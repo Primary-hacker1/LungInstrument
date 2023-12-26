@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="com.just.news.R" />
+
+        <variable
+            name="vm"
+            type="com.just.machine.ui.viewmodel.MainViewModel" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/view_toolbar"
+            setTitleImage="@{R.drawable.ic_back}"
+            titleRight='@{"submit"}' />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_me"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="跳转" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_item_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+</layout>

@@ -1,0 +1,55 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply from: 'dependencies.gradle'
+buildscript {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        google()
+        mavenCentral()
+
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.0.3'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:2.36"
+    }
+}
+
+allprojects {
+    // build.gradle
+    allprojects {
+        repositories {
+            maven {
+                url "https://androidx.dev/snapshots/builds/6543454/artifacts/repository/"
+            }
+        }
+    }
+
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'https://www.jitpack.io' }
+        google()
+        mavenCentral()
+    }
+
+    ext {
+        //发布debug版本修改此参数，发布release版本同时去掉debug
+        androidApplicationId = 'com.just.news'
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        releaseVersionNameSuffix = androidTargetSdkVersion
+        androidVersionName = "1.0"
+        androidVersionCode = 1
+        apkVersion = "" + androidVersionName
+        androidNdkVersion = '22.1.7171670'
+        androidMultiDexEnabled = true
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

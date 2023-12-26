@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.just.machine.ui.viewmodel.MainViewModel" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/text9">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_background"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="220dp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/iv_background"
+            android:layout_centerHorizontal="true">
+
+            <LinearLayout
+                android:id="@+id/ll_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26dp"
+                android:layout_marginRight="26dp"
+                android:orientation="vertical"
+                android:paddingTop="20dp"
+                tools:ignore="MissingConstraints,NotSibling">
+
+
+                <com.justsafe.libview.text.SuperEditText
+                    android:id="@+id/atv_login_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="31dp"
+                    android:background="@drawable/bg_input"
+                    android:hint="@string/name"
+                    android:maxLength="11"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColorHint="@color/white"
+                    android:textSize="@dimen/space_15"
+                    tools:ignore="SpUsage" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="31dp"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical">
+
+                    <com.justsafe.libview.text.SuperEditText
+                        android:id="@+id/atv_login_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:background="@drawable/bg_input"
+                        android:hint="@string/pass"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColorHint="@color/white"
+                        android:textSize="@dimen/space_15"
+                        app:delete_x="0"
+                        app:ed_backgroundColor="false"
+                        tools:ignore="SpUsage" />
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_login"
+                android:layout_width="315dp"
+                android:layout_height="44dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="33dp"
+                android:background="@drawable/succeed_blue_btn"
+                android:text="@string/submit"
+                android:textColor="@color/colorWhile"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toLeftOf="@id/ll_input"
+                app:layout_constraintRight_toRightOf="@id/ll_input"
+                app:layout_constraintTop_toBottomOf="@id/ll_input" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+
+
+</layout>

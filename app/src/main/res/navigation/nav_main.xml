@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/mainFragment">
+
+    <!--  hold_state_fragment 保活机制  -->
+    <fragment_navigator
+        android:id="@+id/mainFragment"
+        android:name="com.just.machine.ui.fragment.MainFragment"
+        android:label="mainFragment"
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_MainFragment_to_NewFragment"
+            app:destination="@id/newFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_meFragment"
+            app:destination="@id/meFragment" />
+    </fragment_navigator>
+
+    <fragment_navigator
+        android:id="@+id/newFragment"
+        android:name="com.just.machine.ui.fragment.NewFragment"
+        android:label="newFragment"
+        tools:layout="@layout/fragment_new" />
+
+    <fragment_navigator
+        android:id="@+id/meFragment"
+        android:name="com.just.machine.ui.fragment.MeFragment"
+        android:label="meFragment"
+        tools:layout="@layout/fragment_me">
+        <action
+            android:id="@+id/action_meFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
+    </fragment_navigator>
+
+    <fragment_navigator
+        android:id="@+id/settingFragment"
+        android:name="com.just.machine.ui.fragment.SettingFragment"
+        android:label="settingFragment"
+        tools:layout="@layout/fragment_setting">
+        <action
+            android:id="@+id/action_settingFragment_to_meFragment"
+            app:destination="@id/meFragment" />
+    </fragment_navigator>
+
+</navigation>

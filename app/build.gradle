@@ -1,0 +1,119 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
+
+android {
+    def globalConfiguration = rootProject.extensions.getByName("ext")
+    compileSdkVersion androidCompileSdkVersion
+    buildToolsVersion androidBuildToolsVersion
+
+    defaultConfig {
+        minSdkVersion globalConfiguration["androidMinSdkVersion"]
+        targetSdkVersion globalConfiguration["androidTargetSdkVersion"]
+        versionCode globalConfiguration["androidVersionCode"]
+        versionName globalConfiguration["androidVersionName"]
+        ndkVersion globalConfiguration["androidNdkVersion"]
+
+        multiDexEnabled globalConfiguration["androidMultiDexEnabled"]
+        testInstrumentationRunner globalConfiguration["testInstrumentationRunner"]
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            LogDebug = false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            LogDebug = true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+
+    kapt {
+        generateStubs = true
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+
+    applicationVariants.all {
+        variant ->
+            variant.outputs.all {
+                Calendar calendar = Calendar.getInstance(Locale.CHINA)
+                def buildDate = String.format(Locale.CHINA, "%04d%02d%02d",
+                        calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH))
+                def versionName = defaultConfig.versionName
+                if (variant.buildType.name == 'release') {
+                    outputFileName = "inspect-${buildDate}-${versionName}r${versionCode}.apk"
+                } else {
+                    outputFileName = "inspect-${buildDate}_debug.apk"
+                }
+            }
+    }
+
+}
+
+kapt {
+    arguments {
+        // Make Hilt share the same definition of Components in tests instead of
+        // creating a new set of Components per test class.
+        arg("dagger.hilt.shareTestComponents", "true")
+    }
+}
+
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(path: ':libview')
+    implementation project(path: ':common')
+    implementation project(path: ':autosize')
+    implementation gradleBase.core
+    implementation gradleBase.appcompat
+    testImplementation gradleBase.junit
+    implementation presentationDependencies.constraintlayout
+
+    // navigation
+    implementation presentationDependencies.navigation_fragment
+    implementation presentationDependencies.navigation_ui
+    implementation presentationDependencies.navigation_fragment_ktx
+    implementation presentationDependencies.navigation_ui_ktx
+
+    // room
+    kapt presentationDependencies.room_compiler
+    implementation presentationDependencies.room_runtime
+    implementation presentationDependencies.room_ktx
+
+    // work
+    implementation 'androidx.work:work-runtime-ktx:2.7.1'
+
+    // lifecycle
+    implementation presentationDependencies.lifecycle_viewmodel_ktx
+    implementation presentationDependencies.lifecycle_viewmodel_savedstate
+
+    // Hilt
+    kapt presentationDependencies.hilt_compiler
+    implementation presentationDependencies.hilt_andorid
+    implementation presentationDependencies.hilt_lifecycle_viewmodel
+    androidTestImplementation presentationDependencies.hilt_andorid_testing
+    kaptAndroidTest presentationDependencies.hilt_andorid_compiler
+
+    // datastore
+    implementation presentationDependencies.datastore_preferences
+    implementation presentationDependencies.datastore_core
+}

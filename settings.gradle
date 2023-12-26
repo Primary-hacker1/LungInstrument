@@ -1,0 +1,5 @@
+rootProject.name='LungInstruments'
+include ':app'
+include ':common'
+include ':libview'
+include ':autosize'
