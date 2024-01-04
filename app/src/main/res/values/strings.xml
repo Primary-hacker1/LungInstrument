@@ -8,4 +8,6 @@
     <string name="name">账号</string>
     <string name="pass">密码</string>
     <string name="submit">登录</string>
+    <string name="send">发送</string>
+    <string name="connect">连接</string>
 </resources>

@@ -12,14 +12,20 @@ public class FragmentMainBindingImpl extends FragmentMainBinding  {
     @Nullable
     private static final android.util.SparseIntArray sViewsWithIds;
     static {
-        sIncludes = new androidx.databinding.ViewDataBinding.IncludedLayouts(4);
+        sIncludes = new androidx.databinding.ViewDataBinding.IncludedLayouts(10);
         sIncludes.setIncludes(0, 
             new String[] {"view_toolbar"},
             new int[] {1},
             new int[] {com.just.news.R.layout.view_toolbar});
         sViewsWithIds = new android.util.SparseIntArray();
         sViewsWithIds.put(R.id.btn_me, 2);
-        sViewsWithIds.put(R.id.rv_item_main, 3);
+        sViewsWithIds.put(R.id.buttonConnect, 3);
+        sViewsWithIds.put(R.id.editTextTextSend, 4);
+        sViewsWithIds.put(R.id.buttonSend, 5);
+        sViewsWithIds.put(R.id.scrollView2, 6);
+        sViewsWithIds.put(R.id.textViewReceiced, 7);
+        sViewsWithIds.put(R.id.buttonDisconnect, 8);
+        sViewsWithIds.put(R.id.textViewConnectInfo, 9);
     }
     // views
     @NonNull
@@ -30,12 +36,18 @@ public class FragmentMainBindingImpl extends FragmentMainBinding  {
     // Inverse Binding Event Handlers
 
     public FragmentMainBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
-        this(bindingComponent, root, mapBindings(bindingComponent, root, 4, sIncludes, sViewsWithIds));
+        this(bindingComponent, root, mapBindings(bindingComponent, root, 10, sIncludes, sViewsWithIds));
     }
     private FragmentMainBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 1
             , (androidx.appcompat.widget.AppCompatButton) bindings[2]
-            , (androidx.recyclerview.widget.RecyclerView) bindings[3]
+            , (android.widget.Button) bindings[3]
+            , (android.widget.Button) bindings[8]
+            , (android.widget.Button) bindings[5]
+            , (android.widget.EditText) bindings[4]
+            , (android.widget.ScrollView) bindings[6]
+            , (android.widget.TextView) bindings[9]
+            , (android.widget.TextView) bindings[7]
             , (com.just.news.databinding.ViewToolbarBinding) bindings[1]
             );
         this.mboundView0 = (android.widget.LinearLayout) bindings[0];
