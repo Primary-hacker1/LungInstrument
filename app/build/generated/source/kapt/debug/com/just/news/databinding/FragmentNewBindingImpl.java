@@ -12,12 +12,20 @@ public class FragmentNewBindingImpl extends FragmentNewBinding  {
     @Nullable
     private static final android.util.SparseIntArray sViewsWithIds;
     static {
-        sIncludes = new androidx.databinding.ViewDataBinding.IncludedLayouts(3);
+        sIncludes = new androidx.databinding.ViewDataBinding.IncludedLayouts(10);
         sIncludes.setIncludes(0, 
             new String[] {"view_toolbar"},
-            new int[] {2},
+            new int[] {1},
             new int[] {com.just.news.R.layout.view_toolbar});
-        sViewsWithIds = null;
+        sViewsWithIds = new android.util.SparseIntArray();
+        sViewsWithIds.put(R.id.btn_me, 2);
+        sViewsWithIds.put(R.id.buttonConnect, 3);
+        sViewsWithIds.put(R.id.editTextTextSend, 4);
+        sViewsWithIds.put(R.id.buttonSend, 5);
+        sViewsWithIds.put(R.id.scrollView2, 6);
+        sViewsWithIds.put(R.id.textViewReceiced, 7);
+        sViewsWithIds.put(R.id.buttonDisconnect, 8);
+        sViewsWithIds.put(R.id.textViewConnectInfo, 9);
     }
     // views
     @NonNull
@@ -28,16 +36,22 @@ public class FragmentNewBindingImpl extends FragmentNewBinding  {
     // Inverse Binding Event Handlers
 
     public FragmentNewBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
-        this(bindingComponent, root, mapBindings(bindingComponent, root, 3, sIncludes, sViewsWithIds));
+        this(bindingComponent, root, mapBindings(bindingComponent, root, 10, sIncludes, sViewsWithIds));
     }
     private FragmentNewBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
-        super(bindingComponent, root, 2
-            , (androidx.recyclerview.widget.RecyclerView) bindings[1]
-            , (com.just.news.databinding.ViewToolbarBinding) bindings[2]
+        super(bindingComponent, root, 1
+            , (androidx.appcompat.widget.AppCompatButton) bindings[2]
+            , (android.widget.Button) bindings[3]
+            , (android.widget.Button) bindings[8]
+            , (android.widget.Button) bindings[5]
+            , (android.widget.EditText) bindings[4]
+            , (android.widget.ScrollView) bindings[6]
+            , (android.widget.TextView) bindings[9]
+            , (android.widget.TextView) bindings[7]
+            , (com.just.news.databinding.ViewToolbarBinding) bindings[1]
             );
         this.mboundView0 = (android.widget.LinearLayout) bindings[0];
         this.mboundView0.setTag(null);
-        this.recycleView.setTag(null);
         setContainedBinding(this.toolbar);
         setRootTag(root);
         // listeners
@@ -47,7 +61,7 @@ public class FragmentNewBindingImpl extends FragmentNewBinding  {
     @Override
     public void invalidateAll() {
         synchronized(this) {
-                mDirtyFlags = 0x8L;
+                mDirtyFlags = 0x4L;
         }
         toolbar.invalidateAll();
         requestRebind();
@@ -69,8 +83,8 @@ public class FragmentNewBindingImpl extends FragmentNewBinding  {
     @Override
     public boolean setVariable(int variableId, @Nullable Object variable)  {
         boolean variableSet = true;
-        if (BR.viewModel == variableId) {
-            setViewModel((com.just.machine.ui.viewmodel.MainViewModel) variable);
+        if (BR.vm == variableId) {
+            setVm((com.just.machine.ui.viewmodel.MainViewModel) variable);
         }
         else {
             variableSet = false;
@@ -78,13 +92,8 @@ public class FragmentNewBindingImpl extends FragmentNewBinding  {
             return variableSet;
     }
 
-    public void setViewModel(@Nullable com.just.machine.ui.viewmodel.MainViewModel ViewModel) {
-        this.mViewModel = ViewModel;
-        synchronized(this) {
-            mDirtyFlags |= 0x4L;
-        }
-        notifyPropertyChanged(BR.viewModel);
-        super.requestRebind();
+    public void setVm(@Nullable com.just.machine.ui.viewmodel.MainViewModel Vm) {
+        this.mVm = Vm;
     }
 
     @Override
@@ -97,25 +106,14 @@ public class FragmentNewBindingImpl extends FragmentNewBinding  {
     protected boolean onFieldChange(int localFieldId, Object object, int fieldId) {
         switch (localFieldId) {
             case 0 :
-                return onChangeViewModelItemNews((androidx.databinding.ObservableList<com.just.machine.model.Data>) object, fieldId);
-            case 1 :
                 return onChangeToolbar((com.just.news.databinding.ViewToolbarBinding) object, fieldId);
-        }
-        return false;
-    }
-    private boolean onChangeViewModelItemNews(androidx.databinding.ObservableList<com.just.machine.model.Data> ViewModelItemNews, int fieldId) {
-        if (fieldId == BR._all) {
-            synchronized(this) {
-                    mDirtyFlags |= 0x1L;
-            }
-            return true;
         }
         return false;
     }
     private boolean onChangeToolbar(com.just.news.databinding.ViewToolbarBinding Toolbar, int fieldId) {
         if (fieldId == BR._all) {
             synchronized(this) {
-                    mDirtyFlags |= 0x2L;
+                    mDirtyFlags |= 0x1L;
             }
             return true;
         }
@@ -129,26 +127,8 @@ public class FragmentNewBindingImpl extends FragmentNewBinding  {
             dirtyFlags = mDirtyFlags;
             mDirtyFlags = 0;
         }
-        androidx.databinding.ObservableList<com.just.machine.model.Data> viewModelItemNews = null;
-        com.just.machine.ui.viewmodel.MainViewModel viewModel = mViewModel;
-
-        if ((dirtyFlags & 0xdL) != 0) {
-
-
-
-                if (viewModel != null) {
-                    // read viewModel.itemNews
-                    viewModelItemNews = viewModel.getItemNews();
-                }
-                updateRegistration(0, viewModelItemNews);
-        }
         // batch finished
-        if ((dirtyFlags & 0xdL) != 0) {
-            // api target 1
-
-            com.just.machine.helper.binding.Binding.addItem(this.recycleView, viewModelItemNews);
-        }
-        if ((dirtyFlags & 0x8L) != 0) {
+        if ((dirtyFlags & 0x4L) != 0) {
             // api target 1
 
             this.toolbar.setSetTitleImage(com.just.news.R.drawable.ic_back);
@@ -161,10 +141,9 @@ public class FragmentNewBindingImpl extends FragmentNewBinding  {
     // dirty flag
     private  long mDirtyFlags = 0xffffffffffffffffL;
     /* flag mapping
-        flag 0 (0x1L): viewModel.itemNews
-        flag 1 (0x2L): toolbar
-        flag 2 (0x3L): viewModel
-        flag 3 (0x4L): null
+        flag 0 (0x1L): toolbar
+        flag 1 (0x2L): vm
+        flag 2 (0x3L): null
     flag mapping end*/
     //end
 }

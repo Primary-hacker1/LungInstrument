@@ -20,6 +20,10 @@ class SettingFragment : CommonBaseFragment<FragmentSettingBinding>() {
         initToolbar()
     }
 
+    override fun initListener() {
+
+    }
+
     private fun initToolbar() {
         binding.toolbar.title = Constants.setting//标题
         binding.toolbar.ivTitleBack.setOnClickListener {//返回

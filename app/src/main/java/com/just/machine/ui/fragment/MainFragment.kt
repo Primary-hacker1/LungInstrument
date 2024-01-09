@@ -18,8 +18,6 @@ import com.just.machine.model.Constants
 import com.just.machine.ui.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.item_new.view.title
-import kotlinx.android.synthetic.main.view_toolbar.view.iv_title_back
-import kotlinx.android.synthetic.main.view_toolbar.view.tv_right
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import world.shanya.serialport.SerialPortBuilder
@@ -38,76 +36,14 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
         viewModel.getDates("")//插入或者请求网络数据
     }
 
-    private fun initToolbar() {
-        binding.toolbar.title = Constants.succeedName//标题
-        binding.toolbar.tvRight.gone()
-        binding.toolbar.ivTitleBack.gone()
-    }
-
     @SuppressLint("SetTextI18n")
     override fun initView() {
-        initToolbar()
 
-        binding.btnMe.setOnClickListener {
-            navigate(it, R.id.newFragment)
-        }
-
-        viewModel.mEventHub.observe(this) {
-            when (it.action) {
-                LiveDataEvent.LOGIN_FAIL -> {
-                    LogUtils.e(TAG + it.any as Plant)
-                }
-            }
-        }
-
-        val stringBuilder = StringBuilder()
-
-        val serialPort =
-            SerialPortBuilder
-                .setReceivedDataCallback {
-                    MainScope().launch {
-                        stringBuilder.append(it)
-                        binding.textViewReceiced.text = stringBuilder.toString()
-                    }
-                }
-                .isDebug(Constants.isDebug)
-                .setConnectionStatusCallback { status, bluetoothDevice ->
-                    MainScope().launch {
-                        if (status) {
-                            if (ActivityCompat.checkSelfPermission(
-                                    activity!!,
-                                    Manifest.permission.BLUETOOTH_CONNECT
-                                ) != PackageManager.PERMISSION_GRANTED
-                            ) {
-                                return@launch
-                            }
-
-                            binding.textViewConnectInfo.text =
-                                "设备名称:\t${bluetoothDevice?.name}\n" +
-                                        "设备地址:\t${bluetoothDevice?.address}\n" +
-                                        "设备类型:\t${bluetoothDevice?.type}"
-
-                        }else {
-                            binding.textViewConnectInfo.text = ""
-                        }
-                    }
-                }
-                .build(activity!!)
-
-        binding.buttonConnect.setOnClickListener {
-            serialPort.openDiscoveryActivity()
-        }
-
-        binding.buttonDisconnect.setOnClickListener {
-            serialPort.disconnect()
-        }
-
-        binding.buttonSend.setOnClickListener {
-            serialPort.sendData(binding.editTextTextSend.text.toString())
-        }
     }
 
+    override fun initListener() {
 
+    }
 
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =

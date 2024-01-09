@@ -51,6 +51,7 @@ abstract class CommonBaseFragment<VB : ViewDataBinding> : Fragment() {
         super.onActivityCreated(savedInstanceState)
         initView()
         lazyLoad()
+        initListener()
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
@@ -89,6 +90,7 @@ abstract class CommonBaseFragment<VB : ViewDataBinding> : Fragment() {
     protected abstract fun loadData()
 
     protected abstract fun initView()
+    protected abstract fun initListener()
 
     protected abstract fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?): VB
 

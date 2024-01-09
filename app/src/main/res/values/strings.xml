@@ -1,12 +1,12 @@
 <resources>
-    <string name="app_name">格调架构</string>
+    <string name="app_name">心肺功能仪</string>
     <string name="home">首页</string>
     <string name="personal">我的</string>
     <string name="newS">最新</string>
     <string name="setting">设置</string>
     <string name="queryDatabase">查询数据库</string>
-    <string name="name">账号</string>
-    <string name="pass">密码</string>
+    <string name="name">请输入手机号码</string>
+    <string name="pass">请输入密码</string>
     <string name="submit">登录</string>
     <string name="send">发送</string>
     <string name="connect">连接</string>

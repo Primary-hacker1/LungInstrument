@@ -1,0 +1,25 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="me.jessyan.autosize" >
+4
+5    <uses-sdk
+6        android:minSdkVersion="21"
+6-->/Users/user/StudioProjects/LungInstrument/autosize/src/main/AndroidManifest.xml
+7        android:targetSdkVersion="33" />
+7-->/Users/user/StudioProjects/LungInstrument/autosize/src/main/AndroidManifest.xml
+8
+9    <application>
+9-->/Users/user/StudioProjects/LungInstrument/autosize/src/main/AndroidManifest.xml:4:5-10:19
+10        <provider
+10-->/Users/user/StudioProjects/LungInstrument/autosize/src/main/AndroidManifest.xml:5:9-9:42
+11            android:name="me.jessyan.autosize.InitProvider"
+11-->/Users/user/StudioProjects/LungInstrument/autosize/src/main/AndroidManifest.xml:6:13-60
+12            android:authorities="${applicationId}.autosize-init-provider"
+12-->/Users/user/StudioProjects/LungInstrument/autosize/src/main/AndroidManifest.xml:7:13-74
+13            android:exported="false"
+13-->/Users/user/StudioProjects/LungInstrument/autosize/src/main/AndroidManifest.xml:8:13-37
+14            android:multiprocess="true" />
+14-->/Users/user/StudioProjects/LungInstrument/autosize/src/main/AndroidManifest.xml:9:13-40
+15    </application>
+16
+17</manifest>

@@ -52,6 +52,10 @@ class MeFragment : CommonBaseFragment<FragmentMeBinding>() {
 
     }
 
+    override fun initListener() {
+
+    }
+
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentMeBinding.inflate(inflater, container, false)
 

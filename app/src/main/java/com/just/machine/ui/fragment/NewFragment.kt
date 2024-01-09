@@ -1,13 +1,25 @@
 package com.just.machine.ui.fragment
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
+import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import com.common.base.*
+import com.common.network.LogUtils
+import com.common.viewmodel.LiveDataEvent
+import com.just.machine.dao.Plant
 import com.just.machine.model.Constants
+import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.news.R
 import com.just.news.databinding.FragmentNewBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import world.shanya.serialport.SerialPortBuilder
 
 /**
  *create by 2020/6/19
@@ -15,6 +27,14 @@ import dagger.hilt.android.AndroidEntryPoint
  */
 @AndroidEntryPoint
 class NewFragment : CommonBaseFragment<FragmentNewBinding>() {
+
+    private val viewModel by viewModels<MainViewModel>()
+    override fun loadData() {//懒加载
+        viewModel.getDates("")//插入或者请求网络数据
+        binding.toolbar.ivTitleBack.setNoRepeatListener {
+            Navigation.findNavController(it).popBackStack()
+        }
+    }
 
     private fun initToolbar() {
         binding.toolbar.title = Constants.news//标题
@@ -25,12 +45,68 @@ class NewFragment : CommonBaseFragment<FragmentNewBinding>() {
     @SuppressLint("UseRequireInsteadOfGet")
     override fun initView() {
         initToolbar()
+
+        binding.btnMe.setOnClickListener {
+            navigate(it, R.id.newFragment)
+        }
+
+        viewModel.mEventHub.observe(this) {
+            when (it.action) {
+                LiveDataEvent.LOGIN_FAIL -> {
+                    LogUtils.e(TAG + it.any as Plant)
+                }
+            }
+        }
+
+        val stringBuilder = StringBuilder()
+
+        val serialPort =
+            SerialPortBuilder
+                .setReceivedDataCallback {
+                    MainScope().launch {
+                        stringBuilder.append(it)
+                        binding.textViewReceiced.text = stringBuilder.toString()
+                    }
+                }
+                .isDebug(Constants.isDebug)
+                .setConnectionStatusCallback { status, bluetoothDevice ->
+                    MainScope().launch {
+                        if (status) {
+                            if (ActivityCompat.checkSelfPermission(
+                                    activity!!,
+                                    Manifest.permission.BLUETOOTH_CONNECT
+                                ) != PackageManager.PERMISSION_GRANTED
+                            ) {
+                                return@launch
+                            }
+
+                            binding.textViewConnectInfo.text =
+                                "设备名称:\t${bluetoothDevice?.name}\n" +
+                                        "设备地址:\t${bluetoothDevice?.address}\n" +
+                                        "设备类型:\t${bluetoothDevice?.type}"
+
+                        }else {
+                            binding.textViewConnectInfo.text = ""
+                        }
+                    }
+                }
+                .build(activity!!)
+
+        binding.buttonConnect.setOnClickListener {
+            serialPort.openDiscoveryActivity()
+        }
+
+        binding.buttonDisconnect.setOnClickListener {
+            serialPort.disconnect()
+        }
+
+        binding.buttonSend.setOnClickListener {
+            serialPort.sendData(binding.editTextTextSend.text.toString())
+        }
     }
 
-    override fun loadData() {
-        binding.toolbar.ivTitleBack.setNoRepeatListener {
-            Navigation.findNavController(it).popBackStack()
-        }
+    override fun initListener() {
+
     }
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =

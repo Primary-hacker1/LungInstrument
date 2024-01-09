@@ -39,7 +39,7 @@ allprojects {
 
     ext {
         //发布debug版本修改此参数，发布release版本同时去掉debug
-        androidApplicationId = 'com.just.news'
+        androidApplicationId = 'com.just.machine'
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         releaseVersionNameSuffix = androidTargetSdkVersion
         androidVersionName = "1.0"

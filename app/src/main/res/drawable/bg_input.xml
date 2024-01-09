@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-    <corners android:radius="5dp"/>
-    <solid android:color="@color/white"/>
-    <stroke android:width="0.5dp" android:color="#E4E4E4"/>
-
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#fff" />
+    <corners android:radius="25dp" />
+    <stroke android:width="@dimen/space_2"
+        android:color="@color/login_hit"/>
 </shape>
+

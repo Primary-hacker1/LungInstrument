@@ -23,7 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.just.machine.ui.activity.MainActivity" />
+        <activity android:name="com.just.machine.ui.activity.MainActivity"
+            android:exported="false"/>
     </application>
 
 </manifest>
