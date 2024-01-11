@@ -31,6 +31,7 @@ class MeFragment : CommonBaseFragment<FragmentMeBinding>() {
         binding.toolbar.title = Constants.me//标题
         binding.toolbar.tvRight.gone()
         binding.toolbar.ivTitleBack.gone()
+
     }
 
     override fun initView() {
@@ -44,8 +45,7 @@ class MeFragment : CommonBaseFragment<FragmentMeBinding>() {
 
         val navController = findNavController()//fragment返回数据处理
 
-        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<String>("key")
-            ?.observe(this
+        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<String>("key")?.observe(this
             ) {
                 LogUtils.e(TAG + it.toString())
             }

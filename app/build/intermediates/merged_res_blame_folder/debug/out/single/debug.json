@@ -8,8 +8,16 @@
         "source": "/Users/user/StudioProjects/LungInstrument/app/build/generated/res/pngs/debug/drawable-hdpi/user.png"
     },
     {
+        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/navigation_nav_login.xml.flat",
+        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/navigation/nav_login.xml"
+    },
+    {
         "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable_back.xml.flat",
         "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/drawable/back.xml"
+    },
+    {
+        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/layout_activity_web.xml.flat",
+        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/layout/activity_web.xml"
     },
     {
         "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/layout_fragment_login.xml.flat",
@@ -18,86 +26,6 @@
     {
         "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable-anydpi-v24_ic_logo.xml.flat",
         "source": "/Users/user/StudioProjects/LungInstrument/app/build/generated/res/pngs/debug/drawable-anydpi-v24/ic_logo.xml"
-    },
-    {
-        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable-mdpi_user.png.flat",
-        "source": "/Users/user/StudioProjects/LungInstrument/app/build/generated/res/pngs/debug/drawable-mdpi/user.png"
-    },
-    {
-        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/layout_view_toolbar.xml.flat",
-        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/layout/view_toolbar.xml"
-    },
-    {
-        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/layout_fragmelayout_succeed.xml.flat",
-        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/layout/fragmelayout_succeed.xml"
-    },
-    {
-        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable_ic_personal_on.xml.flat",
-        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/drawable/ic_personal_on.xml"
-    },
-    {
-        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable-anydpi-v24_user.xml.flat",
-        "source": "/Users/user/StudioProjects/LungInstrument/app/build/generated/res/pngs/debug/drawable-anydpi-v24/user.xml"
-    },
-    {
-        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/layout_activity_login.xml.flat",
-        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/layout/activity_login.xml"
-    },
-    {
-        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/layout_fragment_me.xml.flat",
-        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/layout/fragment_me.xml"
-    },
-    {
-        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/menu_bottom_navigation_main.xml.flat",
-        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/menu/bottom_navigation_main.xml"
-    },
-    {
-        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/layout_activity_main.xml.flat",
-        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/layout/activity_main.xml"
-    },
-    {
-        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/layout_fragment_main.xml.flat",
-        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/layout/fragment_main.xml"
-    },
-    {
-        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable-ldpi_ic_logo.png.flat",
-        "source": "/Users/user/StudioProjects/LungInstrument/app/build/generated/res/pngs/debug/drawable-ldpi/ic_logo.png"
-    },
-    {
-        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable_login_btn.xml.flat",
-        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/drawable/login_btn.xml"
-    },
-    {
-        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable-ldpi_user.png.flat",
-        "source": "/Users/user/StudioProjects/LungInstrument/app/build/generated/res/pngs/debug/drawable-ldpi/user.png"
-    },
-    {
-        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/color_main_bottom_tab_color.xml.flat",
-        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/color/main_bottom_tab_color.xml"
-    },
-    {
-        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable-anydpi-v24_pass.xml.flat",
-        "source": "/Users/user/StudioProjects/LungInstrument/app/build/generated/res/pngs/debug/drawable-anydpi-v24/pass.xml"
-    },
-    {
-        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable_bg_input.xml.flat",
-        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/drawable/bg_input.xml"
-    },
-    {
-        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable-xxxhdpi_ic_logo.png.flat",
-        "source": "/Users/user/StudioProjects/LungInstrument/app/build/generated/res/pngs/debug/drawable-xxxhdpi/ic_logo.png"
-    },
-    {
-        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/mipmap-xxxhdpi_logo.png.flat",
-        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/mipmap-xxxhdpi/logo.png"
-    },
-    {
-        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/navigation_nav_login.xml.flat",
-        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/navigation/nav_login.xml"
-    },
-    {
-        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/layout_activity_web.xml.flat",
-        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/layout/activity_web.xml"
     },
     {
         "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable_ic_launcher_background.xml.flat",
@@ -112,8 +40,28 @@
         "source": "/Users/user/StudioProjects/LungInstrument/app/build/generated/res/pngs/debug/drawable-hdpi/ic_logo.png"
     },
     {
+        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable-mdpi_user.png.flat",
+        "source": "/Users/user/StudioProjects/LungInstrument/app/build/generated/res/pngs/debug/drawable-mdpi/user.png"
+    },
+    {
+        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/layout_view_toolbar.xml.flat",
+        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/layout/view_toolbar.xml"
+    },
+    {
         "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/layout_fragment_setting.xml.flat",
         "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/layout/fragment_setting.xml"
+    },
+    {
+        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/layout_fragmelayout_succeed.xml.flat",
+        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/layout/fragmelayout_succeed.xml"
+    },
+    {
+        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable_ic_personal_on.xml.flat",
+        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/drawable/ic_personal_on.xml"
+    },
+    {
+        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable-anydpi-v24_user.xml.flat",
+        "source": "/Users/user/StudioProjects/LungInstrument/app/build/generated/res/pngs/debug/drawable-anydpi-v24/user.xml"
     },
     {
         "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable-xxhdpi_pass.png.flat",
@@ -128,8 +76,24 @@
         "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/drawable/menu.xml"
     },
     {
+        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/layout_fragment_me.xml.flat",
+        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/layout/fragment_me.xml"
+    },
+    {
+        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/layout_activity_login.xml.flat",
+        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/layout/activity_login.xml"
+    },
+    {
         "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/layout_fragment_new.xml.flat",
         "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/layout/fragment_new.xml"
+    },
+    {
+        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/menu_bottom_navigation_main.xml.flat",
+        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/menu/bottom_navigation_main.xml"
+    },
+    {
+        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/layout_activity_main.xml.flat",
+        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/layout/activity_main.xml"
     },
     {
         "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable-xhdpi_user.png.flat",
@@ -138,6 +102,10 @@
     {
         "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable_ic_back.xml.flat",
         "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/drawable/ic_back.xml"
+    },
+    {
+        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/layout_fragment_main.xml.flat",
+        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/layout/fragment_main.xml"
     },
     {
         "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/navigation_nav_main.xml.flat",
@@ -156,12 +124,32 @@
         "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/layout/activity_succeed_prison.xml"
     },
     {
+        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable-ldpi_ic_logo.png.flat",
+        "source": "/Users/user/StudioProjects/LungInstrument/app/build/generated/res/pngs/debug/drawable-ldpi/ic_logo.png"
+    },
+    {
+        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable_login_btn.xml.flat",
+        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/drawable/login_btn.xml"
+    },
+    {
+        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable-ldpi_user.png.flat",
+        "source": "/Users/user/StudioProjects/LungInstrument/app/build/generated/res/pngs/debug/drawable-ldpi/user.png"
+    },
+    {
+        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/color_main_bottom_tab_color.xml.flat",
+        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/color/main_bottom_tab_color.xml"
+    },
+    {
         "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable-xhdpi_pass.png.flat",
         "source": "/Users/user/StudioProjects/LungInstrument/app/build/generated/res/pngs/debug/drawable-xhdpi/pass.png"
     },
     {
         "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable-mdpi_pass.png.flat",
         "source": "/Users/user/StudioProjects/LungInstrument/app/build/generated/res/pngs/debug/drawable-mdpi/pass.png"
+    },
+    {
+        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable-anydpi-v24_pass.xml.flat",
+        "source": "/Users/user/StudioProjects/LungInstrument/app/build/generated/res/pngs/debug/drawable-anydpi-v24/pass.xml"
     },
     {
         "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable-ldpi_pass.png.flat",
@@ -172,12 +160,24 @@
         "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/layout/activity_welcome.xml"
     },
     {
+        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable_bg_input.xml.flat",
+        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/drawable/bg_input.xml"
+    },
+    {
         "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable-xxhdpi_ic_logo.png.flat",
         "source": "/Users/user/StudioProjects/LungInstrument/app/build/generated/res/pngs/debug/drawable-xxhdpi/ic_logo.png"
     },
     {
         "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable-xhdpi_ic_logo.png.flat",
         "source": "/Users/user/StudioProjects/LungInstrument/app/build/generated/res/pngs/debug/drawable-xhdpi/ic_logo.png"
+    },
+    {
+        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable-xxxhdpi_ic_logo.png.flat",
+        "source": "/Users/user/StudioProjects/LungInstrument/app/build/generated/res/pngs/debug/drawable-xxxhdpi/ic_logo.png"
+    },
+    {
+        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/mipmap-xxxhdpi_logo.png.flat",
+        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/mipmap-xxxhdpi/logo.png"
     },
     {
         "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/layout_activity_organization.xml.flat",
