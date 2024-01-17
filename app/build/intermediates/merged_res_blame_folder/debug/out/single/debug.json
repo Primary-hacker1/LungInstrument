@@ -1,11 +1,11 @@
 [
     {
-        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable-xxhdpi_user.png.flat",
-        "source": "/Users/user/StudioProjects/LungInstrument/app/build/generated/res/pngs/debug/drawable-xxhdpi/user.png"
-    },
-    {
         "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable-hdpi_user.png.flat",
         "source": "/Users/user/StudioProjects/LungInstrument/app/build/generated/res/pngs/debug/drawable-hdpi/user.png"
+    },
+    {
+        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable-xxhdpi_user.png.flat",
+        "source": "/Users/user/StudioProjects/LungInstrument/app/build/generated/res/pngs/debug/drawable-xxhdpi/user.png"
     },
     {
         "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/navigation_nav_login.xml.flat",

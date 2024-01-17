@@ -2410,6 +2410,8 @@ int id dropdown_menu 0x7f0900b2
 int id easeIn 0x7f0900b3
 int id easeInOut 0x7f0900b4
 int id easeOut 0x7f0900b5
+int id ecg_button 0x7f09024b
+int id ecg_view 0x7f09024a
 int id editTextTextSend 0x7f0900b6
 int id edit_query 0x7f0900b7
 int id edit_succeed_note_num 0x7f0900b8

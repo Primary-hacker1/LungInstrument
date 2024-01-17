@@ -37,8 +37,8 @@ public class FragmentLoginBindingImpl extends FragmentLoginBinding  {
     }
     private FragmentLoginBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 1
-            , (com.justsafe.libview.text.SuperEditText) bindings[5]
-            , (com.justsafe.libview.text.SuperEditText) bindings[4]
+            , (com.justsafe.libview.text.LoginEditText) bindings[5]
+            , (com.justsafe.libview.text.LoginEditText) bindings[4]
             , (androidx.appcompat.widget.AppCompatButton) bindings[6]
             , (androidx.appcompat.widget.AppCompatImageView) bindings[2]
             , (android.widget.LinearLayout) bindings[3]

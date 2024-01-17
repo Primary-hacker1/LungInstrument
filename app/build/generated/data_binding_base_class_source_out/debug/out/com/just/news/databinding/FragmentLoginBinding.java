@@ -14,16 +14,16 @@ import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import com.just.machine.ui.viewmodel.MainViewModel;
 import com.just.news.R;
-import com.justsafe.libview.text.SuperEditText;
+import com.justsafe.libview.text.LoginEditText;
 import java.lang.Deprecated;
 import java.lang.Object;
 
 public abstract class FragmentLoginBinding extends ViewDataBinding {
   @NonNull
-  public final SuperEditText atvPass;
+  public final LoginEditText atvPass;
 
   @NonNull
-  public final SuperEditText atvPhone;
+  public final LoginEditText atvPhone;
 
   @NonNull
   public final AppCompatButton btnLogin;
@@ -41,7 +41,7 @@ public abstract class FragmentLoginBinding extends ViewDataBinding {
   protected MainViewModel mVm;
 
   protected FragmentLoginBinding(Object _bindingComponent, View _root, int _localFieldCount,
-      SuperEditText atvPass, SuperEditText atvPhone, AppCompatButton btnLogin,
+      LoginEditText atvPass, LoginEditText atvPhone, AppCompatButton btnLogin,
       AppCompatImageView ivBackground, LinearLayout llInput, ViewToolbarBinding toolbar) {
     super(_bindingComponent, _root, _localFieldCount);
     this.atvPass = atvPass;

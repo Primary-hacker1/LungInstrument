@@ -2411,6 +2411,8 @@ id dropdown_menu
 id easeIn
 id easeInOut
 id easeOut
+id ecg_button
+id ecg_view
 id editTextTextSend
 id edit_query
 id edit_succeed_note_num

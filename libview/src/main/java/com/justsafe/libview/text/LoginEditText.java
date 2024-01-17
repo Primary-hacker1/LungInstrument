@@ -8,9 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatEditText;
@@ -21,7 +19,7 @@ import com.justsafe.libview.R;
 
 import java.lang.reflect.Field;
 
-public class SuperEditText extends AppCompatEditText {
+public class LoginEditText extends AppCompatEditText {
     /*
      * 定义属性变量
      * */
@@ -45,17 +43,17 @@ public class SuperEditText extends AppCompatEditText {
     private int linePosition;
 
 
-    public SuperEditText(Context context) {
+    public LoginEditText(Context context) {
         super(context);
 
     }
 
-    public SuperEditText(Context context, AttributeSet attrs) {
+    public LoginEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public SuperEditText(Context context, AttributeSet attrs, int defStyleAttr) {
+    public LoginEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }

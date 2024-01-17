@@ -6,20 +6,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.databinding.Bindable;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import com.just.machine.ui.viewmodel.MainViewModel;
 import com.just.news.R;
+import com.justsafe.libview.ecg.WaveShowView;
 import java.lang.Deprecated;
 import java.lang.Object;
 
 public abstract class FragmentMainBinding extends ViewDataBinding {
+  @NonNull
+  public final AppCompatButton ecgButton;
+
+  @NonNull
+  public final WaveShowView ecgView;
+
   @Bindable
   protected MainViewModel mVm;
 
-  protected FragmentMainBinding(Object _bindingComponent, View _root, int _localFieldCount) {
+  protected FragmentMainBinding(Object _bindingComponent, View _root, int _localFieldCount,
+      AppCompatButton ecgButton, WaveShowView ecgView) {
     super(_bindingComponent, _root, _localFieldCount);
+    this.ecgButton = ecgButton;
+    this.ecgView = ecgView;
   }
 
   public abstract void setVm(@Nullable MainViewModel vm);
