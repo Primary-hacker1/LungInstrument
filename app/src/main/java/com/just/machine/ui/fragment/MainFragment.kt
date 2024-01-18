@@ -38,7 +38,6 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                     binding.ecgView.showLine(cooY)
                 }
             })//链式心电图view
-
     }
 
     override fun initListener() {

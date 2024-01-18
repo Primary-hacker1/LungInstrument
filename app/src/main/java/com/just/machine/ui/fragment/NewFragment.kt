@@ -42,7 +42,7 @@ class NewFragment : CommonBaseFragment<FragmentNewBinding>() {
         binding.toolbar.ivTitleBack.visible()
     }
 
-    @SuppressLint("UseRequireInsteadOfGet")
+    @SuppressLint("UseRequireInsteadOfGet", "SetTextI18n")
     override fun initView() {
         initToolbar()
 
