@@ -46,7 +46,6 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                 ecg.add(Random.nextInt(10).toFloat())//随机数
             }
         }
-
     }
 
 

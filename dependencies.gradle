@@ -3,7 +3,7 @@ ext {
     androidMinSdkVersion = 21
     androidTargetSdkVersion = 33
     androidCompileSdkVersion = 33
-    androidBuildToolsVersion = "30.0.3"
+    androidBuildToolsVersion = "33.0.3"
 
     junit = "4.13.2"
 

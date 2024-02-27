@@ -12,7 +12,6 @@ import com.just.machine.ui.activity.MainActivity
 import com.just.news.databinding.FragmentLoginBinding
 import com.just.machine.ui.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.item_new.view.title
 
 /**
  *create by 2020/6/19
