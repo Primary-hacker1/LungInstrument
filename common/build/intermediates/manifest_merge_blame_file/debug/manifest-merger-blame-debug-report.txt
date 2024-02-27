@@ -4,8 +4,8 @@
 4
 5    <uses-sdk
 6        android:minSdkVersion="21"
-6-->/Users/user/StudioProjects/LungInstrument/common/src/main/AndroidManifest.xml
+6-->D:\code\240103\LungInstrument\common\src\main\AndroidManifest.xml
 7        android:targetSdkVersion="33" />
-7-->/Users/user/StudioProjects/LungInstrument/common/src/main/AndroidManifest.xml
+7-->D:\code\240103\LungInstrument\common\src\main\AndroidManifest.xml
 8
 9</manifest>

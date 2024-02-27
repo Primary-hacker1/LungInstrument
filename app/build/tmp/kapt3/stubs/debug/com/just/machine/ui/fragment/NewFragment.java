@@ -27,7 +27,7 @@ public final class NewFragment extends com.common.base.CommonBaseFragment<com.ju
     private final void initToolbar() {
     }
     
-    @android.annotation.SuppressLint(value = {"UseRequireInsteadOfGet"})
+    @android.annotation.SuppressLint(value = {"UseRequireInsteadOfGet", "SetTextI18n"})
     @java.lang.Override
     protected void initView() {
     }

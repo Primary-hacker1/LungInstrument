@@ -2,18 +2,67 @@ package com.just.machine.ui.activity
 
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
+import android.os.Message
+import android.widget.Toast
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI
 import com.common.base.CommonBaseActivity
+import com.just.machine.util.ConnectThread
+import com.just.machine.util.ListenerThread
 import com.just.news.R
 import com.just.news.databinding.ActivityMainBinding
 import com.justsafe.libview.nav.FragmentNavigatorHideShow
-import com.justsafe.libview.util.BaseUtil
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.IOException
+import java.net.Socket
 
 @AndroidEntryPoint
 class MainActivity : CommonBaseActivity<ActivityMainBinding>() {
+
+    private lateinit var listenerThread: ListenerThread
+    private lateinit var connectThread: ConnectThread
+
+    private val handler: Handler = object : Handler() {
+
+        override fun handleMessage(msg: Message) {
+            when (msg.what) {
+                1 -> {
+                    connectThread = ConnectThread(
+                        this@MainActivity, listenerThread.getSocket(),
+                        this
+                    )
+                    connectThread.start()
+                }
+
+                2 -> Toast.makeText(
+                    this@MainActivity,
+                    "设备连接成功",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                3 -> Toast.makeText(
+                    this@MainActivity,
+                    "发送消息成功:" + msg.data.getString("MSG"),
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                4 -> Toast.makeText(
+                    this@MainActivity,
+                    "发送消息失败:" + msg.data.getString("MSG"),
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                6 -> Toast.makeText(
+                    this@MainActivity,
+                    "收到消息:" + msg.data.getString(
+                        "MSG"
+                    ),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
 
     companion object {
         /**
@@ -27,7 +76,38 @@ class MainActivity : CommonBaseActivity<ActivityMainBinding>() {
     }
 
     override fun initView() {
+        initSocket()
         initNavigationView()
+    }
+
+    private fun initSocket() {
+        listenerThread = ListenerThread(12345, handler)
+        listenerThread.start()
+
+        try {
+            Thread.sleep(1000)
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+
+        Thread {
+            try {
+                //本地路由开启通信
+                val ip = "192.168.108.1"
+                val socket = Socket(ip, 12345)
+                connectThread = ConnectThread(this@MainActivity, socket, handler)
+                connectThread.start()
+            } catch (e: IOException) {
+                e.printStackTrace()
+                runOnUiThread {
+                    Toast.makeText(
+                        this@MainActivity,
+                        "创建通信失败",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }.start()
     }
 
     private fun initNavigationView() {

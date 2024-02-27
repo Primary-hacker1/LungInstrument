@@ -1,6 +1,5 @@
 package com.just.machine;
 
-import androidx.hilt.lifecycle.ViewModelFactoryModules;
 import com.just.machine.di.AppModule;
 import com.just.machine.di.DatabaseModule;
 import com.just.machine.ui.activity.LoginActivity_GeneratedInjector;
@@ -171,8 +170,7 @@ public final class App_HiltComponents {
           FragmentCBuilderModule.class,
           ViewCBuilderModule.class,
           HiltWrapper_ActivityModule.class,
-          HiltWrapper_DefaultViewModelFactories_ActivityModule.class,
-          ViewModelFactoryModules.ActivityModule.class
+          HiltWrapper_DefaultViewModelFactories_ActivityModule.class
       }
   )
   @ActivityScoped
@@ -215,10 +213,7 @@ public final class App_HiltComponents {
   }
 
   @Subcomponent(
-      modules = {
-          ViewWithFragmentCBuilderModule.class,
-          ViewModelFactoryModules.FragmentModule.class
-      }
+      modules = ViewWithFragmentCBuilderModule.class
   )
   @FragmentScoped
   public abstract static class FragmentC implements LoginFragment_GeneratedInjector,

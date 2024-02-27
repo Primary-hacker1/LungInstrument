@@ -1,11 +1,11 @@
 [
   {
-    "name": "nav_main",
+    "name": "nav_login",
     "navigationXmlIds": [],
     "deepLinks": []
   },
   {
-    "name": "nav_login",
+    "name": "nav_main",
     "navigationXmlIds": [],
     "deepLinks": []
   }
