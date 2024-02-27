@@ -35,7 +35,7 @@ class MainViewModel @Inject constructor(
 
         viewModelScope.launch {
             val plants: MutableList<PatientBean> = ArrayList()
-            val plant = PatientBean("123", "张涛的数据库操作", "", 6, 7, "http//：www.baidu.com")
+            val plant = PatientBean()
             plants.add(plant)
             plantDao.insertAll(plants)
         }
@@ -51,7 +51,7 @@ class MainViewModel @Inject constructor(
     }
 
 
-    fun getPlant() {//数据库查询
+    fun getPatient() {//数据库查询
         viewModelScope.launch {
             plantDao.getPlant("123").collect {
                 mEventHub.value = LiveDataEvent(

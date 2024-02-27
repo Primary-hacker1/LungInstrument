@@ -30,7 +30,6 @@ class NewFragment : CommonBaseFragment<FragmentNewBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
     override fun loadData() {//懒加载
-        viewModel.getDates("")//插入或者请求网络数据
         binding.toolbar.ivTitleBack.setNoRepeatListener {
             Navigation.findNavController(it).popBackStack()
         }

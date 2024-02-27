@@ -29,7 +29,7 @@ class PatientAdapter(private val mDatas: MutableList<PatientBean>) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ItemHolder) {
             holder.tvContent.text = mDatas[position].name
-            holder.tvTime.text = mDatas[position].imageUrl
+            holder.medicalRecordNumber.text = mDatas[position].medicalRecordNumber
             holder.ivDelete.setOnClickListener {
                 deleteItem(holder.adapterPosition)
             }
@@ -52,12 +52,12 @@ class PatientAdapter(private val mDatas: MutableList<PatientBean>) :
     //item的holder
     class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvContent: TextView
-        val tvTime: TextView
+        val medicalRecordNumber: TextView
         val ivDelete: ImageView
 
         init {
             tvContent = itemView.findViewById<TextView>(R.id.tvLinesItemContent)
-            tvTime = itemView.findViewById<TextView>(R.id.tvLinesItemTime)
+            medicalRecordNumber = itemView.findViewById<TextView>(R.id.tvLinesItemContent)
             ivDelete = itemView.findViewById<ImageView>(R.id.ivLinesItemDelete)
         }
     }

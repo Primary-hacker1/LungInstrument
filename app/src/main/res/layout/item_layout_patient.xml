@@ -30,7 +30,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvLinesItemTime"
+                android:id="@+id/tv_medicalRecordNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#A0A1A4"

@@ -16,26 +16,54 @@ class SharedPreferencesUtils private constructor() {
     companion object {
         val instance = SharedPreferencesUtils()
         private const val PER_USERNAME = "per_username"
-        private const val NAME = "per_user_name"
+        private const val USER = "per_user_user"
+        private const val PHONE = "per_user_phone"
+        private const val PASS = "per_user_pass"
     }
 
-    var phone: String? = null
+    var user: String? = null
         get() {
             if (field == null) {
-                field = CommonSharedPreferences.getSPValue(NAME, "")
+                field = CommonSharedPreferences.getSPValue(USER, "")
             }
             return field
         }
         set(serialNo) {
             field = serialNo
-            CommonSharedPreferences.setSPValue(NAME, serialNo)
+            CommonSharedPreferences.setSPValue(USER, serialNo)
+        }
+
+    var phone: String? = null
+        get() {
+            if (field == null) {
+                field = CommonSharedPreferences.getSPValue(PHONE, "")
+            }
+            return field
+        }
+        set(serialNo) {
+            field = serialNo
+            CommonSharedPreferences.setSPValue(PHONE, serialNo)
+        }
+
+    var pass: String? = null
+        get() {
+            if (field == null) {
+                field = CommonSharedPreferences.getSPValue(PASS, "")
+            }
+            return field
+        }
+        set(serialNo) {
+            field = serialNo
+            CommonSharedPreferences.setSPValue(PASS, serialNo)
         }
 
     /**
      * 登录信息销毁
      */
     fun logout() {
+        user = ""
         phone = ""
+        pass = ""
     }
 
 }

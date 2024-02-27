@@ -38,7 +38,7 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
 
         binding.btnLogin.setOnClickListener {
 
-            if(Constants.isDebug){
+            if (Constants.isDebug) {
                 MainActivity.startMainActivity(context)
                 activity?.finish()
                 return@setOnClickListener
@@ -56,12 +56,14 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
 
             SharedPreferencesUtils.instance.phone = binding.atvPhone.text.toString()
 
+            SharedPreferencesUtils.instance.pass = binding.atvPass.text.toString()
+
             MainActivity.startMainActivity(context)
 
             activity?.finish()
         }
 
-        binding.toolbar.ivTitleBack.setOnClickListener{
+        binding.toolbar.ivTitleBack.setOnClickListener {
             activity?.finish()
             SharedPreferencesUtils.instance.logout()
         }

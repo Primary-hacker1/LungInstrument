@@ -11,13 +11,13 @@ import kotlinx.coroutines.flow.Flow
  */
 @Dao
 interface PlantDao {
-    @Query("SELECT * FROM plants ORDER BY name")
+    @Query("SELECT * FROM patients ORDER BY name")
     fun getPlants(): Flow<List<PatientBean>>
 
-    @Query("SELECT * FROM plants WHERE growZoneNumber = :growZoneNumber ORDER BY name")
-    fun getPlantsWithGrowZoneNumber(growZoneNumber: Int): Flow<List<PatientBean>>
+    @Query("SELECT * FROM patients WHERE age = :age ORDER BY name")//条件查询
+    fun getPlantsWithGrowZoneNumber(age: Int): Flow<List<PatientBean>>
 
-    @Query("SELECT * FROM plants WHERE id = :plantId")
+    @Query("SELECT * FROM patients WHERE id = :plantId")
     fun getPlant(plantId: String): Flow<PatientBean>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
