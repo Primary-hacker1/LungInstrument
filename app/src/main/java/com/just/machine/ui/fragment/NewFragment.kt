@@ -11,7 +11,7 @@ import androidx.navigation.Navigation
 import com.common.base.*
 import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
-import com.just.machine.dao.Plant
+import com.just.machine.dao.PatientBean
 import com.just.machine.model.Constants
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
@@ -53,7 +53,7 @@ class NewFragment : CommonBaseFragment<FragmentNewBinding>() {
         viewModel.mEventHub.observe(this) {
             when (it.action) {
                 LiveDataEvent.LOGIN_FAIL -> {
-                    LogUtils.e(TAG + it.any as Plant)
+                    LogUtils.e(TAG + it.any as PatientBean)
                 }
             }
         }

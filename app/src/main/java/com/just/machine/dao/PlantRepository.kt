@@ -13,9 +13,9 @@ class PlantRepository @Inject constructor(private val plantDao: PlantDao) {
 
     fun getPlants() = plantDao.getPlants()
 
-    fun getPlant(plantId: String): Flow<Plant> = plantDao.getPlant(plantId)
+    fun getPlant(plantId: String): Flow<PatientBean> = plantDao.getPlant(plantId)
 
-    suspend fun insertAll(plants: List<Plant>) = plantDao.insertAll(plants)
+    suspend fun insertAll(plants: List<PatientBean>) = plantDao.insertAll(plants)
 
     fun getPlantsWithGrowZoneNumber(growZoneNumber: Int) =
         plantDao.getPlantsWithGrowZoneNumber(growZoneNumber)

@@ -8,7 +8,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
 import com.just.machine.dao.AppDatabase
-import com.just.machine.dao.Plant
+import com.just.machine.dao.PatientBean
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -22,8 +22,8 @@ class SeedDatabaseWorker(
             if (filename != null) {
                 applicationContext.assets.open(filename).use { inputStream ->
                     JsonReader(inputStream.reader()).use { jsonReader ->
-                        val plantType = object : TypeToken<List<Plant>>() {}.type
-                        val plantList: List<Plant> = Gson().fromJson(jsonReader, plantType)
+                        val plantType = object : TypeToken<List<PatientBean>>() {}.type
+                        val plantList: List<PatientBean> = Gson().fromJson(jsonReader, plantType)
 
                         val database = AppDatabase.getInstance(applicationContext)
                         database.plantDao().insertAll(plantList)

@@ -7,7 +7,7 @@ import com.common.base.subscribes
 import com.common.viewmodel.BaseViewModel
 import com.common.viewmodel.LiveDataEvent
 import com.just.machine.api.UserRepository
-import com.just.machine.dao.Plant
+import com.just.machine.dao.PatientBean
 import com.just.machine.dao.PlantRepository
 import com.just.machine.model.Data
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,8 +34,8 @@ class MainViewModel @Inject constructor(
     fun getDates(type: String) {
 
         viewModelScope.launch {
-            val plants: MutableList<Plant> = ArrayList()
-            val plant = Plant("123", "张涛的数据库操作", "", 6, 7, "http//：www.baidu.com")
+            val plants: MutableList<PatientBean> = ArrayList()
+            val plant = PatientBean("123", "张涛的数据库操作", "", 6, 7, "http//：www.baidu.com")
             plants.add(plant)
             plantDao.insertAll(plants)
         }

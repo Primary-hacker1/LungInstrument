@@ -12,14 +12,14 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface PlantDao {
     @Query("SELECT * FROM plants ORDER BY name")
-    fun getPlants(): Flow<List<Plant>>
+    fun getPlants(): Flow<List<PatientBean>>
 
     @Query("SELECT * FROM plants WHERE growZoneNumber = :growZoneNumber ORDER BY name")
-    fun getPlantsWithGrowZoneNumber(growZoneNumber: Int): Flow<List<Plant>>
+    fun getPlantsWithGrowZoneNumber(growZoneNumber: Int): Flow<List<PatientBean>>
 
     @Query("SELECT * FROM plants WHERE id = :plantId")
-    fun getPlant(plantId: String): Flow<Plant>
+    fun getPlant(plantId: String): Flow<PatientBean>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(plants: List<Plant>)
+    suspend fun insertAll(plants: List<PatientBean>)
 }

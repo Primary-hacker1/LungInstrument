@@ -3,10 +3,9 @@ package com.just.machine.ui.activity
 
 import android.content.Context
 import android.content.Intent
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseActivity
-import com.just.machine.model.PatientBean
+import com.just.machine.dao.PatientBean
 import com.just.machine.ui.adapter.PatientAdapter
 import com.just.news.databinding.ActivityPatientBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,7 +28,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         }
     }
 
-    lateinit var adapter: PatientAdapter
+    private lateinit var adapter: PatientAdapter
     override fun initView() {
 
         binding.rvList.layoutManager = LinearLayoutManager(this)
@@ -41,11 +40,11 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
     private fun getDataList(): ArrayList<PatientBean> {
         val list = ArrayList<PatientBean>()
-        list.add(PatientBean("2024", "测试"))
-        list.add(PatientBean("2024", "测试"))
-        list.add(PatientBean("2024", "测试"))
-        list.add(PatientBean("2024", "测试"))
-        list.add(PatientBean("2024", "测试"))
+        list.add(PatientBean("2024", "测试1"))
+        list.add(PatientBean("2024", "测试2"))
+        list.add(PatientBean("2024", "测试3"))
+        list.add(PatientBean("2024", "测试4"))
+        list.add(PatientBean("2024", "测试5"))
         return list
     }
 

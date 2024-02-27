@@ -7,11 +7,11 @@ import java.util.Calendar
 import java.util.Calendar.DAY_OF_YEAR
 
 @Entity(tableName = "plants")
-data class Plant(
+data class PatientBean(
     @PrimaryKey @ColumnInfo(name = "id") val plantId: String,
     val name: String,
-    val description: String,
-    val growZoneNumber: Int,
+    val description: String = "",
+    val growZoneNumber: Int = 1,
     val wateringInterval: Int = 7, // how often the plant should be watered, in days
     val imageUrl: String = ""
 ) {
