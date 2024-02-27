@@ -34,7 +34,6 @@ android {
         }
     }
 
-
     kapt {
         generateStubs = true
     }
@@ -71,8 +70,6 @@ android {
 
 kapt {
     arguments {
-        // Make Hilt share the same definition of Components in tests instead of
-        // creating a new set of Components per test class.
         arg("dagger.hilt.shareTestComponents", "true")
     }
 }
@@ -110,7 +107,7 @@ dependencies {
     // Hilt
     kapt presentationDependencies.hilt_compiler
     implementation presentationDependencies.hilt_andorid
-    implementation presentationDependencies.hilt_lifecycle_viewmodel
+//    implementation presentationDependencies.hilt_lifecycle_viewmodel
     androidTestImplementation presentationDependencies.hilt_andorid_testing
     kaptAndroidTest presentationDependencies.hilt_andorid_compiler
 

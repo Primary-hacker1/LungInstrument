@@ -7,28 +7,36 @@ import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.common.base.setNoRepeatListener
+import com.just.machine.model.PatientBean
 import com.just.machine.ui.activity.PatientActivity
 import com.just.news.R
+import kotlinx.android.synthetic.main.item_layout_patient.view.ivLinesItemDelete
 
 /**
  *create by 2024/2/27
  * 患者信息adapter
  *@author zt
  */
-class PatientAdapter(private val dataList: MutableList<String>) :
+class PatientAdapter(private val dataList: MutableList<PatientBean>) :
     RecyclerView.Adapter<PatientAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_patient, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_layout_patient, parent, false)
         return MyViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.bind(dataList[position])
+        holder.itemView.ivLinesItemDelete.setNoRepeatListener {
+            deleteItem(holder.adapterPosition)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -42,12 +50,14 @@ class PatientAdapter(private val dataList: MutableList<String>) :
 
     // RecyclerView ViewHolder
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(data: String) {
-            itemView.findViewById<TextView>(R.id.item_name).text = data
+        fun bind(data: PatientBean) {
+            itemView.findViewById<TextView>(R.id.tvLinesItemContent).text = data.content
+            itemView.findViewById<ImageView>(R.id.ivLinesItemDelete)
         }
     }
 
-    class SwipeToDeleteCallback(context: Context) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+    class SwipeToDeleteCallback(context: Context) :
+        ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
         private val deleteIcon = ContextCompat.getDrawable(context, R.drawable.ic_delete)
         private val intrinsicWidth = deleteIcon?.intrinsicWidth
@@ -96,7 +106,12 @@ class PatientAdapter(private val dataList: MutableList<String>) :
             val iconBottom = iconTop + intrinsicHeight
 
             // Draw delete icon
-            deleteIcon?.setBounds(iconLeft.toInt(), iconTop.toInt(), iconRight.toInt(), iconBottom.toInt())
+            deleteIcon?.setBounds(
+                iconLeft.toInt(),
+                iconTop.toInt(),
+                iconRight.toInt(),
+                iconBottom.toInt()
+            )
             deleteIcon?.draw(c)
 
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)

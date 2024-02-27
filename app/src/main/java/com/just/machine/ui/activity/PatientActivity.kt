@@ -1,19 +1,33 @@
 package com.just.machine.ui.activity
 
 
+import android.content.Context
+import android.content.Intent
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseActivity
+import com.just.machine.model.PatientBean
 import com.just.machine.ui.adapter.PatientAdapter
 import com.just.news.databinding.ActivityPatientBinding
 import dagger.hilt.android.AndroidEntryPoint
+
 /**
  *create by 2024/2/27
  * 患者信息
  *@author zt
  */
 @AndroidEntryPoint
-class PatientActivity : CommonBaseActivity<ActivityPatientBinding>(){
+class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
+
+    companion object {
+        /**
+         * @param context context
+         */
+        fun startPatientActivity(context: Context?) {
+            val intent = Intent(context, PatientActivity::class.java)
+            context?.startActivity(intent)
+        }
+    }
 
     lateinit var adapter: PatientAdapter
     override fun initView() {
@@ -23,21 +37,16 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>(){
         adapter = PatientAdapter(getDataList())
 
         binding.rvList.adapter = adapter
-
-        // 设置左滑删除功能
-        val itemTouchHelper = ItemTouchHelper(PatientAdapter.SwipeToDeleteCallback(this))
-
-        itemTouchHelper.attachToRecyclerView(binding.rvList)
     }
 
-    private fun getDataList(): ArrayList<String> {
-        return arrayListOf(
-            "Item 1",
-            "Item 2",
-            "Item 3",
-            "Item 4",
-            "Item 5"
-        )
+    private fun getDataList(): ArrayList<PatientBean> {
+        val list = ArrayList<PatientBean>()
+        list.add(PatientBean("2024", "测试"))
+        list.add(PatientBean("2024", "测试"))
+        list.add(PatientBean("2024", "测试"))
+        list.add(PatientBean("2024", "测试"))
+        list.add(PatientBean("2024", "测试"))
+        return list
     }
 
     override fun getViewBinding() = ActivityPatientBinding.inflate(layoutInflater)

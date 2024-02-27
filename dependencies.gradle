@@ -3,7 +3,7 @@ ext {
     androidMinSdkVersion = 21
     androidTargetSdkVersion = 33
     androidCompileSdkVersion = 33
-    androidBuildToolsVersion = "33.0.3"
+    androidBuildToolsVersion = "30.0.3"
 
     junit = "4.13.2"
 
@@ -44,7 +44,7 @@ ext {
             hilt_andorid                  : "com.google.dagger:hilt-android:$hilt",
             hilt_andorid_testing          : "com.google.dagger:hilt-android-testing:$hilt",
             hilt_andorid_compiler         : "com.google.dagger:hilt-android-compiler:$hilt",
-            hilt_lifecycle_viewmodel      : "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-SNAPSHOT",
+//            hilt_lifecycle_viewmodel      : "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-SNAPSHOT",
             lifecycle_viewmodel_ktx       : "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle",
             lifecycle_viewmodel_savedstate: "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle",
             datastore_preferences         : "androidx.datastore:datastore-preferences:$datastore_core",
