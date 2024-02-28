@@ -1,12 +1,14 @@
 package com.just.machine.ui.fragment
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
-import com.just.machine.ui.activity.PatientActivity
+import com.just.machine.ui.activity.LoginActivity
+import com.just.machine.ui.activity.SixMinActivity
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.TimerEcg
 import com.just.news.databinding.FragmentMainBinding
@@ -22,21 +24,35 @@ import kotlin.random.Random
 @AndroidEntryPoint
 class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
 
+    private val viewModel by viewModels<MainViewModel>()
     override fun loadData() {//懒加载
+        viewModel.getDates("")//插入或者请求网络数据
+    }
 
+    companion object {
+        val ecg = ArrayList<Float>()
     }
 
     @SuppressLint("SetTextI18n")
     override fun initView() {
-
-        binding.btnPatient.setNoRepeatListener {
-            PatientActivity.startPatientActivity(context)
-        }
-
+        TimerEcg().startTimer(ecg)
+            .ecgTimerListener(object : TimerEcg.EcgTimerListener {
+                override fun ecgTimerView(cooY: Float) {
+                    binding.ecgView.showLine(cooY)
+                }
+            })//链式心电图view
     }
 
     override fun initListener() {
-
+        binding.ecgButton.setNoRepeatListener {
+            for (i in 0..9){
+                ecg.add(Random.nextInt(10).toFloat())//随机数
+            }
+        }
+        binding.walkTestButton.setNoRepeatListener {
+            val intent = Intent(activity, SixMinActivity::class.java)
+            startActivity(intent)
+        }
     }
 
 
