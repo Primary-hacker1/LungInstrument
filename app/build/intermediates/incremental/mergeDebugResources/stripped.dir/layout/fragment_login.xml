@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+                                                       
+                                                   
+
+    
+
+                                         
+
+                 
+                     
+                                                                 
+
+           
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" android:tag="layout/fragment_login_0" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/view_toolbar"
+                                              
+                                     />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_background"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="150dp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/iv_background"
+            android:layout_centerHorizontal="true">
+
+            <LinearLayout
+                android:id="@+id/ll_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26dp"
+                android:layout_marginRight="26dp"
+                android:orientation="vertical"
+                android:paddingTop="20dp"
+                tools:ignore="MissingConstraints,NotSibling">
+
+
+                <com.justsafe.libview.text.LoginEditText
+                    android:id="@+id/atv_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:drawablePadding="@dimen/space_10"
+                    android:hint="@string/name"
+                    android:maxLength="11"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColorHint="@color/login_hit"
+                    android:textSize="@dimen/space_15"
+                    app:ed_backgroundColor="true"
+                    app:left_icon="@drawable/user"
+                    tools:ignore="SpUsage" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical">
+
+                    <com.justsafe.libview.text.LoginEditText
+                        android:id="@+id/atv_pass"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:drawablePadding="@dimen/space_10"
+                        android:hint="@string/pass"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColorHint="@color/login_hit"
+                        android:textSize="@dimen/space_15"
+                        app:delete_x="0"
+                        app:ic_left_click="@drawable/pass"
+                        app:ic_left_unclick="@drawable/pass"
+                        app:ed_backgroundColor="true"
+                        app:left_icon="@drawable/pass"
+                        tools:ignore="SpUsage" />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_login"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="@dimen/space_20"
+                android:layout_marginTop="60dp"
+                android:layout_marginEnd="@dimen/space_20"
+                android:background="@drawable/login_btn"
+                android:text="@string/submit"
+                android:textColor="@color/colorWhile"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="@id/ll_input"
+                app:layout_constraintRight_toRightOf="@id/ll_input"
+                app:layout_constraintTop_toBottomOf="@id/ll_input" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+
+
+         
