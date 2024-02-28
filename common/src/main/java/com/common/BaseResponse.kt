@@ -9,3 +9,7 @@ data class BaseResponse<T>(
     val code: Int,
     val data: T
 )
+
+data class BaseResponseDB<T>(
+    val code: T
+)

@@ -51,7 +51,7 @@ class NewFragment : CommonBaseFragment<FragmentNewBinding>() {
 
         viewModel.mEventHub.observe(this) {
             when (it.action) {
-                LiveDataEvent.LOGIN_FAIL -> {
+                LiveDataEvent.FAIL -> {
                     LogUtils.e(TAG + it.any as PatientBean)
                 }
             }

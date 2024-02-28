@@ -1,5 +1,6 @@
 package com.just.machine.dao
 
+import com.common.BaseResponseDB
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -13,10 +14,10 @@ class PlantRepository @Inject constructor(private val plantDao: PlantDao) {
 
     fun getPlants() = plantDao.getPlants()
 
-    fun getPlant(plantId: String): Flow<PatientBean> = plantDao.getPlant(plantId)
+    fun getPatients(): Flow<List<PatientBean>> = plantDao.getPatients()
 
     suspend fun insertAll(plants: List<PatientBean>) = plantDao.insertAll(plants)
 
-    fun getPlantsWithGrowZoneNumber(growZoneNumber: Int) =
-        plantDao.getPlantsWithGrowZoneNumber(growZoneNumber)
+    fun insertPatient(patients: PatientBean): Long = plantDao.insertPatient(patients)
+
 }

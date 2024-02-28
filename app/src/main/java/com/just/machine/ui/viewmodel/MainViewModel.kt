@@ -3,6 +3,7 @@ package com.just.machine.ui.viewmodel
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.viewModelScope
+import com.common.base.doAsync
 import com.common.base.subscribes
 import com.common.viewmodel.BaseViewModel
 import com.common.viewmodel.LiveDataEvent
@@ -20,6 +21,7 @@ import javax.inject.Inject
  *
  * @author zt
  */
+@Suppress("CAST_NEVER_SUCCEEDS")
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private var repository: UserRepository,
@@ -32,30 +34,41 @@ class MainViewModel @Inject constructor(
      *@param type 协程请求->直接获取结果的
      */
     fun getDates(type: String) {
+        val plants: MutableList<PatientBean> = ArrayList()
 
-        viewModelScope.launch {
-            val plants: MutableList<PatientBean> = ArrayList()
+        for (item in 0..9) {
             val plant = PatientBean()
+            plant.name = "张三$item"
+            plant.age = (1 + item).toString()
             plants.add(plant)
-            plantDao.insertAll(plants)
         }
 
-        async({ repository.getNews(type) }, {
-            itemNews.clear()
-            itemNews.addAll(it.data)
-        }, {
-            it.printStackTrace()
-        }, {
+        val plant = PatientBean()
+        plant.name = "张三"
+        plant.age = (28).toString()
 
-        })
+        doAsync {
+            val patient = plantDao.insertPatient(plant)
+
+            if (patient as Int == 0){
+                mEventHub.value = LiveDataEvent(
+                    LiveDataEvent.QuerySuccess,
+                    patient
+                )
+            }
+        }
+
+        viewModelScope.launch {
+
+        }
     }
 
 
-    fun getPatient() {//数据库查询
+    fun getPatient() {//查询所有患者
         viewModelScope.launch {
-            plantDao.getPlant("123").collect {
+            plantDao.getPatients().collect {
                 mEventHub.value = LiveDataEvent(
-                    LiveDataEvent.LOGIN_FAIL,
+                    LiveDataEvent.QuerySuccess,
                     it
                 )
             }

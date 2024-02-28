@@ -56,8 +56,8 @@ class PatientAdapter(private val mDatas: MutableList<PatientBean>) :
         val ivDelete: ImageView
 
         init {
-            tvContent = itemView.findViewById<TextView>(R.id.tvLinesItemContent)
-            medicalRecordNumber = itemView.findViewById<TextView>(R.id.tvLinesItemContent)
+            tvContent = itemView.findViewById<TextView>(R.id.tvName)
+            medicalRecordNumber = itemView.findViewById<TextView>(R.id.tvMedicalRecordNumber)
             ivDelete = itemView.findViewById<ImageView>(R.id.ivLinesItemDelete)
         }
     }

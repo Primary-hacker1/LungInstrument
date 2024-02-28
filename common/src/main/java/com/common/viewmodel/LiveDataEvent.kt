@@ -4,29 +4,22 @@ package com.common.viewmodel
 class LiveDataEvent {
 
     companion object {
-        const val SUCCESS: Int = 200
 
         /**
-         * 登录状态
-         *
-         * @param LOGIN_SUCCESS
+         * @param SUCCESS -通用数据库成功
          * @return
          */
-        const val LOGIN_SUCCESS: Int = 0x01
+        const val SUCCESS: Int = 0
+
+        const val QuerySuccess: Int = 0x01
 
 
         /**
-         * 登录错误
-         *
-         * @param LOGIN_FAIL
+         * @param FAIL -通用错误
          * @return -
          */
-        const val LOGIN_FAIL: Int = 0x02
+        const val FAIL: Int = 0x02
 
-        /**
-         * 可判断所有错误
-         */
-        val JUST_ERROR_FAIL: Int = 0x37
     }
 
     var action = 0

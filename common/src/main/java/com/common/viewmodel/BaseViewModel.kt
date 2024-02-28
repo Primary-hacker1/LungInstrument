@@ -2,13 +2,14 @@ package com.common.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.common.BaseResponse
+import com.common.BaseResponseDB
 import com.common.throwe.BaseResponseThrowable
 import com.common.throwe.ThrowableHandler
 import com.common.viewmodel.LiveDataEvent.Companion.SUCCESS
 import kotlinx.coroutines.*
 
 /**
- *create by 2020/5/22
+ *create by 2024/2/27
  * ViewModel 基础类
  *@author zt
  */
@@ -16,7 +17,7 @@ open class BaseViewModel() : BaseLifeViewModel() {
 
     protected var tag = BaseViewModel::class.simpleName
 
-    var stateView = StateView()
+    private var stateView = StateView()
 
     private fun launchUi(block: suspend CoroutineScope.() -> Unit) =
         viewModelScope.launch { block() }
@@ -38,7 +39,7 @@ open class BaseViewModel() : BaseLifeViewModel() {
             }, {
                 error(it)
             }, {
-                complete()//不管成功与否，执行结束调用
+                complete()
             })
         }
     }
@@ -114,7 +115,7 @@ open class BaseViewModel() : BaseLifeViewModel() {
         }
     }
 
-    //过滤返回数据
+    //网络过滤返回数据
     private suspend fun <T> executeResponse(
         response: BaseResponse<T>,
         success: suspend CoroutineScope.(T) -> Unit

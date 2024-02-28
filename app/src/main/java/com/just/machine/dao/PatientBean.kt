@@ -46,19 +46,20 @@ import java.util.Calendar.DAY_OF_YEAR
 3.14备注 此为非必填字段；字符长度为0-40；*/
 @Entity(tableName = "patients")
 data class PatientBean(
-    @PrimaryKey @ColumnInfo(name = "id") val patientId: String = "",
-    val name: String = "",//姓名
-    val sex: String = "",//性别
-    val height: String = "",//身高
-    val weight: String = "",//体重
-    val identityCard: String = "",//身份证
-    val birthday: String = "",//生日
-    val age: String = "",//年龄
-    val BMI: String = "",
-    val medicalRecordNumber: String = "",//病例号
-    val predictDistances: String = "",//预测距离
-    val diseaseHistory: String = "",//病史
-    val currentMedications: String = "",//目前用药
-    val clinicalDiagnosis: String = "",//临床诊断
-    val remark: String = "",//备注
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id")
+    val patientId: Long = 0,
+    var name: String = "",//姓名
+    var sex: String = "",//性别
+    var height: String = "",//身高
+    var weight: String = "",//体重
+    var identityCard: String = "",//身份证
+    var birthday: String = "",//生日
+    var age: String = "",//年龄
+    var BMI: String = "",
+    var medicalRecordNumber: String = "",//病例号
+    var predictDistances: String = "",//预测距离
+    var diseaseHistory: String = "",//病史
+    var currentMedications: String = "",//目前用药
+    var clinicalDiagnosis: String = "",//临床诊断
+    var remark: String = "",//备注
 )

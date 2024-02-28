@@ -6,6 +6,8 @@ import android.content.Intent
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseActivity
+import com.common.network.LogUtils
+import com.common.viewmodel.LiveDataEvent
 import com.just.machine.dao.PatientBean
 import com.just.machine.ui.adapter.PatientAdapter
 import com.just.machine.ui.viewmodel.MainViewModel
@@ -32,26 +34,43 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         }
     }
 
-    private lateinit var adapter: PatientAdapter
     override fun initView() {
 
         viewModel.getDates("")//插入患者数据
 
+        viewModel.getPatient()//查询数据库
+
         binding.rvList.layoutManager = LinearLayoutManager(this)
 
-        adapter = PatientAdapter(getDataList())
+        viewModel.mEventHub.observe(this) {
+            when (it.action) {
+                LiveDataEvent.SUCCESS -> {
+                    if (it.any is Int)
+                        LogUtils.e(tag + it.any)
+                }
 
-        binding.rvList.adapter = adapter
-    }
+                LiveDataEvent.QuerySuccess -> {
+                    if (it.any is List<*>) {
 
-    private fun getDataList(): ArrayList<PatientBean> {
-        val list = ArrayList<PatientBean>()
-        list.add(PatientBean("1", "测试1"))
-        list.add(PatientBean("2", "测试2"))
-        list.add(PatientBean("3", "测试3"))
-        list.add(PatientBean("4", "测试4"))
-        list.add(PatientBean("5", "测试5"))
-        return list
+                        val datas = it.any as MutableList<*>
+
+                        val beans: MutableList<PatientBean> = ArrayList()
+
+                        for (num in 0 until datas.size) {
+                            val bean = datas[num] as PatientBean
+                            beans.add(bean)
+                        }
+
+                        LogUtils.e(tag + beans.toString())
+
+                       val adapter = PatientAdapter(beans)
+
+                        binding.rvList.adapter = adapter
+
+                    }
+                }
+            }
+        }
     }
 
     override fun getViewBinding() = ActivityPatientBinding.inflate(layoutInflater)
