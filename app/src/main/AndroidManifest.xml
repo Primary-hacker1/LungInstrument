@@ -17,7 +17,8 @@
         tools:targetApi="m">
         <activity
             android:name="com.just.machine.ui.activity.LoginActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,9 +27,11 @@
         </activity>
         <activity
             android:name="com.just.machine.ui.activity.MainActivity"
+            android:screenOrientation="landscape"
             android:exported="false" />
         <activity
             android:name="com.just.machine.ui.activity.SixMinActivity"
+            android:screenOrientation="landscape"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />

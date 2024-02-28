@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -13,43 +13,46 @@
 
     </data>
 
-    <LinearLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.justsafe.libview.ecg.WaveShowView
-                android:id="@+id/ecg_view"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="13dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="13dp"
-                tools:ignore="MissingClass,MissingConstraints" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="MissingConstraints">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/ecg_button"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:text="模拟心电数据"
-                app:layout_constraintTop_toBottomOf="@+id/ecg_view"
+                android:text="@string/cardiopulmonary"
                 tools:ignore="MissingConstraints" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/walk_test_button"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:text="6分钟步行测试"
+                android:text="@string/minute_walk"
                 app:layout_constraintTop_toBottomOf="@+id/ecg_button"
                 tools:ignore="MissingConstraints" />
 
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_patientInformation"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="@string/patientInformation"
+                app:layout_constraintTop_toBottomOf="@+id/ecg_button"
+                tools:ignore="MissingConstraints" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
