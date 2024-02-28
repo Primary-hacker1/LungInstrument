@@ -2807,6 +2807,7 @@ id visible
 id visible_removing_fragment_view_tag
 id vp_month
 id vp_week
+id walk_test_button
 id wheel_id_picker_container
 id wheel_id_title_bar_cancel
 id wheel_id_title_bar_ok
@@ -2889,6 +2890,7 @@ layout activity_invite_people
 layout activity_login
 layout activity_main
 layout activity_organization
+layout activity_six_min
 layout activity_succeed_prison
 layout activity_web
 layout activity_welcome
@@ -4086,6 +4088,7 @@ styleable ViewPager2 android_orientation
 styleable ViewStubCompat android_id android_layout android_inflatedId
 styleable WheelMaskView wheelMaskLineColor
 styleable WheelView wheelItemVerticalSpace wheelRotationX wheelShowCount wheelTextColor wheelTextSize wheelTotalOffsetX wheelVelocityUnits
+xml device_filter
 xml standalone_badge
 xml standalone_badge_gravity_bottom_end
 xml standalone_badge_gravity_bottom_start

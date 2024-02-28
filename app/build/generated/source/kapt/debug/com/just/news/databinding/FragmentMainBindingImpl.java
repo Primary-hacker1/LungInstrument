@@ -16,6 +16,7 @@ public class FragmentMainBindingImpl extends FragmentMainBinding  {
         sViewsWithIds = new android.util.SparseIntArray();
         sViewsWithIds.put(R.id.ecg_view, 1);
         sViewsWithIds.put(R.id.ecg_button, 2);
+        sViewsWithIds.put(R.id.walk_test_button, 3);
     }
     // views
     @NonNull
@@ -26,12 +27,13 @@ public class FragmentMainBindingImpl extends FragmentMainBinding  {
     // Inverse Binding Event Handlers
 
     public FragmentMainBindingImpl(@Nullable androidx.databinding.DataBindingComponent bindingComponent, @NonNull View root) {
-        this(bindingComponent, root, mapBindings(bindingComponent, root, 3, sIncludes, sViewsWithIds));
+        this(bindingComponent, root, mapBindings(bindingComponent, root, 4, sIncludes, sViewsWithIds));
     }
     private FragmentMainBindingImpl(androidx.databinding.DataBindingComponent bindingComponent, View root, Object[] bindings) {
         super(bindingComponent, root, 0
             , (androidx.appcompat.widget.AppCompatButton) bindings[2]
             , (com.justsafe.libview.ecg.WaveShowView) bindings[1]
+            , (androidx.appcompat.widget.AppCompatButton) bindings[3]
             );
         this.mboundView0 = (android.widget.LinearLayout) bindings[0];
         this.mboundView0.setTag(null);

@@ -23,14 +23,18 @@ public abstract class FragmentMainBinding extends ViewDataBinding {
   @NonNull
   public final WaveShowView ecgView;
 
+  @NonNull
+  public final AppCompatButton walkTestButton;
+
   @Bindable
   protected MainViewModel mVm;
 
   protected FragmentMainBinding(Object _bindingComponent, View _root, int _localFieldCount,
-      AppCompatButton ecgButton, WaveShowView ecgView) {
+      AppCompatButton ecgButton, WaveShowView ecgView, AppCompatButton walkTestButton) {
     super(_bindingComponent, _root, _localFieldCount);
     this.ecgButton = ecgButton;
     this.ecgView = ecgView;
+    this.walkTestButton = walkTestButton;
   }
 
   public abstract void setVm(@Nullable MainViewModel vm);

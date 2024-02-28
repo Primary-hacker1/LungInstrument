@@ -19,6 +19,7 @@ import com.just.machine.di.DatabaseModule_ProvideAppDatabaseFactory;
 import com.just.machine.di.DatabaseModule_ProvidePlantDaoFactory;
 import com.just.machine.ui.activity.LoginActivity;
 import com.just.machine.ui.activity.MainActivity;
+import com.just.machine.ui.activity.SixMinActivity;
 import com.just.machine.ui.activity.WelComeActivity;
 import com.just.machine.ui.fragment.LoginFragment;
 import com.just.machine.ui.fragment.MainFragment;
@@ -261,6 +262,10 @@ public final class DaggerApp_HiltComponents_SingletonC extends App_HiltComponent
 
       @Override
       public void injectMainActivity(MainActivity mainActivity) {
+      }
+
+      @Override
+      public void injectSixMinActivity(SixMinActivity sixMinActivity) {
       }
 
       @Override

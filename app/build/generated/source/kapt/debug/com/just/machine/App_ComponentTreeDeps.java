@@ -22,6 +22,7 @@ import hilt_aggregated_deps._com_just_machine_di_AppModule;
 import hilt_aggregated_deps._com_just_machine_di_DatabaseModule;
 import hilt_aggregated_deps._com_just_machine_ui_activity_LoginActivity_GeneratedInjector;
 import hilt_aggregated_deps._com_just_machine_ui_activity_MainActivity_GeneratedInjector;
+import hilt_aggregated_deps._com_just_machine_ui_activity_SixMinActivity_GeneratedInjector;
 import hilt_aggregated_deps._com_just_machine_ui_activity_WelComeActivity_GeneratedInjector;
 import hilt_aggregated_deps._com_just_machine_ui_fragment_LoginFragment_GeneratedInjector;
 import hilt_aggregated_deps._com_just_machine_ui_fragment_MainFragment_GeneratedInjector;
@@ -87,6 +88,7 @@ import hilt_aggregated_deps._dagger_hilt_android_internal_modules_HiltWrapper_Ac
         _com_just_machine_di_AppModule.class,
         _com_just_machine_di_DatabaseModule.class,
         _com_just_machine_ui_activity_LoginActivity_GeneratedInjector.class,
+        _com_just_machine_ui_activity_MainActivity_GeneratedInjector.class,
         _com_just_machine_ui_activity_WelComeActivity_GeneratedInjector.class,
         _com_just_machine_ui_fragment_LoginFragment_GeneratedInjector.class,
         _com_just_machine_ui_fragment_MainFragment_GeneratedInjector.class,
@@ -95,7 +97,7 @@ import hilt_aggregated_deps._dagger_hilt_android_internal_modules_HiltWrapper_Ac
         _com_just_machine_ui_fragment_SettingFragment_GeneratedInjector.class,
         _com_just_machine_ui_viewmodel_MainViewModel_HiltModules_BindsModule.class,
         _com_just_machine_ui_viewmodel_MainViewModel_HiltModules_KeyModule.class,
-        _com_just_machine_ui_activity_MainActivity_GeneratedInjector.class
+        _com_just_machine_ui_activity_SixMinActivity_GeneratedInjector.class
     }
 )
 class App_ComponentTreeDeps {

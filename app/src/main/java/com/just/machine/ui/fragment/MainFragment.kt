@@ -1,11 +1,14 @@
 package com.just.machine.ui.fragment
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
+import com.just.machine.ui.activity.LoginActivity
+import com.just.machine.ui.activity.SixMinActivity
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.TimerEcg
 import com.just.news.databinding.FragmentMainBinding
@@ -46,7 +49,10 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                 ecg.add(Random.nextInt(10).toFloat())//随机数
             }
         }
-
+        binding.walkTestButton.setNoRepeatListener {
+            val intent = Intent(activity, SixMinActivity::class.java)
+            startActivity(intent)
+        }
     }
 
 

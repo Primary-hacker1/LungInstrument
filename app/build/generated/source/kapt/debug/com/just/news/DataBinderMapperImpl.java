@@ -9,6 +9,7 @@ import androidx.databinding.ViewDataBinding;
 import com.just.news.databinding.ActivityLoginBindingImpl;
 import com.just.news.databinding.ActivityMainBindingImpl;
 import com.just.news.databinding.ActivityOrganizationBindingImpl;
+import com.just.news.databinding.ActivitySixMinBindingImpl;
 import com.just.news.databinding.ActivitySucceedPrisonBindingImpl;
 import com.just.news.databinding.ActivityWebBindingImpl;
 import com.just.news.databinding.ActivityWelcomeBindingImpl;
@@ -37,34 +38,37 @@ public class DataBinderMapperImpl extends DataBinderMapper {
 
   private static final int LAYOUT_ACTIVITYORGANIZATION = 3;
 
-  private static final int LAYOUT_ACTIVITYSUCCEEDPRISON = 4;
+  private static final int LAYOUT_ACTIVITYSIXMIN = 4;
 
-  private static final int LAYOUT_ACTIVITYWEB = 5;
+  private static final int LAYOUT_ACTIVITYSUCCEEDPRISON = 5;
 
-  private static final int LAYOUT_ACTIVITYWELCOME = 6;
+  private static final int LAYOUT_ACTIVITYWEB = 6;
 
-  private static final int LAYOUT_FRAGMELAYOUTSUCCEED = 7;
+  private static final int LAYOUT_ACTIVITYWELCOME = 7;
 
-  private static final int LAYOUT_FRAGMENTLOGIN = 8;
+  private static final int LAYOUT_FRAGMELAYOUTSUCCEED = 8;
 
-  private static final int LAYOUT_FRAGMENTMAIN = 9;
+  private static final int LAYOUT_FRAGMENTLOGIN = 9;
 
-  private static final int LAYOUT_FRAGMENTME = 10;
+  private static final int LAYOUT_FRAGMENTMAIN = 10;
 
-  private static final int LAYOUT_FRAGMENTNEW = 11;
+  private static final int LAYOUT_FRAGMENTME = 11;
 
-  private static final int LAYOUT_FRAGMENTSETTING = 12;
+  private static final int LAYOUT_FRAGMENTNEW = 12;
 
-  private static final int LAYOUT_ITEMNEW = 13;
+  private static final int LAYOUT_FRAGMENTSETTING = 13;
 
-  private static final int LAYOUT_VIEWTOOLBAR = 14;
+  private static final int LAYOUT_ITEMNEW = 14;
 
-  private static final SparseIntArray INTERNAL_LAYOUT_ID_LOOKUP = new SparseIntArray(14);
+  private static final int LAYOUT_VIEWTOOLBAR = 15;
+
+  private static final SparseIntArray INTERNAL_LAYOUT_ID_LOOKUP = new SparseIntArray(15);
 
   static {
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.just.news.R.layout.activity_login, LAYOUT_ACTIVITYLOGIN);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.just.news.R.layout.activity_main, LAYOUT_ACTIVITYMAIN);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.just.news.R.layout.activity_organization, LAYOUT_ACTIVITYORGANIZATION);
+    INTERNAL_LAYOUT_ID_LOOKUP.put(com.just.news.R.layout.activity_six_min, LAYOUT_ACTIVITYSIXMIN);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.just.news.R.layout.activity_succeed_prison, LAYOUT_ACTIVITYSUCCEEDPRISON);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.just.news.R.layout.activity_web, LAYOUT_ACTIVITYWEB);
     INTERNAL_LAYOUT_ID_LOOKUP.put(com.just.news.R.layout.activity_welcome, LAYOUT_ACTIVITYWELCOME);
@@ -104,6 +108,12 @@ public class DataBinderMapperImpl extends DataBinderMapper {
             return new ActivityOrganizationBindingImpl(component, view);
           }
           throw new IllegalArgumentException("The tag for activity_organization is invalid. Received: " + tag);
+        }
+        case  LAYOUT_ACTIVITYSIXMIN: {
+          if ("layout/activity_six_min_0".equals(tag)) {
+            return new ActivitySixMinBindingImpl(component, view);
+          }
+          throw new IllegalArgumentException("The tag for activity_six_min is invalid. Received: " + tag);
         }
         case  LAYOUT_ACTIVITYSUCCEEDPRISON: {
           if ("layout/activity_succeed_prison_0".equals(tag)) {
@@ -232,12 +242,13 @@ public class DataBinderMapperImpl extends DataBinderMapper {
   }
 
   private static class InnerLayoutIdLookup {
-    static final HashMap<String, Integer> sKeys = new HashMap<String, Integer>(14);
+    static final HashMap<String, Integer> sKeys = new HashMap<String, Integer>(15);
 
     static {
       sKeys.put("layout/activity_login_0", com.just.news.R.layout.activity_login);
       sKeys.put("layout/activity_main_0", com.just.news.R.layout.activity_main);
       sKeys.put("layout/activity_organization_0", com.just.news.R.layout.activity_organization);
+      sKeys.put("layout/activity_six_min_0", com.just.news.R.layout.activity_six_min);
       sKeys.put("layout/activity_succeed_prison_0", com.just.news.R.layout.activity_succeed_prison);
       sKeys.put("layout/activity_web_0", com.just.news.R.layout.activity_web);
       sKeys.put("layout/activity_welcome_0", com.just.news.R.layout.activity_welcome);

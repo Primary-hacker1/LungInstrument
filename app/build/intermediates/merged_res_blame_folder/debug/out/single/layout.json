@@ -24,6 +24,10 @@
         "source": "D:\\code\\240103\\LungInstrument\\app\\src\\main\\res\\layout\\view_toolbar.xml"
     },
     {
+        "merged": "D:\\code\\240103\\LungInstrument\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_six_min.xml",
+        "source": "D:\\code\\240103\\LungInstrument\\app\\src\\main\\res\\layout\\activity_six_min.xml"
+    },
+    {
         "merged": "D:\\code\\240103\\LungInstrument\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_main.xml",
         "source": "D:\\code\\240103\\LungInstrument\\app\\src\\main\\res\\layout\\activity_main.xml"
     },

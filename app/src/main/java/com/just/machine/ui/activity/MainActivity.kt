@@ -1,9 +1,11 @@
 package com.just.machine.ui.activity
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Message
+import android.util.Log
 import android.widget.Toast
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
@@ -15,7 +17,11 @@ import com.just.news.databinding.ActivityMainBinding
 import com.justsafe.libview.nav.FragmentNavigatorHideShow
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
+import java.net.InetAddress
+import java.net.NetworkInterface
 import java.net.Socket
+import java.net.SocketException
+
 
 @AndroidEntryPoint
 class MainActivity : CommonBaseActivity<ActivityMainBinding>() {
@@ -23,13 +29,14 @@ class MainActivity : CommonBaseActivity<ActivityMainBinding>() {
     private lateinit var listenerThread: ListenerThread
     private lateinit var connectThread: ConnectThread
 
-    private val handler: Handler = object : Handler() {
+    private val handler: Handler = @SuppressLint("HandlerLeak")
+    object : Handler() {
 
         override fun handleMessage(msg: Message) {
             when (msg.what) {
                 1 -> {
                     connectThread = ConnectThread(
-                        this@MainActivity, listenerThread.getSocket(),
+                        this@MainActivity, listenerThread.socket,
                         this
                     )
                     connectThread.start()
@@ -122,5 +129,4 @@ class MainActivity : CommonBaseActivity<ActivityMainBinding>() {
 
 
     override fun getViewBinding() = ActivityMainBinding.inflate(layoutInflater)
-
 }

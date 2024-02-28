@@ -31,10 +31,12 @@ public class ListenerThread extends Thread {
         while (true) {
             try {
                 //阻塞，等待设备连接
-                socket = serverSocket.accept();
-                Message message = Message.obtain();
-                message.what = 1;
-                handler.sendMessage(message);
+                if(null != serverSocket){
+                    socket = serverSocket.accept();
+                    Message message = Message.obtain();
+                    message.what = 1;
+                    handler.sendMessage(message);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -4,6 +4,7 @@ import com.just.machine.di.AppModule;
 import com.just.machine.di.DatabaseModule;
 import com.just.machine.ui.activity.LoginActivity_GeneratedInjector;
 import com.just.machine.ui.activity.MainActivity_GeneratedInjector;
+import com.just.machine.ui.activity.SixMinActivity_GeneratedInjector;
 import com.just.machine.ui.activity.WelComeActivity_GeneratedInjector;
 import com.just.machine.ui.fragment.LoginFragment_GeneratedInjector;
 import com.just.machine.ui.fragment.MainFragment_GeneratedInjector;
@@ -176,6 +177,7 @@ public final class App_HiltComponents {
   @ActivityScoped
   public abstract static class ActivityC implements LoginActivity_GeneratedInjector,
       MainActivity_GeneratedInjector,
+      SixMinActivity_GeneratedInjector,
       WelComeActivity_GeneratedInjector,
       ActivityComponent,
       DefaultViewModelFactories.ActivityEntryPoint,
