@@ -43,7 +43,19 @@ import java.util.Calendar.DAY_OF_YEAR
 3.11病史 此为非必填字段；字符长度为0-40；
 3.12目前用药 此为非必填字段；字符长度为0-40；
 3.13临床诊断 此为非必填字段；字符长度为0-40；
-3.14备注 此为非必填字段；字符长度为0-40；*/
+3.14备注 此为非必填字段；字符长度为0-40；
+
+  `to_times` int(11) DEFAULT '0' COMMENT '参加试验次数',
+  `admission` varchar(125) DEFAULT '' COMMENT '住院号',
+  `bedno` varchar(125) DEFAULT '' COMMENT '床号',
+  `administrativ` varchar(125) DEFAULT '' COMMENT '科室',
+  `add_time` datetime DEFAULT NULL COMMENT '添加时间',
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `del_flag` int(2) NOT NULL DEFAULT '0' COMMENT '删除标记',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COMMENT='患者信息表';
+
+*/
 @Entity(tableName = "patients")
 data class PatientBean(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id")
@@ -62,4 +74,15 @@ data class PatientBean(
     var currentMedications: String = "",//目前用药
     var clinicalDiagnosis: String = "",//临床诊断
     var remark: String = "",//备注
+
+//-----------------------------六分钟参数----------------------------
+
+    var stride: String = "",//步幅
+    var numberOfTrialsParticipated: String = "",//参加试验次数
+    var juin: String = "",//住院号
+    var floorNo: String = "",//床号
+    var department: String = "",//科室
+    var addTime: String = "",//添加时间
+    var updatedTime: String = "",//更新时间
+    var deleteTheTag: String = "",//删除标记
 )
