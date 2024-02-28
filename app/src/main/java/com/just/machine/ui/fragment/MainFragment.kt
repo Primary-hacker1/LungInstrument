@@ -39,6 +39,10 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
         binding.btnPatientInformation.setNoRepeatListener {
             PatientActivity.startPatientActivity(context)
         }
+
+        binding.btnEcg.setNoRepeatListener {//心肺测试
+
+        }
     }
 
 

@@ -108,14 +108,14 @@ public class LoginEditText extends AppCompatEditText {
 
         if (ed_bg) {
 
-            setBackground(ContextCompat.getDrawable(getContext(),R.drawable.super_edittext_bg));
+            setBackground(ContextCompat.getDrawable(getContext(), R.drawable.super_edittext_bg));
             /**
              * 初始化删除图标
              */
             // 1. 获取资源ID
             ic_deleteResID = typedArray.getResourceId(R.styleable.SuperEditText_ic_delete, R.drawable.ic_delete);
             // 2. 根据资源ID获取图标资源（转化成Drawable对象）
-            ic_delete = ContextCompat.getDrawable(getContext(),ic_deleteResID);
+            ic_delete = ContextCompat.getDrawable(getContext(), ic_deleteResID);
             // 3. 设置图标大小
             // 起点(x，y)、宽= left_width、高 = left_height
             delete_x = typedArray.getInteger(R.styleable.SuperEditText_delete_x, 0);
@@ -157,32 +157,32 @@ public class LoginEditText extends AppCompatEditText {
          * 设置EditText左侧 & 右侧的图片（初始状态仅有左侧图片））
          *
          */
-        ic_left_unclick = ContextCompat.getDrawable(getContext(),typedArray.getResourceId(
+        ic_left_unclick = ContextCompat.getDrawable(getContext(), typedArray.getResourceId(
                 R.styleable.SuperEditText_left_icon, R.drawable.ic_launcher_background));
 
-        ic_left_click  = ContextCompat.getDrawable(getContext(),typedArray.getResourceId(
+        ic_left_click = ContextCompat.getDrawable(getContext(), typedArray.getResourceId(
                 R.styleable.SuperEditText_left_icon, R.drawable.ic_launcher_background));
 
         assert ic_left_click != null;
 
-        ic_left_click.setBounds(0,0,50,60);  //这里是设置图片的高宽
+        ic_left_click.setBounds(0, 0, 40, 42);  //这里是设置图片的高宽
 
         setCompoundDrawables(ic_left_click, null,
                 null, null);
 
         setCompoundDrawablePadding(20);
 
-        setPadding(50,0,0,0);
+        setPadding(50, 0, 0, 0);
 
         // 2. 设置分割线颜色（使用十六进制代码，如#333、#8e8e8e）
-        int lineColorClick_default = context.getResources().getColor(R.color.dbdbdb); // 默认 = 蓝色#1296db
-        int lineColornClick_default = context.getResources().getColor(R.color.cdcdcdc); // 默认 = 灰色#9b9b9b
+        int lineColorClick_default = context.getResources().getColor(R.color.font_blue); // 默认 = 蓝色#1296db 输入颜色
+        int lineColornClick_default = context.getResources().getColor(R.color.white); // 默认 = 灰色#9b9b9b 下滑线颜色
         lineColor_click = typedArray.getColor(R.styleable.SuperEditText_lineColor_click, lineColorClick_default);
         lineColor_unclick = typedArray.getColor(R.styleable.SuperEditText_lineColor_unclick, lineColornClick_default);
-        color = lineColor_unclick;
+//        color = lineColor_unclick;
 
         mPaint.setColor(lineColor_unclick); // 分割线默认颜色 = 灰色
-        setTextColor(color); // 字体默认颜色 = 灰色
+//        setTextColor(color); // 字体默认颜色 = 灰色
 
     }
 
@@ -260,17 +260,17 @@ public class LoginEditText extends AppCompatEditText {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        mPaint.setColor(color);
+//        mPaint.setColor(color);
         setTextColor(color);
-        // 绘制分割线
-        // 需要考虑：当输入长度超过输入框时，所画的线需要跟随着延伸
-        // 解决方案：线的长度 = 控件长度 + 延伸后的长度
-        int x = this.getScrollX(); // 获取延伸后的长度
-        int w = this.getMeasuredWidth(); // 获取控件长度
-
-        // 传入参数时，线的长度 = 控件长度 + 延伸后的长度
-        canvas.drawLine(0, this.getMeasuredHeight() - linePosition, w + x,
-                this.getMeasuredHeight() - linePosition, mPaint);
+//        // 绘制分割线
+//        // 需要考虑：当输入长度超过输入框时，所画的线需要跟随着延伸
+//        // 解决方案：线的长度 = 控件长度 + 延伸后的长度
+//        int x = this.getScrollX(); // 获取延伸后的长度
+//        int w = this.getMeasuredWidth(); // 获取控件长度
+//
+//        // 传入参数时，线的长度 = 控件长度 + 延伸后的长度
+//        canvas.drawLine(0, this.getMeasuredHeight() - linePosition, w + x,
+//                this.getMeasuredHeight() - linePosition, mPaint);
 
     }
 }

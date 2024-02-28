@@ -33,18 +33,6 @@ class SharedPreferencesUtils private constructor() {
             CommonSharedPreferences.setSPValue(USER, serialNo)
         }
 
-    var phone: String? = null
-        get() {
-            if (field == null) {
-                field = CommonSharedPreferences.getSPValue(PHONE, "")
-            }
-            return field
-        }
-        set(serialNo) {
-            field = serialNo
-            CommonSharedPreferences.setSPValue(PHONE, serialNo)
-        }
-
     var pass: String? = null
         get() {
             if (field == null) {
@@ -62,7 +50,6 @@ class SharedPreferencesUtils private constructor() {
      */
     fun logout() {
         user = ""
-        phone = ""
         pass = ""
     }
 

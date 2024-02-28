@@ -80,6 +80,10 @@
         "source": "/Users/user/StudioProjects/LungInstrument/app/build/generated/res/pngs/debug/drawable-anydpi-v24/pass.xml"
     },
     {
+        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable_bg_login_view.xml.flat",
+        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/drawable/bg_login_view.xml"
+    },
+    {
         "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable_bg_input.xml.flat",
         "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/drawable/bg_input.xml"
     },
@@ -94,6 +98,10 @@
     {
         "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/navigation_nav_login.xml.flat",
         "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/navigation/nav_login.xml"
+    },
+    {
+        "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/drawable_register_btn.xml.flat",
+        "source": "/Users/user/StudioProjects/LungInstrument/app/src/main/res/drawable/register_btn.xml"
     },
     {
         "merged": "/Users/user/StudioProjects/LungInstrument/app/build/intermediates/merged_res/debug/layout_activity_web.xml.flat",

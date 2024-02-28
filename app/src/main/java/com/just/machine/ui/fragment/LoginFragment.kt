@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
 import com.common.base.gone
+import com.common.base.setNoRepeatListener
 import com.common.base.toast
 import com.just.machine.model.Constants
 import com.just.machine.model.SharedPreferencesUtils
@@ -23,38 +24,31 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
 
-    private fun initToolbar() {
-        binding.toolbar.title = Constants.login//标题
-        binding.toolbar.tvRight.gone()
-//        binding.toolbar.ivTitleBack.visible()
-    }
-
     override fun initView() {
-        initToolbar()
 
-        if (!SharedPreferencesUtils.instance.phone.equals("")) {
+        if (!SharedPreferencesUtils.instance.user.equals("")) {
             MainActivity.startMainActivity(context)
         }
 
-        binding.btnLogin.setOnClickListener {
+        binding.btnLogin.setNoRepeatListener {
 
             if (Constants.isDebug) {
                 MainActivity.startMainActivity(context)
                 activity?.finish()
-                return@setOnClickListener
+                return@setNoRepeatListener
             }
 
             hideKeyboard(it.windowToken)
-            if (binding.atvPhone.text?.isEmpty() == true) {
-                toast("手机号不能为空！")
-                return@setOnClickListener
+            if (binding.atvUser.text?.isEmpty() == true) {
+                toast("用户名不能为空！")
+                return@setNoRepeatListener
             }
             if (binding.atvPass.text?.isEmpty() == true) {
                 toast("密码不能为空！")
-                return@setOnClickListener
+                return@setNoRepeatListener
             }
 
-            SharedPreferencesUtils.instance.phone = binding.atvPhone.text.toString()
+            SharedPreferencesUtils.instance.user = binding.atvUser.text.toString()
 
             SharedPreferencesUtils.instance.pass = binding.atvPass.text.toString()
 
@@ -63,10 +57,10 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
             activity?.finish()
         }
 
-        binding.toolbar.ivTitleBack.setOnClickListener {
-            activity?.finish()
-            SharedPreferencesUtils.instance.logout()
-        }
+//        binding.toolbar.ivTitleBack.setOnClickListener {
+//            activity?.finish()
+//            SharedPreferencesUtils.instance.logout()
+//        }
     }
 
     override fun initListener() {
