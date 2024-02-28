@@ -3,8 +3,6 @@ package com.just.machine.dao
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.Calendar
-import java.util.Calendar.DAY_OF_YEAR
 
 /*
 基本信息：姓名、性别、身高、体重、身份证、生日、年龄、BMI
@@ -78,11 +76,11 @@ data class PatientBean(
 //-----------------------------六分钟参数----------------------------
 
     var stride: String = "",//步幅
-    var numberOfTrialsParticipated: String = "",//参加试验次数
-    var juin: String = "",//住院号
+    var numberOfTrialsParticipated: Int = 0,//参加试验次数
+    var hospitalNumber: String = "",//住院号
     var floorNo: String = "",//床号
     var department: String = "",//科室
     var addTime: String = "",//添加时间
     var updatedTime: String = "",//更新时间
-    var deleteTheTag: String = "",//删除标记
+    var deleteTheTag: Int = 0,//删除标记
 )
