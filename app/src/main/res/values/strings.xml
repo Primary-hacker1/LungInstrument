@@ -32,6 +32,20 @@
     <string name="currentMedications">目前用药</string>
     <string name="remark">备注</string>
     <string name="clinicalDiagnosis">临床诊断</string>
-    <string name="measure_blood">测量\n血压</string>
-    <string name="measuring_blood">测量\n中</string>
+
+    <string name="sixmin_measure_blood">测量\n血压</string>
+    <string name="sixmin_measuring_blood">测量\n中</string>
+    <string name="sixmin_blood_pressure_yes">血压已连接</string>
+    <string name="sixmin_blood_pressure_no">血压未连接</string>
+    <string name="sixmin_blood_oxygen_yes">血氧已连接</string>
+    <string name="sixmin_blood_oxygen_no">血氧未连接</string>
+    <string name="sixmin_ecg_yes">心电已连接</string>
+    <string name="sixmin_ecg_no">心电未连接</string>
+    <string name="sixmin_start">开始</string>
+    <string name="sixmin_stop">停止</string>
+    <string name="sixmin_circle_count">计圈</string>
+    <string name="sixmin_blood_pressure_high">收缩压</string>
+    <string name="sixmin_blood_pressure_low">舒张压</string>
+    <string name="sixmin_blood_pressure_font">运动前</string>
+    <string name="sixmin_blood_pressure_behind">运动后</string>
 </resources>

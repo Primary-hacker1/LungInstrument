@@ -2,37 +2,41 @@ package com.just.machine.model;
 
 public class UsbSerialData {
 
-    private String bloodPressure;
-    private String ecg;
-    private String bloodOxy;
+    private String bloodPressureState;
+    private String ecgState;
+    private String bloodOxyState;
     private int batteryLevel;
 
     private String bloodHigh;
     private String bloodLow;
+    private String bloodHighFront;
+    private String bloodLowFront;
+    private String bloodHighBehind;
+    private String bloodLowBehind;
     private String bloodState;
 
-    public String getBloodPressure() {
-        return bloodPressure;
+    public String getBloodPressureState() {
+        return bloodPressureState;
     }
 
-    public void setBloodPressure(String bloodPressure) {
-        this.bloodPressure = bloodPressure;
+    public void setBloodPressureState(String bloodPressure) {
+        this.bloodPressureState = bloodPressure;
     }
 
-    public String getEcg() {
-        return ecg;
+    public String getEcgState() {
+        return ecgState;
     }
 
-    public void setEcg(String ecg) {
-        this.ecg = ecg;
+    public void setEcgState(String ecgState) {
+        this.ecgState = ecgState;
     }
 
-    public String getBloodOxy() {
-        return bloodOxy;
+    public String getBloodOxyState() {
+        return bloodOxyState;
     }
 
-    public void setBloodOxy(String bloodOxy) {
-        this.bloodOxy = bloodOxy;
+    public void setBloodOxyState(String bloodOxyState) {
+        this.bloodOxyState = bloodOxyState;
     }
 
     public int getBatteryLevel() {
@@ -65,5 +69,37 @@ public class UsbSerialData {
 
     public void setBloodState(String bloodState) {
         this.bloodState = bloodState;
+    }
+
+    public String getBloodHighFront() {
+        return bloodHighFront;
+    }
+
+    public void setBloodHighFront(String bloodHighFront) {
+        this.bloodHighFront = bloodHighFront;
+    }
+
+    public String getBloodLowFront() {
+        return bloodLowFront;
+    }
+
+    public void setBloodLowFront(String bloodLowFront) {
+        this.bloodLowFront = bloodLowFront;
+    }
+
+    public String getBloodHighBehind() {
+        return bloodHighBehind;
+    }
+
+    public void setBloodHighBehind(String bloodHighBehind) {
+        this.bloodHighBehind = bloodHighBehind;
+    }
+
+    public String getBloodLowBehind() {
+        return bloodLowBehind;
+    }
+
+    public void setBloodLowBehind(String bloodLowBehind) {
+        this.bloodLowBehind = bloodLowBehind;
     }
 }

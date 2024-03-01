@@ -402,26 +402,26 @@ public class USBTransferUtil {
                             // 心电连接状态
                             if (bytes[4] == (byte) 0x11) {
                                 //连接
-                                usbSerialData.setEcg("心电已连接");
+                                usbSerialData.setEcgState("心电已连接");
                             } else if (bytes[4] == (byte) 0x10) {
                                 //断开
-                                usbSerialData.setEcg("心电未连接");
+                                usbSerialData.setEcgState("心电未连接");
                             }
 
                             //血氧连接状态
                             if (bytes[5] == (byte) 0x21) {
                                 //连接
-                                usbSerialData.setBloodOxy("血氧已连接");
+                                usbSerialData.setBloodOxyState("血氧已连接");
                             } else if (bytes[5] == (byte) 0x20) {
                                 //断开
-                                usbSerialData.setBloodOxy("血氧未连接");
+                                usbSerialData.setBloodOxyState("血氧未连接");
                             }
 
                             //血压连接状态
                             if (bytes[6] == (byte) 0x31) {
-                                usbSerialData.setBloodPressure("血压已连接");
+                                usbSerialData.setBloodPressureState("血压已连接");
                             } else if (bytes[6] == (byte) 0x30) {
-                                usbSerialData.setBloodPressure("血压未连接");
+                                usbSerialData.setBloodPressureState("血压未连接");
                             }
 
                             //电池等级
@@ -447,7 +447,33 @@ public class USBTransferUtil {
                             //血压数据
                             if(bloodState == 0){
                                 if(bytes[13] == bytesnull && bytes[14] == bytesnull){
+                                    usbSerialData.setBloodState("未测量血压");
+                                }
 
+                                if(bytes[13] != bytesnull && bytes[14] != bytesnull){
+                                    byte[] bloodFrontByte = {bytes[13]};
+                                    String bloodFrontValue = Integer.valueOf(CRC16Util.bytesToHexString(bloodFrontByte), 16).toString();
+                                    //测量血压中
+                                    if(bytes[13] != (byte) 0xFF && bytes[14] == (byte) 0xFF){
+                                        usbSerialData.setBloodState("测量血压中");
+                                        //测量失败
+                                    }else if((bytes[13] == (byte) 0xFF && bytes[14] == (byte) 0xFF)
+                                            || bytes[6] == (byte) 0x30){
+                                        usbSerialData.setBloodState("测量血压失败");
+                                        SixMinCmdUtils.Companion.failMeasureBloodPressure();
+                                        //测量成功
+                                    }else if((bytes[13] != (byte) 0xFF && bytes[14] != (byte) 0xFF)){
+                                        byte[] bloodBehindByte = {bytes[13]};
+                                        String bloodBehindValue = Integer.valueOf(CRC16Util.bytesToHexString(bloodBehindByte), 16).toString();
+                                        usbSerialData.setBloodState("测量血压成功");
+                                        SixMinCmdUtils.Companion.resetMeasureBloodPressure();
+                                        //运动前
+                                        if(bloodState == 0){
+                                            bloodState = 1;
+                                            usbSerialData.setBloodHighFront(bloodFrontValue);
+                                            usbSerialData.setBloodLowFront(bloodBehindValue);
+                                        }
+                                    }
                                 }
                             }
                         }
