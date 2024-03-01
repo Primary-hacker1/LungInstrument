@@ -55,6 +55,7 @@ public class USBTransferUtil {
     private Map<Long, byte[]> mapNew = new TreeMap<>();
     private String byteStr = "";
     private UsbSerialData usbSerialData = new UsbSerialData();
+    private int bloodState = 0; //1运动前血压 2运动后血压
 
     // 顺序： manager - availableDrivers（所有可用设备） - UsbSerialDriver（目标设备对象） - UsbDeviceConnection（设备连接对象） - UsbSerialPort（设备的端口，一般只有1个）
     private List<UsbSerialDriver> availableDrivers = new ArrayList<>();  // 所有可用设备
@@ -71,6 +72,14 @@ public class USBTransferUtil {
 
     // 单例 -------------------------
     private static USBTransferUtil usbTransferUtil;
+
+    public int getBloodState() {
+        return bloodState;
+    }
+
+    public void setBloodState(int bloodState) {
+        this.bloodState = bloodState;
+    }
 
     public static USBTransferUtil getInstance() {
         if (usbTransferUtil == null) {
@@ -410,9 +419,9 @@ public class USBTransferUtil {
 
                             //血压连接状态
                             if (bytes[6] == (byte) 0x31) {
-                                usbSerialData.setBloodOxy("血压已连接");
+                                usbSerialData.setBloodPressure("血压已连接");
                             } else if (bytes[6] == (byte) 0x30) {
-                                usbSerialData.setBloodOxy("血压未连接");
+                                usbSerialData.setBloodPressure("血压未连接");
                             }
 
                             //电池等级
@@ -434,6 +443,12 @@ public class USBTransferUtil {
                                 case "50":
                                     usbSerialData.setBatteryLevel(1);
                                     break;
+                            }
+                            //血压数据
+                            if(bloodState == 0){
+                                if(bytes[13] == bytesnull && bytes[14] == bytesnull){
+
+                                }
                             }
                         }
                     }
