@@ -12,7 +12,7 @@
         <attr name="group_has_header" format="boolean" />
     </declare-styleable>
 
-    <declare-styleable name="SuperEditText">
+    <declare-styleable name="LoginEditText">
 
         <attr name="ic_delete" format="reference" />
         <attr name="delete_x" format="integer" />

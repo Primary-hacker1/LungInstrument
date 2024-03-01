@@ -4,18 +4,14 @@
     <item android:state_window_focused="false">
         <shape android:shape="rectangle">
             <!-- 圆角 -->
-            <corners android:radius="18dp" />
-            <!--填充颜色为白色-->
-            <!--<solid android:color="@color/pickerview_timebtn_nor" />-->
-            <!-- 描边 -->
-            <!-- <stroke android:width="1dp" android:color="@color/global_blue" />-->
+            <corners android:radius="6dp" />
             <gradient
                 android:angle="180"
                 android:endColor="#fff"
                 android:startColor="#fff" />
             <corners android:radius="25dp" />
             <stroke android:width="@dimen/space_1"
-                android:color="#CB89B2FF"/>
+                android:color="#CB787878"/>
 
         </shape>
     </item>
@@ -23,15 +19,11 @@
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
             <!--圆角-->
-            <corners android:radius="18dp" />
-            <!--填充颜色为白色-->
-            <!--<solid android:color="@color/pickerview_timebtn_pre" />-->
-            <!--描边-->
-            <!--<stroke android:width="1dp" android:color="@color/global_blue" />-->
+            <corners android:radius="6dp" />
             <gradient
                 android:angle="180"
-                android:endColor="#CACACA"
-                android:startColor="#E1E1E1" />
+                android:endColor="#CB787878"
+                android:startColor="#CB787878" />
         </shape>
     </item>
 

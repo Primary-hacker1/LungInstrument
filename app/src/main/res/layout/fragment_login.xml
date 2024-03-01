@@ -30,9 +30,9 @@
                 android:id="@+id/iv_background"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:layout_gravity="center"
                 android:layout_marginTop="@dimen/space_20"
-                android:background="@drawable/ic_logo"
-                android:layout_gravity="center" />
+                android:background="@drawable/ic_logo" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
@@ -59,6 +59,7 @@
                         android:maxLines="1"
                         android:singleLine="true"
                         android:textColorHint="@color/login_hit"
+                        android:textCursorDrawable="@drawable/liner_view"
                         android:textSize="@dimen/space_15"
                         app:ed_backgroundColor="true"
                         app:left_icon="@drawable/user"
@@ -81,6 +82,7 @@
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textColorHint="@color/login_hit"
+                            android:textCursorDrawable="@drawable/liner_view"
                             android:textSize="@dimen/space_15"
                             app:delete_x="0"
                             app:ed_backgroundColor="true"

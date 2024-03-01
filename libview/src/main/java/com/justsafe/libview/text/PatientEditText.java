@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.TextView;
@@ -14,12 +15,11 @@ import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.content.ContextCompat;
 
-
 import com.justsafe.libview.R;
 
 import java.lang.reflect.Field;
 
-public class LoginEditText extends AppCompatEditText {
+public class PatientEditText extends AppCompatEditText {
     /*
      * 定义属性变量
      * */
@@ -43,17 +43,17 @@ public class LoginEditText extends AppCompatEditText {
     private int linePosition;
 
 
-    public LoginEditText(Context context) {
+    public PatientEditText(Context context) {
         super(context);
 
     }
 
-    public LoginEditText(Context context, AttributeSet attrs) {
+    public PatientEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public LoginEditText(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PatientEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
@@ -67,39 +67,10 @@ public class LoginEditText extends AppCompatEditText {
         // 获取控件资源
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.LoginEditText);
 
-
-        // setCompoundDrawables(Drawable left, Drawable top, Drawable right, Drawable bottom)介绍
-        // 作用：在EditText上、下、左、右设置图标（相当于android:drawableLeft=""  android:drawableRight=""）
-        // 备注：传入的Drawable对象必须已经setBounds(x,y,width,height)，即必须设置过初始位置、宽和高等信息
-        // x:组件在容器X轴上的起点 y:组件在容器Y轴上的起点 width:组件的长度 height:组件的高度
-        // 若不想在某个地方显示，则设置为null
-
-        // 另外一个相似的方法：setCompoundDrawablesWithIntrinsicBounds(Drawable left, Drawable top, Drawable right, Drawable bottom)
-        // 作用：在EditText上、下、左、右设置图标
-        // 与setCompoundDrawables的区别：setCompoundDrawablesWithIntrinsicBounds（）传入的Drawable的宽高=固有宽高（自动通过getIntrinsicWidth（）& getIntrinsicHeight（）获取）
-        // 不需要设置setBounds(x,y,width,height)
-
-        /**
-         * 初始化光标（颜色 & 粗细）
-         */
-        // 原理：通过 反射机制 动态设置光标
-        // 1. 获取资源ID
-        cursor = typedArray.getResourceId(R.styleable.LoginEditText_cursor, R.drawable.super_edittext_cursor);
-        try {
-
-            // 2. 通过反射 获取光标属性
-            @SuppressLint("SoonBlockedPrivateApi") Field f = TextView.class.getDeclaredField("mCursorDrawableRes");
-            f.setAccessible(true);
-            // 3. 传入资源ID
-            f.set(this, cursor);
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            setTextCursorDrawable(R.drawable.liner_view);
         }
 
-        /**
-         * 初始化分割线（颜色、粗细、位置）
-         */
         // 1. 设置画笔
         mPaint = new Paint();
 
@@ -108,10 +79,7 @@ public class LoginEditText extends AppCompatEditText {
 
         if (ed_bg) {
 
-            setBackground(ContextCompat.getDrawable(getContext(), R.drawable.super_edittext_bg));
-            /**
-             * 初始化删除图标
-             */
+            setBackground(ContextCompat.getDrawable(getContext(), R.drawable.patient_edittext_bg));
             // 1. 获取资源ID
             ic_deleteResID = typedArray.getResourceId(R.styleable.LoginEditText_ic_delete, R.drawable.ic_delete);
             // 2. 根据资源ID获取图标资源（转化成Drawable对象）
@@ -124,62 +92,18 @@ public class LoginEditText extends AppCompatEditText {
             delete_height = typedArray.getInteger(R.styleable.LoginEditText_delete_height, 40);
 
         }
-//        else {
-//            mPaint.setStrokeWidth(1.0f); // 分割线粗细
-//
-//            // 3. 分割线位置
-//            linePosition = typedArray.getInteger(R.styleable.SuperEditText_linePosition, 1);
-//            // 消除自带下划线
-//            setBackground(null);
-//
-//            /**
-//             * 初始化删除图标
-//             */
-//
-//            // 1. 获取资源ID
-//            ic_deleteResID = typedArray.getResourceId(R.styleable.SuperEditText_ic_delete, R.drawable.ic_delete);
-//            // 2. 根据资源ID获取图标资源（转化成Drawable对象）
-//
-//            ic_delete = ContextCompat.getDrawable(getContext(),ic_deleteResID);
-//            ;
-//            // 3. 设置图标大小
-//            // 起点(x，y)、宽= left_width、高 = left_height
-//            delete_x = typedArray.getInteger(R.styleable.SuperEditText_delete_x, 0);
-//            delete_y = typedArray.getInteger(R.styleable.SuperEditText_delete_y, 0);
-//            delete_width = typedArray.getInteger(R.styleable.SuperEditText_delete_width, 33);
-//            delete_height = typedArray.getInteger(R.styleable.SuperEditText_delete_height, 33);
-//
-//        }
 
         ic_delete.setBounds(delete_x, delete_y, delete_width, delete_height);
 
-        /**
-         * 设置EditText左侧 & 右侧的图片（初始状态仅有左侧图片））
-         *
-         */
-        ic_left_unclick = ContextCompat.getDrawable(getContext(), typedArray.getResourceId(
-                R.styleable.LoginEditText_left_icon, R.drawable.ic_launcher_background));
-
-        ic_left_click = ContextCompat.getDrawable(getContext(), typedArray.getResourceId(
-                R.styleable.LoginEditText_left_icon, R.drawable.ic_launcher_background));
-
-        assert ic_left_click != null;
-
-        ic_left_click.setBounds(0, 0, 40, 42);  //这里是设置图片的高宽
-
-        setCompoundDrawables(ic_left_click, null,
-                null, null);
-
         setCompoundDrawablePadding(20);
 
-        setPadding(50, 0, 0, 0);
+        setPadding(10, 0, 0, 0);
 
         // 2. 设置分割线颜色（使用十六进制代码，如#333、#8e8e8e）
         int lineColorClick_default = context.getResources().getColor(R.color.font_blue); // 默认 = 蓝色#1296db 输入颜色
         int lineColornClick_default = context.getResources().getColor(R.color.white); // 默认 = 灰色#9b9b9b 下滑线颜色
         lineColor_click = typedArray.getColor(R.styleable.LoginEditText_lineColor_click, lineColorClick_default);
         lineColor_unclick = typedArray.getColor(R.styleable.LoginEditText_lineColor_unclick, lineColornClick_default);
-//        color = lineColor_unclick;
 
         mPaint.setColor(lineColor_unclick); // 分割线默认颜色 = 灰色
 //        setTextColor(color); // 字体默认颜色 = 灰色

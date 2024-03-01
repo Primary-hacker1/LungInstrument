@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import com.common.base.BaseDialogFragment
 import com.common.base.setNoRepeatListener
+import com.common.base.toast
 import com.just.machine.dao.PatientBean
 import com.just.machine.model.Constants
 import com.just.machine.ui.viewmodel.MainViewModel
@@ -50,12 +51,43 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
     }
 
     override fun initView() {
-        binding.toolbar.title = Constants.addPatient//标题
+        binding.tvTitle.text = Constants.addPatient//标题
+    }
+
+    override fun initData() {
+        viewModel.setDates(PatientBean())//新增患者
     }
 
     override fun initListener() {
         binding.btnYes.setNoRepeatListener {
+
             listener?.onClickConfirmBtn()
+
+            hideKeyboard(it.windowToken)
+
+//            if (binding.atvName.text?.isEmpty() == true) {
+//                toast("姓名不能为空！")
+//                return@setNoRepeatListener
+//            }
+//            if (binding.atvPaientNumber.text?.isEmpty() == true) {
+//                toast("病历号不能为空！")
+//                return@setNoRepeatListener
+//            }
+//            if (binding.atvHeight.text?.isEmpty() == true) {
+//                toast("身高不能为空！")
+//                return@setNoRepeatListener
+//            }
+//            if (binding.atvWeight.text?.isEmpty() == true) {
+//                toast("体重不能为空！")
+//                return@setNoRepeatListener
+//            }
+//            if (binding.atvBirthday.text?.isEmpty() == true) {
+//                toast("生日不能为空！")
+//                return@setNoRepeatListener
+//            }
+
+
+
         }
 
         binding.btnNo.setNoRepeatListener {
@@ -63,9 +95,7 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
         }
     }
 
-    override fun initData() {
-        viewModel.setDates(PatientBean())//新增患者
-    }
+
 
     override fun getLayout(): Int {
         return R.layout.fragment_dialog_patient

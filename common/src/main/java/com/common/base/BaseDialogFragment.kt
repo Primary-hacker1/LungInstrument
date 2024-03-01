@@ -1,6 +1,5 @@
 package com.common.base
 
-import android.Manifest
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
@@ -9,14 +8,11 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
-import android.os.SystemClock
-import android.util.Log
+import android.os.IBinder
 import android.view.*
-import android.widget.Chronometer
-import android.widget.Toast
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.LayoutRes
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.DialogFragment
@@ -38,7 +34,6 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(){
         start(dialog)
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     protected fun setTitleBar() {
         val window = dialog?.window // 设置宽度为屏宽, 靠近屏幕底部。
 //        window!!.setWindowAnimations(R.style.animate_dialog) //设置dialog的 进出 动画
@@ -59,9 +54,9 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initData()
         initView()
         initListener()
-        initData()
     }
 
     //跳转类
@@ -97,6 +92,16 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(){
 
     override fun onResume() {
         super.onResume()
+    }
+
+    /**
+     * @param token - 获取InputMethodManager，隐藏软键盘
+     */
+    open fun hideKeyboard(token: IBinder?) {
+        if (token != null) {
+            val im = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            im.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS)
+        }
     }
 
 }
