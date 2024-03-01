@@ -31,24 +31,17 @@ class MainViewModel @Inject constructor(
     var itemNews: ObservableList<Data> = ObservableArrayList()
 
     /**
-     *@param type 协程请求->直接获取结果的
+     *@param patient 协程请求->直接获取结果的
      */
-    fun getDates(type: String) {
-        val plants: MutableList<PatientBean> = ArrayList()
+    fun getDates(patient: PatientBean) {
 
-        for (item in 0..9) {
-            val plant = PatientBean()
-            plant.name = "张三$item"
-            plant.age = (1 + item).toString()
-            plants.add(plant)
-        }
 
-        val plant = PatientBean()
-        plant.name = "张三"
-        plant.age = (28).toString()
+        patient.name = "张三"
+
+        patient.age = (28).toString()
 
         doAsync {
-            val patient = plantDao.insertPatient(plant)
+            val patient = plantDao.insertPatient(patient)
 
             if (patient as Int == 0){
                 mEventHub.value = LiveDataEvent(

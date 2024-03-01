@@ -34,9 +34,11 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         }
     }
 
+    private var adapter: PatientAdapter? = null
+
     override fun initView() {
 
-        viewModel.getDates("")//插入患者数据
+        viewModel.getDates(PatientBean())//插入患者数据
 
         viewModel.getPatient()//查询数据库
 
@@ -63,7 +65,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
                         LogUtils.e(tag + beans.toString())
 
-                       val adapter = PatientAdapter(beans)
+                        adapter = PatientAdapter(beans)
 
                         binding.rvList.adapter = adapter
 
@@ -71,6 +73,14 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                 }
             }
         }
+
+        adapter?.setItemOnClickListener(object : PatientAdapter.PatientListener {
+            //点击item返回点击患者的数据
+            override fun onClickItem(bean: PatientBean) {
+
+
+            }
+        })
     }
 
     override fun getViewBinding() = ActivityPatientBinding.inflate(layoutInflater)

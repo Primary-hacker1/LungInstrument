@@ -19,6 +19,16 @@ import com.just.news.R
 class PatientAdapter(private val mDatas: MutableList<PatientBean>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    private var listener: PatientListener? = null
+
+    interface PatientListener {
+        fun onClickItem(bean: PatientBean)
+    }
+
+    fun setItemOnClickListener(listener: PatientListener) {
+
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ItemHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_layout_patient, parent, false)
@@ -34,7 +44,7 @@ class PatientAdapter(private val mDatas: MutableList<PatientBean>) :
                 deleteItem(holder.adapterPosition)
             }
             holder.itemView.setOnClickListener {
-
+                listener?.onClickItem(mDatas[position])
             }
         }
     }

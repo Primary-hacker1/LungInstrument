@@ -23,7 +23,6 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
     override fun loadData() {//懒加载
-        viewModel.getDates("")//插入或者请求网络数据
     }
 
     override fun initView() {
