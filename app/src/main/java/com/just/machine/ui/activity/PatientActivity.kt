@@ -38,8 +38,6 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
     override fun initView() {
 
-        viewModel.getDates(PatientBean())//插入患者数据
-
         viewModel.getPatient()//查询数据库
 
         binding.rvList.layoutManager = LinearLayoutManager(this)

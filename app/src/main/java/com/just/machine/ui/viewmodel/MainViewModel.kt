@@ -33,7 +33,7 @@ class MainViewModel @Inject constructor(
     /**
      *@param patient 协程请求->直接获取结果的
      */
-    fun getDates(patient: PatientBean) {
+    fun setDates(patient: PatientBean) {
 
 
         patient.name = "张三"
