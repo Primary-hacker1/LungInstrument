@@ -27,5 +27,10 @@
     <string name="birthday">生日</string>
     <string name="age">年龄</string>
     <string name="bmi">BMI</string>
+    <string name="predictDistances">预测距离</string>
+    <string name="diseaseHistory">病史</string>
+    <string name="currentMedications">目前用药</string>
+    <string name="remark">备注</string>
+    <string name="clinicalDiagnosis">临床诊断</string>
 
 </resources>
