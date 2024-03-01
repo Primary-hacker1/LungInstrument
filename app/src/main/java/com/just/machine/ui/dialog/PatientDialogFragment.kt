@@ -1,6 +1,8 @@
 package com.just.machine.ui.dialog
 
 import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import com.common.base.BaseDialogFragment
@@ -48,6 +50,8 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
 
     override fun start(dialog: Dialog?) {
 
+
+
     }
 
     override fun initView() {
@@ -65,26 +69,26 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
 
             hideKeyboard(it.windowToken)
 
-//            if (binding.atvName.text?.isEmpty() == true) {
-//                toast("姓名不能为空！")
-//                return@setNoRepeatListener
-//            }
-//            if (binding.atvPaientNumber.text?.isEmpty() == true) {
-//                toast("病历号不能为空！")
-//                return@setNoRepeatListener
-//            }
-//            if (binding.atvHeight.text?.isEmpty() == true) {
-//                toast("身高不能为空！")
-//                return@setNoRepeatListener
-//            }
-//            if (binding.atvWeight.text?.isEmpty() == true) {
-//                toast("体重不能为空！")
-//                return@setNoRepeatListener
-//            }
-//            if (binding.atvBirthday.text?.isEmpty() == true) {
-//                toast("生日不能为空！")
-//                return@setNoRepeatListener
-//            }
+            if (binding.atvName.text?.isEmpty() == true) {
+                toast("姓名不能为空！")
+                return@setNoRepeatListener
+            }
+            if (binding.atvPaientNumber.text?.isEmpty() == true) {
+                toast("病历号不能为空！")
+                return@setNoRepeatListener
+            }
+            if (binding.atvHeight.text?.isEmpty() == true) {
+                toast("身高不能为空！")
+                return@setNoRepeatListener
+            }
+            if (binding.atvWeight.text?.isEmpty() == true) {
+                toast("体重不能为空！")
+                return@setNoRepeatListener
+            }
+            if (binding.atvBirthday.text?.isEmpty() == true) {
+                toast("生日不能为空！")
+                return@setNoRepeatListener
+            }
 
 
 

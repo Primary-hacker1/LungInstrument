@@ -48,6 +48,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -119,6 +120,27 @@
                     android:padding="@dimen/space_5">
 
                     <com.justsafe.libview.text.PatientEditText
+                        android:id="@+id/atvName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColorHint="@color/login_hit"
+                        android:textSize="15sp"
+                        app:ed_backgroundColor="true" />
+
+                    <com.justsafe.libview.text.PatientEditText
+                        android:id="@+id/atvHeight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColorHint="@color/login_hit"
+                        android:textSize="15sp"
+                        app:ed_backgroundColor="true" />
+
+                    <com.justsafe.libview.text.PatientEditText
+                        android:id="@+id/atvWeight"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:maxLines="1"
@@ -137,24 +159,7 @@
                         app:ed_backgroundColor="true" />
 
                     <com.justsafe.libview.text.PatientEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textColorHint="@color/login_hit"
-                        android:textSize="15sp"
-                        app:ed_backgroundColor="true" />
-
-                    <com.justsafe.libview.text.PatientEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textColorHint="@color/login_hit"
-                        android:textSize="15sp"
-                        app:ed_backgroundColor="true" />
-
-                    <com.justsafe.libview.text.PatientEditText
+                        android:id="@+id/atvBirthday"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:maxLines="1"
@@ -234,6 +239,7 @@
                     android:padding="@dimen/space_5">
 
                     <com.justsafe.libview.text.PatientEditText
+                        android:id="@+id/atvPaientNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:maxLines="1"

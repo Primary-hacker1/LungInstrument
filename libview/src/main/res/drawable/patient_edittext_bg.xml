@@ -9,7 +9,7 @@
                 android:angle="180"
                 android:endColor="#fff"
                 android:startColor="#fff" />
-            <corners android:radius="25dp" />
+            <corners android:radius="6dp" />
             <stroke android:width="@dimen/space_1"
                 android:color="#CB787878"/>
 
