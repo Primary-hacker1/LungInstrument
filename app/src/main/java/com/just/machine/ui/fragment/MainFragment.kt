@@ -8,6 +8,7 @@ import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.just.machine.ui.activity.PatientActivity
 import com.just.machine.ui.activity.SixMinActivity
+import com.just.machine.ui.dialog.PatientDialogFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.databinding.FragmentMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,7 +41,20 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
         }
 
         binding.btnEcg.setNoRepeatListener {//心肺测试
+            val patientDialogFragment = PatientDialogFragment.startPatientDialogFragment(parentFragmentManager)//添加患者修改患者信息
+            patientDialogFragment.setDialogOnClickListener(object : PatientDialogFragment.PatientDialogListener{
+                override fun onClickConfirmBtn() {//确认
 
+                }
+
+                override fun onClickCleanBtn() {//取消
+                    patientDialogFragment.dismiss()
+                }
+            })
+        }
+
+        binding.btnClose.setNoRepeatListener {
+            activity?.finish()
         }
     }
 

@@ -6,10 +6,14 @@ import android.content.Intent
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseActivity
+import com.common.base.gone
+import com.common.base.visible
 import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
 import com.just.machine.dao.PatientBean
+import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.PatientAdapter
+import com.just.machine.ui.dialog.PatientDialogFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.databinding.ActivityPatientBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,7 +40,14 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
     private var adapter: PatientAdapter? = null
 
+    private fun initToolbar() {
+        binding.toolbar.title = Constants.patientInformation//标题
+        binding.toolbar.tvRight.gone()
+        binding.toolbar.ivTitleBack.visible()
+    }
+
     override fun initView() {
+        initToolbar()
 
         viewModel.getPatient()//查询数据库
 
@@ -71,6 +82,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                 }
             }
         }
+
 
         adapter?.setItemOnClickListener(object : PatientAdapter.PatientListener {
             //点击item返回点击患者的数据

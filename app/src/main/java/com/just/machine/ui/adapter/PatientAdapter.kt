@@ -26,7 +26,7 @@ class PatientAdapter(private val mDatas: MutableList<PatientBean>) :
     }
 
     fun setItemOnClickListener(listener: PatientListener) {
-
+        this.listener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

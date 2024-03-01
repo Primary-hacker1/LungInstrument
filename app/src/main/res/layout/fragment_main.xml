@@ -18,6 +18,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/space_50"
+            android:padding="@dimen/space_10"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:ignore="MissingConstraints"
+            android:drawableStart="@drawable/btn_close"
+            android:textColor="@color/text1"
+            android:gravity="center"
+            android:text="@string/close"
+            android:background="@null"
+            tools:layout_editor_absoluteY="50dp" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
