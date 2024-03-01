@@ -32,5 +32,6 @@
     <string name="currentMedications">目前用药</string>
     <string name="remark">备注</string>
     <string name="clinicalDiagnosis">临床诊断</string>
-
+    <string name="measure_blood">测量\n血压</string>
+    <string name="measuring_blood">测量\n中</string>
 </resources>

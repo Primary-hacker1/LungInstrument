@@ -7,6 +7,10 @@ public class UsbSerialData {
     private String bloodOxy;
     private int batteryLevel;
 
+    private String bloodHigh;
+    private String bloodLow;
+    private String bloodState;
+
     public String getBloodPressure() {
         return bloodPressure;
     }
@@ -37,5 +41,29 @@ public class UsbSerialData {
 
     public void setBatteryLevel(int batteryLevel) {
         this.batteryLevel = batteryLevel;
+    }
+
+    public String getBloodLow() {
+        return bloodLow;
+    }
+
+    public void setBloodLow(String bloodLow) {
+        this.bloodLow = bloodLow;
+    }
+
+    public String getBloodHigh() {
+        return bloodHigh;
+    }
+
+    public void setBloodHigh(String bloodHigh) {
+        this.bloodHigh = bloodHigh;
+    }
+
+    public String getBloodState() {
+        return bloodState;
+    }
+
+    public void setBloodState(String bloodState) {
+        this.bloodState = bloodState;
     }
 }
