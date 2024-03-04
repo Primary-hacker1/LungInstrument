@@ -20,6 +20,7 @@
     <string name="cancel">取消</string>
     <string name="close">退出</string>
     <string name="gender">性别</string>
+    <string name="select_name_number">请输入病历号或者姓名进行查询</string>
     <string name="record_number">病历号</string>
     <string name="height">身高</string>
     <string name="bodyWeight">体重</string>
@@ -52,4 +53,5 @@
     <string name="measuring_blood">测量\n中</string>
     <string name="man">男</string>
     <string name="woman">女</string>
+    <string name="add">新增</string>
 </resources>

@@ -26,6 +26,7 @@ public class PatientEditText extends AppCompatEditText {
     private Paint mPaint; // 画笔
 
     private Boolean ed_bg;//是否需要默认颜色
+    private Boolean ed_select_bg;//是否搜索框
 
     private int ic_deleteResID; // 删除图标 资源ID
     private Drawable ic_delete; // 删除图标
@@ -77,9 +78,17 @@ public class PatientEditText extends AppCompatEditText {
         // 默认颜色
         ed_bg = typedArray.getBoolean(R.styleable.LoginEditText_ed_backgroundColor, false);
 
+        // 是否是查询
+        ed_select_bg = typedArray.getBoolean(R.styleable.LoginEditText_select_bg, false);
+
+
         if (ed_bg) {
 
-            setBackground(ContextCompat.getDrawable(getContext(), R.drawable.patient_edittext_bg));
+            if (ed_select_bg) {
+                setBackground(ContextCompat.getDrawable(getContext(), R.drawable.bg_select_bg));
+            } else {
+                setBackground(ContextCompat.getDrawable(getContext(), R.drawable.patient_edittext_bg));
+            }
             // 1. 获取资源ID
             ic_deleteResID = typedArray.getResourceId(R.styleable.LoginEditText_ic_delete, R.drawable.ic_delete);
             // 2. 根据资源ID获取图标资源（转化成Drawable对象）

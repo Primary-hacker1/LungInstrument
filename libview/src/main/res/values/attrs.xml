@@ -32,6 +32,7 @@
         <attr name="lineColor_click" format="color" />
         <attr name="lineColor_unclick" format="color" />
         <attr name="linePosition" format="integer" />
+        <attr name="select_bg" format="boolean" />
 
 
         <attr name="cursor" format="reference" />
