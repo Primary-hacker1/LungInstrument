@@ -11,13 +11,13 @@
         android:orientation="vertical">
 
         <RelativeLayout
-            android:id="@+id/ll_devices_status"
+            android:id="@+id/sixmin_ll_devices_status"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv_test_status"
+                android:id="@+id/sixmin_tv_test_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -27,49 +27,49 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/iv_ecg"
+                android:id="@+id/sixmin_iv_ecg"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_centerVertical="true"
-                android:layout_toStartOf="@id/iv_blood_oxygen"
+                android:layout_toStartOf="@id/sixmin_iv_blood_oxygen"
                 android:src="@mipmap/xinlvno" />
 
             <ImageView
-                android:id="@+id/iv_blood_oxygen"
+                android:id="@+id/sixmin_iv_blood_oxygen"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_centerVertical="true"
                 android:layout_marginHorizontal="10dp"
-                android:layout_toStartOf="@id/iv_blood_pressure"
+                android:layout_toStartOf="@id/sixmin_iv_blood_pressure"
                 android:src="@mipmap/xueyangno" />
 
             <ImageView
-                android:id="@+id/iv_blood_pressure"
+                android:id="@+id/sixmin_iv_blood_pressure"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_centerVertical="true"
-                android:layout_toStartOf="@id/iv_battery_status"
+                android:layout_toStartOf="@id/sixmin_iv_battery_status"
                 android:src="@mipmap/xueyano" />
 
             <ImageView
-                android:id="@+id/iv_battery_status"
+                android:id="@+id/sixmin_iv_battery_status"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_centerVertical="true"
                 android:layout_marginHorizontal="10dp"
-                android:layout_toStartOf="@id/iv_internal"
+                android:layout_toStartOf="@id/sixmin_iv_internal"
                 android:src="@mipmap/dianchi" />
 
             <View
-                android:id="@+id/iv_internal"
+                android:id="@+id/sixmin_iv_internal"
                 android:layout_width="1dp"
                 android:layout_height="10dp"
                 android:layout_centerVertical="true"
-                android:layout_toStartOf="@id/iv_close"
+                android:layout_toStartOf="@id/sixmin_iv_close"
                 android:background="@color/white" />
 
             <ImageView
-                android:id="@+id/iv_close"
+                android:id="@+id/sixmin_iv_close"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_alignParentEnd="true"
@@ -81,7 +81,7 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/ll_patient_info"
+            android:id="@+id/sixmin_ll_patient_info"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_marginTop="1dp"
@@ -352,6 +352,7 @@
                         android:background="@mipmap/jiquank">
 
                         <TextView
+                            android:id="@+id/sixmin_tv_circle_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
@@ -405,6 +406,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/sixmin_tv_blood_pressure_high_front"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="- - -"
@@ -426,6 +428,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/sixmin_tv_blood_pressure_low_front"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="- - -"
@@ -460,6 +463,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/sixmin_tv_blood_pressure_high_behind"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="- - -"
@@ -481,6 +485,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/sixmin_tv_blood_pressure_low_behind"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="- - -"
@@ -522,6 +527,7 @@
                         android:textColor="@color/white" />
 
                     <TextView
+                        android:id="@+id/sixmin_tv_blood_oxygen"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -536,6 +542,7 @@
                         android:textColor="@color/white" />
 
                     <TextView
+                        android:id="@+id/sixmin_tv_heart_beat"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -570,7 +577,7 @@
                         android:textColor="@color/white" />
 
                     <TextView
-                        android:id="@+id/tv_systolic_blood"
+                        android:id="@+id/sixmin_tv_blood_pressure_high"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -585,7 +592,7 @@
                         android:textColor="@color/white" />
 
                     <TextView
-                        android:id="@+id/tv_diastolic_blood"
+                        android:id="@+id/sixmin_tv_blood_pressure_low"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -601,7 +608,7 @@
                     android:src="@mipmap/xiantiao2" />
 
                 <RelativeLayout
-                    android:id="@+id/rl_measure_blood"
+                    android:id="@+id/sixmin_rl_measure_blood"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -614,11 +621,11 @@
                         android:src="@mipmap/celiangxueya1" />
 
                     <TextView
-                        android:id="@+id/tv_measure_blood"
+                        android:id="@+id/sixmin_tv_measure_blood"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="@string/measure_blood"
+                        android:text="@string/sixmin_measure_blood"
                         android:textColor="#4998e2"
                         android:gravity="center"
                         android:textSize="20sp"
@@ -651,7 +658,7 @@
                         android:src="@mipmap/jishi" />
 
                     <TextView
-                        android:id="@+id/tv_start_min"
+                        android:id="@+id/sixmin_tv_start_min"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
@@ -662,7 +669,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_start_sec1"
+                        android:id="@+id/sixmin_tv_start_sec1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
@@ -673,7 +680,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_start_sec2"
+                        android:id="@+id/sixmin_tv_start_sec2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
@@ -685,7 +692,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:id="@+id/rl_start"
+                    android:id="@+id/sixmin_rl_start"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -698,6 +705,7 @@
                         android:src="@mipmap/kaishi2" />
 
                     <TextView
+                        android:id="@+id/sixmin_tv_start"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"

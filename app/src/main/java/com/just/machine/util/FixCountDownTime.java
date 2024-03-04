@@ -96,4 +96,12 @@ public class FixCountDownTime {
         void onFinish();
 
     }
+
+    public int getmTimes() {
+        return mTimes;
+    }
+
+    public void setmTimes(int mTimes) {
+        this.mTimes = mTimes;
+    }
 }

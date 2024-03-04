@@ -29,8 +29,8 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
     private var isBegin = false
 
     override fun initView() {
-        binding.llDevicesStatus.setBackgroundColor(Color.rgb(109, 188, 246))
-        binding.llPatientInfo.setBackgroundColor(Color.rgb(109, 188, 246))
+        binding.sixminLlDevicesStatus.setBackgroundColor(Color.rgb(109, 188, 246))
+        binding.sixminLlPatientInfo.setBackgroundColor(Color.rgb(109, 188, 246))
         initCountDownTimerExt()
         usbTransferUtil = USBTransferUtil.getInstance()
         usbTransferUtil.init(this)
@@ -42,53 +42,79 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         })
         usbTransferUtil.connect()
         if (!USBTransferUtil.isConnectUSB) {
-            binding.ivEcg.setImageResource(R.mipmap.xinlvno)
-            binding.ivBloodPressure.setImageResource(R.mipmap.xueyangno)
-            binding.ivBloodOxygen.setImageResource(R.mipmap.xueyangno)
+            binding.sixminIvEcg.setImageResource(R.mipmap.xinlvno)
+            binding.sixminIvBloodPressure.setImageResource(R.mipmap.xueyangno)
+            binding.sixminIvBloodOxygen.setImageResource(R.mipmap.xueyangno)
         }
         LiveDataBus.get().with("111").observe(this, Observer {
-//            Toast.makeText(this@SixMinActivity,it.toString(),Toast.LENGTH_SHORT).show()
-//            val bytes = CRC16Util.hexStringToBytes(it.toString())
             try {
                 val usbSerialData = Gson().fromJson(it.toString(), UsbSerialData::class.java)
-                if (usbSerialData.ecg == "心电已连接") {
-                    binding.ivEcg.setImageResource(R.mipmap.xinlvyes)
+                if (usbSerialData.ecgState == "心电已连接") {
+                    binding.sixminIvEcg.setImageResource(R.mipmap.xinlvyes)
                 } else {
-                    binding.ivEcg.setImageResource(R.mipmap.xinlvno)
+                    binding.sixminIvEcg.setImageResource(R.mipmap.xinlvno)
                 }
-                if (usbSerialData.bloodPressure == "血压已连接") {
-                    binding.ivBloodPressure.setImageResource(R.mipmap.xueyayes)
+                if (usbSerialData.bloodPressureState == "血压已连接") {
+                    binding.sixminIvBloodPressure.setImageResource(R.mipmap.xueyayes)
                 } else {
-                    binding.ivBloodPressure.setImageResource(R.mipmap.xueyangno)
+                    binding.sixminIvBloodPressure.setImageResource(R.mipmap.xueyangno)
                 }
-                if (usbSerialData.bloodOxy == "血氧已连接") {
-                    binding.ivBloodOxygen.setImageResource(R.mipmap.xueyangyes)
+                if (usbSerialData.bloodOxyState == "血氧已连接") {
+                    binding.sixminIvBloodOxygen.setImageResource(R.mipmap.xueyangyes)
                 } else {
-                    binding.ivBloodOxygen.setImageResource(R.mipmap.xueyangno)
+                    binding.sixminIvBloodOxygen.setImageResource(R.mipmap.xueyangno)
                 }
                 when (usbSerialData.batteryLevel) {
                     1 -> {
-                        binding.ivBatteryStatus.setImageResource(R.mipmap.dianchi1)
+                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi1)
                     }
 
                     2 -> {
-                        binding.ivBatteryStatus.setImageResource(R.mipmap.dianchi2)
+                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi2)
                     }
 
                     3 -> {
-                        binding.ivBatteryStatus.setImageResource(R.mipmap.dianchi3)
+                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi3)
                     }
 
                     4 -> {
-                        binding.ivBatteryStatus.setImageResource(R.mipmap.dianchi4)
+                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi4)
                     }
 
                     5 -> {
-                        binding.ivBatteryStatus.setImageResource(R.mipmap.dianchi)
+                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi)
                     }
 
                     else -> {
-                        binding.ivBatteryStatus.setImageResource(R.mipmap.dianchi00)
+                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi00)
+                    }
+                }
+                when (usbSerialData.bloodState) {
+                    "未测量血压" -> {
+                        binding.sixminTvMeasureBlood.text = getString(R.string.sixmin_measure_blood)
+                        binding.sixminTvBloodPressureHigh.text = "- - -"
+                        binding.sixminTvBloodPressureLow.text = "- - -"
+                    }
+
+                    "测量血压中" -> {
+                        binding.sixminTvMeasureBlood.text =
+                            getString(R.string.sixmin_measuring_blood)
+                        binding.sixminTvBloodPressureHigh.text = usbSerialData.bloodHigh ?: "- - -"
+                        binding.sixminTvBloodPressureLow.text = usbSerialData.bloodLow ?: "- - -"
+                    }
+
+                    "测量血压失败" -> {
+                        binding.sixminTvMeasureBlood.text = getString(R.string.sixmin_measure_blood)
+                        binding.sixminTvBloodPressureHigh.text = "- - -"
+                        binding.sixminTvBloodPressureLow.text = "- - -"
+                    }
+
+                    "测量血压成功" -> {
+                        binding.sixminTvMeasureBlood.text = getString(R.string.sixmin_measure_blood)
+                        binding.sixminTvBloodPressureHighFront.text = usbSerialData.bloodHighFront ?: "- - -"
+                        binding.sixminTvBloodPressureLowFront.text = usbSerialData.bloodLowFront ?: "- - -"
+                        binding.sixminTvBloodPressureHighBehind.text = usbSerialData.bloodHighBehind ?: "- - -"
+                        binding.sixminTvBloodPressureLowBehind.text = usbSerialData.bloodLowBehind ?: "- - -"
                     }
                 }
             } catch (e: Exception) {
@@ -96,37 +122,49 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
             }
         })
 
-        binding.rlMeasureBlood.setNoRepeatListener {
-            if (binding.tvMeasureBlood.text == getString(R.string.measure_blood)) {
-                usbTransferUtil.bloodState = 1
-                binding.tvMeasureBlood.text = getString(R.string.measuring_blood)
+        binding.sixminRlMeasureBlood.setNoRepeatListener {
+            if (binding.sixminTvMeasureBlood.text == getString(R.string.sixmin_measure_blood)) {
                 SixMinCmdUtils.measureBloodPressure()
+            } else {
+                Toast.makeText(this, "正在测量血压中...", Toast.LENGTH_SHORT).show()
             }
         }
 
-        binding.rlStart.setNoRepeatListener {
-            isBegin = true
-            mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack {
-                override fun onStart() {
+        binding.sixminRlStart.setNoRepeatListener {
+            if (!isBegin) {
+                binding.sixminTvStart.text = "停止"
+                mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack {
+                    override fun onStart() {
 
-                }
+                    }
 
-                override fun onTick(times: Int) {
-                    val minute = times / 60 % 60
-                    val second = times % 60
-                    binding.tvStartMin.text = minute.toString()
-                    binding.tvStartSec1.text = second.toString().substring(0, 1)
-                    binding.tvStartSec2.text = second.toString().substring(1)
+                    override fun onTick(times: Int) {
+                        val minute = times / 60 % 60
+                        val second = times % 60
+                        binding.sixminTvStartMin.text = minute.toString()
+                        binding.sixminTvStartSec1.text = second.toString().substring(0, 1)
+                        binding.sixminTvStartSec2.text = second.toString().substring(1)
 //                    Toast.makeText(this@SixMinActivity, "$times===", Toast.LENGTH_SHORT).show()
-                }
+                    }
 
-                override fun onFinish() {
-
-                }
-            })
+                    override fun onFinish() {
+                        binding.sixminTvStartMin.text = "5"
+                        binding.sixminTvStartSec1.text = "5"
+                        binding.sixminTvStartSec2.text = "9"
+                    }
+                })
+            } else {
+                binding.sixminTvStart.text = "开始"
+                binding.sixminTvStartMin.text = "5"
+                binding.sixminTvStartSec1.text = "5"
+                binding.sixminTvStartSec2.text = "9"
+                mCountDownTime.cancel()
+                mCountDownTime.setmTimes(360)
+            }
+            isBegin = !isBegin
         }
 
-        binding.ivClose.setNoRepeatListener {
+        binding.sixminIvClose.setNoRepeatListener {
             if (isBegin) {
 
             } else {
