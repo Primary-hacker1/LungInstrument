@@ -34,4 +34,6 @@
     <string name="clinicalDiagnosis">临床诊断</string>
     <string name="measure_blood">测量\n血压</string>
     <string name="measuring_blood">测量\n中</string>
+    <string name="man">男</string>
+    <string name="woman">女</string>
 </resources>

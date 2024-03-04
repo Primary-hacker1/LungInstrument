@@ -100,8 +100,8 @@ public class PatientEditText extends AppCompatEditText {
         setPadding(10, 0, 0, 0);
 
         // 2. 设置分割线颜色（使用十六进制代码，如#333、#8e8e8e）
-        int lineColorClick_default = context.getResources().getColor(R.color.font_blue); // 默认 = 蓝色#1296db 输入颜色
-        int lineColornClick_default = context.getResources().getColor(R.color.white); // 默认 = 灰色#9b9b9b 下滑线颜色
+        int lineColorClick_default = context.getResources().getColor(R.color.c888888); // 默认 = 蓝色#1296db 输入颜色
+        int lineColornClick_default = context.getResources().getColor(R.color.c888888); // 默认 = 灰色#9b9b9b 下滑线颜色
         lineColor_click = typedArray.getColor(R.styleable.LoginEditText_lineColor_click, lineColorClick_default);
         lineColor_unclick = typedArray.getColor(R.styleable.LoginEditText_lineColor_unclick, lineColornClick_default);
 

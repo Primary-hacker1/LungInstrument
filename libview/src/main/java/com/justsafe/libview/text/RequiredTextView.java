@@ -47,6 +47,7 @@ public class RequiredTextView extends AppCompatTextView {
         }
         ta.recycle();
         setText(text);
+        setTextSize(18);
     }
 
     public void setText(String text) {

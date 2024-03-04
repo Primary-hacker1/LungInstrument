@@ -17,7 +17,7 @@ class SharedPreferencesUtils private constructor() {
         val instance = SharedPreferencesUtils()
         private const val PER_USERNAME = "per_username"
         private const val USER = "per_user_user"
-        private const val PHONE = "per_user_phone"
+        private const val PER_IS_CLICK_BTN = "per_user_is_click_btn"
         private const val PASS = "per_user_pass"
     }
 
@@ -43,6 +43,18 @@ class SharedPreferencesUtils private constructor() {
         set(serialNo) {
             field = serialNo
             CommonSharedPreferences.setSPValue(PASS, serialNo)
+        }
+
+    var isClickBtn: Boolean? = false //第一次点击的时候创建患者
+        get() {
+            if (field == null) {
+                field = CommonSharedPreferences.getSPValue(PER_IS_CLICK_BTN, false)
+            }
+            return field
+        }
+        set(serialNo) {
+            field = serialNo
+            CommonSharedPreferences.setSPValue(PER_IS_CLICK_BTN, serialNo)
         }
 
     /**

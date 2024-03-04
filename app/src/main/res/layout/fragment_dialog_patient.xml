@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
-        android:layout_width="580dp"
-        android:layout_height="380dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@drawable/dialog_bg"
         android:orientation="vertical">
 
@@ -55,14 +55,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_20"
-                android:orientation="horizontal">
+                android:gravity="right"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/space_5"
-                    android:gravity="right"
-                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
                     android:padding="@dimen/space_5"
                     tools:ignore="RtlHardcoded">
 
@@ -73,104 +73,192 @@
                         android:text="@string/user"
                         tools:ignore="RtlHardcoded" />
 
+                    <com.justsafe.libview.text.PatientEditText
+                        android:id="@+id/atvName"
+                        android:layout_width="@dimen/space_120"
+                        android:layout_height="@dimen/space_28"
+                        android:layout_marginStart="@dimen/space_10"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColorHint="@color/login_hit"
+                        android:textSize="15sp"
+                        app:ed_backgroundColor="true" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/space_5"
+                    tools:ignore="RtlHardcoded">
+
                     <com.justsafe.libview.text.RequiredTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/gender" />
+                        android:text="@string/gender"
+                        tools:ignore="RtlHardcoded" />
+
+                    <RadioGroup
+                        android:id="@+id/rg_sex"
+                        android:layout_width="@dimen/space_120"
+                        android:layout_height="@dimen/space_28"
+                        android:layout_marginStart="@dimen/space_10"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rb_man"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:textSize="18sp"
+                            android:textColor="@color/light_gray"
+                            android:text="@string/man" />
+
+                        <RadioButton
+                            android:id="@+id/rb_woman"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:textColor="@color/light_gray"
+                            android:text="@string/woman" />
+                    </RadioGroup>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/space_3"
+                    tools:ignore="RtlHardcoded">
 
                     <com.justsafe.libview.text.RequiredTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/height" />
 
+                    <com.justsafe.libview.text.PatientEditText
+                        android:id="@+id/atvHeight"
+                        android:layout_width="@dimen/space_120"
+                        android:layout_height="@dimen/space_28"
+                        android:layout_marginStart="@dimen/space_10"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColorHint="@color/login_hit"
+                        android:textSize="15sp"
+                        app:ed_backgroundColor="true" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/space_3"
+                    tools:ignore="RtlHardcoded">
+
                     <com.justsafe.libview.text.RequiredTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/bodyWeight" />
 
+
+                    <com.justsafe.libview.text.PatientEditText
+                        android:id="@+id/atvWeight"
+                        android:layout_width="@dimen/space_120"
+                        android:layout_height="@dimen/space_28"
+                        android:layout_marginStart="@dimen/space_10"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColorHint="@color/login_hit"
+                        android:textSize="15sp"
+                        app:ed_backgroundColor="true" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/space_3"
+                    tools:ignore="RtlHardcoded">
+
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/identification_number" />
+                        android:text="@string/identification_number"
+                        android:textSize="18sp" />
+
+
+                    <com.justsafe.libview.text.PatientEditText
+                        android:layout_width="@dimen/space_120"
+                        android:layout_height="@dimen/space_28"
+                        android:layout_marginStart="@dimen/space_10"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColorHint="@color/login_hit"
+                        android:textSize="15sp"
+                        app:ed_backgroundColor="true" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/space_3"
+                    tools:ignore="RtlHardcoded">
 
                     <com.justsafe.libview.text.RequiredTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/birthday" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/age" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/bmi" />
-
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/atv_birthday"
+                        android:layout_width="@dimen/space_120"
+                        android:layout_height="@dimen/space_28"
+                        android:layout_marginStart="@dimen/space_10"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:paddingStart="@dimen/space_5"
+                        android:background="@drawable/patient_edittext_bg"
+                        android:textColorHint="@color/login_hit"
+                        android:textSize="15sp"
+                        android:gravity="left|center_vertical"
+                        />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="90dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:divider="@drawable/liner_view"
-                    android:orientation="vertical"
-                    android:padding="@dimen/space_5">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/space_3"
+                    tools:ignore="RtlHardcoded">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/age"
+                        android:textSize="18sp" />
+
 
                     <com.justsafe.libview.text.PatientEditText
-                        android:id="@+id/atvName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textColorHint="@color/login_hit"
-                        android:textSize="15sp"
-                        app:ed_backgroundColor="true" />
-
-                    <com.justsafe.libview.text.PatientEditText
-                        android:id="@+id/atvHeight"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textColorHint="@color/login_hit"
-                        android:textSize="15sp"
-                        app:ed_backgroundColor="true" />
-
-                    <com.justsafe.libview.text.PatientEditText
-                        android:id="@+id/atvWeight"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textColorHint="@color/login_hit"
-                        android:textSize="15sp"
-                        app:ed_backgroundColor="true" />
-
-                    <com.justsafe.libview.text.PatientEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textColorHint="@color/login_hit"
-                        android:textSize="15sp"
-                        app:ed_backgroundColor="true" />
-
-                    <com.justsafe.libview.text.PatientEditText
-                        android:id="@+id/atvBirthday"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textColorHint="@color/login_hit"
-                        android:textSize="15sp"
-                        app:ed_backgroundColor="true" />
-
-                    <com.justsafe.libview.text.PatientEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/space_120"
+                        android:layout_height="@dimen/space_28"
+                        android:layout_marginStart="@dimen/space_10"
                         android:maxLines="1"
                         android:singleLine="true"
                         android:textColorHint="@color/login_hit"
@@ -179,21 +267,50 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/space_3"
+                    tools:ignore="RtlHardcoded">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/bmi"
+                        android:textSize="18sp" />
+
+
+                    <com.justsafe.libview.text.PatientEditText
+                        android:layout_width="@dimen/space_120"
+                        android:layout_height="@dimen/space_28"
+                        android:layout_marginStart="@dimen/space_10"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColorHint="@color/login_hit"
+                        android:textSize="15sp"
+                        app:ed_backgroundColor="true" />
+
+                </LinearLayout>
             </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_20"
-                android:orientation="horizontal">
+                android:layout_marginStart="@dimen/space_50"
+                android:gravity="right"
+                android:orientation="vertical">
+
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/space_5"
-                    android:gravity="right"
-                    android:orientation="vertical"
-                    android:padding="@dimen/space_5"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/space_3"
                     tools:ignore="RtlHardcoded">
 
                     <com.justsafe.libview.text.RequiredTextView
@@ -203,90 +320,39 @@
                         android:text="@string/record_number"
                         tools:ignore="RtlHardcoded" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/predictDistances" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/diseaseHistory" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/currentMedications" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/clinicalDiagnosis" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/remark" />
+                    <com.justsafe.libview.text.PatientEditText
+                        android:id="@+id/atvPaientNumber"
+                        android:layout_width="@dimen/space_200"
+                        android:layout_height="@dimen/space_28"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:layout_marginStart="@dimen/space_10"
+                        android:textColorHint="@color/login_hit"
+                        android:textSize="15sp"
+                        app:ed_backgroundColor="true" />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="90dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:divider="@drawable/liner_view"
-                    android:orientation="vertical"
-                    android:padding="@dimen/space_5">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/space_3"
+                    tools:ignore="RtlHardcoded">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/predictDistances"
+                        android:textSize="18sp" />
+
 
                     <com.justsafe.libview.text.PatientEditText
-                        android:id="@+id/atvPaientNumber"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textColorHint="@color/login_hit"
-                        android:textSize="15sp"
-                        app:ed_backgroundColor="true" />
-
-                    <com.justsafe.libview.text.PatientEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textColorHint="@color/login_hit"
-                        android:textSize="15sp"
-                        app:ed_backgroundColor="true" />
-
-                    <com.justsafe.libview.text.PatientEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textColorHint="@color/login_hit"
-                        android:textSize="15sp"
-                        app:ed_backgroundColor="true" />
-
-                    <com.justsafe.libview.text.PatientEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textColorHint="@color/login_hit"
-                        android:textSize="15sp"
-                        app:ed_backgroundColor="true" />
-
-                    <com.justsafe.libview.text.PatientEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textColorHint="@color/login_hit"
-                        android:textSize="15sp"
-                        app:ed_backgroundColor="true" />
-
-                    <com.justsafe.libview.text.PatientEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/space_200"
+                        android:layout_height="@dimen/space_28"
+                        android:layout_marginStart="@dimen/space_10"
                         android:maxLines="1"
                         android:singleLine="true"
                         android:textColorHint="@color/login_hit"
@@ -295,6 +361,113 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/space_3"
+                    tools:ignore="RtlHardcoded">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/diseaseHistory"
+                        android:textSize="18sp" />
+
+
+                    <com.justsafe.libview.text.PatientEditText
+                        android:layout_width="@dimen/space_200"
+                        android:layout_height="@dimen/space_48"
+                        android:layout_marginStart="@dimen/space_10"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColorHint="@color/login_hit"
+                        android:textSize="15sp"
+                        app:ed_backgroundColor="true" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/space_3"
+                    tools:ignore="RtlHardcoded">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/currentMedications"
+                        android:textSize="18sp" />
+
+
+                    <com.justsafe.libview.text.PatientEditText
+                        android:layout_width="@dimen/space_200"
+                        android:layout_height="@dimen/space_48"
+                        android:layout_marginStart="@dimen/space_10"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColorHint="@color/login_hit"
+                        android:textSize="15sp"
+                        app:ed_backgroundColor="true" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/space_3"
+                    tools:ignore="RtlHardcoded">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/clinicalDiagnosis"
+                        android:textSize="18sp" />
+
+
+                    <com.justsafe.libview.text.PatientEditText
+                        android:layout_width="@dimen/space_200"
+                        android:layout_height="@dimen/space_48"
+                        android:layout_marginStart="@dimen/space_10"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:paddingBottom="@dimen/space_50"
+                        android:textColorHint="@color/login_hit"
+                        android:textSize="15sp"
+                        app:ed_backgroundColor="true" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/space_3"
+                    tools:ignore="RtlHardcoded">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/remark"
+                        android:textSize="18sp" />
+
+
+                    <com.justsafe.libview.text.PatientEditText
+                        android:layout_width="@dimen/space_200"
+                        android:layout_height="@dimen/space_48"
+                        android:layout_marginStart="@dimen/space_10"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColorHint="@color/login_hit"
+                        android:textSize="15sp"
+                        app:ed_backgroundColor="true" />
+
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
@@ -308,19 +481,21 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_no"
-                android:layout_width="@dimen/space_100"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/space_100"
+                android:layout_marginEnd="@dimen/space_20"
                 android:background="@drawable/dialog_btn_no"
                 android:text="@string/cancel"
+                android:textSize="18sp"
                 android:textColor="@color/white" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_yes"
-                android:layout_width="@dimen/space_100"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/dialog_btn"
                 android:text="@string/yes"
+                android:textSize="18sp"
                 android:textColor="@color/white" />
 
         </LinearLayout>

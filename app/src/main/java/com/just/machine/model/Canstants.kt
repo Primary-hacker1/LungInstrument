@@ -8,7 +8,7 @@ interface Constants {
         const val news = "首页"
         const val addPatient = "添加患者信息"
         const val patientInformation = "患者信息"
-        const val login = "登陆"
+        const val cardiopulmonary = "心肺测试"
         const val me = "我的"
         const val setting = "设置"
     }

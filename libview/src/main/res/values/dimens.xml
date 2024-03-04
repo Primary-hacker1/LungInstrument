@@ -199,9 +199,6 @@
 
     <dimen name="space_200">200dp</dimen>
 
-    <!--时间选择器新-->
-
-
     <dimen name="page_title_height">49dp</dimen>
     <dimen name="ptz_height">40dp</dimen>
     <dimen name="ptz_parent_height">45dp</dimen>

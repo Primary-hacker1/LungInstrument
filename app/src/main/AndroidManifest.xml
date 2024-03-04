@@ -34,6 +34,10 @@
             android:screenOrientation="landscape"
             android:exported="false" />
         <activity
+            android:name="com.just.machine.ui.activity.CardiopulmonaryActivity"
+            android:screenOrientation="landscape"
+            android:exported="false" />
+        <activity
             android:name="com.just.machine.ui.activity.SixMinActivity"
             android:screenOrientation="landscape"
             android:exported="false">
