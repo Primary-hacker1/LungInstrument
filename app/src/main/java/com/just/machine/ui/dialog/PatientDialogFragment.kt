@@ -120,8 +120,6 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
                 toast("生日不能为空！")
                 return@setNoRepeatListener
             }
-
-
         }
 
         binding.btnNo.setNoRepeatListener {

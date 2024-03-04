@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.just.machine.model.SharedPreferencesUtils
+import com.just.machine.ui.activity.CardiopulmonaryActivity
 import com.just.machine.ui.activity.PatientActivity
 import com.just.machine.ui.activity.SixMinActivity
 import com.just.machine.ui.dialog.PatientDialogFragment
@@ -42,6 +43,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                         PatientDialogFragment.PatientDialogListener {
                         override fun onClickConfirmBtn() {//确认
                             SharedPreferencesUtils.instance.isClickBtn = true
+                            patientDialogFragment.dismiss()
                             val intent = Intent(activity, SixMinActivity::class.java)
                             startActivity(intent)
                         }
@@ -71,7 +73,8 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                         PatientDialogFragment.PatientDialogListener {
                         override fun onClickConfirmBtn() {//确认
                             SharedPreferencesUtils.instance.isClickBtn = true
-                            PatientActivity.startPatientActivity(context)
+                            patientDialogFragment.dismiss()
+                            CardiopulmonaryActivity.startCardiopulmonaryActivity(context)
                         }
 
                         override fun onClickCleanBtn() {//取消
@@ -81,15 +84,15 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                 }
 
                 true -> {
-                    PatientActivity.startPatientActivity(context)
+                    CardiopulmonaryActivity.startCardiopulmonaryActivity(context)
                 }
 
                 null -> TODO()
             }
+        }
 
-            binding.btnPatientInformation.setNoRepeatListener {
-                PatientActivity.startPatientActivity(context)
-            }
+        binding.btnPatientInformation.setNoRepeatListener {
+            PatientActivity.startPatientActivity(context)
         }
 
         binding.btnClose.setNoRepeatListener {
