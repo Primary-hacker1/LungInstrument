@@ -72,7 +72,7 @@
             android:id="@+id/atv_create_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1.5"
+            android:layout_weight="3"
             android:text="@string/create_time"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -90,6 +90,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/operation"
                 android:textSize="18sp"
+                android:layout_weight="1"
                 android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -98,6 +99,7 @@
                 android:layout_height="wrap_content"
                 android:text="删除"
                 android:textSize="18sp"
+                android:layout_weight="1"
                 android:textStyle="bold" />
 
         </LinearLayout>

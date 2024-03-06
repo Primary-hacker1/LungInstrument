@@ -18,6 +18,7 @@ import com.just.news.R
  * 患者信息adapter
  *@author zt
  */
+@Deprecated("PatientsAdapter")
 class PatientAdapter(private val mDatas: MutableList<PatientBean>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

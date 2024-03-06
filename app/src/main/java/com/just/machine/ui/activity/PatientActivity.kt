@@ -4,6 +4,8 @@ package com.just.machine.ui.activity
 import android.content.Context
 import android.content.Intent
 import androidx.activity.viewModels
+import androidx.databinding.ObservableArrayList
+import androidx.databinding.ObservableList
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseActivity
 import com.common.base.gone
@@ -14,8 +16,10 @@ import com.common.viewmodel.LiveDataEvent
 import com.just.machine.dao.PatientBean
 import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.PatientAdapter
+import com.just.machine.ui.adapter.PatientsAdapter
 import com.just.machine.ui.dialog.PatientDialogFragment
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.news.R
 import com.just.news.databinding.ActivityPatientBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -39,7 +43,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         }
     }
 
-    private var adapter: PatientAdapter? = null
+    private var adapter: PatientsAdapter? = null
 
     private fun initToolbar() {
         binding.toolbar.title = Constants.patientInformation//标题
@@ -66,7 +70,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
                         val datas = it.any as MutableList<*>
 
-                        val beans: MutableList<PatientBean> = ArrayList()
+                        val beans: ObservableList<PatientBean> = ObservableArrayList()
 
                         for (num in 0 until datas.size) {
                             val bean = datas[num] as PatientBean
@@ -75,7 +79,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
                         LogUtils.e(tag + beans.toString())
 
-                        adapter = PatientAdapter(beans)
+                        adapter = PatientsAdapter(beans, R.layout.item_layout_patient,10)
 
                         binding.rvList.adapter = adapter
 
@@ -85,7 +89,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         }
 
 
-        adapter?.setItemOnClickListener(object : PatientAdapter.PatientListener {
+        adapter?.setItemOnClickListener(object : PatientsAdapter.PatientListener {
             //点击item返回点击患者的数据
             override fun onClickItem(bean: PatientBean) {
 

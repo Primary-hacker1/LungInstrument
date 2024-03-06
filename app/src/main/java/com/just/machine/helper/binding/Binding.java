@@ -11,9 +11,10 @@ import androidx.databinding.ObservableList;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.common.base.BaseRecyclerViewAdapter;
+import com.just.machine.dao.PatientBean;
 import com.just.news.R;
 import com.just.machine.model.Data;
-import com.just.machine.ui.adapter.MainAdapter;
+import com.just.machine.ui.adapter.PatientsAdapter;
 
 import java.util.List;
 
@@ -42,9 +43,9 @@ public class Binding {
     }
 
     @BindingAdapter({"setItmes"})
-    public static <T> void setItem(RecyclerView recyclerView, ObservableList<Data> it) {
+    public static <T> void setItem(RecyclerView recyclerView, ObservableList<PatientBean> it) {
         if (it != null) {
-            recyclerView.setAdapter(new MainAdapter((ObservableList<Data>) it,
+            recyclerView.setAdapter(new PatientsAdapter((ObservableList<PatientBean>) it,
                     R.layout.item_new,
                     0));
         }
