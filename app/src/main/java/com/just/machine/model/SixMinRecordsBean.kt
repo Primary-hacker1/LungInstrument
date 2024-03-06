@@ -4,10 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.PrimaryKey
 
 data class SixMinRecordsBean(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id")
-    var reportId: String? = "0",//报告主id
-    var reportNum: String? = "",//报告编号
-    var reportDate: String? = "",//报告日期
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") var reportId: String? = "0",//报告主id
+    var reportNo: String? = "",//报告编号
+    var testTime: String? = "",//测试日期
     var movementWay: String? = "0",//运动方式，0为步行，1为跑步
     var movementTime: String? = "",//运动时间
     var movementDistance: String? = "0.0",//运动距离
@@ -50,5 +49,10 @@ data class SixMinRecordsBean(
     var metabState: String? = "1", // 代谢当量的状态，1=出具，2=不出具,
     var tiredState: String? = "1",// borg疲劳的状态，1=出具，2=不出具,
     var prescripState: String? = "0",//处方状态，0=强度版本，1=运动步速版本,
-    var delFlag: String? = "0" // 删除标记,
+    var delFlag: String? = "0", // 删除标记,
+    var reserveOne: String? = "0", // 预留字段,
+    var reserveTwo: String? = "0",// 预留字段,
+    var reserveThree: String? = "0", // 预留字段,
+    var reserveFour: String? = "0", // 预留字段,
+    var reserveFive: String? = "0" // 预留字段,
 )
