@@ -116,7 +116,7 @@
                     android:layout_marginTop="@dimen/space_10"
                     android:background="@drawable/register_btn"
                     android:text="@string/registration"
-                    android:textColor="@color/text1"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="18sp"
                     app:layout_constraintLeft_toLeftOf="@id/btn_login"
                     app:layout_constraintRight_toRightOf="@id/btn_login"

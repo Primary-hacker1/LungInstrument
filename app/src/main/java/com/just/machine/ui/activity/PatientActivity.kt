@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseActivity
 import com.common.base.gone
+import com.common.base.setNoRepeatListener
 import com.common.base.visible
 import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
@@ -91,6 +92,22 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
             }
         })
+
+        binding.btnAdd.setNoRepeatListener {
+            val patientDialogFragment =
+                PatientDialogFragment.startPatientDialogFragment(supportFragmentManager)//添加患者修改患者信息
+            patientDialogFragment.setDialogOnClickListener(object :
+                PatientDialogFragment.PatientDialogListener {
+                override fun onClickConfirmBtn() {//确认
+                    patientDialogFragment.dismiss()
+
+                }
+
+                override fun onClickCleanBtn() {//取消
+                    patientDialogFragment.dismiss()
+                }
+            })
+        }
     }
 
     override fun getViewBinding() = ActivityPatientBinding.inflate(layoutInflater)

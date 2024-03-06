@@ -27,7 +27,7 @@
             app:layout_constraintRight_toRightOf="parent"
             tools:ignore="MissingConstraints"
             android:drawableStart="@drawable/btn_close"
-            android:textColor="@color/text1"
+            android:textColor="@color/colorPrimary"
             android:gravity="center"
             android:text="@string/close"
             android:background="@null"
@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/entry_name"
-                android:textColor="@color/text1"
+                android:textColor="@color/colorPrimary"
                 android:textSize="28sp"
                 android:textStyle="bold" />
 

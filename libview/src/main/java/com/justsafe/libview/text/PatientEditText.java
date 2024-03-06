@@ -86,6 +86,16 @@ public class PatientEditText extends AppCompatEditText {
 
             if (ed_select_bg) {
                 setBackground(ContextCompat.getDrawable(getContext(), R.drawable.bg_select_bg));
+
+                ic_left_click = ContextCompat.getDrawable(getContext(), typedArray.getResourceId(
+                        R.styleable.LoginEditText_left_icon, R.drawable.ic_launcher_background));
+
+                assert ic_left_click != null;
+
+                ic_left_click.setBounds(0, 0, 40, 40);  //这里是设置图片的高宽
+
+                setCompoundDrawables(ic_left_click, null,
+                        null, null);
             } else {
                 setBackground(ContextCompat.getDrawable(getContext(), R.drawable.patient_edittext_bg));
             }

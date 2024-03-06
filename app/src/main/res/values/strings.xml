@@ -54,4 +54,5 @@
     <string name="man">男</string>
     <string name="woman">女</string>
     <string name="add">新增</string>
+    <string name="patient_list">患者列表</string>
 </resources>

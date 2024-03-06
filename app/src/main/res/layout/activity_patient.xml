@@ -14,7 +14,9 @@
 
         <include
             android:id="@+id/toolbar"
-            layout="@layout/view_toolbar" />
+            layout="@layout/view_toolbar"
+            setImage=""
+            />
 
 
         <LinearLayout
@@ -22,8 +24,30 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="@dimen/space_3"
-            tools:ignore="RtlHardcoded">
+            android:padding="@dimen/space_3">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="@dimen/space_3">
+
+                <View
+                    android:layout_width="@dimen/space_5"
+                    android:layout_height="19dp"
+                    android:background="@color/colorPrimary" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_5"
+                    android:text="@string/patient_list"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
 
 
             <LinearLayout
@@ -31,28 +55,27 @@
                 android:layout_height="wrap_content"
                 android:gravity="right|center_vertical"
                 android:orientation="horizontal"
-                android:padding="@dimen/space_3"
-                tools:ignore="RtlHardcoded">
+                android:padding="@dimen/space_3">
 
                 <com.justsafe.libview.text.PatientEditText
                     android:layout_width="300dp"
                     android:layout_height="46dp"
                     android:layout_marginStart="@dimen/space_10"
-                    android:drawableLeft="@drawable/liner_view"
                     android:hint="@string/select_name_number"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textColorHint="@color/text9"
                     android:textSize="15sp"
+                    app:left_icon="@drawable/select"
                     app:ed_backgroundColor="true"
                     app:select_bg="true" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_yes"
+                    android:id="@+id/btn_add"
                     android:layout_width="160dp"
-                    android:layout_marginStart="@dimen/space_28"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/dialog_btn"
+                    android:layout_marginStart="@dimen/space_28"
+                    android:background="@color/colorPrimary"
                     android:text="@string/add"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
