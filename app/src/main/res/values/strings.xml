@@ -49,8 +49,6 @@
     <string name="sixmin_blood_pressure_low">舒张压</string>
     <string name="sixmin_blood_pressure_font">运动前</string>
     <string name="sixmin_blood_pressure_behind">运动后</string>
-    <string name="measure_blood">测量\n血压</string>
-    <string name="measuring_blood">测量\n中</string>
     <string name="man">男</string>
     <string name="woman">女</string>
     <string name="add">新增</string>

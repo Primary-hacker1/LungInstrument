@@ -11,7 +11,6 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.hoho.android.usbserial.driver.UsbSerialDriver;
 import com.hoho.android.usbserial.driver.UsbSerialPort;
@@ -19,20 +18,21 @@ import com.hoho.android.usbserial.driver.UsbSerialProber;
 import com.hoho.android.usbserial.util.SerialInputOutputManager;
 import com.just.machine.model.UsbSerialData;
 import com.just.news.BuildConfig;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 
-// usb 数据传输工具
+/**
+ * usb 数据传输工具
+ */
 public class USBTransferUtil {
 
     private String afterStr = "EDFFEDFF";//包尾
@@ -53,9 +53,14 @@ public class USBTransferUtil {
 
     private Map<Long, byte[]> map = new HashMap<>();//接收数据
     private Map<Long, byte[]> mapNew = new TreeMap<>();
+    private Map<Long, String> mapXueyang = new HashMap<>();//血氧数据
     private String byteStr = "";
     private UsbSerialData usbSerialData = new UsbSerialData();
-    private int bloodState = 0; //1运动前血压 2运动后血压
+    private boolean isBegin = false;//是否开始试验
+    private int bloodState = 0;
+    private int bloodType = 0; //1运动前血压 2运动后血压
+    private boolean xueyangType = true;
+    private int startType = 0;
 
     // 顺序： manager - availableDrivers（所有可用设备） - UsbSerialDriver（目标设备对象） - UsbDeviceConnection（设备连接对象） - UsbSerialPort（设备的端口，一般只有1个）
     private List<UsbSerialDriver> availableDrivers = new ArrayList<>();  // 所有可用设备
@@ -79,6 +84,14 @@ public class USBTransferUtil {
 
     public void setBloodState(int bloodState) {
         this.bloodState = bloodState;
+    }
+
+    public boolean isBegin() {
+        return isBegin;
+    }
+
+    public void setBegin(boolean begin) {
+        isBegin = begin;
     }
 
     public static USBTransferUtil getInstance() {
@@ -337,7 +350,7 @@ public class USBTransferUtil {
                 cc.printStackTrace();
             }
             for (Long key : mapNew.keySet()) {
-                byteStr = byteStr + (CRC16Util.bytesToHexString(mapNew.get(key)));
+                byteStr = byteStr + (CRC16Util.bytesToHexString(Objects.requireNonNull(mapNew.get(key))));
                 map.remove(key);
             }
         }
@@ -468,13 +481,36 @@ public class USBTransferUtil {
                                         usbSerialData.setBloodState("测量血压成功");
                                         SixMinCmdUtils.Companion.resetMeasureBloodPressure();
                                         //运动前
-                                        if(bloodState == 0){
-                                            bloodState = 1;
+                                        if(bloodType == 0){
+                                            bloodType = 1;
                                             usbSerialData.setBloodHighFront(bloodFrontValue);
                                             usbSerialData.setBloodLowFront(bloodBehindValue);
                                         }
                                     }
                                 }
+                            }
+
+                            //血氧数据
+                            if(bytes[10] == (byte) 0x61 && bytes[11] == (byte) 0x71){
+                                if (xueyangType) {
+                                    //系统时间戳
+                                    Long time = System.currentTimeMillis();
+                                    byte[] b = {bytes[12]};
+                                    int xueyang = Integer.valueOf(CRC16Util.bytesToHexString(b), 16);
+                                    if (xueyang > 99) {
+                                        xueyang = 99;
+                                    }
+                                    String str = Integer.toString(xueyang);
+                                    mapXueyang.put(time, str);
+                                    //静息血氧，取集合的平均值
+                                }
+                                xueyangType = !xueyangType;
+                            }
+
+                            if (startType == 1 && (bytes[15] != bytesnull || bytes[16] != bytesnull)) {
+                                byte[] bytesBS = {bytes[15], bytes[16]};
+                                String bsStr = CRC16Util.bytesToHexString(bytesBS);
+                                Integer steps = Integer.valueOf(bsStr, 16);
                             }
                         }
                     }

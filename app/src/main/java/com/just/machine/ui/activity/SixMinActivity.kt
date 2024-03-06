@@ -1,7 +1,7 @@
 package com.just.machine.ui.activity
 
+import android.app.AlertDialog
 import android.graphics.Color
-import android.os.CountDownTimer
 import android.speech.tts.TextToSpeech
 import android.widget.Toast
 import androidx.lifecycle.Observer
@@ -9,6 +9,7 @@ import com.common.base.CommonBaseActivity
 import com.common.base.setNoRepeatListener
 import com.google.gson.Gson
 import com.just.machine.model.UsbSerialData
+import com.just.machine.util.FileUtil
 import com.just.machine.util.FixCountDownTime
 import com.just.machine.util.LiveDataBus
 import com.just.machine.util.SixMinCmdUtils
@@ -17,6 +18,8 @@ import com.just.machine.util.USBTransferUtil.OnUSBDateReceive
 import com.just.news.R
 import com.just.news.databinding.ActivitySixMinBinding
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
+import java.io.FileInputStream
 import java.util.Locale
 
 
@@ -26,26 +29,19 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
     private lateinit var usbTransferUtil: USBTransferUtil
     private lateinit var textToSpeech: TextToSpeech
     private lateinit var mCountDownTime: FixCountDownTime
-    private var isBegin = false
+    private lateinit var exitTestDialog: AlertDialog
 
     override fun initView() {
         binding.sixminLlDevicesStatus.setBackgroundColor(Color.rgb(109, 188, 246))
         binding.sixminLlPatientInfo.setBackgroundColor(Color.rgb(109, 188, 246))
         initCountDownTimerExt()
+        initExitAlertDialog()
+        copyAssetsFilesToSD()
         usbTransferUtil = USBTransferUtil.getInstance()
         usbTransferUtil.init(this)
         textToSpeech = TextToSpeech(applicationContext, this)
-        usbTransferUtil.setOnUSBDateReceive(OnUSBDateReceive {
-            runOnUiThread {
-
-            }
-        })
         usbTransferUtil.connect()
-        if (!USBTransferUtil.isConnectUSB) {
-            binding.sixminIvEcg.setImageResource(R.mipmap.xinlvno)
-            binding.sixminIvBloodPressure.setImageResource(R.mipmap.xueyangno)
-            binding.sixminIvBloodOxygen.setImageResource(R.mipmap.xueyangno)
-        }
+
         LiveDataBus.get().with("111").observe(this, Observer {
             try {
                 val usbSerialData = Gson().fromJson(it.toString(), UsbSerialData::class.java)
@@ -111,10 +107,14 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
 
                     "测量血压成功" -> {
                         binding.sixminTvMeasureBlood.text = getString(R.string.sixmin_measure_blood)
-                        binding.sixminTvBloodPressureHighFront.text = usbSerialData.bloodHighFront ?: "- - -"
-                        binding.sixminTvBloodPressureLowFront.text = usbSerialData.bloodLowFront ?: "- - -"
-                        binding.sixminTvBloodPressureHighBehind.text = usbSerialData.bloodHighBehind ?: "- - -"
-                        binding.sixminTvBloodPressureLowBehind.text = usbSerialData.bloodLowBehind ?: "- - -"
+                        binding.sixminTvBloodPressureHighFront.text =
+                            usbSerialData.bloodHighFront ?: "- - -"
+                        binding.sixminTvBloodPressureLowFront.text =
+                            usbSerialData.bloodLowFront ?: "- - -"
+                        binding.sixminTvBloodPressureHighBehind.text =
+                            usbSerialData.bloodHighBehind ?: "- - -"
+                        binding.sixminTvBloodPressureLowBehind.text =
+                            usbSerialData.bloodLowBehind ?: "- - -"
                     }
                 }
             } catch (e: Exception) {
@@ -123,50 +123,62 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         })
 
         binding.sixminRlMeasureBlood.setNoRepeatListener {
-            if (binding.sixminTvMeasureBlood.text == getString(R.string.sixmin_measure_blood)) {
-                SixMinCmdUtils.measureBloodPressure()
+            if (USBTransferUtil.isConnectUSB) {
+                if (binding.sixminTvMeasureBlood.text == getString(R.string.sixmin_measure_blood)) {
+                    SixMinCmdUtils.measureBloodPressure()
+                } else {
+                    Toast.makeText(this, "正在测量血压中...", Toast.LENGTH_SHORT).show()
+                }
             } else {
-                Toast.makeText(this, "正在测量血压中...", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "请先接入设备", Toast.LENGTH_SHORT).show()
             }
         }
 
         binding.sixminRlStart.setNoRepeatListener {
-            if (!isBegin) {
-                binding.sixminTvStart.text = "停止"
-                mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack {
-                    override fun onStart() {
+            if (USBTransferUtil.isConnectUSB) {
+                if (!usbTransferUtil.isBegin) {
+                    binding.sixminTvStart.text = "停止"
+                    mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack {
+                        override fun onStart() {
 
-                    }
+                        }
 
-                    override fun onTick(times: Int) {
-                        val minute = times / 60 % 60
-                        val second = times % 60
-                        binding.sixminTvStartMin.text = minute.toString()
-                        binding.sixminTvStartSec1.text = second.toString().substring(0, 1)
-                        binding.sixminTvStartSec2.text = second.toString().substring(1)
+                        override fun onTick(times: Int) {
+                            val minute = times / 60 % 60
+                            val second = times % 60
+                            binding.sixminTvStartMin.text = minute.toString()
+                            binding.sixminTvStartSec1.text = second.toString().substring(0, 1)
+                            binding.sixminTvStartSec2.text = second.toString().substring(1)
 //                    Toast.makeText(this@SixMinActivity, "$times===", Toast.LENGTH_SHORT).show()
-                    }
+                        }
 
-                    override fun onFinish() {
-                        binding.sixminTvStartMin.text = "5"
-                        binding.sixminTvStartSec1.text = "5"
-                        binding.sixminTvStartSec2.text = "9"
-                    }
-                })
+                        override fun onFinish() {
+                            binding.sixminTvStartMin.text = "5"
+                            binding.sixminTvStartSec1.text = "5"
+                            binding.sixminTvStartSec2.text = "9"
+                        }
+                    })
+                } else {
+                    binding.sixminTvStart.text = "开始"
+                    binding.sixminTvStartMin.text = "5"
+                    binding.sixminTvStartSec1.text = "5"
+                    binding.sixminTvStartSec2.text = "9"
+                    mCountDownTime.cancel()
+                    mCountDownTime.setmTimes(360)
+                }
+                usbTransferUtil.isBegin = !usbTransferUtil.isBegin
             } else {
-                binding.sixminTvStart.text = "开始"
-                binding.sixminTvStartMin.text = "5"
-                binding.sixminTvStartSec1.text = "5"
-                binding.sixminTvStartSec2.text = "9"
-                mCountDownTime.cancel()
-                mCountDownTime.setmTimes(360)
+                Toast.makeText(this, "请先接入设备", Toast.LENGTH_SHORT).show()
+//                WordUtil.wordToPdf(this,getExternalFilesDir("test.doc")?.absolutePath,getExternalFilesDir("")?.absolutePath+ File.separator+"test.pdf")
             }
-            isBegin = !isBegin
         }
 
         binding.sixminIvClose.setNoRepeatListener {
-            if (isBegin) {
-
+            if (usbTransferUtil.isBegin) {
+//                Toast.makeText(this@SixMinActivity, "正在试验中...", Toast.LENGTH_SHORT).show()
+                if (!exitTestDialog.isShowing) {
+                    exitTestDialog.show()
+                }
             } else {
                 finish()
             }
@@ -180,6 +192,52 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 null
             )
         }
+    }
+
+    /**
+     * 将assets文件复制到内存卡
+     */
+    private fun copyAssetsFilesToSD() {
+        try {
+            val stringNames = assets.list("templates")
+            var srcFolderSize: Long = 0
+            stringNames?.forEach { name ->
+                val length = assets.open("templates/$name").available()
+                srcFolderSize += length
+            }
+            val dstFolderSize = FileUtil.getInstance(this)
+                .getFolderSize(getExternalFilesDir("")?.absolutePath + File.separator + "templates")
+            if (srcFolderSize != dstFolderSize) {
+                val file = File(getExternalFilesDir("templates"), "报告模板3页-无截图.xml")
+                val fi = FileInputStream(file)
+                fi.available()
+                FileUtil.getInstance(this).copyAssetsToSD("templates", "templates")
+                    .setFileOperateCallback(object : FileUtil.FileOperateCallback {
+                        override fun onSuccess() {
+                            Toast.makeText(this@SixMinActivity, "复制成功", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+
+                        override fun onFailed(error: String?) {
+                            Toast.makeText(this@SixMinActivity, "复制失败", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    })
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun initExitAlertDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("提示")
+        builder.setMessage("是否确定退出试验？")
+        builder.setPositiveButton("是") { _, _ ->
+        }
+        builder.setNegativeButton("否") { _, _ ->
+        }
+        exitTestDialog = builder.create()
     }
 
     private fun initCountDownTimerExt() {
@@ -199,6 +257,15 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
             textToSpeech.setSpeechRate(0.2f)
             //在onInIt方法里直接调用tts的播报功能
         }
+    }
+
+    override fun onResume() {
+        if (!USBTransferUtil.isConnectUSB) {
+            binding.sixminIvEcg.setImageResource(R.mipmap.xinlvno)
+            binding.sixminIvBloodPressure.setImageResource(R.mipmap.xueyangno)
+            binding.sixminIvBloodOxygen.setImageResource(R.mipmap.xueyangno)
+        }
+        super.onResume()
     }
 
     override fun onDestroy() {
