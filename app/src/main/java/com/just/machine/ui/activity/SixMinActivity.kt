@@ -2,6 +2,7 @@ package com.just.machine.ui.activity
 
 import android.app.AlertDialog
 import android.graphics.Color
+import android.hardware.usb.UsbManager
 import android.speech.tts.TextToSpeech
 import android.widget.Toast
 import androidx.lifecycle.Observer
@@ -14,7 +15,6 @@ import com.just.machine.util.FixCountDownTime
 import com.just.machine.util.LiveDataBus
 import com.just.machine.util.SixMinCmdUtils
 import com.just.machine.util.USBTransferUtil
-import com.just.machine.util.USBTransferUtil.OnUSBDateReceive
 import com.just.news.R
 import com.just.news.databinding.ActivitySixMinBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,6 +41,17 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         usbTransferUtil.init(this)
         textToSpeech = TextToSpeech(applicationContext, this)
         usbTransferUtil.connect()
+        usbTransferUtil.setOnUSBDateReceive {
+            runOnUiThread {
+                if (it.equals("android.hardware.usb.action.USB_DEVICE_DETACHED")) {
+                    //usb设备拔出
+                    binding.sixminIvEcg.setImageResource(R.mipmap.xinlvno)
+                    binding.sixminIvBloodPressure.setImageResource(R.mipmap.xueyangno)
+                    binding.sixminIvBloodOxygen.setImageResource(R.mipmap.xueyangno)
+                    binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi00)
+                }
+            }
+        }
 
         LiveDataBus.get().with("111").observe(this, Observer {
             try {
@@ -88,8 +99,6 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 when (usbSerialData.bloodState) {
                     "未测量血压" -> {
                         binding.sixminTvMeasureBlood.text = getString(R.string.sixmin_measure_blood)
-                        binding.sixminTvBloodPressureHigh.text = "- - -"
-                        binding.sixminTvBloodPressureLow.text = "- - -"
                     }
 
                     "测量血压中" -> {
@@ -107,6 +116,8 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
 
                     "测量血压成功" -> {
                         binding.sixminTvMeasureBlood.text = getString(R.string.sixmin_measure_blood)
+                        binding.sixminTvBloodPressureHigh.text = usbSerialData.bloodHigh
+                        binding.sixminTvBloodPressureLow.text = usbSerialData.bloodLow
                         binding.sixminTvBloodPressureHighFront.text =
                             usbSerialData.bloodHighFront ?: "- - -"
                         binding.sixminTvBloodPressureLowFront.text =
@@ -144,18 +155,21 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                         }
 
                         override fun onTick(times: Int) {
-                            val minute = times / 60 % 60
-                            val second = times % 60
-                            binding.sixminTvStartMin.text = minute.toString()
-                            binding.sixminTvStartSec1.text = second.toString().substring(0, 1)
-                            binding.sixminTvStartSec2.text = second.toString().substring(1)
-//                    Toast.makeText(this@SixMinActivity, "$times===", Toast.LENGTH_SHORT).show()
+                            try {
+                                val minute = times / 60 % 60
+                                val second = times % 60
+                                binding.sixminTvStartMin.text = minute.toString()
+                                binding.sixminTvStartSec1.text = second.toString().substring(0, 1)
+                                binding.sixminTvStartSec2.text = second.toString().substring(1)
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
                         }
 
                         override fun onFinish() {
-                            binding.sixminTvStartMin.text = "5"
-                            binding.sixminTvStartSec1.text = "5"
-                            binding.sixminTvStartSec2.text = "9"
+                            binding.sixminTvStartMin.text = "0"
+                            binding.sixminTvStartSec1.text = "0"
+                            binding.sixminTvStartSec2.text = "0"
                         }
                     })
                 } else {
@@ -169,7 +183,6 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 usbTransferUtil.isBegin = !usbTransferUtil.isBegin
             } else {
                 Toast.makeText(this, "请先接入设备", Toast.LENGTH_SHORT).show()
-//                WordUtil.wordToPdf(this,getExternalFilesDir("test.doc")?.absolutePath,getExternalFilesDir("")?.absolutePath+ File.separator+"test.pdf")
             }
         }
 

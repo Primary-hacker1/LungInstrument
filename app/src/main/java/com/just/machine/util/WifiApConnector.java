@@ -5,13 +5,16 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 public class WifiApConnector {
 
     private static final String SETUP_WIFIAP_METHOD = "setWifiApEnabled";
-    private static final String TAG="wifi_test";
+    private static final String TAG = "wifi_test";
     Context context = null;
     WifiManager wifiManager = null;
     static WifiApConnector wifiApConnector = null;
@@ -26,31 +29,29 @@ public class WifiApConnector {
     }
 
 
-
     public void setupWifiAp(String name, String password) throws Exception {
 
         if (wifiManager.isWifiEnabled()) {
-            Log.i(TAG,"手机wifi开启了"+wifiManager.isWifiEnabled());
+            Log.i(TAG, "手机wifi开启了" + wifiManager.isWifiEnabled());
             wifiManager.setWifiEnabled(false);
-            Log.i(TAG,"手机wifi被强行");
+            Log.i(TAG, "手机wifi被强行");
             if (name == null || "".equals(name)) {
                 throw new Exception("the name of the wifiap is cannot be null");
-            }
-            else{
+            } else {
                 stratWifiAp(name, password);
-                Log.i(TAG,"手机关闭wifi之后成功调用startwifiap方法");
+                Log.i(TAG, "手机关闭wifi之后成功调用startwifiap方法");
             }
 
         }
 
         if (!wifiManager.isWifiEnabled()) {
-            Log.i(TAG,"手机wifi未开启"+wifiManager.isWifiEnabled());
+            Log.i(TAG, "手机wifi未开启" + wifiManager.isWifiEnabled());
 
             if (name == null || "".equals(name)) {
                 throw new Exception("the name of the wifiap is cannot be null");
-            }else{
+            } else {
                 stratWifiAp(name, password);
-                Log.i(TAG,"手机不需要关闭wifi之后热点创建成功");
+                Log.i(TAG, "手机不需要关闭wifi之后热点创建成功");
             }
 
         }
@@ -75,7 +76,7 @@ public class WifiApConnector {
             netConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
             netConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
             method1.invoke(wifiManager, netConfig, true);
-            Log.i(TAG,"成功启动start方法创建wifi热点");
+            Log.i(TAG, "成功启动start方法创建wifi热点");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -88,8 +89,6 @@ public class WifiApConnector {
             e.printStackTrace();
         }
     }
-
-
 
 
     public boolean isWifiApEnabled() {
@@ -124,5 +123,27 @@ public class WifiApConnector {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * 获取已连接本机热点的ip
+     * @return
+     * @throws Exception
+     */
+    public ArrayList getConnectIp() throws Exception {
+        ArrayList connectIpList = new ArrayList();
+        Runtime runtime = Runtime.getRuntime();
+        Process proc = runtime.exec("ip neigh show");
+        proc.waitFor();
+        BufferedReader br = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] splitted = line.split(" +");
+            if (splitted != null && splitted.length >= 4) {
+                String ip = splitted[0];
+                connectIpList.add(ip);
+            }
+        }
+        return connectIpList;
     }
 }

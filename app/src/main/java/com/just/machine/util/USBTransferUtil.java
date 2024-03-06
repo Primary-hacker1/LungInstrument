@@ -11,6 +11,7 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.hoho.android.usbserial.driver.UsbSerialDriver;
 import com.hoho.android.usbserial.driver.UsbSerialPort;
@@ -18,6 +19,7 @@ import com.hoho.android.usbserial.driver.UsbSerialProber;
 import com.hoho.android.usbserial.util.SerialInputOutputManager;
 import com.just.machine.model.UsbSerialData;
 import com.just.news.BuildConfig;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -139,10 +141,23 @@ public class USBTransferUtil {
                     // 授权操作完成，连接
 //                    boolean granted = intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false);  // 不知为何获取到的永远都是 false 因此无法判断授权还是拒绝
                     connectDevice();
+                    //usb插入
+                } else if (UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(intent.getAction())) {
+                    connect();
+                } else if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(intent.getAction())) {
+                    isConnectUSB = false;
+                    inputOutputManager = null;
+                    if (onUSBDateReceive != null) {
+                        onUSBDateReceive.onReceive(intent.getAction());
+                    }
                 }
             }
         };
-        my_context.registerReceiver(usbReceiver, new IntentFilter(INTENT_ACTION_GRANT_USB));
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(INTENT_ACTION_GRANT_USB);
+        filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
+        filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
+        my_context.registerReceiver(usbReceiver, filter);
     }
 
     // 刷新当前可用 usb设备
@@ -250,7 +265,7 @@ public class USBTransferUtil {
             @Override
             public void onRunError(Exception e) {
                 Log.e(TAG, "usb 断开了");
-                disconnect();
+                isConnectUSB = false;
                 e.printStackTrace();
             }
         });
@@ -342,15 +357,12 @@ public class USBTransferUtil {
                 while (iterator.hasNext()) {
                     Long mapLongKey = iterator.next();
                     mapNew.put(mapLongKey, map.get(mapLongKey));
-                    if (!iterator.hasNext()) {
-                        break;
-                    }
                 }
             } catch (ConcurrentModificationException cc) {
                 cc.printStackTrace();
             }
             for (Long key : mapNew.keySet()) {
-                byteStr = byteStr + (CRC16Util.bytesToHexString(Objects.requireNonNull(mapNew.get(key))));
+                byteStr = (CRC16Util.bytesToHexString(Objects.requireNonNull(mapNew.get(key)))) + byteStr ;
                 map.remove(key);
             }
         }
@@ -458,32 +470,35 @@ public class USBTransferUtil {
                                     break;
                             }
                             //血压数据
-                            if(bloodState == 0){
-                                if(bytes[13] == bytesnull && bytes[14] == bytesnull){
+                            if (bloodState == 0) {
+                                if (bytes[13] == bytesnull && bytes[14] == bytesnull) {
                                     usbSerialData.setBloodState("未测量血压");
                                 }
 
-                                if(bytes[13] != bytesnull && bytes[14] != bytesnull){
-                                    byte[] bloodFrontByte = {bytes[13]};
-                                    String bloodFrontValue = Integer.valueOf(CRC16Util.bytesToHexString(bloodFrontByte), 16).toString();
+                                if (bytes[13] != bytesnull && bytes[14] != bytesnull) {
+                                    byte[] bloodByte = {bytes[13]};
+                                    String bloodValue = Integer.valueOf(CRC16Util.bytesToHexString(bloodByte), 16).toString();
                                     //测量血压中
-                                    if(bytes[13] != (byte) 0xFF && bytes[14] == (byte) 0xFF){
+                                    if (bytes[13] != (byte) 0xFF && bytes[14] == (byte) 0xFF) {
                                         usbSerialData.setBloodState("测量血压中");
+                                        usbSerialData.setBloodHigh(bloodValue);
                                         //测量失败
-                                    }else if((bytes[13] == (byte) 0xFF && bytes[14] == (byte) 0xFF)
-                                            || bytes[6] == (byte) 0x30){
+                                    } else if ((bytes[13] == (byte) 0xFF && bytes[14] == (byte) 0xFF)
+                                            || bytes[6] == (byte) 0x30) {
                                         usbSerialData.setBloodState("测量血压失败");
                                         SixMinCmdUtils.Companion.failMeasureBloodPressure();
                                         //测量成功
-                                    }else if((bytes[13] != (byte) 0xFF && bytes[14] != (byte) 0xFF)){
-                                        byte[] bloodBehindByte = {bytes[13]};
+                                    } else if ((bytes[13] != (byte) 0xFF && bytes[14] != (byte) 0xFF)) {
+                                        byte[] bloodBehindByte = {bytes[14]};
                                         String bloodBehindValue = Integer.valueOf(CRC16Util.bytesToHexString(bloodBehindByte), 16).toString();
                                         usbSerialData.setBloodState("测量血压成功");
+                                        usbSerialData.setBloodHigh(bloodValue);
+                                        usbSerialData.setBloodLow(bloodBehindValue);
                                         SixMinCmdUtils.Companion.resetMeasureBloodPressure();
                                         //运动前
-                                        if(bloodType == 0){
+                                        if (bloodType == 0) {
                                             bloodType = 1;
-                                            usbSerialData.setBloodHighFront(bloodFrontValue);
+                                            usbSerialData.setBloodHighFront(bloodValue);
                                             usbSerialData.setBloodLowFront(bloodBehindValue);
                                         }
                                     }
@@ -491,7 +506,7 @@ public class USBTransferUtil {
                             }
 
                             //血氧数据
-                            if(bytes[10] == (byte) 0x61 && bytes[11] == (byte) 0x71){
+                            if (bytes[10] == (byte) 0x61 && bytes[11] == (byte) 0x71) {
                                 if (xueyangType) {
                                     //系统时间戳
                                     Long time = System.currentTimeMillis();
@@ -517,6 +532,8 @@ public class USBTransferUtil {
 
                     LiveDataBus.get().with("111").postValue(new Gson().toJson(usbSerialData));
                 }
+            }else{
+                byteStr = byteStr.substring(2, byteStr.length());
             }
         }
     }
