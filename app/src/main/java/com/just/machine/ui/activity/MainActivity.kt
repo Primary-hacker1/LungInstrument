@@ -10,11 +10,13 @@ import android.widget.Toast
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import com.common.base.CommonBaseActivity
+import com.common.network.LogUtils
 import com.just.machine.util.ConnectThread
 import com.just.machine.util.ListenerThread
 import com.just.news.R
 import com.just.news.databinding.ActivityMainBinding
 import com.justsafe.libview.nav.FragmentNavigatorHideShow
+import com.justsafe.libview.util.MySystemParams
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
 import java.net.InetAddress
@@ -83,6 +85,7 @@ class MainActivity : CommonBaseActivity<ActivityMainBinding>() {
     }
 
     override fun initView() {
+        LogUtils.d(MySystemParams.getInstance(this).toString())
         initSocket()
         initNavigationView()
     }

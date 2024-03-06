@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.just.machine.dao.PatientBean
 import com.just.news.R
@@ -61,14 +63,14 @@ class PatientAdapter(private val mDatas: MutableList<PatientBean>) :
 
     //item的holder
     class ItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvContent: TextView
-        val medicalRecordNumber: TextView
-        val ivDelete: ImageView
+        val tvContent: AppCompatTextView
+        val medicalRecordNumber: AppCompatTextView
+        val ivDelete: AppCompatButton
 
         init {
-            tvContent = itemView.findViewById<TextView>(R.id.tvName)
-            medicalRecordNumber = itemView.findViewById<TextView>(R.id.tvMedicalRecordNumber)
-            ivDelete = itemView.findViewById<ImageView>(R.id.ivLinesItemDelete)
+            tvContent = itemView.findViewById<AppCompatTextView>(R.id.atv_name)
+            medicalRecordNumber = itemView.findViewById<AppCompatTextView>(R.id.atv_record_number)
+            ivDelete = itemView.findViewById<AppCompatButton>(R.id.btn_delete)
         }
     }
 }
