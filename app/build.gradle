@@ -116,4 +116,9 @@ dependencies {
     // datastore
     implementation presentationDependencies.datastore_preferences
     implementation presentationDependencies.datastore_core
+
+    //pdf
+    implementation 'org.freemarker:freemarker:2.3.31'
+    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+    implementation (group: 'com.aspose', name: 'aspose-words', version: '20.6', classifier: 'android.via.java')
 }
