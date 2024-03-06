@@ -24,8 +24,7 @@ import javax.inject.Inject
 @Suppress("CAST_NEVER_SUCCEEDS")
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private var repository: UserRepository,
-    private var plantDao: PlantRepository
+    private var repository: UserRepository, private var plantDao: PlantRepository
 ) : BaseViewModel() {
 
     var itemNews: ObservableList<Data> = ObservableArrayList()
@@ -43,10 +42,9 @@ class MainViewModel @Inject constructor(
         doAsync {
             val patient = plantDao.insertPatient(patient)
 
-            if (patient as Int == 0){
+            if (patient as Int == 0) {
                 mEventHub.value = LiveDataEvent(
-                    LiveDataEvent.QuerySuccess,
-                    patient
+                    LiveDataEvent.QuerySuccess, patient
                 )
             }
         }
@@ -56,13 +54,21 @@ class MainViewModel @Inject constructor(
         }
     }
 
-
-    fun getPatient() {//查询所有患者
+    fun getPatients() {//查询所有患者
         viewModelScope.launch {
             plantDao.getPatients().collect {
                 mEventHub.value = LiveDataEvent(
-                    LiveDataEvent.QuerySuccess,
-                    it
+                    LiveDataEvent.QuerySuccess, it
+                )
+            }
+        }
+    }
+
+    fun getPatient(patientId: Long) {//查询单个患者
+        viewModelScope.launch {
+            plantDao.getPatient(patientId).collect {
+                mEventHub.value = LiveDataEvent(
+                    LiveDataEvent.QueryPatient, it
                 )
             }
         }
@@ -81,13 +87,11 @@ class MainViewModel @Inject constructor(
      *@param type rxjava请求->直接获取结果的
      */
     fun getRxNews(type: String) {
-        repository.getRxNews(type)
-            .`as`(auto(this))
-            .subscribes({
+        repository.getRxNews(type).`as`(auto(this)).subscribes({
 
-            }, {
+        }, {
 
-            })
+        })
     }
 }
 

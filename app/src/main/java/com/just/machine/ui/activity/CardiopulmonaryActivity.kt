@@ -8,7 +8,6 @@ import com.common.base.CommonBaseActivity
 import com.common.base.gone
 import com.common.base.visible
 import com.just.machine.model.Constants
-import com.just.machine.ui.adapter.PatientAdapter
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.databinding.ActivityPatientBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,7 +32,6 @@ class CardiopulmonaryActivity : CommonBaseActivity<ActivityPatientBinding>() {
         }
     }
 
-    private var adapter: PatientAdapter? = null
 
     private fun initToolbar() {
         binding.toolbar.title = Constants.cardiopulmonary//标题

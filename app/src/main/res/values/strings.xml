@@ -55,4 +55,11 @@
     <string name="patient_list">患者列表</string>
     <string name="create_time">创建时间</string>
     <string name="operation">操作</string>
+    <string name="report_no">报告编号</string>
+    <string name="testTime">测试时间</string>
+    <string name="assess">评估</string>
+    <string name="exercise_lung_test">运动肺测试</string>
+    <string name="maximumVentilation">最大通气量</string>
+    <string name="forcedVitalCapacity">用力肺活量</string>
+    <string name="conventionalVentilation">常规肺活量</string>
 </resources>

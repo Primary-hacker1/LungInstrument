@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
@@ -19,7 +17,7 @@ import com.just.news.R
  *@author zt
  */
 @Deprecated("PatientsAdapter")
-class PatientAdapter(private val mDatas: MutableList<PatientBean>) :
+class PatientAllAdapter(private val mDatas: MutableList<PatientBean>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var listener: PatientListener? = null

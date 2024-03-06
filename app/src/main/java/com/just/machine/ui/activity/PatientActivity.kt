@@ -15,7 +15,6 @@ import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
 import com.just.machine.dao.PatientBean
 import com.just.machine.model.Constants
-import com.just.machine.ui.adapter.PatientAdapter
 import com.just.machine.ui.adapter.PatientsAdapter
 import com.just.machine.ui.dialog.PatientDialogFragment
 import com.just.machine.ui.viewmodel.MainViewModel
@@ -44,6 +43,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
     }
 
     private var adapter: PatientsAdapter? = null
+    private var bean: PatientBean? = null
 
     private fun initToolbar() {
         binding.toolbar.title = Constants.patientInformation//标题
@@ -54,7 +54,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
     override fun initView() {
         initToolbar()
 
-        viewModel.getPatient()//查询数据库
+        viewModel.getPatients()//查询数据库
 
         binding.rvList.layoutManager = LinearLayoutManager(this)
 
@@ -65,7 +65,17 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                         LogUtils.e(tag + it.any)
                 }
 
-                LiveDataEvent.QuerySuccess -> {
+                LiveDataEvent.QueryPatient -> {//查询患者单个
+                    if (it.any is PatientBean) {
+                        val bean = it.any as PatientBean
+
+                        this.bean = bean
+
+                        bean.testRecordsBean
+                    }
+                }
+
+                LiveDataEvent.QuerySuccess -> {//查询所有患者
                     if (it.any is List<*>) {
 
                         val datas = it.any as MutableList<*>
@@ -79,7 +89,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
                         LogUtils.e(tag + beans.toString())
 
-                        adapter = PatientsAdapter(beans, R.layout.item_layout_patient,10)
+                        adapter = PatientsAdapter(beans, R.layout.item_layout_patient, 10)
 
                         binding.rvList.adapter = adapter
 
@@ -89,11 +99,12 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         }
 
 
+
+
         adapter?.setItemOnClickListener(object : PatientsAdapter.PatientListener {
             //点击item返回点击患者的数据
             override fun onClickItem(bean: PatientBean) {
-
-
+                viewModel.getPatient(bean.patientId)//查询数据库
             }
         })
 

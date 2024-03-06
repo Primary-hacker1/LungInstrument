@@ -77,7 +77,7 @@ data class PatientBean(
     var clinicalDiagnosis: String? = "",//临床诊断
     var remark: String? = "",//备注
 
-    var testRecordsBean: MutableList<CardiopulmonaryRecordsBean>? = ArrayList(),//六分钟测试记录
+    var testRecordsBean: MutableList<CardiopulmonaryRecordsBean>? = ArrayList(),//心肺测试记录
 
     var sixMinRecordsBean: MutableList<SixMinRecordsBean>? = ArrayList(),//六分钟测试记录
 
