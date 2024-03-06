@@ -3,6 +3,9 @@ package com.just.machine.dao
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import com.just.machine.model.CardiopulmonaryRecordsBean
+import com.just.machine.model.SixMinRecordsBean
 
 /*
 基本信息：姓名、性别、身高、体重、身份证、生日、年龄、BMI
@@ -55,32 +58,37 @@ import androidx.room.PrimaryKey
 
 */
 @Entity(tableName = "patients")
+@TypeConverters(ChatItemConverter::class)
 data class PatientBean(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id")
     val patientId: Long = 0,
-    var name: String = "",//姓名
-    var sex: String = "",//性别
-    var height: String = "",//身高
-    var weight: String = "",//体重
-    var identityCard: String = "",//身份证
-    var birthday: String = "",//生日
-    var age: String = "",//年龄
-    var BMI: String = "",
-    var medicalRecordNumber: String = "",//病例号
-    var predictDistances: String = "",//预测距离
-    var diseaseHistory: String = "",//病史
-    var currentMedications: String = "",//目前用药
-    var clinicalDiagnosis: String = "",//临床诊断
-    var remark: String = "",//备注
+    var name: String? = "",//姓名
+    var sex: String? = "",//性别
+    var height: String? = "",//身高
+    var weight: String? = "",//体重
+    var identityCard: String? = "",//身份证
+    var birthday: String? = "",//生日
+    var age: String? = "",//年龄
+    var BMI: String? = "",
+    var medicalRecordNumber: String? = "",//病例号
+    var predictDistances: String? = "",//预测距离
+    var diseaseHistory: String? = "",//病史
+    var currentMedications: String? = "",//目前用药
+    var clinicalDiagnosis: String? = "",//临床诊断
+    var remark: String? = "",//备注
+
+    var testRecordsBean: MutableList<CardiopulmonaryRecordsBean>? = ArrayList(),//六分钟测试记录
+
+    var sixMinRecordsBean: MutableList<SixMinRecordsBean>? = ArrayList(),//六分钟测试记录
 
 //-----------------------------六分钟参数----------------------------
 
-    var stride: String = "",//步幅
-    var numberOfTrialsParticipated: Int = 0,//参加试验次数
-    var hospitalNumber: String = "",//住院号
-    var floorNo: String = "",//床号
-    var department: String = "",//科室
-    var addTime: String = "",//添加时间
-    var updatedTime: String = "",//更新时间
-    var deleteTheTag: Int = 0,//删除标记
+    var stride: String? = "",//步幅
+    var numberOfTrialsParticipated: Int? = 0,//参加试验次数
+    var hospitalNumber: String? = "",//住院号
+    var floorNo: String? = "",//床号
+    var department: String? = "",//科室
+    var addTime: String? = "",//添加时间
+    var updatedTime: String? = "",//更新时间
+    var deleteTheTag: Int? = 0,//删除标记
 )
