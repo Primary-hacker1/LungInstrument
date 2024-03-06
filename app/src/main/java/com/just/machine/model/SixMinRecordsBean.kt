@@ -1,7 +1,13 @@
 package com.just.machine.model
 
+import androidx.room.ColumnInfo
+import androidx.room.PrimaryKey
+
 data class SixMinRecordsBean(
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id")
     var reportId: String? = "0",//报告主id
+    var reportNum: String? = "",//报告编号
+    var reportDate: String? = "",//报告日期
     var movementWay: String? = "0",//运动方式，0为步行，1为跑步
     var movementTime: String? = "",//运动时间
     var movementDistance: String? = "0.0",//运动距离
