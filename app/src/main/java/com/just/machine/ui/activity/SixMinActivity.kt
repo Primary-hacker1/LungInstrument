@@ -1,10 +1,11 @@
 package com.just.machine.ui.activity
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.Color
-import android.hardware.usb.UsbManager
 import android.speech.tts.TextToSpeech
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.common.base.CommonBaseActivity
 import com.common.base.setNoRepeatListener
@@ -32,8 +33,8 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
     private lateinit var exitTestDialog: AlertDialog
 
     override fun initView() {
-        binding.sixminLlDevicesStatus.setBackgroundColor(Color.rgb(109, 188, 246))
-        binding.sixminLlPatientInfo.setBackgroundColor(Color.rgb(109, 188, 246))
+        binding.sixminLlDevicesStatus.setBackgroundColor(ContextCompat.getColor(this,R.color.colorPrimary))
+        binding.sixminLlPatientInfo.setBackgroundColor(ContextCompat.getColor(this,R.color.colorPrimary))
         initCountDownTimerExt()
         initExitAlertDialog()
         copyAssetsFilesToSD()
@@ -204,6 +205,11 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 null,
                 null
             )
+        }
+
+        binding.sixminIvSystemSetting.setOnClickListener {
+            val intent = Intent(this, SixMinSystemSettingActivity::class.java)
+            startActivity(intent)
         }
     }
 
