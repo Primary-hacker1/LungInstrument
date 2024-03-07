@@ -10,7 +10,9 @@ import com.common.viewmodel.LiveDataEvent
 import com.just.machine.api.UserRepository
 import com.just.machine.dao.PatientBean
 import com.just.machine.dao.PlantRepository
+import com.just.machine.model.CardiopulmonaryRecordsBean
 import com.just.machine.model.Data
+import com.just.machine.model.SixMinRecordsBean
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -34,11 +36,34 @@ class MainViewModel @Inject constructor(
      */
     fun setDates(patient: PatientBean) {
 
-
         patient.name = "张三"
 
-        patient.age = (28).toString()
+        patient.age = "28"
 
+        patient.sex = "男"
+
+        patient.height = "188"
+
+        patient.addTime = "2024-3-7 13:00"
+
+        val testRecordsBeans: MutableList<CardiopulmonaryRecordsBean> = ArrayList()//心肺测试记录
+
+        val sixMinRecordsBeans: MutableList<SixMinRecordsBean> = ArrayList()//六分钟测试记录
+
+        val sixMinRecordsBean = SixMinRecordsBean("", "123456","2024-3-7 13:00")
+
+        val cardiopulmonaryRecordsBean = CardiopulmonaryRecordsBean(
+            "测试1",
+            "测试2", "测试3", "测试4", "测试5",
+        )
+
+        sixMinRecordsBeans.add(sixMinRecordsBean)
+
+        testRecordsBeans.add(cardiopulmonaryRecordsBean)
+
+        patient.testRecordsBean = testRecordsBeans
+
+        patient.sixMinRecordsBean = sixMinRecordsBeans
         doAsync {
             val patient = plantDao.insertPatient(patient)
 
@@ -81,6 +106,12 @@ class MainViewModel @Inject constructor(
                     LiveDataEvent.QueryPatient, it
                 )
             }
+        }
+    }
+
+    fun deletePatient(patientId: Long) {//删除单个患者
+        doAsync {
+            plantDao.deletePatient(patientId)
         }
     }
 

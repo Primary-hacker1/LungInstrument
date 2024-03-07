@@ -23,6 +23,10 @@ class CardiopulAdapter(itemData: ObservableList<CardiopulmonaryRecordsBean>, lay
     ) {
         super.bindViewHolder(viewHolder, position, t)
 
+        viewHolder.binding.atvConventionalVentilation.text = itemData[position].conventionalVentilation
+        viewHolder.binding.atvForcedVitalCapacity.text = itemData[position].forcedVitalCapacity
+        viewHolder.binding.atvMaximumVentilation.text = itemData[position].maximumVentilation
+        viewHolder.binding.atvExerciseLungTest.text = itemData[position].exerciseLungTest
         viewHolder.binding.atvAssess.text = itemData[position].assess
 
         viewHolder.binding.btnDelete.setOnClickListener {

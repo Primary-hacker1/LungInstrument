@@ -12,7 +12,7 @@ import javax.inject.Inject
  */
 class PlantRepository @Inject constructor(private val plantDao: PlantDao) {
 
-    fun getPlants() = plantDao.getPlants()
+    fun deletePatient(id: Long) = plantDao.deletePatient(id)
 
     fun getPatients(): Flow<List<PatientBean>> = plantDao.getPatients()
 

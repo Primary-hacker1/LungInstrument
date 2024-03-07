@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.Flow
  */
 @Dao
 interface PlantDao {
-    @Query("SELECT * FROM patients ORDER BY name")
-    fun getPlants(): Flow<List<PatientBean>>
+    @Query("DELETE FROM patients WHERE id = :id")
+    fun deletePatient(id: Long)
 
     @Query("SELECT * FROM patients WHERE age = :age ORDER BY name")//条件查询
     fun getPlantsWithGrowZoneNumber(age: Int): Flow<List<PatientBean>>

@@ -3,9 +3,10 @@ package com.just.machine.ui.activity
 
 import android.content.Context
 import android.content.Intent
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -33,7 +34,7 @@ import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.ActivityPatientBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_patient.rv_six_test
+
 
 /**
  *create by 2024/2/27
@@ -55,7 +56,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         }
     }
 
-    private var adapter: PatientsAdapter? = null
+//    private var adapter: PatientsAdapter? = null
 
     private var sixMinAdapter: SixMinAdapter? = null
 
@@ -64,6 +65,14 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
     private var bean: PatientBean? = null
 
     val beans: ObservableList<PatientBean> = ObservableArrayList()
+
+    private val adapter by lazy {
+        PatientsAdapter(
+            beans,
+            R.layout.item_layout_patient,
+            0
+        )
+    }
 
 
     private fun initToolbar() {
@@ -83,8 +92,6 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         binding.rvList.layoutManager = LinearLayoutManager(this)
         binding.rvSixTest.layoutManager = LinearLayoutManager(this)
         binding.rvCardiopulmonaryTest.layoutManager = LinearLayoutManager(this)
-
-        initOnClick()
 
         viewModel.mEventHub.observe(this) {
             when (it.action) {
@@ -123,13 +130,14 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                             10
                         )
 
-                        binding.rvCardiopulmonaryTest.adapter = adapter
+                        binding.rvCardiopulmonaryTest.adapter = cardiopulAdapter
                     }
                 }
 
                 in LiveDataEvent.QueryNameId downTo LiveDataEvent.QuerySuccess -> {//查询所有患者
 
                     if (it.any is List<*>) {
+                        beans.clear()
 
                         val datas = it.any as MutableList<*>
 
@@ -141,7 +149,11 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
                         LogUtils.d(tag + beans.toString())
 
-                        adapter = PatientsAdapter(beans, R.layout.item_layout_patient, 10)
+                        adapter.itemData.addAll(beans)
+
+//                        adapter = PatientsAdapter(beans, R.layout.item_layout_patient, 10)
+
+                        adapter.notifyDataSetChanged()
 
                         binding.rvList.adapter = adapter
 
@@ -149,37 +161,45 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                 }
             }
         }
+
+        initOnClick()
+
     }
 
     private fun initOnClick() {
-        binding.editSearch.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                if (beans.size > 0) {
-                    beans.clear()
-                }
 
-                val select = binding.editSearch.text.toString().trim()
+        binding.editSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                    if (beans.size > 0) {
+                        beans.clear()
+                    }
 
-                if (select.isEmpty()) {
-                    toast("请输入搜索内容", Toast.LENGTH_LONG)
-                    false
-                }
-                viewModel.getNameOrId(select)//模糊查询数据库
+                    val select = binding.editSearch.text.toString().trim()
+
+                    if (select.isEmpty()) {
+                        viewModel.getPatients()//查询数据库
+                        return
+                    }
+                    viewModel.getNameOrId(select)//模糊查询数据库
             }
-            false
-        }
+            override fun afterTextChanged(s: Editable) {}
+        })
 
-        adapter?.setItemOnClickListener(object : PatientsAdapter.PatientListener {
-            //点击item返回点击患者的数据
-            override fun onClickItem(bean: PatientBean) {
+        adapter.setPatientsClickListener(object : PatientsAdapter.PatientListener {
+            override fun onClickItem(bean: PatientBean) {//点击item返回点击患者的数据
+                LogUtils.d(tag + bean.toString())
                 viewModel.getPatient(bean.patientId)//查询数据库
+            }
+
+            override fun deleteItem(id: Long) {
+                viewModel.deletePatient(id)
             }
         })
 
 
         cardiopulAdapter?.setItemOnClickListener(object : CardiopulAdapter.PatientListener {
-            //点击item返回心肺测试数据
-            override fun onClickItem(bean: CardiopulmonaryRecordsBean) {
+            override fun onClickItem(bean: CardiopulmonaryRecordsBean) {//点击item返回心肺测试数据
 
             }
         })
