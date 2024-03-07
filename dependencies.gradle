@@ -20,6 +20,8 @@ ext {
     hilt = "2.36"
     lifecycle = "2.3.1"
     datastore_core = "1.0.0-alpha04"
+    freemarker = "2.3.31"
+    pdf_viewer = "2.8.2"
 
     gradleBase = [
             junit    : "junit:junit:${junit}",
@@ -48,7 +50,9 @@ ext {
             lifecycle_viewmodel_ktx       : "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle",
             lifecycle_viewmodel_savedstate: "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle",
             datastore_preferences         : "androidx.datastore:datastore-preferences:$datastore_core",
-            datastore_core                : "androidx.datastore:datastore-core:$datastore_core"
+            datastore_core                : "androidx.datastore:datastore-core:$datastore_core",
+            freemarker                    : "org.freemarker:freemarker:$freemarker",
+            pdf_viewer                    : "com.github.barteksc:android-pdf-viewer:$pdf_viewer"
     ]
 
     libview = [

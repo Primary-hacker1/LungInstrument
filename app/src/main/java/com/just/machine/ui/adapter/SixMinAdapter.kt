@@ -23,9 +23,9 @@ class SixMinAdapter(itemData: ObservableList<SixMinRecordsBean>, layoutId: Int, 
     ) {
         super.bindViewHolder(viewHolder, position, t)
 
-        viewHolder.binding.atvTestTime.text = itemData[position].testTime
+        viewHolder.binding.atvTestTime.text = itemData[position].reportNo
 
-        viewHolder.binding.atvNumber.text = itemData[position].reportNo
+        viewHolder.binding.atvNumber.text = itemData[position].testTime
 
         viewHolder.binding.btnDelete.setOnClickListener {
             deleteItem(viewHolder.adapterPosition)

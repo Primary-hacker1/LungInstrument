@@ -58,7 +58,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginHorizontal="10dp"
                 android:layout_toStartOf="@id/sixmin_iv_internal"
-                android:src="@mipmap/dianchi" />
+                android:src="@mipmap/dianchi00" />
 
             <View
                 android:id="@+id/sixmin_iv_internal"
@@ -581,6 +581,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:textAlignment="center"
                         android:text="- - -      mmHg"
                         android:textColor="@color/white" />
 
