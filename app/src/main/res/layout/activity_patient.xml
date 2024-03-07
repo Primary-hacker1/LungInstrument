@@ -15,6 +15,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <include
@@ -70,16 +71,18 @@
 
 
                     <com.justsafe.libview.text.PatientEditText
+                        android:id="@+id/edit_search"
                         android:layout_width="352dp"
                         android:layout_height="35dp"
                         android:layout_marginStart="@dimen/space_10"
+                        android:drawablePadding="@dimen/space_10"
                         android:hint="@string/select_name_number"
                         android:maxLines="1"
                         android:singleLine="true"
                         android:textColorHint="@color/text9"
                         android:textSize="15sp"
                         app:ed_backgroundColor="true"
-                        app:left_icon="@drawable/select"
+                        app:left_icon="@drawable/selete"
                         app:select_bg="true" />
 
                     <androidx.appcompat.widget.AppCompatButton
@@ -176,9 +179,8 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/atv_operation"
-                    android:layout_width="0dp"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="@string/operation"
                     android:textColor="@color/c333333"
                     android:textSize="18sp"
@@ -187,16 +189,43 @@
 
             </LinearLayout>
 
-            <com.just.machine.util.PatientRV
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="175dp" />
 
-            <TableRow
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="horizontal" />
+                android:orientation="horizontal"
+                android:padding="@dimen/space_5">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/btn_cardiopulmonary"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/super_edittext_bg"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/cardiopulmonary_records"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/btn_six_min"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_18"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/six_records"
+                    android:textColor="@color/cD9D9D9"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -277,6 +306,18 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_cardiopulmonary_test"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_six_test"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
         </LinearLayout>
 
     </LinearLayout>

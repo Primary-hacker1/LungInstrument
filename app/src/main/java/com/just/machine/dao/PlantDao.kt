@@ -18,6 +18,9 @@ interface PlantDao {
     @Query("SELECT * FROM patients WHERE age = :age ORDER BY name")//条件查询
     fun getPlantsWithGrowZoneNumber(age: Int): Flow<List<PatientBean>>
 
+    @Query("SELECT * FROM patients WHERE name LIKE '%' || :nameId || '%' or medicalRecordNumber LIKE '%' || :nameId || '%'")//条件查询
+    fun getNameOrId(nameId: String): Flow<List<PatientBean>>
+
     @Query("SELECT * FROM patients")
     fun getPatients(): Flow<List<PatientBean>>
 

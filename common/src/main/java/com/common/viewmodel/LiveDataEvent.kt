@@ -13,6 +13,8 @@ class LiveDataEvent {
 
         const val QuerySuccess: Int = 0x01
 
+        const val QueryNameId: Int = 0x02
+
         const val QueryPatient: Int = 0x03
 
 
@@ -20,7 +22,7 @@ class LiveDataEvent {
          * @param FAIL -通用错误
          * @return -
          */
-        const val FAIL: Int = 0x02
+        const val FAIL: Int = 0x88
 
     }
 

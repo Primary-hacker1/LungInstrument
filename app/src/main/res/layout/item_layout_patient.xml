@@ -79,27 +79,27 @@
 
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center_vertical">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_update"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/operation"
+                android:layout_width="@dimen/space_19"
+                android:layout_height="@dimen/space_19"
                 android:textSize="18sp"
-                android:layout_weight="1"
+                android:background="@drawable/update"
+                android:padding="@dimen/space_5"
                 android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_delete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="删除"
+                android:layout_width="@dimen/space_20"
+                android:layout_height="@dimen/space_20"
                 android:textSize="18sp"
-                android:layout_weight="1"
+                android:layout_marginStart="@dimen/space_19"
+                android:background="@drawable/icon_del"
+                android:padding="@dimen/space_5"
                 android:textStyle="bold" />
 
         </LinearLayout>

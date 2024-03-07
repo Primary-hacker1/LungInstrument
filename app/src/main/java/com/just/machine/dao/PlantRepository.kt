@@ -16,7 +16,9 @@ class PlantRepository @Inject constructor(private val plantDao: PlantDao) {
 
     fun getPatients(): Flow<List<PatientBean>> = plantDao.getPatients()
 
-    fun getPatient(id : Long): Flow<PatientBean> = plantDao.getPatient(id)
+    fun getNameOrId(nameId: String): Flow<List<PatientBean>> = plantDao.getNameOrId(nameId)
+
+    fun getPatient(id: Long): Flow<PatientBean> = plantDao.getPatient(id)
 
     suspend fun insertAll(plants: List<PatientBean>) = plantDao.insertAll(plants)
 

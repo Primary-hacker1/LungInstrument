@@ -64,6 +64,16 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun getNameOrId(nameOrId: String) {//模糊查询姓名和病历号
+        viewModelScope.launch {
+            plantDao.getNameOrId(nameOrId).collect {
+                mEventHub.value = LiveDataEvent(
+                    LiveDataEvent.QueryNameId, it
+                )
+            }
+        }
+    }
+
     fun getPatient(patientId: Long) {//查询单个患者
         viewModelScope.launch {
             plantDao.getPatient(patientId).collect {

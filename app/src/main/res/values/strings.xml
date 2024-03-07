@@ -62,4 +62,6 @@
     <string name="maximumVentilation">最大通气量</string>
     <string name="forcedVitalCapacity">用力肺活量</string>
     <string name="conventionalVentilation">常规肺活量</string>
+    <string name="cardiopulmonary_records">心肺测试记录</string>
+    <string name="six_records">六分钟步行测试记录</string>
 </resources>
