@@ -207,19 +207,23 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         }
 
         binding.btnSixMin.setNoRepeatListener {
-            binding.btnSixMin.setTextColor(ContextCompat.getColor(this,R.color.colorPrimary))
-            binding.btnCardiopulmonary.setTextColor(ContextCompat.getColor(this,R.color.cD9D9D9))
-            binding.btnCardiopulmonary.setBackgroundColor(ContextCompat.getColor(this,R.color.white))
-            binding.btnSixMin.background = ContextCompat.getDrawable(this,R.drawable.super_edittext_bg)
+            setButtonStyle(
+                binding.btnCardiopulmonary,
+                binding.btnSixMin
+            )
             toggleRecyclerView(binding.rvSixTest, binding.rvCardiopulmonaryTest)
         }
 
         binding.btnCardiopulmonary.setNoRepeatListener {
-            binding.btnSixMin.setTextColor(ContextCompat.getColor(this,R.color.cD9D9D9))
-            binding.btnCardiopulmonary.setTextColor(ContextCompat.getColor(this,R.color.colorPrimary))
-            binding.btnSixMin.setBackgroundColor(ContextCompat.getColor(this,R.color.white))
-            binding.btnCardiopulmonary.background = ContextCompat.getDrawable(this,R.drawable.super_edittext_bg)
-            toggleRecyclerView(binding.rvCardiopulmonaryTest, binding.rvSixTest)
+            setButtonStyle(
+                binding.btnSixMin,
+                binding.btnCardiopulmonary
+            )
+
+            toggleRecyclerView(
+                binding.rvCardiopulmonaryTest,
+                binding.rvSixTest
+            )
         }
 
     }
@@ -234,13 +238,16 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         }
     }
 
-    private fun setButtonStyle(button: TextView, styleResId: Int) {// 设置按钮的样式
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            button.setTextAppearance(styleResId)
-        } else {
-            @Suppress("DEPRECATION")
-            button.setTextAppearance(this, styleResId)
-        }
+    private fun setButtonStyle(
+        textView1: TextView,
+        textView2: TextView,
+    ) {// 设置按钮的样式
+
+        textView1.setTextColor(ContextCompat.getColor(this, R.color.cD9D9D9))
+        textView2.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
+        textView1.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+        textView2.background =
+            ContextCompat.getDrawable(this, R.drawable.super_edittext_bg)
     }
 
     override fun getViewBinding() = ActivityPatientBinding.inflate(layoutInflater)
