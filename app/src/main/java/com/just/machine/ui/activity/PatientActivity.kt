@@ -60,9 +60,9 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
     private var bean: PatientBean? = null
 
-    val beans: ObservableList<PatientBean> = ObservableArrayList()
+    val beans: MutableList<PatientBean> = ArrayList()
 
-    private val adapter: PatientsAdapter? = PatientsAdapter()
+    private val adapter: PatientsAdapter = PatientsAdapter()
 
 
     private fun initToolbar() {
@@ -96,31 +96,18 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
                         this.bean = bean
 
-                        val sixBeans: ObservableList<SixMinRecordsBean> = ObservableArrayList()
+                        LogUtils.d(tag + bean.toString())
 
-                        bean.sixMinRecordsBean?.let { data -> sixBeans.addAll(data) }
+                        sixMinAdapter = SixMinAdapter()
 
-                        sixMinAdapter = SixMinAdapter(sixBeans, R.layout.item_layout_six_test, 10)
+                        bean.sixMinRecordsBean?.let { it1 -> sixMinAdapter?.setItemsBean(it1) }
 
                         binding.rvSixTest.adapter = sixMinAdapter
 
 
-                        val cardiopulmonaryBeans: ObservableList<CardiopulmonaryRecordsBean> =
-                            ObservableArrayList()
+                        cardiopulAdapter = CardiopulAdapter()
 
-                        bean.testRecordsBean?.let {
-                            {
-                                cardiopulmonaryBeans.addAll(it)
-                            }
-                        }
-
-                        LogUtils.d(tag + cardiopulmonaryBeans.toString())
-
-                        cardiopulAdapter = CardiopulAdapter(
-                            cardiopulmonaryBeans,
-                            R.layout.item_layout_cardiopul_test,
-                            10
-                        )
+                        bean.testRecordsBean?.let { it1 -> cardiopulAdapter?.setItemsBean(it1) }
 
                         binding.rvCardiopulmonaryTest.adapter = cardiopulAdapter
                     }
@@ -132,7 +119,6 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                         beans.clear()
 
                         val datas = it.any as MutableList<*>
-
 
                         for (num in 0 until datas.size) {
                             val bean = datas[num] as PatientBean
@@ -175,18 +161,26 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
             override fun afterTextChanged(s: Editable) {}
         })
 
-        adapter?.setPatientsClickListener(object : PatientsAdapter.PatientListener {
-            override fun onClickItem(bean: PatientBean) {//点击item返回点击患者的数据
-                LogUtils.d(tag + bean.toString())
-                viewModel.getPatient(bean.patientId)//查询数据库
-            }
+//        adapter?.setPatientsClickListener(object : PatientsAdapter.PatientListener {
+//            override fun onClickItem(bean: PatientBean) {//点击item返回点击患者的数据
+//                LogUtils.d(tag + bean.toString())
+//                viewModel.getPatient(bean.patientId)//查询数据库
+//            }
+//
+//            override fun deleteItem(id: Long) {
+//                viewModel.deletePatient(id)
+//            }
+//        })
 
-            override fun deleteItem(id: Long) {
-                viewModel.deletePatient(id)
-            }
-        })
+        adapter?.setDeleteClickListener {
+            viewModel.deletePatient(it.patientId)
+            viewModel.getPatients()//查询数据库
+        }
 
-
+        adapter?.setItemClickListener {
+            LogUtils.e(tag + it)
+            viewModel.getPatient(it.patientId)//查询数据库
+        }
 
 
         cardiopulAdapter?.setItemOnClickListener(object : CardiopulAdapter.PatientListener {
@@ -202,9 +196,44 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
             }
         })
 
+        var index = 0
+
         binding.btnAdd.setNoRepeatListener {
 
-            viewModel.setDates(PatientBean())//新增患者
+            val patient = PatientBean()
+
+            index++
+
+            patient.name = "张三$index"
+
+            patient.age = (1+index).toString()
+
+            patient.sex = "男$index"
+
+            patient.height = "18$index"
+
+            patient.addTime = "2024-3-6 13:00"
+
+            val testRecordsBeans: MutableList<CardiopulmonaryRecordsBean> = ArrayList()//心肺测试记录
+
+            val sixMinRecordsBeans: MutableList<SixMinRecordsBean> = ArrayList()//六分钟测试记录
+
+            val sixMinRecordsBean = SixMinRecordsBean("", "123456", "2024-3-7 13:00")
+
+            val cardiopulmonaryRecordsBean = CardiopulmonaryRecordsBean(
+                "测试1",
+                "测试2", "测试3", "测试4", "测试5",
+            )
+
+            sixMinRecordsBeans.add(sixMinRecordsBean)
+
+            testRecordsBeans.add(cardiopulmonaryRecordsBean)
+
+            patient.testRecordsBean = testRecordsBeans
+
+            patient.sixMinRecordsBean = sixMinRecordsBeans
+
+            viewModel.setDates(patient)//新增患者
 
             val patientDialogFragment =
                 PatientDialogFragment.startPatientDialogFragment(supportFragmentManager)//添加患者修改患者信息

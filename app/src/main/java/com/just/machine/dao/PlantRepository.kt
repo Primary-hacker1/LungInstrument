@@ -22,6 +22,6 @@ class PlantRepository @Inject constructor(private val plantDao: PlantDao) {
 
     suspend fun insertAll(plants: List<PatientBean>) = plantDao.insertAll(plants)
 
-    fun insertPatient(patients: PatientBean): Long = plantDao.insertPatient(patients)
+    suspend fun insertPatient(patients: PatientBean): Long = plantDao.insertPatient(patients)
 
 }

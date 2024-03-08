@@ -241,7 +241,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_19"
-                    android:layout_weight="2"
                     android:text="@string/testTime"
                     android:textColor="@color/c333333"
                     android:textSize="18sp"
@@ -251,8 +250,8 @@
                     android:id="@+id/atv_conventionalVentilation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="@string/conventionalVentilation"
+                    android:layout_marginStart="@dimen/space_120"
                     android:textColor="@color/c333333"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -261,8 +260,8 @@
                     android:id="@+id/atv_forcedVitalCapacity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="@string/forcedVitalCapacity"
+                    android:layout_marginStart="@dimen/space_56"
                     android:textColor="@color/c333333"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -271,8 +270,8 @@
                     android:id="@+id/atv_maximumVentilation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="@string/maximumVentilation"
+                    android:layout_marginStart="@dimen/space_56"
                     android:textColor="@color/c333333"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -281,8 +280,8 @@
                     android:id="@+id/atv_exerciseLungTest"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="@string/exercise_lung_test"
+                    android:layout_marginStart="@dimen/space_56"
                     android:textColor="@color/c333333"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -291,8 +290,8 @@
                     android:id="@+id/atv_assess"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="@string/assess"
+                    android:layout_marginStart="@dimen/space_56"
                     android:textColor="@color/c333333"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -300,9 +299,10 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/btn_update"
-                    android:layout_width="135dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/operation"
+                    android:layout_marginStart="@dimen/space_56"
                     android:textColor="@color/c333333"
                     android:textSize="18sp"
                     android:textStyle="bold" />

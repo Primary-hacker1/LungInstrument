@@ -1,9 +1,6 @@
 package com.just.machine.ui.adapter
 
-import androidx.databinding.ObservableList
-import com.common.base.BaseDataBingViewHolder
 import com.common.base.BaseRecyclerViewAdapter
-import com.just.machine.model.CardiopulmonaryRecordsBean
 import com.just.machine.model.SixMinRecordsBean
 import com.just.news.R
 import com.just.news.databinding.ItemLayoutSixTestBinding
@@ -13,7 +10,7 @@ import com.just.news.databinding.ItemLayoutSixTestBinding
  * 患者六分钟测试数据
  *@author zt
  */
-class SixMinAdapter(itemData: ObservableList<SixMinRecordsBean>, layoutId: Int, dataId: Int)
+class SixMinAdapter()
     : BaseRecyclerViewAdapter<SixMinRecordsBean, ItemLayoutSixTestBinding>() {
 
 //    override fun bindViewHolder(

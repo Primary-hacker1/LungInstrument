@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
         <variable
             name="item"
             type="com.just.machine.model.SixMinRecordsBean" />
@@ -12,15 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/atv_testTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_18"
-            android:text="@string/testTime"
+            android:text="@{item.testTime}"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_200"
-            android:text="@string/report_no"
+            android:text="@{item.reportNo}"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -37,29 +37,33 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right|center_vertical"
-            >
+            android:gravity="right|center_vertical">
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_check"
-                android:layout_width="28dp"
-                android:layout_height="wrap_content"
-                android:text="查看"
+                android:layout_width="@dimen/space_19"
+                android:layout_height="@dimen/space_19"
+                android:background="@drawable/icon_file_open"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_update"
-                android:layout_width="28dp"
-                android:layout_height="wrap_content"
-                android:text="@string/operation"
+                android:layout_width="@dimen/space_19"
+                android:layout_height="@dimen/space_19"
+                android:layout_marginStart="@dimen/space_9"
+                android:background="@drawable/update"
+                android:padding="@dimen/space_5"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_delete"
-                android:layout_width="28dp"
-                android:layout_height="wrap_content"
-                android:text="删除"
+                android:layout_width="@dimen/space_20"
+                android:layout_height="@dimen/space_20"
+                android:layout_marginStart="@dimen/space_9"
+                android:background="@drawable/icon_del"
+                android:padding="@dimen/space_5"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 

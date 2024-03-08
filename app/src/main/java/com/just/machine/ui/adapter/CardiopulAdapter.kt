@@ -1,20 +1,16 @@
 package com.just.machine.ui.adapter
 
-import androidx.databinding.ObservableList
-import com.common.base.BaseDataBingViewHolder
 import com.common.base.BaseRecyclerViewAdapter
-import com.just.machine.dao.PatientBean
 import com.just.machine.model.CardiopulmonaryRecordsBean
 import com.just.news.R
 import com.just.news.databinding.ItemLayoutCardiopulTestBinding
-import com.just.news.databinding.ItemLayoutPatientBinding
 
 /**
  *create by 2024/3/6
  * 患者心肺测试数据
  *@author zt
  */
-class CardiopulAdapter(itemData: ObservableList<CardiopulmonaryRecordsBean>, layoutId: Int, dataId: Int)
+class CardiopulAdapter()
     : BaseRecyclerViewAdapter<CardiopulmonaryRecordsBean, ItemLayoutCardiopulTestBinding>()  {
 
 //    override fun bindViewHolder(

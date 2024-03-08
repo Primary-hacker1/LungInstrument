@@ -15,6 +15,8 @@ class PatientsAdapter
 
     var listener: PatientListener? = null
 
+    private var itemClickListener: ((PatientBean) -> Unit)? = null
+
 //    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 //        super.onBindViewHolder(holder, position)
 //
@@ -41,6 +43,11 @@ class PatientsAdapter
 
     override fun bindData(item: PatientBean) {
         binding.item = item
+
+        binding.btnDelete.setOnClickListener{
+//            removeItem(item)
+            itemClickListener?.invoke(item)
+        }
     }
 
     override fun getLayoutRes(): Int {
@@ -54,6 +61,10 @@ class PatientsAdapter
 
     fun setPatientsClickListener(listener: PatientListener) {
         this.listener = listener
+    }
+
+    fun setDeleteClickListener(listener: (PatientBean) -> Unit) {
+        this.itemClickListener = listener
     }
 
 }

@@ -21,8 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_19"
-            android:layout_weight="2"
-            android:text="@string/testTime"
+            android:text="@{item.createTime}"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -30,8 +29,8 @@
             android:id="@+id/atv_conventionalVentilation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/conventionalVentilation"
+            android:layout_marginStart="@dimen/space_120"
+            android:text="@{item.conventionalVentilation}"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -39,8 +38,8 @@
             android:id="@+id/atv_forcedVitalCapacity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/forcedVitalCapacity"
+            android:layout_marginStart="@dimen/space_56"
+            android:text="@{item.forcedVitalCapacity}"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -48,8 +47,8 @@
             android:id="@+id/atv_maximumVentilation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/maximumVentilation"
+            android:layout_marginStart="@dimen/space_56"
+            android:text="@{item.maximumVentilation}"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -57,8 +56,8 @@
             android:id="@+id/atv_exerciseLungTest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/exercise_lung_test"
+            android:layout_marginStart="@dimen/space_56"
+            android:text="@{item.exerciseLungTest}"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -66,43 +65,43 @@
             android:id="@+id/atv_assess"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/assess"
+            android:layout_marginStart="@dimen/space_56"
+            android:text="@{item.assess}"
             android:textSize="16sp"
             android:textStyle="bold" />
 
 
         <LinearLayout
-            android:layout_width="135dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_vertical">
+            android:gravity="right|center_vertical">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_check"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="查看"
+                android:layout_width="@dimen/space_20"
+                android:layout_height="@dimen/space_20"
+                android:background="@drawable/icon_file_open"
                 android:textSize="18sp"
-                android:layout_weight="1"
                 android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_update"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/operation"
+                android:layout_width="@dimen/space_19"
+                android:layout_height="@dimen/space_19"
+                android:layout_marginStart="@dimen/space_9"
+                android:background="@drawable/update"
+                android:padding="@dimen/space_5"
                 android:textSize="18sp"
-                android:layout_weight="1"
                 android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_delete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="删除"
+                android:layout_width="@dimen/space_20"
+                android:layout_height="@dimen/space_20"
+                android:layout_marginStart="@dimen/space_9"
+                android:background="@drawable/icon_del"
+                android:padding="@dimen/space_5"
                 android:textSize="18sp"
-                android:layout_weight="1"
                 android:textStyle="bold" />
 
         </LinearLayout>

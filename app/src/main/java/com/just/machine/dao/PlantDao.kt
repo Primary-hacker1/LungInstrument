@@ -31,5 +31,5 @@ interface PlantDao {
     suspend fun insertAll(plants: List<PatientBean>)
 
     @Insert
-    fun insertPatient(patients: PatientBean): Long
+    suspend fun insertPatient(patients: PatientBean): Long
 }
