@@ -13,37 +13,15 @@ import com.just.news.databinding.ItemLayoutPatientBinding
 class PatientsAdapter
     : BaseRecyclerViewAdapter<PatientBean, ItemLayoutPatientBinding>() {
 
-    private var itemClickListener: ((PatientBean) -> Unit)? = null
-
-//    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-//        super.onBindViewHolder(holder, position)
-//
-//        holder.binding.atvRecordNumber.text = itemData[position].medicalRecordNumber
-//        holder.binding.atvName.text = itemData[position].name
-//        holder.binding.atvSex.text = itemData[position].sex
-//        holder.binding.atvAge.text = itemData[position].age
-//        holder.binding.atvHeight.text = itemData[position].height
-//        holder.binding.atvWeight.text = itemData[position].weight
-//        holder.binding.atvCreateTime.text = itemData[position].addTime
-//
-//        holder.binding.btnDelete.setNoRepeatListener {
-////            removeItem(viewHolder.adapterPosition)
-//            LogUtils.e("" + position + "--viewHolder.adapterPosition--" + holder.adapterPosition)
-////            listener?.deleteItem(itemData[viewHolder.adapterPosition].patientId)
-//        }
-//
-//        holder.binding.llItem.setNoRepeatListener {
-//            listener?.onClickItem(itemData[holder.adapterPosition])
-//        }
-//
-//    }
-
-
     override fun bindData(item: PatientBean) {
         binding.item = item
 
         binding.btnDelete.setOnClickListener{
-            itemClickListener?.invoke(item)
+            listener?.onDeleteItem(item)
+        }
+
+        binding.btnUpdate.setOnClickListener{
+            listener?.onUpdateItem(item)
         }
     }
 
@@ -51,8 +29,16 @@ class PatientsAdapter
         return R.layout.item_layout_patient
     }
 
-    fun setDeleteClickListener(listener: (PatientBean) -> Unit) {
-        this.itemClickListener = listener
+
+    private var listener: PatientListener? = null
+
+    interface PatientListener {
+        fun onDeleteItem(bean: PatientBean)
+        fun onUpdateItem(bean: PatientBean)
+    }
+
+    fun setItemOnClickListener(listener: PatientListener) {
+        this.listener = listener
     }
 
 }

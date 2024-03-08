@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.common.BaseResponseDB
 import kotlinx.coroutines.flow.Flow
 
@@ -12,8 +13,14 @@ import kotlinx.coroutines.flow.Flow
  */
 @Dao
 interface PlantDao {
+    @Query("update patients set predictDistances =:predictDistances where id =:id")
+    suspend fun updatePatient(predictDistances: String, id: Long)
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updatePatients(patients: PatientBean)
+
     @Query("DELETE FROM patients WHERE id = :id")
-    fun deletePatient(id: Long)
+    suspend fun deletePatient(id: Long)
 
     @Query("SELECT * FROM patients WHERE age = :age ORDER BY name")//条件查询
     fun getPlantsWithGrowZoneNumber(age: Int): Flow<List<PatientBean>>
@@ -29,6 +36,9 @@ interface PlantDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(plants: List<PatientBean>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateBean(plants: PatientBean)
 
     @Insert
     suspend fun insertPatient(patients: PatientBean): Long

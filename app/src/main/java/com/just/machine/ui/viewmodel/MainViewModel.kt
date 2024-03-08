@@ -74,10 +74,20 @@ class MainViewModel @Inject constructor(
     }
 
     fun deletePatient(patientId: Long) {//删除单个患者
-        doAsync {
+        viewModelScope.launch {
             plantDao.deletePatient(patientId)
         }
     }
+
+    /**
+     *@param patient 患者更新数据覆盖原数据
+     */
+    fun updatePatients(patient: PatientBean) {//update单个患者
+        viewModelScope.launch {
+            plantDao.updatePatients(patient)
+        }
+    }
+
 
     /**
      *@param type 协程请求->带loading的

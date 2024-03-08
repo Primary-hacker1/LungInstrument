@@ -3,6 +3,7 @@ package com.just.machine.ui.dialog
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Gravity
 import androidx.fragment.app.FragmentManager
@@ -35,9 +36,24 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
         /**
          * @param fragmentManager FragmentManager
          */
-        fun startPatientDialogFragment(fragmentManager: FragmentManager): PatientDialogFragment {
+        fun startPatientDialogFragment(
+
+            fragmentManager: FragmentManager,
+
+            bean: PatientBean? = PatientBean()
+
+        ): PatientDialogFragment {
+
             val dialogFragment = PatientDialogFragment()
+
             dialogFragment.show(fragmentManager, PatientDialogFragment::javaClass.toString())
+
+            val bundle = Bundle()
+
+            bundle.putParcelable("patientBean", bean)
+
+            dialogFragment.arguments = bundle
+
             return dialogFragment
         }
     }
@@ -74,7 +90,7 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
     }
 
     override fun initData() {
-
+        viewModel.updatePatients(PatientBean())//修改数据
     }
 
     var index = 0
@@ -107,11 +123,11 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
 
             val patient = PatientBean()
 
-            if (Constants.isDebug){
+            if (Constants.isDebug) {
 
                 patient.name = "张三$index"
 
-                patient.age = (1+index).toString()
+                patient.age = (1 + index).toString()
 
                 patient.sex = "男$index"
 

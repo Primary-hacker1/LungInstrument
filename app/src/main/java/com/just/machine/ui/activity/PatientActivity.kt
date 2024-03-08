@@ -161,10 +161,17 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
             override fun afterTextChanged(s: Editable) {}
         })
 
-        adapter.setDeleteClickListener {
-            viewModel.deletePatient(it.patientId)
-            viewModel.getPatients()//查询数据库
-        }
+        adapter.setItemOnClickListener(object : PatientsAdapter.PatientListener{
+            override fun onDeleteItem(bean: PatientBean) {
+                viewModel.deletePatient(bean.patientId)
+                viewModel.getPatients()//查询数据库
+            }
+
+            override fun onUpdateItem(bean: PatientBean) {
+                PatientDialogFragment.startPatientDialogFragment(supportFragmentManager)
+            }
+
+        })
 
         adapter.setItemClickListener {
             viewModel.getPatient(it.patientId)//查询数据库

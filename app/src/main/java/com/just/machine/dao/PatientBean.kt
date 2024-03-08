@@ -1,5 +1,7 @@
 package com.just.machine.dao
 
+import android.os.Parcel
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -91,4 +93,73 @@ data class PatientBean(
     var addTime: String? = "",//添加时间
     var updatedTime: String? = "",//更新时间
     var deleteTheTag: Int? = 0,//删除标记
-)
+) : Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readLong(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        ArrayList(),
+        ArrayList(),
+        parcel.readString(),
+        parcel.readValue(Int::class.java.classLoader) as? Int,
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readValue(Int::class.java.classLoader) as? Int
+    ) {
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeLong(patientId)
+        parcel.writeString(name)
+        parcel.writeString(sex)
+        parcel.writeString(height)
+        parcel.writeString(weight)
+        parcel.writeString(identityCard)
+        parcel.writeString(birthday)
+        parcel.writeString(age)
+        parcel.writeString(BMI)
+        parcel.writeString(medicalRecordNumber)
+        parcel.writeString(predictDistances)
+        parcel.writeString(diseaseHistory)
+        parcel.writeString(currentMedications)
+        parcel.writeString(clinicalDiagnosis)
+        parcel.writeString(remark)
+        parcel.writeString(stride)
+        parcel.writeValue(numberOfTrialsParticipated)
+        parcel.writeString(hospitalNumber)
+        parcel.writeString(floorNo)
+        parcel.writeString(department)
+        parcel.writeString(addTime)
+        parcel.writeString(updatedTime)
+        parcel.writeValue(deleteTheTag)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<PatientBean> {
+        override fun createFromParcel(parcel: Parcel): PatientBean {
+            return PatientBean(parcel)
+        }
+
+        override fun newArray(size: Int): Array<PatientBean?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
