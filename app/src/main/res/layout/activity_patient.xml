@@ -233,12 +233,12 @@
                 android:layout_height="35dp"
                 android:background="#f4f5fa"
                 android:gravity="center_vertical"
-                android:visibility="visible"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="visible">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/atv_testTime"
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/space_200"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_19"
                     android:text="@string/testTime"
@@ -248,50 +248,55 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/atv_conventionalVentilation"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:maxLines="1"
                     android:text="@string/conventionalVentilation"
-                    android:layout_marginStart="@dimen/space_120"
                     android:textColor="@color/c333333"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/atv_forcedVitalCapacity"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:maxLines="1"
                     android:text="@string/forcedVitalCapacity"
-                    android:layout_marginStart="@dimen/space_56"
                     android:textColor="@color/c333333"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/atv_maximumVentilation"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:maxLines="1"
                     android:text="@string/maximumVentilation"
-                    android:layout_marginStart="@dimen/space_56"
                     android:textColor="@color/c333333"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/atv_exerciseLungTest"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:maxLines="1"
                     android:text="@string/exercise_lung_test"
-                    android:layout_marginStart="@dimen/space_56"
                     android:textColor="@color/c333333"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/atv_assess"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:maxLines="1"
                     android:text="@string/assess"
-                    android:layout_marginStart="@dimen/space_56"
                     android:textColor="@color/c333333"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -299,10 +304,10 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/btn_update"
-                    android:layout_width="wrap_content"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
+                    android:maxLines="1"
                     android:text="@string/operation"
-                    android:layout_marginStart="@dimen/space_56"
                     android:textColor="@color/c333333"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -314,11 +319,11 @@
                 android:layout_height="35dp"
                 android:background="#f4f5fa"
                 android:gravity="center_vertical"
-                android:visibility="gone"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="280dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_19"
                     android:text="@string/testTime"
@@ -329,7 +334,6 @@
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/space_200"
                     android:text="@string/report_number"
                     android:textColor="@color/c333333"
                     android:textSize="18sp"

@@ -13,8 +13,6 @@ import com.just.news.databinding.ItemLayoutPatientBinding
 class PatientsAdapter
     : BaseRecyclerViewAdapter<PatientBean, ItemLayoutPatientBinding>() {
 
-    var listener: PatientListener? = null
-
     private var itemClickListener: ((PatientBean) -> Unit)? = null
 
 //    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -45,22 +43,12 @@ class PatientsAdapter
         binding.item = item
 
         binding.btnDelete.setOnClickListener{
-//            removeItem(item)
             itemClickListener?.invoke(item)
         }
     }
 
     override fun getLayoutRes(): Int {
         return R.layout.item_layout_patient
-    }
-
-    interface PatientListener {
-        fun onClickItem(bean: PatientBean)
-        fun deleteItem(id: Long)
-    }
-
-    fun setPatientsClickListener(listener: PatientListener) {
-        this.listener = listener
     }
 
     fun setDeleteClickListener(listener: (PatientBean) -> Unit) {
