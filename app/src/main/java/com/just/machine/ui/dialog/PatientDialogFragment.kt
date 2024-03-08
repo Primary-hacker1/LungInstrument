@@ -72,7 +72,7 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
     }
 
     override fun initData() {
-        viewModel.setDates(PatientBean())//新增患者
+
     }
 
     override fun initListener() {

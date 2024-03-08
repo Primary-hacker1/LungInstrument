@@ -5,10 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.databinding.ObservableArrayList
@@ -18,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.common.base.CommonBaseActivity
 import com.common.base.gone
 import com.common.base.setNoRepeatListener
-import com.common.base.toast
 import com.common.base.visible
 import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
@@ -66,13 +62,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
     val beans: ObservableList<PatientBean> = ObservableArrayList()
 
-    private val adapter by lazy {
-        PatientsAdapter(
-            beans,
-            R.layout.item_layout_patient,
-            0
-        )
-    }
+    private val adapter: PatientsAdapter? = PatientsAdapter()
 
 
     private fun initToolbar() {
@@ -118,11 +108,13 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                         val cardiopulmonaryBeans: ObservableList<CardiopulmonaryRecordsBean> =
                             ObservableArrayList()
 
-                        bean.testRecordsBean?.let { data ->
+                        bean.testRecordsBean?.let {
                             {
-                                cardiopulmonaryBeans.addAll(data)
+                                cardiopulmonaryBeans.addAll(it)
                             }
                         }
+
+                        LogUtils.d(tag + cardiopulmonaryBeans.toString())
 
                         cardiopulAdapter = CardiopulAdapter(
                             cardiopulmonaryBeans,
@@ -147,13 +139,9 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                             beans.add(bean)
                         }
 
+                        adapter?.setItemsBean(beans)
+
                         LogUtils.d(tag + beans.toString())
-
-                        adapter.itemData.addAll(beans)
-
-//                        adapter = PatientsAdapter(beans, R.layout.item_layout_patient, 10)
-
-                        adapter.notifyDataSetChanged()
 
                         binding.rvList.adapter = adapter
 
@@ -171,22 +159,23 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         binding.editSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    if (beans.size > 0) {
-                        beans.clear()
-                    }
+                if (beans.size > 0) {
+                    beans.clear()
+                }
 
-                    val select = binding.editSearch.text.toString().trim()
+                val select = binding.editSearch.text.toString().trim()
 
-                    if (select.isEmpty()) {
-                        viewModel.getPatients()//查询数据库
-                        return
-                    }
-                    viewModel.getNameOrId(select)//模糊查询数据库
+                if (select.isEmpty()) {
+                    viewModel.getPatients()//查询数据库
+                    return
+                }
+                viewModel.getNameOrId(select)//模糊查询数据库
             }
+
             override fun afterTextChanged(s: Editable) {}
         })
 
-        adapter.setPatientsClickListener(object : PatientsAdapter.PatientListener {
+        adapter?.setPatientsClickListener(object : PatientsAdapter.PatientListener {
             override fun onClickItem(bean: PatientBean) {//点击item返回点击患者的数据
                 LogUtils.d(tag + bean.toString())
                 viewModel.getPatient(bean.patientId)//查询数据库
@@ -196,6 +185,8 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                 viewModel.deletePatient(id)
             }
         })
+
+
 
 
         cardiopulAdapter?.setItemOnClickListener(object : CardiopulAdapter.PatientListener {
@@ -212,6 +203,9 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         })
 
         binding.btnAdd.setNoRepeatListener {
+
+            viewModel.setDates(PatientBean())//新增患者
+
             val patientDialogFragment =
                 PatientDialogFragment.startPatientDialogFragment(supportFragmentManager)//添加患者修改患者信息
             patientDialogFragment.setDialogOnClickListener(object :
@@ -229,38 +223,32 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         binding.btnSixMin.setNoRepeatListener {
             setButtonStyle(
                 binding.btnCardiopulmonary,
-                binding.btnSixMin
+                binding.btnSixMin,
+                binding.rvCardiopulmonaryTest,
+                binding.rvSixTest
             )
-            toggleRecyclerView(binding.rvSixTest, binding.rvCardiopulmonaryTest)
+            binding.llSixMin.visible()
+            binding.llCardiopulmonary.gone()
         }
 
         binding.btnCardiopulmonary.setNoRepeatListener {
             setButtonStyle(
                 binding.btnSixMin,
-                binding.btnCardiopulmonary
+                binding.btnCardiopulmonary,
+                binding.rvSixTest,
+                binding.rvCardiopulmonaryTest
             )
-
-            toggleRecyclerView(
-                binding.rvCardiopulmonaryTest,
-                binding.rvSixTest
-            )
+            binding.llSixMin.gone()
+            binding.llCardiopulmonary.visible()
         }
 
-    }
-
-    private fun toggleRecyclerView(showRecyclerView: RecyclerView, hideRecyclerView: RecyclerView) {
-        if (showRecyclerView.visibility == View.VISIBLE) {
-            showRecyclerView.gone()
-            hideRecyclerView.visible()
-        } else {
-            showRecyclerView.visible()
-            hideRecyclerView.gone()
-        }
     }
 
     private fun setButtonStyle(
         textView1: TextView,
         textView2: TextView,
+        showRecyclerView: RecyclerView,
+        hideRecyclerView: RecyclerView
     ) {// 设置按钮的样式
 
         textView1.setTextColor(ContextCompat.getColor(this, R.color.cD9D9D9))
@@ -268,6 +256,8 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         textView1.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
         textView2.background =
             ContextCompat.getDrawable(this, R.drawable.super_edittext_bg)
+        showRecyclerView.gone()
+        hideRecyclerView.visible()
     }
 
     override fun getViewBinding() = ActivityPatientBinding.inflate(layoutInflater)

@@ -3,6 +3,10 @@
 
     <data>
 
+        <variable
+            name="item"
+            type="com.just.machine.model.CardiopulmonaryRecordsBean" />
+
     </data>
 
     <LinearLayout

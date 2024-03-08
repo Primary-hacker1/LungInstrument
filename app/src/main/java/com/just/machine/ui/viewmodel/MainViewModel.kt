@@ -36,46 +36,56 @@ class MainViewModel @Inject constructor(
      */
     fun setDates(patient: PatientBean) {
 
-        patient.name = "张三"
 
-        patient.age = "28"
+//        doAsync {
+//            val patient = plantDao.insertPatient(patient)
+//
+//            if (patient as Int == 0) {
+//                mEventHub.value = LiveDataEvent(
+//                    LiveDataEvent.QuerySuccess, patient
+//                )
+//            }
+//        }
 
-        patient.sex = "男"
+        val list = ArrayList<PatientBean>()
 
-        patient.height = "188"
+        for (index in 0..10) {
+            val patient = PatientBean()
 
-        patient.addTime = "2024-3-7 13:00"
+            patient.name = "张三+$index"
 
-        val testRecordsBeans: MutableList<CardiopulmonaryRecordsBean> = ArrayList()//心肺测试记录
+            patient.age = (1 + index).toString()
 
-        val sixMinRecordsBeans: MutableList<SixMinRecordsBean> = ArrayList()//六分钟测试记录
+            patient.sex = "男"
 
-        val sixMinRecordsBean = SixMinRecordsBean("", "123456","2024-3-7 13:00")
+            patient.height = "18$index"
 
-        val cardiopulmonaryRecordsBean = CardiopulmonaryRecordsBean(
-            "测试1",
-            "测试2", "测试3", "测试4", "测试5",
-        )
+            patient.addTime = "2024-3-$index 13:00"
 
-        sixMinRecordsBeans.add(sixMinRecordsBean)
+            val testRecordsBeans: MutableList<CardiopulmonaryRecordsBean> = ArrayList()//心肺测试记录
 
-        testRecordsBeans.add(cardiopulmonaryRecordsBean)
+            val sixMinRecordsBeans: MutableList<SixMinRecordsBean> = ArrayList()//六分钟测试记录
 
-        patient.testRecordsBean = testRecordsBeans
+            val sixMinRecordsBean = SixMinRecordsBean("", "123456", "2024-3-7 13:00")
 
-        patient.sixMinRecordsBean = sixMinRecordsBeans
-        doAsync {
-            val patient = plantDao.insertPatient(patient)
+            val cardiopulmonaryRecordsBean = CardiopulmonaryRecordsBean(
+                "测试1",
+                "测试2", "测试3", "测试4", "测试5",
+            )
 
-            if (patient as Int == 0) {
-                mEventHub.value = LiveDataEvent(
-                    LiveDataEvent.QuerySuccess, patient
-                )
-            }
+            sixMinRecordsBeans.add(sixMinRecordsBean)
+
+            testRecordsBeans.add(cardiopulmonaryRecordsBean)
+
+            patient.testRecordsBean = testRecordsBeans
+
+            patient.sixMinRecordsBean = sixMinRecordsBeans
+
+            list.add(patient)
         }
 
         viewModelScope.launch {
-
+            plantDao.insertAll(list)
         }
     }
 

@@ -1,11 +1,8 @@
 package com.just.machine.ui.adapter
 
-import androidx.databinding.ObservableList
-import com.common.base.BaseDataBingViewHolder
 import com.common.base.BaseRecyclerViewAdapter
-import com.common.base.setNoRepeatListener
-import com.common.network.LogUtils
 import com.just.machine.dao.PatientBean
+import com.just.news.R
 import com.just.news.databinding.ItemLayoutPatientBinding
 
 /**
@@ -13,42 +10,41 @@ import com.just.news.databinding.ItemLayoutPatientBinding
  * 患者信息adapter
  *@author zt
  */
-class PatientsAdapter(itemData: ObservableList<PatientBean>, layoutId: Int, dataId: Int) :
-    BaseRecyclerViewAdapter<PatientBean, ItemLayoutPatientBinding>(
-        itemData, layoutId, dataId
-    ) {
+class PatientsAdapter
+    : BaseRecyclerViewAdapter<PatientBean, ItemLayoutPatientBinding>() {
 
     var listener: PatientListener? = null
 
-    override fun bindViewHolder(
-        viewHolder: BaseDataBingViewHolder<ItemLayoutPatientBinding>,
-        position: Int,
-        t: PatientBean
-    ) {
-        super.bindViewHolder(viewHolder, position, t)
-        viewHolder.binding.atvRecordNumber.text = itemData[position].medicalRecordNumber
-        viewHolder.binding.atvName.text = itemData[position].name
-        viewHolder.binding.atvSex.text = itemData[position].sex
-        viewHolder.binding.atvAge.text = itemData[position].age
-        viewHolder.binding.atvHeight.text = itemData[position].height
-        viewHolder.binding.atvWeight.text = itemData[position].weight
-        viewHolder.binding.atvCreateTime.text = itemData[position].addTime
+//    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+//        super.onBindViewHolder(holder, position)
+//
+//        holder.binding.atvRecordNumber.text = itemData[position].medicalRecordNumber
+//        holder.binding.atvName.text = itemData[position].name
+//        holder.binding.atvSex.text = itemData[position].sex
+//        holder.binding.atvAge.text = itemData[position].age
+//        holder.binding.atvHeight.text = itemData[position].height
+//        holder.binding.atvWeight.text = itemData[position].weight
+//        holder.binding.atvCreateTime.text = itemData[position].addTime
+//
+//        holder.binding.btnDelete.setNoRepeatListener {
+////            removeItem(viewHolder.adapterPosition)
+//            LogUtils.e("" + position + "--viewHolder.adapterPosition--" + holder.adapterPosition)
+////            listener?.deleteItem(itemData[viewHolder.adapterPosition].patientId)
+//        }
+//
+//        holder.binding.llItem.setNoRepeatListener {
+//            listener?.onClickItem(itemData[holder.adapterPosition])
+//        }
+//
+//    }
 
-        viewHolder.binding.btnDelete.setOnClickListener {
-            deleteItem(viewHolder.adapterPosition)
-            LogUtils.e(viewHolder.adapterPosition.toString())
-//            listener?.deleteItem(itemData[viewHolder.adapterPosition].patientId)
-        }
 
-        viewHolder.binding.llItem.setNoRepeatListener {
-            listener?.onClickItem(itemData[position])
-        }
-
+    override fun bindData(item: PatientBean) {
+        binding.item = item
     }
 
-    private fun deleteItem(position: Int) {
-        itemData.removeAt(position)
-        notifyItemRemoved(position)
+    override fun getLayoutRes(): Int {
+        return R.layout.item_layout_patient
     }
 
     interface PatientListener {

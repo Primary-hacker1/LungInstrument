@@ -2,7 +2,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-
+        <variable
+            name="item"
+            type="com.just.machine.model.SixMinRecordsBean" />
     </data>
 
     <LinearLayout

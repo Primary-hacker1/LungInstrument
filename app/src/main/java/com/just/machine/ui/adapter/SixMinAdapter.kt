@@ -3,7 +3,9 @@ package com.just.machine.ui.adapter
 import androidx.databinding.ObservableList
 import com.common.base.BaseDataBingViewHolder
 import com.common.base.BaseRecyclerViewAdapter
+import com.just.machine.model.CardiopulmonaryRecordsBean
 import com.just.machine.model.SixMinRecordsBean
+import com.just.news.R
 import com.just.news.databinding.ItemLayoutSixTestBinding
 
 /**
@@ -11,37 +13,37 @@ import com.just.news.databinding.ItemLayoutSixTestBinding
  * 患者六分钟测试数据
  *@author zt
  */
-class SixMinAdapter(itemData: ObservableList<SixMinRecordsBean>, layoutId: Int, dataId: Int) :
-    BaseRecyclerViewAdapter<SixMinRecordsBean, ItemLayoutSixTestBinding>(
-        itemData, layoutId, dataId
-    ) {
+class SixMinAdapter(itemData: ObservableList<SixMinRecordsBean>, layoutId: Int, dataId: Int)
+    : BaseRecyclerViewAdapter<SixMinRecordsBean, ItemLayoutSixTestBinding>() {
 
-    override fun bindViewHolder(
-        viewHolder: BaseDataBingViewHolder<ItemLayoutSixTestBinding>,
-        position: Int,
-        t: SixMinRecordsBean
-    ) {
-        super.bindViewHolder(viewHolder, position, t)
+//    override fun bindViewHolder(
+//        viewHolder: BaseDataBingViewHolder<ItemLayoutSixTestBinding>,
+//        position: Int,
+//        t: SixMinRecordsBean
+//    ) {
+//        super.bindViewHolder(viewHolder, position, t)
+//
+//        viewHolder.binding.atvTestTime.text = itemData[position].reportNo
+//
+//        viewHolder.binding.atvNumber.text = itemData[position].testTime
+//
+//        viewHolder.binding.btnDelete.setOnClickListener {
+//            deleteItem(viewHolder.adapterPosition)
+//        }
+//
+//        viewHolder.binding.llItem.setOnClickListener {
+//            listener?.onClickItem(itemData[position])
+//        }
+//
+//    }
 
-        viewHolder.binding.atvTestTime.text = itemData[position].reportNo
-
-        viewHolder.binding.atvNumber.text = itemData[position].testTime
-
-        viewHolder.binding.btnDelete.setOnClickListener {
-            deleteItem(viewHolder.adapterPosition)
-        }
-
-        viewHolder.binding.llItem.setOnClickListener {
-            listener?.onClickItem(itemData[position])
-        }
-
+    override fun bindData(item: SixMinRecordsBean) {
+        binding.item = item
     }
 
-    private fun deleteItem(position: Int) {
-        itemData.removeAt(position)
-        notifyItemRemoved(position)
+    override fun getLayoutRes(): Int {
+        return R.layout.item_layout_six_test
     }
-
 
     private var listener: PatientListener? = null
 
