@@ -24,14 +24,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/space_50"
-            android:layout_marginBottom="@dimen/space_20"
             android:background="@null"
             android:drawableStart="@drawable/btn_main_close"
             android:gravity="center"
             android:padding="@dimen/space_10"
             android:text="@string/close"
-            android:textSize="19sp"
             android:textColor="#1890ff"
+            android:textSize="19sp"
             app:layout_constraintBottom_toTopOf="@+id/ll_main"
             app:layout_constraintRight_toRightOf="parent"
             tools:ignore="MissingConstraints" />
@@ -41,6 +40,7 @@
             android:id="@+id/ll_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -54,48 +54,85 @@
                 android:layout_gravity="center"
                 android:text="@string/entry_name"
                 android:textColor="@color/colorPrimary"
-                android:textSize="28sp"
+                android:textSize="30sp"
                 android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_30"
+                android:layout_marginTop="@dimen/space_50"
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginEnd="80dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_ecg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_cf" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_16"
+                        android:text="@string/cardiopulmonary"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_ecg"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/space_30"
-                    android:background="@drawable/btn_cf"
-                    tools:ignore="MissingConstraints" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/walk_test_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/space_56"
-                    android:layout_marginEnd="@dimen/space_30"
-                    android:background="@drawable/btn_six_min"
-                    app:layout_constraintTop_toBottomOf="@+id/ecg_button"
-                    tools:ignore="MissingConstraints" />
+                    android:layout_marginEnd="80dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_patientInformation"
-                    android:layout_width="wrap_content"
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/walk_test_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:background="@drawable/btn_six_min" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_16"
+                        android:text="@string/minute_walk"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/btn_patient_manager"
-                    app:layout_constraintTop_toBottomOf="@+id/ecg_button"
-                    tools:ignore="MissingConstraints" />
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_patientInformation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_patient_manager" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_16"
+                        android:text="@string/patientInformation"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
             </LinearLayout>
 
