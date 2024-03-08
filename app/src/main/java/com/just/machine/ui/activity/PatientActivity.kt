@@ -56,7 +56,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
     private var sixMinAdapter: SixMinAdapter? = null
 
-    private var cardiopulAdapter: CardiopulAdapter? = null
+    private var cardiopulAdapter: CardiopulAdapter = CardiopulAdapter()
 
     private var bean: PatientBean? = null
 
@@ -107,7 +107,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
                         cardiopulAdapter = CardiopulAdapter()
 
-                        bean.testRecordsBean?.let { it1 -> cardiopulAdapter?.setItemsBean(it1) }
+                        bean.testRecordsBean?.let { it1 -> cardiopulAdapter.setItemsBean(it1) }
 
                         binding.rvCardiopulmonaryTest.adapter = cardiopulAdapter
                     }
@@ -125,7 +125,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                             beans.add(bean)
                         }
 
-                        adapter?.setItemsBean(beans)
+                        adapter.setItemsBean(beans)
 
                         LogUtils.d(tag + beans.toString())
 
@@ -161,29 +161,17 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
             override fun afterTextChanged(s: Editable) {}
         })
 
-//        adapter?.setPatientsClickListener(object : PatientsAdapter.PatientListener {
-//            override fun onClickItem(bean: PatientBean) {//点击item返回点击患者的数据
-//                LogUtils.d(tag + bean.toString())
-//                viewModel.getPatient(bean.patientId)//查询数据库
-//            }
-//
-//            override fun deleteItem(id: Long) {
-//                viewModel.deletePatient(id)
-//            }
-//        })
-
-        adapter?.setDeleteClickListener {
+        adapter.setDeleteClickListener {
             viewModel.deletePatient(it.patientId)
             viewModel.getPatients()//查询数据库
         }
 
-        adapter?.setItemClickListener {
-            LogUtils.e(tag + it)
+        adapter.setItemClickListener {
             viewModel.getPatient(it.patientId)//查询数据库
         }
 
 
-        cardiopulAdapter?.setItemOnClickListener(object : CardiopulAdapter.PatientListener {
+        cardiopulAdapter.setItemOnClickListener(object : CardiopulAdapter.PatientListener {
             override fun onClickItem(bean: CardiopulmonaryRecordsBean) {//点击item返回心肺测试数据
 
             }
@@ -196,44 +184,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
             }
         })
 
-        var index = 0
-
         binding.btnAdd.setNoRepeatListener {
-
-            val patient = PatientBean()
-
-            index++
-
-            patient.name = "张三$index"
-
-            patient.age = (1+index).toString()
-
-            patient.sex = "男$index"
-
-            patient.height = "18$index"
-
-            patient.addTime = "2024-3-6 13:00"
-
-            val testRecordsBeans: MutableList<CardiopulmonaryRecordsBean> = ArrayList()//心肺测试记录
-
-            val sixMinRecordsBeans: MutableList<SixMinRecordsBean> = ArrayList()//六分钟测试记录
-
-            val sixMinRecordsBean = SixMinRecordsBean("", "123456", "2024-3-7 13:00")
-
-            val cardiopulmonaryRecordsBean = CardiopulmonaryRecordsBean(
-                "测试1",
-                "测试2", "测试3", "测试4", "测试5",
-            )
-
-            sixMinRecordsBeans.add(sixMinRecordsBean)
-
-            testRecordsBeans.add(cardiopulmonaryRecordsBean)
-
-            patient.testRecordsBean = testRecordsBeans
-
-            patient.sixMinRecordsBean = sixMinRecordsBeans
-
-            viewModel.setDates(patient)//新增患者
 
             val patientDialogFragment =
                 PatientDialogFragment.startPatientDialogFragment(supportFragmentManager)//添加患者修改患者信息

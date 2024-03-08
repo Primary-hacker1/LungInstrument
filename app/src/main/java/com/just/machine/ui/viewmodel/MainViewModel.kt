@@ -35,59 +35,8 @@ class MainViewModel @Inject constructor(
      *@param patient 协程请求->直接获取结果的
      */
     fun setDates(patient: PatientBean) {
-
-//        val list = ArrayList<PatientBean>()
-//
-//        for (index in 0..20) {
-//            val patient = PatientBean()
-//
-//            patient.name = "张三$index"
-//
-//            patient.age = (1+index).toString()
-//
-//            patient.sex = "男$index"
-//
-//            patient.height = "18$index"
-//
-//            patient.addTime = "2024-3-6 13:00"
-//
-//            val testRecordsBeans: MutableList<CardiopulmonaryRecordsBean> = ArrayList()//心肺测试记录
-//
-//            val sixMinRecordsBeans: MutableList<SixMinRecordsBean> = ArrayList()//六分钟测试记录
-//
-//            val sixMinRecordsBean = SixMinRecordsBean("", "123456", "2024-3-7 13:00")
-//
-//            val cardiopulmonaryRecordsBean = CardiopulmonaryRecordsBean(
-//                "测试1",
-//                "测试2", "测试3", "测试4", "测试5",
-//            )
-//
-//            sixMinRecordsBeans.add(sixMinRecordsBean)
-//
-//            testRecordsBeans.add(cardiopulmonaryRecordsBean)
-//
-//            patient.testRecordsBean = testRecordsBeans
-//
-//            patient.sixMinRecordsBean = sixMinRecordsBeans
-//
-//            list.add(patient)
-//        }
-
-//        doAsync {
-//            val patient = plantDao.insertPatient(patient)
-//
-//            if (patient as Int == 0) {
-//                mEventHub.value = LiveDataEvent(
-//                    LiveDataEvent.QuerySuccess, patient
-//                )
-//            }
-//        }
-
         viewModelScope.launch {
-//            plantDao.insertAll(list)
-
             val patient = plantDao.insertPatient(patient)
-
             mEventHub.value = LiveDataEvent(
                 LiveDataEvent.QuerySuccess, patient
             )

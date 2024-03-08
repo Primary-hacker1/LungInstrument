@@ -12,7 +12,9 @@ import com.common.base.setNoRepeatListener
 import com.common.base.toast
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.just.machine.dao.PatientBean
+import com.just.machine.model.CardiopulmonaryRecordsBean
 import com.just.machine.model.Constants
+import com.just.machine.model.SixMinRecordsBean
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogPatientBinding
@@ -75,6 +77,8 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
 
     }
 
+    var index = 0
+
     override fun initListener() {
 
 
@@ -94,11 +98,48 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
             }
         }
 
+
         binding.btnYes.setNoRepeatListener {
 
             listener?.onClickConfirmBtn()
 
             hideKeyboard(it.windowToken)
+
+            val patient = PatientBean()
+
+            if (Constants.isDebug){
+
+                patient.name = "张三$index"
+
+                patient.age = (1+index).toString()
+
+                patient.sex = "男$index"
+
+                patient.height = "18$index"
+
+                patient.addTime = "2024-3-6 13:00"
+
+                val testRecordsBeans: MutableList<CardiopulmonaryRecordsBean> = ArrayList()//心肺测试记录
+
+                val sixMinRecordsBeans: MutableList<SixMinRecordsBean> = ArrayList()//六分钟测试记录
+
+                val sixMinRecordsBean = SixMinRecordsBean("", "123456", "2024-3-7 13:00")
+
+                val cardiopulmonaryRecordsBean = CardiopulmonaryRecordsBean(
+                    "测试1",
+                    "测试2", "测试3", "测试4", "测试5",
+                )
+
+                sixMinRecordsBeans.add(sixMinRecordsBean)
+
+                testRecordsBeans.add(cardiopulmonaryRecordsBean)
+
+                patient.testRecordsBean = testRecordsBeans
+
+                patient.sixMinRecordsBean = sixMinRecordsBeans
+
+                viewModel.setDates(patient)//新增患者
+            }
 
             if (binding.atvName.text?.isEmpty() == true) {
                 toast("姓名不能为空！")
@@ -120,6 +161,7 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
                 toast("生日不能为空！")
                 return@setNoRepeatListener
             }
+            viewModel.setDates(patient)//新增患者
         }
 
         binding.btnNo.setNoRepeatListener {

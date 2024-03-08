@@ -10,7 +10,7 @@ import com.just.news.databinding.ItemLayoutCardiopulTestBinding
  * 患者心肺测试数据
  *@author zt
  */
-class CardiopulAdapter()
+class CardiopulAdapter
     : BaseRecyclerViewAdapter<CardiopulmonaryRecordsBean, ItemLayoutCardiopulTestBinding>()  {
 
 //    override fun bindViewHolder(
