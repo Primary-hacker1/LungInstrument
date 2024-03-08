@@ -16,6 +16,14 @@
             android:layout_height="48dp"
             android:orientation="horizontal">
 
+            <ImageView
+                android:id="@+id/sixmin_iv_system_setting"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:src="@mipmap/xtsz" />
+
             <TextView
                 android:id="@+id/sixmin_tv_test_status"
                 android:layout_width="wrap_content"
@@ -581,8 +589,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:textAlignment="center"
                         android:text="- - -      mmHg"
+                        android:textAlignment="center"
                         android:textColor="@color/white" />
 
                     <TextView
@@ -626,9 +634,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
+                        android:gravity="center"
                         android:text="@string/sixmin_measure_blood"
                         android:textColor="#4998e2"
-                        android:gravity="center"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
