@@ -703,6 +703,7 @@
                                     android:orientation="horizontal">
 
                                     <LinearLayout
+                                        android:visibility="invisible"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
@@ -1054,7 +1055,6 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginStart="88dp"
                                     android:gravity="center_vertical"
-                                    android:text="发布版本：v1 完整版本：v1.0.2.210708 @2020知心健（南京）科技有限公司版权所有"
                                     android:textColor="@color/text3"
                                     android:textSize="13sp" />
 

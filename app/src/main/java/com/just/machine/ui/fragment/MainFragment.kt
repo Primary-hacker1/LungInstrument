@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
+import com.just.machine.model.CommonSharedPreferences.privateSet
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.ui.activity.CardiopulmonaryActivity
 import com.just.machine.ui.activity.PatientActivity
@@ -36,13 +37,13 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
         binding.walkTestButton.setNoRepeatListener {
             val isClick = SharedPreferencesUtils.instance.isClickBtn
             when (isClick) {
-                false -> {
+                "" -> {
                     val patientDialogFragment =
                         PatientDialogFragment.startPatientDialogFragment(parentFragmentManager)//添加患者修改患者信息
                     patientDialogFragment.setDialogOnClickListener(object :
                         PatientDialogFragment.PatientDialogListener {
                         override fun onClickConfirmBtn() {//确认
-                            SharedPreferencesUtils.instance.isClickBtn = true
+                            SharedPreferencesUtils.instance.isClickBtn = "1"
                             patientDialogFragment.dismiss()
                             val intent = Intent(activity, SixMinActivity::class.java)
                             startActivity(intent)
@@ -54,7 +55,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                     })
                 }
 
-                true -> {
+                "1" -> {
                     val intent = Intent(activity, SixMinActivity::class.java)
                     startActivity(intent)
                 }
@@ -66,13 +67,13 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
         binding.btnEcg.setNoRepeatListener {//心肺测试
             val isClick = SharedPreferencesUtils.instance.isClickBtn
             when (isClick) {
-                false -> {
+                "" -> {
                     val patientDialogFragment =
                         PatientDialogFragment.startPatientDialogFragment(parentFragmentManager)//添加患者修改患者信息
                     patientDialogFragment.setDialogOnClickListener(object :
                         PatientDialogFragment.PatientDialogListener {
                         override fun onClickConfirmBtn() {//确认
-                            SharedPreferencesUtils.instance.isClickBtn = true
+                            SharedPreferencesUtils.instance.isClickBtn = "1"
                             patientDialogFragment.dismiss()
                             CardiopulmonaryActivity.startCardiopulmonaryActivity(context)
                         }
@@ -83,7 +84,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                     })
                 }
 
-                true -> {
+                "1" -> {
                     CardiopulmonaryActivity.startCardiopulmonaryActivity(context)
                 }
 

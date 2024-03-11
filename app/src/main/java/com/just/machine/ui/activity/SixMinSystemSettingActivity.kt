@@ -2,6 +2,7 @@ package com.just.machine.ui.activity
 
 import androidx.core.content.ContextCompat
 import com.common.base.CommonBaseActivity
+import com.just.machine.model.SharedPreferencesUtils
 import com.just.news.R
 import com.just.news.databinding.ActivitySixminSystemSettingBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -14,6 +15,7 @@ class SixMinSystemSettingActivity : CommonBaseActivity<ActivitySixminSystemSetti
 
     override fun initView() {
         initToolbar()
+        initSysInfo()
         initClickListener()
     }
 
@@ -65,6 +67,11 @@ class SixMinSystemSettingActivity : CommonBaseActivity<ActivitySixminSystemSetti
 //        binding.toolbar.ivTitleBack.setNoRepeatListener {
 //            finish()
 //        }
+    }
+
+
+    private fun initSysInfo() {
+
         binding.rbBroadcastGuidanceVoiceYes.isChecked = true
         binding.rbAutoMearsureBloodYes.isChecked = true
         binding.rbAutoStartTestYes.isChecked = true
