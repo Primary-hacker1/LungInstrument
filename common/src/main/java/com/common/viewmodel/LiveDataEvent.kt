@@ -17,6 +17,8 @@ class LiveDataEvent {
 
         const val QueryPatient: Int = 0x03
 
+        const val addPatient: Int = 0x05
+
 
         /**
          * @param FAIL -通用错误

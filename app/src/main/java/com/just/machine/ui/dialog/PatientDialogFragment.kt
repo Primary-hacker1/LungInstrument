@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Gravity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import com.common.base.BaseDialogFragment
@@ -92,8 +93,6 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
 
     override fun initView() {
         binding.tvTitle.text = Constants.addPatient//标题
-
-
     }
 
     override fun initData() {

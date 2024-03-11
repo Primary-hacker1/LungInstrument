@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.common.base.CommonBaseActivity
 import com.common.base.gone
+import com.common.base.onUI
 import com.common.base.setNoRepeatListener
 import com.common.base.visible
 import com.common.network.LogUtils
@@ -28,6 +29,7 @@ import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.ActivityPatientBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 
 /**
@@ -166,7 +168,6 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
             override fun onUpdateItem(bean: PatientBean) {
                 PatientDialogFragment.startPatientDialogFragment(supportFragmentManager, bean)//修改患者信息
             }
-
         })
 
         adapter.setItemClickListener {
