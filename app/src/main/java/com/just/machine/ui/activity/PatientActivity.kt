@@ -91,34 +91,19 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                 }
 
                 LiveDataEvent.QueryPatient -> {//查询患者单个
-                    if (it.any is PatientBean) {
-                        val bean = it.any as PatientBean
+                    it.any?.let { it1 -> queryPatient(it1) }
+                }
 
-                        this.bean = bean
-
-                        LogUtils.d(tag + bean.toString())
-
-                        sixMinAdapter = SixMinAdapter()
-
-                        bean.sixMinRecordsBean?.let { it1 -> sixMinAdapter.setItemsBean(it1) }
-
-                        binding.rvSixTest.adapter = sixMinAdapter
-
-
-                        cardiopulmonaryAdapter = CardiopulAdapter()
-
-                        bean.testRecordsBean?.let { it1 -> cardiopulmonaryAdapter.setItemsBean(it1) }
-
-                        binding.rvCardiopulmonaryTest.adapter = cardiopulmonaryAdapter
-                    }
+                LiveDataEvent.QueryPatientNull -> {
+                    it.any?.let { it1 -> queryPatient(it1) }
                 }
 
                 LiveDataEvent.QueryNameId -> {
-                    it.any?.let { it1 -> livaDataBean(it1) }
+                    it.any?.let { it1 -> beanQuery(it1) }
                 }
 
                 LiveDataEvent.QuerySuccess -> {
-                    it.any?.let { it1 -> livaDataBean(it1) }
+                    it.any?.let { it1 -> beanQuery(it1) }
                 }
             }
         }
@@ -127,7 +112,32 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
     }
 
-    private fun livaDataBean(any: Any) {
+    private fun queryPatient(any: Any) {
+
+        if (any is PatientBean) {
+            this.bean = any
+        } else {
+            bean = PatientBean()
+        }
+
+        LogUtils.d(tag + bean.toString())
+
+        sixMinAdapter = SixMinAdapter()
+
+        bean?.sixMinRecordsBean?.let { it1 -> sixMinAdapter.setItemsBean(it1) }
+
+        binding.rvSixTest.adapter = sixMinAdapter
+
+
+        cardiopulmonaryAdapter = CardiopulAdapter()
+
+        bean?.testRecordsBean?.let { it1 -> cardiopulmonaryAdapter.setItemsBean(it1) }
+
+        binding.rvCardiopulmonaryTest.adapter = cardiopulmonaryAdapter
+
+    }
+
+    private fun beanQuery(any: Any) {
         if (any is List<*>) {
             beans.clear()
 

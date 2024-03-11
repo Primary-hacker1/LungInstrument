@@ -74,6 +74,10 @@ class MainViewModel @Inject constructor(
                     mEventHub.value = LiveDataEvent(
                         LiveDataEvent.QueryPatient, it
                     )
+                } else {
+                    mEventHub.value = LiveDataEvent(
+                        LiveDataEvent.QueryPatientNull, "null"
+                    )
                 }
             }
         }
