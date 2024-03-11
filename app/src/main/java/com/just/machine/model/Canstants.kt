@@ -2,7 +2,7 @@ package com.just.machine.model
 
 interface Constants {
     companion object {
-        const val isDebug = false//是否是测试模式
+        const val isDebug = true//是否是测试模式
         const val news = "首页"
         const val addPatient = "添加患者信息"
         const val patientInformation = "患者管理"

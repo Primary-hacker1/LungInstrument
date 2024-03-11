@@ -8,8 +8,6 @@ import android.text.TextWatcher
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
-import androidx.databinding.ObservableArrayList
-import androidx.databinding.ObservableList
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.common.base.CommonBaseActivity
@@ -52,11 +50,9 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         }
     }
 
-//    private var adapter: PatientsAdapter? = null
+    private var sixMinAdapter: SixMinAdapter = SixMinAdapter()
 
-    private var sixMinAdapter: SixMinAdapter? = null
-
-    private var cardiopulAdapter: CardiopulAdapter = CardiopulAdapter()
+    private var cardiopulmonaryAdapter: CardiopulAdapter = CardiopulAdapter()
 
     private var bean: PatientBean? = null
 
@@ -100,16 +96,16 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
                         sixMinAdapter = SixMinAdapter()
 
-                        bean.sixMinRecordsBean?.let { it1 -> sixMinAdapter?.setItemsBean(it1) }
+                        bean.sixMinRecordsBean?.let { it1 -> sixMinAdapter.setItemsBean(it1) }
 
                         binding.rvSixTest.adapter = sixMinAdapter
 
 
-                        cardiopulAdapter = CardiopulAdapter()
+                        cardiopulmonaryAdapter = CardiopulAdapter()
 
-                        bean.testRecordsBean?.let { it1 -> cardiopulAdapter.setItemsBean(it1) }
+                        bean.testRecordsBean?.let { it1 -> cardiopulmonaryAdapter.setItemsBean(it1) }
 
-                        binding.rvCardiopulmonaryTest.adapter = cardiopulAdapter
+                        binding.rvCardiopulmonaryTest.adapter = cardiopulmonaryAdapter
                     }
                 }
 
@@ -178,13 +174,13 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         }
 
 
-        cardiopulAdapter.setItemOnClickListener(object : CardiopulAdapter.PatientListener {
+        cardiopulmonaryAdapter.setItemOnClickListener(object : CardiopulAdapter.PatientListener {
             override fun onClickItem(bean: CardiopulmonaryRecordsBean) {//点击item返回心肺测试数据
 
             }
         })
 
-        sixMinAdapter?.setItemOnClickListener(object : SixMinAdapter.PatientListener {
+        sixMinAdapter.setItemOnClickListener(object : SixMinAdapter.PatientListener {
             //点击item返回六分钟测试数据
             override fun onClickItem(bean: SixMinRecordsBean) {
 

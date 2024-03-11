@@ -37,6 +37,7 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
     companion object {
         /**
          * @param fragmentManager FragmentManager
+         * @param bean 修改传过来的bean数据
          */
         fun startPatientDialogFragment(
 
