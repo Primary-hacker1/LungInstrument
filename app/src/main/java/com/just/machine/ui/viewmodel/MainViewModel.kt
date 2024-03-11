@@ -3,7 +3,9 @@ package com.just.machine.ui.viewmodel
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.viewModelScope
+import com.common.base.delay
 import com.common.base.doAsync
+import com.common.base.notNull
 import com.common.base.subscribes
 import com.common.viewmodel.BaseViewModel
 import com.common.viewmodel.LiveDataEvent
@@ -16,6 +18,7 @@ import com.just.machine.model.SixMinRecordsBean
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 /**
@@ -37,9 +40,10 @@ class MainViewModel @Inject constructor(
     fun setDates(patient: PatientBean) {
         viewModelScope.launch {
             val patient = plantDao.insertPatient(patient)
-            mEventHub.value = LiveDataEvent(
-                LiveDataEvent.QuerySuccess, patient
-            )
+            getPatients()
+//            mEventHub.value = LiveDataEvent(
+//                LiveDataEvent.addPatient, patient
+//            )
         }
     }
 
@@ -66,16 +70,20 @@ class MainViewModel @Inject constructor(
     fun getPatient(patientId: Long) {//查询单个患者
         viewModelScope.launch {
             plantDao.getPatient(patientId).collect {
-                mEventHub.value = LiveDataEvent(
-                    LiveDataEvent.QueryPatient, it
-                )
+                if (it != null) {
+                    mEventHub.value = LiveDataEvent(
+                        LiveDataEvent.QueryPatient, it
+                    )
+                }
             }
         }
     }
 
-    fun deletePatient(patientId: Long) {//删除单个患者
+    fun deletePatient(patientId: Long?) {//删除单个患者
         viewModelScope.launch {
-            plantDao.deletePatient(patientId)
+            if (patientId != null) {
+                plantDao.deletePatient(patientId)
+            }
         }
     }
 

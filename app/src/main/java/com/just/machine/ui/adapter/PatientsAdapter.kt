@@ -1,6 +1,7 @@
 package com.just.machine.ui.adapter
 
 import com.common.base.BaseRecyclerViewAdapter
+import com.common.base.setNoRepeatListener
 import com.just.machine.dao.PatientBean
 import com.just.news.R
 import com.just.news.databinding.ItemLayoutPatientBinding
@@ -16,11 +17,11 @@ class PatientsAdapter
     override fun bindData(item: PatientBean) {
         binding.item = item
 
-        binding.btnDelete.setOnClickListener{
+        binding.btnDelete.setNoRepeatListener{
             listener?.onDeleteItem(item)
         }
 
-        binding.btnUpdate.setOnClickListener{
+        binding.btnUpdate.setNoRepeatListener{
             listener?.onUpdateItem(item)
         }
     }

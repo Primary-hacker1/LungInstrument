@@ -32,7 +32,7 @@ interface PlantDao {
     fun getPatients(): Flow<List<PatientBean>>
 
     @Query("SELECT * FROM patients WHERE id = :id")//条件查询
-    fun getPatient(id: Long): Flow<PatientBean>
+    fun getPatient(id: Long): Flow<PatientBean?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(plants: List<PatientBean>)

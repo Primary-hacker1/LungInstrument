@@ -78,7 +78,9 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         viewModel.getPatients()//查询数据库
 
         binding.rvList.layoutManager = LinearLayoutManager(this)
+
         binding.rvSixTest.layoutManager = LinearLayoutManager(this)
+
         binding.rvCardiopulmonaryTest.layoutManager = LinearLayoutManager(this)
 
         viewModel.mEventHub.observe(this) {
@@ -111,31 +113,37 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                     }
                 }
 
-                in LiveDataEvent.QueryNameId downTo LiveDataEvent.QuerySuccess -> {//查询所有患者
+                LiveDataEvent.QueryNameId -> {
+                    it.any?.let { it1 -> livaDataBean(it1) }
+                }
 
-                    if (it.any is List<*>) {
-                        beans.clear()
-
-                        val datas = it.any as MutableList<*>
-
-                        for (num in 0 until datas.size) {
-                            val bean = datas[num] as PatientBean
-                            beans.add(bean)
-                        }
-
-                        adapter.setItemsBean(beans)
-
-                        LogUtils.d(tag + beans.toString())
-
-                        binding.rvList.adapter = adapter
-
-                    }
+                LiveDataEvent.QuerySuccess -> {
+                    it.any?.let { it1 -> livaDataBean(it1) }
                 }
             }
         }
 
         initOnClick()
 
+    }
+
+    private fun livaDataBean(any: Any) {
+        if (any is List<*>) {
+            beans.clear()
+
+            val datas = any as MutableList<*>
+
+            for (num in 0 until datas.size) {
+                val bean = datas[num] as PatientBean
+                beans.add(bean)
+            }
+
+            adapter.setItemsBean(beans)
+
+            LogUtils.d(tag + beans.toString())
+
+            binding.rvList.adapter = adapter
+        }
     }
 
     private fun initOnClick() {
@@ -162,11 +170,13 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         adapter.setItemOnClickListener(object : PatientsAdapter.PatientListener {
             override fun onDeleteItem(bean: PatientBean) {
                 viewModel.deletePatient(bean.patientId)
-                viewModel.getPatients()//查询数据库
             }
 
             override fun onUpdateItem(bean: PatientBean) {
-                PatientDialogFragment.startPatientDialogFragment(supportFragmentManager, bean)//修改患者信息
+                PatientDialogFragment.startPatientDialogFragment(
+                    supportFragmentManager,
+                    bean
+                )//修改患者信息
             }
         })
 
