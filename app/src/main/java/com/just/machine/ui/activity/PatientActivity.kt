@@ -161,14 +161,14 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
             override fun afterTextChanged(s: Editable) {}
         })
 
-        adapter.setItemOnClickListener(object : PatientsAdapter.PatientListener{
+        adapter.setItemOnClickListener(object : PatientsAdapter.PatientListener {
             override fun onDeleteItem(bean: PatientBean) {
                 viewModel.deletePatient(bean.patientId)
                 viewModel.getPatients()//查询数据库
             }
 
             override fun onUpdateItem(bean: PatientBean) {
-                PatientDialogFragment.startPatientDialogFragment(supportFragmentManager)
+                PatientDialogFragment.startPatientDialogFragment(supportFragmentManager, bean)//修改患者信息
             }
 
         })
@@ -192,17 +192,16 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         })
 
         binding.btnAdd.setNoRepeatListener {
-
             val patientDialogFragment =
                 PatientDialogFragment.startPatientDialogFragment(supportFragmentManager)//添加患者修改患者信息
             patientDialogFragment.setDialogOnClickListener(object :
                 PatientDialogFragment.PatientDialogListener {
                 override fun onClickConfirmBtn() {//确认
-                    patientDialogFragment.dismiss()
+
                 }
 
                 override fun onClickCleanBtn() {//取消
-                    patientDialogFragment.dismiss()
+
                 }
             })
         }

@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import com.common.base.BaseDialogFragment
 import com.common.base.setNoRepeatListener
 import com.common.base.toast
+import com.common.network.LogUtils
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.just.machine.dao.PatientBean
 import com.just.machine.model.CardiopulmonaryRecordsBean
@@ -19,6 +20,7 @@ import com.just.machine.model.SixMinRecordsBean
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogPatientBinding
+import com.justsafe.libview.util.DateUtils
 import com.justsafe.libview.util.StringUtils
 import com.loper7.date_time_picker.DateTimeConfig
 import com.loper7.date_time_picker.dialog.CardDatePickerDialog
@@ -50,7 +52,7 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
 
             val bundle = Bundle()
 
-            bundle.putParcelable("patientBean", bean)
+            bundle.putParcelable(Constants.patientBean, bean)
 
             dialogFragment.arguments = bundle
 
@@ -58,7 +60,11 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
         }
     }
 
+    private var patient = PatientBean()
+
     private var listener: PatientDialogListener? = null
+
+    private var isUpdate: Boolean = false
 
     interface PatientDialogListener {
         fun onClickConfirmBtn()
@@ -90,26 +96,59 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
     }
 
     override fun initData() {
-        viewModel.updatePatients(PatientBean())//修改数据
+        val bean = arguments?.getParcelable<PatientBean>(Constants.patientBean)
+        if (bean != null) {
+            patient = bean
+            if (patient.name.toString().isNotEmpty()) {
+                isUpdate = true
+
+                binding.atvName.setText(patient.name)
+
+                binding.atvHeight.setText(patient.height)
+
+                binding.atvWeight.setText(patient.weight)
+
+                binding.editIdentityCard.setText(patient.identityCard)
+
+                binding.atvBirthday.text = patient.birthday
+
+                binding.editBmi.setText(patient.BMI)
+
+                binding.editAge.setText(patient.age)
+
+                binding.atvPaientNumber.setText(patient.medicalRecordNumber)
+
+                binding.editPredictDistances.setText(patient.predictDistances)
+
+                binding.editDiseaseHistory.setText(patient.diseaseHistory)
+
+                binding.editCurrentMedications.setText(patient.currentMedications)
+
+                binding.editClinicalDiagnosis.setText(patient.clinicalDiagnosis)
+
+                binding.editRemark.setText(patient.remark)
+            }
+        }
     }
 
     var index = 0
 
     override fun initListener() {
 
+//        patient.sex = "男"
 
         binding.rgSex.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.rb_man -> {
-
+                    patient.sex = "男"
                 }
 
                 R.id.rb_woman -> {
-
+                    patient.sex = "女"
                 }
 
                 else -> {
-
+                    patient.sex = "男"
                 }
             }
         }
@@ -120,8 +159,6 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
             listener?.onClickConfirmBtn()
 
             hideKeyboard(it.windowToken)
-
-            val patient = PatientBean()
 
             if (Constants.isDebug) {
 
@@ -155,6 +192,8 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
                 patient.sixMinRecordsBean = sixMinRecordsBeans
 
                 viewModel.setDates(patient)//新增患者
+
+                return@setNoRepeatListener
             }
 
             if (binding.atvName.text?.isEmpty() == true) {
@@ -177,11 +216,54 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
                 toast("生日不能为空！")
                 return@setNoRepeatListener
             }
-            viewModel.setDates(patient)//新增患者
+
+            patient.addTime = DateUtils.nowTimeString
+
+            patient.name = binding.atvName.text.toString()
+
+            patient.height = binding.atvHeight.text.toString()
+
+            patient.weight = binding.atvWeight.text.toString()
+
+            patient.identityCard = binding.editIdentityCard.text.toString()
+
+            patient.birthday = binding.atvBirthday.text.toString()
+
+            patient.BMI = binding.editBmi.text.toString()
+
+            patient.age = binding.editAge.text.toString()
+
+
+            patient.medicalRecordNumber = binding.atvPaientNumber.text.toString()
+
+            patient.predictDistances = binding.editPredictDistances.text.toString()
+
+            patient.diseaseHistory = binding.editDiseaseHistory.text.toString()
+
+            patient.currentMedications = binding.editCurrentMedications.text.toString()
+
+            patient.clinicalDiagnosis = binding.editClinicalDiagnosis.text.toString()
+
+            patient.remark = binding.editRemark.text.toString()
+
+            if (isUpdate) {
+
+                viewModel.updatePatients(patient)//修改数据
+
+            } else {
+
+                viewModel.setDates(patient)//新增患者
+
+            }
+
+            LogUtils.d(tag + patient.toString())
+
+            dismiss()
         }
 
         binding.btnNo.setNoRepeatListener {
             listener?.onClickCleanBtn()
+            dismiss()
         }
 
         binding.atvBirthday.setNoRepeatListener {

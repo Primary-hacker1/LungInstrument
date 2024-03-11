@@ -199,6 +199,7 @@
 
 
                     <com.justsafe.libview.text.PatientEditText
+                        android:id="@+id/edit_identityCard"
                         android:layout_width="@dimen/space_120"
                         android:layout_height="@dimen/space_28"
                         android:layout_marginStart="@dimen/space_10"
@@ -256,6 +257,7 @@
 
 
                     <com.justsafe.libview.text.PatientEditText
+                        android:id="@+id/edit_age"
                         android:layout_width="@dimen/space_120"
                         android:layout_height="@dimen/space_28"
                         android:layout_marginStart="@dimen/space_10"
@@ -283,6 +285,7 @@
 
 
                     <com.justsafe.libview.text.PatientEditText
+                        android:id="@+id/edit_bmi"
                         android:layout_width="@dimen/space_120"
                         android:layout_height="@dimen/space_28"
                         android:layout_marginStart="@dimen/space_10"
@@ -350,6 +353,7 @@
 
 
                     <com.justsafe.libview.text.PatientEditText
+                        android:id="@+id/edit_predictDistances"
                         android:layout_width="@dimen/space_200"
                         android:layout_height="@dimen/space_28"
                         android:layout_marginStart="@dimen/space_10"
@@ -376,6 +380,7 @@
 
 
                     <com.justsafe.libview.text.PatientEditText
+                        android:id="@+id/edit_diseaseHistory"
                         android:layout_width="@dimen/space_200"
                         android:layout_height="@dimen/space_48"
                         android:layout_marginStart="@dimen/space_10"
@@ -403,6 +408,7 @@
 
 
                     <com.justsafe.libview.text.PatientEditText
+                        android:id="@+id/edit_currentMedications"
                         android:layout_width="@dimen/space_200"
                         android:layout_height="@dimen/space_48"
                         android:layout_marginStart="@dimen/space_10"
@@ -430,6 +436,7 @@
 
 
                     <com.justsafe.libview.text.PatientEditText
+                        android:id="@+id/edit_clinicalDiagnosis"
                         android:layout_width="@dimen/space_200"
                         android:layout_height="@dimen/space_48"
                         android:layout_marginStart="@dimen/space_10"
@@ -458,6 +465,7 @@
 
 
                     <com.justsafe.libview.text.PatientEditText
+                        android:id="@+id/edit_remark"
                         android:layout_width="@dimen/space_200"
                         android:layout_height="@dimen/space_48"
                         android:layout_marginStart="@dimen/space_10"
