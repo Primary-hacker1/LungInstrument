@@ -84,6 +84,12 @@
     <string name="sixmin_system_setting_show_rest_time">是否显示休息时长:</string>
     <string name="sixmin_system_setting_check_yes">是</string>
     <string name="sixmin_system_setting_check_no">否</string>
+    <string name="sixmin_system_setting_export_pwd">导出密码:</string>
+    <string name="sixmin_system_setting_modify_pwd">修改密码:</string>
+    <string name="sixmin_system_setting_confirm_pwd">确认密码:</string>
+    <string name="sixmin_system_setting_bluetooth_ecg">心电蓝牙</string>
+    <string name="sixmin_system_setting_bluetooth_blood">血压蓝牙</string>
+    <string name="sixmin_system_setting_bluetooth_blood_oxygen">血氧蓝牙</string>
     <string name="man">男</string>
     <string name="woman">女</string>
     <string name="add">新增</string>
