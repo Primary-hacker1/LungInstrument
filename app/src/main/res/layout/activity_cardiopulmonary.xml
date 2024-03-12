@@ -4,6 +4,11 @@
 
     <data>
 
+        <import type="com.just.news.R" />
+
+        <variable
+            name="vm"
+            type="com.just.machine.ui.viewmodel.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -11,6 +16,18 @@
         android:layout_height="match_parent"
         tools:ignore="MissingDefaultResource">
 
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/view_toolbar"
+            setTitleImage="@{R.drawable.back}" />
+
+
+        <Button
+            android:id="@+id/setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设置"
+            tools:ignore="MissingConstraints" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

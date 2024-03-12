@@ -102,4 +102,29 @@
     <string name="system_setting">系统设置</string>
     <string name="save">保存</string>
     <string name="report_number">报告编号</string>
+    <string name="hospital_settings">医院设置</string>
+    <string name="hospital_name">医院名称</string>
+    <string name="dynamic_settings">动态肺设置</string>
+    <string name="static_setting">静态肺设置</string>
+    <string name="general_settings">通用设置</string>
+    <string name="hospital_name_mao">医院名称：</string>
+    <string name="login_pass_mao">登陆密码:</string>
+    <string name="_123456789">123456789</string>
+    <string name="update_pass">修改密码:</string>
+    <string name="confirm_password">确认密码:</string>
+    <string name="export_passwords">导出密码:</string>
+    <string name="test_parameters">测试参数</string>
+    <string name="data_backup">数据备份/还原</string>
+    <string name="data_backup_">数据备份</string>
+    <string name="data_restoration">数据还原</string>
+    <string name="device_management">设备管理</string>
+    <string name="ECG">心电仪：</string>
+    <string name="device_overhaul">设备检修</string>
+    <string name="ml">毫升(ML)</string>
+    <string-array name="spinner_items">
+        <item>Item 1</item>
+        <item>Item 2</item>
+        <item>Item 3</item>
+        <!-- 添加更多项 -->
+    </string-array>
 </resources>

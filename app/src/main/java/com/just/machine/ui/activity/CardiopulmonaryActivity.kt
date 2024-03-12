@@ -6,9 +6,12 @@ import android.content.Intent
 import androidx.activity.viewModels
 import com.common.base.CommonBaseActivity
 import com.common.base.gone
+import com.common.base.setNoRepeatListener
 import com.common.base.visible
 import com.just.machine.model.Constants
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.news.databinding.ActivityCardiopulmonaryBinding
+import com.just.news.databinding.ActivityCardiopulmonarySettingBinding
 import com.just.news.databinding.ActivityPatientBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -18,7 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
  *@author zt
  */
 @AndroidEntryPoint
-class CardiopulmonaryActivity : CommonBaseActivity<ActivityPatientBinding>() {
+class CardiopulmonaryActivity : CommonBaseActivity<ActivityCardiopulmonaryBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
 
@@ -37,11 +40,16 @@ class CardiopulmonaryActivity : CommonBaseActivity<ActivityPatientBinding>() {
         binding.toolbar.title = Constants.cardiopulmonary//标题
         binding.toolbar.tvRight.gone()
         binding.toolbar.ivTitleBack.visible()
+
+        binding.setting.setNoRepeatListener{
+            CardiopulmonarySettingActivity.startCSettingActivity(this)
+
+        }
     }
 
     override fun initView() {
         initToolbar()
     }
 
-    override fun getViewBinding() = ActivityPatientBinding.inflate(layoutInflater)
+    override fun getViewBinding() = ActivityCardiopulmonaryBinding.inflate(layoutInflater)
 }
