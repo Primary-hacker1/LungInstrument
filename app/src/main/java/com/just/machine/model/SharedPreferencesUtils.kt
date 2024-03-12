@@ -61,7 +61,7 @@ class SharedPreferencesUtils private constructor() {
     var sixMinSysSetting: String? = null //6分钟系统设置
         get() {
             if (field == null) {
-                field = CommonSharedPreferences.getSPValue(SIX_MIN_SYS_SETTING, sixMinSysSetting)
+                field = CommonSharedPreferences.getSPValue(SIX_MIN_SYS_SETTING, "")
             }
             return field
         }

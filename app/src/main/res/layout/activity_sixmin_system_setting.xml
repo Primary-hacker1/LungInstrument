@@ -122,13 +122,13 @@
                                                 android:textSize="13sp" />
 
                                             <EditText
+                                                android:id="@+id/sixmin_et_alarm_sys_pressure"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_marginHorizontal="5dp"
                                                 android:backgroundTint="@color/colorPrimary"
                                                 android:inputType="number"
                                                 android:maxLength="3"
-                                                android:text="140"
                                                 android:textColor="@color/colorPrimary"
                                                 android:textSize="20sp"
                                                 android:textStyle="bold" />
@@ -172,13 +172,13 @@
                                                 android:textSize="13sp" />
 
                                             <EditText
+                                                android:id="@+id/sixmin_et_alarm_dias_pressure"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_marginHorizontal="5dp"
                                                 android:backgroundTint="@color/colorPrimary"
                                                 android:inputType="number"
                                                 android:maxLength="3"
-                                                android:text="90"
                                                 android:textColor="@color/colorPrimary"
                                                 android:textSize="20sp"
                                                 android:textStyle="bold" />
@@ -231,13 +231,13 @@
                                                 android:textSize="13sp" />
 
                                             <EditText
+                                                android:id="@+id/sixmin_et_alarm_ecg"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_marginHorizontal="5dp"
                                                 android:backgroundTint="@color/colorPrimary"
                                                 android:inputType="number"
                                                 android:maxLength="3"
-                                                android:text="120"
                                                 android:textColor="@color/colorPrimary"
                                                 android:textSize="20sp"
                                                 android:textStyle="bold" />
@@ -280,13 +280,13 @@
                                                 android:textSize="13sp" />
 
                                             <EditText
+                                                android:id="@+id/sixmin_et_alarm_blood_oxygen"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_marginHorizontal="5dp"
                                                 android:backgroundTint="@color/colorPrimary"
                                                 android:inputType="number"
                                                 android:maxLength="2"
-                                                android:text="98"
                                                 android:textColor="@color/colorPrimary"
                                                 android:textSize="20sp"
                                                 android:textStyle="bold" />
@@ -418,13 +418,14 @@
                                         android:background="@drawable/frame_with_color_d6d6d6">
 
                                         <EditText
+                                            android:id="@+id/sixmin_et_other_use_org"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
                                             android:layout_marginStart="20dp"
                                             android:background="@null"
                                             android:backgroundTint="@null"
-                                            android:text="第一人民医院"
+                                            android:maxLines="1"
                                             android:textColor="@color/text3"
                                             android:textSize="12sp" />
                                     </LinearLayout>
@@ -461,6 +462,7 @@
                                             android:background="@drawable/frame_with_color_d6d6d6">
 
                                             <EditText
+                                                android:id="@+id/sixmin_et_other_area_length"
                                                 android:layout_width="0dp"
                                                 android:layout_height="wrap_content"
                                                 android:layout_gravity="center_vertical"
@@ -468,7 +470,8 @@
                                                 android:layout_weight="1"
                                                 android:background="@null"
                                                 android:backgroundTint="@null"
-                                                android:text="30"
+                                                android:inputType="number"
+                                                android:maxLength="5"
                                                 android:textColor="@color/text3"
                                                 android:textSize="12sp" />
 
@@ -556,13 +559,13 @@
                                             android:background="@drawable/frame_with_color_d6d6d6">
 
                                             <EditText
+                                                android:id="@+id/sixmin_et_other_ect_type"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_gravity="center_vertical"
                                                 android:layout_marginStart="20dp"
                                                 android:background="@null"
                                                 android:backgroundTint="@null"
-                                                android:text="7导联"
                                                 android:textColor="@color/text3"
                                                 android:textSize="12sp" />
                                         </LinearLayout>
@@ -613,7 +616,7 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="30dp"
+                                    android:layout_marginStart="38dp"
                                     android:layout_marginTop="8dp"
                                     android:layout_marginEnd="44dp"
                                     android:orientation="horizontal">
@@ -629,7 +632,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
-                                            android:text="@string/sixmin_system_setting_position_of_trolley"
+                                            android:text="@string/sixmin_system_setting_steps_or_breath"
                                             android:textColor="@color/text3"
                                             android:textSize="14sp" />
 
@@ -640,16 +643,16 @@
                                             android:orientation="horizontal">
 
                                             <RadioButton
-                                                android:id="@+id/rb_position_of_trolley_middle"
+                                                android:id="@+id/rb_steps_or_breath_steps"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:text="@string/sixmin_system_setting_position_of_trolley_middle" />
+                                                android:text="@string/sixmin_system_setting_steps_or_breath_steps" />
 
                                             <RadioButton
-                                                android:id="@+id/rb_position_of_trolley_start"
+                                                android:id="@+id/rb_steps_or_breath_breath"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:text="@string/sixmin_system_setting_position_of_trolley_start" />
+                                                android:text="@string/sixmin_system_setting_steps_or_breath_breath" />
                                         </RadioGroup>
                                     </LinearLayout>
 
@@ -703,18 +706,18 @@
                                     android:orientation="horizontal">
 
                                     <LinearLayout
-                                        android:visibility="invisible"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:layout_weight="1"
-                                        android:orientation="horizontal">
+                                        android:orientation="horizontal"
+                                        android:visibility="invisible">
 
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
-                                            android:text="@string/sixmin_system_setting_steps_or_breath"
+                                            android:text="@string/sixmin_system_setting_position_of_trolley"
                                             android:textColor="@color/text3"
                                             android:textSize="14sp" />
 
@@ -725,16 +728,16 @@
                                             android:orientation="horizontal">
 
                                             <RadioButton
-                                                android:id="@+id/rb_steps_or_breath_steps"
+                                                android:id="@+id/rb_position_of_trolley_middle"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:text="@string/sixmin_system_setting_steps_or_breath_steps" />
+                                                android:text="@string/sixmin_system_setting_position_of_trolley_middle" />
 
                                             <RadioButton
-                                                android:id="@+id/rb_steps_or_breath_breath"
+                                                android:id="@+id/rb_position_of_trolley_start"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:text="@string/sixmin_system_setting_steps_or_breath_breath" />
+                                                android:text="@string/sixmin_system_setting_position_of_trolley_start" />
                                         </RadioGroup>
                                     </LinearLayout>
 
@@ -832,38 +835,18 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
-                                        android:text="导出密码:"
+                                        android:text="@string/sixmin_system_setting_export_pwd"
                                         android:textColor="@color/text3"
                                         android:textSize="14sp" />
 
                                     <TextView
+                                        android:id="@+id/sixmin_tv_export_pwd"
                                         android:layout_width="169dp"
                                         android:layout_height="22dp"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="10dp"
                                         android:background="@drawable/frame_with_color_d6d6d6"
                                         android:paddingStart="10dp"
-                                        android:text="123456789"
-                                        android:textColor="@color/text3"
-                                        android:textSize="14sp" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_marginStart="10dp"
-                                        android:text="修改密码:"
-                                        android:textColor="@color/text3"
-                                        android:textSize="14sp" />
-
-                                    <EditText
-                                        android:layout_width="169dp"
-                                        android:layout_height="22dp"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_marginStart="10dp"
-                                        android:background="@drawable/frame_with_color_d6d6d6"
-                                        android:paddingStart="10dp"
-                                        android:text="123456789"
                                         android:textColor="@color/text3"
                                         android:textSize="14sp" />
 
@@ -872,18 +855,40 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="10dp"
-                                        android:text="确认密码:"
+                                        android:text="@string/sixmin_system_setting_modify_pwd"
                                         android:textColor="@color/text3"
                                         android:textSize="14sp" />
 
                                     <EditText
+                                        android:id="@+id/sixmin_et_modify_pwd"
                                         android:layout_width="169dp"
                                         android:layout_height="22dp"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="10dp"
                                         android:background="@drawable/frame_with_color_d6d6d6"
+                                        android:maxLines="1"
                                         android:paddingStart="10dp"
-                                        android:text="123456789"
+                                        android:textColor="@color/text3"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="10dp"
+                                        android:text="@string/sixmin_system_setting_confirm_pwd"
+                                        android:textColor="@color/text3"
+                                        android:textSize="14sp" />
+
+                                    <EditText
+                                        android:id="@+id/sixmin_et_confirm_pwd"
+                                        android:layout_width="169dp"
+                                        android:layout_height="22dp"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="10dp"
+                                        android:background="@drawable/frame_with_color_d6d6d6"
+                                        android:maxLines="1"
+                                        android:paddingStart="10dp"
                                         android:textColor="@color/text3"
                                         android:textSize="14sp" />
 
@@ -945,18 +950,20 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
-                                        android:text="心电蓝牙:"
+                                        android:text="@string/sixmin_system_setting_bluetooth_ecg"
                                         android:textColor="@color/text3"
                                         android:textSize="14sp" />
 
                                     <EditText
+                                        android:id="@+id/sixmin_et_bluetooth_ecg"
                                         android:layout_width="169dp"
                                         android:layout_height="22dp"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="10dp"
                                         android:background="@drawable/frame_with_color_d6d6d6"
                                         android:paddingStart="10dp"
-                                        android:text="123456789"
+                                        android:maxLength="12"
+                                        android:maxLines="1"
                                         android:textColor="@color/text3"
                                         android:textSize="14sp" />
 
@@ -965,18 +972,20 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="10dp"
-                                        android:text="血压蓝牙:"
+                                        android:text="@string/sixmin_system_setting_bluetooth_blood"
                                         android:textColor="@color/text3"
                                         android:textSize="14sp" />
 
                                     <EditText
+                                        android:id="@+id/sixmin_et_bluetooth_blood"
                                         android:layout_width="169dp"
                                         android:layout_height="22dp"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="10dp"
                                         android:background="@drawable/frame_with_color_d6d6d6"
                                         android:paddingStart="10dp"
-                                        android:text="123456789"
+                                        android:maxLength="12"
+                                        android:maxLines="1"
                                         android:textColor="@color/text3"
                                         android:textSize="14sp" />
 
@@ -985,18 +994,20 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="10dp"
-                                        android:text="血氧蓝牙:"
+                                        android:text="@string/sixmin_system_setting_bluetooth_blood_oxygen"
                                         android:textColor="@color/text3"
                                         android:textSize="14sp" />
 
                                     <EditText
+                                        android:id="@+id/sixmin_et_bluetooth_blood_oxygen"
                                         android:layout_width="169dp"
                                         android:layout_height="22dp"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="10dp"
                                         android:background="@drawable/frame_with_color_d6d6d6"
                                         android:paddingStart="10dp"
-                                        android:text="123456789"
+                                        android:maxLines="1"
+                                        android:maxLength="12"
                                         android:textColor="@color/text3"
                                         android:textSize="14sp" />
 
