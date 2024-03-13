@@ -1,4 +1,4 @@
-package com.just.machine.ui.fragment
+package com.just.machine.ui.fragment.setting
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,7 +10,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 /**
  *create by 2020/6/19
- * 设置界面
+ * 总设置界面
  *@author zt
  */
 @AndroidEntryPoint

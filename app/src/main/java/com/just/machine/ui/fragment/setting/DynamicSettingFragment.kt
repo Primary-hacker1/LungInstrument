@@ -1,4 +1,4 @@
-package com.just.machine.ui.fragment
+package com.just.machine.ui.fragment.setting
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,10 +10,11 @@ import dagger.hilt.android.AndroidEntryPoint
 
 /**
  *create by 2020/6/19
+ * 运动肺设置
  *@author zt
  */
 @AndroidEntryPoint
-class StaticSettingFragment : CommonBaseFragment<FragmentAllSettingBinding>() {
+class DynamicSettingFragment : CommonBaseFragment<FragmentAllSettingBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
     override fun loadData() {//懒加载

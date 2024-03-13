@@ -1,4 +1,4 @@
-package com.just.machine.ui.fragment
+package com.just.machine.ui.fragment.setting
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -30,10 +30,10 @@ class AllSettingFragment : CommonBaseFragment<FragmentAllSettingBinding>() {
 
     override fun initListener() {
 
-        // 预计方案
-        val spScenarios = SpinnerHelper(requireContext(), binding.spScenarios, R.array.spinner_items)
+        val spScenarios =
+            SpinnerHelper(requireContext(), binding.spScenarios, R.array.spinner_items)
         spScenarios.setSpinnerSelectionListener(object : SpinnerHelper.SpinnerSelectionListener {
-            override fun onItemSelected(selectedItem: String) {
+            override fun onItemSelected(selectedItem: String) {// 预计方案
                 LogUtils.d(tag + selectedItem)
             }
 
@@ -42,10 +42,10 @@ class AllSettingFragment : CommonBaseFragment<FragmentAllSettingBinding>() {
             }
         })
 
-        // 呼吸面罩
-        val spBreathing = SpinnerHelper(requireContext(), binding.spBreathing, R.array.spinner_items)
+        val spBreathing =
+            SpinnerHelper(requireContext(), binding.spBreathing, R.array.spinner_items)
         spBreathing.setSpinnerSelectionListener(object : SpinnerHelper.SpinnerSelectionListener {
-            override fun onItemSelected(selectedItem: String) {
+            override fun onItemSelected(selectedItem: String) {// 呼吸面罩
                 LogUtils.d(tag + selectedItem)
             }
 

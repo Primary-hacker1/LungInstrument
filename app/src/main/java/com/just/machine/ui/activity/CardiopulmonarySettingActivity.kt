@@ -8,10 +8,10 @@ import com.common.base.gone
 import com.common.base.setNoRepeatListener
 import com.common.base.visible
 import com.just.machine.model.Constants
-import com.just.machine.ui.fragment.AllSettingFragment
-import com.just.machine.ui.fragment.DynamicSettingFragment
+import com.just.machine.ui.fragment.setting.AllSettingFragment
+import com.just.machine.ui.fragment.setting.DynamicSettingFragment
 import com.just.machine.ui.fragment.FragmentPagerAdapter
-import com.just.machine.ui.fragment.StaticSettingFragment
+import com.just.machine.ui.fragment.setting.StaticSettingFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.LiveDataBus
 import com.just.news.R

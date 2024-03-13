@@ -37,7 +37,7 @@
 
     <fragment_navigator
         android:id="@+id/settingFragment"
-        android:name="com.just.machine.ui.fragment.SettingFragment"
+        android:name="com.just.machine.ui.fragment.setting.SettingFragment"
         android:label="settingFragment"
         tools:layout="@layout/fragment_setting">
         <action
