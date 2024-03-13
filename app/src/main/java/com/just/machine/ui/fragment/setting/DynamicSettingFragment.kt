@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import com.common.base.*
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.databinding.FragmentAllSettingBinding
+import com.just.news.databinding.FragmentDynamicSettingBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -14,7 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
  *@author zt
  */
 @AndroidEntryPoint
-class DynamicSettingFragment : CommonBaseFragment<FragmentAllSettingBinding>() {
+class DynamicSettingFragment : CommonBaseFragment<FragmentDynamicSettingBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
     override fun loadData() {//懒加载
@@ -28,5 +29,5 @@ class DynamicSettingFragment : CommonBaseFragment<FragmentAllSettingBinding>() {
     }
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
-        FragmentAllSettingBinding.inflate(inflater, container, false)
+        FragmentDynamicSettingBinding.inflate(inflater, container, false)
 }

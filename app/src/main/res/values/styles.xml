@@ -15,4 +15,9 @@
         <item name="android:textAllCaps">true</item>
     </style>
 
+    <style name="CustomCheckBox" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/custom_checkbox_selector</item>
+    </style>
+
+
 </resources>
