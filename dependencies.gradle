@@ -22,6 +22,7 @@ ext {
     datastore_core = "1.0.0-alpha04"
     freemarker = "2.3.31"
     pdf_viewer = "2.8.2"
+    android_chart = "v3.1.0"
 
     gradleBase = [
             junit    : "junit:junit:${junit}",
@@ -52,7 +53,8 @@ ext {
             datastore_preferences         : "androidx.datastore:datastore-preferences:$datastore_core",
             datastore_core                : "androidx.datastore:datastore-core:$datastore_core",
             freemarker                    : "org.freemarker:freemarker:$freemarker",
-            pdf_viewer                    : "com.github.barteksc:android-pdf-viewer:$pdf_viewer"
+            pdf_viewer                    : "com.github.barteksc:android-pdf-viewer:$pdf_viewer",
+            android_chart                 : "com.github.PhilJay:MPAndroidChart:$android_chart"
     ]
 
     libview = [

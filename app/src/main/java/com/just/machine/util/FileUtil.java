@@ -6,9 +6,19 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FileUtil {
 
@@ -90,6 +100,7 @@ public class FileUtil {
 
     /**
      * 获取文件夹大小
+     *
      * @param folderPath
      * @return
      */
@@ -119,5 +130,56 @@ public class FileUtil {
         void onSuccess();
 
         void onFailed(String error);
+    }
+
+    /**
+     * 初始化图表
+     */
+    public void initChart(LineChart lineChart) {
+        /***图表设置***/
+        //是否展示网格线
+        lineChart.setDrawGridBackground(false);
+        //是否显示边界
+        lineChart.setDrawBorders(true);
+        //是否可以拖动
+        lineChart.setDragEnabled(false);
+        //是否有触摸事件
+        lineChart.setTouchEnabled(true);
+        //设置XY轴动画效果
+        lineChart.animateY(2500);
+        lineChart.animateX(1500);
+
+        /***XY轴的设置***/
+        XAxis xAxis = lineChart.getXAxis();
+        YAxis leftYAxis = lineChart.getAxisLeft();
+        YAxis rightYaxis = lineChart.getAxisRight();
+        //X轴设置显示位置在底部
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setAxisMinimum(0f);
+        xAxis.setGranularity(1f);
+        //保证Y轴从0开始，不然会上移一点
+        leftYAxis.setAxisMinimum(0f);
+        rightYaxis.setAxisMinimum(0f);
+
+        /***折线图例 标签 设置***/
+        Legend legend = lineChart.getLegend();
+        //设置显示类型，LINE CIRCLE SQUARE EMPTY 等等 多种方式，查看LegendForm 即可
+        legend.setForm(Legend.LegendForm.LINE);
+        legend.setTextSize(12f);
+        //显示位置 左下方
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        //是否绘制在图表里面
+        legend.setDrawInside(false);
+    }
+
+
+    /**
+     * 展示曲线
+     */
+    public void showLineChart(LineChart lineChart, LineData entries) {
+        lineChart.setData(entries);
+        lineChart.invalidate();
     }
 }
