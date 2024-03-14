@@ -122,4 +122,7 @@ dependencies {
     implementation presentationDependencies.freemarker
     implementation presentationDependencies.pdf_viewer
     implementation (group: 'com.aspose', name: 'aspose-words', version: '20.6', classifier: 'android.via.java')
+
+    //chart
+    implementation presentationDependencies.android_chart
 }

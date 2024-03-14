@@ -1,11 +1,15 @@
 package com.just.machine.ui.activity
 
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.common.base.CommonBaseActivity
+import com.common.base.bind
 import com.google.gson.Gson
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.systemsetting.SixMinSysSettingBean
 import com.just.machine.util.KeyboardUtil
+import com.just.machine.util.SixMinCmdUtils
+import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.ActivitySixminSystemSettingBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,6 +61,50 @@ class SixMinSystemSettingActivity : CommonBaseActivity<ActivitySixminSystemSetti
             }
             autoCircleCount = !autoCircleCount
         }
+        binding.sixminLlSave.setOnClickListener {
+            val gson = Gson()
+            val sysSettingBean = SixMinSysSettingBean()
+
+            //报警设置
+            sysSettingBean.sysAlarm.highPressure = binding.sixminEtAlarmSysPressure.text.toString()
+            sysSettingBean.sysAlarm.lowPressure = binding.sixminEtAlarmDiasPressure.text.toString()
+            sysSettingBean.sysAlarm.heartBeat = binding.sixminEtAlarmEcg.text.toString()
+            sysSettingBean.sysAlarm.bloodOxy = binding.sixminEtAlarmBloodOxygen.text.toString()
+            //其它设置
+            sysSettingBean.sysOther.circleCountType = if (autoCircleCount) "0" else "1"
+            sysSettingBean.sysOther.useOrg = binding.sixminEtOtherUseOrg.text.toString()
+            sysSettingBean.sysOther.areaLength = binding.sixminEtOtherAreaLength.text.toString()
+            sysSettingBean.sysOther.broadcastVoice =
+                if (binding.rbBroadcastGuidanceVoiceYes.isChecked) "1" else "0"
+            sysSettingBean.sysOther.autoMeasureBlood =
+                if (binding.rbAutoMearsureBloodYes.isChecked) "1" else "0"
+            sysSettingBean.sysOther.autoStart =
+                if (binding.rbAutoStartTestYes.isChecked) "1" else "0"
+            sysSettingBean.sysOther.showResetTime =
+                if (binding.rbShowRestTimeYes.isChecked) "1" else "0"
+            sysSettingBean.sysOther.stepsOrBreath =
+                if (binding.rbStepsOrBreathBreath.isChecked) "1" else "0"
+            //密码修改
+            sysSettingBean.sysPwd.exportPwd = binding.sixminTvExportPwd.text.toString()
+            sysSettingBean.sysPwd.modifyPwd = binding.sixminEtModifyPwd.text.toString()
+            sysSettingBean.sysPwd.confirmPwd = binding.sixminEtConfirmPwd.text.toString()
+            //蓝牙设置
+            if (sysSettingBean.sysBlue.ecgBlue != binding.sixminEtBluetoothEcg.text.toString() || sysSettingBean.sysBlue.bloodBlue != binding.sixminEtBluetoothBlood.text.toString() || sysSettingBean.sysBlue.bloodOxyBlue != binding.sixminEtBluetoothBloodOxygen.text.toString()) {
+                //蓝牙配置有变动需要同步到设备
+                SixMinCmdUtils.dealBluetooth(
+                    binding.sixminEtBluetoothEcg.text.toString(),
+                    binding.sixminEtBluetoothBlood.text.toString(),
+                    binding.sixminEtBluetoothBloodOxygen.text.toString()
+                )
+            }
+            sysSettingBean.sysBlue.ecgBlue = binding.sixminEtBluetoothEcg.text.toString()
+            sysSettingBean.sysBlue.bloodBlue = binding.sixminEtBluetoothBlood.text.toString()
+            sysSettingBean.sysBlue.bloodOxyBlue =
+                binding.sixminEtBluetoothBloodOxygen.text.toString()
+
+            SharedPreferencesUtils.instance.sixMinSysSetting = gson.toJson(sysSettingBean)
+            Toast.makeText(this, "系统设置保存成功!", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun initToolbar() {
@@ -85,7 +133,7 @@ class SixMinSystemSettingActivity : CommonBaseActivity<ActivitySixminSystemSetti
                     sixMinSysSetting, SixMinSysSettingBean::class.java
                 )
             }
-
+            autoCircleCount = sysSettingBean.sysOther.circleCountType == "0"
             //报警设置
             binding.sixminEtAlarmSysPressure.setText(sysSettingBean.sysAlarm.highPressure)
             binding.sixminEtAlarmDiasPressure.setText(sysSettingBean.sysAlarm.lowPressure)
@@ -138,6 +186,16 @@ class SixMinSystemSettingActivity : CommonBaseActivity<ActivitySixminSystemSetti
             binding.sixminEtOtherAreaLength.setText(sysSettingBean.sysOther.areaLength)
             binding.sixminEtOtherEctType.setText(sysSettingBean.sysOther.ectType)
             //密码修改
+            binding.sixminTvExportPwd.text = sysSettingBean.sysPwd.exportPwd
+            binding.sixminEtModifyPwd.setText(sysSettingBean.sysPwd.modifyPwd)
+            binding.sixminEtConfirmPwd.setText(sysSettingBean.sysPwd.confirmPwd)
+            //蓝牙设置
+            binding.sixminEtBluetoothEcg.setText(sysSettingBean.sysBlue.ecgBlue)
+            binding.sixminEtBluetoothBlood.setText(sysSettingBean.sysBlue.bloodBlue)
+            binding.sixminEtBluetoothBloodOxygen.setText(sysSettingBean.sysBlue.bloodOxyBlue)
+            //系统信息
+            binding.sixminTvSystemInfo.text =
+                "发布版本: ${sysSettingBean.publishVer}                     完整版本: ${sysSettingBean.completeVer}                     ${sysSettingBean.copyRight}"
         } catch (e: Exception) {
             e.printStackTrace()
         }
