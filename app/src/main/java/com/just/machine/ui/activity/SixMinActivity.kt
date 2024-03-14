@@ -278,11 +278,12 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 text = ""
             }
             xAxis?.apply {
-                textSize = 11f
+                textSize = 9f
                 textColor = ContextCompat.getColor(this@SixMinActivity, R.color.colorWhile)
                 //X轴最大值和最小值
                 axisMaximum = 6F
                 axisMinimum = 0F
+                offsetLeftAndRight(10)
                 //X轴每个值的差值(缩放时可以体现出来)
                 granularity = 1f
                 //X轴的位置
