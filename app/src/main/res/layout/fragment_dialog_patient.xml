@@ -110,20 +110,23 @@
 
                         <RadioButton
                             android:id="@+id/rb_man"
+                            style="@style/CustomRadioButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checked="true"
-                            android:textSize="18sp"
+                            android:text="@string/man"
                             android:textColor="@color/light_gray"
-                            android:text="@string/man" />
+                            android:textSize="18sp" />
 
                         <RadioButton
                             android:id="@+id/rb_woman"
+                            style="@style/CustomRadioButton"
+                            android:layout_marginStart="@dimen/space_10"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="18sp"
+                            android:text="@string/woman"
                             android:textColor="@color/light_gray"
-                            android:text="@string/woman" />
+                            android:textSize="18sp" />
                     </RadioGroup>
 
                 </LinearLayout>
@@ -230,14 +233,13 @@
                         android:layout_width="@dimen/space_120"
                         android:layout_height="@dimen/space_28"
                         android:layout_marginStart="@dimen/space_10"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:paddingStart="@dimen/space_5"
                         android:background="@drawable/patient_edittext_bg"
-                        android:textColorHint="@color/login_hit"
-                        android:textSize="15sp"
                         android:gravity="left|center_vertical"
-                        />
+                        android:maxLines="1"
+                        android:paddingStart="@dimen/space_5"
+                        android:singleLine="true"
+                        android:textColorHint="@color/login_hit"
+                        android:textSize="15sp" />
 
                 </LinearLayout>
 
@@ -302,8 +304,8 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_20"
                 android:layout_marginStart="@dimen/space_50"
+                android:layout_marginTop="@dimen/space_20"
                 android:gravity="right"
                 android:orientation="vertical">
 
@@ -328,9 +330,9 @@
                         android:id="@+id/atvPaientNumber"
                         android:layout_width="@dimen/space_200"
                         android:layout_height="@dimen/space_28"
+                        android:layout_marginStart="@dimen/space_10"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:layout_marginStart="@dimen/space_10"
                         android:textColorHint="@color/login_hit"
                         android:textSize="15sp"
                         app:ed_backgroundColor="true" />
@@ -441,8 +443,8 @@
                         android:layout_height="@dimen/space_48"
                         android:layout_marginStart="@dimen/space_10"
                         android:maxLines="1"
-                        android:singleLine="true"
                         android:paddingBottom="@dimen/space_50"
+                        android:singleLine="true"
                         android:textColorHint="@color/login_hit"
                         android:textSize="15sp"
                         app:ed_backgroundColor="true" />
@@ -494,8 +496,8 @@
                 android:layout_marginEnd="@dimen/space_20"
                 android:background="@drawable/dialog_btn_no"
                 android:text="@string/cancel"
-                android:textSize="18sp"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="18sp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_yes"
@@ -503,8 +505,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/dialog_btn"
                 android:text="@string/yes"
-                android:textSize="18sp"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="18sp" />
 
         </LinearLayout>
 

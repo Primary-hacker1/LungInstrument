@@ -17,6 +17,14 @@
 
     <style name="CustomCheckBox" parent="@android:style/Widget.CompoundButton.CheckBox">
         <item name="android:button">@drawable/custom_checkbox_selector</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:layout_marginStart">48dp</item>
+
+    </style>
+
+    <style name="CustomRadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/radio_button_selector</item>
+        <item name="android:paddingStart">8dp</item>
     </style>
 
 

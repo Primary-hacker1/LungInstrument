@@ -127,6 +127,10 @@
     <string name="ECG">心电仪：</string>
     <string name="device_overhaul">设备检修</string>
     <string name="ml">毫升(ML)</string>
+    <string name="assessment_process">评估流程</string>
+    <string name="report_shows">报告显示</string>
+    <string name="exercise_prescription">运动处方</string>
+    <string name="cpet">CPET设置</string>
     <string-array name="spinner_items">
         <item>Item 1</item>
         <item>Item 2</item>
