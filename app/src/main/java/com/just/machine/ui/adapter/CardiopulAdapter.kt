@@ -13,29 +13,6 @@ import com.just.news.databinding.ItemLayoutCardiopulTestBinding
 class CardiopulAdapter
     : BaseRecyclerViewAdapter<CardiopulmonaryRecordsBean, ItemLayoutCardiopulTestBinding>()  {
 
-//    override fun bindViewHolder(
-//        viewHolder: BaseDataBingViewHolder<ItemLayoutCardiopulTestBinding>,
-//        position: Int,
-//        t: CardiopulmonaryRecordsBean
-//    ) {
-//        super.bindViewHolder(viewHolder, position, t)
-//
-//        viewHolder.binding.atvConventionalVentilation.text = itemData[position].conventionalVentilation
-//        viewHolder.binding.atvForcedVitalCapacity.text = itemData[position].forcedVitalCapacity
-//        viewHolder.binding.atvMaximumVentilation.text = itemData[position].maximumVentilation
-//        viewHolder.binding.atvExerciseLungTest.text = itemData[position].exerciseLungTest
-//        viewHolder.binding.atvAssess.text = itemData[position].assess
-//
-//        viewHolder.binding.btnDelete.setOnClickListener {
-//            deleteItem(viewHolder.adapterPosition)
-//        }
-//
-//        viewHolder.binding.llItem.setOnClickListener {
-//            listener?.onClickItem(itemData[position])
-//        }
-//    }
-
-
     override fun bindData(item: CardiopulmonaryRecordsBean) {
         binding.item = item
     }
