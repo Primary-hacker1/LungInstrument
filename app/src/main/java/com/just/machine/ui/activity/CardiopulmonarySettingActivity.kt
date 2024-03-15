@@ -83,7 +83,7 @@ class CardiopulmonarySettingActivity : CommonBaseActivity<ActivityCardiopulmonar
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 // 当页面被选中时执行你的操作
-                LogUtils.d(tag + "ViewPager2Selected page: $position")
+//                LogUtils.d(tag + "ViewPager2Selected page: $position")
 
                 setButtonPosition(position)
 
