@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
+import com.common.viewmodel.LiveDataEvent
+import com.just.machine.dao.PatientBean
 import com.just.machine.model.CommonSharedPreferences.privateSet
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.ui.activity.CardiopulmonaryActivity
@@ -26,7 +28,19 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
+    private var patientListSize = 0
     override fun loadData() {//懒加载
+        viewModel.getPatients()
+        viewModel.mEventHub.observe(this) {
+            when (it.action) {
+                LiveDataEvent.QuerySuccess -> {
+                    if (it.any is List<*>) {
+                        val datas = it.any as MutableList<*>
+                        patientListSize = datas.size
+                    }
+                }
+            }
+        }
     }
 
     override fun initView() {
@@ -35,9 +49,8 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
 
     override fun initListener() {
         binding.walkTestButton.setNoRepeatListener {
-            val isClick = SharedPreferencesUtils.instance.isClickBtn
-            when (isClick) {
-                "" -> {
+            when (patientListSize) {
+                0 -> {
                     val patientDialogFragment =
                         PatientDialogFragment.startPatientDialogFragment(parentFragmentManager)//添加患者修改患者信息
                     patientDialogFragment.setDialogOnClickListener(object :
@@ -54,13 +67,10 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                         }
                     })
                 }
-
-                "1" -> {
+                else -> {
                     val intent = Intent(activity, SixMinActivity::class.java)
                     startActivity(intent)
                 }
-
-                null -> TODO()
             }
         }
 

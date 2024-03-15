@@ -5,17 +5,22 @@ import android.content.Intent
 import android.graphics.Color
 import android.speech.tts.TextToSpeech
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.common.base.CommonBaseActivity
 import com.common.base.setNoRepeatListener
+import com.common.network.LogUtils
+import com.common.viewmodel.LiveDataEvent
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.gson.Gson
+import com.just.machine.dao.PatientBean
 import com.just.machine.model.UsbSerialData
+import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.FileUtil
 import com.just.machine.util.FixCountDownTime
 import com.just.machine.util.LiveDataBus
@@ -27,6 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.FileInputStream
 import java.util.Locale
+import java.util.Random
 
 
 @AndroidEntryPoint
@@ -36,6 +42,9 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
     private lateinit var textToSpeech: TextToSpeech
     private lateinit var mCountDownTime: FixCountDownTime
     private lateinit var exitTestDialog: AlertDialog
+    private lateinit var bloodOxyDataSet: LineDataSet
+    private val viewModel by viewModels<MainViewModel>()
+    private lateinit var patientBean: PatientBean
 
     override fun initView() {
         binding.sixminLlDevicesStatus.setBackgroundColor(
@@ -66,6 +75,16 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                     binding.sixminIvBloodPressure.setImageResource(R.mipmap.xueyangno)
                     binding.sixminIvBloodOxygen.setImageResource(R.mipmap.xueyangno)
                     binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi00)
+                }
+            }
+        }
+
+        viewModel.getPatients()
+
+        viewModel.mEventHub.observe(this) {
+            when (it.action) {
+                LiveDataEvent.QuerySuccess -> {
+                    it.any?.let { it1 -> beanQuery(it1) }
                 }
             }
         }
@@ -221,34 +240,14 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
 //                null,
 //                null
 //            )
-            val entries: MutableList<Entry> = java.util.ArrayList()
-            for (i in 0..9) {
-                val entry = Entry(0f, (i + 85).toFloat())
-                entries.add(entry)
-            }
-            val lineDataSet = LineDataSet(entries, "")
-            lineDataSet.lineWidth = 1.0f
-            lineDataSet.color = ContextCompat.getColor(this@SixMinActivity, R.color.colorWhile)
-            lineDataSet.setDrawValues(false)
-            lineDataSet.setDrawCircles(false)
-            val lineData = LineData(lineDataSet)
-            binding.sixminLineChartBloodOxygen.data = lineData
-            binding.sixminLineChartBloodOxygen.invalidate()
-        }
-
-        binding.btnMeasureBlood.setOnClickListener {
-            val entries: MutableList<Entry> = java.util.ArrayList()
-            for (i in 1..9) {
-                val entry = Entry(1f, (i + 85).toFloat())
-                entries.add(entry)
-            }
-            val lineDataSet = LineDataSet(entries, "")
-            lineDataSet.lineWidth = 1.0f
-            lineDataSet.color = ContextCompat.getColor(this@SixMinActivity, R.color.colorWhile)
-            lineDataSet.setDrawValues(false)
-            lineDataSet.setDrawCircles(false)
-            val lineData = LineData(lineDataSet)
-            binding.sixminLineChartBloodOxygen.data = lineData
+            val random = Random()
+            bloodOxyDataSet.addEntry(
+                Entry(
+                    random.nextInt(6).toFloat(),
+                    (random.nextInt(10) + 90).toFloat()
+                )
+            )
+            binding.sixminLineChartBloodOxygen.notifyDataSetChanged()
             binding.sixminLineChartBloodOxygen.invalidate()
         }
 
@@ -258,16 +257,34 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         }
     }
 
+    private fun beanQuery(any: Any) {
+        try {
+            if (any is List<*>) {
+                val datas = any as MutableList<*>
+                patientBean = datas[0] as PatientBean
+                binding.sixminTvTestPatientName.text = patientBean.name
+                binding.sixminTvTestPatientSex.text = patientBean.sex
+                binding.sixminTvTestPatientAge.text = patientBean.age
+                binding.sixminTvTestPatientHight.text = patientBean.height
+                binding.sixminTvTestPatientWeight.text = patientBean.weight
+                binding.sixminTvTestPatientBmi.text = patientBean.BMI
+            }
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
     private fun initLineChart() {
         binding.sixminLineChartBloodOxygen.apply {
             dragDecelerationFrictionCoef = 0.9f
             isDragEnabled = false
             //开启缩放功能
             setScaleEnabled(false)
+            clearAnimation()
             //绘制网格线的背景
             setDrawGridBackground(false)
             //绘制动画的总时长
-            animateX(500)
+//            animateX(500)
             //是否开启右边Y轴
             axisRight?.isEnabled = false
             //设置图标的标题
@@ -305,7 +322,6 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                     }
                 }
             }
-
             axisLeft?.apply {
                 textColor = ContextCompat.getColor(this@SixMinActivity, R.color.colorWhile)
                 //左侧Y轴的最大值和最小值
@@ -325,16 +341,15 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 setDrawInside(false)
                 formSize = 0f
             }
-            val lineDataSet = LineDataSet(null, "")
-            lineDataSet.lineWidth = 1.0f
-            lineDataSet.color = ContextCompat.getColor(this@SixMinActivity, R.color.colorWhile)
-            lineDataSet.setDrawValues(false)
-            lineDataSet.setDrawCircles(false)
-            lineDataSet.setDrawFilled(true)
-            lineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER;
-            val lineData = LineData(lineDataSet)
+            bloodOxyDataSet = LineDataSet(null, "")
+            bloodOxyDataSet.lineWidth = 1.0f
+            bloodOxyDataSet.color = ContextCompat.getColor(this@SixMinActivity, R.color.colorWhile)
+            bloodOxyDataSet.setDrawValues(false)
+            bloodOxyDataSet.setDrawCircles(false)
+            bloodOxyDataSet.setDrawFilled(true)
+            bloodOxyDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER;
+            val lineData = LineData(bloodOxyDataSet)
             data = lineData
-
         }
     }
 

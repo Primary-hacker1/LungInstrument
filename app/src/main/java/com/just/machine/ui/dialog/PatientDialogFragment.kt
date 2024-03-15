@@ -4,6 +4,8 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.DisplayMetrics
 import android.view.Gravity
 import androidx.core.content.ContextCompat
@@ -19,6 +21,7 @@ import com.just.machine.model.CardiopulmonaryRecordsBean
 import com.just.machine.model.Constants
 import com.just.machine.model.SixMinRecordsBean
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.machine.util.CommonUtil
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogPatientBinding
 import com.justsafe.libview.util.DateUtils
@@ -93,6 +96,9 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
 
     override fun initView() {
         binding.tvTitle.text = Constants.addPatient//标题
+        binding.atvHeight.addTextChangedListener(textWatcher)
+        binding.atvWeight.addTextChangedListener(textWatcher)
+        binding.editIdentityCard.addTextChangedListener(idCardWatcher)
     }
 
     override fun initData() {
@@ -156,11 +162,7 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
 
         binding.btnYes.setNoRepeatListener {
 
-            listener?.onClickConfirmBtn()
-
-            hideKeyboard(it.windowToken)
-
-            if (Constants.isDebug) {
+            if (!Constants.isDebug) {
 
                 patient.name = "张三$index"
 
@@ -233,6 +235,7 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
 
             patient.age = binding.editAge.text.toString()
 
+            patient.sex = if(binding.rbMan.isChecked) "男" else "女"
 
             patient.medicalRecordNumber = binding.atvPaientNumber.text.toString()
 
@@ -255,6 +258,10 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
                 viewModel.setDates(patient)//新增患者
 
             }
+
+            listener?.onClickConfirmBtn()
+
+            hideKeyboard(it.windowToken)
 
             LogUtils.d(tag + patient.toString())
 
@@ -295,7 +302,8 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
 
                     val time = StringUtils.conversionTime(it)
 
-                    binding.atvBirthday.setText(time)
+                    binding.atvBirthday.text = time
+                    binding.editAge.setText(CommonUtil.getAge(time).toString())
                 }
                 .setOnCancel("关闭") {
                 }.build()
@@ -304,6 +312,44 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
         }
     }
 
+    private val textWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+        }
+
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+        }
+        override fun afterTextChanged(s: Editable) {
+            // 这里处理两个EditText的文本变化
+            val height = binding.atvHeight.text.toString()
+            val weight = binding.atvWeight.text.toString()
+            if(height.isNotEmpty() && weight.isNotEmpty()){
+                binding.editBmi.setText( String.format("%.1f", CommonUtil.calculateBmi(height.toDouble()/100, weight.toDouble())))
+            }
+        }
+    }
+
+    private val idCardWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+        }
+
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+        }
+        override fun afterTextChanged(s: Editable) {
+            val idCard = binding.editIdentityCard.text.toString()
+            val sex = CommonUtil.isSex(idCard)
+            if(sex == 1){
+               binding.rbMan.isChecked = true
+               binding.rbWoman.isChecked = false
+            }else{
+                binding.rbMan.isChecked = false
+                binding.rbWoman.isChecked = true
+            }
+            val birthdayFromIdCard = CommonUtil.getBirthdayFromIdCard(idCard)
+            binding.atvBirthday.text = birthdayFromIdCard
+            val age = CommonUtil.getAgeFromIdCard(idCard)
+            binding.editAge.setText(age)
+        }
+    }
 
     override fun getLayout(): Int {
         return R.layout.fragment_dialog_patient
