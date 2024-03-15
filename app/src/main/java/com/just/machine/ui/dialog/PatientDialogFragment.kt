@@ -98,6 +98,7 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
         binding.tvTitle.text = Constants.addPatient//标题
         binding.atvHeight.addTextChangedListener(textWatcher)
         binding.atvWeight.addTextChangedListener(textWatcher)
+        binding.editIdentityCard.addTextChangedListener(idCardWatcher)
     }
 
     override fun initData() {
@@ -324,6 +325,29 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
             if(height.isNotEmpty() && weight.isNotEmpty()){
                 binding.editBmi.setText( String.format("%.1f", CommonUtil.calculateBmi(height.toDouble()/100, weight.toDouble())))
             }
+        }
+    }
+
+    private val idCardWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+        }
+
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+        }
+        override fun afterTextChanged(s: Editable) {
+            val idCard = binding.editIdentityCard.text.toString()
+            val sex = CommonUtil.isSex(idCard)
+            if(sex == 1){
+               binding.rbMan.isChecked = true
+               binding.rbWoman.isChecked = false
+            }else{
+                binding.rbMan.isChecked = false
+                binding.rbWoman.isChecked = true
+            }
+            val birthdayFromIdCard = CommonUtil.getBirthdayFromIdCard(idCard)
+            binding.atvBirthday.text = birthdayFromIdCard
+            val age = CommonUtil.getAgeFromIdCard(idCard)
+            binding.editAge.setText(age)
         }
     }
 
