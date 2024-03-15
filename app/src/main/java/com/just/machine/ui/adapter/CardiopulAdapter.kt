@@ -11,9 +11,9 @@ import com.just.news.databinding.ItemLayoutCardiopulTestBinding
  *@author zt
  */
 class CardiopulAdapter
-    : BaseRecyclerViewAdapter<CardiopulmonaryRecordsBean, ItemLayoutCardiopulTestBinding>()  {
+    : BaseRecyclerViewAdapter<CardiopulmonaryRecordsBean, ItemLayoutCardiopulTestBinding>() {
 
-    override fun bindData(item: CardiopulmonaryRecordsBean) {
+    override fun bindData(item: CardiopulmonaryRecordsBean, position: Int) {
         binding.item = item
     }
 

@@ -10,31 +10,9 @@ import com.just.news.databinding.ItemLayoutSixTestBinding
  * 患者六分钟测试数据
  *@author zt
  */
-class SixMinAdapter()
-    : BaseRecyclerViewAdapter<SixMinRecordsBean, ItemLayoutSixTestBinding>() {
+class SixMinAdapter() : BaseRecyclerViewAdapter<SixMinRecordsBean, ItemLayoutSixTestBinding>() {
 
-//    override fun bindViewHolder(
-//        viewHolder: BaseDataBingViewHolder<ItemLayoutSixTestBinding>,
-//        position: Int,
-//        t: SixMinRecordsBean
-//    ) {
-//        super.bindViewHolder(viewHolder, position, t)
-//
-//        viewHolder.binding.atvTestTime.text = itemData[position].reportNo
-//
-//        viewHolder.binding.atvNumber.text = itemData[position].testTime
-//
-//        viewHolder.binding.btnDelete.setOnClickListener {
-//            deleteItem(viewHolder.adapterPosition)
-//        }
-//
-//        viewHolder.binding.llItem.setOnClickListener {
-//            listener?.onClickItem(itemData[position])
-//        }
-//
-//    }
-
-    override fun bindData(item: SixMinRecordsBean) {
+    override fun bindData(item: SixMinRecordsBean, position: Int) {
         binding.item = item
     }
 

@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:baselineAligned="false"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -33,9 +34,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_5"
-                    android:text="SVC设置"
+                    android:text="@string/svc_setting"
+                    android:textColor="@color/text3"
                     android:textSize="18sp"
-                    android:textColor="@color/text3"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -49,7 +50,7 @@
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="X轴时间量程："
+                    android:text="@string/x_time"
                     android:textColor="@color/text3"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -68,7 +69,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_5"
-                    android:text="秒(s)"
+                    android:text="@string/min_s"
                     android:textColor="@color/text3"
                     android:textStyle="bold" />
 
@@ -83,7 +84,7 @@
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Y轴时间上限："
+                    android:text="@string/y_time_up"
                     android:textColor="@color/text3"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -117,7 +118,7 @@
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Y轴时间下限："
+                    android:text="@string/y_time_down"
                     android:textColor="@color/text3"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -144,88 +145,93 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="120dp"
                 android:layout_marginTop="@dimen/space_38"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/space_5"
-                    android:text="VT基线："
-                    android:textColor="@color/text3"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <RadioButton
-                        style="@style/CustomRadioButton"
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="显示"
-                        android:textSize="14sp" />
+                        android:layout_marginStart="@dimen/space_5"
+                        android:text="@string/vt_base_line"
+                        android:textColor="@color/text3"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
 
-                    <RadioButton
-                        style="@style/CustomRadioButton"
-                        android:layout_width="wrap_content"
+                    <RadioGroup
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_15"
-                        android:text="不显示"
-                        android:textSize="14sp" />
-                </RadioGroup>
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-            </LinearLayout>
+                        <RadioButton
+                            style="@style/CustomRadioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/display"
+                            android:textSize="14sp" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_18"
-                android:orientation="horizontal">
+                        <RadioButton
+                            style="@style/CustomRadioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_15"
+                            android:text="@string/display_no"
+                            android:textSize="14sp" />
+                    </RadioGroup>
 
-                <androidx.appcompat.widget.AppCompatTextView
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/space_5"
-                    android:text="视频自动播放："
-                    android:textSize="15sp"
-                    android:textColor="@color/text3"
-                    android:textStyle="bold" />
-
-                <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/space_18"
                     android:orientation="horizontal">
 
-                    <RadioButton
-                        style="@style/CustomRadioButton"
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="是"
-                        android:textSize="14sp" />
+                        android:layout_marginStart="@dimen/space_5"
+                        android:text="视频自动播放："
+                        android:textColor="@color/text3"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
 
-                    <RadioButton
-                        style="@style/CustomRadioButton"
-                        android:layout_width="wrap_content"
+                    <RadioGroup
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_15"
-                        android:text="否"
-                        android:textSize="14sp" />
-                </RadioGroup>
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            style="@style/CustomRadioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="是"
+                            android:textSize="14sp" />
+
+                        <RadioButton
+                            style="@style/CustomRadioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_15"
+                            android:text="否"
+                            android:textSize="14sp" />
+                    </RadioGroup>
+
+                </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="30dp"
                 android:background="#f4f5fa"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -235,7 +241,7 @@
                     android:layout_width="68dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_5"
-                    android:text="指标值"
+                    android:text="@string/metricValues"
                     android:textColor="@color/c333333"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -244,7 +250,7 @@
                     android:layout_width="68dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_5"
-                    android:text="中文名"
+                    android:text="@string/chines_name"
                     android:textColor="@color/c333333"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -253,7 +259,7 @@
                     android:layout_width="68dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_5"
-                    android:text="单位"
+                    android:text="@string/unit"
                     android:textColor="@color/c333333"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -262,7 +268,7 @@
                     android:layout_width="68dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_5"
-                    android:text="是否显示"
+                    android:text="@string/di_displayed"
                     android:textColor="@color/c333333"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -270,6 +276,7 @@
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_svc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -298,8 +305,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_5"
                     android:text="FVC设置"
+                    android:textColor="@color/text3"
                     android:textSize="18sp"
-                    android:textColor="@color/text3"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -313,7 +320,7 @@
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="X轴时间量程："
+                    android:text="@string/x_time"
                     android:textColor="@color/text3"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -332,7 +339,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_5"
-                    android:text="秒(s)"
+                    android:text="@string/min_s"
                     android:textColor="@color/text3"
                     android:textStyle="bold" />
 
@@ -347,7 +354,7 @@
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Y轴时间上限："
+                    android:text="@string/y_time_up"
                     android:textColor="@color/text3"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -381,7 +388,7 @@
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Y轴时间下限："
+                    android:text="@string/y_time_down"
                     android:textColor="@color/text3"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -408,88 +415,93 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="120dp"
                 android:layout_marginTop="@dimen/space_38"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/space_5"
-                    android:text="预测值环："
-                    android:textColor="@color/text3"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        style="@style/CustomRadioButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="显示"
-                        android:textSize="14sp" />
-
-                    <RadioButton
-                        style="@style/CustomRadioButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_15"
-                        android:text="不显示"
-                        android:textSize="14sp" />
-                </RadioGroup>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_18"
-                android:orientation="horizontal">
-
-                <androidx.appcompat.widget.AppCompatTextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/space_5"
-                    android:text="视频自动播放："
-                    android:textSize="15sp"
-                    android:textColor="@color/text3"
-                    android:textStyle="bold" />
-
-                <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <RadioButton
-                        style="@style/CustomRadioButton"
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="是"
-                        android:textSize="14sp" />
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/space_5"
+                        android:text="预测值环："
+                        android:textColor="@color/text3"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
 
-                    <RadioButton
-                        style="@style/CustomRadioButton"
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            style="@style/CustomRadioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="显示"
+                            android:textSize="14sp" />
+
+                        <RadioButton
+                            style="@style/CustomRadioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_15"
+                            android:text="不显示"
+                            android:textSize="14sp" />
+                    </RadioGroup>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_18"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_15"
-                        android:text="否"
-                        android:textSize="14sp" />
-                </RadioGroup>
+                        android:layout_marginStart="@dimen/space_5"
+                        android:text="视频自动播放："
+                        android:textColor="@color/text3"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            style="@style/CustomRadioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="是"
+                            android:textSize="14sp" />
+
+                        <RadioButton
+                            style="@style/CustomRadioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_15"
+                            android:text="否"
+                            android:textSize="14sp" />
+                    </RadioGroup>
+
+                </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="30dp"
                 android:background="#f4f5fa"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -499,7 +511,7 @@
                     android:layout_width="68dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_5"
-                    android:text="指标值"
+                    android:text="@string/metricValues"
                     android:textColor="@color/c333333"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -508,7 +520,7 @@
                     android:layout_width="68dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_5"
-                    android:text="中文名"
+                    android:text="@string/chines_name"
                     android:textColor="@color/c333333"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -517,7 +529,7 @@
                     android:layout_width="68dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_5"
-                    android:text="单位"
+                    android:text="@string/unit"
                     android:textColor="@color/c333333"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -526,7 +538,7 @@
                     android:layout_width="68dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_5"
-                    android:text="是否显示"
+                    android:text="@string/di_displayed"
                     android:textColor="@color/c333333"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -534,6 +546,7 @@
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_fvc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -562,8 +575,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_5"
                     android:text="MVV设置"
+                    android:textColor="@color/text3"
                     android:textSize="18sp"
-                    android:textColor="@color/text3"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -577,7 +590,7 @@
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="X轴时间量程："
+                    android:text="@string/x_time"
                     android:textColor="@color/text3"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -596,7 +609,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_5"
-                    android:text="秒(s)"
+                    android:text="@string/min_s"
                     android:textColor="@color/text3"
                     android:textStyle="bold" />
 
@@ -611,7 +624,7 @@
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Y轴时间上限："
+                    android:text="@string/y_time_up"
                     android:textColor="@color/text3"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -645,7 +658,7 @@
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Y轴时间下限："
+                    android:text="@string/y_time_down"
                     android:textColor="@color/text3"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -672,128 +685,132 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="120dp"
                 android:layout_marginTop="@dimen/space_38"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-                <androidx.appcompat.widget.AppCompatTextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/space_5"
-                    android:text="开始结算标尺："
-                    android:textColor="@color/text3"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <RadioButton
-                        style="@style/CustomRadioButton"
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="显示"
-                        android:textSize="14sp" />
+                        android:layout_marginStart="@dimen/space_5"
+                        android:text="开始结算标尺："
+                        android:textColor="@color/text3"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
 
-                    <RadioButton
-                        style="@style/CustomRadioButton"
-                        android:layout_width="wrap_content"
+                    <RadioGroup
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_15"
-                        android:text="不显示"
-                        android:textSize="14sp" />
-                </RadioGroup>
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-            </LinearLayout>
+                        <RadioButton
+                            style="@style/CustomRadioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="显示"
+                            android:textSize="14sp" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_18"
-                android:orientation="horizontal">
+                        <RadioButton
+                            style="@style/CustomRadioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_15"
+                            android:text="不显示"
+                            android:textSize="14sp" />
+                    </RadioGroup>
 
-                <androidx.appcompat.widget.AppCompatTextView
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/space_5"
-                    android:text="通气量曲线："
-                    android:textColor="@color/text3"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/space_18"
                     android:orientation="horizontal">
 
-                    <RadioButton
-                        style="@style/CustomRadioButton"
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="显示"
-                        android:textSize="14sp" />
+                        android:layout_marginStart="@dimen/space_5"
+                        android:text="通气量曲线："
+                        android:textColor="@color/text3"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
 
-                    <RadioButton
-                        style="@style/CustomRadioButton"
-                        android:layout_width="wrap_content"
+                    <RadioGroup
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_15"
-                        android:text="不显示"
-                        android:textSize="14sp" />
-                </RadioGroup>
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-            </LinearLayout>
+                        <RadioButton
+                            style="@style/CustomRadioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="显示"
+                            android:textSize="14sp" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_18"
-                android:orientation="horizontal">
+                        <RadioButton
+                            style="@style/CustomRadioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_15"
+                            android:text="不显示"
+                            android:textSize="14sp" />
+                    </RadioGroup>
 
-                <androidx.appcompat.widget.AppCompatTextView
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/space_5"
-                    android:text="视频自动播放："
-                    android:textSize="15sp"
-                    android:textColor="@color/text3"
-                    android:textStyle="bold" />
-
-                <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/space_18"
                     android:orientation="horizontal">
 
-                    <RadioButton
-                        style="@style/CustomRadioButton"
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="是"
-                        android:textSize="14sp" />
+                        android:layout_marginStart="@dimen/space_5"
+                        android:text="视频自动播放："
+                        android:textColor="@color/text3"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
 
-                    <RadioButton
-                        style="@style/CustomRadioButton"
-                        android:layout_width="wrap_content"
+                    <RadioGroup
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_15"
-                        android:text="否"
-                        android:textSize="14sp" />
-                </RadioGroup>
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            style="@style/CustomRadioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="是"
+                            android:textSize="14sp" />
+
+                        <RadioButton
+                            style="@style/CustomRadioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_15"
+                            android:text="否"
+                            android:textSize="14sp" />
+                    </RadioGroup>
+
+                </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="30dp"
                 android:background="#f4f5fa"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -803,7 +820,7 @@
                     android:layout_width="68dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_5"
-                    android:text="指标值"
+                    android:text="@string/metricValues"
                     android:textColor="@color/c333333"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -812,7 +829,7 @@
                     android:layout_width="68dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_5"
-                    android:text="中文名"
+                    android:text="@string/chines_name"
                     android:textColor="@color/c333333"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -821,7 +838,7 @@
                     android:layout_width="68dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_5"
-                    android:text="单位"
+                    android:text="@string/unit"
                     android:textColor="@color/c333333"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -830,7 +847,7 @@
                     android:layout_width="68dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_5"
-                    android:text="是否显示"
+                    android:text="@string/di_displayed"
                     android:textColor="@color/c333333"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -838,11 +855,11 @@
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_mvv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
-
 
 
     </LinearLayout>

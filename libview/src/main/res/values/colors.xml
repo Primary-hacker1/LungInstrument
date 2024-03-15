@@ -33,6 +33,7 @@
     <color name="red">#FFFF0004</color>
     <color name="blue">#FF5757EA</color>
     <color name="gray">#B4B3AE</color>
+    <color name="cf4f5fa">#f4f5fa</color>
 
     <color name="absence_bg">#EAEAEA</color>
     <color name="attend_bg">#40B0F7</color>

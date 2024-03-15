@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.common.base.CommonBaseActivity
 import com.common.base.gone
+import com.common.base.observe
 import com.common.base.onUI
 import com.common.base.setNoRepeatListener
 import com.common.base.visible
@@ -90,21 +91,14 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                         LogUtils.e(tag + it.any)
                 }
 
-                LiveDataEvent.QueryPatient -> {//查询患者单个
+                LiveDataEvent.QueryPatient,LiveDataEvent.QueryPatientNull -> {//查询患者
                     it.any?.let { it1 -> queryPatient(it1) }
                 }
 
-                LiveDataEvent.QueryPatientNull -> {
-                    it.any?.let { it1 -> queryPatient(it1) }
-                }
-
-                LiveDataEvent.QueryNameId -> {
+                LiveDataEvent.QueryNameId,LiveDataEvent.QuerySuccess -> {
                     it.any?.let { it1 -> beanQuery(it1) }
                 }
 
-                LiveDataEvent.QuerySuccess -> {
-                    it.any?.let { it1 -> beanQuery(it1) }
-                }
             }
         }
 

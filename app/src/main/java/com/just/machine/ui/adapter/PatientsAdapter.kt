@@ -14,14 +14,14 @@ import com.just.news.databinding.ItemLayoutPatientBinding
 class PatientsAdapter
     : BaseRecyclerViewAdapter<PatientBean, ItemLayoutPatientBinding>() {
 
-    override fun bindData(item: PatientBean) {
+    override fun bindData(item: PatientBean, position: Int) {
         binding.item = item
 
-        binding.btnDelete.setNoRepeatListener{
+        binding.btnDelete.setNoRepeatListener {
             listener?.onDeleteItem(item)
         }
 
-        binding.btnUpdate.setNoRepeatListener{
+        binding.btnUpdate.setNoRepeatListener {
             listener?.onUpdateItem(item)
         }
     }

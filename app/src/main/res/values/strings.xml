@@ -146,6 +146,20 @@
     <string name="report_shows">报告显示</string>
     <string name="exercise_prescription">运动处方</string>
     <string name="cpet">CPET设置</string>
+    <string name="unit">单位</string>
+    <string name="vital_capacity">呼气肺活量</string>
+    <string name="svc">svc</string>
+    <string name="chines_name">中文名</string>
+    <string name="metricValues">指标值</string>
+    <string name="di_displayed">是否显示</string>
+    <string name="svc_setting">SVC设置</string>
+    <string name="x_time">X轴时间量程：</string>
+    <string name="min_s">秒(s)</string>
+    <string name="y_time_up">Y轴时间上限：</string>
+    <string name="y_time_down">Y轴时间下限：</string>
+    <string name="vt_base_line">VT基线：</string>
+    <string name="display">显示</string>
+    <string name="display_no">不显示</string>
     <string-array name="spinner_items">
         <item>Item 1</item>
         <item>Item 2</item>

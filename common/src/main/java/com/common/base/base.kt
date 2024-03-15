@@ -27,6 +27,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import com.common.network.RequestObserver
 import com.common.throwe.BaseResponseThrowable
@@ -38,9 +39,15 @@ import io.reactivex.annotations.SchedulerSupport
 import io.reactivex.disposables.Disposable
 import io.reactivex.internal.functions.ObjectHelper
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.*
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
+import kotlin.coroutines.CoroutineContext
 
 
 /**
@@ -170,6 +177,21 @@ val mainThread by lazy {
 
 fun onUI(callback: () -> Unit) {
     mainThread.post(callback)
+}
+
+inline fun <T> LifecycleOwner.observe(
+    flow: Flow<T>,
+    context: CoroutineContext = Dispatchers.IO,
+    callbackContext: CoroutineContext = Dispatchers.Main,
+    crossinline function: (T) -> Unit
+) {
+    lifecycleScope.launch(context) {
+        flow.collect {
+            withContext(callbackContext) {
+                function.invoke(it)
+            }
+        }
+    }
 }
 
 

@@ -17,7 +17,7 @@ class LiveDataEvent {
 
         const val QueryPatient: Int = 0x03
 
-        const val QueryPatientNull: Int = 0x05
+        const val QueryPatientNull: Int = 0x04
 
 
         /**
