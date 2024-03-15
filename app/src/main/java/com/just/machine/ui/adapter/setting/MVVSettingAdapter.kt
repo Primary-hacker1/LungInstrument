@@ -3,12 +3,9 @@ package com.just.machine.ui.adapter.setting
 import android.content.Context
 import androidx.core.content.ContextCompat
 import com.common.base.BaseRecyclerViewAdapter
-import com.common.network.LogUtils
 import com.just.machine.model.setting.MvvSettingBean
-import com.just.machine.model.setting.StaticSettingBean
 import com.just.news.R
 import com.just.news.databinding.ItemMvvSettingBinding
-import com.just.news.databinding.ItemSvcSettingBinding
 
 /**
  *create by 2024/3/15

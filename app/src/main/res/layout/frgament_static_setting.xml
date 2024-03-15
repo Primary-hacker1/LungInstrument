@@ -56,6 +56,7 @@
                     android:textStyle="bold" />
 
                 <com.justsafe.libview.text.PatientEditText
+                    android:id="@+id/edit_x_time_svc"
                     android:layout_width="@dimen/space_120"
                     android:layout_height="@dimen/space_28"
                     android:layout_marginStart="@dimen/space_10"
@@ -90,6 +91,7 @@
                     android:textStyle="bold" />
 
                 <com.justsafe.libview.text.PatientEditText
+                    android:id="@+id/edit_y_time_up_svc"
                     android:layout_width="@dimen/space_120"
                     android:layout_height="@dimen/space_28"
                     android:layout_marginStart="@dimen/space_10"
@@ -124,6 +126,7 @@
                     android:textStyle="bold" />
 
                 <com.justsafe.libview.text.PatientEditText
+                    android:id="@+id/edit_y_time_down_svc"
                     android:layout_width="@dimen/space_120"
                     android:layout_height="@dimen/space_28"
                     android:layout_marginStart="@dimen/space_10"
@@ -164,19 +167,23 @@
                         android:textStyle="bold" />
 
                     <RadioGroup
+                        android:id="@+id/radio_vt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <RadioButton
+                            android:id="@+id/radio_vt_visible"
                             style="@style/CustomRadioButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:checked="true"
                             android:text="@string/display"
                             android:textSize="14sp" />
 
                         <RadioButton
+                            android:id="@+id/radio_vt_gone"
                             style="@style/CustomRadioButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -203,12 +210,14 @@
                         android:textStyle="bold" />
 
                     <RadioGroup
+                        android:id="@+id/radio_videoAutoplay_svc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <RadioButton
+                            android:id="@+id/radio_svc_video_visible"
                             style="@style/CustomRadioButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -216,6 +225,7 @@
                             android:textSize="14sp" />
 
                         <RadioButton
+                            android:id="@+id/radio_svc_video_gone"
                             style="@style/CustomRadioButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -326,6 +336,7 @@
                     android:textStyle="bold" />
 
                 <com.justsafe.libview.text.PatientEditText
+                    android:id="@+id/edit_x_time_fvc"
                     android:layout_width="@dimen/space_120"
                     android:layout_height="@dimen/space_28"
                     android:layout_marginStart="@dimen/space_10"
@@ -360,6 +371,7 @@
                     android:textStyle="bold" />
 
                 <com.justsafe.libview.text.PatientEditText
+                    android:id="@+id/edit_y_time_up_fvc"
                     android:layout_width="@dimen/space_120"
                     android:layout_height="@dimen/space_28"
                     android:layout_marginStart="@dimen/space_10"
@@ -394,6 +406,7 @@
                     android:textStyle="bold" />
 
                 <com.justsafe.libview.text.PatientEditText
+                    android:id="@+id/edit_y_time_down_fvc"
                     android:layout_width="@dimen/space_120"
                     android:layout_height="@dimen/space_28"
                     android:layout_marginStart="@dimen/space_10"
@@ -434,12 +447,14 @@
                         android:textStyle="bold" />
 
                     <RadioGroup
+                        android:id="@+id/radio_predictionRing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <RadioButton
+                            android:id="@+id/radio_predictionRing_visible"
                             style="@style/CustomRadioButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -447,6 +462,7 @@
                             android:textSize="14sp" />
 
                         <RadioButton
+                            android:id="@+id/radio_predictionRing_gone"
                             style="@style/CustomRadioButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -473,12 +489,14 @@
                         android:textStyle="bold" />
 
                     <RadioGroup
+                        android:id="@+id/radio_videoAutoplay_fvc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <RadioButton
+                            android:id="@+id/radio_fvc_video_visible"
                             style="@style/CustomRadioButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -486,6 +504,7 @@
                             android:textSize="14sp" />
 
                         <RadioButton
+                            android:id="@+id/radio_fvc_video_gone"
                             style="@style/CustomRadioButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -596,6 +615,7 @@
                     android:textStyle="bold" />
 
                 <com.justsafe.libview.text.PatientEditText
+                    android:id="@+id/edit_x_time_mvv"
                     android:layout_width="@dimen/space_120"
                     android:layout_height="@dimen/space_28"
                     android:layout_marginStart="@dimen/space_10"
@@ -630,6 +650,7 @@
                     android:textStyle="bold" />
 
                 <com.justsafe.libview.text.PatientEditText
+                    android:id="@+id/edit_y_time_up_mvv"
                     android:layout_width="@dimen/space_120"
                     android:layout_height="@dimen/space_28"
                     android:layout_marginStart="@dimen/space_10"
@@ -664,6 +685,7 @@
                     android:textStyle="bold" />
 
                 <com.justsafe.libview.text.PatientEditText
+                    android:id="@+id/edit_y_time_down_mvv"
                     android:layout_width="@dimen/space_120"
                     android:layout_height="@dimen/space_28"
                     android:layout_marginStart="@dimen/space_10"
@@ -704,12 +726,14 @@
                         android:textStyle="bold" />
 
                     <RadioGroup
+                        android:id="@+id/radio_startRuler"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <RadioButton
+                            android:id="@+id/radio_startRuler_visible"
                             style="@style/CustomRadioButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -717,6 +741,7 @@
                             android:textSize="14sp" />
 
                         <RadioButton
+                            android:id="@+id/radio_startRuler_gone"
                             style="@style/CustomRadioButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -743,12 +768,14 @@
                         android:textStyle="bold" />
 
                     <RadioGroup
+                        android:id="@+id/radio_ventilationCurve"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <RadioButton
+                            android:id="@+id/radio_ventilationCurve_visible"
                             style="@style/CustomRadioButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -756,6 +783,7 @@
                             android:textSize="14sp" />
 
                         <RadioButton
+                            android:id="@+id/radio_ventilationCurve_gone"
                             style="@style/CustomRadioButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -782,12 +810,14 @@
                         android:textStyle="bold" />
 
                     <RadioGroup
+                        android:id="@+id/radio_videoAutoplay_mvv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <RadioButton
+                            android:id="@+id/radio_video_mvv_visible"
                             style="@style/CustomRadioButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -795,6 +825,7 @@
                             android:textSize="14sp" />
 
                         <RadioButton
+                            android:id="@+id/radio_video_mvv_gone"
                             style="@style/CustomRadioButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

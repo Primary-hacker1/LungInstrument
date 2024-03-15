@@ -5,7 +5,10 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.fragment.app.viewModels
 import com.common.base.*
+import com.common.network.LogUtils
+import com.just.machine.model.Constants
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FragmentDynamicSettingBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,6 +35,12 @@ class DynamicSettingFragment : CommonBaseFragment<FragmentDynamicSettingBinding>
                 // 复选框 1 被选中
             } else {
                 // 复选框 1 被取消选中
+            }
+        }
+
+        LiveDataBus.get().with(Constants.llSave).observe(this) {//保存
+            if (it == 2) {
+                LogUtils.d(tag + it.toString())
             }
         }
     }
