@@ -160,6 +160,11 @@
     <string name="vt_base_line">VT基线：</string>
     <string name="display">显示</string>
     <string name="display_no">不显示</string>
+    <string name="begin">开始</string>
+    <string name="environmental_calibration">环境定标</string>
+    <string name="calibrationMethod">标定方式</string>
+    <string name="atmosphericPressure">气压(mmHg)</string>
+    <string name="ambientAirPressure">环境气压</string>
     <string-array name="spinner_items">
         <item>Item 1</item>
         <item>Item 2</item>

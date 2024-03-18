@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/calibrationFragment">
+
+    <!--  hold_state_fragment 保活机制  -->
+    <fragment_navigator
+        android:id="@+id/calibrationFragment"
+        android:name="com.just.machine.ui.fragment.calibration.CalibrationFragment"
+        android:label="calibrationFragment"
+        tools:layout="@layout/fragment_calibration">
+    </fragment_navigator>
+
+</navigation>
