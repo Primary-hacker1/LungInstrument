@@ -324,6 +324,7 @@ public class USBTransferUtil {
             if (isConnectUSB) {
                 isConnectUSB = false;  // 修改标识
             }
+            byteStr = "";
             Log.e(TAG, "断开连接");
         } catch (Exception e) {
             e.printStackTrace();
@@ -362,7 +363,7 @@ public class USBTransferUtil {
                 cc.printStackTrace();
             }
             for (Long key : mapNew.keySet()) {
-                byteStr = (CRC16Util.bytesToHexString(Objects.requireNonNull(mapNew.get(key)))) + byteStr ;
+                byteStr = byteStr + (CRC16Util.bytesToHexString(Objects.requireNonNull(mapNew.get(key)))) ;
                 map.remove(key);
             }
         }
@@ -507,19 +508,16 @@ public class USBTransferUtil {
 
                             //血氧数据
                             if (bytes[10] == (byte) 0x61 && bytes[11] == (byte) 0x71) {
-                                if (xueyangType) {
-                                    //系统时间戳
-                                    Long time = System.currentTimeMillis();
-                                    byte[] b = {bytes[12]};
-                                    int xueyang = Integer.valueOf(CRC16Util.bytesToHexString(b), 16);
-                                    if (xueyang > 99) {
-                                        xueyang = 99;
-                                    }
-                                    String str = Integer.toString(xueyang);
-                                    mapXueyang.put(time, str);
-                                    //静息血氧，取集合的平均值
+                                //系统时间戳
+                                Long time = System.currentTimeMillis();
+                                byte[] b = {bytes[12]};
+                                int oxygen = Integer.valueOf(CRC16Util.bytesToHexString(b), 16);
+                                if (oxygen > 99) {
+                                    oxygen = 99;
                                 }
-                                xueyangType = !xueyangType;
+                                String str = Integer.toString(oxygen);
+                                mapXueyang.put(time, str);
+                                //静息血氧，取集合的平均值
                             }
 
                             if (startType == 1 && (bytes[15] != bytesnull || bytes[16] != bytesnull)) {

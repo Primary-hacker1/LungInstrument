@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
 import android.speech.tts.TextToSpeech
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
@@ -45,20 +46,9 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
     private lateinit var bloodOxyDataSet: LineDataSet
     private val viewModel by viewModels<MainViewModel>()
     private lateinit var patientBean: PatientBean
+    private var i = 0
 
     override fun initView() {
-        binding.sixminLlDevicesStatus.setBackgroundColor(
-            ContextCompat.getColor(
-                this,
-                R.color.colorPrimary
-            )
-        )
-        binding.sixminLlPatientInfo.setBackgroundColor(
-            ContextCompat.getColor(
-                this,
-                R.color.colorPrimary
-            )
-        )
         initCountDownTimerExt()
         initExitAlertDialog()
         copyAssetsFilesToSD()
@@ -185,6 +175,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
             if (USBTransferUtil.isConnectUSB) {
                 if (!usbTransferUtil.isBegin) {
                     binding.sixminTvStart.text = "停止"
+                    binding.sixminTvTestStatus.text = getString(R.string.sixmin_test_testing)
                     mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack {
                         override fun onStart() {
 
@@ -210,6 +201,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                     })
                 } else {
                     binding.sixminTvStart.text = "开始"
+                    binding.sixminTvTestStatus.text = getString(R.string.sixmin_test_title)
                     binding.sixminTvStartMin.text = "5"
                     binding.sixminTvStartSec1.text = "5"
                     binding.sixminTvStartSec2.text = "9"
@@ -218,6 +210,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 }
                 usbTransferUtil.isBegin = !usbTransferUtil.isBegin
             } else {
+                binding.sixminLlLineChartBloodOxygen.visibility = View.VISIBLE
                 Toast.makeText(this, "请先接入设备", Toast.LENGTH_SHORT).show()
             }
         }
@@ -243,7 +236,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
             val random = Random()
             bloodOxyDataSet.addEntry(
                 Entry(
-                    random.nextInt(6).toFloat(),
+                    i++.toFloat(),
                     (random.nextInt(10) + 90).toFloat()
                 )
             )
