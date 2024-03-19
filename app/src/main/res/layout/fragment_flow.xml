@@ -128,7 +128,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:padding="@dimen/space_3">
+                    android:padding="@dimen/space_6">
 
                     <View
                         android:layout_width="@dimen/space_3"
@@ -150,6 +150,7 @@
                     android:id="@+id/ll_item"
                     android:layout_width="match_parent"
                     android:layout_height="25dp"
+                    android:layout_marginHorizontal="@dimen/space_6"
                     android:background="@color/cf4f5fa"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
@@ -202,7 +203,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_flow"
                     android:layout_width="match_parent"
-                    android:layout_height="180dp" />
+                    android:layout_height="match_parent" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -249,6 +250,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_16"
                             android:background="@drawable/flow_pull"
                             android:gravity="center"
                             android:text="@string/pull"
@@ -266,7 +268,40 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:layout_margin="@dimen/space_9"
                 android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:background="@drawable/calibration_bg"
+                    android:orientation="vertical">
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:text="容量-时间"
+                        android:padding="@dimen/space_6"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="@dimen/space_9"
+                    android:gravity="center_horizontal"
+                    android:background="@drawable/calibration_bg"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:text="流速-容量"
+                        android:padding="@dimen/space_6"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
 
 
             </LinearLayout>
