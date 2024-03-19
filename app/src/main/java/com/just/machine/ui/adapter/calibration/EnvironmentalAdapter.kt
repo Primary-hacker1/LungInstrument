@@ -1,32 +1,25 @@
-package com.just.machine.ui.adapter
+package com.just.machine.ui.adapter.calibration
 
 import android.content.Context
 import androidx.core.content.ContextCompat
 import com.common.base.BaseRecyclerViewAdapter
-import com.just.machine.model.SixMinRecordsBean
+import com.just.machine.model.EnvironmentalBean
 import com.just.news.R
-import com.just.news.databinding.ItemLayoutSixTestBinding
+import com.just.news.databinding.ItemEnvironmentalBinding
 
-/**
- *create by 2024/3/6
- * 患者六分钟测试数据
- *@author zt
- */
-class SixMinAdapter(var context: Context) : BaseRecyclerViewAdapter<SixMinRecordsBean, ItemLayoutSixTestBinding>() {
+class EnvironmentalAdapter(val context: Context) :
+    BaseRecyclerViewAdapter<EnvironmentalBean, ItemEnvironmentalBinding>() {
 
     private var selectedItem = -1
 
-    override fun bindData(item: SixMinRecordsBean, position: Int) {
-        binding.item = item
+    override fun bindData(item: EnvironmentalBean, position: Int) {
+        binding.bean = item
+
         if (position == selectedItem) {
             binding.llItem.setBackgroundColor(ContextCompat.getColor(context, R.color.cf4f5fa))
         } else {
             binding.llItem.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
         }
-    }
-
-    override fun getLayoutRes(): Int {
-        return R.layout.item_layout_six_test
     }
 
     /**
@@ -42,4 +35,7 @@ class SixMinAdapter(var context: Context) : BaseRecyclerViewAdapter<SixMinRecord
     }
 
 
+    override fun getLayoutRes(): Int {
+        return R.layout.item_environmental
+    }
 }

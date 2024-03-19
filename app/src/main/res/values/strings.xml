@@ -165,6 +165,9 @@
     <string name="calibrationMethod">标定方式</string>
     <string name="atmosphericPressure">气压(mmHg)</string>
     <string name="ambientAirPressure">环境气压</string>
+    <string name="calibrationTime">定标时间</string>
+    <string name="temperature">温度(℃)</string>
+    <string name="humidity">湿度(%)</string>
     <string-array name="spinner_items">
         <item>Item 1</item>
         <item>Item 2</item>

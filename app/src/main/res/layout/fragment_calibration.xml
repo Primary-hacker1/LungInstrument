@@ -33,28 +33,48 @@
                 android:orientation="vertical">
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_environment"
+                    android:layout_width="96dp"
+                    android:layout_height="73dp"
+                    android:background="@color/white"
+                    android:drawableTop="@drawable/environment"
+                    android:padding="@dimen/space_10"
                     android:text="环境定标" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_flow"
+                    android:layout_width="96dp"
+                    android:layout_height="73dp"
+                    android:background="@color/white"
+                    android:drawableTop="@drawable/flow"
+                    android:padding="@dimen/space_10"
                     android:text="流量定标" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_ingredient"
+                    android:layout_width="96dp"
+                    android:layout_height="73dp"
+                    android:background="@color/white"
+                    android:drawableTop="@drawable/ingredient"
+                    android:padding="@dimen/space_10"
                     android:text="成分定标" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_result"
+                    android:layout_width="96dp"
+                    android:layout_height="73dp"
+                    android:background="@color/white"
+                    android:drawableTop="@drawable/result"
+                    android:padding="@dimen/space_10"
                     android:text="定标结果" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_calibration_update"
+                    android:layout_width="96dp"
+                    android:layout_height="73dp"
+                    android:background="@color/white"
+                    android:drawableTop="@drawable/calibration_update"
+                    android:padding="@dimen/space_10"
                     android:text="返回上级" />
 
             </LinearLayout>

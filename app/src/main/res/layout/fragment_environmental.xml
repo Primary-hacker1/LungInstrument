@@ -325,7 +325,6 @@
                 android:visibility="visible">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/atv_testTime"
                     android:layout_width="@dimen/space_200"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_19"
@@ -334,7 +333,6 @@
                     android:textSize="13sp" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/atv_conventionalVentilation"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -344,7 +342,6 @@
                     android:textSize="13sp" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/atv_forcedVitalCapacity"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -354,7 +351,6 @@
                     android:textSize="13sp" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/atv_maximumVentilation"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -364,7 +360,6 @@
                     android:textSize="13sp" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/atv_exerciseLungTest"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

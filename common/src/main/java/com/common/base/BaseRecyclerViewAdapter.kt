@@ -13,7 +13,7 @@ abstract class BaseRecyclerViewAdapter<T, VB : ViewDataBinding> :
 
     var items: MutableList<T> = mutableListOf() // 使用 MutableList 以支持删除操作
 
-    private var itemClickListener: ((T) -> Unit)? = null
+    private var itemClickListener: ((T, Int) -> Unit)? = null
 
     lateinit var binding: VB
 
@@ -39,7 +39,7 @@ abstract class BaseRecyclerViewAdapter<T, VB : ViewDataBinding> :
             bindData(item, adapterPosition)
 
             binding.root.setOnClickListener {
-                itemClickListener?.invoke(item)
+                itemClickListener?.invoke(item, adapterPosition)
             }
             binding.executePendingBindings()
         }
@@ -66,7 +66,7 @@ abstract class BaseRecyclerViewAdapter<T, VB : ViewDataBinding> :
         }
     }
 
-    fun setItemClickListener(listener: (T) -> Unit) {
+    fun setItemClickListener(listener: (item: T, position: Int) -> Unit) {
         this.itemClickListener = listener
     }
 }

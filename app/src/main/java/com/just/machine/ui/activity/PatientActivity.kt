@@ -53,15 +53,15 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         }
     }
 
-    private var sixMinAdapter: SixMinAdapter = SixMinAdapter()
+    private var sixMinAdapter: SixMinAdapter = SixMinAdapter(this)
 
-    private var cardiopulmonaryAdapter: CardiopulAdapter = CardiopulAdapter()
+    private var cardiopulmonaryAdapter: CardiopulAdapter = CardiopulAdapter(this)
 
     private var bean: PatientBean? = null
 
     val beans: MutableList<PatientBean> = ArrayList()
 
-    private val adapter: PatientsAdapter = PatientsAdapter()
+    private val adapter: PatientsAdapter = PatientsAdapter(this)
 
 
     private fun initToolbar() {
@@ -91,11 +91,11 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                         LogUtils.e(tag + it.any)
                 }
 
-                LiveDataEvent.QueryPatient,LiveDataEvent.QueryPatientNull -> {//查询患者
+                LiveDataEvent.QueryPatient, LiveDataEvent.QueryPatientNull -> {//查询患者
                     it.any?.let { it1 -> queryPatient(it1) }
                 }
 
-                LiveDataEvent.QueryNameId,LiveDataEvent.QuerySuccess -> {
+                LiveDataEvent.QueryNameId, LiveDataEvent.QuerySuccess -> {
                     it.any?.let { it1 -> beanQuery(it1) }
                 }
 
@@ -116,14 +116,14 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
         LogUtils.d(tag + bean.toString())
 
-        sixMinAdapter = SixMinAdapter()
+        sixMinAdapter = SixMinAdapter(this)
 
         bean?.sixMinRecordsBean?.let { it1 -> sixMinAdapter.setItemsBean(it1) }
 
         binding.rvSixTest.adapter = sixMinAdapter
 
 
-        cardiopulmonaryAdapter = CardiopulAdapter()
+        cardiopulmonaryAdapter = CardiopulAdapter(this)
 
         bean?.testRecordsBean?.let { it1 -> cardiopulmonaryAdapter.setItemsBean(it1) }
 
@@ -184,23 +184,19 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
             }
         })
 
-        adapter.setItemClickListener {
-            viewModel.getPatient(it.patientId)//查询数据库
+        adapter.setItemClickListener { item, position ->
+            viewModel.getPatient(item.patientId)//查询数据库
+            adapter.toggleItemBackground(position)
         }
 
+        cardiopulmonaryAdapter.setItemClickListener { item, position ->
+            cardiopulmonaryAdapter.toggleItemBackground(position)
+            LogUtils.d(tag + item.toString())
+        }
 
-        cardiopulmonaryAdapter.setItemOnClickListener(object : CardiopulAdapter.PatientListener {
-            override fun onClickItem(bean: CardiopulmonaryRecordsBean) {//点击item返回心肺测试数据
-
-            }
-        })
-
-        sixMinAdapter.setItemOnClickListener(object : SixMinAdapter.PatientListener {
-            //点击item返回六分钟测试数据
-            override fun onClickItem(bean: SixMinRecordsBean) {
-
-            }
-        })
+        sixMinAdapter.setItemClickListener { item, position ->
+            sixMinAdapter.toggleItemBackground(position)
+        }
 
         binding.btnAdd.setNoRepeatListener {
             val patientDialogFragment =
