@@ -11,24 +11,28 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.common.base.CommonBaseActivity
 import com.common.base.setNoRepeatListener
-import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
+import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.utils.MPPointF
 import com.google.gson.Gson
 import com.just.machine.dao.PatientBean
+import com.just.machine.model.CommonSharedPreferences.set
 import com.just.machine.model.UsbSerialData
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.FileUtil
 import com.just.machine.util.FixCountDownTime
 import com.just.machine.util.LiveDataBus
+import com.just.machine.util.ScreenUtils
 import com.just.machine.util.SixMinCmdUtils
 import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.ActivitySixMinBinding
+import com.justsafe.libview.util.SystemUtil
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.FileInputStream
@@ -49,10 +53,12 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
     private var i = 0
 
     override fun initView() {
+        SystemUtil.immersive(this,true)
         initCountDownTimerExt()
         initExitAlertDialog()
         copyAssetsFilesToSD()
-        initLineChart()
+        initLineChart(binding.sixminLineChartBloodOxygen,1)
+        initLineChart(binding.sixminLineChartHeartBeat,2)
         usbTransferUtil = USBTransferUtil.getInstance()
         usbTransferUtil.init(this)
         textToSpeech = TextToSpeech(applicationContext, this)
@@ -245,8 +251,10 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         }
 
         binding.sixminIvSystemSetting.setOnClickListener {
-            val intent = Intent(this, SixMinSystemSettingActivity::class.java)
-            startActivity(intent)
+            if(!usbTransferUtil.isBegin){
+                val intent = Intent(this, SixMinSystemSettingActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 
@@ -267,8 +275,8 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         }
     }
 
-    private fun initLineChart() {
-        binding.sixminLineChartBloodOxygen.apply {
+    private fun initLineChart(lineChart: LineChart, type: Int) {
+        lineChart.apply {
             dragDecelerationFrictionCoef = 0.9f
             isDragEnabled = false
             //开启缩放功能
@@ -284,12 +292,15 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
             setNoDataText("")
             setTouchEnabled(false)
             isDragEnabled = false
+            val screenWidth = ScreenUtils.getScreenWidth(this@SixMinActivity)
+            description.setPosition((screenWidth/2).toFloat()+80,20f)
+            description.textSize = 11f
             description?.apply {
-                text = ""
+                text = if(type == 1) "血氧趋势" else "心率趋势"
             }
             xAxis?.apply {
-                textSize = 9f
-                textColor = ContextCompat.getColor(this@SixMinActivity, R.color.colorWhile)
+                textSize = 10f
+                textColor = ContextCompat.getColor(this@SixMinActivity, R.color.text3)
                 //X轴最大值和最小值
                 axisMaximum = 6F
                 axisMinimum = 0F
@@ -316,14 +327,14 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 }
             }
             axisLeft?.apply {
-                textColor = ContextCompat.getColor(this@SixMinActivity, R.color.colorWhile)
+                textColor = ContextCompat.getColor(this@SixMinActivity, R.color.text3)
                 //左侧Y轴的最大值和最小值
-                axisMaximum = 99f
-                axisMinimum = 85f
+                axisMaximum = if(type == 1) 99f else 170f
+                axisMinimum = if(type == 1) 85f else 30f
                 setLabelCount(8, true)
                 //绘制网格线(样式虚线)
                 enableGridDashedLine(2f, 2f, 0f)
-                gridColor = ContextCompat.getColor(this@SixMinActivity, R.color.colorWhile)
+                gridColor = ContextCompat.getColor(this@SixMinActivity, R.color.text3)
                 setDrawGridLines(true)
                 setDrawAxisLine(false) //绘制左边Y轴是否显示
                 setDrawZeroLine(false) //是否开启0线
@@ -336,7 +347,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
             }
             bloodOxyDataSet = LineDataSet(null, "")
             bloodOxyDataSet.lineWidth = 1.0f
-            bloodOxyDataSet.color = ContextCompat.getColor(this@SixMinActivity, R.color.colorWhile)
+            bloodOxyDataSet.color = ContextCompat.getColor(this@SixMinActivity, R.color.text3)
             bloodOxyDataSet.setDrawValues(false)
             bloodOxyDataSet.setDrawCircles(false)
             bloodOxyDataSet.setDrawFilled(true)
