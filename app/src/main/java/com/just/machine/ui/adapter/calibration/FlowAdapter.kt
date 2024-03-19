@@ -3,16 +3,16 @@ package com.just.machine.ui.adapter.calibration
 import android.content.Context
 import androidx.core.content.ContextCompat
 import com.common.base.BaseRecyclerViewAdapter
-import com.just.machine.model.calibration.EnvironmentalBean
+import com.just.machine.model.calibration.FlowBean
 import com.just.news.R
-import com.just.news.databinding.ItemEnvironmentalBinding
+import com.just.news.databinding.ItemFlowBinding
 
-class EnvironmentalAdapter(val context: Context) :
-    BaseRecyclerViewAdapter<EnvironmentalBean, ItemEnvironmentalBinding>() {
+class FlowAdapter(val context: Context) :
+    BaseRecyclerViewAdapter<FlowBean, ItemFlowBinding>() {
 
     private var selectedItem = -1
 
-    override fun bindData(item: EnvironmentalBean, position: Int) {
+    override fun bindData(item: FlowBean, position: Int) {
         binding.bean = item
 
         if (position == selectedItem) {
@@ -36,6 +36,6 @@ class EnvironmentalAdapter(val context: Context) :
 
 
     override fun getLayoutRes(): Int {
-        return R.layout.item_environmental
+        return R.layout.item_flow
     }
 }

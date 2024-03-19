@@ -5,64 +5,64 @@
 
         <variable
             name="bean"
-            type="com.just.machine.model.calibration.EnvironmentalBean" />
+            type="com.just.machine.model.calibration.FlowBean" />
 
     </data>
 
     <LinearLayout
         android:id="@+id/ll_item"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="25dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/atv_calibrationTime"
-            android:layout_width="@dimen/space_200"
+            android:id="@+id/atv_inspiratoryIndicators"
+            android:layout_width="88dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_19"
-            android:text="@{bean.calibrationTime}"
+            android:text="@{bean.inspiratoryIndicators}"
             android:textColor="@color/text3"
-            android:textSize="13sp" />
+            android:textSize="11sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/atv_conventionalVentilation"
+            android:id="@+id/atv_calibratedValue"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="1"
-            android:text="@{bean.conventionalVentilation}"
+            android:text="@{bean.calibratedValue}"
             android:textColor="@color/text3"
-            android:textSize="13sp" />
+            android:textSize="11sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/atv_humidity"
+            android:id="@+id/atv_actual"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="1"
-            android:text="@{bean.humidity}"
+            android:text="@{bean.actual}"
             android:textColor="@color/text3"
-            android:textSize="13sp" />
+            android:textSize="11sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/atv_atmosphericPressure"
+            android:id="@+id/atv_errorRate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="1"
-            android:text="@{bean.atmosphericPressure}"
+            android:text="@{bean.errorRate}"
             android:textColor="@color/text3"
-            android:textSize="13sp" />
+            android:textSize="11sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/atv_calibrationMethod"
+            android:id="@+id/atv_calibrationResults"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="1"
-            android:text="@{bean.calibrationMethod}"
+            android:text="@{bean.calibrationResults}"
             android:textColor="@color/text3"
-            android:textSize="13sp" />
+            android:textSize="11sp" />
     </LinearLayout>
 </layout>
