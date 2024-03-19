@@ -81,10 +81,7 @@ class CalibrationFragment : CommonBaseFragment<FragmentCalibrationBinding>() {
     }
 
     private fun onButtonClick(button: AppCompatButton, position: Int) {
-
         binding.vpCalibration.currentItem = position// 切换ViewPager页面
-
-
         resetButtonColors()// 切换按钮颜色
         button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.cF5FCFF))
     }
