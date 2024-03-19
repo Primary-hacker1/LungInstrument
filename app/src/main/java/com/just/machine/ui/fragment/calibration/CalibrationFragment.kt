@@ -1,8 +1,12 @@
 package com.just.machine.ui.fragment.calibration
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.viewpager2.widget.ViewPager2
 import com.common.base.CommonBaseFragment
 import com.common.base.gone
 import com.common.base.setNoRepeatListener
@@ -50,6 +54,47 @@ class CalibrationFragment : CommonBaseFragment<FragmentCalibrationBinding>() {
 
         binding.vpCalibration.adapter = adapter
 
+        binding.vpCalibration.isUserInputEnabled = false
+
+        binding.btnEnvironment.setNoRepeatListener {
+            onButtonClick(binding.btnEnvironment, 0)
+        }
+
+        binding.btnFlow.setNoRepeatListener {
+            onButtonClick(binding.btnFlow, 1)
+        }
+
+        binding.btnIngredient.setNoRepeatListener {
+            onButtonClick(binding.btnIngredient, 2)
+        }
+
+        binding.btnResult.setNoRepeatListener {
+            onButtonClick(binding.btnResult, 3)
+        }
+
+        binding.btnCalibrationUpdate.setNoRepeatListener {
+
+        }
+
+        binding.vpCalibration.orientation = ViewPager2.ORIENTATION_VERTICAL // 设置垂直方向滑动
+
+    }
+
+    private fun onButtonClick(button: AppCompatButton, position: Int) {
+
+        binding.vpCalibration.currentItem = position// 切换ViewPager页面
+
+
+        resetButtonColors()// 切换按钮颜色
+        button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.cF5FCFF))
+    }
+
+    private fun resetButtonColors() {
+        binding.btnEnvironment.setBackgroundColor(Color.WHITE)
+        binding.btnFlow.setBackgroundColor(Color.WHITE)
+        binding.btnIngredient.setBackgroundColor(Color.WHITE)
+        binding.btnResult.setBackgroundColor(Color.WHITE)
+        binding.btnCalibrationUpdate.setBackgroundColor(Color.WHITE)
     }
 
     override fun initListener() {
