@@ -170,6 +170,7 @@
     <string name="humidity">湿度(%)</string>
     <string name="flow">流量定标</string>
     <string name="Inspiratory_calibration">吸气标定指标</string>
+    <string name="pull">拉</string>
     <string-array name="spinner_items">
         <item>Item 1</item>
         <item>Item 2</item>

@@ -119,6 +119,8 @@
             <LinearLayout
                 android:layout_width="360dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_9"
+                android:background="@drawable/calibration_bg"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -148,6 +150,7 @@
                     android:id="@+id/ll_item"
                     android:layout_width="match_parent"
                     android:layout_height="25dp"
+                    android:background="@color/cf4f5fa"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -196,8 +199,66 @@
                         android:textSize="11sp" />
                 </LinearLayout>
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_flow"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_9"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/prompt"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:padding="@dimen/space_9"
+                        android:text="提示 请按照开始后的操作提示抽拉定标筒，抽啦过程中"
+                        android:textColor="@color/text3"
+                        android:textSize="11sp"
+                        tools:ignore="RtlHardcoded" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:padding="@dimen/space_9"
+                        android:text="避免停顿，抽拉必须达到3L的容量"
+                        android:textColor="@color/text3"
+                        android:textSize="11sp"
+                        tools:ignore="RtlHardcoded" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_9"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/flow_up" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/flow_pull"
+                            android:gravity="center"
+                            android:text="@string/pull"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
 
