@@ -29,7 +29,7 @@ public class EcgView extends View {
     protected Paint mPath;
 
     //网格颜色
-    protected int mGridColor = Color.parseColor("#EDA5B5");
+    protected int mGridColor = Color.parseColor("#3FEDA5B5");
     //小网格颜色
     protected int mSGridColor = Color.parseColor("#EFE4F1");
     //背景颜色
