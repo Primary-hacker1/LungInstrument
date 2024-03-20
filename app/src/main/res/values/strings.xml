@@ -173,6 +173,8 @@
     <string name="pull">拉</string>
     <string name="ingredient_calibration">成分定标</string>
     <string name="o_t90_ms">O₂T90(ms)</string>
+    <string name="ingredientCalibration">成分定标</string>
+    <string name="dataTables">数据表格</string>
     <string-array name="spinner_items">
         <item>Item 1</item>
         <item>Item 2</item>
