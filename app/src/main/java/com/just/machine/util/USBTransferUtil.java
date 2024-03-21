@@ -520,6 +520,7 @@ public class USBTransferUtil {
                                 //静息血氧，取集合的平均值
                             }
 
+                            //步数数据
                             if (startType == 1 && (bytes[15] != bytesnull || bytes[16] != bytesnull)) {
                                 byte[] bytesBS = {bytes[15], bytes[16]};
                                 String bsStr = CRC16Util.bytesToHexString(bytesBS);
