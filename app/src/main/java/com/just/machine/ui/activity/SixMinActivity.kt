@@ -256,6 +256,12 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 startActivity(intent)
             }
         }
+        binding.sixminIvCircleCountPlus.setOnClickListener {
+
+        }
+        binding.sixminIvCircleCountMinus.setOnClickListener {
+
+        }
     }
 
     private fun beanQuery(any: Any) {
