@@ -55,7 +55,7 @@ public class USBTransferUtil {
 
     private Map<Long, byte[]> map = new HashMap<>();//接收数据
     private Map<Long, byte[]> mapNew = new TreeMap<>();
-    private Map<Long, String> mapXueyang = new HashMap<>();//血氧数据
+    private Map<Long, String> mapBloodOxygen = new TreeMap<>();//血氧数据
     private String byteStr = "";
     private UsbSerialData usbSerialData = new UsbSerialData();
     private boolean isBegin = false;//是否开始试验
@@ -516,8 +516,8 @@ public class USBTransferUtil {
                                     oxygen = 99;
                                 }
                                 String str = Integer.toString(oxygen);
-                                mapXueyang.put(time, str);
-                                //静息血氧，取集合的平均值
+                                mapBloodOxygen.put(time, str);
+                                usbSerialData.setBloodOxygen(String.valueOf(oxygen));
                             }
 
                             //步数数据

@@ -15,6 +15,8 @@ public class UsbSerialData {
     private String bloodLowBehind;
     private String bloodState;
 
+    private String bloodOxygen;
+
     public String getBloodPressureState() {
         return bloodPressureState;
     }
@@ -101,5 +103,13 @@ public class UsbSerialData {
 
     public void setBloodLowBehind(String bloodLowBehind) {
         this.bloodLowBehind = bloodLowBehind;
+    }
+
+    public String getBloodOxygen() {
+        return bloodOxygen;
+    }
+
+    public void setBloodOxygen(String bloodOxygen) {
+        this.bloodOxygen = bloodOxygen;
     }
 }
