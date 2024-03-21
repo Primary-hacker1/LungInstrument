@@ -1,48 +1,37 @@
-package com.just.machine.ui.activity
+package com.just.machine.ui.fragment.setting
 
-import android.content.Context
-import android.content.Intent
-import android.util.Log
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
-import com.common.base.CommonBaseActivity
+import com.common.base.CommonBaseFragment
 import com.common.base.gone
 import com.common.base.setNoRepeatListener
 import com.common.base.visible
-import com.common.network.LogUtils
 import com.just.machine.model.Constants
 import com.just.machine.ui.fragment.FragmentPagerAdapter
-import com.just.machine.ui.fragment.setting.AllSettingFragment
-import com.just.machine.ui.fragment.setting.DynamicSettingFragment
-import com.just.machine.ui.fragment.setting.StaticSettingFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.LiveDataBus
 import com.just.news.R
-import com.just.news.databinding.ActivityCardiopulmonarySettingBinding
+import com.just.news.databinding.FragmentCardiopulmonarySettingBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class CardiopulmonarySettingActivity : CommonBaseActivity<ActivityCardiopulmonarySettingBinding>() {
+class CardiopulmonarySettingFragment : CommonBaseFragment<FragmentCardiopulmonarySettingBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
+    override fun loadData() {
 
-    companion object {
-        /**
-         * @param context context
-         */
-        fun startCSettingActivity(context: Context?) {
-            val intent = Intent(context, CardiopulmonarySettingActivity::class.java)
-            context?.startActivity(intent)
-        }
     }
 
     override fun initView() {
         initToolbar()
 
-        val adapter = FragmentPagerAdapter(this)
+        val adapter = FragmentPagerAdapter(activity!!)
         // 添加三个 Fragment
         adapter.addFragment(AllSettingFragment())
         adapter.addFragment(StaticSettingFragment())
@@ -56,10 +45,9 @@ class CardiopulmonarySettingActivity : CommonBaseActivity<ActivityCardiopulmonar
             LiveDataBus.get().with(Constants.llSave).value = binding.vpTitle.currentItem
         }
 
-        initClickListener()
     }
 
-    private fun initClickListener() {
+    override fun initListener() {
 
         binding.btnGeneralSettings.setNoRepeatListener {
             binding.vpTitle.currentItem = 0
@@ -89,7 +77,6 @@ class CardiopulmonarySettingActivity : CommonBaseActivity<ActivityCardiopulmonar
 
             }
         })
-
     }
 
     private fun setButtonPosition(position: Int) {
@@ -121,7 +108,7 @@ class CardiopulmonarySettingActivity : CommonBaseActivity<ActivityCardiopulmonar
         binding.toolbar.tvRight.gone()
         binding.toolbar.ivTitleBack.visible()
         binding.toolbar.ivTitleBack.setNoRepeatListener {
-            finish()
+            Navigation.findNavController(it).popBackStack()
         }
 
     }
@@ -132,16 +119,18 @@ class CardiopulmonarySettingActivity : CommonBaseActivity<ActivityCardiopulmonar
         textView3: TextView,
     ) {// 设置按钮的样式
 
-        textView1.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
+        textView1.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
         textView1.background =
-            ContextCompat.getDrawable(this, R.drawable.super_edittext_bg)
+            ContextCompat.getDrawable(requireContext(), R.drawable.super_edittext_bg)
 
-        textView2.setTextColor(ContextCompat.getColor(this, R.color.cD9D9D9))
-        textView2.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+        textView2.setTextColor(ContextCompat.getColor(requireContext(), R.color.cD9D9D9))
+        textView2.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
 
-        textView3.setTextColor(ContextCompat.getColor(this, R.color.cD9D9D9))
-        textView3.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+        textView3.setTextColor(ContextCompat.getColor(requireContext(), R.color.cD9D9D9))
+        textView3.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
     }
 
-    override fun getViewBinding() = ActivityCardiopulmonarySettingBinding.inflate(layoutInflater)
+
+    override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentCardiopulmonarySettingBinding.inflate(inflater, container, false)
 }

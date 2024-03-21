@@ -43,7 +43,7 @@
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.just.machine.ui.activity.CardiopulmonarySettingActivity"
+            android:name="com.just.machine.ui.fragment.setting.CardiopulmonarySettingFragment"
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity

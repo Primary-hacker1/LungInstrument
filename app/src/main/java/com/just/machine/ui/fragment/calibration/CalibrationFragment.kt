@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
 import androidx.viewpager2.widget.ViewPager2
 import com.common.base.CommonBaseFragment
 import com.common.base.gone
@@ -39,9 +40,7 @@ class CalibrationFragment : CommonBaseFragment<FragmentCalibrationBinding>() {
         binding.toolbar.title = Constants.cardiopulmonary//标题
         binding.toolbar.tvRight.gone()
         binding.toolbar.ivTitleBack.visible()
-        binding.toolbar.ivTitleBack.setNoRepeatListener {
-            activity?.finish()
-        }
+
 
         val adapter = FragmentPagerAdapter(activity!!)
         // 添加三个 Fragment
@@ -50,11 +49,34 @@ class CalibrationFragment : CommonBaseFragment<FragmentCalibrationBinding>() {
         adapter.addFragment(IngredientFragment())
         adapter.addFragment(CalibrationResultFragment())
 
-        binding.vpCalibration.setCurrentItem(0, true)
+        onButtonClick(binding.btnEnvironment, 0)
 
         binding.vpCalibration.adapter = adapter
 
         binding.vpCalibration.isUserInputEnabled = false
+
+        binding.vpCalibration.orientation = ViewPager2.ORIENTATION_VERTICAL // 设置垂直方向滑动
+
+    }
+
+    private fun onButtonClick(button: AppCompatButton, position: Int) {
+        binding.vpCalibration.currentItem = position// 切换ViewPager页面
+        resetButtonColors()// 切换按钮颜色
+        button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.cF5FCFF))
+    }
+
+    private fun resetButtonColors() {
+        binding.btnEnvironment.setBackgroundColor(Color.WHITE)
+        binding.btnFlow.setBackgroundColor(Color.WHITE)
+        binding.btnIngredient.setBackgroundColor(Color.WHITE)
+        binding.btnResult.setBackgroundColor(Color.WHITE)
+        binding.btnCalibrationClose.setBackgroundColor(Color.WHITE)
+    }
+
+    override fun initListener() {
+        binding.toolbar.ivTitleBack.setNoRepeatListener {
+            Navigation.findNavController(it).popBackStack()
+        }
 
         binding.btnEnvironment.setNoRepeatListener {
             onButtonClick(binding.btnEnvironment, 0)
@@ -72,31 +94,9 @@ class CalibrationFragment : CommonBaseFragment<FragmentCalibrationBinding>() {
             onButtonClick(binding.btnResult, 3)
         }
 
-        binding.btnCalibrationUpdate.setNoRepeatListener {
-
+        binding.btnCalibrationClose.setOnClickListener {
+            Navigation.findNavController(it).popBackStack()
         }
-
-        binding.vpCalibration.orientation = ViewPager2.ORIENTATION_VERTICAL // 设置垂直方向滑动
-
-    }
-
-    private fun onButtonClick(button: AppCompatButton, position: Int) {
-        binding.vpCalibration.currentItem = position// 切换ViewPager页面
-        resetButtonColors()// 切换按钮颜色
-        button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.cF5FCFF))
-    }
-
-    private fun resetButtonColors() {
-        binding.btnEnvironment.setBackgroundColor(Color.WHITE)
-        binding.btnFlow.setBackgroundColor(Color.WHITE)
-        binding.btnIngredient.setBackgroundColor(Color.WHITE)
-        binding.btnResult.setBackgroundColor(Color.WHITE)
-        binding.btnCalibrationUpdate.setBackgroundColor(Color.WHITE)
-    }
-
-    override fun initListener() {
-
-
     }
 
     /**

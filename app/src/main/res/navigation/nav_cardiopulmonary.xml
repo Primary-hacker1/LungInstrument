@@ -2,8 +2,8 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_main"
-    app:startDestination="@id/calibrationFragment">
+    android:id="@+id/nav_cardiopulmonary"
+    app:startDestination="@id/cardiopulmonaryFragment">
 
     <!--  hold_state_fragment 保活机制  -->
     <fragment_navigator
@@ -11,6 +11,26 @@
         android:name="com.just.machine.ui.fragment.calibration.CalibrationFragment"
         android:label="calibrationFragment"
         tools:layout="@layout/fragment_calibration">
+    </fragment_navigator>
+
+    <fragment_navigator
+        android:id="@+id/cardiopulmonaryFragment"
+        android:name="com.just.machine.ui.fragment.cardiopulmonary.CardiopulmonaryFragment"
+        android:label="cardiopulmonaryFragment"
+        tools:layout="@layout/fragment_cardiopulmonary">
+        <action
+            android:id="@+id/action_cardiopulmonaryFragment_to_calibrationFragment"
+            app:destination="@id/calibrationFragment" />
+        <action
+            android:id="@+id/action_cardiopulmonaryFragment_to_cardiopulmonarySettingFragment"
+            app:destination="@id/cardiopulmonarySettingFragment" />
+    </fragment_navigator>
+
+    <fragment_navigator
+        android:id="@+id/cardiopulmonarySettingFragment"
+        android:name="com.just.machine.ui.fragment.setting.CardiopulmonarySettingFragment"
+        android:label="cardiopulmonarySettingFragment"
+        tools:layout="@layout/fragment_cardiopulmonary_setting">
     </fragment_navigator>
 
 </navigation>
