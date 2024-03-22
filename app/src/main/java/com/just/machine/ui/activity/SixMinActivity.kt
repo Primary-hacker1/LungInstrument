@@ -23,6 +23,7 @@ import com.google.gson.Gson
 import com.just.machine.dao.PatientBean
 import com.just.machine.model.CommonSharedPreferences.set
 import com.just.machine.model.UsbSerialData
+import com.just.machine.model.systemsetting.SixMinSysSettingBean
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.FileUtil
 import com.just.machine.util.FixCountDownTime
@@ -51,14 +52,15 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
     private val viewModel by viewModels<MainViewModel>()
     private lateinit var patientBean: PatientBean
     private var i = 0
+    private lateinit var sysSettingBean:SixMinSysSettingBean
 
     override fun initView() {
-        SystemUtil.immersive(this,true)
         initCountDownTimerExt()
         initExitAlertDialog()
         copyAssetsFilesToSD()
         initLineChart(binding.sixminLineChartBloodOxygen,1)
         initLineChart(binding.sixminLineChartHeartBeat,2)
+        sysSettingBean = SixMinSysSettingBean()
         usbTransferUtil = USBTransferUtil.getInstance()
         usbTransferUtil.init(this)
         textToSpeech = TextToSpeech(applicationContext, this)
@@ -103,6 +105,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 } else {
                     binding.sixminIvBloodOxygen.setImageResource(R.mipmap.xueyangno)
                 }
+                //电池状态
                 when (usbSerialData.batteryLevel) {
                     1 -> {
                         binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi1)
@@ -128,6 +131,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                         binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi00)
                     }
                 }
+                //血压数据
                 when (usbSerialData.bloodState) {
                     "未测量血压" -> {
                         binding.sixminTvMeasureBlood.text = getString(R.string.sixmin_measure_blood)
@@ -159,6 +163,18 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                         binding.sixminTvBloodPressureLowBehind.text =
                             usbSerialData.bloodLowBehind ?: "- - -"
                     }
+                }
+                //血氧数据
+                if(usbSerialData.bloodOxygen != null && usbSerialData.bloodOxygen != ""){
+                    if(usbSerialData.bloodOxygen.toInt() > sysSettingBean.sysAlarm.bloodOxy.toInt()){
+                        binding.sixminTvBloodOxygen.setTextColor(ContextCompat.getColor(this@SixMinActivity,R.color.red))
+                    }else{
+                        binding.sixminTvBloodOxygen.setTextColor(ContextCompat.getColor(this@SixMinActivity,R.color.colorWhite))
+                    }
+                    binding.sixminTvBloodOxygen.text = usbSerialData.bloodOxygen
+                }else{
+                    binding.sixminTvBloodOxygen.text = "--"
+                    binding.sixminTvBloodOxygen.setTextColor(ContextCompat.getColor(this@SixMinActivity,R.color.red))
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -299,7 +315,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
             setTouchEnabled(false)
             isDragEnabled = false
             val screenWidth = ScreenUtils.getScreenWidth(this@SixMinActivity)
-            description.setPosition((screenWidth/2).toFloat()+80,20f)
+            description.setPosition((screenWidth/2).toFloat()+140,20f)
             description.textSize = 11f
             description?.apply {
                 text = if(type == 1) "血氧趋势" else "心率趋势"
@@ -434,6 +450,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
             binding.sixminIvBloodPressure.setImageResource(R.mipmap.xueyano)
             binding.sixminIvBloodOxygen.setImageResource(R.mipmap.xueyangno)
         }
+        SystemUtil.immersive(this,true)
         super.onResume()
     }
 
