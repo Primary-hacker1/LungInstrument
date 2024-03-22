@@ -7,6 +7,7 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.common.base.CommonBaseFragment
 import com.common.base.gone
@@ -75,7 +76,7 @@ class CalibrationFragment : CommonBaseFragment<FragmentCalibrationBinding>() {
 
     override fun initListener() {
         binding.toolbar.ivTitleBack.setNoRepeatListener {
-            Navigation.findNavController(it).popBackStack()
+            popBackStack()
         }
 
         binding.btnEnvironment.setNoRepeatListener {
@@ -95,8 +96,14 @@ class CalibrationFragment : CommonBaseFragment<FragmentCalibrationBinding>() {
         }
 
         binding.btnCalibrationClose.setOnClickListener {
-            Navigation.findNavController(it).popBackStack()
+            popBackStack()
         }
+    }
+
+    private fun popBackStack(){
+        val navController = findNavController()//fragment返回数据处理
+        navController.previousBackStackEntry?.savedStateHandle?.set("key", "返回")
+        navController.popBackStack()
     }
 
     /**

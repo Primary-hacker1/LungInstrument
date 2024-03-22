@@ -3,14 +3,9 @@ package com.just.machine.ui.fragment.cardiopulmonary
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.common.base.CommonBaseFragment
-import com.common.base.gone
-import com.common.network.LogUtils
-import com.just.machine.model.Constants
-import com.just.news.R
-import com.just.news.databinding.FragmentMeBinding
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.news.databinding.FragmentDynamicBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -20,7 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
  *@author zt
  */
 @AndroidEntryPoint
-class DynamicFragment : CommonBaseFragment<FragmentMeBinding>() {
+class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
 
@@ -29,9 +24,6 @@ class DynamicFragment : CommonBaseFragment<FragmentMeBinding>() {
     }
 
     private fun initToolbar() {
-        binding.toolbar.title = Constants.me//标题
-        binding.toolbar.tvRight.gone()
-        binding.toolbar.ivTitleBack.gone()
 
     }
 
@@ -44,6 +36,6 @@ class DynamicFragment : CommonBaseFragment<FragmentMeBinding>() {
     }
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
-        FragmentMeBinding.inflate(inflater, container, false)
+        FragmentDynamicBinding.inflate(inflater, container, false)
 
 }

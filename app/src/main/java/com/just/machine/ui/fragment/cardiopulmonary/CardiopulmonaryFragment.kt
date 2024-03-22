@@ -6,17 +6,20 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.common.base.CommonBaseFragment
 import com.common.base.gone
 import com.common.base.setNoRepeatListener
 import com.common.base.visible
+import com.common.network.LogUtils
 import com.just.machine.model.Constants
 import com.just.machine.ui.fragment.FragmentPagerAdapter
 import com.just.machine.ui.fragment.calibration.CalibrationResultFragment
 import com.just.machine.ui.fragment.calibration.EnvironmentalFragment
 import com.just.machine.ui.fragment.calibration.FlowFragment
 import com.just.machine.ui.fragment.calibration.IngredientFragment
+import com.just.machine.ui.fragment.setting.CardiopulmonarySettingFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.FragmentCardiopulmonaryBinding
@@ -46,14 +49,17 @@ class CardiopulmonaryFragment : CommonBaseFragment<FragmentCardiopulmonaryBindin
         initToolbar()
 
         val adapter = FragmentPagerAdapter(activity!!)
+
         // 添加三个 Fragment
-//        adapter.addFragment(EnvironmentalFragment())
+        adapter.addFragment(EnvironmentalFragment())
 
         adapter.addFragment(StaticFragment())
 
         adapter.addFragment(DynamicFragment())
 
         adapter.addFragment(DynamicResultFragment())
+
+        adapter.addFragment(CardiopulmonarySettingFragment())
 
         onButtonClick(binding.btnStatic, 1)
 
@@ -65,8 +71,6 @@ class CardiopulmonaryFragment : CommonBaseFragment<FragmentCardiopulmonaryBindin
     }
 
     override fun initListener() {
-
-
 
         binding.btnEnvironment.setOnClickListener {
             navigate(it, R.id.calibrationFragment)//fragment跳转
@@ -93,6 +97,14 @@ class CardiopulmonaryFragment : CommonBaseFragment<FragmentCardiopulmonaryBindin
         binding.btnClose.setNoRepeatListener {
             onButtonClick(binding.btnClose, 5)
             activity?.finish()
+        }
+
+        val navController = findNavController()//fragment返回数据处理
+
+        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<String>("key")?.observe(this
+        ) {
+            LogUtils.e(TAG + it.toString())
+            onButtonClick(binding.btnStatic, 1)
         }
 
     }
