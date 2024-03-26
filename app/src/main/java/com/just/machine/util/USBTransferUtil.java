@@ -18,6 +18,7 @@ import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
 import com.hoho.android.usbserial.util.SerialInputOutputManager;
 import com.just.machine.model.UsbSerialData;
+import com.just.machine.model.systemsetting.SixMinSysSettingBean;
 import com.just.news.BuildConfig;
 
 import java.io.ByteArrayOutputStream;
@@ -63,6 +64,11 @@ public class USBTransferUtil {
     private int bloodType = 0; //1运动前血压 2运动后血压
     private boolean xueyangType = true;
     private int startType = 0;
+    private boolean circleBoolean = true;
+    private boolean autoCircleBoolean = true;//自动计圈
+    private int circleCount = 0;
+    private int testType = 0;//0初始状态 1开始 2结束
+    private boolean ignoreBlood = false;//是否忽略测量血压
 
     // 顺序： manager - availableDrivers（所有可用设备） - UsbSerialDriver（目标设备对象） - UsbDeviceConnection（设备连接对象） - UsbSerialPort（设备的端口，一般只有1个）
     private List<UsbSerialDriver> availableDrivers = new ArrayList<>();  // 所有可用设备
@@ -94,6 +100,23 @@ public class USBTransferUtil {
 
     public void setBegin(boolean begin) {
         isBegin = begin;
+    }
+
+    public boolean isIgnoreBlood() {
+        return ignoreBlood;
+    }
+
+    public void setIgnoreBlood(boolean ignoreBlood) {
+        this.ignoreBlood = ignoreBlood;
+    }
+
+
+    public Map<Long, String> getMapBloodOxygen() {
+        return mapBloodOxygen;
+    }
+
+    public void setMapBloodOxygen(Map<Long, String> mapBloodOxygen) {
+        this.mapBloodOxygen = mapBloodOxygen;
     }
 
     public static USBTransferUtil getInstance() {
@@ -363,7 +386,7 @@ public class USBTransferUtil {
                 cc.printStackTrace();
             }
             for (Long key : mapNew.keySet()) {
-                byteStr = byteStr + (CRC16Util.bytesToHexString(Objects.requireNonNull(mapNew.get(key)))) ;
+                byteStr = (CRC16Util.bytesToHexString(Objects.requireNonNull(mapNew.get(key))))+byteStr;
                 map.remove(key);
             }
         }
@@ -518,6 +541,8 @@ public class USBTransferUtil {
                                 String str = Integer.toString(oxygen);
                                 mapBloodOxygen.put(time, str);
                                 usbSerialData.setBloodOxygen(String.valueOf(oxygen));
+                            }else{
+                                usbSerialData.setBloodOxygen("--");
                             }
 
                             //步数数据
@@ -525,6 +550,17 @@ public class USBTransferUtil {
                                 byte[] bytesBS = {bytes[15], bytes[16]};
                                 String bsStr = CRC16Util.bytesToHexString(bytesBS);
                                 Integer steps = Integer.valueOf(bsStr, 16);
+                            }
+                            //圈数数据
+                            if (startType == 1 && bytes[17] != bytesnull) {
+                                //圈数
+                                byte[] b = {bytes[17]};
+                                Integer qsInt = Integer.valueOf(CRC16Util.bytesToHexString(b), 16);
+                                SixMinSysSettingBean bean = new SixMinSysSettingBean();
+                                if (circleBoolean && bean.getSysOther().getCircleCountType().equals("0") && qsInt == 1) {
+                                    ++circleCount;
+                                   usbSerialData.setCircleCount(String.valueOf(circleCount));
+                                }
                             }
                         }
                     }
