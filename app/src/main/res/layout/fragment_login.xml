@@ -29,11 +29,12 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_background"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="60dp"
+                android:layout_height="80dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/space_20"
-                android:background="@drawable/ic_logo" />
+                android:layout_marginBottom="@dimen/space_10"
+                android:background="@mipmap/logo" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
