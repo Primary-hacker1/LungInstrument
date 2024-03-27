@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -63,7 +64,6 @@ public class USBTransferUtil {
     private int bloodState = 0;
     private int bloodType = 0; //1运动前血压 2运动后血压
     private boolean xueyangType = true;
-    private int startType = 0;
     private boolean circleBoolean = true;
     private boolean autoCircleBoolean = true;//自动计圈
     private int circleCount = 0;
@@ -119,11 +119,33 @@ public class USBTransferUtil {
         this.mapBloodOxygen = mapBloodOxygen;
     }
 
+    public int getBloodType() {
+        return bloodType;
+    }
+
+    public void setBloodType(int bloodType) {
+        this.bloodType = bloodType;
+    }
+
+    public int getTestType() {
+        return testType;
+    }
+
+    public void setTestType(int testType) {
+        this.testType = testType;
+    }
+
     public static USBTransferUtil getInstance() {
         if (usbTransferUtil == null) {
             usbTransferUtil = new USBTransferUtil();
         }
         return usbTransferUtil;
+    }
+
+    public void addOxygenData() {
+        Random random =new Random();
+        int data = random.nextInt(10) + 90;
+        mapBloodOxygen.put(System.currentTimeMillis(),String.valueOf(data));
     }
 
     // 接口 -------------------------
@@ -515,16 +537,16 @@ public class USBTransferUtil {
                                     } else if ((bytes[13] != (byte) 0xFF && bytes[14] != (byte) 0xFF)) {
                                         byte[] bloodBehindByte = {bytes[14]};
                                         String bloodBehindValue = Integer.valueOf(CRC16Util.bytesToHexString(bloodBehindByte), 16).toString();
-                                        usbSerialData.setBloodState("测量血压成功");
                                         usbSerialData.setBloodHigh(bloodValue);
                                         usbSerialData.setBloodLow(bloodBehindValue);
                                         SixMinCmdUtils.Companion.resetMeasureBloodPressure();
                                         //运动前
                                         if (bloodType == 0) {
-                                            bloodType = 1;
                                             usbSerialData.setBloodHighFront(bloodValue);
                                             usbSerialData.setBloodLowFront(bloodBehindValue);
+
                                         }
+                                        usbSerialData.setBloodState("测量血压成功");
                                     }
                                 }
                             }
@@ -546,13 +568,13 @@ public class USBTransferUtil {
                             }
 
                             //步数数据
-                            if (startType == 1 && (bytes[15] != bytesnull || bytes[16] != bytesnull)) {
+                            if (testType == 1 && (bytes[15] != bytesnull || bytes[16] != bytesnull)) {
                                 byte[] bytesBS = {bytes[15], bytes[16]};
                                 String bsStr = CRC16Util.bytesToHexString(bytesBS);
                                 Integer steps = Integer.valueOf(bsStr, 16);
                             }
                             //圈数数据
-                            if (startType == 1 && bytes[17] != bytesnull) {
+                            if (testType == 1 && bytes[17] != bytesnull) {
                                 //圈数
                                 byte[] b = {bytes[17]};
                                 Integer qsInt = Integer.valueOf(CRC16Util.bytesToHexString(b), 16);
