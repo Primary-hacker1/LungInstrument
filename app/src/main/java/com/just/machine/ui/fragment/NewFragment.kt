@@ -14,6 +14,7 @@ import com.common.viewmodel.LiveDataEvent
 import com.just.machine.dao.PatientBean
 import com.just.machine.model.Constants
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.machine.util.SendMsg
 import com.just.news.R
 import com.just.news.databinding.FragmentNewBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -100,7 +101,7 @@ class NewFragment : CommonBaseFragment<FragmentNewBinding>() {
         }
 
         binding.buttonSend.setOnClickListener {
-            serialPort.sendData(binding.editTextTextSend.text.toString())
+            SendMsg(binding.editTextTextSend.text.toString(),serialPort)
         }
     }
 
