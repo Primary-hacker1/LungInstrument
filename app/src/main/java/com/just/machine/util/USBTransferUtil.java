@@ -18,6 +18,7 @@ import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
 import com.hoho.android.usbserial.util.SerialInputOutputManager;
 import com.just.machine.model.UsbSerialData;
+import com.just.machine.model.systemsetting.SixMinSysSettingBean;
 import com.just.news.BuildConfig;
 
 import java.io.ByteArrayOutputStream;
@@ -29,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -62,7 +64,11 @@ public class USBTransferUtil {
     private int bloodState = 0;
     private int bloodType = 0; //1运动前血压 2运动后血压
     private boolean xueyangType = true;
-    private int startType = 0;
+    private boolean circleBoolean = true;
+    private boolean autoCircleBoolean = true;//自动计圈
+    private int circleCount = 0;
+    private int testType = 0;//0初始状态 1开始 2结束
+    private boolean ignoreBlood = false;//是否忽略测量血压
 
     // 顺序： manager - availableDrivers（所有可用设备） - UsbSerialDriver（目标设备对象） - UsbDeviceConnection（设备连接对象） - UsbSerialPort（设备的端口，一般只有1个）
     private List<UsbSerialDriver> availableDrivers = new ArrayList<>();  // 所有可用设备
@@ -96,11 +102,50 @@ public class USBTransferUtil {
         isBegin = begin;
     }
 
+    public boolean isIgnoreBlood() {
+        return ignoreBlood;
+    }
+
+    public void setIgnoreBlood(boolean ignoreBlood) {
+        this.ignoreBlood = ignoreBlood;
+    }
+
+
+    public Map<Long, String> getMapBloodOxygen() {
+        return mapBloodOxygen;
+    }
+
+    public void setMapBloodOxygen(Map<Long, String> mapBloodOxygen) {
+        this.mapBloodOxygen = mapBloodOxygen;
+    }
+
+    public int getBloodType() {
+        return bloodType;
+    }
+
+    public void setBloodType(int bloodType) {
+        this.bloodType = bloodType;
+    }
+
+    public int getTestType() {
+        return testType;
+    }
+
+    public void setTestType(int testType) {
+        this.testType = testType;
+    }
+
     public static USBTransferUtil getInstance() {
         if (usbTransferUtil == null) {
             usbTransferUtil = new USBTransferUtil();
         }
         return usbTransferUtil;
+    }
+
+    public void addOxygenData() {
+        Random random =new Random();
+        int data = random.nextInt(10) + 90;
+        mapBloodOxygen.put(System.currentTimeMillis(),String.valueOf(data));
     }
 
     // 接口 -------------------------
@@ -363,7 +408,7 @@ public class USBTransferUtil {
                 cc.printStackTrace();
             }
             for (Long key : mapNew.keySet()) {
-                byteStr = byteStr + (CRC16Util.bytesToHexString(Objects.requireNonNull(mapNew.get(key)))) ;
+                byteStr = (CRC16Util.bytesToHexString(Objects.requireNonNull(mapNew.get(key))))+byteStr;
                 map.remove(key);
             }
         }
@@ -492,16 +537,16 @@ public class USBTransferUtil {
                                     } else if ((bytes[13] != (byte) 0xFF && bytes[14] != (byte) 0xFF)) {
                                         byte[] bloodBehindByte = {bytes[14]};
                                         String bloodBehindValue = Integer.valueOf(CRC16Util.bytesToHexString(bloodBehindByte), 16).toString();
-                                        usbSerialData.setBloodState("测量血压成功");
                                         usbSerialData.setBloodHigh(bloodValue);
                                         usbSerialData.setBloodLow(bloodBehindValue);
                                         SixMinCmdUtils.Companion.resetMeasureBloodPressure();
                                         //运动前
                                         if (bloodType == 0) {
-                                            bloodType = 1;
                                             usbSerialData.setBloodHighFront(bloodValue);
                                             usbSerialData.setBloodLowFront(bloodBehindValue);
+
                                         }
+                                        usbSerialData.setBloodState("测量血压成功");
                                     }
                                 }
                             }
@@ -518,13 +563,26 @@ public class USBTransferUtil {
                                 String str = Integer.toString(oxygen);
                                 mapBloodOxygen.put(time, str);
                                 usbSerialData.setBloodOxygen(String.valueOf(oxygen));
+                            }else{
+                                usbSerialData.setBloodOxygen("--");
                             }
 
                             //步数数据
-                            if (startType == 1 && (bytes[15] != bytesnull || bytes[16] != bytesnull)) {
+                            if (testType == 1 && (bytes[15] != bytesnull || bytes[16] != bytesnull)) {
                                 byte[] bytesBS = {bytes[15], bytes[16]};
                                 String bsStr = CRC16Util.bytesToHexString(bytesBS);
                                 Integer steps = Integer.valueOf(bsStr, 16);
+                            }
+                            //圈数数据
+                            if (testType == 1 && bytes[17] != bytesnull) {
+                                //圈数
+                                byte[] b = {bytes[17]};
+                                Integer qsInt = Integer.valueOf(CRC16Util.bytesToHexString(b), 16);
+                                SixMinSysSettingBean bean = new SixMinSysSettingBean();
+                                if (circleBoolean && bean.getSysOther().getCircleCountType().equals("0") && qsInt == 1) {
+                                    ++circleCount;
+                                   usbSerialData.setCircleCount(String.valueOf(circleCount));
+                                }
                             }
                         }
                     }

@@ -20,6 +20,7 @@ class SharedPreferencesUtils private constructor() {
         private const val PER_IS_CLICK_BTN = "per_user_is_click_btn"
         private const val PASS = "per_user_pass"
         private const val SIX_MIN_SYS_SETTING = "per_six_min_sys_setting"
+        private const val SIX_MIN_TEST_GUIDE = "per_six_min_test_guide"
     }
 
     var user: String? = null
@@ -68,6 +69,18 @@ class SharedPreferencesUtils private constructor() {
         set(serialNo) {
             field = serialNo
             CommonSharedPreferences.setSPValue(SIX_MIN_SYS_SETTING, serialNo)
+        }
+
+    var sixMinGuide: String? = null //6分钟引导
+        get() {
+            if (field == null) {
+                field = CommonSharedPreferences.getSPValue(SIX_MIN_TEST_GUIDE, "")
+            }
+            return field
+        }
+        set(serialNo) {
+            field = serialNo
+            CommonSharedPreferences.setSPValue(SIX_MIN_TEST_GUIDE, serialNo)
         }
 
     /**

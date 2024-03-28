@@ -1,23 +1,24 @@
 package com.just.machine.ui.activity
 
+import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.common.base.CommonBaseActivity
-import com.common.base.bind
 import com.google.gson.Gson
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.systemsetting.SixMinSysSettingBean
 import com.just.machine.util.KeyboardUtil
 import com.just.machine.util.SixMinCmdUtils
-import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.ActivitySixminSystemSettingBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.view_toolbar.view.tv_right
 
 @AndroidEntryPoint
 class SixMinSystemSettingActivity : CommonBaseActivity<ActivitySixminSystemSettingBinding>() {
 
     private var autoCircleCount: Boolean = true
+
     override fun getViewBinding() = ActivitySixminSystemSettingBinding.inflate(layoutInflater)
 
     override fun initView() {
@@ -109,11 +110,11 @@ class SixMinSystemSettingActivity : CommonBaseActivity<ActivitySixminSystemSetti
 
     private fun initToolbar() {
         binding.toolbar.title = getString(R.string.system_setting)//标题
-//        binding.toolbar.tvRight.gone()
-//        binding.toolbar.ivTitleBack.visible()
-//        binding.toolbar.ivTitleBack.setNoRepeatListener {
-//            finish()
-//        }
+        binding.toolbar.tvRight.visibility = View.GONE
+        binding.toolbar.ivTitleBack.visibility = View.VISIBLE
+        binding.toolbar.ivTitleBack.setOnClickListener {
+            finish()
+        }
         KeyboardUtil.setEditTextFilter(binding.sixminEtOtherUseOrg)
         KeyboardUtil.setEditTextFilter(binding.sixminEtModifyPwd)
         KeyboardUtil.setEditTextFilter(binding.sixminEtConfirmPwd)

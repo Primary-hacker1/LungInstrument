@@ -16,6 +16,7 @@ public class UsbSerialData {
     private String bloodState;
 
     private String bloodOxygen;
+    private String circleCount;
 
     public String getBloodPressureState() {
         return bloodPressureState;
@@ -111,5 +112,13 @@ public class UsbSerialData {
 
     public void setBloodOxygen(String bloodOxygen) {
         this.bloodOxygen = bloodOxygen;
+    }
+
+    public String getCircleCount() {
+        return circleCount;
+    }
+
+    public void setCircleCount(String circleCount) {
+        this.circleCount = circleCount;
     }
 }

@@ -103,7 +103,7 @@
                     android:layout_marginStart="5dp"
                     android:text="@string/sixmin_test_patient_info_name"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/sixmin_tv_test_patient_name"
@@ -112,7 +112,7 @@
                     android:layout_marginStart="5dp"
                     android:text="张三"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
@@ -137,7 +137,7 @@
                     android:layout_marginStart="5dp"
                     android:text="@string/sixmin_test_patient_info_sex"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/sixmin_tv_test_patient_sex"
@@ -146,7 +146,7 @@
                     android:layout_marginStart="5dp"
                     android:text="男"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
@@ -171,7 +171,7 @@
                     android:layout_marginStart="5dp"
                     android:text="@string/sixmin_test_patient_info_age"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/sixmin_tv_test_patient_age"
@@ -180,7 +180,7 @@
                     android:layout_marginStart="5dp"
                     android:text="29"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
 
             </LinearLayout>
@@ -206,7 +206,7 @@
                     android:layout_marginStart="5dp"
                     android:text="@string/sixmin_test_patient_info_height"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/sixmin_tv_test_patient_hight"
@@ -215,7 +215,7 @@
                     android:layout_marginStart="5dp"
                     android:text="175"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
@@ -240,7 +240,7 @@
                     android:layout_marginStart="5dp"
                     android:text="@string/sixmin_test_patient_info_weight"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/sixmin_tv_test_patient_weight"
@@ -249,7 +249,7 @@
                     android:layout_marginStart="5dp"
                     android:text="75"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
 
             </LinearLayout>
@@ -275,7 +275,7 @@
                     android:layout_marginStart="5dp"
                     android:text="@string/sixmin_test_patient_info_bmi"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/sixmin_tv_test_patient_bmi"
@@ -284,8 +284,7 @@
                     android:layout_marginStart="5dp"
                     android:text="24.5"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
-
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
