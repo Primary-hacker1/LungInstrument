@@ -135,6 +135,14 @@ public class USBTransferUtil {
         this.testType = testType;
     }
 
+    public int getCircleCount() {
+        return circleCount;
+    }
+
+    public void setCircleCount(int circleCount) {
+        this.circleCount = circleCount;
+    }
+
     public static USBTransferUtil getInstance() {
         if (usbTransferUtil == null) {
             usbTransferUtil = new USBTransferUtil();
@@ -544,7 +552,6 @@ public class USBTransferUtil {
                                         if (bloodType == 0) {
                                             usbSerialData.setBloodHighFront(bloodValue);
                                             usbSerialData.setBloodLowFront(bloodBehindValue);
-
                                         }
                                         usbSerialData.setBloodState("测量血压成功");
                                     }
