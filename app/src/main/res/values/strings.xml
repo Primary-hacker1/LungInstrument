@@ -189,4 +189,16 @@
     <string name="sixmin_test_start_measure_blood_front">请您坐在椅子上，并保持平静，我们为您测量运动前血压。</string>
     <string name="sixmin_test_start_measure_blood_behind">我们为您测量运动后血压。</string>
     <string name="sixmin_test_start_test">现在开始六分钟步行试验，倒计时5秒</string>
+    <string name="sixmin_test_start_exit_test_tips">是否确定退出试验？</string>
+    <string name="sixmin_test_start_timeout">时间到。</string>
+    <string name="sixmin_test_start_heart_beat_trend">心率趋势</string>
+    <string name="sixmin_test_start_blood_oxygen_trend">血氧趋势</string>
+    <string name="sixmin_test_start_use_this_blood_pressure_front">是否使用此次运动前血压？</string>
+    <string name="sixmin_test_start_use_this_blood_pressure_behind">是否使用此次运动后血压？</string>
+    <string name="sixmin_test_start_count_down_five_tips">您做得很好，还有5分钟。</string>
+    <string name="sixmin_test_start_count_down_four_tips">再接再厉，您还有4分钟。</string>
+    <string name="sixmin_test_start_count_down_three_tips">很好，已经一半了。</string>
+    <string name="sixmin_test_start_count_down_two_tips">加油，您只剩两分钟了。</string>
+    <string name="sixmin_test_start_count_down_one_tips">您做得很好，再走1分钟就结束了。</string>
+    <string name="sixmin_test_start_count_down_zero_tips">试验即将结束，当提示时间到的时候，您不要突然停下来，而是放慢速度继续向前走。</string>
 </resources>
