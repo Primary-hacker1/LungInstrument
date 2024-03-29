@@ -40,7 +40,6 @@ class MeFragment : CommonBaseFragment<FragmentMeBinding>() {
         LogUtils.e(TAG + viewModel.itemNews.toString())
 
         binding.btnMe.setOnClickListener {
-            navigate(it, R.id.settingFragment)//fragment跳转
         }
 
         val navController = findNavController()//fragment返回数据处理

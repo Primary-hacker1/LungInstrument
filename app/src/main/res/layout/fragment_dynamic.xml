@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -13,29 +15,317 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="vertical">
+
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:ignore="ScrollViewSize">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/ll_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/space_8">
+
+
+                <LinearLayout
+                    android:id="@+id/ll_"
+                    android:layout_width="83dp"
+                    android:layout_height="28dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    tools:ignore="MissingConstraints">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:src="@drawable/ic_dynamic"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="@string/ambulatoryLungTest"
+                        android:textColor="@color/text9"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/btn_routine"
+                    android:layout_width="100dp"
+                    android:layout_height="28dp"
+                    android:layout_marginStart="@dimen/space_18"
+                    android:background="@drawable/super_edittext_bg"
+                    android:gravity="center"
+                    android:text="@string/routine"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/ll_"
+                    tools:ignore="MissingConstraints" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/btn_wasserman"
+                    android:layout_width="100dp"
+                    android:layout_height="28dp"
+                    android:layout_marginStart="@dimen/space_18"
+                    android:gravity="center"
+                    android:text="@string/wasserman_9"
+                    android:textColor="@color/cD9D9D9"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/btn_routine"
+                    tools:ignore="MissingConstraints" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/btn_data"
+                    android:layout_width="100dp"
+                    android:layout_height="28dp"
+                    android:layout_marginStart="@dimen/space_18"
+                    android:gravity="center"
+                    android:text="@string/data"
+                    android:textColor="@color/cD9D9D9"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/btn_wasserman"
+                    tools:ignore="MissingConstraints" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/space_8"
+                    android:orientation="horizontal"
+                    app:layout_constraintRight_toRightOf="parent"
+                    tools:ignore="MissingConstraints">
+
+                    <LinearLayout
+                        android:id="@+id/ll_start"
+                        android:layout_width="83dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/save_bg"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        tools:ignore="MissingConstraints">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/baseline_play"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:text="@string/begin"
+                            android:textColor="@color/colorWhile"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_save"
+                        android:layout_width="83dp"
+                        android:layout_height="35dp"
+                        android:layout_marginStart="@dimen/space_12"
+                        android:background="@drawable/save_bg_line"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        tools:ignore="MissingConstraints">
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@drawable/save_icon"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:text="@string/cancel"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="8"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:padding="@dimen/space_6">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="8"
+                android:orientation="vertical">
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <Spinner
+                        android:id="@+id/time_spinner"
+                        style="@style/CustomSpinnerStyle"
+                        android:layout_width="88dp"
+                        android:layout_height="53dp"
+                        />
+
+                    <Spinner
+                        android:id="@+id/vo_spinner"
+                        style="@style/CustomSpinnerStyle"
+                        android:layout_width="88dp"
+                        android:layout_height="53dp"
+                        />
+
+
+                    <Spinner
+                        android:id="@+id/hr_spinner"
+                        style="@style/CustomSpinnerStyle"
+                        android:layout_width="88dp"
+                        android:layout_height="53dp"/>
+
+
+                    <Spinner
+                        android:id="@+id/rer_spinner"
+                        style="@style/CustomSpinnerStyle"
+                        android:layout_width="88dp"
+                        android:layout_height="53dp"/>
+
+
+                    <Spinner
+                        android:id="@+id/o2hr_spinner"
+                        style="@style/CustomSpinnerStyle"
+                        android:layout_width="88dp"
+                        android:layout_height="53dp" />
+
+
+                    <Spinner
+                        android:id="@+id/fio_spinner"
+                        style="@style/CustomSpinnerStyle"
+                        android:layout_width="88dp"
+                        android:layout_height="53dp" />
+
+
+                    <Spinner
+                        android:id="@+id/vd_spinner"
+                        style="@style/CustomSpinnerStyle"
+                        android:layout_width="88dp"
+                        android:layout_height="53dp" />
+
+
+                    <Spinner
+                        android:id="@+id/tex_spinner"
+                        style="@style/CustomSpinnerStyle"
+                        android:layout_width="88dp"
+                        android:layout_height="53dp" />
+
+
+                    <Spinner
+                        android:id="@+id/feo_spinner"
+                        style="@style/CustomSpinnerStyle"
+                        android:layout_width="88dp"
+                        android:layout_height="53dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <Spinner
+                        android:id="@+id/ph_spinner"
+                        style="@style/CustomSpinnerStyle"
+                        android:layout_width="88dp"
+                        android:layout_height="53dp"/>
+
+                    <Spinner
+                        android:id="@+id/vco_spinner"
+                        style="@style/CustomSpinnerStyle"
+                        android:layout_width="88dp"
+                        android:layout_height="53dp"/>
+
+                    <Spinner
+                        android:id="@+id/hrr_spinner"
+                        style="@style/CustomSpinnerStyle"
+                        android:layout_width="88dp"
+                        android:layout_height="53dp"/>
+
+                    <Spinner
+                        android:id="@+id/ve_spinner"
+                        style="@style/CustomSpinnerStyle"
+                        android:layout_width="88dp"
+                        android:layout_height="53dp"/>
+
+                    <Spinner
+                        android:id="@+id/spo_spinner"
+                        style="@style/CustomSpinnerStyle"
+                        android:layout_width="88dp"
+                        android:layout_height="53dp" />
+
+                    <Spinner
+                        android:id="@+id/fico_spinner"
+                        style="@style/CustomSpinnerStyle"
+                        android:layout_width="88dp"
+                        android:layout_height="53dp"/>
+
+                    <Spinner
+                        android:id="@+id/bf_spinner"
+                        style="@style/CustomSpinnerStyle"
+                        android:layout_width="88dp"
+                        android:layout_height="53dp" />
+
+                    <Spinner
+                        android:id="@+id/vtex_spinner"
+                        style="@style/CustomSpinnerStyle"
+                        android:layout_width="88dp"
+                        android:layout_height="53dp"/>
+
+                    <Spinner
+                        android:id="@+id/feco_spinner"
+                        style="@style/CustomSpinnerStyle"
+                        android:layout_width="88dp"
+                        android:layout_height="53dp" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
 
 
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:orientation="vertical">
-
-
-
-
-        </LinearLayout>
-
-
     </LinearLayout>
 
 </layout>

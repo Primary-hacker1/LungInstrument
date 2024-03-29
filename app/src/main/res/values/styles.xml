@@ -27,5 +27,12 @@
         <item name="android:paddingStart">8dp</item>
     </style>
 
+    <style name="CustomSpinnerStyle" parent="Widget.AppCompat.Spinner">
+        <!-- 修改 Spinner 下拉箭头颜色为透明 -->
+        <item name="android:background">@drawable/spinner_dropdown_background</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:popupBackground">@drawable/spinner_dropdown_background</item>
+        <!-- 可选：其他样式修改 -->
+    </style>
 
 </resources>
