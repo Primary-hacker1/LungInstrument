@@ -181,4 +181,12 @@
         <item>Item 3</item>
         <!-- 添加更多项 -->
     </string-array>
+    <string name="sixmin_test_guide_text">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;本次试验为六分钟步行试验，目标是在规定场地内来回步行，在6分钟之内步行尽可能远的距离。如果您在测试过程中停止行走或需要休息时，如果您愿意，可以靠在墙上或坐在椅子上休息，当您觉得体力恢复后，请继续行走，当提示时间到的时候，您不要突然停下来，而是放慢速度继续向前走。</string>
+    <string name="ambulatoryLungTest">动态肺测试</string>
+    <string name="routine">常规</string>
+    <string name="wasserman_9">Wasserman-9</string>
+    <string name="data">数据</string>
+    <string name="sixmin_test_start_measure_blood_front">数据</string>
+    <string name="sixmin_test_start_measure_blood_behind">数据</string>
+    <string name="sixmin_test_start_test">数据</string>
 </resources>

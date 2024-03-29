@@ -30,19 +30,7 @@
         android:name="com.just.machine.ui.fragment.MeFragment"
         android:label="meFragment"
         tools:layout="@layout/fragment_me">
-        <action
-            android:id="@+id/action_meFragment_to_settingFragment"
-            app:destination="@id/settingFragment" />
-    </fragment_navigator>
 
-    <fragment_navigator
-        android:id="@+id/settingFragment"
-        android:name="com.just.machine.ui.fragment.setting.SettingFragment"
-        android:label="settingFragment"
-        tools:layout="@layout/fragment_setting">
-        <action
-            android:id="@+id/action_settingFragment_to_meFragment"
-            app:destination="@id/meFragment" />
     </fragment_navigator>
 
 </navigation>
