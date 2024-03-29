@@ -186,7 +186,7 @@
     <string name="routine">常规</string>
     <string name="wasserman_9">Wasserman-9</string>
     <string name="data">数据</string>
-    <string name="sixmin_test_start_measure_blood_front">数据</string>
-    <string name="sixmin_test_start_measure_blood_behind">数据</string>
-    <string name="sixmin_test_start_test">数据</string>
+    <string name="sixmin_test_start_measure_blood_front">请您坐在椅子上，并保持平静，我们为您测量运动前血压。</string>
+    <string name="sixmin_test_start_measure_blood_behind">我们为您测量运动后血压。</string>
+    <string name="sixmin_test_start_test">现在开始六分钟步行试验，倒计时5秒</string>
 </resources>
