@@ -90,6 +90,30 @@ class SixMinSystemSettingActivity : CommonBaseActivity<ActivitySixminSystemSetti
             sysSettingBean.sysPwd.modifyPwd = binding.sixminEtModifyPwd.text.toString()
             sysSettingBean.sysPwd.confirmPwd = binding.sixminEtConfirmPwd.text.toString()
             //蓝牙设置
+            if(binding.sixminEtBluetoothEcg.text.toString() == ""){
+                showMsg("心电蓝牙不可为空")
+                return@setOnClickListener
+            }
+            if(binding.sixminEtBluetoothEcg.text.toString().length != 12){
+                showMsg("请检查心电蓝牙长度")
+                return@setOnClickListener
+            }
+            if(binding.sixminEtBluetoothBlood.text.toString() == ""){
+                showMsg("血压蓝牙不可为空")
+                return@setOnClickListener
+            }
+            if(binding.sixminEtBluetoothBlood.text.toString().length != 12){
+                showMsg("请检查血压蓝牙长度")
+                return@setOnClickListener
+            }
+            if(binding.sixminEtBluetoothBloodOxygen.text.toString() == ""){
+                showMsg("血氧蓝牙不可为空")
+                return@setOnClickListener
+            }
+            if(binding.sixminEtBluetoothBloodOxygen.text.toString().length != 12){
+                showMsg("请检查血氧蓝牙长度")
+                return@setOnClickListener
+            }
             if (sysSettingBean.sysBlue.ecgBlue != binding.sixminEtBluetoothEcg.text.toString() || sysSettingBean.sysBlue.bloodBlue != binding.sixminEtBluetoothBlood.text.toString() || sysSettingBean.sysBlue.bloodOxyBlue != binding.sixminEtBluetoothBloodOxygen.text.toString()) {
                 //蓝牙配置有变动需要同步到设备
                 SixMinCmdUtils.dealBluetooth(

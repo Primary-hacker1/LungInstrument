@@ -119,6 +119,13 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         showGuideDialog()
     }
 
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if(hasFocus){
+            SystemUtil.immersive(this, true)
+        }
+    }
+
     /**
      * 初始化系统设置信息
      */
@@ -190,23 +197,23 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 //电池状态
                 when (usbSerialData.batteryLevel) {
                     1 -> {
-                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi1)
+                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi00)
                     }
 
                     2 -> {
-                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi2)
+                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi1)
                     }
 
                     3 -> {
-                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi3)
+                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi2)
                     }
 
                     4 -> {
-                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi4)
+                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi3)
                     }
 
                     5 -> {
-                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi)
+                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi4)
                     }
 
                     else -> {

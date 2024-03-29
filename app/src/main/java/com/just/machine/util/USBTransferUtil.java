@@ -69,6 +69,7 @@ public class USBTransferUtil {
     private int circleCount = 0;
     private int testType = 0;//0初始状态 1开始 2结束
     private boolean ignoreBlood = false;//是否忽略测量血压
+    private int updateBluetooth = 0;//
 
     // 顺序： manager - availableDrivers（所有可用设备） - UsbSerialDriver（目标设备对象） - UsbDeviceConnection（设备连接对象） - UsbSerialPort（设备的端口，一般只有1个）
     private List<UsbSerialDriver> availableDrivers = new ArrayList<>();  // 所有可用设备
@@ -408,9 +409,7 @@ public class USBTransferUtil {
             }
             try {
                 Set<Long> set = map.keySet();
-                Iterator<Long> iterator = set.iterator();
-                while (iterator.hasNext()) {
-                    Long mapLongKey = iterator.next();
+                for (Long mapLongKey : set) {
                     mapNew.put(mapLongKey, map.get(mapLongKey));
                 }
             } catch (ConcurrentModificationException cc) {
@@ -594,6 +593,16 @@ public class USBTransferUtil {
                                     ++circleCount;
                                    usbSerialData.setCircleCount(String.valueOf(circleCount));
                                 }
+                            }
+
+                            //计圈、记步设备、低功耗工作状态
+                            String byteStr = CRC16Util.bytesToHexString(new byte[]{bytes[18]});
+                            //System.out.println(dataStr);
+                            String dGHStr = byteStr.substring(0, 1);
+                            String jqAndJbAndDGhStr = byteStr.substring(1, 2);
+                            //验证蓝牙参数是否更新成功
+                            if (dGHStr.equals("1")) {
+                                updateBluetooth = 1;
                             }
                         }
                     }
