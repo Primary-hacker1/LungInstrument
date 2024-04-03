@@ -7,8 +7,6 @@ import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.viewmodel.LiveDataEvent
-import com.just.machine.dao.PatientBean
-import com.just.machine.model.CommonSharedPreferences.privateSet
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.ui.activity.CardiopulmonaryActivity
 import com.just.machine.ui.activity.PatientActivity
@@ -103,7 +101,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
         }
 
         binding.btnPatientInformation.setNoRepeatListener {
-            PatientActivity.startPatientActivity(context)
+            PatientActivity.startPatientActivity(context,null)
         }
 
         binding.btnClose.setNoRepeatListener {

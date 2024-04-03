@@ -6,6 +6,9 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ViewDataBinding
 
@@ -78,6 +81,13 @@ abstract class CommonBaseActivity<VB : ViewDataBinding> : AppCompatActivity() {
             val im = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             im.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS)
         }
+    }
+
+    /**
+     * Toast消息
+     */
+    fun showMsg(msg:String,duration:Int=Toast.LENGTH_SHORT){
+        Toast.makeText(this, msg, duration).show()
     }
 
 }

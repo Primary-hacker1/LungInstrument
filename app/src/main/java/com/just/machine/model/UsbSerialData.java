@@ -121,4 +121,23 @@ public class UsbSerialData {
     public void setCircleCount(String circleCount) {
         this.circleCount = circleCount;
     }
+
+    @Override
+    public String toString() {
+        return "UsbSerialData{" +
+                "bloodPressureState='" + bloodPressureState + '\'' +
+                ", ecgState='" + ecgState + '\'' +
+                ", bloodOxyState='" + bloodOxyState + '\'' +
+                ", batteryLevel=" + batteryLevel +
+                ", bloodHigh='" + bloodHigh + '\'' +
+                ", bloodLow='" + bloodLow + '\'' +
+                ", bloodHighFront='" + bloodHighFront + '\'' +
+                ", bloodLowFront='" + bloodLowFront + '\'' +
+                ", bloodHighBehind='" + bloodHighBehind + '\'' +
+                ", bloodLowBehind='" + bloodLowBehind + '\'' +
+                ", bloodState='" + bloodState + '\'' +
+                ", bloodOxygen='" + bloodOxygen + '\'' +
+                ", circleCount='" + circleCount + '\'' +
+                '}';
+    }
 }

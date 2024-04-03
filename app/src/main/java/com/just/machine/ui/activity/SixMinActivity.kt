@@ -5,11 +5,14 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.CountDownTimer
 import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.common.base.CommonBaseActivity
 import com.common.base.setNoRepeatListener
 import com.common.viewmodel.LiveDataEvent
@@ -24,7 +27,6 @@ import com.just.machine.dao.PatientBean
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.UsbSerialData
 import com.just.machine.model.systemsetting.SixMinSysSettingBean
-import com.just.machine.ui.dialog.PatientDialogFragment
 import com.just.machine.ui.dialog.SixMinGuideDialogFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.FileUtil
@@ -37,23 +39,26 @@ import com.just.news.R
 import com.just.news.databinding.ActivitySixMinBinding
 import com.justsafe.libview.util.SystemUtil
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileInputStream
 import java.text.DecimalFormat
 import java.util.Locale
-import java.util.Random
 
 
 @AndroidEntryPoint
 class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech.OnInitListener {
 
+    private val TAG = "SixMinActivity"
     private lateinit var usbTransferUtil: USBTransferUtil
     private lateinit var textToSpeech: TextToSpeech
     private lateinit var mCountDownTime: FixCountDownTime
     private lateinit var mCountDownTimeThree: CountDownTimer
+    private lateinit var mStartTestCountDownTime: FixCountDownTime
     private lateinit var exitTestDialog: AlertDialog
     private lateinit var confirmBloodFrontDialog: AlertDialog
     private lateinit var confirmBloodEndDialog: AlertDialog
+    private lateinit var stopTestDialog: AlertDialog
     private lateinit var bloodOxyDataSet: LineDataSet
     private val viewModel by viewModels<MainViewModel>()
     private lateinit var patientBean: PatientBean
@@ -61,8 +66,13 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
     private var colorList = mutableListOf(0)
     private var notShowAnymore = false
     private lateinit var usbSerialData: UsbSerialData
-    private var exitType = "0"
-
+    private var exitType = "0" //0是返回键 1是跳转系统设置
+    private var measureBloodUtteranceId = "" //测量血压语音播报标识
+    private var startTestUtteranceId = "" //开始训练语音播报标识
+    private var stepsAndCircleUtteranceId = "" //开始步行和计圈语音播报标识
+    private var bloodBeforeUtteranceId = "" //运动前血压语音播报标识
+    private var bloodEndUtteranceId = "" //运动后血压语音播报标识
+    private var defaultUtteranceId = ""//语音播报开始标识
     private fun addEntryData(entryData: Float, times: Int) {
 
         val decimalFormat = DecimalFormat("#.00")
@@ -83,14 +93,15 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
     }
 
     override fun initView() {
+        initSysInfo()
         initCountDownTimerExt()
         initExitAlertDialog()
         initConfirmBloodFrontDialog()
         initConfirmBloodEndDialog()
+        initStopTestDialog()
         copyAssetsFilesToSD()
         initLineChart(binding.sixminLineChartBloodOxygen, 1)
         initLineChart(binding.sixminLineChartHeartBeat, 2)
-        sysSettingBean = SixMinSysSettingBean()
         usbTransferUtil = USBTransferUtil.getInstance()
         usbTransferUtil.init(this)
         textToSpeech = TextToSpeech(applicationContext, this)
@@ -112,25 +123,51 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         showGuideDialog()
     }
 
-    private fun showGuideDialog() {
-        val sixMinGuide = SharedPreferencesUtils.instance.sixMinGuide
-        if (sixMinGuide == null || sixMinGuide == "") {
-            val sixMinGuideDialogFragment =
-                SixMinGuideDialogFragment.startGuideDialogFragment(supportFragmentManager)//添加患者修改患者信息
-            sixMinGuideDialogFragment.setDialogOnClickListener(object :
-                SixMinGuideDialogFragment.SixMinGuideDialogListener {
-                override fun onSelectNotSeeAnyMore(checked: Boolean) {
-                    notShowAnymore = checked
-                }
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            SystemUtil.immersive(this, true)
+        }
+    }
 
-                override fun onClickStartTest() {
-                    if (notShowAnymore) {
-                        SharedPreferencesUtils.instance.sixMinGuide = "1"
+    /**
+     * 初始化系统设置信息
+     */
+    private fun initSysInfo() {
+        val gson = Gson()
+        sysSettingBean = SixMinSysSettingBean()
+        val sixMinSysSetting = SharedPreferencesUtils.instance.sixMinSysSetting
+        if (sixMinSysSetting != null && sixMinSysSetting != "") {
+            sysSettingBean = gson.fromJson(
+                sixMinSysSetting, SixMinSysSettingBean::class.java
+            )
+        }
+    }
+
+    /**
+     * 显示引导弹窗
+     */
+    private fun showGuideDialog() {
+        if (sysSettingBean.sysOther.broadcastVoice == "1") {
+            val sixMinGuide = SharedPreferencesUtils.instance.sixMinGuide
+            if (sixMinGuide == null || sixMinGuide == "") {
+                val sixMinGuideDialogFragment =
+                    SixMinGuideDialogFragment.startGuideDialogFragment(supportFragmentManager)//添加患者修改患者信息
+                sixMinGuideDialogFragment.setDialogOnClickListener(object :
+                    SixMinGuideDialogFragment.SixMinGuideDialogListener {
+                    override fun onSelectNotSeeAnyMore(checked: Boolean) {
+                        notShowAnymore = checked
                     }
-                    sixMinGuideDialogFragment.dismiss()
-                    startTest()
-                }
-            })
+
+                    override fun onClickStartTest() {
+                        if (notShowAnymore) {
+                            SharedPreferencesUtils.instance.sixMinGuide = "1"
+                        }
+                        sixMinGuideDialogFragment.dismiss()
+                        startTest()
+                    }
+                })
+            }
         }
     }
 
@@ -164,23 +201,23 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 //电池状态
                 when (usbSerialData.batteryLevel) {
                     1 -> {
-                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi1)
+                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi00)
                     }
 
                     2 -> {
-                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi2)
+                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi1)
                     }
 
                     3 -> {
-                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi3)
+                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi2)
                     }
 
                     4 -> {
-                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi4)
+                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi3)
                     }
 
                     5 -> {
-                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi)
+                        binding.sixminIvBatteryStatus.setImageResource(R.mipmap.dianchi4)
                     }
 
                     else -> {
@@ -210,18 +247,19 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                         binding.sixminTvMeasureBlood.text = getString(R.string.sixmin_measure_blood)
                         binding.sixminTvBloodPressureHigh.text = usbSerialData.bloodHigh
                         binding.sixminTvBloodPressureLow.text = usbSerialData.bloodLow
-                        binding.sixminTvBloodPressureHighFront.text =
-                            usbSerialData.bloodHighFront ?: "---"
-                        binding.sixminTvBloodPressureLowFront.text =
-                            usbSerialData.bloodLowFront ?: "---"
                         binding.sixminTvBloodPressureHighBehind.text =
                             usbSerialData.bloodHighBehind ?: "---"
                         binding.sixminTvBloodPressureLowBehind.text =
                             usbSerialData.bloodLowBehind ?: "---"
-                        if(usbTransferUtil.bloodType == 0){
-
+                        val str =
+                            "您当前的收缩压为，${usbSerialData.bloodHigh},舒张压为，${usbSerialData.bloodLow}"
+                        if (usbTransferUtil.bloodType == 0) {
+                            bloodBeforeUtteranceId = System.currentTimeMillis().toString()
+                            speechContent(str, bloodBeforeUtteranceId)
+                        } else if (usbTransferUtil.bloodType == 2) {
+                            bloodEndUtteranceId = System.currentTimeMillis().toString()
+                            speechContent(str, bloodEndUtteranceId)
                         }
-                        startStepAndCircle()
                     }
                 }
                 //血氧数据
@@ -261,9 +299,10 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                     }
                 }
                 //圈数数据
-                if (usbSerialData.circleCount != null && !usbSerialData.circleCount.isEmpty()) {
+                if (usbSerialData.circleCount != null && usbSerialData.circleCount.isNotEmpty()) {
                     binding.sixminTvCircleCount.text = usbSerialData.circleCount
                 }
+                Log.d("SixMinActivity", usbSerialData.toString())
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -272,7 +311,11 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         binding.sixminRlMeasureBlood.setNoRepeatListener {
             if (USBTransferUtil.isConnectUSB) {
                 if (binding.sixminTvMeasureBlood.text == getString(R.string.sixmin_measure_blood)) {
-                    SixMinCmdUtils.measureBloodPressure()
+                    if (usbSerialData.bloodPressureState == "血压已连接") {
+                        SixMinCmdUtils.measureBloodPressure()
+                    } else {
+                        Toast.makeText(this, "血压仪未连接，请检查设备!", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     Toast.makeText(this, "正在测量血压中...", Toast.LENGTH_SHORT).show()
                 }
@@ -315,7 +358,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
             if (!usbTransferUtil.isBegin) {
                 val intent = Intent(this, SixMinSystemSettingActivity::class.java)
                 startActivity(intent)
-            }else{
+            } else {
                 exitType = "1"
                 if (!exitTestDialog.isShowing) {
                     exitTestDialog.show()
@@ -324,25 +367,21 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         }
         binding.sixminIvCircleCountPlus.setOnClickListener {
             if (usbTransferUtil.isBegin) {
-                usbTransferUtil.circleCount++
                 if (usbSerialData.circleCount == null) {
-                    usbSerialData.circleCount = "1"
-                } else {
-                    usbSerialData.circleCount = (usbSerialData.circleCount.toInt() + 1).toString()
+                    usbSerialData.circleCount = "0"
                 }
+                usbSerialData.circleCount = (usbSerialData.circleCount.toInt() + 1).toString()
+                usbTransferUtil.circleCount = usbSerialData.circleCount.toInt()
                 binding.sixminTvCircleCount.text = usbSerialData.circleCount
             }
         }
         binding.sixminIvCircleCountMinus.setOnClickListener {
             if (usbTransferUtil.isBegin) {
-                if (usbTransferUtil.circleCount == 0) {
-                    return@setOnClickListener
-                }
-                usbTransferUtil.circleCount--
                 if (usbSerialData.circleCount == null || usbSerialData.circleCount == "0") {
                     return@setOnClickListener
                 }
                 usbSerialData.circleCount = (usbSerialData.circleCount.toInt() - 1).toString()
+                usbTransferUtil.circleCount = usbSerialData.circleCount.toInt()
                 binding.sixminTvCircleCount.text = usbSerialData.circleCount
             }
         }
@@ -353,130 +392,137 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
     }
 
     private fun startStepAndCircle() {
-        if (!usbTransferUtil.isBegin) {
-            usbTransferUtil.testType = 1
-            binding.sixminTvStart.text = getString(R.string.sixmin_stop)
-            binding.sixminTvTestStatus.text = getString(R.string.sixmin_test_testing)
-            binding.sixminTvCircleCount.text = "0"
-            SixMinCmdUtils.openQSAndBS()
-            mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack {
-                override fun onStart() {
+        usbTransferUtil.isBegin = true
+        usbTransferUtil.testType = 1
+        binding.sixminTvStart.text = getString(R.string.sixmin_stop)
+        binding.sixminTvTestStatus.text = getString(R.string.sixmin_test_testing)
+        usbSerialData.circleCount = "0"
+        binding.sixminTvCircleCount.text = "0"
+        SixMinCmdUtils.openQSAndBS()
+        mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack {
+            override fun onStart() {
 
-                }
+            }
 
-                override fun onTick(times: Int) {
-                    try {
-                        val minute = times / 60 % 60
-                        val second = times % 60
-                        binding.sixminTvStartMin.text = minute.toString()
-                        if (second.toString().length == 1) {
-                            binding.sixminTvStartSec1.text = "0"
-                            binding.sixminTvStartSec2.text = second.toString()
-                        } else {
-                            binding.sixminTvStartSec1.text =
-                                second.toString().substring(0, 1)
-                            binding.sixminTvStartSec2.text =
-                                second.toString().substring(1)
-                        }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
+            override fun onTick(times: Int) {
+                try {
+                    val minute = times / 60 % 60
+                    val second = times % 60
+                    binding.sixminTvStartMin.text = minute.toString()
+                    if (second.toString().length == 1) {
+                        binding.sixminTvStartSec1.text = "0"
+                        binding.sixminTvStartSec2.text = second.toString()
+                    } else {
+                        binding.sixminTvStartSec1.text =
+                            second.toString().substring(0, 1)
+                        binding.sixminTvStartSec2.text =
+                            second.toString().substring(1)
                     }
-                }
 
-                override fun onFinish() {
-                    usbTransferUtil.testType = 0
-                    SixMinCmdUtils.closeQSAndBS()
-                    binding.sixminTvStart.text = getString(R.string.sixmin_start)
-                    binding.sixminTvStartMin.text = "0"
-                    binding.sixminTvStartSec1.text = "0"
-                    binding.sixminTvStartSec2.text = "0"
-                    binding.sixminIvIgnoreBlood.visibility = View.VISIBLE
-                    usbTransferUtil.isIgnoreBlood = false
-                    mCountDownTimeThree.cancel()
-                    mCountDownTime.setmTimes(360)
-                }
-            })
-            mCountDownTimeThree.start()
-        } else {
-            usbTransferUtil.testType = 0
-            SixMinCmdUtils.closeQSAndBS()
-            binding.sixminTvStart.text = getString(R.string.sixmin_start)
-            binding.sixminTvTestStatus.text = getString(R.string.sixmin_test_title)
-            binding.sixminTvStartMin.text = "5"
-            binding.sixminTvStartSec1.text = "5"
-            binding.sixminTvStartSec2.text = "9"
-            mCountDownTime.cancel()
-            mCountDownTime.setmTimes(360)
-            binding.sixminIvIgnoreBlood.visibility = View.VISIBLE
-            usbTransferUtil.isIgnoreBlood = false
-        }
-        usbTransferUtil.isBegin = !usbTransferUtil.isBegin
+                    if (second == 0) {
+                        when (minute) {
+                            5 -> {
+                                speechContent(getString(R.string.sixmin_test_start_count_down_five_tips))
+                            }
 
+                            4 -> {
+                                speechContent(getString(R.string.sixmin_test_start_count_down_four_tips))
+                            }
+
+                            3 -> {
+                                speechContent(getString(R.string.sixmin_test_start_count_down_three_tips))
+                            }
+
+                            2 -> {
+                                speechContent(getString(R.string.sixmin_test_start_count_down_two_tips))
+                            }
+
+                            1 -> {
+                                speechContent(getString(R.string.sixmin_test_start_count_down_one_tips))
+                            }
+                        }
+                    }
+
+                    if (minute == 0 && second == 16) {
+                        speechContent(getString(R.string.sixmin_test_start_count_down_zero_tips))
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onFinish() {
+                speechContent(getString(R.string.sixmin_test_start_timeout))
+                binding.sixminRlStart.isEnabled = false
+                usbTransferUtil.isBegin = false
+                usbTransferUtil.testType = 0
+                usbTransferUtil.bloodType = 2
+                SixMinCmdUtils.closeQSAndBS()
+                if (sysSettingBean.sysOther.autoMeasureBlood == "1") {
+                    lifecycleScope.launch {
+                        kotlinx.coroutines.delay(1000L)
+                        binding.sixminTvBloodPressureHigh.text = "---"
+                        binding.sixminTvBloodPressureLow.text = "---"
+                        if (usbSerialData.bloodPressureState == "血压已连接") {
+                            SixMinCmdUtils.measureBloodPressure()
+                        } else {
+                            Toast.makeText(
+                                this@SixMinActivity,
+                                "血压仪未连接，请检查设备!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                }else{
+
+                }
+                binding.sixminTvStart.text = getString(R.string.sixmin_start)
+                binding.sixminTvTestStatus.text = getString(R.string.sixmin_test_title)
+                binding.sixminTvStartMin.text = "0"
+                binding.sixminTvStartSec1.text = "0"
+                binding.sixminTvStartSec2.text = "0"
+                binding.sixminIvIgnoreBlood.visibility = View.VISIBLE
+                usbTransferUtil.isIgnoreBlood = false
+                mCountDownTimeThree.cancel()
+                mCountDownTime.setmTimes(360)
+            }
+        })
+        mCountDownTimeThree.start()
     }
 
     private fun startTest() {
         if (!usbTransferUtil.isBegin) {
+            //是否自动测量血压
             if (sysSettingBean.sysOther.autoMeasureBlood == "1") {
-                SixMinCmdUtils.measureBloodPressure()
+                //是否播报语音
+                if (sysSettingBean.sysOther.broadcastVoice == "1") {
+                    measureBloodUtteranceId = System.currentTimeMillis().toString()
+                    speechContent(
+                        getString(R.string.sixmin_test_start_measure_blood_front),
+                        measureBloodUtteranceId
+                    )
+                } else {
+                    if (usbSerialData.bloodPressureState == "血压已连接") {
+                        SixMinCmdUtils.measureBloodPressure()
+                    } else {
+                        Toast.makeText(this, "血压仪未连接，请检查设备!", Toast.LENGTH_SHORT).show()
+                    }
+                }
             } else {
-                usbTransferUtil.isBegin = true
-                usbTransferUtil.testType = 1
-                binding.sixminTvStart.text = getString(R.string.sixmin_stop)
-                binding.sixminTvTestStatus.text = getString(R.string.sixmin_test_testing)
-                binding.sixminTvCircleCount.text = "0"
-                SixMinCmdUtils.openQSAndBS()
-                mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack {
-                    override fun onStart() {
-
-                    }
-
-                    override fun onTick(times: Int) {
-                        try {
-                            val minute = times / 60 % 60
-                            val second = times % 60
-                            binding.sixminTvStartMin.text = minute.toString()
-                            if (second.toString().length == 1) {
-                                binding.sixminTvStartSec1.text = "0"
-                                binding.sixminTvStartSec2.text = second.toString()
-                            } else {
-                                binding.sixminTvStartSec1.text =
-                                    second.toString().substring(0, 1)
-                                binding.sixminTvStartSec2.text =
-                                    second.toString().substring(1)
-                            }
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-                    }
-
-                    override fun onFinish() {
-                        usbTransferUtil.testType = 0
-                        SixMinCmdUtils.closeQSAndBS()
-                        binding.sixminTvStart.text = getString(R.string.sixmin_start)
-                        binding.sixminTvStartMin.text = "0"
-                        binding.sixminTvStartSec1.text = "0"
-                        binding.sixminTvStartSec2.text = "0"
-                        binding.sixminIvIgnoreBlood.visibility = View.VISIBLE
-                        usbTransferUtil.isIgnoreBlood = false
-                        mCountDownTimeThree.cancel()
-                        mCountDownTime.setmTimes(360)
-                    }
-                })
-                mCountDownTimeThree.start()
+                if (sysSettingBean.sysOther.broadcastVoice == "1") {
+                    startTestUtteranceId = System.currentTimeMillis().toString()
+                    speechContent(
+                        getString(R.string.sixmin_test_start_test),
+                        startTestUtteranceId
+                    )
+                } else {
+                    startStepAndCircle()
+                }
             }
         } else {
-            usbTransferUtil.isBegin = false
-            usbTransferUtil.testType = 0
-            SixMinCmdUtils.closeQSAndBS()
-            binding.sixminTvStart.text = getString(R.string.sixmin_start)
-            binding.sixminTvTestStatus.text = getString(R.string.sixmin_test_title)
-            binding.sixminTvStartMin.text = "5"
-            binding.sixminTvStartSec1.text = "5"
-            binding.sixminTvStartSec2.text = "9"
-            mCountDownTime.cancel()
-            mCountDownTime.setmTimes(360)
-            binding.sixminIvIgnoreBlood.visibility = View.VISIBLE
-            usbTransferUtil.isIgnoreBlood = false
+            if(!stopTestDialog.isShowing){
+                stopTestDialog.show()
+            }
         }
     }
 
@@ -518,7 +564,10 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
             description.setPosition((screenWidth / 2).toFloat() + 140, 20f)
             description.textSize = 11f
             description?.apply {
-                text = if (type == 1) "血氧趋势" else "心率趋势"
+                text =
+                    if (type == 1) getString(R.string.sixmin_test_start_blood_oxygen_trend) else getString(
+                        R.string.sixmin_test_start_heart_beat_trend
+                    )
             }
             xAxis?.apply {
                 textSize = 10f
@@ -621,18 +670,20 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
     private fun initExitAlertDialog() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("")
-        builder.setMessage("是否确定退出试验？")
-        builder.setPositiveButton("是") { _, _ ->
-            if(exitType == "0"){
+        builder.setMessage(getString(R.string.sixmin_test_start_exit_test_tips))
+        builder.setPositiveButton(getString(R.string.sixmin_system_setting_check_yes)) { _, _ ->
+            if (exitType == "0") {
                 finish()
-            }else{
+            } else {
                 val intent = Intent(this, SixMinSystemSettingActivity::class.java)
                 startActivity(intent)
             }
         }
-        builder.setNegativeButton("否") { _, _ ->
+        builder.setNegativeButton(getString(R.string.sixmin_system_setting_check_no)) { _, _ ->
         }
         exitTestDialog = builder.create()
+        exitTestDialog.setCanceledOnTouchOutside(false)
+        exitTestDialog.setCancelable(false)
     }
 
     /**
@@ -641,14 +692,28 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
     private fun initConfirmBloodFrontDialog() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("")
-        builder.setMessage("是否使用此次运动前血压？")
-        builder.setPositiveButton("是") { _, _ ->
-            startTest()
+        builder.setMessage(getString(R.string.sixmin_test_start_use_this_blood_pressure_front))
+        builder.setPositiveButton(getString(R.string.sixmin_system_setting_check_yes)) { _, _ ->
+            binding.sixminTvBloodPressureHighFront.text =
+                usbSerialData.bloodHighFront ?: "---"
+            binding.sixminTvBloodPressureLowFront.text =
+                usbSerialData.bloodLowFront ?: "---"
+            usbTransferUtil.bloodType = 1
+            if (sysSettingBean.sysOther.broadcastVoice == "1") {
+                startTestUtteranceId = System.currentTimeMillis().toString()
+                speechContent(getString(R.string.sixmin_test_start_test), startTestUtteranceId)
+            }
         }
-        builder.setNegativeButton("否") { _, _ ->
-            startTest()
+        builder.setNegativeButton(getString(R.string.sixmin_system_setting_check_no)) { _, _ ->
+            usbTransferUtil.bloodType = 1
+            if (sysSettingBean.sysOther.broadcastVoice == "1") {
+                startTestUtteranceId = System.currentTimeMillis().toString()
+                speechContent(getString(R.string.sixmin_test_start_test), startTestUtteranceId)
+            }
         }
         confirmBloodFrontDialog = builder.create()
+        confirmBloodFrontDialog.setCanceledOnTouchOutside(false)
+        confirmBloodFrontDialog.setCancelable(false)
     }
 
     /**
@@ -657,19 +722,58 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
     private fun initConfirmBloodEndDialog() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("")
-        builder.setMessage("是否使用此次运动后血压？")
-        builder.setPositiveButton("是") { _, _ ->
+        builder.setMessage(getString(R.string.sixmin_test_start_use_this_blood_pressure_behind))
+        builder.setPositiveButton(getString(R.string.sixmin_system_setting_check_yes)) { _, _ ->
+            binding.sixminTvBloodPressureHighBehind.text =
+                usbSerialData.bloodHighBehind ?: "---"
+            binding.sixminTvBloodPressureLowBehind.text =
+                usbSerialData.bloodLowBehind ?: "---"
+            usbTransferUtil.bloodType = 0
+            PatientActivity.startPatientActivity(this@SixMinActivity,"sixMinTest")
+            finish()
         }
-        builder.setNegativeButton("否") { _, _ ->
+        builder.setNegativeButton(getString(R.string.sixmin_system_setting_check_no)) { _, _ ->
+
         }
         confirmBloodEndDialog = builder.create()
+        confirmBloodEndDialog.setCanceledOnTouchOutside(false)
+        confirmBloodEndDialog.setCancelable(false)
+    }
+
+    /**
+     * 是否停止试验
+     */
+    private fun initStopTestDialog(){
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("")
+        builder.setMessage(getString(R.string.sixmin_test_start_stop_test_tips))
+        builder.setPositiveButton(getString(R.string.sixmin_system_setting_check_yes)) { _, _ ->
+            usbTransferUtil.isBegin = false
+            usbTransferUtil.testType = 0
+            SixMinCmdUtils.closeQSAndBS()
+            binding.sixminTvStart.text = getString(R.string.sixmin_start)
+            binding.sixminTvTestStatus.text = getString(R.string.sixmin_test_title)
+            binding.sixminTvStartMin.text = "5"
+            binding.sixminTvStartSec1.text = "5"
+            binding.sixminTvStartSec2.text = "9"
+            mCountDownTime.cancel()
+            mCountDownTime.setmTimes(360)
+            binding.sixminIvIgnoreBlood.visibility = View.VISIBLE
+            usbTransferUtil.isIgnoreBlood = false
+        }
+        builder.setNegativeButton(getString(R.string.sixmin_system_setting_check_no)) { _, _ ->
+
+        }
+        stopTestDialog = builder.create()
+        stopTestDialog.setCanceledOnTouchOutside(false)
+        stopTestDialog.setCancelable(false)
     }
 
     private fun initCountDownTimerExt() {
         mCountDownTime = object : FixCountDownTime(360, 1000) {}
         mCountDownTimeThree = object : CountDownTimer(1080000, 3000) {
             override fun onTick(millisUntilFinished: Long) {
-                if(usbSerialData != null && usbSerialData.bloodOxyState != null && usbSerialData.bloodOxyState == "血氧已连接"){
+                if (usbSerialData != null && usbSerialData.bloodOxyState != null && usbSerialData.bloodOxyState == "血氧已连接") {
                     val mapBloodOxygen = usbTransferUtil.mapBloodOxygen
 //                usbTransferUtil.addOxygenData()
                     val value = mapBloodOxygen.entries.lastOrNull()?.value ?: "98"
@@ -681,6 +785,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
 
             }
         }
+        mStartTestCountDownTime = object : FixCountDownTime(5, 1000) {}
     }
 
     override fun getViewBinding() = ActivitySixMinBinding.inflate(layoutInflater)
@@ -691,11 +796,102 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
             //设置语言为中文
             textToSpeech.language = Locale.CHINA
             //设置音调,值越大声音越尖（女生），值越小则变成男声,1.0是常规
-            textToSpeech.setPitch(0.6f)
+            textToSpeech.setPitch(1f)
             //设置语速
-            textToSpeech.setSpeechRate(0.2f)
+            textToSpeech.setSpeechRate(1f)
             //在onInIt方法里直接调用tts的播报功能
+            textToSpeech.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+                override fun onStart(utteranceId: String?) {
+                    Log.d(TAG, "onStart: $utteranceId")
+                    defaultUtteranceId = utteranceId!!
+                }
+
+                override fun onDone(utteranceId: String?) {
+                    runOnUiThread {
+                        Log.d(TAG, "onDone: $utteranceId")
+                        if (measureBloodUtteranceId == defaultUtteranceId) {
+                            if (usbSerialData.bloodPressureState == "血压已连接") {
+                                SixMinCmdUtils.measureBloodPressure()
+                            } else {
+                                Toast.makeText(
+                                    this@SixMinActivity,
+                                    "血压仪未连接，请检查设备!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        } else if (startTestUtteranceId == defaultUtteranceId) {
+                            mStartTestCountDownTime.start(object :
+                                FixCountDownTime.OnTimerCallBack {
+                                override fun onStart() {
+                                    binding.sixminIvCountdownTime.visibility = View.VISIBLE
+                                }
+
+                                override fun onTick(times: Int) {
+                                    var imageId = -1
+                                    when (times) {
+                                        5 -> {
+                                            imageId = R.mipmap.five
+                                        }
+
+                                        4 -> {
+                                            imageId = R.mipmap.four
+                                        }
+
+                                        3 -> {
+                                            imageId = R.mipmap.three
+                                        }
+
+                                        2 -> {
+                                            imageId = R.mipmap.two
+                                        }
+
+                                        1 -> {
+                                            imageId = R.mipmap.one
+                                        }
+                                    }
+                                    speechContent(times.toString())
+                                    lifecycleScope.launch {
+                                        kotlinx.coroutines.delay(1200L)
+                                        binding.sixminIvCountdownTime.setImageResource(imageId)
+                                    }
+                                }
+
+                                override fun onFinish() {
+                                    lifecycleScope.launch {
+                                        kotlinx.coroutines.delay(1000L)
+                                        binding.sixminIvCountdownTime.visibility = View.GONE
+                                        stepsAndCircleUtteranceId =
+                                            System.currentTimeMillis().toString()
+                                        speechContent("请开始步行。", stepsAndCircleUtteranceId)
+                                    }
+                                }
+                            })
+                        } else if (stepsAndCircleUtteranceId == defaultUtteranceId) {
+                            startStepAndCircle()
+                        } else if (bloodBeforeUtteranceId == defaultUtteranceId) {
+                            if (!confirmBloodFrontDialog.isShowing) {
+                                confirmBloodFrontDialog.show()
+                            }
+                        } else if (bloodEndUtteranceId == defaultUtteranceId) {
+                            if (!confirmBloodEndDialog.isShowing) {
+                                confirmBloodEndDialog.show()
+                            }
+                        }
+                    }
+                }
+
+                override fun onError(utteranceId: String?) {
+                    Log.d(TAG, "onError: $utteranceId")
+                }
+            })
         }
+    }
+
+    private fun speechContent(
+        content: String,
+        utteranceId: String = System.currentTimeMillis().toString()
+    ) {
+        textToSpeech.speak(content, TextToSpeech.QUEUE_ADD, null, utteranceId)
     }
 
     override fun onResume() {
@@ -704,16 +900,24 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
             binding.sixminIvBloodPressure.setImageResource(R.mipmap.xueyano)
             binding.sixminIvBloodOxygen.setImageResource(R.mipmap.xueyangno)
         }
+        initSysInfo()
         SystemUtil.immersive(this, true)
         super.onResume()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        binding.sixminRlStart.isEnabled = true
+        usbTransferUtil.isBegin = false
+        usbTransferUtil.testType = 0
+        usbTransferUtil.bloodType = 0
+        SixMinCmdUtils.closeQSAndBS()
         usbTransferUtil.disconnect()
         textToSpeech.stop()
         textToSpeech.shutdown()
         mCountDownTime.cancel()
+        mCountDownTimeThree.cancel()
+        mStartTestCountDownTime.cancel()
     }
 
 }

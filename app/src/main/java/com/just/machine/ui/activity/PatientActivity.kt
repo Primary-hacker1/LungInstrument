@@ -12,16 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.common.base.CommonBaseActivity
 import com.common.base.gone
-import com.common.base.observe
-import com.common.base.onUI
 import com.common.base.setNoRepeatListener
 import com.common.base.visible
 import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
 import com.just.machine.dao.PatientBean
-import com.just.machine.model.CardiopulmonaryRecordsBean
 import com.just.machine.model.Constants
-import com.just.machine.model.SixMinRecordsBean
 import com.just.machine.ui.adapter.CardiopulAdapter
 import com.just.machine.ui.adapter.PatientsAdapter
 import com.just.machine.ui.adapter.SixMinAdapter
@@ -30,7 +26,6 @@ import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.ActivityPatientBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 
 
 /**
@@ -47,8 +42,9 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         /**
          * @param context context
          */
-        fun startPatientActivity(context: Context?) {
+        fun startPatientActivity(context: Context?, jumpFlag: String?) {
             val intent = Intent(context, PatientActivity::class.java)
+            intent.putExtra("jumpFlag",jumpFlag)
             context?.startActivity(intent)
         }
     }
@@ -62,6 +58,8 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
     val beans: MutableList<PatientBean> = ArrayList()
 
     private val adapter: PatientsAdapter = PatientsAdapter(this)
+
+    private var jumpFlag:String? = null
 
 
     private fun initToolbar() {
@@ -103,7 +101,17 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         }
 
         initOnClick()
-
+        jumpFlag = intent.getStringExtra("jumpFlag")
+        if(jumpFlag != null && jumpFlag == "sixMinTest"){
+            setButtonStyle(
+                binding.btnCardiopulmonary,
+                binding.btnSixMin,
+                binding.rvCardiopulmonaryTest,
+                binding.rvSixTest
+            )
+            binding.llSixMin.visible()
+            binding.llCardiopulmonary.gone()
+        }
     }
 
     private fun queryPatient(any: Any) {
