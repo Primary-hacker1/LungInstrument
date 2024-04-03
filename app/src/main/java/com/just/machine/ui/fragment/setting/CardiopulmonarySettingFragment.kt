@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.common.base.CommonBaseFragment
@@ -13,7 +12,7 @@ import com.common.base.gone
 import com.common.base.setNoRepeatListener
 import com.common.base.visible
 import com.just.machine.model.Constants
-import com.just.machine.ui.fragment.FragmentPagerAdapter
+import com.just.machine.ui.adapter.FragmentPagerAdapter
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.LiveDataBus
 import com.just.news.R
@@ -32,11 +31,10 @@ class CardiopulmonarySettingFragment : CommonBaseFragment<FragmentCardiopulmonar
     override fun initView() {
         initToolbar()
 
-        val adapter = FragmentPagerAdapter(activity!!)
-        // 添加三个 Fragment
-        adapter.addFragment(AllSettingFragment())
-        adapter.addFragment(StaticSettingFragment())
-        adapter.addFragment(DynamicSettingFragment())
+        val fragments = listOf(AllSettingFragment(), StaticSettingFragment(),DynamicSettingFragment())
+
+        val adapter = FragmentPagerAdapter(childFragmentManager, lifecycle, fragments)
+
 
         binding.vpTitle.setCurrentItem(0, true)
 
@@ -104,22 +102,6 @@ class CardiopulmonarySettingFragment : CommonBaseFragment<FragmentCardiopulmonar
         }
     }
 
-    private fun initToolbar() {
-        binding.toolbar.title = getString(R.string.system_setting)//标题
-        binding.toolbar.tvRight.gone()
-        binding.toolbar.ivTitleBack.visible()
-        binding.toolbar.ivTitleBack.setNoRepeatListener {
-            popBackStack()
-        }
-
-    }
-
-    private fun popBackStack(){
-        val navController = findNavController()//fragment返回数据处理
-        navController.previousBackStackEntry?.savedStateHandle?.set("key", "返回")
-        navController.popBackStack()
-    }
-
     private fun setButtonStyle(
         textView1: TextView,
         textView2: TextView,
@@ -137,6 +119,21 @@ class CardiopulmonarySettingFragment : CommonBaseFragment<FragmentCardiopulmonar
         textView3.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
     }
 
+    private fun initToolbar() {
+        binding.toolbar.title = getString(R.string.system_setting)//标题
+        binding.toolbar.tvRight.gone()
+        binding.toolbar.ivTitleBack.visible()
+        binding.toolbar.ivTitleBack.setNoRepeatListener {
+            popBackStack()
+        }
+
+    }
+
+    private fun popBackStack(){
+        val navController = findNavController()//fragment返回数据处理
+        navController.previousBackStackEntry?.savedStateHandle?.set("key", "返回")
+        navController.popBackStack()
+    }
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentCardiopulmonarySettingBinding.inflate(inflater, container, false)

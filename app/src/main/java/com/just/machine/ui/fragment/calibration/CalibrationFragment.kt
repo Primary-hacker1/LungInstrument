@@ -6,22 +6,17 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.common.base.CommonBaseFragment
 import com.common.base.gone
 import com.common.base.setNoRepeatListener
-import com.common.base.toast
 import com.common.base.visible
 import com.just.machine.model.Constants
-import com.just.machine.model.SharedPreferencesUtils
-import com.just.machine.ui.activity.MainActivity
-import com.just.machine.ui.fragment.FragmentPagerAdapter
-import com.just.machine.ui.fragment.setting.AllSettingFragment
-import com.just.machine.ui.fragment.setting.DynamicSettingFragment
-import com.just.machine.ui.fragment.setting.StaticSettingFragment
-import com.just.news.databinding.FragmentLoginBinding
+import com.just.machine.ui.adapter.FragmentPagerAdapter
+import com.just.machine.ui.fragment.cardiopulmonary.static.BreatheHardInFragment
+import com.just.machine.ui.fragment.cardiopulmonary.static.MaximalVentilationFragment
+import com.just.machine.ui.fragment.cardiopulmonary.static.RoutineLungBreathingFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.FragmentCalibrationBinding
@@ -42,13 +37,12 @@ class CalibrationFragment : CommonBaseFragment<FragmentCalibrationBinding>() {
         binding.toolbar.tvRight.gone()
         binding.toolbar.ivTitleBack.visible()
 
+        val fragments = listOf(
+            EnvironmentalFragment(), FlowFragment(),
+            IngredientFragment(),CalibrationResultFragment()
+        )
 
-        val adapter = FragmentPagerAdapter(activity!!)
-        // 添加三个 Fragment
-        adapter.addFragment(EnvironmentalFragment())
-        adapter.addFragment(FlowFragment())
-        adapter.addFragment(IngredientFragment())
-        adapter.addFragment(CalibrationResultFragment())
+        val adapter = FragmentPagerAdapter(childFragmentManager, lifecycle, fragments)
 
         onButtonClick(binding.btnEnvironment, 0)
 

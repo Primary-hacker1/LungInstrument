@@ -132,7 +132,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/ll_save"
+                        android:id="@+id/ll_clean"
                         android:layout_width="83dp"
                         android:layout_height="35dp"
                         android:layout_marginStart="@dimen/space_12"

@@ -1,21 +1,26 @@
 package com.just.machine.ui.fragment.cardiopulmonary
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.viewpager2.widget.ViewPager2
 import com.common.base.CommonBaseFragment
-import com.common.base.onUI
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
 import com.just.machine.ui.adapter.CustomSpinnerAdapter
+import com.just.machine.ui.adapter.FragmentPagerAdapter
+import com.just.machine.ui.fragment.calibration.EnvironmentalFragment
+import com.just.machine.ui.fragment.cardiopulmonary.dynamic.DynamicDataFragment
+import com.just.machine.ui.fragment.cardiopulmonary.dynamic.RoutineFragment
+import com.just.machine.ui.fragment.cardiopulmonary.dynamic.WassermanFragment
+import com.just.machine.ui.fragment.setting.CardiopulmonarySettingFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.LiveDataBus
+import com.just.news.R
 import com.just.news.databinding.FragmentDynamicBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_calibration.btn_ingredient
 
 
 /**
@@ -38,6 +43,7 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
     override fun initView() {
         initToolbar()
+//        initViewPager()
 
         val adapterTime = CustomSpinnerAdapter(requireContext())
         val adapterVo = CustomSpinnerAdapter(requireContext())
@@ -111,8 +117,100 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
         }
     }
 
+    private fun initViewPager() {
+
+        val fragments = listOf(
+            RoutineFragment(), WassermanFragment(),
+            DynamicDataFragment()
+        )
+
+        val adapter = FragmentPagerAdapter(childFragmentManager, lifecycle, fragments)
+
+        binding.vpTitle.setCurrentItem(0, true)
+
+        binding.vpTitle.adapter = adapter
+
+        binding.llStart.setNoRepeatListener {
+
+        }
+
+        binding.llClean.setNoRepeatListener { //点击取消
+
+        }
+
+    }
+
     override fun initListener() {
 
+        binding.btnRoutine.setNoRepeatListener {
+            binding.vpTitle.currentItem = 0
+            setButtonPosition(0)
+        }
+
+        binding.btnWasserman.setNoRepeatListener {
+            binding.vpTitle.currentItem = 1
+            setButtonPosition(1)
+        }
+
+        binding.btnData.setNoRepeatListener {
+            binding.vpTitle.currentItem = 2
+            setButtonPosition(2)
+        }
+
+        //这个必须写，不然会产生Fata
+        binding.vpTitle.isSaveEnabled = false
+
+        binding.vpTitle.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                // 当页面被选中时执行你的操作
+//                LogUtils.d(tag + "ViewPager2Selected page: $position")
+
+                setButtonPosition(position)
+
+            }
+        })
+    }
+
+    private fun setButtonPosition(position: Int) {
+        when (position) {
+            0->{
+                setButtonStyle(
+                    binding.btnRoutine,
+                    binding.btnWasserman, binding.btnData
+                )
+            }
+            1->{
+                setButtonStyle(
+                    binding.btnWasserman,
+                    binding.btnRoutine, binding.btnData
+                )
+            }
+            2->{
+                setButtonStyle(
+                    binding.btnData,
+                    binding.btnWasserman, binding.btnRoutine
+                )
+            }
+
+        }
+    }
+
+    private fun setButtonStyle(
+        textView1: TextView,
+        textView2: TextView,
+        textView3: TextView,
+    ) {// 设置按钮的样式
+
+        textView1.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+        textView1.background =
+            ContextCompat.getDrawable(requireContext(), R.drawable.super_edittext_bg)
+
+        textView2.setTextColor(ContextCompat.getColor(requireContext(), R.color.cD9D9D9))
+        textView2.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+
+        textView3.setTextColor(ContextCompat.getColor(requireContext(), R.color.cD9D9D9))
+        textView3.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
     }
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =

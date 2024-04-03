@@ -27,20 +27,11 @@ class MeFragment : CommonBaseFragment<FragmentMeBinding>() {
 
     }
 
-    private fun initToolbar() {
-        binding.toolbar.title = Constants.me//标题
-        binding.toolbar.tvRight.gone()
-        binding.toolbar.ivTitleBack.gone()
-
-    }
 
     override fun initView() {
-        initToolbar()
 
         LogUtils.e(TAG + viewModel.itemNews.toString())
 
-        binding.btnMe.setOnClickListener {
-        }
 
         val navController = findNavController()//fragment返回数据处理
 

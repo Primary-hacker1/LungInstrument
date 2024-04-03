@@ -52,49 +52,51 @@ class SendMsg(
         }
     }
 
-}
 
-internal class Producer(
-    private val queue: BlockingQueue<String>,
-    private val data: String,
-    private val threadSleep: Long,
-    private val  serialPort: SerialPort
-) :
-    Runnable {
-    override fun run() {
-        try {
-            queue.put(data)
-            var send = ByteArray(0) // 获取 字符串并告诉BluetoothChatService发送
+    internal class Producer(
+        private val queue: BlockingQueue<String>,
+        private val data: String,
+        private val threadSleep: Long,
+        private val  serialPort: SerialPort
+    ) :
+        Runnable {
+        override fun run() {
             try {
-                send = hexStr2Bytes(data)
-            } catch (e: Exception) {
-                LogUtils.d("hexStr2Bytes" + e.message)
+                queue.put(data)
+                var send = ByteArray(0) // 获取 字符串并告诉BluetoothChatService发送
+                try {
+                    send = hexStr2Bytes(data)
+                } catch (e: Exception) {
+                    LogUtils.d("hexStr2Bytes" + e.message)
+                }
+
+                serialPort.sendData(send)
+
+                // 延时300毫秒
+                Thread.sleep(threadSleep)
+                LogUtils.e("发送串口延时消息：$threadSleep")
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
             }
+        }
 
-            serialPort.sendData(send)
-
-            // 延时300毫秒
-            Thread.sleep(threadSleep)
-            LogUtils.e("发送串口延时消息：$threadSleep")
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
+        private fun hexStr2Bytes(paramString: String): ByteArray {
+            val i = paramString.length / 2
+            val arrayOfByte = ByteArray(i)
+            var j = 0
+            while (true) {
+                if (j >= i) return arrayOfByte
+                val k = 1 + j * 2
+                val l = k + 1
+                arrayOfByte[j] = (0xFF and Integer.decode(
+                    "0x" + paramString.substring(j * 2, k)
+                            + paramString.substring(k, l)
+                )).toByte()
+                ++j
+            }
         }
     }
 
-    private fun hexStr2Bytes(paramString: String): ByteArray {
-        val i = paramString.length / 2
-        val arrayOfByte = ByteArray(i)
-        var j = 0
-        while (true) {
-            if (j >= i) return arrayOfByte
-            val k = 1 + j * 2
-            val l = k + 1
-            arrayOfByte[j] = (0xFF and Integer.decode(
-                "0x" + paramString.substring(j * 2, k)
-                        + paramString.substring(k, l)
-            )).toByte()
-            ++j
-        }
-    }
 }
+
 

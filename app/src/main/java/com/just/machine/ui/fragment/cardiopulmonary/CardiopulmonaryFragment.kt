@@ -14,12 +14,12 @@ import com.common.base.setNoRepeatListener
 import com.common.base.visible
 import com.common.network.LogUtils
 import com.just.machine.model.Constants
-import com.just.machine.ui.fragment.FragmentPagerAdapter
-import com.just.machine.ui.fragment.calibration.CalibrationResultFragment
+import com.just.machine.ui.adapter.FragmentPagerAdapter
 import com.just.machine.ui.fragment.calibration.EnvironmentalFragment
-import com.just.machine.ui.fragment.calibration.FlowFragment
-import com.just.machine.ui.fragment.calibration.IngredientFragment
+import com.just.machine.ui.fragment.setting.AllSettingFragment
 import com.just.machine.ui.fragment.setting.CardiopulmonarySettingFragment
+import com.just.machine.ui.fragment.setting.DynamicSettingFragment
+import com.just.machine.ui.fragment.setting.StaticSettingFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.FragmentCardiopulmonaryBinding
@@ -48,18 +48,13 @@ class CardiopulmonaryFragment : CommonBaseFragment<FragmentCardiopulmonaryBindin
     override fun initView() {
         initToolbar()
 
-        val adapter = FragmentPagerAdapter(activity!!)
 
-        // 添加三个 Fragment
-        adapter.addFragment(EnvironmentalFragment())
+        val fragments = listOf(
+            EnvironmentalFragment(), StaticFragment(),
+            DynamicFragment(),DynamicResultFragment(),CardiopulmonarySettingFragment()
+        )
 
-        adapter.addFragment(StaticFragment())
-
-        adapter.addFragment(DynamicFragment())
-
-        adapter.addFragment(DynamicResultFragment())
-
-        adapter.addFragment(CardiopulmonarySettingFragment())
+        val adapter = FragmentPagerAdapter(childFragmentManager, lifecycle, fragments)
 
         onButtonClick(binding.btnStatic, 1)
 

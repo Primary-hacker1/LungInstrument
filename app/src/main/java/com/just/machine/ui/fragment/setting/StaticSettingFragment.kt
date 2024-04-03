@@ -67,6 +67,7 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
             )
         )
 
+
         binding.rvSvc.adapter = adapterSvc
 
 
