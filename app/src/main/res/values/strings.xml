@@ -195,6 +195,7 @@
     <string name="sixmin_test_start_blood_oxygen_trend">血氧趋势</string>
     <string name="sixmin_test_start_use_this_blood_pressure_front">是否使用此次运动前血压？</string>
     <string name="sixmin_test_start_use_this_blood_pressure_behind">是否使用此次运动后血压？</string>
+    <string name="sixmin_test_start_stop_test_tips">是否停止训练？</string>
     <string name="sixmin_test_start_count_down_five_tips">您做得很好，还有5分钟。</string>
     <string name="sixmin_test_start_count_down_four_tips">再接再厉，您还有4分钟。</string>
     <string name="sixmin_test_start_count_down_three_tips">很好，已经一半了。</string>

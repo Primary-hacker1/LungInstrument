@@ -511,12 +511,14 @@
                                                 android:orientation="horizontal">
 
                                                 <RadioButton
+                                                    android:buttonTint="@color/colorPrimary"
                                                     android:id="@+id/rb_broadcast_guidance_voice_yes"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                     android:text="@string/sixmin_system_setting_check_yes" />
 
                                                 <RadioButton
+                                                    android:buttonTint="@color/colorPrimary"
                                                     android:id="@+id/rb_broadcast_guidance_voice_no"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
@@ -591,17 +593,20 @@
                                             android:layout_gravity="center_vertical">
 
                                             <RadioGroup
+                                                android:buttonTint="@color/colorPrimary"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:orientation="horizontal">
 
                                                 <RadioButton
+                                                    android:buttonTint="@color/colorPrimary"
                                                     android:id="@+id/rb_auto_mearsure_blood_yes"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                     android:text="@string/sixmin_system_setting_check_yes" />
 
                                                 <RadioButton
+                                                    android:buttonTint="@color/colorPrimary"
                                                     android:id="@+id/rb_auto_mearsure_blood_no"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
@@ -643,12 +648,14 @@
                                             android:orientation="horizontal">
 
                                             <RadioButton
+                                                android:buttonTint="@color/colorPrimary"
                                                 android:id="@+id/rb_steps_or_breath_steps"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:text="@string/sixmin_system_setting_steps_or_breath_steps" />
 
                                             <RadioButton
+                                                android:buttonTint="@color/colorPrimary"
                                                 android:id="@+id/rb_steps_or_breath_breath"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
@@ -680,12 +687,14 @@
                                                 android:orientation="horizontal">
 
                                                 <RadioButton
+                                                    android:buttonTint="@color/colorPrimary"
                                                     android:id="@+id/rb_auto_start_test_yes"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                     android:text="@string/sixmin_system_setting_check_yes" />
 
                                                 <RadioButton
+                                                    android:buttonTint="@color/colorPrimary"
                                                     android:id="@+id/rb_auto_start_test_no"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
@@ -728,12 +737,14 @@
                                             android:orientation="horizontal">
 
                                             <RadioButton
+                                                android:buttonTint="@color/colorPrimary"
                                                 android:id="@+id/rb_position_of_trolley_middle"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:text="@string/sixmin_system_setting_position_of_trolley_middle" />
 
                                             <RadioButton
+                                                android:buttonTint="@color/colorPrimary"
                                                 android:id="@+id/rb_position_of_trolley_start"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
@@ -765,12 +776,14 @@
                                                 android:orientation="horizontal">
 
                                                 <RadioButton
+                                                    android:buttonTint="@color/colorPrimary"
                                                     android:id="@+id/rb_show_rest_time_yes"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                     android:text="@string/sixmin_system_setting_check_yes" />
 
                                                 <RadioButton
+                                                    android:buttonTint="@color/colorPrimary"
                                                     android:id="@+id/rb_show_rest_time_no"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
