@@ -10,6 +10,7 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.databinding.FragmentBreatheBinding
+import com.just.news.databinding.FragmentDynamicDataBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.collections.MutableMap.MutableEntry
 
@@ -20,7 +21,7 @@ import kotlin.collections.MutableMap.MutableEntry
  *@author zt
  */
 @AndroidEntryPoint
-class WassermanFragment : CommonBaseFragment<FragmentBreatheBinding>() {
+class WassermanFragment : CommonBaseFragment<FragmentDynamicDataBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
 
@@ -37,6 +38,6 @@ class WassermanFragment : CommonBaseFragment<FragmentBreatheBinding>() {
     }
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
-        FragmentBreatheBinding.inflate(inflater, container, false)
+        FragmentDynamicDataBinding.inflate(inflater, container, false)
 
 }

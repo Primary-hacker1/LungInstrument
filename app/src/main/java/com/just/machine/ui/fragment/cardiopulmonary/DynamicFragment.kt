@@ -43,7 +43,7 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
     override fun initView() {
         initToolbar()
-//        initViewPager()
+        initViewPager()
 
         val adapterTime = CustomSpinnerAdapter(requireContext())
         val adapterVo = CustomSpinnerAdapter(requireContext())

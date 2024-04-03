@@ -11,6 +11,9 @@
         android:name="com.just.machine.ui.fragment.calibration.CalibrationFragment"
         android:label="calibrationFragment"
         tools:layout="@layout/fragment_calibration">
+        <action
+            android:id="@+id/action_calibrationFragment_to_cardiopulmonaryFragment"
+            app:destination="@id/cardiopulmonaryFragment" />
     </fragment_navigator>
 
     <fragment_navigator
@@ -24,6 +27,9 @@
         <action
             android:id="@+id/action_cardiopulmonaryFragment_to_cardiopulmonarySettingFragment"
             app:destination="@id/cardiopulmonarySettingFragment" />
+        <action
+            android:id="@+id/action_cardiopulmonaryFragment_to_StaticFragment"
+            app:destination="@id/StaticFragment" />
     </fragment_navigator>
 
     <fragment_navigator
@@ -31,6 +37,29 @@
         android:name="com.just.machine.ui.fragment.setting.CardiopulmonarySettingFragment"
         android:label="cardiopulmonarySettingFragment"
         tools:layout="@layout/fragment_cardiopulmonary_setting">
+        <action
+            android:id="@+id/action_cardiopulmonarySettingFragment_to_cardiopulmonaryFragment"
+            app:destination="@id/cardiopulmonaryFragment" />
+    </fragment_navigator>
+
+    <fragment_navigator
+        android:id="@+id/DynamicFragment"
+        android:name="com.just.machine.ui.fragment.cardiopulmonary.DynamicFragment"
+        android:label="dynamicFragment"
+        tools:layout="@layout/fragment_dynamic">
+        <action
+            android:id="@+id/action_D_to_cardiopulmonaryFragment"
+            app:destination="@id/cardiopulmonaryFragment" />
+    </fragment_navigator>
+
+    <fragment_navigator
+        android:id="@+id/StaticFragment"
+        android:name="com.just.machine.ui.fragment.cardiopulmonary.StaticFragment"
+        android:label="StaticFragment"
+        tools:layout="@layout/fragment_static">
+        <action
+            android:id="@+id/action_D_to_cardiopulmonaryFragment"
+            app:destination="@id/cardiopulmonaryFragment" />
     </fragment_navigator>
 
 </navigation>

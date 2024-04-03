@@ -13,8 +13,8 @@ import com.just.machine.ui.fragment.cardiopulmonary.dynamic.DynamicDataFragment
 import com.just.machine.ui.fragment.cardiopulmonary.dynamic.RoutineFragment
 import com.just.machine.ui.fragment.cardiopulmonary.dynamic.WassermanFragment
 import com.just.machine.ui.fragment.cardiopulmonary.static.BreatheHardInFragment
-import com.just.machine.ui.fragment.cardiopulmonary.static.MaximalVentilationFragment
-import com.just.machine.ui.fragment.cardiopulmonary.static.RoutineLungBreathingFragment
+import com.just.machine.ui.fragment.cardiopulmonary.static.MaxVentilationFragment
+import com.just.machine.ui.fragment.cardiopulmonary.static.RoutineLungFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.FragmentStaticBinding
@@ -41,14 +41,14 @@ class StaticFragment : CommonBaseFragment<FragmentStaticBinding>() {
 
     override fun initView() {
         initToolbar()
-//        initViewPager()
+        initViewPager()
     }
 
     private fun initViewPager() {
-
+        
         val fragments = listOf(
-            RoutineLungBreathingFragment(), BreatheHardInFragment(),
-            MaximalVentilationFragment()
+            BreatheHardInFragment(), RoutineLungFragment(),
+            MaxVentilationFragment()
         )
 
         val adapter = FragmentPagerAdapter(childFragmentManager, lifecycle, fragments)
