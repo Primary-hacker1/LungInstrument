@@ -30,6 +30,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
+                android:layout_margin="@dimen/space_8"
+                android:background="@drawable/calibration_bg"
                 android:padding="@dimen/space_8">
 
 

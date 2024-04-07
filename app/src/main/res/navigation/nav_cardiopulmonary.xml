@@ -29,7 +29,7 @@
             app:destination="@id/cardiopulmonarySettingFragment" />
         <action
             android:id="@+id/action_cardiopulmonaryFragment_to_StaticFragment"
-            app:destination="@id/StaticFragment" />
+            app:destination="@id/StaticLungFragment" />
     </fragment_navigator>
 
     <fragment_navigator
@@ -53,13 +53,19 @@
     </fragment_navigator>
 
     <fragment_navigator
-        android:id="@+id/StaticFragment"
-        android:name="com.just.machine.ui.fragment.cardiopulmonary.StaticFragment"
-        android:label="StaticFragment"
+        android:id="@+id/StaticLungFragment"
+        android:name="com.just.machine.ui.fragment.cardiopulmonary.StaticLungFragment"
+        android:label="StaticLungFragment"
         tools:layout="@layout/fragment_static">
         <action
             android:id="@+id/action_D_to_cardiopulmonaryFragment"
             app:destination="@id/cardiopulmonaryFragment" />
     </fragment_navigator>
 
+    <fragment_navigator
+        android:id="@+id/breatheHardInFragment"
+        android:name="com.just.machine.ui.fragment.cardiopulmonary.BreatheHardInFragment"
+        android:label="breatheHardInFragment"
+        tools:layout="@layout/fragment_breathe">
+    </fragment_navigator>
 </navigation>

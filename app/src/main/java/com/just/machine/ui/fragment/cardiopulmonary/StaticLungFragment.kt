@@ -8,13 +8,8 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
+import com.common.network.LogUtils
 import com.just.machine.ui.adapter.FragmentPagerAdapter
-import com.just.machine.ui.fragment.cardiopulmonary.dynamic.DynamicDataFragment
-import com.just.machine.ui.fragment.cardiopulmonary.dynamic.RoutineFragment
-import com.just.machine.ui.fragment.cardiopulmonary.dynamic.WassermanFragment
-import com.just.machine.ui.fragment.cardiopulmonary.static.BreatheHardInFragment
-import com.just.machine.ui.fragment.cardiopulmonary.static.MaxVentilationFragment
-import com.just.machine.ui.fragment.cardiopulmonary.static.RoutineLungFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.FragmentStaticBinding
@@ -27,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
  *@author zt
  */
 @AndroidEntryPoint
-class StaticFragment : CommonBaseFragment<FragmentStaticBinding>() {
+class StaticLungFragment : CommonBaseFragment<FragmentStaticBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
 
@@ -35,12 +30,7 @@ class StaticFragment : CommonBaseFragment<FragmentStaticBinding>() {
 
     }
 
-    private fun initToolbar() {
-
-    }
-
     override fun initView() {
-        initToolbar()
         initViewPager()
     }
 
@@ -52,9 +42,13 @@ class StaticFragment : CommonBaseFragment<FragmentStaticBinding>() {
         adapter.addFragment(RoutineLungFragment())
         adapter.addFragment(MaxVentilationFragment())
 
-        binding.vpTitle.setCurrentItem(0, true)
+        binding.vpTitle.setCurrentItem(1, true)
 
         binding.vpTitle.adapter = adapter
+
+        binding.vpTitle.isUserInputEnabled = false
+
+        LogUtils.e(TAG + "fragment页面=" + adapter.getAllFragmentNames())
 
         binding.llStart.setNoRepeatListener {
 
@@ -134,6 +128,7 @@ class StaticFragment : CommonBaseFragment<FragmentStaticBinding>() {
         textView3.setTextColor(ContextCompat.getColor(requireContext(), R.color.cD9D9D9))
         textView3.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
     }
+
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentStaticBinding.inflate(inflater, container, false)
 

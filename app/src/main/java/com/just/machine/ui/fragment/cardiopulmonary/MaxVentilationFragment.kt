@@ -1,4 +1,4 @@
-package com.just.machine.ui.fragment.cardiopulmonary.static
+package com.just.machine.ui.fragment.cardiopulmonary
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,17 +6,17 @@ import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.databinding.FragmentDynamicDataBinding
-import com.just.news.databinding.FragmentLungBinding
+import com.just.news.databinding.FragmentMaxVentilationBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 
 /**
  *create by 2024/4/2
- * 静态肺的常规
+ * 最大通气量
  *@author zt
  */
 @AndroidEntryPoint
-class RoutineLungFragment : CommonBaseFragment<FragmentLungBinding>() {
+class MaxVentilationFragment : CommonBaseFragment<FragmentMaxVentilationBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
 
@@ -33,6 +33,6 @@ class RoutineLungFragment : CommonBaseFragment<FragmentLungBinding>() {
     }
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
-        FragmentLungBinding.inflate(inflater, container, false)
+        FragmentMaxVentilationBinding.inflate(inflater, container, false)
 
 }

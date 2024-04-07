@@ -1,4 +1,4 @@
-package com.just.machine.ui.fragment.cardiopulmonary.static
+package com.just.machine.ui.fragment.cardiopulmonary
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

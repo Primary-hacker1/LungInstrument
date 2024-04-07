@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.viewmodel.LiveDataEvent
+import com.just.machine.model.Constants
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.ui.activity.CardiopulmonaryActivity
 import com.just.machine.ui.activity.PatientActivity
@@ -73,7 +74,10 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
         }
 
         binding.btnEcg.setNoRepeatListener {//心肺测试
-            val isClick = SharedPreferencesUtils.instance.isClickBtn
+            var isClick = SharedPreferencesUtils.instance.isClickBtn
+            if(Constants.isDebug){
+                isClick = "1"
+            }
             when (isClick) {
                 "" -> {
                     val patientDialogFragment =

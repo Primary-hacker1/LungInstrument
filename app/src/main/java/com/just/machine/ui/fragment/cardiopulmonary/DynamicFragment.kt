@@ -129,6 +129,8 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
         binding.vpTitle.adapter = adapter
 
+        binding.vpTitle.isUserInputEnabled = false
+
         binding.llStart.setNoRepeatListener {
 
         }

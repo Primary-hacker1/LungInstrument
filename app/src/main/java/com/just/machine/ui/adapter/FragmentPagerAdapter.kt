@@ -7,13 +7,20 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class FragmentPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
+class FragmentPagerAdapter(fragmentActivity: FragmentActivity) :
+    FragmentStateAdapter(fragmentActivity) {
 
     private val fragments = mutableListOf<Fragment>()
 
+    // 添加 Fragment 的名称列表
+    private val fragmentNames = mutableListOf<String>()
+
     @SuppressLint("NotifyDataSetChanged")
-    fun addFragment(fragment: Fragment) {
+    fun addFragment(fragment: Fragment, fragmentName: String? = "fragment") {
         fragments.add(fragment)
+        if (fragmentName != null) {
+            fragmentNames.add(fragmentName)
+        }
         notifyDataSetChanged()
     }
 
@@ -24,7 +31,13 @@ class FragmentPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAd
     override fun createFragment(position: Int): Fragment {
         return fragments[position]
     }
+
+    // 返回所有 Fragment 名称的列表
+    fun getAllFragmentNames(): List<String> {
+        return fragmentNames
+    }
 }
+
 
 
 

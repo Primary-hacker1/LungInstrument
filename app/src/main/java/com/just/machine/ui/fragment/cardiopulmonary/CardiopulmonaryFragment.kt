@@ -50,15 +50,15 @@ class CardiopulmonaryFragment : CommonBaseFragment<FragmentCardiopulmonaryBindin
 
         val adapter = FragmentPagerAdapter(requireActivity())
 
-        adapter.addFragment(EnvironmentalFragment())
+        adapter.addFragment(EnvironmentalFragment(), "EnvironmentalFragment")
 
-        adapter.addFragment(StaticFragment())
+        adapter.addFragment(StaticLungFragment(), "StaticLungFragment")
 
-        adapter.addFragment(DynamicFragment())
+        adapter.addFragment(DynamicFragment(), "DynamicFragment")
 
-        adapter.addFragment(DynamicResultFragment())
+        adapter.addFragment(DynamicResultFragment(), "DynamicResultFragment")
 
-        adapter.addFragment(CardiopulmonarySettingFragment())
+        adapter.addFragment(CardiopulmonarySettingFragment(), "CardiopulmonarySettingFragment")
 
         onButtonClick(binding.btnStatic, 1)
 
@@ -100,7 +100,8 @@ class CardiopulmonaryFragment : CommonBaseFragment<FragmentCardiopulmonaryBindin
 
         val navController = findNavController()//fragment返回数据处理
 
-        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<String>("key")?.observe(this
+        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<String>("key")?.observe(
+            this
         ) {
             LogUtils.e(TAG + it.toString())
             onButtonClick(binding.btnStatic, 1)
@@ -110,6 +111,8 @@ class CardiopulmonaryFragment : CommonBaseFragment<FragmentCardiopulmonaryBindin
 
     private fun onButtonClick(button: AppCompatButton, position: Int) {
         binding.vpCardiopulmonary.currentItem = position// 切换ViewPager页面
+
+        LogUtils.e(TAG + "点击fragment页面=" + position)
         resetButtonColors()// 切换按钮颜色
         button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.cF5FCFF))
     }
