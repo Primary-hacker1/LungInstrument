@@ -2,11 +2,6 @@ package com.just.machine.model;
 
 public class UsbSerialData {
 
-    private String bloodPressureState;
-    private String ecgState;
-    private String bloodOxyState;
-    private int batteryLevel;
-
     private String bloodHigh;
     private String bloodLow;
     private String bloodHighFront;
@@ -17,38 +12,8 @@ public class UsbSerialData {
 
     private String bloodOxygen;
     private String circleCount;
+    private String stepsCount;
 
-    public String getBloodPressureState() {
-        return bloodPressureState;
-    }
-
-    public void setBloodPressureState(String bloodPressure) {
-        this.bloodPressureState = bloodPressure;
-    }
-
-    public String getEcgState() {
-        return ecgState;
-    }
-
-    public void setEcgState(String ecgState) {
-        this.ecgState = ecgState;
-    }
-
-    public String getBloodOxyState() {
-        return bloodOxyState;
-    }
-
-    public void setBloodOxyState(String bloodOxyState) {
-        this.bloodOxyState = bloodOxyState;
-    }
-
-    public int getBatteryLevel() {
-        return batteryLevel;
-    }
-
-    public void setBatteryLevel(int batteryLevel) {
-        this.batteryLevel = batteryLevel;
-    }
 
     public String getBloodLow() {
         return bloodLow;
@@ -122,14 +87,18 @@ public class UsbSerialData {
         this.circleCount = circleCount;
     }
 
+    public String getStepsCount() {
+        return stepsCount;
+    }
+
+    public void setStepsCount(String stepsCount) {
+        this.stepsCount = stepsCount;
+    }
+
     @Override
     public String toString() {
         return "UsbSerialData{" +
-                "bloodPressureState='" + bloodPressureState + '\'' +
-                ", ecgState='" + ecgState + '\'' +
-                ", bloodOxyState='" + bloodOxyState + '\'' +
-                ", batteryLevel=" + batteryLevel +
-                ", bloodHigh='" + bloodHigh + '\'' +
+                "bloodHigh='" + bloodHigh + '\'' +
                 ", bloodLow='" + bloodLow + '\'' +
                 ", bloodHighFront='" + bloodHighFront + '\'' +
                 ", bloodLowFront='" + bloodLowFront + '\'' +
@@ -138,6 +107,7 @@ public class UsbSerialData {
                 ", bloodState='" + bloodState + '\'' +
                 ", bloodOxygen='" + bloodOxygen + '\'' +
                 ", circleCount='" + circleCount + '\'' +
+                ", stepsCount='" + stepsCount + '\'' +
                 '}';
     }
 }

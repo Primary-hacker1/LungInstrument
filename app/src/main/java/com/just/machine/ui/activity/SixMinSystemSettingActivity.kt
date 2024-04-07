@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.common.base.CommonBaseActivity
 import com.google.gson.Gson
+import com.just.machine.model.CommonSharedPreferences.get
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.systemsetting.SixMinSysSettingBean
 import com.just.machine.util.KeyboardUtil
@@ -128,7 +129,7 @@ class SixMinSystemSettingActivity : CommonBaseActivity<ActivitySixminSystemSetti
                 binding.sixminEtBluetoothBloodOxygen.text.toString()
 
             SharedPreferencesUtils.instance.sixMinSysSetting = gson.toJson(sysSettingBean)
-            Toast.makeText(this, "系统设置保存成功!", Toast.LENGTH_SHORT).show()
+            showMsg("系统设置保存成功!")
         }
     }
 
@@ -219,6 +220,9 @@ class SixMinSystemSettingActivity : CommonBaseActivity<ActivitySixminSystemSetti
             binding.sixminEtBluetoothBlood.setText(sysSettingBean.sysBlue.bloodBlue)
             binding.sixminEtBluetoothBloodOxygen.setText(sysSettingBean.sysBlue.bloodOxyBlue)
             //系统信息
+            val packageInfo = packageManager.getPackageInfo(packageName, 0)
+            sysSettingBean.publishVer = "v${packageInfo.versionName.substring(0,1)}"
+            sysSettingBean.completeVer = "v${packageInfo.versionName}"
             binding.sixminTvSystemInfo.text =
                 "发布版本: ${sysSettingBean.publishVer}                     完整版本: ${sysSettingBean.completeVer}                     ${sysSettingBean.copyRight}"
         } catch (e: Exception) {

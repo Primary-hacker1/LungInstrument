@@ -70,6 +70,10 @@ public class USBTransferUtil {
     private int testType = 0;//0初始状态 1开始 2结束
     private boolean ignoreBlood = false;//是否忽略测量血压
     private int updateBluetooth = 0;//
+    public boolean ecgConnection = false;//心电连接状态
+    public boolean bloodPressureConnection = false;//血压连接状态
+    public boolean bloodOxygenConnection = false;//血氧连接状态
+    public int batteryLevel = 0;//电池电量
 
     // 顺序： manager - availableDrivers（所有可用设备） - UsbSerialDriver（目标设备对象） - UsbDeviceConnection（设备连接对象） - UsbSerialPort（设备的端口，一般只有1个）
     private List<UsbSerialDriver> availableDrivers = new ArrayList<>();  // 所有可用设备
@@ -201,6 +205,9 @@ public class USBTransferUtil {
                     connect();
                 } else if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(intent.getAction())) {
                     isConnectUSB = false;
+                    ecgConnection = false;
+                    bloodOxygenConnection = false;
+                    bloodPressureConnection = false;
                     inputOutputManager = null;
                     if (onUSBDateReceive != null) {
                         onUSBDateReceive.onReceive(intent.getAction());
@@ -321,6 +328,9 @@ public class USBTransferUtil {
             public void onRunError(Exception e) {
                 Log.e(TAG, "usb 断开了");
                 isConnectUSB = false;
+                ecgConnection = false;
+                bloodOxygenConnection = false;
+                bloodPressureConnection = false;
                 e.printStackTrace();
             }
         });
@@ -378,6 +388,9 @@ public class USBTransferUtil {
             }
             if (isConnectUSB) {
                 isConnectUSB = false;  // 修改标识
+                ecgConnection = false;
+                bloodOxygenConnection = false;
+                bloodPressureConnection = false;
             }
             byteStr = "";
             Log.e(TAG, "断开连接");
@@ -481,46 +494,46 @@ public class USBTransferUtil {
                             // 心电连接状态
                             if (bytes[4] == (byte) 0x11) {
                                 //连接
-                                usbSerialData.setEcgState("心电已连接");
+                                ecgConnection = true;
                             } else if (bytes[4] == (byte) 0x10) {
                                 //断开
-                                usbSerialData.setEcgState("心电未连接");
+                                ecgConnection = true;
                             }
 
                             //血氧连接状态
                             if (bytes[5] == (byte) 0x21) {
                                 //连接
-                                usbSerialData.setBloodOxyState("血氧已连接");
+                                bloodOxygenConnection = true;
                             } else if (bytes[5] == (byte) 0x20) {
                                 //断开
-                                usbSerialData.setBloodOxyState("血氧未连接");
+                                bloodOxygenConnection = false;
                             }
 
                             //血压连接状态
                             if (bytes[6] == (byte) 0x31) {
-                                usbSerialData.setBloodPressureState("血压已连接");
+                                bloodPressureConnection = true;
                             } else if (bytes[6] == (byte) 0x30) {
-                                usbSerialData.setBloodPressureState("血压未连接");
+                                bloodPressureConnection = true;
                             }
 
                             //电池等级
                             String dcLevelStr = CRC16Util.bytesToHexString(new byte[]{bytes[8]});
                             switch (dcLevelStr) {
                                 case "55":
-                                    usbSerialData.setBatteryLevel(5);
+                                    batteryLevel = 5;
                                     break;
                                 case "54":
-                                    usbSerialData.setBatteryLevel(4);
+                                    batteryLevel = 4;
                                     break;
                                 case "53":
-                                    usbSerialData.setBatteryLevel(3);
+                                    batteryLevel = 3;
                                     break;
                                 case "52":
-                                    usbSerialData.setBatteryLevel(2);
+                                    batteryLevel = 2;
                                     break;
                                 case "51":
                                 case "50":
-                                    usbSerialData.setBatteryLevel(1);
+                                    batteryLevel = 1;
                                     break;
                             }
                             //血压数据
@@ -582,6 +595,7 @@ public class USBTransferUtil {
                                 byte[] bytesBS = {bytes[15], bytes[16]};
                                 String bsStr = CRC16Util.bytesToHexString(bytesBS);
                                 Integer steps = Integer.valueOf(bsStr, 16);
+                                usbSerialData.setStepsCount(String.valueOf(steps));
                             }
                             //圈数数据
                             if (testType == 1 && bytes[17] != bytesnull) {
