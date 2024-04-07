@@ -119,12 +119,11 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
     private fun initViewPager() {
 
-        val fragments = listOf(
-            RoutineFragment(), WassermanFragment(),
-            DynamicDataFragment()
-        )
+        val adapter = FragmentPagerAdapter(requireActivity())
 
-        val adapter = FragmentPagerAdapter(childFragmentManager, lifecycle, fragments)
+        adapter.addFragment(RoutineFragment())
+        adapter.addFragment(WassermanFragment())
+        adapter.addFragment(DynamicDataFragment())
 
         binding.vpTitle.setCurrentItem(0, true)
 

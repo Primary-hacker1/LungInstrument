@@ -45,13 +45,12 @@ class StaticFragment : CommonBaseFragment<FragmentStaticBinding>() {
     }
 
     private fun initViewPager() {
-        
-        val fragments = listOf(
-            BreatheHardInFragment(), RoutineLungFragment(),
-            MaxVentilationFragment()
-        )
 
-        val adapter = FragmentPagerAdapter(childFragmentManager, lifecycle, fragments)
+        val adapter = FragmentPagerAdapter(requireActivity())
+
+        adapter.addFragment(BreatheHardInFragment())
+        adapter.addFragment(RoutineLungFragment())
+        adapter.addFragment(MaxVentilationFragment())
 
         binding.vpTitle.setCurrentItem(0, true)
 

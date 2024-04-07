@@ -31,9 +31,11 @@ class CardiopulmonarySettingFragment : CommonBaseFragment<FragmentCardiopulmonar
     override fun initView() {
         initToolbar()
 
-        val fragments = listOf(AllSettingFragment(), StaticSettingFragment(),DynamicSettingFragment())
+        val adapter = FragmentPagerAdapter(requireActivity())
 
-        val adapter = FragmentPagerAdapter(childFragmentManager, lifecycle, fragments)
+        adapter.addFragment(AllSettingFragment())
+        adapter.addFragment(StaticSettingFragment())
+        adapter.addFragment(DynamicSettingFragment())
 
 
         binding.vpTitle.setCurrentItem(0, true)

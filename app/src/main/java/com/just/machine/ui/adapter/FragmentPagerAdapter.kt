@@ -7,31 +7,25 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
-//class FragmentPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
-//
-//    private val fragments = mutableListOf<Fragment>()
-//
-//    @SuppressLint("NotifyDataSetChanged")
-//    fun addFragment(fragment: Fragment) {
-//        fragments.add(fragment)
-//        notifyDataSetChanged()
-//    }
-//
-//    override fun getItemCount(): Int {
-//        return fragments.size
-//    }
-//
-//    override fun createFragment(position: Int): Fragment {
-//        return fragments[position]
-//    }
-//}
+class FragmentPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
 
-class FragmentPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle, private val fragments: List<Fragment>) : FragmentStateAdapter(fragmentManager, lifecycle) {
+    private val fragments = mutableListOf<Fragment>()
 
-    override fun getItemCount(): Int = fragments.size
+    @SuppressLint("NotifyDataSetChanged")
+    fun addFragment(fragment: Fragment) {
+        fragments.add(fragment)
+        notifyDataSetChanged()
+    }
 
-    override fun createFragment(position: Int): Fragment = fragments[position]
+    override fun getItemCount(): Int {
+        return fragments.size
+    }
+
+    override fun createFragment(position: Int): Fragment {
+        return fragments[position]
+    }
 }
+
 
 
 

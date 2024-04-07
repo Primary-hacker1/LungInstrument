@@ -34,12 +34,13 @@ class CalibrationFragment : CommonBaseFragment<FragmentCalibrationBinding>() {
         binding.toolbar.tvRight.gone()
         binding.toolbar.ivTitleBack.visible()
 
-        val fragments = listOf(
-            EnvironmentalFragment(), FlowFragment(),
-            IngredientFragment(),CalibrationResultFragment()
-        )
+        val adapter = FragmentPagerAdapter(requireActivity())
 
-        val adapter = FragmentPagerAdapter(childFragmentManager, lifecycle, fragments)
+        adapter.addFragment(EnvironmentalFragment())
+        adapter.addFragment(FlowFragment())
+        adapter.addFragment(IngredientFragment())
+        adapter.addFragment(CalibrationResultFragment())
+
 
         onButtonClick(binding.btnEnvironment, 0)
 
