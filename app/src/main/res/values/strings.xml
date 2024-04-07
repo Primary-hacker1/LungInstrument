@@ -204,4 +204,7 @@
     <string name="sixmin_test_start_count_down_zero_tips">试验即将结束，当提示时间到的时候，您不要突然停下来，而是放慢速度继续向前走。</string>
     <string name="staticLungTest">静态肺测试</string>
     <string name="maxiVentilation">分钟最大通气量</string>
+    <string name="sixmin_test_measuring_blood">正在测量血压中…</string>
+    <string name="sixmin_test_blood_pressure_without_connection">血压仪未连接，请检查设备!</string>
+    <string name="sixmin_test_device_without_connection">请先接入设备</string>
 </resources>
