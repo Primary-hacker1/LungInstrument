@@ -48,8 +48,6 @@ class StaticLungFragment : CommonBaseFragment<FragmentStaticBinding>() {
 
         binding.vpTitle.isUserInputEnabled = false
 
-        LogUtils.e(TAG + "fragment页面=" + adapter.getAllFragmentNames())
-
         binding.llStart.setNoRepeatListener {
 
         }

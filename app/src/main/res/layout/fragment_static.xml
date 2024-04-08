@@ -147,8 +147,8 @@
                             tools:ignore="ContentDescription" />
 
                         <TextView
-                            android:layout_width="12dp"
-                            android:layout_height="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
                             android:text="@string/cancel"
                             android:textColor="@color/colorPrimary"
@@ -165,12 +165,18 @@
                 android:layout_height="match_parent" />
         </LinearLayout>
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/viewpager"
+        <LinearLayout
+            android:layout_marginHorizontal="@dimen/space_8"
+            android:layout_marginBottom="@dimen/space_8"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </androidx.viewpager2.widget.ViewPager2>
+            android:layout_height="match_parent">
 
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewpager"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </androidx.viewpager2.widget.ViewPager2>
+        </LinearLayout>
 
     </LinearLayout>
 

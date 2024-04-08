@@ -60,9 +60,9 @@ class CardiopulmonaryFragment : CommonBaseFragment<FragmentCardiopulmonaryBindin
 
         adapter.addFragment(CardiopulmonarySettingFragment(), "CardiopulmonarySettingFragment")
 
-        onButtonClick(binding.btnStatic, 1)
-
         binding.vpCardiopulmonary.adapter = adapter
+
+        onButtonClick(binding.btnStatic, 1)
 
         binding.vpCardiopulmonary.isUserInputEnabled = false
 
