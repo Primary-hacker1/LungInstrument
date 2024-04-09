@@ -27,6 +27,8 @@ import com.just.machine.dao.PatientBean
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.UsbSerialData
 import com.just.machine.model.systemsetting.SixMinSysSettingBean
+import com.just.machine.ui.adapter.SixMinAdapter
+import com.just.machine.ui.adapter.SixMinReportDataAdapter
 import com.just.machine.ui.dialog.SixMinGuideDialogFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.FileUtil
@@ -121,6 +123,20 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         viewModel.getPatients()
         initClickListener()
         showGuideDialog()
+
+        val reportList = mutableListOf<String>()
+        reportList.add("时间(min)")
+        reportList.add("静止")
+        reportList.add("1")
+        reportList.add("2")
+        reportList.add("3")
+        reportList.add("4")
+        reportList.add("5")
+        reportList.add("6")
+        reportList.add("最大值")
+        reportList.add("最小值")
+        reportList.add("平均值")
+        binding.sixminGvReport.adapter = SixMinReportDataAdapter(reportList,this)
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
