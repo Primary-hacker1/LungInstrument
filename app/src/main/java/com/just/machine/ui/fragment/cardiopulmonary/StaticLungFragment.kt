@@ -8,8 +8,10 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
-import com.common.network.LogUtils
 import com.just.machine.ui.adapter.FragmentPagerAdapter
+import com.just.machine.ui.fragment.cardiopulmonary.staticfragment.BreatheHardInFragment
+import com.just.machine.ui.fragment.cardiopulmonary.staticfragment.MaxVentilationFragment
+import com.just.machine.ui.fragment.cardiopulmonary.staticfragment.RoutineLungFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.FragmentStaticBinding

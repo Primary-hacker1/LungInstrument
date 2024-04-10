@@ -64,7 +64,7 @@
 
     <fragment_navigator
         android:id="@+id/breatheHardInFragment"
-        android:name="com.just.machine.ui.fragment.cardiopulmonary.BreatheHardInFragment"
+        android:name="com.just.machine.ui.fragment.cardiopulmonary.staticfragment.BreatheHardInFragment"
         android:label="breatheHardInFragment"
         tools:layout="@layout/fragment_breathe">
     </fragment_navigator>
