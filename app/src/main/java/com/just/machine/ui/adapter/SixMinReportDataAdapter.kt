@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.RelativeLayout
 import android.widget.TextView
 import com.just.news.R
 
@@ -28,8 +29,9 @@ class SixMinReportDataAdapter(val mList: MutableList<String>, val mContext: Cont
         val layoutInflater =
             mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val convertView = layoutInflater.inflate(R.layout.item_sixmin_report, null)
-
-        convertView.findViewById<TextView>(R.id.sixmin_tv_report).text = mList[position]
+        val textView = convertView.findViewById<TextView>(R.id.sixmin_tv_report)
+        textView.text = mList[position]
+        textView.layoutParams = RelativeLayout.LayoutParams(150,50)
         return convertView
     }
 }

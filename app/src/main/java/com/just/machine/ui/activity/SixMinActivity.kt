@@ -1,13 +1,18 @@
 package com.just.machine.ui.activity
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.CountDownTimer
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.util.Log
+import android.view.Gravity
 import android.view.View
+import android.widget.LinearLayout
+import android.widget.TableRow
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
@@ -25,10 +30,9 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.gson.Gson
 import com.just.machine.dao.PatientBean
 import com.just.machine.model.SharedPreferencesUtils
+import com.just.machine.model.SixMinReportItemBean
 import com.just.machine.model.UsbSerialData
 import com.just.machine.model.systemsetting.SixMinSysSettingBean
-import com.just.machine.ui.adapter.SixMinAdapter
-import com.just.machine.ui.adapter.SixMinReportDataAdapter
 import com.just.machine.ui.dialog.SixMinGuideDialogFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.FileUtil
@@ -76,7 +80,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
     private var bloodEndUtteranceId = "" //运动后血压语音播报标识
     private var defaultUtteranceId = ""//语音播报开始标识
     private fun addEntryData(entryData: Float, times: Int) {
-        
+
         val decimalFormat = DecimalFormat("#.00")
         val index: Float = (times.toFloat() / 60)
         bloodOxyDataSet.addEntry(
@@ -123,20 +127,186 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         viewModel.getPatients()
         initClickListener()
         showGuideDialog()
+        val rowList = mutableListOf<SixMinReportItemBean>()
+        rowList.add(
+            SixMinReportItemBean(
+                "时间(min)",
+                "静止",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "最大值",
+                "最小值",
+                "平均值"
+            )
+        )
+        rowList.add(
+            SixMinReportItemBean(
+                "心率(bpm)",
+                "60",
+                "60",
+                "60",
+                "60",
+                "60",
+                "60",
+                "60",
+                "60",
+                "60",
+                "60"
+            )
+        )
+        rowList.add(
+            SixMinReportItemBean(
+                "血氧(%)",
+                "80",
+                "80",
+                "80",
+                "80",
+                "80",
+                "80",
+                "80",
+                "80",
+                "80",
+                "80"
+            )
+        )
+        rowList.add(
+            SixMinReportItemBean(
+                "步数",
+                "70",
+                "70",
+                "70",
+                "70",
+                "70",
+                "70",
+                "70",
+                "70",
+                "70",
+                "70"
+            )
+        )
+        rowList.add(
+            SixMinReportItemBean(
+                "血压(mmHg)",
+                "105/68",
+                "/",
+                "/",
+                "/",
+                "/",
+                "/",
+                "110/70",
+                "/",
+                "/",
+                "/"
+            )
+        )
+        initTable(rowList)
+    }
 
-        val reportList = mutableListOf<String>()
-        reportList.add("时间(min)")
-        reportList.add("静止")
-        reportList.add("1")
-        reportList.add("2")
-        reportList.add("3")
-        reportList.add("4")
-        reportList.add("5")
-        reportList.add("6")
-        reportList.add("最大值")
-        reportList.add("最小值")
-        reportList.add("平均值")
-        binding.sixminGvReport.adapter = SixMinReportDataAdapter(reportList,this)
+    private fun initTable(rowList: MutableList<SixMinReportItemBean>) {
+        val padding = dip2px(applicationContext, 4)
+        for (i in 0 until rowList.size) {
+            val sixMinReportItemBean = rowList[i]
+            val newRow = TableRow(applicationContext)
+            val layoutParams = TableRow.LayoutParams()
+            newRow.layoutParams = layoutParams
+
+            val linearLayout = LinearLayout(
+                applicationContext
+            )
+            linearLayout.orientation = LinearLayout.HORIZONTAL
+
+            var bottomLine = dip2px(applicationContext, 1)
+            if (i === rowList.size - 1) {
+                // 如果当前行是最后一行, 则底部边框加粗
+                bottomLine = dip2px(applicationContext, 2)
+            }
+
+            for (j in 0..10) {
+                val tvNo = TextView(applicationContext)
+                tvNo.textSize = dip2px(applicationContext, 7).toFloat()
+                // 设置文字居中
+                tvNo.gravity = if (j == 0) Gravity.START else Gravity.CENTER
+                tvNo.setTextColor(ContextCompat.getColor(this,R.color.text3))
+                // 设置表格中的数据不自动换行
+                tvNo.setSingleLine()
+                // 设置边框和weight
+                val lpNo = LinearLayout.LayoutParams(
+                    0,
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    if (j == 0) 4.2f else if (j == 1 || j == 7 || j == 8 || j == 9 || j == 10) 3f else 2f
+                )
+                lpNo.setMargins(
+                    0, 0, dip2px(applicationContext, 2), bottomLine
+                )
+                tvNo.layoutParams = lpNo
+                // 设置padding和背景颜色
+                tvNo.setPadding(padding, padding, padding, padding)
+                // 填充文字数据
+                tvNo.text = when (j) {
+                    0 -> {
+                        sixMinReportItemBean.itemName
+                    }
+
+                    1 -> {
+                        sixMinReportItemBean.stillnessValue
+                    }
+
+                    2 -> {
+                        sixMinReportItemBean.oneMinValue
+                    }
+
+                    3 -> {
+                        sixMinReportItemBean.twoMinValue
+                    }
+
+                    4 -> {
+                        sixMinReportItemBean.threeMinValue
+                    }
+
+                    5 -> {
+                        sixMinReportItemBean.fourMinValue
+                    }
+
+                    6 -> {
+                        sixMinReportItemBean.fiveMinValue
+                    }
+
+                    7 -> {
+                        sixMinReportItemBean.sixMinValue
+                    }
+
+                    8 -> {
+                        sixMinReportItemBean.maxValue
+                    }
+
+                    9 -> {
+                        sixMinReportItemBean.minMinValue
+                    }
+
+                    else -> {
+                        sixMinReportItemBean.avgMinValue
+                    }
+                }
+                linearLayout.addView(tvNo)
+            }
+            newRow.setPadding(
+                dip2px(this, 6),
+                dip2px(this, 3),
+                dip2px(this, 6),
+                dip2px(this, 3)
+            )
+            newRow.addView(linearLayout)
+            binding.sixminReportTable.addView(newRow)
+        }
+    }
+
+    private fun dip2px(context: Context, dpValue: Int): Int {
+        val scale: Float = context.resources.displayMetrics.density
+        return (dpValue * scale + 0.5f).toInt()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -330,13 +500,25 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                     if (binding.sixminTvMeasureBlood.text == getString(R.string.sixmin_measure_blood)) {
                         SixMinCmdUtils.measureBloodPressure()
                     } else {
-                        Toast.makeText(this, getString(R.string.sixmin_test_measuring_blood), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            getString(R.string.sixmin_test_measuring_blood),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 } else {
-                    Toast.makeText(this, getString(R.string.sixmin_test_blood_pressure_without_connection), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        getString(R.string.sixmin_test_blood_pressure_without_connection),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             } else {
-                Toast.makeText(this, getString(R.string.sixmin_test_device_without_connection), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    getString(R.string.sixmin_test_device_without_connection),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -345,7 +527,11 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 startTest()
             } else {
                 binding.sixminLlLineChartBloodOxygen.visibility = View.VISIBLE
-                Toast.makeText(this, getString(R.string.sixmin_test_device_without_connection), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    getString(R.string.sixmin_test_device_without_connection),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -480,10 +666,14 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                         binding.sixminTvBloodPressureHigh.text = "---"
                         binding.sixminTvBloodPressureLow.text = "---"
                         if (usbTransferUtil.bloodPressureConnection) {
-                            if(binding.sixminTvMeasureBlood.text == getString(R.string.sixmin_measure_blood)){
+                            if (binding.sixminTvMeasureBlood.text == getString(R.string.sixmin_measure_blood)) {
                                 SixMinCmdUtils.measureBloodPressure()
-                            }else{
-                                Toast.makeText(this@SixMinActivity, getString(R.string.sixmin_test_measuring_blood), Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(
+                                    this@SixMinActivity,
+                                    getString(R.string.sixmin_test_measuring_blood),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         } else {
                             Toast.makeText(
@@ -524,10 +714,18 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                         if (binding.sixminTvMeasureBlood.text == getString(R.string.sixmin_measure_blood)) {
                             SixMinCmdUtils.measureBloodPressure()
                         } else {
-                            Toast.makeText(this, getString(R.string.sixmin_test_measuring_blood), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this,
+                                getString(R.string.sixmin_test_measuring_blood),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     } else {
-                        Toast.makeText(this, getString(R.string.sixmin_test_blood_pressure_without_connection), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            getString(R.string.sixmin_test_blood_pressure_without_connection),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             } else {
@@ -542,7 +740,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 }
             }
         } else {
-            if(!stopTestDialog.isShowing){
+            if (!stopTestDialog.isShowing) {
                 stopTestDialog.show()
             }
         }
@@ -751,7 +949,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
             binding.sixminTvBloodPressureLowBehind.text =
                 usbSerialData.bloodLowBehind ?: "---"
             usbTransferUtil.bloodType = 0
-            PatientActivity.startPatientActivity(this@SixMinActivity,"sixMinTest")
+            PatientActivity.startPatientActivity(this@SixMinActivity, "sixMinTest")
             finish()
         }
         builder.setNegativeButton(getString(R.string.sixmin_system_setting_check_no)) { _, _ ->
@@ -765,7 +963,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
     /**
      * 是否停止试验
      */
-    private fun initStopTestDialog(){
+    private fun initStopTestDialog() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("")
         builder.setMessage(getString(R.string.sixmin_test_start_stop_test_tips))
@@ -835,10 +1033,18 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                                 if (binding.sixminTvMeasureBlood.text == getString(R.string.sixmin_measure_blood)) {
                                     SixMinCmdUtils.measureBloodPressure()
                                 } else {
-                                    Toast.makeText(this@SixMinActivity, getString(R.string.sixmin_test_measuring_blood), Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        this@SixMinActivity,
+                                        getString(R.string.sixmin_test_measuring_blood),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             } else {
-                                Toast.makeText(this@SixMinActivity, getString(R.string.sixmin_test_blood_pressure_without_connection), Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    this@SixMinActivity,
+                                    getString(R.string.sixmin_test_blood_pressure_without_connection),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         } else if (startTestUtteranceId == defaultUtteranceId) {
                             mStartTestCountDownTime.start(object :
