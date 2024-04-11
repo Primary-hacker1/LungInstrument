@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/simin_report_rb_patient_self_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:buttonTint="@color/colorPrimary" />
+
+        <TextView
+            android:id="@+id/simin_report_tv_patient_self_item_name"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="0级"
+            android:textColor="@color/text3"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/simin_report_tv_patient_self_item_level"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="20dp"
+            android:text="非常非常轻"
+            android:textColor="@color/text3"
+            android:textSize="13sp" />
+    </LinearLayout>
+</layout>

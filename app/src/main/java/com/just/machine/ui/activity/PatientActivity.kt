@@ -44,7 +44,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
          */
         fun startPatientActivity(context: Context?, jumpFlag: String?) {
             val intent = Intent(context, PatientActivity::class.java)
-            intent.putExtra("jumpFlag",jumpFlag)
+            intent.putExtra(Constants.finishSixMinTest,jumpFlag)
             context?.startActivity(intent)
         }
     }
@@ -101,8 +101,8 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         }
 
         initOnClick()
-        jumpFlag = intent.getStringExtra("jumpFlag")
-        if(jumpFlag != null && jumpFlag == "sixMinTest"){
+        jumpFlag = intent.getStringExtra(Constants.finishSixMinTest)
+        if(jumpFlag != null && jumpFlag == "finishSixMinTest"){
             setButtonStyle(
                 binding.btnCardiopulmonary,
                 binding.btnSixMin,

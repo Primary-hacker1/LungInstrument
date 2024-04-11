@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.RadioButton
 import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
@@ -18,6 +19,7 @@ import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseActivity
 import com.common.base.setNoRepeatListener
 import com.common.viewmodel.LiveDataEvent
@@ -30,10 +32,15 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.gson.Gson
 import com.just.machine.dao.PatientBean
 import com.just.machine.model.SharedPreferencesUtils
+import com.just.machine.model.SixMinReportEditBloodPressure
 import com.just.machine.model.SixMinReportItemBean
+import com.just.machine.model.SixMinReportPatientSelfBean
+import com.just.machine.model.SixMinReportPatientSelfItemBean
 import com.just.machine.model.UsbSerialData
 import com.just.machine.model.systemsetting.SixMinSysSettingBean
+import com.just.machine.ui.adapter.SixMinReportPatientSelfAdapter
 import com.just.machine.ui.dialog.SixMinGuideDialogFragment
+import com.just.machine.ui.dialog.SixMinReportEditBloodPressureFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.FileUtil
 import com.just.machine.util.FixCountDownTime
@@ -70,6 +77,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
     private lateinit var patientBean: PatientBean
     private lateinit var sysSettingBean: SixMinSysSettingBean
     private var colorList = mutableListOf(0)
+    private var reportRowList = mutableListOf<SixMinReportItemBean>()
     private var notShowAnymore = false
     private lateinit var usbSerialData: UsbSerialData
     private var exitType = "0" //0是返回键 1是跳转系统设置
@@ -127,8 +135,10 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         viewModel.getPatients()
         initClickListener()
         showGuideDialog()
-        val rowList = mutableListOf<SixMinReportItemBean>()
-        rowList.add(
+
+        //6分钟报告
+        reportRowList.clear()
+        reportRowList.add(
             SixMinReportItemBean(
                 "时间(min)",
                 "静止",
@@ -143,7 +153,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 "平均值"
             )
         )
-        rowList.add(
+        reportRowList.add(
             SixMinReportItemBean(
                 "心率(bpm)",
                 "60",
@@ -158,7 +168,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 "60"
             )
         )
-        rowList.add(
+        reportRowList.add(
             SixMinReportItemBean(
                 "血氧(%)",
                 "80",
@@ -173,7 +183,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 "80"
             )
         )
-        rowList.add(
+        reportRowList.add(
             SixMinReportItemBean(
                 "步数",
                 "70",
@@ -188,7 +198,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 "70"
             )
         )
-        rowList.add(
+        reportRowList.add(
             SixMinReportItemBean(
                 "血压(mmHg)",
                 "105/68",
@@ -197,17 +207,62 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 "/",
                 "/",
                 "/",
-                "110/70",
+                "/",
                 "/",
                 "/",
                 "/"
             )
         )
-        initTable(rowList)
+        initTable(reportRowList)
+
+        val patientSelfList = mutableListOf<SixMinReportPatientSelfBean>()
+        val patientBreathSelfItemList = mutableListOf<SixMinReportPatientSelfItemBean>()
+        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("0级", "没有"))
+        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("0.5级", "非常非常轻"))
+        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("1级", "非常轻"))
+        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("2级", "很轻"))
+        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("3级", "中度"))
+        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("4级", "较严重"))
+        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("5-6级", "严重"))
+        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("7-9级", "非常严重"))
+        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("10级", "非常非常严重"))
+        patientSelfList.add(
+            SixMinReportPatientSelfBean(
+                "呼吸状况等级",
+                "1",
+                patientBreathSelfItemList
+            )
+        )
+        val patientTiredSelfItemList = mutableListOf<SixMinReportPatientSelfItemBean>()
+        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("0级", "没有"))
+        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("0.5级", "非常轻松"))
+        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("1级", "轻松"))
+        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("2级", "很轻"))
+        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("3级", "中度"))
+        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("4级", "有点疲劳"))
+        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("5-6级", "疲劳"))
+        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("7-9级", "非常疲劳"))
+        patientTiredSelfItemList.add(
+            SixMinReportPatientSelfItemBean(
+                "10级",
+                "非常非常疲劳(几乎到极限)"
+            )
+        )
+        patientSelfList.add(
+            SixMinReportPatientSelfBean(
+                "疲劳状况等级",
+                "2",
+                patientTiredSelfItemList
+            )
+        )
+        binding.sixminRvPatientSelfCheck.layoutManager = LinearLayoutManager(this)
+        val patientSelfItemAdapter = SixMinReportPatientSelfAdapter(this)
+        patientSelfItemAdapter.setItemsBean(patientSelfList)
+        binding.sixminRvPatientSelfCheck.adapter = patientSelfItemAdapter
     }
 
     private fun initTable(rowList: MutableList<SixMinReportItemBean>) {
-        val padding = dip2px(applicationContext, 4)
+        val padding = dip2px(applicationContext, 1)
         for (i in 0 until rowList.size) {
             val sixMinReportItemBean = rowList[i]
             val newRow = TableRow(applicationContext)
@@ -219,18 +274,12 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
             )
             linearLayout.orientation = LinearLayout.HORIZONTAL
 
-            var bottomLine = dip2px(applicationContext, 1)
-            if (i === rowList.size - 1) {
-                // 如果当前行是最后一行, 则底部边框加粗
-                bottomLine = dip2px(applicationContext, 2)
-            }
-
             for (j in 0..10) {
                 val tvNo = TextView(applicationContext)
                 tvNo.textSize = dip2px(applicationContext, 7).toFloat()
                 // 设置文字居中
                 tvNo.gravity = if (j == 0) Gravity.START else Gravity.CENTER
-                tvNo.setTextColor(ContextCompat.getColor(this,R.color.text3))
+                tvNo.setTextColor(ContextCompat.getColor(this, R.color.text3))
                 // 设置表格中的数据不自动换行
                 tvNo.setSingleLine()
                 // 设置边框和weight
@@ -240,7 +289,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                     if (j == 0) 4.2f else if (j == 1 || j == 7 || j == 8 || j == 9 || j == 10) 3f else 2f
                 )
                 lpNo.setMargins(
-                    0, 0, dip2px(applicationContext, 2), bottomLine
+                    0, 0, dip2px(applicationContext, 2), 0
                 )
                 tvNo.layoutParams = lpNo
                 // 设置padding和背景颜色
@@ -590,6 +639,43 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         binding.sixminIvIgnoreBlood.setOnClickListener {
             usbTransferUtil.isIgnoreBlood = true
             binding.sixminIvIgnoreBlood.visibility = View.INVISIBLE
+        }
+        binding.sixminReportTvEditBloodPressure.setOnClickListener {
+            if(reportRowList.isNotEmpty()){
+                val sixMinReportItemBean = reportRowList[reportRowList.size - 1]
+                val stillnessValue = sixMinReportItemBean.stillnessValue
+                val bean = SixMinReportEditBloodPressure()
+                val before = stillnessValue.split("/")
+                if(before.size > 1){
+                    bean.highBloodPressureBefore = before[0]
+                    bean.lowBloodPressureBefore = before[1]
+                }
+                val after = sixMinReportItemBean.sixMinValue.split("/")
+                if(after.size > 1){
+                    bean.highBloodPressureAfter = after[0]
+                    bean.lowBloodPressureAfter = after[1]
+                }
+                val startEditBloodDialogFragment =
+                    SixMinReportEditBloodPressureFragment.startEditBloodDialogFragment(
+                        supportFragmentManager,
+                        bean
+                    )
+                startEditBloodDialogFragment.setEditBloodDialogOnClickListener(object:
+                    SixMinReportEditBloodPressureFragment.SixMinReportEditBloodDialogListener{
+                    override fun onClickConfirm(bean: SixMinReportEditBloodPressure) {
+                        if(reportRowList.isNotEmpty()){
+                            val sixMinReportItem = reportRowList[reportRowList.size - 1]
+                            sixMinReportItem.stillnessValue = "${bean.highBloodPressureBefore}/${bean.lowBloodPressureBefore}"
+                            sixMinReportItem.sixMinValue = "${bean.highBloodPressureAfter}/${bean.lowBloodPressureAfter}"
+                            binding.sixminReportTable.removeAllViews()
+                            initTable(reportRowList)
+                        }
+                    }
+                })
+            }
+        }
+        binding.sixminReportTvSelfCheckBeforeTest.setOnClickListener {
+
         }
     }
 
@@ -949,7 +1035,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
             binding.sixminTvBloodPressureLowBehind.text =
                 usbSerialData.bloodLowBehind ?: "---"
             usbTransferUtil.bloodType = 0
-            PatientActivity.startPatientActivity(this@SixMinActivity, "sixMinTest")
+            PatientActivity.startPatientActivity(this@SixMinActivity, "finishSixMinTest")
             finish()
         }
         builder.setNegativeButton(getString(R.string.sixmin_system_setting_check_no)) { _, _ ->
