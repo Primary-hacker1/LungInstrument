@@ -44,11 +44,11 @@ class StaticLungFragment : CommonBaseFragment<FragmentStaticBinding>() {
         adapter.addFragment(RoutineLungFragment())
         adapter.addFragment(MaxVentilationFragment())
 
-        binding.vpTitle.setCurrentItem(1, true)
+        binding.viewpager.setCurrentItem(1, true)
 
-        binding.vpTitle.adapter = adapter
+        binding.viewpager.adapter = adapter
 
-        binding.vpTitle.isUserInputEnabled = false
+        binding.viewpager.isUserInputEnabled = false
 
         binding.llStart.setNoRepeatListener {
 
@@ -63,24 +63,24 @@ class StaticLungFragment : CommonBaseFragment<FragmentStaticBinding>() {
     override fun initListener() {
 
         binding.btnRoutine.setNoRepeatListener {//常规
-            binding.vpTitle.currentItem = 0
+            binding.viewpager.currentItem = 0
             setButtonPosition(0)
         }
 
         binding.btnForced.setNoRepeatListener {//用力
-            binding.vpTitle.currentItem = 1
+            binding.viewpager.currentItem = 1
             setButtonPosition(1)
         }
 
         binding.btnMaxiVentilation.setNoRepeatListener {//最大通气量
-            binding.vpTitle.currentItem = 2
+            binding.viewpager.currentItem = 2
             setButtonPosition(2)
         }
 
         //这个必须写，不然会产生Fata
-        binding.vpTitle.isSaveEnabled = false
+        binding.viewpager.isSaveEnabled = false
 
-        binding.vpTitle.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        binding.viewpager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 setButtonPosition(position)

@@ -10,20 +10,80 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="fvc"
+                    android:textSize="30sp"
+                    />
+
+                <CheckBox
+                    android:id="@+id/checkbox"
+                    style="@style/CustomCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_10"
+                    android:layout_marginLeft="300dp"
+                    android:layout_toRightOf="@+id/title"
+                    android:text="自动最佳" />
+
+                <Button
+                    android:id="@+id/btn_test1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                </Button>
+
+                <Button
+                    android:id="@+id/btn_test2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                </Button>
+
+                <Button
+                    android:id="@+id/btn_test3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                </Button>
+
+                <Button
+                    android:id="@+id/btn_test4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                </Button>
+
+                <Button
+                    android:id="@+id/btn_test5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                </Button>
+
+
+            </RelativeLayout>
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart_fvc"
                 android:layout_width="match_parent"
-                android:layout_height="190dp"
+                android:layout_height="match_parent"
                 android:layout_margin="@dimen/space_6" />
 
-
-        </FrameLayout>
-
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -59,85 +119,85 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/calibration_bg"
-                android:padding="@dimen/space_10"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="@dimen/space_10">
 
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="静态肺数据"
+                    android:textColor="@color/text3" />
+
+                <LinearLayout
+                    android:id="@+id/ll_Cardiopulmonary"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="@dimen/space_16"
+                    android:background="#f4f5fa"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="160dp"
                         android:layout_height="wrap_content"
-                        android:text="静态肺数据"
-                        android:textColor="@color/text3" />
+                        android:layout_marginStart="@dimen/space_19"
+                        android:text="参数名"
+                        android:textColor="@color/text3"
+                        android:textSize="13sp" />
 
-                    <LinearLayout
-                        android:id="@+id/ll_Cardiopulmonary"
-                        android:layout_width="match_parent"
-                        android:layout_height="35dp"
-                        android:layout_marginTop="@dimen/space_16"
-                        android:background="#f4f5fa"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:visibility="visible">
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:maxLines="1"
+                        android:text="单位"
+                        android:textColor="@color/text3"
+                        android:textSize="13sp" />
 
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="@dimen/space_200"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/space_19"
-                            android:text="参数名"
-                            android:textColor="@color/text3"
-                            android:textSize="13sp" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:maxLines="1"
+                        android:text="预计值"
+                        android:textColor="@color/text3"
+                        android:textSize="13sp" />
 
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:maxLines="1"
-                            android:text="单位"
-                            android:textColor="@color/text3"
-                            android:textSize="13sp" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:maxLines="1"
+                        android:text="最佳值"
+                        android:textColor="@color/text3"
+                        android:textSize="13sp" />
 
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:maxLines="1"
-                            android:text="预计值"
-                            android:textColor="@color/text3"
-                            android:textSize="13sp" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:maxLines="1"
+                        android:text="B/P(%)"
+                        android:textColor="@color/text3"
+                        android:textSize="13sp" />
 
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:maxLines="1"
-                            android:text="最佳值"
-                            android:textColor="@color/text3"
-                            android:textSize="13sp" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:maxLines="1"
+                        android:text="测试1"
+                        android:textColor="@color/text3"
+                        android:textSize="13sp" />
+                </LinearLayout>
 
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:maxLines="1"
-                            android:text="B/P(%)"
-                            android:textColor="@color/text3"
-                            android:textSize="13sp" />
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:maxLines="1"
-                            android:text="测试1"
-                            android:textColor="@color/text3"
-                            android:textSize="13sp" />
-                    </LinearLayout>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_fvc"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:visibility="visible" />
-
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_fvc"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="visible" />
 
 
             </LinearLayout>
