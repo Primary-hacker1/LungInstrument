@@ -12,8 +12,8 @@
 
         <RadioButton
             android:id="@+id/simin_report_rb_patient_self_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:layout_gravity="center_vertical"
             android:buttonTint="@color/colorPrimary" />
 
@@ -22,6 +22,7 @@
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
             android:text="0级"
             android:textColor="@color/text3"
             android:textSize="13sp" />

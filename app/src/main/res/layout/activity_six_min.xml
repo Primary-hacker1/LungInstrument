@@ -1265,6 +1265,7 @@
                                 android:textColor="@color/colorWhile" />
 
                             <TextView
+                                android:id="@+id/sixmin_report_tv_prescription"
                                 android:layout_width="120dp"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"

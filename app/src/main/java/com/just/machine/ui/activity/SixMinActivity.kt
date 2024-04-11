@@ -41,6 +41,8 @@ import com.just.machine.model.systemsetting.SixMinSysSettingBean
 import com.just.machine.ui.adapter.SixMinReportPatientSelfAdapter
 import com.just.machine.ui.dialog.SixMinGuideDialogFragment
 import com.just.machine.ui.dialog.SixMinReportEditBloodPressureFragment
+import com.just.machine.ui.dialog.SixMinReportPrescriptionFragment
+import com.just.machine.ui.dialog.SixMinReportSelfCheckBeforeTestFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.FileUtil
 import com.just.machine.util.FixCountDownTime
@@ -641,17 +643,17 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
             binding.sixminIvIgnoreBlood.visibility = View.INVISIBLE
         }
         binding.sixminReportTvEditBloodPressure.setOnClickListener {
-            if(reportRowList.isNotEmpty()){
+            if (reportRowList.isNotEmpty()) {
                 val sixMinReportItemBean = reportRowList[reportRowList.size - 1]
                 val stillnessValue = sixMinReportItemBean.stillnessValue
                 val bean = SixMinReportEditBloodPressure()
                 val before = stillnessValue.split("/")
-                if(before.size > 1){
+                if (before.size > 1) {
                     bean.highBloodPressureBefore = before[0]
                     bean.lowBloodPressureBefore = before[1]
                 }
                 val after = sixMinReportItemBean.sixMinValue.split("/")
-                if(after.size > 1){
+                if (after.size > 1) {
                     bean.highBloodPressureAfter = after[0]
                     bean.lowBloodPressureAfter = after[1]
                 }
@@ -660,13 +662,15 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                         supportFragmentManager,
                         bean
                     )
-                startEditBloodDialogFragment.setEditBloodDialogOnClickListener(object:
-                    SixMinReportEditBloodPressureFragment.SixMinReportEditBloodDialogListener{
+                startEditBloodDialogFragment.setEditBloodDialogOnClickListener(object :
+                    SixMinReportEditBloodPressureFragment.SixMinReportEditBloodDialogListener {
                     override fun onClickConfirm(bean: SixMinReportEditBloodPressure) {
-                        if(reportRowList.isNotEmpty()){
+                        if (reportRowList.isNotEmpty()) {
                             val sixMinReportItem = reportRowList[reportRowList.size - 1]
-                            sixMinReportItem.stillnessValue = "${bean.highBloodPressureBefore}/${bean.lowBloodPressureBefore}"
-                            sixMinReportItem.sixMinValue = "${bean.highBloodPressureAfter}/${bean.lowBloodPressureAfter}"
+                            sixMinReportItem.stillnessValue =
+                                "${bean.highBloodPressureBefore}/${bean.lowBloodPressureBefore}"
+                            sixMinReportItem.sixMinValue =
+                                "${bean.highBloodPressureAfter}/${bean.lowBloodPressureAfter}"
                             binding.sixminReportTable.removeAllViews()
                             initTable(reportRowList)
                         }
@@ -675,7 +679,17 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
             }
         }
         binding.sixminReportTvSelfCheckBeforeTest.setOnClickListener {
-
+            val startEditBloodDialogFragment =
+                SixMinReportSelfCheckBeforeTestFragment.startPatientSelfCheckDialogFragment(
+                    supportFragmentManager,
+                    "0"
+                )
+        }
+        binding.sixminReportTvPrescription.setOnClickListener {
+            val prescriptionFragment =
+                SixMinReportPrescriptionFragment.startPrescriptionDialogFragment(
+                    supportFragmentManager
+                )
         }
     }
 

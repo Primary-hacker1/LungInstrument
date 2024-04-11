@@ -13,5 +13,6 @@ interface Constants {
         const val llSave = "llSave"
         const val editBloodPressure = "editBloodPressure"
         const val finishSixMinTest = "finishSixMinTest"
+        const val viewSixMinSelfCheck = "viewSixMinSelfCheck"
     }
 }

@@ -30,6 +30,12 @@ class SixMinReportPatientSelfItemAdapter(var mContext: Context) :
         binding.siminReportTvPatientSelfItemName.text = item.itemName
         binding.siminReportTvPatientSelfItemLevel.text = item.itemLevel
         binding.siminReportRbPatientSelfItem.isChecked = item.itemCheck == "1"
+        binding.siminReportRbPatientSelfItem.isEnabled = item.itemStatus == "1"
+        if(item.itemStatus == "0"){
+            binding.siminReportRbPatientSelfItem.alpha = 0.2f
+        }else{
+            binding.siminReportRbPatientSelfItem.alpha = 1.0f
+        }
         binding.siminReportRbPatientSelfItem.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked){
                 items.forEach {
