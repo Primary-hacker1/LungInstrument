@@ -14,13 +14,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight="1.3"
             android:background="@drawable/calibration_bg"
             android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="30dp"
                 android:gravity="center_vertical">
 
                 <TextView
@@ -48,8 +48,8 @@
 
                 <Button
                     android:id="@+id/btn_test1"
-                    android:layout_width="@dimen/space_30"
-                    android:layout_height="@dimen/space_30"
+                    android:layout_width="@dimen/space_25"
+                    android:layout_height="@dimen/space_25"
                     android:layout_centerInParent="true"
                     android:layout_marginLeft="@dimen/space_30"
                     android:layout_toRightOf="@+id/checkbox"
@@ -62,8 +62,8 @@
 
                 <Button
                     android:id="@+id/btn_test2"
-                    android:layout_width="@dimen/space_30"
-                    android:layout_height="@dimen/space_30"
+                    android:layout_width="@dimen/space_25"
+                    android:layout_height="@dimen/space_25"
                     android:layout_centerInParent="true"
                     android:layout_marginLeft="@dimen/space_15"
                     android:layout_toRightOf="@+id/btn_test1"
@@ -76,8 +76,8 @@
 
                 <Button
                     android:id="@+id/btn_test3"
-                    android:layout_width="@dimen/space_30"
-                    android:layout_height="@dimen/space_30"
+                    android:layout_width="@dimen/space_25"
+                    android:layout_height="@dimen/space_25"
                     android:layout_centerInParent="true"
                     android:layout_marginLeft="@dimen/space_15"
                     android:layout_toRightOf="@+id/btn_test2"
@@ -90,8 +90,8 @@
 
                 <Button
                     android:id="@+id/btn_test4"
-                    android:layout_width="@dimen/space_30"
-                    android:layout_height="@dimen/space_30"
+                    android:layout_width="@dimen/space_25"
+                    android:layout_height="@dimen/space_25"
                     android:layout_centerInParent="true"
                     android:layout_marginLeft="@dimen/space_15"
                     android:layout_toRightOf="@+id/btn_test3"
@@ -104,8 +104,8 @@
 
                 <Button
                     android:id="@+id/btn_test5"
-                    android:layout_width="@dimen/space_30"
-                    android:layout_height="@dimen/space_30"
+                    android:layout_width="@dimen/space_25"
+                    android:layout_height="@dimen/space_25"
                     android:layout_centerInParent="true"
                     android:layout_marginLeft="@dimen/space_15"
                     android:layout_toRightOf="@+id/btn_test4"
@@ -159,7 +159,8 @@
                     android:id="@+id/chart_flow"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/space_6"
+                    android:layout_marginHorizontal="@dimen/space_6"
+                    android:background="@drawable/calibration_bg"
                     android:layout_weight="1" />
 
                 <com.github.mikephil.charting.charts.LineChart
@@ -167,6 +168,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/space_6"
+                    android:background="@drawable/calibration_bg"
                     android:layout_weight="1" />
 
             </LinearLayout>
@@ -241,6 +243,7 @@
                         android:textSize="13sp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/atv_test"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

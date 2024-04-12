@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.base.toast
+import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -27,6 +28,7 @@ import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.FragmentLungBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.math.roundToInt
 
 
 /**
@@ -47,73 +49,46 @@ class RoutineLungFragment : CommonBaseFragment<FragmentLungBinding>() {
 
     }
 
+    private var routineLungList: MutableList<RoutineLungBean>? = ArrayList()
+
     enum class Click {
         TEST1, TEST2, TEST3, TEST4, TEST5
     }
 
 
     override fun initView() {
-        val lineChart = binding.chartFvc
+
+        initData()
+
+        val entriesFow = arrayListOf<Entry>()
+        // 创建折线图的样本数据
+        val entriesFlowFvc = arrayListOf<Entry>()
+        for (index in 0..6) {
+            entriesFow.add(Entry(index.toFloat(), index.toFloat() / 6 - 3))
+        }
 
         // 创建折线图的样本数据
         val entries = arrayListOf<Entry>()
         for (index in 0..30) {
-            entries.add(Entry(index.toFloat(), index.toFloat() / 6))
+            entries.add(Entry(index.toFloat(), index.toFloat() / 6 - 3))
         }
 
+        lineChartFlow(binding.chartFvc, entries, -5f, 5f,11)
 
-        // 设置 Y 轴的最小值和最大值，以确保包含所有单数刻度
-        lineChart.axisLeft.axisMinimum = -5f // 设置 Y 轴最小值
-        lineChart.axisLeft.axisMaximum = 5f // 设置 Y 轴最大值
+        lineChartFlow(binding.chartFlow, entriesFow, -12f, 9f,9)
 
-        val xAxis = lineChart.xAxis
+        lineChartFlow(binding.chartFvcFlow, entriesFlowFvc, -12f, 9f,9)
 
-        xAxis.granularity = 1f     //这个很重要
+        val lineChartFvc = binding.chartFvc
 
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
-
-        // 设置折线图的上下边距
-//        lineChart.setExtraOffsets(10f, 50f, 10f, 10f) // 上、左、下、右边距
-
-        // 设置标题
-        lineChart.description.text = "负数折线图示例"
-        lineChart.description.setPosition(15f, 15f)
-        lineChart.description.textSize = 12f
-        lineChart.description.textColor = Color.BLACK
-//        lineChart.description.xOffset = 120f
-//        lineChart.description.yOffset = 200f // 正表示向上偏移
-
-// 设置 MarkerView
+        // 设置 MarkerView
         val markerView = CustomMarkerView(requireContext(), R.layout.custom_marker_view)
-        lineChart.marker = markerView
+        lineChartFvc.marker = markerView
 
-        // 设置 LineChart 可以拖动
-        lineChart.isDragEnabled = true
 
-        // 设置 LineChart 的缩放
-        lineChart.setScaleEnabled(true)
-        lineChart.setPinchZoom(true)
-
-        // 创建 LineDataSet 对象并添加数据集
-        val dataSet1 = LineDataSet(entries, "Data Set 1")
-
-        dataSet1.color = Color.BLUE // 设置曲线颜色
-        dataSet1.setCircleColor(Color.BLUE) // 设置曲线上的数据点颜色
-        dataSet1.lineWidth = 2f // 设置曲线宽度
-        dataSet1.circleRadius = 4f // 设置曲线上的数据点半径
-        dataSet1.valueTextSize = 10f // 设置数据点值的字体大小
-        dataSet1.valueTextColor = Color.BLUE // 设置数据点值的颜色
-        dataSet1.setDrawValues(false) // 设置是否绘制数据点的值
-        dataSet1.mode = LineDataSet.Mode.CUBIC_BEZIER // 设置曲线模式为三次贝塞尔曲线
-
-        val lineDataSets = mutableListOf<ILineDataSet>()
-        lineDataSets.add(dataSet1)
-
-        val lineData = LineData(lineDataSets)
-        lineChart.data = lineData
 
         // 监听 LineChart 的拖动事件
-        lineChart.onChartGestureListener = object : OnChartGestureListener {
+        lineChartFvc.onChartGestureListener = object : OnChartGestureListener {
             override fun onChartGestureStart(
                 me: MotionEvent?,
                 lastPerformedGesture: ChartGesture?
@@ -122,8 +97,8 @@ class RoutineLungFragment : CommonBaseFragment<FragmentLungBinding>() {
 
             override fun onChartGestureEnd(me: MotionEvent?, lastPerformedGesture: ChartGesture?) {
                 // 获取当前拖动的范围
-                val lowestVisibleX = lineChart.lowestVisibleX
-                val highestVisibleX = lineChart.highestVisibleX
+                val lowestVisibleX = lineChartFvc.lowestVisibleX
+                val highestVisibleX = lineChartFvc.highestVisibleX
 
                 // 计算拖动的秒数范围
                 val secondsRange = highestVisibleX - lowestVisibleX
@@ -152,32 +127,106 @@ class RoutineLungFragment : CommonBaseFragment<FragmentLungBinding>() {
         }
 
         // 刷新图表
-        lineChart.invalidate()
-
+        lineChartFvc.invalidate()
 
         binding.rvFvc.layoutManager = LinearLayoutManager(requireContext())
 
-        adapter.setItemsBean(
-            mutableListOf(
-                RoutineLungBean(
-                    "用力肺活量(ERV)", "20", "9", "1","111","11"
-                ), RoutineLungBean(
-                    "一秒量(ERV)", "20", "9", "1","111","11"
-                ), RoutineLungBean(
-                    "一秒率(ERV)", "20", "9", "1","111","11"
-                ), RoutineLungBean(
-                    "用力呼气峰流速(ERV)", "20", "9", "1","111","11"
-                ), RoutineLungBean(
-                    "25%时呼气流逝(ERV)", "20", "9", "1","111","11"
-                ), RoutineLungBean(
-                    "50%时呼气流逝(ERV)", "20", "9", "1","111","11"
-                )
+        routineLungList?.let {
+            adapter.setItemsBean(
+                it
             )
-        )
-
-
+        }
 
         binding.rvFvc.adapter = adapter
+    }
+
+
+    private fun initData() {
+        routineLungList = mutableListOf(
+            RoutineLungBean(
+                "用力肺活量(ERV)", "20", "9", "1", "111", "11"
+            ), RoutineLungBean(
+                "一秒量(ERV)", "20", "9", "1", "111", "11"
+            ), RoutineLungBean(
+                "一秒率(ERV)", "20", "9", "1", "111", "11"
+            ), RoutineLungBean(
+                "用力呼气峰流速(ERV)", "20", "9", "1", "111", "11"
+            ), RoutineLungBean(
+                "25%时呼气流逝(ERV)", "20", "9", "1", "111", "11"
+            ), RoutineLungBean(
+                "50%时呼气流逝(ERV)", "20", "9", "1", "111", "11"
+            )
+        )
+    }
+
+
+    private fun lineChartFlow(
+        lineChart: LineChart,
+        entriesFow: ArrayList<Entry>,//xy数据
+        fl: Float,//y轴最小值
+        fl1: Float,//y轴最大值
+        count: Int//y轴的个数
+    ) {
+
+        // 设置标题
+        lineChart.description.text = "[L/S]"
+        lineChart.description.setPosition(80f, 22f)
+        lineChart.description.textSize = 9f
+        lineChart.description.textColor = Color.BLACK
+
+        // 设置 Y 轴的最小值和最大值，以确保包含所有单数刻度
+        lineChart.axisLeft.axisMinimum = fl // 设置 Y 轴最小值
+        lineChart.axisLeft.axisMaximum = fl1 // 设置 Y 轴最大值
+        lineChart.axisRight.axisMinimum = fl // 设置 Y 轴最小值
+        lineChart.axisRight.axisMaximum = fl1 // 设置 Y 轴最大值
+
+        lineChart.setExtraOffsets(0f, 0f, 0f, 0f) // 上、左、下、右边距
+
+        // 设置 LineChart 可以拖动
+        lineChart.isDragEnabled = true
+
+        // 设置 LineChart 的缩放
+        lineChart.setScaleEnabled(false)
+
+        lineChart.setPinchZoom(false)
+
+        lineChart.axisLeft.setLabelCount(
+            count, true
+        ) // y轴刻度多少个
+        lineChart.axisRight.setLabelCount(
+            count, true
+        ) // y轴刻度多少个
+        // 创建 LineDataSet 对象并添加数据集
+        val dataSet1 = LineDataSet(entriesFow, "Data Set 1")
+
+        dataSet1.color = ContextCompat.getColor(requireContext(), R.color.colorPrimary) // 设置曲线颜色
+        dataSet1.setCircleColor(Color.BLUE) // 设置曲线上的数据点颜色
+        dataSet1.lineWidth = 2f // 设置曲线宽度
+        dataSet1.circleRadius = 3f // 设置曲线上的数据点半径
+        dataSet1.valueTextSize = 10f // 设置数据点值的字体大小
+        dataSet1.valueTextColor = Color.BLUE // 设置数据点值的颜色
+        dataSet1.setDrawValues(false) // 设置是否绘制数据点的值
+        dataSet1.mode = LineDataSet.Mode.CUBIC_BEZIER // 设置曲线模式为三次贝塞尔曲线
+
+        val xAxis = lineChart.xAxis
+
+        xAxis.granularity = 1f     //这个很重要
+
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+
+        xAxis.setLabelCount(entriesFow.size, true)//x刻度多少个
+
+        // 禁用X轴的刻度线
+        xAxis.setDrawGridLines(false)
+
+        val lineDataSets = mutableListOf<ILineDataSet>()
+        lineDataSets.add(dataSet1)
+
+        val lineData = LineData(lineDataSets)
+        lineChart.data = lineData
+
+        // 刷新图表
+        lineChart.invalidate()
     }
 
     override fun initListener() {
@@ -200,57 +249,42 @@ class RoutineLungFragment : CommonBaseFragment<FragmentLungBinding>() {
         })
 
         binding.btnTest1.setNoRepeatListener {
-            onCLickbutton = Click.TEST1
-            setButtonStyle(
-                binding.btnTest1,
-                binding.btnTest2,
-                binding.btnTest3,
-                binding.btnTest4,
-                binding.btnTest5
+            handleButtonClick(
+                Click.TEST1,
+                "测试1",
+                listOf("value1", "value2", "value3", "value4", "value5", "value6")
             )
         }
 
         binding.btnTest2.setNoRepeatListener {
-            onCLickbutton = Click.TEST2
-            setButtonStyle(
-                binding.btnTest2,
-                binding.btnTest1,
-                binding.btnTest3,
-                binding.btnTest4,
-                binding.btnTest5
+            handleButtonClick(
+                Click.TEST2,
+                "测试2",
+                listOf("kotlin1", "kotlin2", "kotlin3", "kotlin4", "kotlin5", "kotlin6")
             )
         }
 
         binding.btnTest3.setNoRepeatListener {
-            onCLickbutton = Click.TEST3
-            setButtonStyle(
-                binding.btnTest3,
-                binding.btnTest2,
-                binding.btnTest1,
-                binding.btnTest4,
-                binding.btnTest5
+            handleButtonClick(
+                Click.TEST3,
+                "测试2",
+                listOf("num1", "num2", "num3", "num4", "num5", "num6")
             )
         }
 
         binding.btnTest4.setNoRepeatListener {
-            onCLickbutton = Click.TEST4
-            setButtonStyle(
-                binding.btnTest4,
-                binding.btnTest3,
-                binding.btnTest2,
-                binding.btnTest1,
-                binding.btnTest5
+            handleButtonClick(
+                Click.TEST4,
+                "测试2",
+                listOf("num1", "num2", "num3", "num4", "num5", "num6")
             )
         }
 
         binding.btnTest5.setNoRepeatListener {
-            onCLickbutton = Click.TEST5
-            setButtonStyle(
-                binding.btnTest5,
-                binding.btnTest4,
-                binding.btnTest3,
-                binding.btnTest2,
-                binding.btnTest1
+            handleButtonClick(
+                Click.TEST5,
+                "测试2",
+                listOf("num1", "num2", "num3", "num4", "num5", "num6")
             )
         }
 
@@ -281,35 +315,76 @@ class RoutineLungFragment : CommonBaseFragment<FragmentLungBinding>() {
 
     }
 
+    private fun handleButtonClick(
+        clickType: Click,
+        buttonText: String,
+        otherList: List<String>
+    ) {
+        onCLickbutton = clickType
+        binding.atvTest.text = buttonText
 
-    private fun setButtonStyle(
-        button1: Button,
-        button2: Button,
-        button3: Button,
-        button4: Button,
-        button5: Button,
-    ) {// 设置按钮的样式
+        routineLungList?.forEachIndexed { index, bean ->
+            if (index < otherList.size) {
+                bean.test1 = otherList[index]
+            }
+        }
 
-        button1.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-        button1.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.circle_click)
+        routineLungList?.let {
+            adapter.setItemsBean(it)
+        }
 
-        button2.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
-        button2.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.circle)
-
-        button3.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
-        button3.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.circle)
-
-        button4.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
-        button4.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.circle)
-
-        button5.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
-        button5.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.circle)
+        when (clickType) {
+            Click.TEST1 -> {
+                setButtonStyle(binding.btnTest1, true)
+                setButtonStyle(binding.btnTest2, false)
+                setButtonStyle(binding.btnTest3, false)
+                setButtonStyle(binding.btnTest4, false)
+                setButtonStyle(binding.btnTest5, false)
+            }
+            Click.TEST2 -> {
+                setButtonStyle(binding.btnTest1, false)
+                setButtonStyle(binding.btnTest2, true)
+                setButtonStyle(binding.btnTest3, false)
+                setButtonStyle(binding.btnTest4, false)
+                setButtonStyle(binding.btnTest5, false)
+            }
+            Click.TEST3 -> {
+                setButtonStyle(binding.btnTest1, false)
+                setButtonStyle(binding.btnTest2, false)
+                setButtonStyle(binding.btnTest3, true)
+                setButtonStyle(binding.btnTest4, false)
+                setButtonStyle(binding.btnTest5, false)
+            }
+            Click.TEST4 -> {
+                setButtonStyle(binding.btnTest1, false)
+                setButtonStyle(binding.btnTest2, false)
+                setButtonStyle(binding.btnTest3, false)
+                setButtonStyle(binding.btnTest4, true)
+                setButtonStyle(binding.btnTest5, false)
+            }
+            Click.TEST5 -> {
+                setButtonStyle(binding.btnTest1, false)
+                setButtonStyle(binding.btnTest2, false)
+                setButtonStyle(binding.btnTest3, false)
+                setButtonStyle(binding.btnTest4, false)
+                setButtonStyle(binding.btnTest5, true)
+            }
+            // 继续添加其他点击类型的处理...
+        }
     }
+
+    private fun setButtonStyle(button: Button, isActive: Boolean) {
+        if (isActive) {
+            button.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+            button.background = ContextCompat.getDrawable(requireContext(), R.drawable.circle_click)
+        } else {
+            button.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+            button.background = ContextCompat.getDrawable(requireContext(), R.drawable.circle)
+        }
+    }
+
+
+
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentLungBinding.inflate(inflater, container, false)
