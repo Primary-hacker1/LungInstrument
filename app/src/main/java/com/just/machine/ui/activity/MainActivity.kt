@@ -3,8 +3,10 @@ package com.just.machine.ui.activity
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.net.wifi.WifiManager
 import android.os.Handler
 import android.os.Message
+import android.text.format.Formatter
 import android.util.Log
 import android.widget.Toast
 import androidx.navigation.Navigation
@@ -94,30 +96,27 @@ class MainActivity : CommonBaseActivity<ActivityMainBinding>() {
         listenerThread = ListenerThread(12345, handler)
         listenerThread.start()
 
-        try {
-            Thread.sleep(1000)
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        }
-
-        Thread {
-            try {
-                //本地路由开启通信
-                val ip = "192.168.108.1"
-                val socket = Socket(ip, 12345)
-                connectThread = ConnectThread(this@MainActivity, socket, handler)
-                connectThread.start()
-            } catch (e: IOException) {
-                e.printStackTrace()
-                runOnUiThread {
-                    Toast.makeText(
-                        this@MainActivity,
-                        "创建通信失败",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        }.start()
+//        Thread {
+//            try {
+//                val wifiManager =
+//                    this.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+//                val dhcpInfo = wifiManager.dhcpInfo
+//                //本地路由开启通信
+//                var routeIp = Formatter.formatIpAddress(dhcpInfo.gateway)
+//                val socket = Socket(routeIp, 12345)
+//                connectThread = ConnectThread(this@MainActivity, socket, handler)
+//                connectThread.start()
+//            } catch (e: IOException) {
+//                e.printStackTrace()
+//                runOnUiThread {
+//                    Toast.makeText(
+//                        this@MainActivity,
+//                        "创建通信失败",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                }
+//            }
+//        }.start()
     }
 
     private fun initNavigationView() {

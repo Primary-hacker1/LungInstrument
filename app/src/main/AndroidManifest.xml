@@ -4,8 +4,8 @@
     package="com.just.news">
 
     <uses-permission android:name="android.permission.INTERNET" /> <!-- 文字转语音适配Android11以上 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <queries>
@@ -67,7 +67,6 @@
             android:name="com.just.machine.ui.activity.SixMinSystemSettingActivity"
             android:exported="false"
             android:screenOrientation="landscape" />
-
     </application>
 
 </manifest>
