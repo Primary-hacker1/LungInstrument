@@ -23,14 +23,14 @@ abstract class BaseFrameLayout<Vb : ViewDataBinding> : FrameLayout {
         initView()
     }
 
-    constructor(context: Context, attributes: AttributeSet) : super(context, attributes) {
+    constructor(context: Context, attributes: AttributeSet?) : super(context, attributes) {
         mContext = context
         var layoutInflater = LayoutInflater.from(context)
         binding = DataBindingUtil.inflate(layoutInflater, getLayout(), this, true)
         initView()
     }
 
-    constructor(context: Context, attributes: AttributeSet, int: Int) : super(
+    constructor(context: Context, attributes: AttributeSet?, int: Int) : super(
         context,
         attributes,
         int

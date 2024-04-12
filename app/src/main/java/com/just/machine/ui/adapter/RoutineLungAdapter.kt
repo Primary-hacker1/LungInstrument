@@ -10,9 +10,20 @@ import com.just.news.databinding.ItemRoutineBinding
 class RoutineLungAdapter(val context: Context) :
     BaseRecyclerViewAdapter<RoutineLungBean, ItemRoutineBinding>() {
 
-
+    private var isClick: Boolean? = false
     override fun bindData(item: RoutineLungBean, position: Int) {
         binding.bean = item
+        if (isClick == true)
+            binding.atvTest1.setBackgroundColor(ContextCompat.getColor(context, R.color.cf4f5fa))
+
+    }
+
+    /**
+     * @param position 点击 item 的 position
+     * */
+    fun toggleItemTstBackground(isClick: Boolean) {
+        this.isClick = isClick
+        notifyDataSetChanged()
     }
 
     override fun getLayoutRes(): Int {

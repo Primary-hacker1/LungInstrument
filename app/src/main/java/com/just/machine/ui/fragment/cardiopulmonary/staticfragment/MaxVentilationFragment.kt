@@ -1,15 +1,10 @@
 package com.just.machine.ui.fragment.cardiopulmonary.staticfragment
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
 import com.just.machine.ui.viewmodel.MainViewModel
-import com.just.news.databinding.FragmentDynamicDataBinding
 import com.just.news.databinding.FragmentMaxVentilationBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,20 +17,21 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MaxVentilationFragment : CommonBaseFragment<FragmentMaxVentilationBinding>() {
 
+
     private val viewModel by viewModels<MainViewModel>()
 
     override fun loadData() {//懒加载
 
     }
 
-
     override fun initView() {
-
+        val layout = binding.fragmentLayout
+        layout.setInitView("MVV")
     }
 
     override fun initListener() {
-
     }
+
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentMaxVentilationBinding.inflate(inflater, container, false)

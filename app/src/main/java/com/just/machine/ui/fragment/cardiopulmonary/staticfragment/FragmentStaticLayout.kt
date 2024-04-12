@@ -1,17 +1,17 @@
 package com.just.machine.ui.fragment.cardiopulmonary.staticfragment
 
 import CustomMarkerView
+import android.content.Context
 import android.graphics.Color
+import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
-import android.view.ViewGroup
 import android.widget.Button
+import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
-import com.common.base.toast
 import com.common.network.LogUtils
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -25,30 +25,56 @@ import com.github.mikephil.charting.listener.OnChartGestureListener
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.just.machine.model.staticlung.RoutineLungBean
 import com.just.machine.ui.adapter.RoutineLungAdapter
-import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
-import com.just.news.databinding.FragmentBreatheBinding
-import com.just.news.databinding.FragmentDynamicDataBinding
-import dagger.hilt.android.AndroidEntryPoint
+import com.just.news.databinding.FragmentLungBinding
+
+class FragmentStaticLayout : FrameLayout {
+
+    private val tag = FragmentStaticLayout::class.java.name
+
+    var binding: FragmentLungBinding
+    var mContext: Context
+
+    constructor(context: Context) : super(context) {
+        mContext = context
+        var layoutInflater = LayoutInflater.from(context)
+        binding = DataBindingUtil.inflate(layoutInflater, getLayout(), this, true)
+        initView()
+    }
+
+    constructor(context: Context, attributes: AttributeSet?) : super(context, attributes) {
+        mContext = context
+        var layoutInflater = LayoutInflater.from(context)
+        binding = DataBindingUtil.inflate(layoutInflater, getLayout(), this, true)
+        initView()
+    }
+
+    constructor(context: Context, attributes: AttributeSet?, int: Int) : super(
+        context,
+        attributes,
+        int
+    ) {
+        mContext = context
+        var layoutInflater = LayoutInflater.from(context)
+        binding = DataBindingUtil.inflate(layoutInflater, getLayout(), this, true)
+        initView()
+    }
 
 
-/**
- *create by 2024/4/2
- * 静态肺常规
- *@author zt
- */
-@AndroidEntryPoint
-class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
+    private var test1 = listOf("value1", "value2", "value3", "value4", "value5", "value6")
+
+    private var test2 = listOf("kotlin1", "kotlin2", "kotlin3", "kotlin4", "kotlin5", "kotlin6")
+
+    private var test3 = listOf("num1", "num2", "num3", "num4", "num5", "num6")
+
+    private var test4 = listOf("value1", "value2", "value3", "value4", "num5", "num6")
+
+    private var test5 = listOf("num", "num2", "num3", "num4", "num5", "num6")
+
 
     private var onCLickbutton: Click? = null
 
-    private val viewModel by viewModels<MainViewModel>()
-
-    private val adapter by lazy { RoutineLungAdapter(requireContext()) }
-
-    override fun loadData() {//懒加载
-
-    }
+    private val adapter by lazy { RoutineLungAdapter(context) }
 
     private var routineLungList: MutableList<RoutineLungBean>? = ArrayList()
 
@@ -56,10 +82,26 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
         TEST1, TEST2, TEST3, TEST4, TEST5
     }
 
+    fun setInitView(title: String) {
+        binding.title.text = title
+    }
 
-    override fun initView() {
+    fun setData(test1: MutableList<String>) {
+        this.test1 = test1
+    }
+
+    fun initView() {
 
         initData()
+
+        initListener()
+
+        val entriesFow = arrayListOf<Entry>()
+        // 创建折线图的样本数据
+        val entriesFlowFvc = arrayListOf<Entry>()
+        for (index in 0..6) {
+            entriesFow.add(Entry(index.toFloat(), index.toFloat() / 6 - 3))
+        }
 
         // 创建折线图的样本数据
         val entries = arrayListOf<Entry>()
@@ -69,10 +111,14 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
 
         lineChartFlow(binding.chartFvc, entries, -5f, 5f, 11)
 
+        lineChartFlow(binding.chartFlow, entriesFow, -12f, 9f, 9)
+
+        lineChartFlow(binding.chartFvcFlow, entriesFlowFvc, -12f, 9f, 9)
+
         val lineChartFvc = binding.chartFvc
 
         // 设置 MarkerView
-        val markerView = CustomMarkerView(requireContext(), R.layout.custom_marker_view)
+        val markerView = CustomMarkerView(context, R.layout.custom_marker_view)
         lineChartFvc.marker = markerView
 
 
@@ -84,7 +130,10 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
             ) {
             }
 
-            override fun onChartGestureEnd(me: MotionEvent?, lastPerformedGesture: ChartTouchListener.ChartGesture?) {
+            override fun onChartGestureEnd(
+                me: MotionEvent?,
+                lastPerformedGesture: ChartTouchListener.ChartGesture?
+            ) {
                 // 获取当前拖动的范围
                 val lowestVisibleX = lineChartFvc.lowestVisibleX
                 val highestVisibleX = lineChartFvc.highestVisibleX
@@ -118,7 +167,7 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
         // 刷新图表
         lineChartFvc.invalidate()
 
-        binding.rvFvc.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvFvc.layoutManager = LinearLayoutManager(context)
 
         routineLungList?.let {
             adapter.setItemsBean(
@@ -188,7 +237,7 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
         // 创建 LineDataSet 对象并添加数据集
         val dataSet1 = LineDataSet(entriesFow, "Data Set 1")
 
-        dataSet1.color = ContextCompat.getColor(requireContext(), R.color.colorPrimary) // 设置曲线颜色
+        dataSet1.color = ContextCompat.getColor(context, R.color.colorPrimary) // 设置曲线颜色
         dataSet1.setCircleColor(Color.BLUE) // 设置曲线上的数据点颜色
         dataSet1.lineWidth = 2f // 设置曲线宽度
         dataSet1.circleRadius = 3f // 设置曲线上的数据点半径
@@ -221,7 +270,7 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
     // 用于保存按钮样式的映射
     private var button: Button? = null
 
-    override fun initListener() {
+    fun initListener() {
         // 设置选中值监听器
         binding.chartFvc.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
             override fun onValueSelected(e: Entry?, h: Highlight?) {
@@ -232,7 +281,7 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
                 val xValue = e.x
                 val yValue = e.y
 
-                toast("Selected value: x = $xValue, y = $yValue")
+//                toast("Selected value: x = $xValue, y = $yValue")
             }
 
             override fun onNothingSelected() {
@@ -245,7 +294,7 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
             handleButtonClick(
                 Click.TEST1,
                 "测试1",
-                listOf("value1", "value2", "value3", "value4", "value5", "value6")
+                test1
             )
         }
 
@@ -253,7 +302,7 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
             handleButtonClick(
                 Click.TEST2,
                 "测试2",
-                listOf("kotlin1", "kotlin2", "kotlin3", "kotlin4", "kotlin5", "kotlin6"),
+                test2,
             )
         }
 
@@ -261,7 +310,7 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
             handleButtonClick(
                 Click.TEST3,
                 "测试3",
-                listOf("num1", "num2", "num3", "num4", "num5", "num6"),
+                test3,
             )
         }
 
@@ -269,7 +318,7 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
             handleButtonClick(
                 Click.TEST4,
                 "测试4",
-                listOf("num1", "num2", "num3", "num4", "num5", "num6"),
+                test4,
             )
         }
 
@@ -277,7 +326,7 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
             handleButtonClick(
                 Click.TEST5,
                 "测试5",
-                listOf("num1", "num2", "num3", "num4", "num5", "num6"),
+                test5,
             )
         }
 
@@ -322,6 +371,8 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
                     setButtonStyle(binding.btnTest3, false)
                     setButtonStyle(binding.btnTest4, false)
                 }
+
+                null -> TODO()
             }
 
         }
@@ -350,161 +401,161 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
         when (clickType) {
             Click.TEST1 -> {
                 val isStart1 = button == binding.btnTest1
-                LogUtils.e(tag+isStart1)
-                if(!isStart1){
+                LogUtils.e(tag + isStart1)
+                if (!isStart1) {
                     setButtonStyle(binding.btnTest1, true)
                 }
 
                 val isStart2 = button == binding.btnTest2
 
-                if(!isStart2){
+                if (!isStart2) {
                     setButtonStyle(binding.btnTest2, false)
                 }
 
-                val isStart3 = button ==binding.btnTest3
+                val isStart3 = button == binding.btnTest3
 
-                if(!isStart3){
-                    setButtonStyle(binding.btnTest3,false)
+                if (!isStart3) {
+                    setButtonStyle(binding.btnTest3, false)
                 }
 
-                val isStart4 = button ==binding.btnTest4
+                val isStart4 = button == binding.btnTest4
 
-                if(!isStart4){
-                    setButtonStyle(binding.btnTest4,false)
+                if (!isStart4) {
+                    setButtonStyle(binding.btnTest4, false)
                 }
 
-                val isStart5 = button ==binding.btnTest5
+                val isStart5 = button == binding.btnTest5
 
-                if(!isStart5){
-                    setButtonStyle(binding.btnTest5,false)
+                if (!isStart5) {
+                    setButtonStyle(binding.btnTest5, false)
                 }
             }
 
             Click.TEST2 -> {
                 val isStart1 = button == binding.btnTest1
-                LogUtils.e(tag+isStart1)
-                if(!isStart1){
+                LogUtils.e(tag + isStart1)
+                if (!isStart1) {
                     setButtonStyle(binding.btnTest1, false)
                 }
 
                 val isStart2 = button == binding.btnTest2
 
-                if(!isStart2){
+                if (!isStart2) {
                     setButtonStyle(binding.btnTest2, true)
                 }
 
-                val isStart3 = button ==binding.btnTest3
+                val isStart3 = button == binding.btnTest3
 
-                if(!isStart3){
-                    setButtonStyle(binding.btnTest3,false)
+                if (!isStart3) {
+                    setButtonStyle(binding.btnTest3, false)
                 }
 
-                val isStart4 = button ==binding.btnTest4
+                val isStart4 = button == binding.btnTest4
 
-                if(!isStart4){
-                    setButtonStyle(binding.btnTest4,false)
+                if (!isStart4) {
+                    setButtonStyle(binding.btnTest4, false)
                 }
 
-                val isStart5 = button ==binding.btnTest5
+                val isStart5 = button == binding.btnTest5
 
-                if(!isStart5){
-                    setButtonStyle(binding.btnTest5,false)
+                if (!isStart5) {
+                    setButtonStyle(binding.btnTest5, false)
                 }
             }
 
             Click.TEST3 -> {
                 val isStart1 = button == binding.btnTest1
-                LogUtils.e(tag+isStart1)
-                if(!isStart1){
+                LogUtils.e(tag + isStart1)
+                if (!isStart1) {
                     setButtonStyle(binding.btnTest1, false)
                 }
 
                 val isStart2 = button == binding.btnTest2
 
-                if(!isStart2){
+                if (!isStart2) {
                     setButtonStyle(binding.btnTest2, false)
                 }
 
-                val isStart3 = button ==binding.btnTest3
+                val isStart3 = button == binding.btnTest3
 
-                if(!isStart3){
-                    setButtonStyle(binding.btnTest3,true)
+                if (!isStart3) {
+                    setButtonStyle(binding.btnTest3, true)
                 }
 
-                val isStart4 = button ==binding.btnTest4
+                val isStart4 = button == binding.btnTest4
 
-                if(!isStart4){
-                    setButtonStyle(binding.btnTest4,false)
+                if (!isStart4) {
+                    setButtonStyle(binding.btnTest4, false)
                 }
 
-                val isStart5 = button ==binding.btnTest5
+                val isStart5 = button == binding.btnTest5
 
-                if(!isStart5){
-                    setButtonStyle(binding.btnTest5,false)
+                if (!isStart5) {
+                    setButtonStyle(binding.btnTest5, false)
                 }
             }
 
             Click.TEST4 -> {
                 val isStart1 = button == binding.btnTest1
-                LogUtils.e(tag+isStart1)
-                if(!isStart1){
+                LogUtils.e(tag + isStart1)
+                if (!isStart1) {
                     setButtonStyle(binding.btnTest1, false)
                 }
 
                 val isStart2 = button == binding.btnTest2
 
-                if(!isStart2){
+                if (!isStart2) {
                     setButtonStyle(binding.btnTest2, false)
                 }
 
-                val isStart3 = button ==binding.btnTest3
+                val isStart3 = button == binding.btnTest3
 
-                if(!isStart3){
-                    setButtonStyle(binding.btnTest3,false)
+                if (!isStart3) {
+                    setButtonStyle(binding.btnTest3, false)
                 }
 
-                val isStart4 = button ==binding.btnTest4
+                val isStart4 = button == binding.btnTest4
 
-                if(!isStart4){
-                    setButtonStyle(binding.btnTest4,true)
+                if (!isStart4) {
+                    setButtonStyle(binding.btnTest4, true)
                 }
 
-                val isStart5 = button ==binding.btnTest5
+                val isStart5 = button == binding.btnTest5
 
-                if(!isStart5){
-                    setButtonStyle(binding.btnTest5,false)
+                if (!isStart5) {
+                    setButtonStyle(binding.btnTest5, false)
                 }
             }
 
             Click.TEST5 -> {
                 val isStart1 = button == binding.btnTest1
-                LogUtils.e(tag+isStart1)
-                if(!isStart1){
+                LogUtils.e(tag + isStart1)
+                if (!isStart1) {
                     setButtonStyle(binding.btnTest1, false)
                 }
 
                 val isStart2 = button == binding.btnTest2
 
-                if(!isStart2){
+                if (!isStart2) {
                     setButtonStyle(binding.btnTest2, false)
                 }
 
-                val isStart3 = button ==binding.btnTest3
+                val isStart3 = button == binding.btnTest3
 
-                if(!isStart3){
-                    setButtonStyle(binding.btnTest3,false)
+                if (!isStart3) {
+                    setButtonStyle(binding.btnTest3, false)
                 }
 
-                val isStart4 = button ==binding.btnTest4
+                val isStart4 = button == binding.btnTest4
 
-                if(!isStart4){
-                    setButtonStyle(binding.btnTest4,false)
+                if (!isStart4) {
+                    setButtonStyle(binding.btnTest4, false)
                 }
 
-                val isStart5 = button ==binding.btnTest5
+                val isStart5 = button == binding.btnTest5
 
-                if(!isStart5){
-                    setButtonStyle(binding.btnTest5,true)
+                if (!isStart5) {
+                    setButtonStyle(binding.btnTest5, true)
                 }
             }
             // 继续添加其他点击类型的处理...
@@ -515,20 +566,21 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
     private fun setButtonStyle(button: Button, isActive: Boolean, isStart: Boolean? = false) {
         if (isStart == true) {
             this.button = button
-            button.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-            button.background = ContextCompat.getDrawable(requireContext(), R.drawable.circle_start)
+            button.setTextColor(ContextCompat.getColor(context, R.color.white))
+            button.background = ContextCompat.getDrawable(context, R.drawable.circle_start)
             return
         }
 
         if (isActive) {
-            button.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-            button.background = ContextCompat.getDrawable(requireContext(), R.drawable.circle_click)
+            button.setTextColor(ContextCompat.getColor(context, R.color.white))
+            button.background = ContextCompat.getDrawable(context, R.drawable.circle_click)
         } else {
-            button.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
-            button.background = ContextCompat.getDrawable(requireContext(), R.drawable.circle)
+            button.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
+            button.background = ContextCompat.getDrawable(context, R.drawable.circle)
         }
     }
 
-    override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
-        FragmentBreatheBinding.inflate(inflater, container, false)
+    fun getLayout(): Int {
+        return R.layout.fragment_lung
+    }
 }

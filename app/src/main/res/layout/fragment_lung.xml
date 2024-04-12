@@ -159,7 +159,7 @@
                     android:id="@+id/chart_flow"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/space_6"
+                    android:layout_marginEnd="@dimen/space_6"
                     android:background="@drawable/calibration_bg"
                     android:layout_weight="1" />
 
@@ -167,7 +167,8 @@
                     android:id="@+id/chart_fvc_flow"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/space_6"
+                    android:layout_marginTop="@dimen/space_6"
+                    android:layout_marginEnd="@dimen/space_6"
                     android:background="@drawable/calibration_bg"
                     android:layout_weight="1" />
 
