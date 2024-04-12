@@ -213,12 +213,52 @@
                         android:textSize="13sp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/atv_test"
+                        android:id="@+id/atv_test1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:maxLines="1"
                         android:text="测试1"
+                        android:textColor="@color/text3"
+                        android:textSize="13sp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/atv_test2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:maxLines="1"
+                        android:text="测试2"
+                        android:textColor="@color/text3"
+                        android:textSize="13sp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/atv_test3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:maxLines="1"
+                        android:text="测试3"
+                        android:textColor="@color/text3"
+                        android:textSize="13sp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/atv_test4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:maxLines="1"
+                        android:text="测试4"
+                        android:textColor="@color/text3"
+                        android:textSize="13sp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/atv_test5"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:maxLines="1"
+                        android:text="测试5"
                         android:textColor="@color/text3"
                         android:textSize="13sp" />
                 </LinearLayout>

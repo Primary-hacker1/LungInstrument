@@ -37,14 +37,14 @@ class FragmentStaticLayout : FrameLayout {
 
     constructor(context: Context) : super(context) {
         mContext = context
-        var layoutInflater = LayoutInflater.from(context)
+        val layoutInflater = LayoutInflater.from(context)
         binding = DataBindingUtil.inflate(layoutInflater, getLayout(), this, true)
         initView()
     }
 
     constructor(context: Context, attributes: AttributeSet?) : super(context, attributes) {
         mContext = context
-        var layoutInflater = LayoutInflater.from(context)
+        val layoutInflater = LayoutInflater.from(context)
         binding = DataBindingUtil.inflate(layoutInflater, getLayout(), this, true)
         initView()
     }
@@ -55,7 +55,7 @@ class FragmentStaticLayout : FrameLayout {
         int
     ) {
         mContext = context
-        var layoutInflater = LayoutInflater.from(context)
+        val layoutInflater = LayoutInflater.from(context)
         binding = DataBindingUtil.inflate(layoutInflater, getLayout(), this, true)
         initView()
     }

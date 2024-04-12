@@ -10,7 +10,7 @@ import com.just.news.R
 class SpinnerHelper(
     private val context: Context,
     private val spinner: Spinner,
-    private val spinnerItems: Int
+    private val spinnerItems: Int,
 ) {
 
     private var listener: SpinnerSelectionListener? = null

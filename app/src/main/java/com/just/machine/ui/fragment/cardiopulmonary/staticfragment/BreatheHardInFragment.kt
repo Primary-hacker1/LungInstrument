@@ -335,7 +335,7 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
 //        isStart: Boolean
     ) {
         onCLickbutton = clickType
-        binding.atvTest.text = buttonText
+        binding.atvTest1.text = buttonText
 
         routineLungList?.forEachIndexed { index, bean ->
             if (index < otherList.size) {
