@@ -1,6 +1,7 @@
 package com.just.machine.ui.fragment.setting
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.common.base.*
@@ -33,8 +34,8 @@ class AllSettingFragment : CommonBaseFragment<FragmentAllSettingBinding>() {
         val spScenarios =
             SpinnerHelper(requireContext(), binding.spScenarios, R.array.spinner_items)
         spScenarios.setSpinnerSelectionListener(object : SpinnerHelper.SpinnerSelectionListener {
-            override fun onItemSelected(selectedItem: String) {// 预计方案
-                LogUtils.d(tag + selectedItem)
+            override fun onItemSelected(selectedItem: String, view: View?) {
+
             }
 
             override fun onNothingSelected() {
@@ -45,8 +46,8 @@ class AllSettingFragment : CommonBaseFragment<FragmentAllSettingBinding>() {
         val spBreathing =
             SpinnerHelper(requireContext(), binding.spBreathing, R.array.spinner_items)
         spBreathing.setSpinnerSelectionListener(object : SpinnerHelper.SpinnerSelectionListener {
-            override fun onItemSelected(selectedItem: String) {// 呼吸面罩
-                LogUtils.d(tag + selectedItem)
+            override fun onItemSelected(selectedItem: String, view: View?) {
+
             }
 
             override fun onNothingSelected() {
@@ -56,8 +57,8 @@ class AllSettingFragment : CommonBaseFragment<FragmentAllSettingBinding>() {
 
         val spEcg = SpinnerHelper(requireContext(), binding.spEcg, R.array.spinner_items)
         spEcg.setSpinnerSelectionListener(object : SpinnerHelper.SpinnerSelectionListener {
-            override fun onItemSelected(selectedItem: String) {
-                LogUtils.d(tag + selectedItem)
+            override fun onItemSelected(selectedItem: String, view: View?) {
+
             }
 
             override fun onNothingSelected() {

@@ -207,4 +207,8 @@
     <string name="sixmin_test_measuring_blood">正在测量血压中…</string>
     <string name="sixmin_test_blood_pressure_without_connection">血压仪未连接，请检查设备!</string>
     <string name="sixmin_test_device_without_connection">请先接入设备</string>
+    <string-array name="spinner_sixmin_report_description">
+        <item>出具</item>
+        <item>不出具</item>
+    </string-array>
 </resources>

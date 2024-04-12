@@ -52,7 +52,8 @@ class SixMinReportEditBloodPressureFragment :
     }
 
     override fun start(dialog: Dialog?) {
-
+        dialog?.setCancelable(false)
+        dialog?.setCanceledOnTouchOutside(false)
     }
 
     override fun initView() {
