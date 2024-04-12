@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.base.toast
+import com.common.network.LogUtils
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -28,7 +29,6 @@ import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.FragmentLungBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.math.roundToInt
 
 
 /**
@@ -73,18 +73,17 @@ class RoutineLungFragment : CommonBaseFragment<FragmentLungBinding>() {
             entries.add(Entry(index.toFloat(), index.toFloat() / 6 - 3))
         }
 
-        lineChartFlow(binding.chartFvc, entries, -5f, 5f,11)
+        lineChartFlow(binding.chartFvc, entries, -5f, 5f, 11)
 
-        lineChartFlow(binding.chartFlow, entriesFow, -12f, 9f,9)
+        lineChartFlow(binding.chartFlow, entriesFow, -12f, 9f, 9)
 
-        lineChartFlow(binding.chartFvcFlow, entriesFlowFvc, -12f, 9f,9)
+        lineChartFlow(binding.chartFvcFlow, entriesFlowFvc, -12f, 9f, 9)
 
         val lineChartFvc = binding.chartFvc
 
         // 设置 MarkerView
         val markerView = CustomMarkerView(requireContext(), R.layout.custom_marker_view)
         lineChartFvc.marker = markerView
-
 
 
         // 监听 LineChart 的拖动事件
@@ -229,6 +228,9 @@ class RoutineLungFragment : CommonBaseFragment<FragmentLungBinding>() {
         lineChart.invalidate()
     }
 
+    // 用于保存按钮样式的映射
+    private var button: Button? = null
+
     override fun initListener() {
         // 设置选中值监听器
         binding.chartFvc.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
@@ -249,6 +251,7 @@ class RoutineLungFragment : CommonBaseFragment<FragmentLungBinding>() {
         })
 
         binding.btnTest1.setNoRepeatListener {
+
             handleButtonClick(
                 Click.TEST1,
                 "测试1",
@@ -260,7 +263,7 @@ class RoutineLungFragment : CommonBaseFragment<FragmentLungBinding>() {
             handleButtonClick(
                 Click.TEST2,
                 "测试2",
-                listOf("kotlin1", "kotlin2", "kotlin3", "kotlin4", "kotlin5", "kotlin6")
+                listOf("kotlin1", "kotlin2", "kotlin3", "kotlin4", "kotlin5", "kotlin6"),
             )
         }
 
@@ -268,7 +271,7 @@ class RoutineLungFragment : CommonBaseFragment<FragmentLungBinding>() {
             handleButtonClick(
                 Click.TEST3,
                 "测试2",
-                listOf("num1", "num2", "num3", "num4", "num5", "num6")
+                listOf("num1", "num2", "num3", "num4", "num5", "num6"),
             )
         }
 
@@ -276,7 +279,7 @@ class RoutineLungFragment : CommonBaseFragment<FragmentLungBinding>() {
             handleButtonClick(
                 Click.TEST4,
                 "测试2",
-                listOf("num1", "num2", "num3", "num4", "num5", "num6")
+                listOf("num1", "num2", "num3", "num4", "num5", "num6"),
             )
         }
 
@@ -284,30 +287,50 @@ class RoutineLungFragment : CommonBaseFragment<FragmentLungBinding>() {
             handleButtonClick(
                 Click.TEST5,
                 "测试2",
-                listOf("num1", "num2", "num3", "num4", "num5", "num6")
+                listOf("num1", "num2", "num3", "num4", "num5", "num6"),
             )
         }
 
         binding.btnStart.setNoRepeatListener {
             when (onCLickbutton) {
                 Click.TEST1 -> {
-
+                    setButtonStyle(binding.btnTest1, isActive = false, isStart = true)
+                    setButtonStyle(binding.btnTest2, false)
+                    setButtonStyle(binding.btnTest3, false)
+                    setButtonStyle(binding.btnTest4, false)
+                    setButtonStyle(binding.btnTest5, false)
                 }
 
                 Click.TEST2 -> {
-
+                    setButtonStyle(binding.btnTest2, isActive = false, isStart = true)
+                    setButtonStyle(binding.btnTest1, false)
+                    setButtonStyle(binding.btnTest3, false)
+                    setButtonStyle(binding.btnTest4, false)
+                    setButtonStyle(binding.btnTest5, false)
                 }
 
                 Click.TEST3 -> {
-
+                    setButtonStyle(binding.btnTest3, isActive = false, isStart = true)
+                    setButtonStyle(binding.btnTest1, false)
+                    setButtonStyle(binding.btnTest2, false)
+                    setButtonStyle(binding.btnTest4, false)
+                    setButtonStyle(binding.btnTest5, false)
                 }
 
                 Click.TEST4 -> {
-
+                    setButtonStyle(binding.btnTest4, isActive = false, isStart = true)
+                    setButtonStyle(binding.btnTest1, false)
+                    setButtonStyle(binding.btnTest2, false)
+                    setButtonStyle(binding.btnTest3, false)
+                    setButtonStyle(binding.btnTest5, false)
                 }
 
                 Click.TEST5 -> {
-
+                    setButtonStyle(binding.btnTest5, isActive = false, isStart = true)
+                    setButtonStyle(binding.btnTest1, false)
+                    setButtonStyle(binding.btnTest2, false)
+                    setButtonStyle(binding.btnTest3, false)
+                    setButtonStyle(binding.btnTest4, false)
                 }
             }
 
@@ -318,7 +341,8 @@ class RoutineLungFragment : CommonBaseFragment<FragmentLungBinding>() {
     private fun handleButtonClick(
         clickType: Click,
         buttonText: String,
-        otherList: List<String>
+        otherList: List<String>,
+//        isStart: Boolean
     ) {
         onCLickbutton = clickType
         binding.atvTest.text = buttonText
@@ -335,45 +359,177 @@ class RoutineLungFragment : CommonBaseFragment<FragmentLungBinding>() {
 
         when (clickType) {
             Click.TEST1 -> {
-                setButtonStyle(binding.btnTest1, true)
-                setButtonStyle(binding.btnTest2, false)
-                setButtonStyle(binding.btnTest3, false)
-                setButtonStyle(binding.btnTest4, false)
-                setButtonStyle(binding.btnTest5, false)
+                val isStart1 = button == binding.btnTest1
+                LogUtils.e(tag+isStart1)
+                if(!isStart1){
+                    setButtonStyle(binding.btnTest1, true)
+                }
+
+                val isStart2 = button == binding.btnTest2
+
+                if(!isStart2){
+                    setButtonStyle(binding.btnTest2, false)
+                }
+
+                val isStart3 = button ==binding.btnTest3
+
+                if(!isStart3){
+                    setButtonStyle(binding.btnTest3,false)
+                }
+
+                val isStart4 = button ==binding.btnTest4
+
+                if(!isStart4){
+                    setButtonStyle(binding.btnTest4,false)
+                }
+
+                val isStart5 = button ==binding.btnTest5
+
+                if(!isStart5){
+                    setButtonStyle(binding.btnTest5,false)
+                }
             }
+
             Click.TEST2 -> {
-                setButtonStyle(binding.btnTest1, false)
-                setButtonStyle(binding.btnTest2, true)
-                setButtonStyle(binding.btnTest3, false)
-                setButtonStyle(binding.btnTest4, false)
-                setButtonStyle(binding.btnTest5, false)
+                val isStart1 = button == binding.btnTest1
+                LogUtils.e(tag+isStart1)
+                if(!isStart1){
+                    setButtonStyle(binding.btnTest1, false)
+                }
+
+                val isStart2 = button == binding.btnTest2
+
+                if(!isStart2){
+                    setButtonStyle(binding.btnTest2, true)
+                }
+
+                val isStart3 = button ==binding.btnTest3
+
+                if(!isStart3){
+                    setButtonStyle(binding.btnTest3,false)
+                }
+
+                val isStart4 = button ==binding.btnTest4
+
+                if(!isStart4){
+                    setButtonStyle(binding.btnTest4,false)
+                }
+
+                val isStart5 = button ==binding.btnTest5
+
+                if(!isStart5){
+                    setButtonStyle(binding.btnTest5,false)
+                }
             }
+
             Click.TEST3 -> {
-                setButtonStyle(binding.btnTest1, false)
-                setButtonStyle(binding.btnTest2, false)
-                setButtonStyle(binding.btnTest3, true)
-                setButtonStyle(binding.btnTest4, false)
-                setButtonStyle(binding.btnTest5, false)
+                val isStart1 = button == binding.btnTest1
+                LogUtils.e(tag+isStart1)
+                if(!isStart1){
+                    setButtonStyle(binding.btnTest1, false)
+                }
+
+                val isStart2 = button == binding.btnTest2
+
+                if(!isStart2){
+                    setButtonStyle(binding.btnTest2, false)
+                }
+
+                val isStart3 = button ==binding.btnTest3
+
+                if(!isStart3){
+                    setButtonStyle(binding.btnTest3,true)
+                }
+
+                val isStart4 = button ==binding.btnTest4
+
+                if(!isStart4){
+                    setButtonStyle(binding.btnTest4,false)
+                }
+
+                val isStart5 = button ==binding.btnTest5
+
+                if(!isStart5){
+                    setButtonStyle(binding.btnTest5,false)
+                }
             }
+
             Click.TEST4 -> {
-                setButtonStyle(binding.btnTest1, false)
-                setButtonStyle(binding.btnTest2, false)
-                setButtonStyle(binding.btnTest3, false)
-                setButtonStyle(binding.btnTest4, true)
-                setButtonStyle(binding.btnTest5, false)
+                val isStart1 = button == binding.btnTest1
+                LogUtils.e(tag+isStart1)
+                if(!isStart1){
+                    setButtonStyle(binding.btnTest1, false)
+                }
+
+                val isStart2 = button == binding.btnTest2
+
+                if(!isStart2){
+                    setButtonStyle(binding.btnTest2, false)
+                }
+
+                val isStart3 = button ==binding.btnTest3
+
+                if(!isStart3){
+                    setButtonStyle(binding.btnTest3,false)
+                }
+
+                val isStart4 = button ==binding.btnTest4
+
+                if(!isStart4){
+                    setButtonStyle(binding.btnTest4,true)
+                }
+
+                val isStart5 = button ==binding.btnTest5
+
+                if(!isStart5){
+                    setButtonStyle(binding.btnTest5,false)
+                }
             }
+
             Click.TEST5 -> {
-                setButtonStyle(binding.btnTest1, false)
-                setButtonStyle(binding.btnTest2, false)
-                setButtonStyle(binding.btnTest3, false)
-                setButtonStyle(binding.btnTest4, false)
-                setButtonStyle(binding.btnTest5, true)
+                val isStart1 = button == binding.btnTest1
+                LogUtils.e(tag+isStart1)
+                if(!isStart1){
+                    setButtonStyle(binding.btnTest1, false)
+                }
+
+                val isStart2 = button == binding.btnTest2
+
+                if(!isStart2){
+                    setButtonStyle(binding.btnTest2, false)
+                }
+
+                val isStart3 = button ==binding.btnTest3
+
+                if(!isStart3){
+                    setButtonStyle(binding.btnTest3,false)
+                }
+
+                val isStart4 = button ==binding.btnTest4
+
+                if(!isStart4){
+                    setButtonStyle(binding.btnTest4,false)
+                }
+
+                val isStart5 = button ==binding.btnTest5
+
+                if(!isStart5){
+                    setButtonStyle(binding.btnTest5,true)
+                }
             }
             // 继续添加其他点击类型的处理...
+
         }
     }
 
-    private fun setButtonStyle(button: Button, isActive: Boolean) {
+    private fun setButtonStyle(button: Button, isActive: Boolean, isStart: Boolean? = false) {
+        if (isStart == true) {
+            this.button = button
+            button.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+            button.background = ContextCompat.getDrawable(requireContext(), R.drawable.circle_start)
+            return
+        }
+
         if (isActive) {
             button.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
             button.background = ContextCompat.getDrawable(requireContext(), R.drawable.circle_click)
@@ -382,8 +538,6 @@ class RoutineLungFragment : CommonBaseFragment<FragmentLungBinding>() {
             button.background = ContextCompat.getDrawable(requireContext(), R.drawable.circle)
         }
     }
-
-
 
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
