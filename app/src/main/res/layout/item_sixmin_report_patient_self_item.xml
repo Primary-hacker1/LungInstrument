@@ -6,6 +6,7 @@
     </data>
 
     <LinearLayout
+        android:layout_marginVertical="2dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -13,8 +14,8 @@
         <RadioButton
             android:id="@+id/simin_report_rb_patient_self_item"
             style="@style/CustomSixMinRadioButton"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
             android:layout_gravity="center_vertical" />
 
         <TextView

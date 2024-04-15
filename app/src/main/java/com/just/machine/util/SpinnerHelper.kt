@@ -62,4 +62,8 @@ class SpinnerHelper(
         fun onItemSelected(selectedItem: String,view: View?=null)
         fun onNothingSelected()
     }
+
+    fun setSelection(position:Int){
+        spinner.setSelection(position)
+    }
 }

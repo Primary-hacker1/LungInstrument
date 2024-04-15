@@ -34,7 +34,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
+                android:layout_marginBottom="10dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/sixmin_report_btn_confirm_bg"
                     android:paddingHorizontal="50dp"
-                    android:paddingVertical="10dp"
+                    android:paddingVertical="5dp"
                     android:text="确定"
                     android:textColor="@color/colorWhite" />
 

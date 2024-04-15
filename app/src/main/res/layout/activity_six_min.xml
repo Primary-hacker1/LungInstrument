@@ -80,14 +80,14 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <FrameLayout
-                    android:id="@+id/sixmin_fl_test"
+                    android:id="@+id/sixmin_fl_patient_and_test_info"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -302,13 +302,17 @@
 
                             </LinearLayout>
 
-                            <ImageView
+                            <TextView
                                 android:id="@+id/sixmin_iv_ignore_blood"
-                                android:layout_width="135dp"
+                                android:layout_width="60dp"
                                 android:layout_height="30dp"
                                 android:layout_gravity="center_vertical"
                                 android:layout_weight="1"
-                                android:src="@mipmap/ignore_blood" />
+                                android:gravity="center"
+                                android:background="@drawable/sixmin_ignore_blood_pressure_bg"
+                                android:text="@string/sixmin_test_ignore_measure_blood_pressure"
+                                android:textColor="@color/colorWhite"
+                                android:textSize="15sp" />
 
                             <ImageView
                                 android:id="@+id/sixmin_iv_system_setting"
@@ -1018,7 +1022,7 @@
                     android:layout_marginHorizontal="36dp"
                     android:layout_marginVertical="24dp"
                     android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -1058,15 +1062,15 @@
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:layout_marginEnd="15dp"
-                            android:background="#51ADF6" />
+                            android:background="#2f89de" />
 
                         <LinearLayout
-                            android:padding="10dp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:background="@drawable/sixmin_report_content_bg"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:padding="10dp">
 
                             <FrameLayout
                                 android:layout_width="match_parent"
@@ -1279,7 +1283,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:layout_marginEnd="15dp"
-                            android:background="#51ADF6" />
+                            android:background="#2f89de" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -1292,7 +1296,8 @@
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/sixmin_report_content_bg"
                                 android:orientation="vertical"
-                                android:padding="10dp">
+                                android:paddingHorizontal="20dp"
+                                android:paddingVertical="10dp">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -1336,10 +1341,10 @@
                                     </LinearLayout>
 
                                     <LinearLayout
-                                        android:layout_marginStart="50dp"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="50dp"
                                         android:orientation="horizontal">
 
                                         <TextView
@@ -1397,10 +1402,10 @@
                                         android:orientation="horizontal">
 
                                         <TextView
-                                            android:text="，处方周期: "
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
+                                            android:text="，处方周期: "
                                             android:textColor="@color/text3" />
 
                                         <RadioGroup
@@ -1452,7 +1457,8 @@
                                 android:layout_marginTop="10dp"
                                 android:background="@drawable/sixmin_report_content_bg"
                                 android:orientation="vertical"
-                                android:padding="10dp">
+                                android:paddingHorizontal="20dp"
+                                android:paddingVertical="10dp">
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -1486,7 +1492,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
-                                            android:text="建议医生:"
+                                            android:text="检验医生:"
                                             android:textColor="@color/text3" />
 
                                         <EditText
@@ -1544,7 +1550,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:layout_marginEnd="15dp"
-                            android:background="#51ADF6" />
+                            android:background="#2f89de" />
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/sixmin_rv_patient_self_check"

@@ -75,6 +75,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
     private lateinit var confirmBloodFrontDialog: AlertDialog
     private lateinit var confirmBloodEndDialog: AlertDialog
     private lateinit var stopTestDialog: AlertDialog
+    private lateinit var generateReportDialog: AlertDialog
     private lateinit var bloodOxyDataSet: LineDataSet
     private val viewModel by viewModels<MainViewModel>()
     private lateinit var patientBean: PatientBean
@@ -116,6 +117,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         initConfirmBloodFrontDialog()
         initConfirmBloodEndDialog()
         initStopTestDialog()
+        initGenerateReportDialog()
         copyAssetsFilesToSD()
         initLineChart(binding.sixminLineChartBloodOxygen, 1)
         initLineChart(binding.sixminLineChartHeartBeat, 2)
@@ -140,6 +142,66 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         showGuideDialog()
 
         //6分钟报告
+        initTable()
+        val patientSelfList = mutableListOf<SixMinReportPatientSelfBean>()
+        val patientBreathSelfItemList = mutableListOf<SixMinReportPatientSelfItemBean>()
+        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("0级", "没有"))
+        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("0.5级", "非常非常轻"))
+        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("1级", "非常轻"))
+        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("2级", "很轻"))
+        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("3级", "中度"))
+        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("4级", "较严重"))
+        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("5-6级", "严重"))
+        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("7-9级", "非常严重"))
+        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("10级", "非常非常严重"))
+        patientSelfList.add(
+            SixMinReportPatientSelfBean(
+                "呼吸状况等级",
+                "1",
+                patientBreathSelfItemList
+            )
+        )
+        val patientTiredSelfItemList = mutableListOf<SixMinReportPatientSelfItemBean>()
+        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("0级", "没有"))
+        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("0.5级", "非常轻松"))
+        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("1级", "轻松"))
+        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("2级", "很轻"))
+        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("3级", "中度"))
+        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("4级", "有点疲劳"))
+        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("5-6级", "疲劳"))
+        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("7-9级", "非常疲劳"))
+        patientTiredSelfItemList.add(
+            SixMinReportPatientSelfItemBean(
+                "10级",
+                "非常非常疲劳(几乎到极限)"
+            )
+        )
+        patientSelfList.add(
+            SixMinReportPatientSelfBean(
+                "疲劳状况等级",
+                "2",
+                patientTiredSelfItemList
+            )
+        )
+        binding.sixminRvPatientSelfCheck.layoutManager = LinearLayoutManager(this)
+        val patientSelfItemAdapter = SixMinReportPatientSelfAdapter(this)
+        patientSelfItemAdapter.setItemsBean(patientSelfList)
+        binding.sixminRvPatientSelfCheck.adapter = patientSelfItemAdapter
+        binding.sixminRbSportTypeWalk.isChecked = true
+        binding.sixminTvFinishCircle.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_finish_circles),20))
+        binding.sixminTvUnfinishCircle.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_unfinish_circles),60))
+        binding.sixminTvTotalDistance.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_total_distance),100))
+        binding.sixminTvDataStatistics.text = String.format(getString(R.string.sixmin_test_report_data_statistics),10,20,1.4,"重度","一级",144)
+        binding.sixminTvStride.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_stride),20))
+        binding.sixminTvSingleSportTimeAndDistance.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_single_sport_time_and_distance),6,30))
+        binding.sixminTvSportHeartbeatAndMetabAndTiredControl.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_heartbeat_and_metab_and_tired_control),108,1.5,2))
+        binding.sixminTvRecommendTimeWeekly.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_recommend_time_weekly),3))
+        binding.sixminRbPrescriptionCycleWeek.isChecked = true
+        binding.sixminTvPrescriptionConclusion.text = "本次未能完成六分钟试验，运动了0分11秒，停止原因：心脏周围的组织和体液都能导电，因此可将人体看成为一个具有长、宽、厚三度空间的容积导体。"
+        binding.sixminTvReportNote.text = "本次未能完成六分钟试验，运动了0分11秒，停止原因:心脏周围的组织和体液都能导电，因此可将人体看成为一个具有长、宽、厚三度空间的容积导体。"
+    }
+
+    private fun initTable() {
         reportRowList.clear()
         reportRowList.add(
             SixMinReportItemBean(
@@ -216,70 +278,9 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 "/"
             )
         )
-        initTable(reportRowList)
-
-        val patientSelfList = mutableListOf<SixMinReportPatientSelfBean>()
-        val patientBreathSelfItemList = mutableListOf<SixMinReportPatientSelfItemBean>()
-        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("0级", "没有"))
-        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("0.5级", "非常非常轻"))
-        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("1级", "非常轻"))
-        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("2级", "很轻"))
-        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("3级", "中度"))
-        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("4级", "较严重"))
-        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("5-6级", "严重"))
-        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("7-9级", "非常严重"))
-        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("10级", "非常非常严重"))
-        patientSelfList.add(
-            SixMinReportPatientSelfBean(
-                "呼吸状况等级",
-                "1",
-                patientBreathSelfItemList
-            )
-        )
-        val patientTiredSelfItemList = mutableListOf<SixMinReportPatientSelfItemBean>()
-        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("0级", "没有"))
-        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("0.5级", "非常轻松"))
-        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("1级", "轻松"))
-        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("2级", "很轻"))
-        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("3级", "中度"))
-        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("4级", "有点疲劳"))
-        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("5-6级", "疲劳"))
-        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("7-9级", "非常疲劳"))
-        patientTiredSelfItemList.add(
-            SixMinReportPatientSelfItemBean(
-                "10级",
-                "非常非常疲劳(几乎到极限)"
-            )
-        )
-        patientSelfList.add(
-            SixMinReportPatientSelfBean(
-                "疲劳状况等级",
-                "2",
-                patientTiredSelfItemList
-            )
-        )
-        binding.sixminRvPatientSelfCheck.layoutManager = LinearLayoutManager(this)
-        val patientSelfItemAdapter = SixMinReportPatientSelfAdapter(this)
-        patientSelfItemAdapter.setItemsBean(patientSelfList)
-        binding.sixminRvPatientSelfCheck.adapter = patientSelfItemAdapter
-        binding.sixminRbSportTypeWalk.isChecked = true
-        binding.sixminTvFinishCircle.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_finish_circles),20))
-        binding.sixminTvUnfinishCircle.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_unfinish_circles),60))
-        binding.sixminTvTotalDistance.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_total_distance),100))
-        binding.sixminTvDataStatistics.text = String.format(getString(R.string.sixmin_test_report_data_statistics),10,20,1.4,"重度","一级",144)
-        binding.sixminTvStride.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_stride),20))
-        binding.sixminTvSingleSportTimeAndDistance.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_single_sport_time_and_distance),6,30))
-        binding.sixminTvSportHeartbeatAndMetabAndTiredControl.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_heartbeat_and_metab_and_tired_control),108,1.5,2))
-        binding.sixminTvRecommendTimeWeekly.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_recommend_time_weekly),3))
-        binding.sixminRbPrescriptionCycleWeek.isChecked = true
-        binding.sixminTvPrescriptionConclusion.text = "本次未能完成六分钟试验，运动了0分11秒，停止原因：心脏周围的组织和体液都能导电，因此可将人体看成为一个具有长、宽、厚三度空间的容积导体。"
-        binding.sixminTvReportNote.text = "本次未能完成六分钟试验，运动了0分11秒，停止原因:心脏周围的组织和体液都能导电，因此可将人体看成为一个具有长、宽、厚三度空间的容积导体。"
-    }
-
-    private fun initTable(rowList: MutableList<SixMinReportItemBean>) {
         val padding = dip2px(applicationContext, 1)
-        for (i in 0 until rowList.size) {
-            val sixMinReportItemBean = rowList[i]
+        for (i in 0 until reportRowList.size) {
+            val sixMinReportItemBean = reportRowList[i]
             val newRow = TableRow(applicationContext)
             val layoutParams = TableRow.LayoutParams()
             newRow.layoutParams = layoutParams
@@ -620,7 +621,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
 //            )
         }
 
-        binding.sixminIvSystemSetting.setOnClickListener {
+        binding.sixminIvSystemSetting.setNoRepeatListener {
             if (!usbTransferUtil.isBegin) {
                 val intent = Intent(this, SixMinSystemSettingActivity::class.java)
                 startActivity(intent)
@@ -631,7 +632,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 }
             }
         }
-        binding.sixminIvCircleCountPlus.setOnClickListener {
+        binding.sixminIvCircleCountPlus.setNoRepeatListener {
             if (usbTransferUtil.isBegin) {
                 if (usbSerialData.circleCount == null) {
                     usbSerialData.circleCount = "0"
@@ -641,19 +642,19 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 binding.sixminTvCircleCount.text = usbSerialData.circleCount
             }
         }
-        binding.sixminIvCircleCountMinus.setOnClickListener {
+        binding.sixminIvCircleCountMinus.setNoRepeatListener {
             if (usbTransferUtil.isBegin) {
                 if (usbSerialData.circleCount == null || usbSerialData.circleCount == "0") {
-                    return@setOnClickListener
+                    return@setNoRepeatListener
                 }
                 usbSerialData.circleCount = (usbSerialData.circleCount.toInt() - 1).toString()
                 usbTransferUtil.circleCount = usbSerialData.circleCount.toInt()
                 binding.sixminTvCircleCount.text = usbSerialData.circleCount
             }
         }
-        binding.sixminIvIgnoreBlood.setOnClickListener {
+        binding.sixminIvIgnoreBlood.setNoRepeatListener {
             usbTransferUtil.isIgnoreBlood = true
-            binding.sixminIvIgnoreBlood.visibility = View.INVISIBLE
+            binding.sixminIvIgnoreBlood.isEnabled = false
         }
         binding.sixminReportTvEditBloodPressure.setOnClickListener {
             if (reportRowList.isNotEmpty()) {
@@ -685,26 +686,26 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                             sixMinReportItem.sixMinValue =
                                 "${bean.highBloodPressureAfter}/${bean.lowBloodPressureAfter}"
                             binding.sixminReportTable.removeAllViews()
-                            initTable(reportRowList)
+                            initTable()
                         }
                     }
                 })
             }
         }
-        binding.sixminReportTvSelfCheckBeforeTest.setOnClickListener {
+        binding.sixminReportTvSelfCheckBeforeTest.setNoRepeatListener {
             val startEditBloodDialogFragment =
                 SixMinReportSelfCheckBeforeTestFragment.startPatientSelfCheckDialogFragment(
                     supportFragmentManager,
-                    "0"
+                    "1"
                 )
         }
-        binding.sixminReportTvPrescription.setOnClickListener {
+        binding.sixminReportTvPrescription.setNoRepeatListener {
             val prescriptionFragment =
                 SixMinReportPrescriptionFragment.startPrescriptionDialogFragment(
                     supportFragmentManager
                 )
         }
-        binding.sixminReportIvGenerateReport.setOnClickListener {
+        binding.sixminReportIvGenerateReport.setNoRepeatListener {
             //生成报告
         }
     }
@@ -1065,8 +1066,9 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
             binding.sixminTvBloodPressureLowBehind.text =
                 usbSerialData.bloodLowBehind ?: "---"
             usbTransferUtil.bloodType = 0
-            PatientActivity.startPatientActivity(this@SixMinActivity, "finishSixMinTest")
-            finish()
+            if(!generateReportDialog.isShowing){
+                generateReportDialog.show()
+            }
         }
         builder.setNegativeButton(getString(R.string.sixmin_system_setting_check_no)) { _, _ ->
 
@@ -1103,6 +1105,25 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         stopTestDialog = builder.create()
         stopTestDialog.setCanceledOnTouchOutside(false)
         stopTestDialog.setCancelable(false)
+    }
+
+    /**
+     * 是否生成报告
+     */
+    private fun initGenerateReportDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("")
+        builder.setMessage(getString(R.string.sixmin_test_generate_report_tips))
+        builder.setPositiveButton(getString(R.string.sixmin_system_setting_check_yes)) { _, _ ->
+            binding.sixminFlPatientAndTestInfo.visibility = View.GONE
+            binding.sixminLlPreReport.visibility = View.VISIBLE
+        }
+        builder.setNegativeButton(getString(R.string.sixmin_system_setting_check_no)) { _, _ ->
+
+        }
+        generateReportDialog = builder.create()
+        generateReportDialog.setCanceledOnTouchOutside(false)
+        generateReportDialog.setCancelable(false)
     }
 
     private fun initCountDownTimerExt() {
