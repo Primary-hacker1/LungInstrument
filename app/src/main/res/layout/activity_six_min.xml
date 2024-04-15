@@ -87,7 +87,7 @@
                     android:id="@+id/sixmin_fl_patient_and_test_info"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -1022,7 +1022,7 @@
                     android:layout_marginHorizontal="36dp"
                     android:layout_marginVertical="24dp"
                     android:orientation="horizontal"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -1061,7 +1061,7 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:layout_marginEnd="15dp"
+                            android:layout_marginEnd="12dp"
                             android:background="#2f89de" />
 
                         <LinearLayout

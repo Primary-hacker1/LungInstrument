@@ -18,7 +18,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:background="#2f89de"
+                android:background="@drawable/sixmin_report_title_topradius_bg"
                 android:gravity="center"
                 android:text="试验前状况评级"
                 android:textColor="@color/colorWhite"
@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/sixmin_report_btn_confirm_bg"
                     android:paddingHorizontal="50dp"
-                    android:paddingVertical="5dp"
+                    android:paddingVertical="10dp"
                     android:text="确定"
                     android:textColor="@color/colorWhite" />
 

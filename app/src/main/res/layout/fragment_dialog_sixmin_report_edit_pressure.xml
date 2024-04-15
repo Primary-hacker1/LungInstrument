@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:background="#2f89de"
+            android:background="@drawable/sixmin_report_title_topradius_bg"
             android:gravity="center"
             android:text="编辑血压"
             android:textColor="@color/colorWhite"
