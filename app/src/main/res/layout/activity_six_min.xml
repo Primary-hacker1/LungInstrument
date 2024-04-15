@@ -1147,7 +1147,6 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="5dp"
-                                        android:text="圈数:0 圈"
                                         android:textColor="@color/text3" />
 
                                 </LinearLayout>
@@ -1171,7 +1170,6 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="5dp"
-                                        android:text="未完成的那圈还剩下: 0 米"
                                         android:textColor="@color/text3" />
 
                                 </LinearLayout>
@@ -1195,7 +1193,6 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="5dp"
-                                        android:text="总距离:0 米"
                                         android:textColor="@color/text3" />
 
                                 </LinearLayout>
@@ -1214,10 +1211,10 @@
                                     android:src="@mipmap/conclusion" />
 
                                 <TextView
+                                    android:id="@+id/sixmin_tv_data_statistics"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="5dp"
-                                    android:text="结论：在六分钟内走了0米，平均步速为20米/分钟，代谢当量为1.4METs，心功能严重程度为重度，根据多项指标评估，心肺功能评级为一级，中途停留了144秒。"
                                     android:textColor="@color/text3" />
 
                             </LinearLayout>
@@ -1238,6 +1235,7 @@
                                     android:textColor="@color/text3" />
 
                                 <EditText
+                                    android:id="@+id/sixmin_et_heart_beat_conclusion"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
@@ -1321,12 +1319,14 @@
                                             android:orientation="horizontal">
 
                                             <RadioButton
+                                                android:id="@+id/sixmin_rb_sport_type_walk"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:buttonTint="@color/colorPrimary"
                                                 android:text="步行" />
 
                                             <RadioButton
+                                                android:id="@+id/sixmin_rb_sport_type_run"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:buttonTint="@color/colorPrimary"
@@ -1343,10 +1343,10 @@
                                         android:orientation="horizontal">
 
                                         <TextView
+                                            android:id="@+id/sixmin_tv_stride"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
-                                            android:text="运动步速控制在:   米/分钟"
                                             android:textColor="@color/text3" />
 
                                     </LinearLayout>
@@ -1354,19 +1354,19 @@
                                 </LinearLayout>
 
                                 <TextView
+                                    android:id="@+id/sixmin_tv_single_sport_time_and_distance"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginTop="5dp"
-                                    android:text="单次运动时长:   分钟,运动距离:   米"
                                     android:textColor="@color/text3" />
 
                                 <TextView
+                                    android:id="@+id/sixmin_tv_sport_heartbeat_and_metab_and_tired_control"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginTop="5dp"
-                                    android:text="运动心率为:   bmp,代谢当量为:   METS,疲劳控制在:   级"
                                     android:textColor="@color/text3" />
 
                                 <LinearLayout
@@ -1382,10 +1382,10 @@
                                         android:orientation="horizontal">
 
                                         <TextView
+                                            android:id="@+id/sixmin_tv_recommend_time_weekly"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
-                                            android:text="建议每周:   次,"
                                             android:textColor="@color/text3" />
 
                                     </LinearLayout>
@@ -1397,10 +1397,10 @@
                                         android:orientation="horizontal">
 
                                         <TextView
+                                            android:text="，处方周期: "
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
-                                            android:text="处方周期:"
                                             android:textColor="@color/text3" />
 
                                         <RadioGroup
@@ -1410,18 +1410,21 @@
                                             android:orientation="horizontal">
 
                                             <RadioButton
+                                                android:id="@+id/sixmin_rb_prescription_cycle_week"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:buttonTint="@color/colorPrimary"
                                                 android:text="周" />
 
                                             <RadioButton
+                                                android:id="@+id/sixmin_rb_prescription_cycle_month"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:buttonTint="@color/colorPrimary"
                                                 android:text="月" />
 
                                             <RadioButton
+                                                android:id="@+id/sixmin_rb_prescription_cycle_year"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:buttonTint="@color/colorPrimary"
@@ -1433,13 +1436,13 @@
                                 </LinearLayout>
 
                                 <TextView
+                                    android:id="@+id/sixmin_tv_prescription_conclusion"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginTop="5dp"
                                     android:layout_marginEnd="10dp"
                                     android:layout_marginBottom="10dp"
-                                    android:text="本次未能完成六分钟试验，运动了0分11秒，停止原因：心脏周围的组织和体液都能导电，因此可将人体看成为一个具有长、宽、厚三度空间的容积导体。"
                                     android:textColor="@color/text3" />
                             </LinearLayout>
 
@@ -1458,9 +1461,9 @@
                                     android:textColor="@color/text3" />
 
                                 <TextView
+                                    android:id="@+id/sixmin_tv_report_note"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="本次未能完成六分钟试验，运动了0分11秒，停止原因:心脏周围的组织和体液都能导电，因此可将人体看成为一个具有长、宽、厚三度空间的容积导体。"
                                     android:textColor="@color/text3" />
 
                                 <LinearLayout
@@ -1487,6 +1490,7 @@
                                             android:textColor="@color/text3" />
 
                                         <EditText
+                                            android:id="@+id/sixmin_et_recommend_doctor"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical" />
@@ -1553,6 +1557,7 @@
                             android:paddingBottom="20dp" />
 
                         <ImageView
+                            android:id="@+id/sixmin_report_iv_generate_report"
                             android:layout_width="150dp"
                             android:layout_height="57dp"
                             android:layout_gravity="center_horizontal"

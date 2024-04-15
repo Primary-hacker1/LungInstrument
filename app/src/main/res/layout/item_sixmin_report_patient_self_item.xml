@@ -12,10 +12,10 @@
 
         <RadioButton
             android:id="@+id/simin_report_rb_patient_self_item"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_gravity="center_vertical"
-            android:buttonTint="@color/colorPrimary" />
+            style="@style/CustomSixMinRadioButton"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_gravity="center_vertical" />
 
         <TextView
             android:id="@+id/simin_report_tv_patient_self_item_name"

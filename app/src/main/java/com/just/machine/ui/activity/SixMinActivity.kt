@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.os.CountDownTimer
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
+import android.text.Html
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -261,6 +262,18 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         val patientSelfItemAdapter = SixMinReportPatientSelfAdapter(this)
         patientSelfItemAdapter.setItemsBean(patientSelfList)
         binding.sixminRvPatientSelfCheck.adapter = patientSelfItemAdapter
+        binding.sixminRbSportTypeWalk.isChecked = true
+        binding.sixminTvFinishCircle.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_finish_circles),20))
+        binding.sixminTvUnfinishCircle.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_unfinish_circles),60))
+        binding.sixminTvTotalDistance.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_total_distance),100))
+        binding.sixminTvDataStatistics.text = String.format(getString(R.string.sixmin_test_report_data_statistics),10,20,1.4,"重度","一级",144)
+        binding.sixminTvStride.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_stride),20))
+        binding.sixminTvSingleSportTimeAndDistance.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_single_sport_time_and_distance),6,30))
+        binding.sixminTvSportHeartbeatAndMetabAndTiredControl.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_heartbeat_and_metab_and_tired_control),108,1.5,2))
+        binding.sixminTvRecommendTimeWeekly.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_recommend_time_weekly),3))
+        binding.sixminRbPrescriptionCycleWeek.isChecked = true
+        binding.sixminTvPrescriptionConclusion.text = "本次未能完成六分钟试验，运动了0分11秒，停止原因：心脏周围的组织和体液都能导电，因此可将人体看成为一个具有长、宽、厚三度空间的容积导体。"
+        binding.sixminTvReportNote.text = "本次未能完成六分钟试验，运动了0分11秒，停止原因:心脏周围的组织和体液都能导电，因此可将人体看成为一个具有长、宽、厚三度空间的容积导体。"
     }
 
     private fun initTable(rowList: MutableList<SixMinReportItemBean>) {
@@ -690,6 +703,9 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 SixMinReportPrescriptionFragment.startPrescriptionDialogFragment(
                     supportFragmentManager
                 )
+        }
+        binding.sixminReportIvGenerateReport.setOnClickListener {
+            //生成报告
         }
     }
 

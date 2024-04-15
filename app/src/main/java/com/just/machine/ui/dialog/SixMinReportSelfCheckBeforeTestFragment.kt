@@ -75,7 +75,7 @@ class SixMinReportSelfCheckBeforeTestFragment :
             SixMinReportPatientSelfItemBean(
                 "0级",
                 "没有",
-                "0",
+                "1",
                 if (checkAble == "" || checkAble == "0") "0" else "1"
             )
         )
