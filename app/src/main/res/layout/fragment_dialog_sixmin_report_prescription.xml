@@ -42,15 +42,15 @@
                         android:text="运动步速"
                         android:textColor="@color/text3" />
 
-                    <TextView
-                        android:id="@+id/sixmin_report_tv_prescription_stride_dropdown"
+                    <Spinner
+                        android:id="@+id/sixmin_report_tv_prescription_stride"
                         android:layout_width="80dp"
                         android:layout_height="22dp"
                         android:layout_marginStart="30dp"
                         android:layout_marginTop="25dp"
                         android:background="@drawable/sixmin_report_prescription_bg"
+                        android:overlapAnchor="false"
                         android:paddingStart="10dp"
-                        android:text="出具"
                         android:textColor="#2f89de" />
 
                     <LinearLayout
@@ -92,13 +92,14 @@
                         android:text="推荐距离"
                         android:textColor="@color/text3" />
 
-                    <TextView
+                    <Spinner
+                        android:id="@+id/sixmin_report_tv_prescription_distance"
                         android:layout_width="80dp"
                         android:layout_height="22dp"
                         android:layout_marginStart="30dp"
                         android:background="@drawable/sixmin_report_prescription_bg"
+                        android:overlapAnchor="false"
                         android:paddingStart="10dp"
-                        android:text="出具"
                         android:textColor="#2f89de"
                         android:visibility="invisible" />
 
@@ -130,20 +131,20 @@
             </LinearLayout>
 
             <View
-                android:rotation="45"
-                android:layout_marginTop="45dp"
-                android:layout_marginStart="80dp"
-                android:background="@color/text3"
                 android:layout_width="40dp"
-                android:layout_height="1.5dp" />
+                android:layout_height="1.5dp"
+                android:layout_marginStart="80dp"
+                android:layout_marginTop="45dp"
+                android:background="@color/text3"
+                android:rotation="45" />
 
             <View
-                android:rotation="135"
+                android:layout_width="40dp"
+                android:layout_height="1.5dp"
+                android:layout_marginStart="80dp"
                 android:layout_marginTop="72dp"
                 android:background="@color/text3"
-                android:layout_width="40dp"
-                android:layout_marginStart="80dp"
-                android:layout_height="1.5dp" />
+                android:rotation="135" />
 
         </RelativeLayout>
 
@@ -160,14 +161,14 @@
                 android:text="运动心率"
                 android:textColor="@color/text3" />
 
-            <TextView
-
+            <Spinner
+                android:id="@+id/sixmin_report_tv_prescription_heartbeat"
                 android:layout_width="80dp"
                 android:layout_height="22dp"
                 android:layout_marginStart="30dp"
                 android:background="@drawable/sixmin_report_prescription_bg"
+                android:overlapAnchor="false"
                 android:paddingStart="10dp"
-                android:text="出具"
                 android:textColor="#2f89de" />
 
             <LinearLayout
@@ -209,13 +210,14 @@
                 android:text="代谢当量"
                 android:textColor="@color/text3" />
 
-            <TextView
+            <Spinner
+                android:id="@+id/sixmin_report_tv_prescription_metab"
                 android:layout_width="80dp"
                 android:layout_height="22dp"
                 android:layout_marginStart="30dp"
                 android:background="@drawable/sixmin_report_prescription_bg"
+                android:overlapAnchor="false"
                 android:paddingStart="10dp"
-                android:text="出具"
                 android:textColor="#2f89de" />
 
             <LinearLayout
@@ -257,13 +259,14 @@
                 android:text="borg疲劳"
                 android:textColor="@color/text3" />
 
-            <TextView
+            <Spinner
+                android:id="@+id/sixmin_report_tv_prescription_tired"
                 android:layout_width="80dp"
                 android:layout_height="22dp"
                 android:layout_marginStart="30dp"
                 android:background="@drawable/sixmin_report_prescription_bg"
+                android:overlapAnchor="false"
                 android:paddingStart="10dp"
-                android:text="出具"
                 android:textColor="#2f89de" />
 
             <LinearLayout

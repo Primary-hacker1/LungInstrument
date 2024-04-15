@@ -27,6 +27,10 @@
         <item name="android:paddingStart">8dp</item>
     </style>
 
+    <style name="CustomSixMinRadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/sixmin_radio_button_selector</item>
+    </style>
+
     <style name="CustomSpinnerStyle" parent="Widget.AppCompat.Spinner">
         <!-- 修改 Spinner 下拉箭头颜色为透明 -->
         <item name="android:background">@drawable/spinner_dropdown_background</item>

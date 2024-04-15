@@ -44,7 +44,7 @@ class SpinnerHelper(
                 // 处理选中项的逻辑
                 val selectedItem = parent?.getItemAtPosition(position).toString()
                 // 在这里可以执行相应的操作
-                listener?.onItemSelected(selectedItem)
+                listener?.onItemSelected(selectedItem,view)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -59,7 +59,11 @@ class SpinnerHelper(
     }
 
     interface SpinnerSelectionListener {
-        fun onItemSelected(selectedItem: String)
+        fun onItemSelected(selectedItem: String,view: View?=null)
         fun onNothingSelected()
+    }
+
+    fun setSelection(position:Int){
+        spinner.setSelection(position)
     }
 }

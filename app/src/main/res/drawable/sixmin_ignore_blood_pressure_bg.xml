@@ -1,0 +1,6 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 未选中状态 -->
+    <item android:drawable="@drawable/sixmin_ignore_blood_pressure_disable" android:state_enabled="false"/>
+    <!-- 选中状态 -->
+    <item android:drawable="@drawable/sixmin_ignore_blood_pressure_enable" android:state_enabled="true"/>
+</selector>

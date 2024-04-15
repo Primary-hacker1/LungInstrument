@@ -213,4 +213,18 @@
     <string name="recover">恢复</string>
     <string name="motorAssessment">运动评估</string>
     <string name="reset">重置</string>
+    <string-array name="spinner_sixmin_report_description">
+        <item>出具</item>
+        <item>不出具</item>
+    </string-array>
+    <string name="sixmin_test_report_finish_circles"><![CDATA[圈数:<font color="#000000"><Big><b>&#160;&#160;&#160;%s</b></Big></font>&#160;&#160;&#160;圈]]></string>
+    <string name="sixmin_test_report_unfinish_circles"><![CDATA[未走完的那圈还剩下:<font color="#000000"><Big><b>&#160;&#160;&#160;%s</b></Big></font>&#160;&#160;&#160;米]]></string>
+    <string name="sixmin_test_report_total_distance"><![CDATA[总距离:<font color="#000000"><Big><b>&#160;&#160;&#160;%s</b></Big></font>&#160;&#160;&#160;米]]></string>
+    <string name="sixmin_test_report_data_statistics"><![CDATA[在六分钟内走了%s米，平均步速为%s米/分钟，代谢当量为%sMETs，心功能严重程度为%s，根据多项指标评估，心肺功能评级为%s，中途停留了%s秒]]></string>
+    <string name="sixmin_test_report_stride"><![CDATA[运动步速控制在:<font color="#000000"><Big><b>&#160;&#160;&#160;%s</b></Big></font>&#160;&#160;&#160;米/分钟]]></string>
+    <string name="sixmin_test_report_single_sport_time_and_distance"><![CDATA[单次运动时长:<font color="#000000"><Big><b>&#160;&#160;&#160;%s</b></Big></font>&#160;&#160;&#160;分钟，运动距离:<font color="#000000"><Big><b>&#160;&#160;&#160;%s</b></Big></font>&#160;&#160;&#160;米]]></string>
+    <string name="sixmin_test_report_heartbeat_and_metab_and_tired_control"><![CDATA[运动心率为:<font color="#000000"><Big><b>&#160;&#160;&#160;%s</b></Big></font>&#160;&#160;&#160;bmp，代谢当量为:<font color="#000000"><Big><b>&#160;&#160;&#160;%s</b></Big></font>&#160;&#160;&#160;METs，疲劳控制在:<font color="#000000"><Big><b>&#160;&#160;&#160;%s</b></Big></font>&#160;&#160;&#160;级]]></string>
+    <string name="sixmin_test_report_recommend_time_weekly"><![CDATA[建议每周:<font color="#000000"><Big><b>&#160;&#160;&#160;%s</b></Big></font>&#160;&#160;&#160;次]]></string>
+    <string name="sixmin_test_generate_report_tips">是否生成报告？</string>
+    <string name="sixmin_test_ignore_measure_blood_pressure">忽略测量血压</string>
 </resources>

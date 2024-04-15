@@ -47,7 +47,8 @@ class SixMinReportSelfCheckBeforeTestFragment :
     private val patientSelfList = mutableListOf<SixMinReportPatientSelfBean>()
 
     override fun start(dialog: Dialog?) {
-
+        dialog?.setCancelable(false)
+        dialog?.setCanceledOnTouchOutside(false)
     }
 
     override fun initView() {
@@ -74,7 +75,7 @@ class SixMinReportSelfCheckBeforeTestFragment :
             SixMinReportPatientSelfItemBean(
                 "0级",
                 "没有",
-                "0",
+                "1",
                 if (checkAble == "" || checkAble == "0") "0" else "1"
             )
         )
