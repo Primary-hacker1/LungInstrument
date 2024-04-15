@@ -2,6 +2,7 @@ package com.just.machine.ui.fragment.setting
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -12,6 +13,7 @@ import com.common.base.gone
 import com.common.base.setNoRepeatListener
 import com.common.base.visible
 import com.just.machine.model.Constants
+import com.just.machine.ui.adapter.FragmentChildAdapter
 import com.just.machine.ui.adapter.FragmentPagerAdapter
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.LiveDataBus
@@ -31,7 +33,7 @@ class CardiopulmonarySettingFragment : CommonBaseFragment<FragmentCardiopulmonar
     override fun initView() {
         initToolbar()
 
-        val adapter = FragmentPagerAdapter(requireActivity())
+        val adapter = FragmentChildAdapter(this)
 
         adapter.addFragment(AllSettingFragment())
         adapter.addFragment(StaticSettingFragment())
@@ -42,10 +44,12 @@ class CardiopulmonarySettingFragment : CommonBaseFragment<FragmentCardiopulmonar
 
         binding.vpTitle.adapter = adapter
 
-        binding.llSave.setNoRepeatListener { //点击保存
-            LiveDataBus.get().with(Constants.llSave).value = binding.vpTitle.currentItem
-        }
 
+    }
+
+    // 公开方法用于获取外层 Fragment 中的 TextView
+    fun onSaveCLick(): LinearLayout {
+        return binding.llSave
     }
 
     override fun initListener() {

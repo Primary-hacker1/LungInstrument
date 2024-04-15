@@ -207,4 +207,10 @@
     <string name="sixmin_test_measuring_blood">正在测量血压中…</string>
     <string name="sixmin_test_blood_pressure_without_connection">血压仪未连接，请检查设备!</string>
     <string name="sixmin_test_device_without_connection">请先接入设备</string>
+    <string name="tranquility">静息</string>
+    <string name="warm_up">热身</string>
+    <string name="motion">运动</string>
+    <string name="recover">恢复</string>
+    <string name="motorAssessment">运动评估</string>
+    <string name="reset">重置</string>
 </resources>

@@ -10,7 +10,6 @@ interface Constants {
         const val me = "我的"
         const val setting = "设置"
         const val patientBean = "patientBean"
-        const val llSave = "llSave"
         const val editBloodPressure = "editBloodPressure"
         const val finishSixMinTest = "finishSixMinTest"
         const val viewSixMinSelfCheck = "viewSixMinSelfCheck"

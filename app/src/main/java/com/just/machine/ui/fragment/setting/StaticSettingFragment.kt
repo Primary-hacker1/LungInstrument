@@ -248,9 +248,10 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
             }
         }
 
-        LiveDataBus.get().with(Constants.llSave).observe(this) {//保存
-            if (it == 1) {
+        val fragment = parentFragment
 
+        if (fragment is CardiopulmonarySettingFragment){//保存
+            fragment.onSaveCLick().setNoRepeatListener {
                 staticSettingBean.xTimeSvc = binding.editXTimeSvc.text.toString()
                 staticSettingBean.yTimeUpSvc = binding.editYTimeUpSvc.text.toString()
                 staticSettingBean.yTimeDownSvc = binding.editYTimeDownSvc.text.toString()
@@ -262,7 +263,6 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
                 staticSettingBean.xTimeMvv = binding.editXTimeMvv.text.toString()
                 staticSettingBean.yTimeUpMvv = binding.editYTimeUpMvv.text.toString()
                 staticSettingBean.yTimeDownMvv = binding.editYTimeDownMvv.text.toString()
-
             }
         }
     }

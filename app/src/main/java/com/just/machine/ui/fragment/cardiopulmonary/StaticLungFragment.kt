@@ -5,9 +5,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
+import com.common.network.LogUtils
+import com.just.machine.ui.adapter.FragmentChildAdapter
 import com.just.machine.ui.adapter.FragmentPagerAdapter
 import com.just.machine.ui.fragment.cardiopulmonary.staticfragment.BreatheHardInFragment
 import com.just.machine.ui.fragment.cardiopulmonary.staticfragment.MaxVentilationFragment
@@ -38,7 +41,7 @@ class StaticLungFragment : CommonBaseFragment<FragmentStaticBinding>() {
 
     private fun initViewPager() {
 
-        val adapter = FragmentPagerAdapter(requireActivity())
+        val adapter = FragmentChildAdapter(this)
 
         adapter.addFragment(BreatheHardInFragment())
         adapter.addFragment(RoutineLungFragment())
@@ -90,19 +93,21 @@ class StaticLungFragment : CommonBaseFragment<FragmentStaticBinding>() {
 
     private fun setButtonPosition(position: Int) {
         when (position) {
-            0->{
+            0 -> {
                 setButtonStyle(
                     binding.btnRoutine,
                     binding.btnForced, binding.btnMaxiVentilation
                 )
             }
-            1->{
+
+            1 -> {
                 setButtonStyle(
                     binding.btnForced,
                     binding.btnRoutine, binding.btnMaxiVentilation
                 )
             }
-            2->{
+
+            2 -> {
                 setButtonStyle(
                     binding.btnMaxiVentilation,
                     binding.btnForced, binding.btnRoutine

@@ -11,11 +11,9 @@ import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
 import com.just.machine.ui.adapter.CustomSpinnerAdapter
 import com.just.machine.ui.adapter.FragmentPagerAdapter
-import com.just.machine.ui.fragment.calibration.EnvironmentalFragment
 import com.just.machine.ui.fragment.cardiopulmonary.dynamic.DynamicDataFragment
 import com.just.machine.ui.fragment.cardiopulmonary.dynamic.RoutineFragment
 import com.just.machine.ui.fragment.cardiopulmonary.dynamic.WassermanFragment
-import com.just.machine.ui.fragment.setting.CardiopulmonarySettingFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.LiveDataBus
 import com.just.news.R
@@ -37,13 +35,23 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
     }
 
+
     private fun initToolbar() {
 
     }
 
     override fun initView() {
         initToolbar()
+
         initViewPager()
+
+        // 更改 SVG 图形的颜色
+        val color = ContextCompat.getColor(requireContext(), R.color.colorPrimary) // 获取颜色资源
+
+        binding.imgTranquility.setColorFilter(color)
+        binding.imgWarm.setColorFilter(color)
+        binding.imgMotion.setColorFilter(color)
+        binding.imgRecover.setColorFilter(color)
 
         val adapterTime = CustomSpinnerAdapter(requireContext())
         val adapterVo = CustomSpinnerAdapter(requireContext())
@@ -175,19 +183,21 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
     private fun setButtonPosition(position: Int) {
         when (position) {
-            0->{
+            0 -> {
                 setButtonStyle(
                     binding.btnRoutine,
                     binding.btnWasserman, binding.btnData
                 )
             }
-            1->{
+
+            1 -> {
                 setButtonStyle(
                     binding.btnWasserman,
                     binding.btnRoutine, binding.btnData
                 )
             }
-            2->{
+
+            2 -> {
                 setButtonStyle(
                     binding.btnData,
                     binding.btnWasserman, binding.btnRoutine

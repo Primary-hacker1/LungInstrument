@@ -33,7 +33,7 @@ class FragmentStaticLayout : FrameLayout {
     private val tag = FragmentStaticLayout::class.java.name
 
     var binding: FragmentLungBinding
-    var mContext: Context
+    private var mContext: Context
 
     constructor(context: Context) : super(context) {
         mContext = context
@@ -281,7 +281,7 @@ class FragmentStaticLayout : FrameLayout {
                 val xValue = e.x
                 val yValue = e.y
 
-//                toast("Selected value: x = $xValue, y = $yValue")
+                LogUtils.d(tag + "Selected value: x = $xValue, y = $yValue")
             }
 
             override fun onNothingSelected() {

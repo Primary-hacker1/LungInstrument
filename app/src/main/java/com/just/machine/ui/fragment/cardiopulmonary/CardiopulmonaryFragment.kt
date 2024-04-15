@@ -14,12 +14,10 @@ import com.common.base.setNoRepeatListener
 import com.common.base.visible
 import com.common.network.LogUtils
 import com.just.machine.model.Constants
+import com.just.machine.ui.adapter.FragmentChildAdapter
 import com.just.machine.ui.adapter.FragmentPagerAdapter
 import com.just.machine.ui.fragment.calibration.EnvironmentalFragment
-import com.just.machine.ui.fragment.setting.AllSettingFragment
 import com.just.machine.ui.fragment.setting.CardiopulmonarySettingFragment
-import com.just.machine.ui.fragment.setting.DynamicSettingFragment
-import com.just.machine.ui.fragment.setting.StaticSettingFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.FragmentCardiopulmonaryBinding
@@ -48,7 +46,7 @@ class CardiopulmonaryFragment : CommonBaseFragment<FragmentCardiopulmonaryBindin
     override fun initView() {
         initToolbar()
 
-        val adapter = FragmentPagerAdapter(requireActivity())
+        val adapter = FragmentChildAdapter(this)
 
         adapter.addFragment(EnvironmentalFragment(), "EnvironmentalFragment")
 

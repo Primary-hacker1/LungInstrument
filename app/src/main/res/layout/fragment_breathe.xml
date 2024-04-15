@@ -172,7 +172,7 @@
                         android:layout_width="160dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/space_19"
-                        android:text="参数名"
+                        android:text="项目"
                         android:textColor="@color/text3"
                         android:textSize="13sp" />
 

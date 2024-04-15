@@ -4,9 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.common.base.*
 import com.common.network.LogUtils
 import com.just.machine.model.Constants
+import com.just.machine.ui.fragment.cardiopulmonary.DynamicResultFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.LiveDataBus
 import com.just.news.R
@@ -38,11 +40,18 @@ class DynamicSettingFragment : CommonBaseFragment<FragmentDynamicSettingBinding>
             }
         }
 
-        LiveDataBus.get().with(Constants.llSave).observe(this) {//保存
-            if (it == 2) {
-                LogUtils.d(tag + it.toString())
+        val fragment = parentFragment
+
+        if (fragment is CardiopulmonarySettingFragment){//保存
+            fragment.onSaveCLick().setNoRepeatListener {
+                LogUtils.d(tag+"onClick")
             }
         }
+
+
+        val settingFragment = parentFragment
+
+        LogUtils.d(tag + settingFragment)
     }
 
     private fun setCheckBoxListener(checkBoxId: CheckBox, listener: (Boolean) -> Unit) {

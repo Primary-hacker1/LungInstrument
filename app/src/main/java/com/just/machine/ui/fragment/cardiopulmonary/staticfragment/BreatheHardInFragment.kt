@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.base.toast
@@ -24,7 +26,9 @@ import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.just.machine.model.staticlung.RoutineLungBean
+import com.just.machine.ui.adapter.FragmentPagerAdapter
 import com.just.machine.ui.adapter.RoutineLungAdapter
+import com.just.machine.ui.fragment.cardiopulmonary.CardiopulmonaryFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.FragmentBreatheBinding
@@ -58,11 +62,9 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
 
 
     override fun initView() {
-
         initData()
 
-        // 创建折线图的样本数据
-        val entries = arrayListOf<Entry>()
+        val entries = arrayListOf<Entry>()// 创建折线图的样本数据
         for (index in 0..30) {
             entries.add(Entry(index.toFloat(), index.toFloat() / 6 - 3))
         }
@@ -84,7 +86,10 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
             ) {
             }
 
-            override fun onChartGestureEnd(me: MotionEvent?, lastPerformedGesture: ChartTouchListener.ChartGesture?) {
+            override fun onChartGestureEnd(
+                me: MotionEvent?,
+                lastPerformedGesture: ChartTouchListener.ChartGesture?
+            ) {
                 // 获取当前拖动的范围
                 val lowestVisibleX = lineChartFvc.lowestVisibleX
                 val highestVisibleX = lineChartFvc.highestVisibleX
@@ -350,161 +355,161 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
         when (clickType) {
             Click.TEST1 -> {
                 val isStart1 = button == binding.btnTest1
-                LogUtils.e(tag+isStart1)
-                if(!isStart1){
+                LogUtils.e(tag + isStart1)
+                if (!isStart1) {
                     setButtonStyle(binding.btnTest1, true)
                 }
 
                 val isStart2 = button == binding.btnTest2
 
-                if(!isStart2){
+                if (!isStart2) {
                     setButtonStyle(binding.btnTest2, false)
                 }
 
-                val isStart3 = button ==binding.btnTest3
+                val isStart3 = button == binding.btnTest3
 
-                if(!isStart3){
-                    setButtonStyle(binding.btnTest3,false)
+                if (!isStart3) {
+                    setButtonStyle(binding.btnTest3, false)
                 }
 
-                val isStart4 = button ==binding.btnTest4
+                val isStart4 = button == binding.btnTest4
 
-                if(!isStart4){
-                    setButtonStyle(binding.btnTest4,false)
+                if (!isStart4) {
+                    setButtonStyle(binding.btnTest4, false)
                 }
 
-                val isStart5 = button ==binding.btnTest5
+                val isStart5 = button == binding.btnTest5
 
-                if(!isStart5){
-                    setButtonStyle(binding.btnTest5,false)
+                if (!isStart5) {
+                    setButtonStyle(binding.btnTest5, false)
                 }
             }
 
             Click.TEST2 -> {
                 val isStart1 = button == binding.btnTest1
-                LogUtils.e(tag+isStart1)
-                if(!isStart1){
+                LogUtils.e(tag + isStart1)
+                if (!isStart1) {
                     setButtonStyle(binding.btnTest1, false)
                 }
 
                 val isStart2 = button == binding.btnTest2
 
-                if(!isStart2){
+                if (!isStart2) {
                     setButtonStyle(binding.btnTest2, true)
                 }
 
-                val isStart3 = button ==binding.btnTest3
+                val isStart3 = button == binding.btnTest3
 
-                if(!isStart3){
-                    setButtonStyle(binding.btnTest3,false)
+                if (!isStart3) {
+                    setButtonStyle(binding.btnTest3, false)
                 }
 
-                val isStart4 = button ==binding.btnTest4
+                val isStart4 = button == binding.btnTest4
 
-                if(!isStart4){
-                    setButtonStyle(binding.btnTest4,false)
+                if (!isStart4) {
+                    setButtonStyle(binding.btnTest4, false)
                 }
 
-                val isStart5 = button ==binding.btnTest5
+                val isStart5 = button == binding.btnTest5
 
-                if(!isStart5){
-                    setButtonStyle(binding.btnTest5,false)
+                if (!isStart5) {
+                    setButtonStyle(binding.btnTest5, false)
                 }
             }
 
             Click.TEST3 -> {
                 val isStart1 = button == binding.btnTest1
-                LogUtils.e(tag+isStart1)
-                if(!isStart1){
+                LogUtils.e(tag + isStart1)
+                if (!isStart1) {
                     setButtonStyle(binding.btnTest1, false)
                 }
 
                 val isStart2 = button == binding.btnTest2
 
-                if(!isStart2){
+                if (!isStart2) {
                     setButtonStyle(binding.btnTest2, false)
                 }
 
-                val isStart3 = button ==binding.btnTest3
+                val isStart3 = button == binding.btnTest3
 
-                if(!isStart3){
-                    setButtonStyle(binding.btnTest3,true)
+                if (!isStart3) {
+                    setButtonStyle(binding.btnTest3, true)
                 }
 
-                val isStart4 = button ==binding.btnTest4
+                val isStart4 = button == binding.btnTest4
 
-                if(!isStart4){
-                    setButtonStyle(binding.btnTest4,false)
+                if (!isStart4) {
+                    setButtonStyle(binding.btnTest4, false)
                 }
 
-                val isStart5 = button ==binding.btnTest5
+                val isStart5 = button == binding.btnTest5
 
-                if(!isStart5){
-                    setButtonStyle(binding.btnTest5,false)
+                if (!isStart5) {
+                    setButtonStyle(binding.btnTest5, false)
                 }
             }
 
             Click.TEST4 -> {
                 val isStart1 = button == binding.btnTest1
-                LogUtils.e(tag+isStart1)
-                if(!isStart1){
+                LogUtils.e(tag + isStart1)
+                if (!isStart1) {
                     setButtonStyle(binding.btnTest1, false)
                 }
 
                 val isStart2 = button == binding.btnTest2
 
-                if(!isStart2){
+                if (!isStart2) {
                     setButtonStyle(binding.btnTest2, false)
                 }
 
-                val isStart3 = button ==binding.btnTest3
+                val isStart3 = button == binding.btnTest3
 
-                if(!isStart3){
-                    setButtonStyle(binding.btnTest3,false)
+                if (!isStart3) {
+                    setButtonStyle(binding.btnTest3, false)
                 }
 
-                val isStart4 = button ==binding.btnTest4
+                val isStart4 = button == binding.btnTest4
 
-                if(!isStart4){
-                    setButtonStyle(binding.btnTest4,true)
+                if (!isStart4) {
+                    setButtonStyle(binding.btnTest4, true)
                 }
 
-                val isStart5 = button ==binding.btnTest5
+                val isStart5 = button == binding.btnTest5
 
-                if(!isStart5){
-                    setButtonStyle(binding.btnTest5,false)
+                if (!isStart5) {
+                    setButtonStyle(binding.btnTest5, false)
                 }
             }
 
             Click.TEST5 -> {
                 val isStart1 = button == binding.btnTest1
-                LogUtils.e(tag+isStart1)
-                if(!isStart1){
+                LogUtils.e(tag + isStart1)
+                if (!isStart1) {
                     setButtonStyle(binding.btnTest1, false)
                 }
 
                 val isStart2 = button == binding.btnTest2
 
-                if(!isStart2){
+                if (!isStart2) {
                     setButtonStyle(binding.btnTest2, false)
                 }
 
-                val isStart3 = button ==binding.btnTest3
+                val isStart3 = button == binding.btnTest3
 
-                if(!isStart3){
-                    setButtonStyle(binding.btnTest3,false)
+                if (!isStart3) {
+                    setButtonStyle(binding.btnTest3, false)
                 }
 
-                val isStart4 = button ==binding.btnTest4
+                val isStart4 = button == binding.btnTest4
 
-                if(!isStart4){
-                    setButtonStyle(binding.btnTest4,false)
+                if (!isStart4) {
+                    setButtonStyle(binding.btnTest4, false)
                 }
 
-                val isStart5 = button ==binding.btnTest5
+                val isStart5 = button == binding.btnTest5
 
-                if(!isStart5){
-                    setButtonStyle(binding.btnTest5,true)
+                if (!isStart5) {
+                    setButtonStyle(binding.btnTest5, true)
                 }
             }
             // 继续添加其他点击类型的处理...

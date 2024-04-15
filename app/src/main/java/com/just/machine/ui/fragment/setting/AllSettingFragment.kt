@@ -66,9 +66,11 @@ class AllSettingFragment : CommonBaseFragment<FragmentAllSettingBinding>() {
         })
 
 
-        LiveDataBus.get().with(Constants.llSave).observe(this) {
-            if (it == 0) {
-                LogUtils.d(tag + it.toString())
+        val fragment = parentFragment
+
+        if (fragment is CardiopulmonarySettingFragment){//保存
+            fragment.onSaveCLick().setNoRepeatListener {
+                LogUtils.d(tag+"onClick")
             }
         }
 
