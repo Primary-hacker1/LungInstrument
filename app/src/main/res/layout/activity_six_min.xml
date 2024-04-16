@@ -308,8 +308,8 @@
                                 android:layout_height="30dp"
                                 android:layout_gravity="center_vertical"
                                 android:layout_weight="1"
-                                android:gravity="center"
                                 android:background="@drawable/sixmin_ignore_blood_pressure_bg"
+                                android:gravity="center"
                                 android:text="@string/sixmin_test_ignore_measure_blood_pressure"
                                 android:textColor="@color/colorWhite"
                                 android:textSize="15sp" />
@@ -1022,7 +1022,7 @@
                     android:layout_marginHorizontal="36dp"
                     android:layout_marginVertical="24dp"
                     android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -1572,6 +1572,148 @@
                     </LinearLayout>
 
                 </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:id="@+id/sixmin_ll_report"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
+                        <LinearLayout
+                            android:layout_width="700dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/sixmin_report_title_white_bg"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:paddingTop="50dp">
+
+                            <LinearLayout
+                                android:layout_width="600dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="南京市第一人民医院"
+                                    android:textColor="@color/text3"
+                                    android:textSize="18sp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="编号:320125144515496450-01"
+                                    android:textColor="@color/text3" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="600dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20dp"
+                                android:background="@drawable/sixmin_report_title_333333_bg"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:gravity="center"
+                                    android:text="@string/sixmin_test_report_check_report_title"
+                                    android:textSize="30sp"
+                                    android:textColor="#000000"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:gravity="center"
+                                    android:text="@string/sixmin_test_report_check_report_title_english" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginEnd="30dp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/sixmin_report_export_report_bg"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="20dp"
+                            android:paddingVertical="10dp">
+
+                            <ImageView
+                                android:layout_width="22dp"
+                                android:layout_height="21dp"
+                                android:layout_gravity="center_vertical"
+                                android:scaleType="centerInside"
+                                android:src="@mipmap/sixmin_export_report" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="10dp"
+                                android:text="@string/sixmin_test_report_export_report"
+                                android:textColor="#2e8fd2"
+                                android:textSize="18sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:background="@drawable/sixmin_report_print_report_bg"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="20dp"
+                            android:paddingVertical="10dp">
+
+                            <ImageView
+                                android:layout_width="22dp"
+                                android:layout_height="21dp"
+                                android:layout_gravity="center_vertical"
+                                android:scaleType="centerInside"
+                                android:src="@mipmap/print_report" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="10dp"
+                                android:text="@string/sixmin_test_report_print_report"
+                                android:textColor="@color/colorWhite"
+                                android:textSize="18sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </FrameLayout>
 
             </LinearLayout>
         </ScrollView>

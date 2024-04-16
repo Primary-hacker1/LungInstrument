@@ -235,10 +235,11 @@
     <string name="sixmin_test_report_sport_metab">代谢当量</string>
     <string name="sixmin_test_report_sport_borg_tired">borg疲劳</string>
     <string name="sixmin_test_report_sport_calculate_formula">计算公式</string>
-    <string name="sixmin_test_report_edit_blood_pressure_before_test">试验前</string>
-    <string name="sixmin_test_report_edit_blood_pressure_after_test">试验后</string>
-    <string name="sixmin_test_report_breath_status_level">呼吸状况等级</string>
-    <string name="sixmin_test_report_tired_status_level">疲劳状况等级</string>
+    <string name="sixmin_test_report_edit_blood_pressure_before_test">试验前:</string>
+    <string name="sixmin_test_report_edit_blood_pressure_after_test">试验后:</string>
+    <string name="sixmin_test_report_edit_blood_pressure_high">收缩压(mmHg)</string>
+    <string name="sixmin_test_report_edit_blood_pressure_low">舒张压(mmHg)</string>
+    <string name="sixmin_test_report_before_test_status_level">试验前状况评级</string>
     <string name="sixmin_test_report_export_report">导出</string>
     <string name="sixmin_test_report_print_report">打印</string>
     <string name="sixmin_test_report_check_doctor">检验医生:</string>
