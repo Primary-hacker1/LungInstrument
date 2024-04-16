@@ -227,5 +227,32 @@
     <string name="sixmin_test_report_recommend_time_weekly"><![CDATA[建议每周:<font color="#000000"><Big><b>&#160;&#160;&#160;%s</b></Big></font>&#160;&#160;&#160;次]]></string>
     <string name="sixmin_test_generate_report_tips">是否生成报告？</string>
     <string name="sixmin_test_ignore_measure_blood_pressure">忽略测量血压</string>
+    <string name="sixmin_test_report_data_statistics_title">数据统计</string>
+    <string name="sixmin_test_report_edit_blood_pressure_title">编辑血压</string>
+    <string name="sixmin_test_report_sport_prescription_title">运动处方</string>
+    <string name="sixmin_test_report_select_prescription_element_title">选择处方参数</string>
+    <string name="sixmin_test_report_patient_self_check_title">患者自评</string>
+    <string name="sixmin_test_report_view_self_check_before_test_title">查看试验前</string>
+    <string name="sixmin_test_report_confirm">确定</string>
+    <string name="sixmin_test_report_close">关闭</string>
+    <string name="sixmin_test_report_sport_stride">运动步速</string>
+    <string name="sixmin_test_report_recommend_distance">推荐距离</string>
+    <string name="sixmin_test_report_sport_heart_beat">运动心率</string>
+    <string name="sixmin_test_report_sport_metab">代谢当量</string>
+    <string name="sixmin_test_report_sport_borg_tired">borg疲劳</string>
+    <string name="sixmin_test_report_sport_calculate_formula">计算公式</string>
+    <string name="sixmin_test_report_edit_blood_pressure_before_test">试验前:</string>
+    <string name="sixmin_test_report_edit_blood_pressure_after_test">试验后:</string>
+    <string name="sixmin_test_report_edit_blood_pressure_high">收缩压(mmHg)</string>
+    <string name="sixmin_test_report_edit_blood_pressure_low">舒张压(mmHg)</string>
+    <string name="sixmin_test_report_before_test_status_level">试验前状况评级</string>
+    <string name="sixmin_test_report_export_report">导出</string>
+    <string name="sixmin_test_report_print_report">打印</string>
+    <string name="sixmin_test_report_check_doctor">检验医生:</string>
+    <string name="sixmin_test_report_check_report_title">六分钟步行试验检测报告</string>
+    <string name="sixmin_test_report_check_report_title_english">6MWT Detection and Analysls Report</string>
+    <string name="sixmin_test_report_check_report_data_statistics_title">【六分钟步行试验检测情况】</string>
+    <string name="sixmin_test_report_check_report_comprehensive_evaluation_title">【六分钟步行试验综合评估】</string>
+    <string name="sixmin_test_report_check_report_sport_prescription_advice_title">【运动处方建议】</string>
     <string name="data_tables">数据表格</string>
 </resources>

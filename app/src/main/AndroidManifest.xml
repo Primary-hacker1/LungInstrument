@@ -4,8 +4,7 @@
     package="com.just.news">
 
     <uses-permission android:name="android.permission.INTERNET" /> <!-- 文字转语音适配Android11以上 -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <queries>
@@ -24,6 +23,14 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
+        <activity
+            android:name="com.just.machine.ui.activity.SixMinReportActivity"
+            android:exported="true"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name="com.just.machine.ui.activity.SixMinPreReportActivity"
+            android:exported="true"
+            android:screenOrientation="landscape" />
         <activity
             android:name="com.just.machine.ui.activity.LoginActivity"
             android:exported="true"

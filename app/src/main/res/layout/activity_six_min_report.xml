@@ -1,0 +1,754 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.just.machine.ui.activity.SixMinReportActivity">
+
+
+        <LinearLayout
+            android:id="@+id/sixmin_ll_report"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/sixmin_ll_devices_status"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="#2f89de">
+
+                <ImageView
+                    android:id="@+id/sixmin_report_iv_close"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/back" />
+
+                <TextView
+                    android:id="@+id/sixmin_report_tv_test_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/sixmin_test_title"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/sixmin_report_iv_ecg"
+                    android:layout_width="25dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toStartOf="@id/sixmin_report_iv_blood_pressure"
+                    android:src="@mipmap/xinlvno" />
+
+                <ImageView
+                    android:id="@+id/sixmin_report_iv_blood_pressure"
+                    android:layout_width="25dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toStartOf="@id/sixmin_report_iv_blood_oxygen"
+                    android:src="@mipmap/xueyano" />
+
+                <ImageView
+                    android:id="@+id/sixmin_report_iv_blood_oxygen"
+                    android:layout_width="25dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toStartOf="@id/sixmin_report_iv_battery_status"
+                    android:src="@mipmap/xueyangno" />
+
+                <ImageView
+                    android:id="@+id/sixmin_report_iv_battery_status"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="30dp"
+                    android:src="@mipmap/dianchi00" />
+
+            </RelativeLayout>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="700dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/sixmin_report_title_white_bg"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="50dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginHorizontal="50dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="南京市第一人民医院"
+                            android:textColor="@color/text3"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="编号:320125144515496450-01"
+                            android:textColor="@color/text3" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="50dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/sixmin_report_title_333333_bg"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingVertical="5dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center"
+                            android:text="@string/sixmin_test_report_check_report_title"
+                            android:textColor="#000000"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center"
+                            android:text="@string/sixmin_test_report_check_report_title_english" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="50dp"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="姓名:王桂荣" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="身高:160cm" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="性别:女" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="体重:60kg" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="年龄:60岁" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="BMI:18.0" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="病 历 号 :012345678912345" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="预测距离:150米" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginHorizontal="50dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/text3" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="50dp"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="病史:"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="临床诊断:"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="目前用药:"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="45dp"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginEnd="50dp"
+                        android:text="@string/sixmin_test_report_check_report_data_statistics_title"
+                        android:textColor="#000000"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="50dp">
+
+                        <TableLayout
+                            android:id="@+id/sixmin_report_table"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:stretchColumns="*">
+
+                        </TableLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.75dp"
+                            android:layout_marginTop="30dp"
+                            android:background="#231815" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.75dp"
+                            android:layout_gravity="bottom"
+                            android:layout_marginBottom="25dp"
+                            android:background="#231815" />
+
+                        <View
+                            android:layout_width="0.75dp"
+                            android:layout_height="115dp"
+                            android:layout_marginStart="150dp"
+                            android:layout_marginTop="10dp"
+                            android:background="#231815" />
+
+                        <View
+                            android:layout_width="0.75dp"
+                            android:layout_height="115dp"
+                            android:layout_marginStart="90dp"
+                            android:layout_marginTop="10dp"
+                            android:background="#231815" />
+
+                        <View
+                            android:layout_width="0.75dp"
+                            android:layout_height="115dp"
+                            android:layout_gravity="end"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="180dp"
+                            android:background="#231815" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="45dp"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginEnd="50dp"
+                        android:text="@string/sixmin_test_report_check_report_comprehensive_evaluation_title"
+                        android:textColor="#000000"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="50dp"
+                        android:text="1、疲劳量级为2级(最大10级)，呼吸量级为4级(最大10级)\n2、六分钟内步行880.0米，230步，实际运动距离占预测距离120%，代谢当量为6.5METs;\n3、运动了6分钟3秒，停止原因:无。" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="45dp"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginEnd="50dp"
+                        android:text="@string/sixmin_test_report_check_report_sport_prescription_advice_title"
+                        android:textColor="#000000"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="50dp">
+
+                        <TableLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp">
+
+                            <TableRow android:background="@drawable/tablelayout_cell_stroke">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_span="1"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text="【运动模式】" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_span="1"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/tablelayout_cell_stroke_single"
+                                    android:orientation="horizontal"
+                                    android:paddingStart="26dp">
+
+                                    <CheckBox
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="步行" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_span="1"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    android:visibility="invisible">
+
+                                    <CheckBox
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="步行" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_span="1"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/tablelayout_cell_stroke_single"
+                                    android:orientation="horizontal"
+                                    android:paddingStart="26dp">
+
+                                    <CheckBox
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="跑步" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_span="1"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    android:visibility="invisible">
+
+                                    <CheckBox
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="跑步" />
+
+                                </LinearLayout>
+
+                            </TableRow>
+
+                            <TableRow android:background="@drawable/tablelayout_cell_stroke">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:padding="2dp"
+                                    android:text="【运动时间】" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/tablelayout_cell_stroke"
+                                    android:gravity="center"
+                                    android:padding="2dp"
+                                    android:text="运动节奏" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/tablelayout_cell_stroke"
+                                    android:gravity="center"
+                                    android:padding="2dp"
+                                    android:text="3100米/30分钟" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/tablelayout_cell_stroke"
+                                    android:gravity="center"
+                                    android:padding="2dp"
+                                    android:text="运动周期" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/tablelayout_cell_stroke"
+                                    android:gravity="center"
+                                    android:padding="2dp"
+                                    android:text="2次/日 4周" />
+                            </TableRow>
+
+                            <TableRow
+                                android:background="@drawable/tablelayout_cell_stroke"
+                                android:collapseColumns="1">
+
+                                <TextView
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:padding="2dp"
+                                    android:text="【运动强度】" />
+
+                                <LinearLayout
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/tablelayout_cell_stroke"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:padding="2dp"
+                                        android:text="运动强度控制" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/tablelayout_cell_stroke"
+                                        android:gravity="center"
+                                        android:padding="2dp"
+                                        android:text="自觉疲劳程度" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/tablelayout_cell_stroke"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:padding="2dp"
+                                        android:text="60-80%" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/tablelayout_cell_stroke"
+                                        android:gravity="center"
+                                        android:padding="2dp"
+                                        android:text="4级-有点疲劳" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/tablelayout_cell_stroke"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:padding="2dp"
+                                        android:text="储备心率" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/tablelayout_cell_stroke"
+                                        android:gravity="center"
+                                        android:padding="2dp"
+                                        android:text="最佳心率" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/tablelayout_cell_stroke"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:padding="2dp"
+                                        android:text="100bpm" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/tablelayout_cell_stroke"
+                                        android:gravity="center"
+                                        android:padding="2dp"
+                                        android:text="130-150bpm" />
+
+                                </LinearLayout>
+
+                            </TableRow>
+
+                            <TableRow android:background="@drawable/tablelayout_cell_stroke">
+
+                                <TextView
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text="【注意事项】" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_span="4"
+                                    android:layout_weight="4"
+                                    android:background="@drawable/tablelayout_cell_stroke"
+                                    android:padding="10dp"
+                                    android:text="运动过程中一旦出现胸闷、胸痛、眩晕、心慌、气短等症状，请立即停止运动，若症状缓解不明显，请及时就医详诊。运动过程中一旦出现胸闷、胸痛、眩晕、心慌、气短等症状，请立即停止运动，若症状缓解不明显，请及时就医详诊运动过程中一旦出现胸闷、胸痛、眩晕、心慌、气短等症状，请立即停止运动，若症状缓解不明显，请及时就医详诊" />
+
+                            </TableRow>
+
+                        </TableLayout>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginHorizontal="50dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@color/text3" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="50dp"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/sixmin_test_report_check_doctor" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_weight="1"
+                            android:text="第1页/共2页" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_weight="1"
+                            android:text="检验时间: 2024-04-16 14.59.03" />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginHorizontal="50dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="30dp"
+                        android:background="@color/text3" />
+
+                </LinearLayout>
+            </ScrollView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="80dp"
+            android:layout_marginEnd="30dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/sixmin_report_export_report_bg"
+                android:orientation="horizontal"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="8dp">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="21dp"
+                    android:layout_gravity="center_vertical"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/sixmin_export_report" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/sixmin_test_report_export_report"
+                    android:textColor="#2e8fd2"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/sixmin_report_print_report_bg"
+                android:orientation="horizontal"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="8dp">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="21dp"
+                    android:layout_gravity="center_vertical"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/print_report" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/sixmin_test_report_print_report"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
+</layout>

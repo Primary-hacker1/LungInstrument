@@ -14,9 +14,9 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:background="#2f89de"
+            android:background="@drawable/sixmin_report_title_topradius_bg"
             android:gravity="center"
-            android:text="选择处方参数"
+            android:text="@string/sixmin_test_report_select_prescription_element_title"
             android:textColor="@color/colorWhite"
             android:textSize="16sp" />
 
@@ -39,7 +39,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="运动步速"
+                        android:text="@string/sixmin_test_report_sport_stride"
                         android:textColor="@color/text3" />
 
                     <Spinner
@@ -64,7 +64,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="计算公式"
+                            android:text="@string/sixmin_test_report_sport_calculate_formula"
                             android:textColor="@color/text3" />
 
                         <TextView
@@ -89,7 +89,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="推荐距离"
+                        android:text="@string/sixmin_test_report_recommend_distance"
                         android:textColor="@color/text3" />
 
                     <Spinner
@@ -114,7 +114,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="计算公式"
+                            android:text="@string/sixmin_test_report_sport_calculate_formula"
                             android:textColor="@color/text3" />
 
                         <TextView
@@ -158,7 +158,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="运动心率"
+                android:text="@string/sixmin_test_report_sport_heart_beat"
                 android:textColor="@color/text3" />
 
             <Spinner
@@ -182,7 +182,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="计算公式"
+                    android:text="@string/sixmin_test_report_sport_calculate_formula"
                     android:textColor="@color/text3" />
 
                 <TextView
@@ -207,7 +207,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="代谢当量"
+                android:text="@string/sixmin_test_report_sport_metab"
                 android:textColor="@color/text3" />
 
             <Spinner
@@ -231,7 +231,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="计算公式"
+                    android:text="@string/sixmin_test_report_sport_calculate_formula"
                     android:textColor="@color/text3" />
 
                 <TextView
@@ -256,7 +256,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="borg疲劳"
+                android:text="@string/sixmin_test_report_sport_borg_tired"
                 android:textColor="@color/text3" />
 
             <Spinner
@@ -280,7 +280,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="计算公式"
+                    android:text="@string/sixmin_test_report_sport_calculate_formula"
                     android:textColor="@color/text3" />
 
                 <TextView
@@ -310,7 +310,7 @@
                 android:background="@drawable/sixmin_report_btn_confirm_bg"
                 android:paddingHorizontal="50dp"
                 android:paddingVertical="10dp"
-                android:text="确定"
+                android:text="@string/sixmin_test_report_confirm"
                 android:textColor="@color/colorWhite" />
 
             <TextView
@@ -321,7 +321,7 @@
                 android:background="@drawable/sixmin_report_btn_close_bg"
                 android:paddingHorizontal="50dp"
                 android:paddingVertical="10dp"
-                android:text="关闭"
+                android:text="@string/sixmin_test_report_close"
                 android:textColor="@color/colorWhite" />
 
         </LinearLayout>
