@@ -70,55 +70,31 @@ class DynamicResultFragment : CommonBaseFragment<FragmentDynamicResultBinding>()
 
     }
 
-    // 创建按钮列表的函数
     private fun createButtonList(activeButtonName: String? = null): MutableList<DynamicResultButtonBean> {
-        val cleanResult = ContextCompat.getDrawable(requireContext(), R.drawable.ic_clean_result)
-        val icExtremum = ContextCompat.getDrawable(requireContext(), R.drawable.ic_extremum)
-        val icOxygen = ContextCompat.getDrawable(requireContext(), R.drawable.ic_oxygen)
-        val icCompensatory = ContextCompat.getDrawable(requireContext(), R.drawable.ic_compensatory)
-        val icSlope = ContextCompat.getDrawable(requireContext(), R.drawable.ic_slope)
-        val rateLoops = ContextCompat.getDrawable(requireContext(), R.drawable.ic_rate_loops)
+        val buttonData = listOf(
+            Pair("终止原因", R.drawable.ic_clean_result),
+            Pair("运动极值分析", R.drawable.ic_extremum),
+            Pair("无氧域分析", R.drawable.ic_oxygen),
+            Pair("呼吸代偿点分析", R.drawable.ic_compensatory),
+            Pair("斜率分析", R.drawable.ic_slope),
+            Pair("动态流速环分析", R.drawable.ic_rate_loops)
+        )
 
+        val buttons = buttonData.map { (name, drawableResId) ->
+            val drawable = ContextCompat.getDrawable(requireContext(), drawableResId)
+            DynamicResultButtonBean(drawable, name, name == activeButtonName)
+        }.toMutableList()
 
-        when (activeButtonName) {
-            "终止原因" -> {
-                binding.viewpager.setCurrentItem(1, true)
-            }
-            "运动极值分析" -> {
-                binding.viewpager.setCurrentItem(2, true)
-            }
-            "无氧域分析" -> {
-                binding.viewpager.setCurrentItem(3, true)
-            }
-            "呼吸代偿点分析" -> {
-                binding.viewpager.setCurrentItem(4, true)
-            }
-            "斜率分析" -> {
-                binding.viewpager.setCurrentItem(5, true)
-            }
-            "动态流速环分析" -> {
-                binding.viewpager.setCurrentItem(6, true)
+        activeButtonName?.let { name ->
+            val index = buttonData.indexOfFirst { it.first == name }
+            if (index != -1) {
+                binding.viewpager.setCurrentItem(index, true)
             }
         }
 
-        val buttons = mutableListOf(
-            DynamicResultButtonBean(cleanResult, "终止原因", activeButtonName == "终止原因"),
-            DynamicResultButtonBean(icExtremum, "运动极值分析", activeButtonName == "运动极值分析"),
-            DynamicResultButtonBean(icOxygen, "无氧域分析", activeButtonName == "无氧域分析"),
-            DynamicResultButtonBean(
-                icCompensatory,
-                "呼吸代偿点分析",
-                activeButtonName == "呼吸代偿点分析"
-            ),
-            DynamicResultButtonBean(icSlope, "斜率分析", activeButtonName == "斜率分析"),
-            DynamicResultButtonBean(
-                rateLoops,
-                "动态流速环分析",
-                activeButtonName == "动态流速环分析"
-            ),
-        )
         return buttons
     }
+
 
     // 更新按钮列表的函数
     private fun updateButtonList(activeButtonName: String?) {
