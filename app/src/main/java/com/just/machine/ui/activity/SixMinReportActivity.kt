@@ -12,6 +12,9 @@ import com.just.news.R
 import com.just.news.databinding.ActivitySixMinReportBinding
 import com.justsafe.libview.util.SystemUtil
 
+/**
+ * 6分钟报告
+ */
 class SixMinReportActivity: CommonBaseActivity<ActivitySixMinReportBinding>()  {
 
     private var reportRowList = mutableListOf<SixMinReportItemBean>()
@@ -20,6 +23,14 @@ class SixMinReportActivity: CommonBaseActivity<ActivitySixMinReportBinding>()  {
 
     override fun initView() {
         initTable()
+        initClickListener()
+    }
+
+    private fun initClickListener() {
+        binding.sixminReportIvClose.setOnClickListener {
+            PatientActivity.startPatientActivity(this,"finishSixMinTest")
+            finish()
+        }
     }
 
     private fun initTable() {
@@ -201,7 +212,9 @@ class SixMinReportActivity: CommonBaseActivity<ActivitySixMinReportBinding>()  {
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
-        SystemUtil.immersive(this, true)
         super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            SystemUtil.immersive(this, true)
+        }
     }
 }

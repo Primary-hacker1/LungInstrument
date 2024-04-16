@@ -15,6 +15,9 @@ import com.just.news.databinding.ActivitySixminSystemSettingBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.view_toolbar.view.tv_right
 
+/**
+ * 6分钟系统设置
+ */
 @AndroidEntryPoint
 class SixMinSystemSettingActivity : CommonBaseActivity<ActivitySixminSystemSettingBinding>() {
 

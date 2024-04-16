@@ -28,7 +28,7 @@
                 android:background="#2f89de">
 
                 <ImageView
-                    android:id="@+id/sixmin_iv_close"
+                    android:id="@+id/sixmin_report_iv_close"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_centerVertical="true"
@@ -36,7 +36,7 @@
                     android:src="@drawable/back" />
 
                 <TextView
-                    android:id="@+id/sixmin_tv_test_status"
+                    android:id="@+id/sixmin_report_tv_test_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
@@ -46,34 +46,34 @@
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:id="@+id/sixmin_iv_ecg"
+                    android:id="@+id/sixmin_report_iv_ecg"
                     android:layout_width="25dp"
                     android:layout_height="30dp"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="10dp"
-                    android:layout_toStartOf="@id/sixmin_iv_blood_pressure"
+                    android:layout_toStartOf="@id/sixmin_report_iv_blood_pressure"
                     android:src="@mipmap/xinlvno" />
 
                 <ImageView
-                    android:id="@+id/sixmin_iv_blood_pressure"
+                    android:id="@+id/sixmin_report_iv_blood_pressure"
                     android:layout_width="25dp"
                     android:layout_height="30dp"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="10dp"
-                    android:layout_toStartOf="@id/sixmin_iv_blood_oxygen"
+                    android:layout_toStartOf="@id/sixmin_report_iv_blood_oxygen"
                     android:src="@mipmap/xueyano" />
 
                 <ImageView
-                    android:id="@+id/sixmin_iv_blood_oxygen"
+                    android:id="@+id/sixmin_report_iv_blood_oxygen"
                     android:layout_width="25dp"
                     android:layout_height="30dp"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="10dp"
-                    android:layout_toStartOf="@id/sixmin_iv_battery_status"
+                    android:layout_toStartOf="@id/sixmin_report_iv_battery_status"
                     android:src="@mipmap/xueyangno" />
 
                 <ImageView
-                    android:id="@+id/sixmin_iv_battery_status"
+                    android:id="@+id/sixmin_report_iv_battery_status"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_alignParentEnd="true"
@@ -111,7 +111,7 @@
                             android:layout_weight="1"
                             android:text="南京市第一人民医院"
                             android:textColor="@color/text3"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -273,7 +273,7 @@
                         android:layout_marginEnd="50dp"
                         android:text="@string/sixmin_test_report_check_report_data_statistics_title"
                         android:textColor="#000000"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <FrameLayout
@@ -292,17 +292,13 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.75dp"
-                            android:layout_marginStart="20dp"
                             android:layout_marginTop="30dp"
-                            android:layout_marginEnd="5dp"
                             android:background="#231815" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.75dp"
                             android:layout_gravity="bottom"
-                            android:layout_marginStart="15dp"
-                            android:layout_marginEnd="5dp"
                             android:layout_marginBottom="25dp"
                             android:background="#231815" />
 
@@ -337,7 +333,7 @@
                         android:layout_marginEnd="50dp"
                         android:text="@string/sixmin_test_report_check_report_comprehensive_evaluation_title"
                         android:textColor="#000000"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -354,7 +350,7 @@
                         android:layout_marginEnd="50dp"
                         android:text="@string/sixmin_test_report_check_report_sport_prescription_advice_title"
                         android:textColor="#000000"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -636,7 +632,7 @@
                                     android:layout_weight="4"
                                     android:background="@drawable/tablelayout_cell_stroke"
                                     android:padding="10dp"
-                                    android:text="fadjglkajdfdafdasfdsafdsafdasfdsafdasfdsafdsafdsafdasfdasfdasfdaslksa" />
+                                    android:text="运动过程中一旦出现胸闷、胸痛、眩晕、心慌、气短等症状，请立即停止运动，若症状缓解不明显，请及时就医详诊。运动过程中一旦出现胸闷、胸痛、眩晕、心慌、气短等症状，请立即停止运动，若症状缓解不明显，请及时就医详诊运动过程中一旦出现胸闷、胸痛、眩晕、心慌、气短等症状，请立即停止运动，若症状缓解不明显，请及时就医详诊" />
 
                             </TableRow>
 
@@ -651,32 +647,32 @@
                         android:layout_marginTop="20dp"
                         android:background="@color/text3" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="50dp"
-                        android:layout_marginTop="10dp"
-                        android:orientation="horizontal">
+                        android:layout_marginTop="10dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:text="@string/sixmin_test_report_check_doctor" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
                             android:layout_weight="1"
                             android:text="第1页/共2页" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
                             android:layout_weight="1"
                             android:text="检验时间: 2024-04-16 14.59.03" />
 
-                    </LinearLayout>
+                    </RelativeLayout>
 
                     <View
                         android:layout_width="match_parent"

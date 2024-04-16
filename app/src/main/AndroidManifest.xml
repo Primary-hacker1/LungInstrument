@@ -25,7 +25,12 @@
         tools:targetApi="m">
         <activity
             android:name="com.just.machine.ui.activity.SixMinReportActivity"
-            android:exported="false" />
+            android:exported="true"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name="com.just.machine.ui.activity.SixMinPreReportActivity"
+            android:exported="true"
+            android:screenOrientation="landscape" />
         <activity
             android:name="com.just.machine.ui.activity.LoginActivity"
             android:exported="true"
