@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.just.machine.model.DynamicResultButtonBean" />
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/rl_item"
+        android:layout_width="80dp"
+        android:layout_height="60dp"
+        android:layout_marginHorizontal="@dimen/space_12"
+        android:background="@drawable/spinner_dropdown_background"
+        android:visibility="visible">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/img_result_click"
+            android:layout_width="@dimen/space_32"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            />
+
+        <LinearLayout
+            android:id="@+id/ll_result_icon"
+            android:layout_width="@dimen/space_25"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/space_10"
+            android:layout_centerHorizontal="true">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/img_result_icon"
+                android:layout_width="@dimen/space_25"
+                android:layout_height="wrap_content"
+                android:src="@{item.resultBtnIcon}" />
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/atv_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_result_icon"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:maxLines="1"
+            android:text="@{item.resultBtnName}"
+            android:textColor="@color/text3"
+            android:textSize="9sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+</layout>

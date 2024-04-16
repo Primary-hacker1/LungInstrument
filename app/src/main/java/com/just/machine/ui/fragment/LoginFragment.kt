@@ -62,7 +62,7 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
 //            SharedPreferencesUtils.instance.logout()
 //        }
     }
-
+ 
     override fun initListener() {
 
     }
