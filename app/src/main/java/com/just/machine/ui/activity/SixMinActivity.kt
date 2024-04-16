@@ -12,7 +12,6 @@ import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.RadioButton
 import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
@@ -61,7 +60,6 @@ import java.io.FileInputStream
 import java.text.DecimalFormat
 import java.util.Locale
 
-
 @AndroidEntryPoint
 class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech.OnInitListener {
 
@@ -91,6 +89,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
     private var bloodBeforeUtteranceId = "" //运动前血压语音播报标识
     private var bloodEndUtteranceId = "" //运动后血压语音播报标识
     private var defaultUtteranceId = ""//语音播报开始标识
+
     private fun addEntryData(entryData: Float, times: Int) {
 
         val decimalFormat = DecimalFormat("#.00")
@@ -366,8 +365,6 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
             )
             newRow.addView(linearLayout)
             binding.sixminReportPreTable.addView(newRow)
-            binding.sixminReportPreTable.removeAllViews()
-            binding.sixminReportTable.addView(newRow)
         }
     }
 
@@ -709,6 +706,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         }
         binding.sixminReportIvGenerateReport.setNoRepeatListener {
             //生成报告
+            startActivity(Intent(this,SixMinReportActivity::class.java))
         }
     }
 

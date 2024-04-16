@@ -123,5 +123,4 @@ dependencies {
 
     //chart
     implementation presentationDependencies.android_chart
-
 }
