@@ -245,7 +245,7 @@
     <string name="sixmin_test_report_check_doctor">检验医生:</string>
     <string name="sixmin_test_report_check_report_title">六分钟步行试验检测报告</string>
     <string name="sixmin_test_report_check_report_title_english">6MWT Detection and Analysls Report</string>
-    <string name="sixmin_test_report_check_report_data_statistics_title">六分钟步行试验检测情况</string>
-    <string name="sixmin_test_report_check_report_comprehensive_evaluation_title">六分钟步行试验综合评估</string>
-    <string name="sixmin_test_report_check_report_sport_prescription_advice_title">运动处方建议</string>
+    <string name="sixmin_test_report_check_report_data_statistics_title">【六分钟步行试验检测情况】</string>
+    <string name="sixmin_test_report_check_report_comprehensive_evaluation_title">【六分钟步行试验综合评估】</string>
+    <string name="sixmin_test_report_check_report_sport_prescription_advice_title">【运动处方建议】</string>
 </resources>

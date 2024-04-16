@@ -365,6 +365,8 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 dip2px(this, 3)
             )
             newRow.addView(linearLayout)
+            binding.sixminReportPreTable.addView(newRow)
+            binding.sixminReportPreTable.removeAllViews()
             binding.sixminReportTable.addView(newRow)
         }
     }
@@ -685,7 +687,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                                 "${bean.highBloodPressureBefore}/${bean.lowBloodPressureBefore}"
                             sixMinReportItem.sixMinValue =
                                 "${bean.highBloodPressureAfter}/${bean.lowBloodPressureAfter}"
-                            binding.sixminReportTable.removeAllViews()
+                            binding.sixminReportPreTable.removeAllViews()
                             initTable()
                         }
                     }
