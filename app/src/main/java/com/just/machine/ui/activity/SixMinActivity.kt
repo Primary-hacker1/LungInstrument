@@ -1,25 +1,18 @@
 package com.just.machine.ui.activity
 
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.CountDownTimer
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
-import android.text.Html
 import android.util.Log
-import android.view.Gravity
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.TableRow
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseActivity
 import com.common.base.setNoRepeatListener
 import com.common.viewmodel.LiveDataEvent
@@ -32,17 +25,9 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.gson.Gson
 import com.just.machine.dao.PatientBean
 import com.just.machine.model.SharedPreferencesUtils
-import com.just.machine.model.SixMinReportEditBloodPressure
-import com.just.machine.model.SixMinReportItemBean
-import com.just.machine.model.SixMinReportPatientSelfBean
-import com.just.machine.model.SixMinReportPatientSelfItemBean
 import com.just.machine.model.UsbSerialData
 import com.just.machine.model.systemsetting.SixMinSysSettingBean
-import com.just.machine.ui.adapter.SixMinReportPatientSelfAdapter
 import com.just.machine.ui.dialog.SixMinGuideDialogFragment
-import com.just.machine.ui.dialog.SixMinReportEditBloodPressureFragment
-import com.just.machine.ui.dialog.SixMinReportPrescriptionFragment
-import com.just.machine.ui.dialog.SixMinReportSelfCheckBeforeTestFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.FileUtil
 import com.just.machine.util.FixCountDownTime
@@ -361,7 +346,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                     getString(R.string.sixmin_test_device_without_connection),
                     Toast.LENGTH_SHORT
                 ).show()
-                startActivity(Intent(this,SixMinPreReportActivity::class.java))
+                startActivity(Intent(this, SixMinPreReportActivity::class.java))
                 finish()
             }
         }
@@ -450,6 +435,27 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                             second.toString().substring(0, 1)
                         binding.sixminTvStartSec2.text =
                             second.toString().substring(1)
+                    }
+
+                    //识别每秒的步数，来采集休息时长
+                    if (sysSettingBean.sysOther.showResetTime == "1") {
+                        val bsStr: String = usbTransferUtil.stepsStr
+                        if (bsStr == "0") {
+                            ++usbTransferUtil.restTime
+                        } else {
+                            if (usbTransferUtil.checkBSStr.equals(bsStr)) {
+                                ++usbTransferUtil.checkBSInd
+                            } else {
+                                usbTransferUtil.checkBSInd = 0
+                            }
+                            if (usbTransferUtil.checkBSInd > 5) {
+                                if (usbTransferUtil.checkBSInd == 6) {
+                                    usbTransferUtil.restTime = usbTransferUtil.restTime + 5
+                                }
+                                ++usbTransferUtil.restTime
+                            }
+                        }
+                        usbTransferUtil.checkBSStr = bsStr
                     }
 
                     if (second == 0) {

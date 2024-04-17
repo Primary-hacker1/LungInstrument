@@ -3,23 +3,19 @@ package com.just.machine.ui.viewmodel
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.viewModelScope
-import com.common.base.delay
-import com.common.base.doAsync
-import com.common.base.notNull
 import com.common.base.subscribes
 import com.common.viewmodel.BaseViewModel
 import com.common.viewmodel.LiveDataEvent
 import com.just.machine.api.UserRepository
 import com.just.machine.dao.PatientBean
 import com.just.machine.dao.PlantRepository
-import com.just.machine.model.CardiopulmonaryRecordsBean
+import com.just.machine.dao.sixmin.SixMinReportBloodRepository
+import com.just.machine.dao.sixmin.SixMinReportWalkRepository
 import com.just.machine.model.Data
-import com.just.machine.model.SixMinRecordsBean
+import com.just.machine.model.sixminreport.SixMinReportWalk
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.observeOn
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 
 /**
@@ -30,7 +26,10 @@ import javax.inject.Inject
 @Suppress("CAST_NEVER_SUCCEEDS")
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private var repository: UserRepository, private var plantDao: PlantRepository
+    private var repository: UserRepository,
+    private var plantDao: PlantRepository,
+    private var sixMinReportWalkDao: SixMinReportWalkRepository,
+    private var sixMinReportBloodDao: SixMinReportBloodRepository
 ) : BaseViewModel() {
 
     var itemNews: ObservableList<Data> = ObservableArrayList()
@@ -93,7 +92,6 @@ class MainViewModel @Inject constructor(
     }
 
 
-
     /**
      *@param patient 患者更新数据覆盖原数据
      */
@@ -122,6 +120,28 @@ class MainViewModel @Inject constructor(
         }, {
 
         })
+    }
+
+    /**
+     * 获取6分钟步数
+     */
+    fun setSixMinReportWalkData(bean: SixMinReportWalk) {
+        viewModelScope.launch {
+            sixMinReportWalkDao.insertReportWalk(bean)
+        }
+    }
+
+    /**
+     * 插入6分钟步数
+     */
+    fun getReportWalk(id:String) {
+        viewModelScope.launch {
+            sixMinReportWalkDao.getReportWalk(id).collect {
+                mEventHub.value = LiveDataEvent(
+                    LiveDataEvent.QuerySuccess, it
+                )
+            }
+        }
     }
 }
 

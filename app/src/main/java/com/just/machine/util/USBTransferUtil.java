@@ -59,7 +59,7 @@ public class USBTransferUtil {
     private Map<Long, byte[]> mapNew = new TreeMap<>();
     private Map<Long, String> mapBloodOxygen = new TreeMap<>();//血氧数据
     private String byteStr = "";
-    private UsbSerialData usbSerialData = new UsbSerialData();
+    private UsbSerialData usbSerialData= null;
     private boolean isBegin = false;//是否开始试验
     private int bloodState = 0;
     private int bloodType = 0; //1运动前血压 2运动后血压
@@ -74,6 +74,11 @@ public class USBTransferUtil {
     public boolean bloodPressureConnection = false;//血压连接状态
     public boolean bloodOxygenConnection = false;//血氧连接状态
     public int batteryLevel = 0;//电池电量
+    public String restBloodOxy = "";//静息血氧集合
+    public int restTime = 0;//休息时长
+    public String stepsStr = "0";//步数
+    public int checkBSInd = 0;
+    public String checkBSStr = "0";
 
     // 顺序： manager - availableDrivers（所有可用设备） - UsbSerialDriver（目标设备对象） - UsbDeviceConnection（设备连接对象） - UsbSerialPort（设备的端口，一般只有1个）
     private List<UsbSerialDriver> availableDrivers = new ArrayList<>();  // 所有可用设备
@@ -157,9 +162,9 @@ public class USBTransferUtil {
     }
 
     public void addOxygenData() {
-        Random random =new Random();
+        Random random = new Random();
         int data = random.nextInt(10) + 90;
-        mapBloodOxygen.put(System.currentTimeMillis(),String.valueOf(data));
+        mapBloodOxygen.put(System.currentTimeMillis(), String.valueOf(data));
     }
 
     // 接口 -------------------------
@@ -176,6 +181,7 @@ public class USBTransferUtil {
     public void init(Context context) {
         my_context = context;
         manager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
+        usbSerialData = new UsbSerialData();
     }
 
     public void setBaudRate(int baudRate) {
@@ -392,11 +398,38 @@ public class USBTransferUtil {
                 bloodOxygenConnection = false;
                 bloodPressureConnection = false;
             }
-            byteStr = "";
+            release();
             Log.e(TAG, "断开连接");
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void release() {
+        map.clear();
+        mapNew.clear();
+        mapBloodOxygen.clear();
+        byteStr = null;
+        usbSerialData = null;
+        isBegin = false;//是否开始试验
+        bloodState = 0;
+        bloodType = 0; //1运动前血压 2运动后血压
+        xueyangType = true;
+        circleBoolean = true;
+        autoCircleBoolean = true;//自动计圈
+        circleCount = 0;
+        testType = 0;//0初始状态 1开始 2结束
+        ignoreBlood = false;//是否忽略测量血压
+        updateBluetooth = 0;//
+        ecgConnection = false;//心电连接状态
+        bloodPressureConnection = false;//血压连接状态
+        bloodOxygenConnection = false;//血氧连接状态
+        batteryLevel = 0;//电池电量
+        restBloodOxy = null;//静息血氧集合
+        restTime = 0;//休息时长
+        stepsStr = null;//步数
+        checkBSInd = 0;
+        checkBSStr = null;
     }
 
 
@@ -429,7 +462,7 @@ public class USBTransferUtil {
                 cc.printStackTrace();
             }
             for (Long key : mapNew.keySet()) {
-                byteStr = (CRC16Util.bytesToHexString(Objects.requireNonNull(mapNew.get(key))))+byteStr;
+                byteStr = (CRC16Util.bytesToHexString(Objects.requireNonNull(mapNew.get(key)))) + byteStr;
                 map.remove(key);
             }
         }
@@ -565,7 +598,7 @@ public class USBTransferUtil {
                                         if (bloodType == 0) {
                                             usbSerialData.setBloodHighFront(bloodValue);
                                             usbSerialData.setBloodLowFront(bloodBehindValue);
-                                        }else if(bloodType == 2){
+                                        } else if (bloodType == 2) {
                                             usbSerialData.setBloodHighBehind(bloodValue);
                                             usbSerialData.setBloodLowBehind(bloodBehindValue);
                                         }
@@ -586,15 +619,19 @@ public class USBTransferUtil {
                                 String str = Integer.toString(oxygen);
                                 mapBloodOxygen.put(time, str);
                                 usbSerialData.setBloodOxygen(String.valueOf(oxygen));
-                            }else{
+                                //静息血氧集合
+                                if (testType == 0) {
+                                    restBloodOxy = restBloodOxy + str + ",";
+                                }
+                            } else {
                                 usbSerialData.setBloodOxygen("--");
                             }
 
                             //步数数据
                             if (testType == 1 && (bytes[15] != bytesnull || bytes[16] != bytesnull)) {
                                 byte[] bytesBS = {bytes[15], bytes[16]};
-                                String bsStr = CRC16Util.bytesToHexString(bytesBS);
-                                Integer steps = Integer.valueOf(bsStr, 16);
+                                String stepsStr = CRC16Util.bytesToHexString(bytesBS);
+                                Integer steps = Integer.valueOf(stepsStr, 16);
                                 usbSerialData.setStepsCount(String.valueOf(steps));
                             }
                             //圈数数据
@@ -605,7 +642,7 @@ public class USBTransferUtil {
                                 SixMinSysSettingBean bean = new SixMinSysSettingBean();
                                 if (circleBoolean && bean.getSysOther().getCircleCountType().equals("0") && qsInt == 1) {
                                     ++circleCount;
-                                   usbSerialData.setCircleCount(String.valueOf(circleCount));
+                                    usbSerialData.setCircleCount(String.valueOf(circleCount));
                                 }
                             }
 
@@ -623,7 +660,7 @@ public class USBTransferUtil {
 
                     LiveDataBus.get().with("111").postValue(new Gson().toJson(usbSerialData));
                 }
-            }else{
+            } else {
                 byteStr = byteStr.substring(2, byteStr.length());
             }
         }
