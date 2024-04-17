@@ -8,6 +8,7 @@ import android.view.Gravity
 import android.widget.LinearLayout
 import android.widget.TableRow
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseActivity
@@ -16,18 +17,24 @@ import com.just.machine.model.SixMinReportEditBloodPressure
 import com.just.machine.model.SixMinReportItemBean
 import com.just.machine.model.SixMinReportPatientSelfBean
 import com.just.machine.model.SixMinReportPatientSelfItemBean
+import com.just.machine.model.sixminreport.SixMinReportWalk
 import com.just.machine.ui.adapter.SixMinReportPatientSelfAdapter
 import com.just.machine.ui.dialog.SixMinReportEditBloodPressureFragment
 import com.just.machine.ui.dialog.SixMinReportPrescriptionFragment
 import com.just.machine.ui.dialog.SixMinReportSelfCheckBeforeTestFragment
+import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.ActivitySixMinPreReportBinding
 import com.justsafe.libview.util.SystemUtil
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * 6分钟预生成报告
  */
+@AndroidEntryPoint
 class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding>()   {
+
+    private val viewModel by viewModels<MainViewModel>()
 
     private lateinit var generateReportDialog: AlertDialog
     private lateinit var exitPreReportDialog: AlertDialog
@@ -149,6 +156,19 @@ class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding
                 )
         }
         binding.sixminReportIvGenerateReport.setNoRepeatListener {
+            val reportWalk = SixMinReportWalk()
+            reportWalk.reportId = "123456789"
+            reportWalk.walkOne = "60"
+            reportWalk.walkTwo = "70"
+            reportWalk.walkThree = "80"
+            reportWalk.walkFour = "90"
+            reportWalk.walkFive = "100"
+            reportWalk.walkSix = "110"
+            reportWalk.walkBig = "110"
+            reportWalk.walkSmall = "60"
+            reportWalk.walkAverage = "85"
+            reportWalk.delFlag = "0"
+            viewModel.setSixMinReportWalkData(reportWalk)
             //生成报告
             startActivity(Intent(this,SixMinReportActivity::class.java))
             finish()

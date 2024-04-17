@@ -11,10 +11,12 @@ import com.just.machine.model.SixMinReportItemBean
 import com.just.news.R
 import com.just.news.databinding.ActivitySixMinReportBinding
 import com.justsafe.libview.util.SystemUtil
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * 6分钟报告
  */
+@AndroidEntryPoint
 class SixMinReportActivity: CommonBaseActivity<ActivitySixMinReportBinding>()  {
 
     private var reportRowList = mutableListOf<SixMinReportItemBean>()
