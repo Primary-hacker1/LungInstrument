@@ -6,6 +6,9 @@ import android.content.Context
 import com.just.machine.dao.AppDatabase
 import com.just.machine.dao.PlantDao
 import com.just.machine.dao.sixmin.SixMinReportBloodDao
+import com.just.machine.dao.sixmin.SixMinReportBreathingDao
+import com.just.machine.dao.sixmin.SixMinReportEvaluationDao
+import com.just.machine.dao.sixmin.SixMinReportHeartDao
 import com.just.machine.dao.sixmin.SixMinReportHeartEcgDao
 import com.just.machine.dao.sixmin.SixMinReportWalkDao
 import dagger.Module
@@ -46,5 +49,23 @@ object DatabaseModule {
     @Provides
     fun provideSixMinReportHeartEcgDao(appDatabase: AppDatabase): SixMinReportHeartEcgDao {
         return appDatabase.sixMinReportHeartEcgDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideSixMinReportBreathingDao(appDatabase: AppDatabase): SixMinReportBreathingDao {
+        return appDatabase.sixMinReportBreathingDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideSixMinReportEvaluationDao(appDatabase: AppDatabase): SixMinReportEvaluationDao {
+        return appDatabase.sixMinReportEvaluationDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideSixMinReportHeartDao(appDatabase: AppDatabase): SixMinReportHeartDao {
+        return appDatabase.sixMinReportHeartDao()
     }
 }
