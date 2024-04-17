@@ -50,10 +50,44 @@
             android:background="@drawable/spinner_dropdown_background"
             android:orientation="vertical">
 
-            <com.github.mikephil.charting.charts.ScatterChart
-                android:id="@+id/sc_chart"
+            <GridLayout
+                android:id="@+id/gridLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:columnCount="2"
+                android:rowCount="2">
+
+                <com.github.mikephil.charting.charts.ScatterChart
+                    android:id="@+id/sc_chart1"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_columnWeight="1"
+                    android:layout_rowWeight="1" />
+
+                <com.github.mikephil.charting.charts.ScatterChart
+                    android:id="@+id/sc_chart2"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_columnWeight="1"
+                    android:layout_rowWeight="1" />
+
+                <com.github.mikephil.charting.charts.ScatterChart
+                    android:id="@+id/sc_chart3"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_columnWeight="1"
+                    android:layout_rowWeight="1" />
+
+                <com.github.mikephil.charting.charts.ScatterChart
+                    android:id="@+id/sc_chart4"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_columnWeight="1"
+                    android:layout_rowWeight="1" />
+
+            </GridLayout>
+
+
 
         </LinearLayout>
 

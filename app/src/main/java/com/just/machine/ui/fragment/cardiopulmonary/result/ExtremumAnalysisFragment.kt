@@ -41,7 +41,7 @@ class ExtremumAnalysisFragment : CommonBaseFragment<FragmentExtremumAnalysisBind
             }
         }
 
-        binding.layoutResult
+        binding.layoutResult.setChartLayout(FragmentResultLayout.ChartLayout.EXTREMUM)
 
     }
 
