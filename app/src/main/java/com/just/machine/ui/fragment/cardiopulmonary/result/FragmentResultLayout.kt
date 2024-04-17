@@ -1,14 +1,18 @@
 package com.just.machine.ui.fragment.cardiopulmonary.result
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
+import android.view.GestureDetector
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.GridLayout
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.common.network.LogUtils
 import com.github.mikephil.charting.charts.ScatterChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.ScatterData
@@ -18,6 +22,7 @@ import com.just.machine.model.DynamicResultBean
 import com.just.machine.ui.adapter.ResultAdapter
 import com.just.news.R
 import com.just.news.databinding.FragmentResultBinding
+import com.justsafe.libview.view.DoubleTapFrameLayout
 
 
 class FragmentResultLayout : FrameLayout {
@@ -63,6 +68,7 @@ class FragmentResultLayout : FrameLayout {
         initView()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun initView() {
         adapter = ResultAdapter(context)
         adapter?.setItemsBean(
@@ -75,9 +81,40 @@ class FragmentResultLayout : FrameLayout {
         binding.rvResultData.layoutManager = LinearLayoutManager(context)
         binding.rvResultData.adapter = adapter
 
-        binding.scChart1.setOnClickListener {
-            onChartClick(binding.scChart1)
+        val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onDoubleTap(e: MotionEvent): Boolean {
+                // 在双击事件中执行你的逻辑
+                onChartClick(binding.chart1)
+                return true
+            }
+        })
+
+        binding.scChart1.setOnTouchListener { _, event ->
+            gestureDetector.onTouchEvent(event)
+            // 如果你还想处理其他触摸事件，可以在这里添加逻辑
+            false // 返回 true 表示已经消费了触摸事件
         }
+
+        binding.chart2.setOnDoubleTapListener(object : DoubleTapFrameLayout.OnDoubleTapListener {
+            override fun onDoubleTap() {
+                // 处理双击事件
+                onChartClick(binding.chart2)
+            }
+        })
+
+        binding.chart3.setOnDoubleTapListener(object : DoubleTapFrameLayout.OnDoubleTapListener {
+            override fun onDoubleTap() {
+                // 处理双击事件
+                onChartClick(binding.chart3)
+            }
+        })
+
+        binding.chart4.setOnDoubleTapListener(object : DoubleTapFrameLayout.OnDoubleTapListener {
+            override fun onDoubleTap() {
+                // 处理双击事件
+                onChartClick(binding.chart4)
+            }
+        })
     }
 
     fun setChartLayout(resultLayout: ChartLayout) {
@@ -85,7 +122,6 @@ class FragmentResultLayout : FrameLayout {
             ChartLayout.EXTREMUM.name -> {
                 val scatterData = generateScatterData(50)
                 setupScatterChart(binding.scChart1, scatterData)
-                binding.scChart1.invalidate() // 刷新图表
             }
 
             ChartLayout.OXYGEN.name -> {//无氧域分析
@@ -95,23 +131,6 @@ class FragmentResultLayout : FrameLayout {
     }
 
     private var isExpanded = false
-
-    private fun onChartClick(view: ScatterChart) {
-        if (isExpanded) {
-            // 恢复布局为2x2
-            binding.gridLayout.columnCount = 2
-            binding.gridLayout.rowCount = 2
-            isExpanded = false
-        } else {
-            // 展开布局以显示一个全屏的图表
-            binding.gridLayout.columnCount = 1
-            binding.gridLayout.rowCount = 1
-            isExpanded = true
-        }
-
-        // 更新布局
-        view.layoutParams = GridLayout.LayoutParams()
-    }
 
     private fun generateScatterData(numPoints: Int): ScatterData {
         val entries = mutableListOf<Entry>()
@@ -156,8 +175,39 @@ class FragmentResultLayout : FrameLayout {
         scatterChart.legend.isEnabled = false // 隐藏图例
         scatterChart.description.isEnabled = false // 隐藏描述
 
+        scatterChart.isDragEnabled = false
+        scatterChart.setPinchZoom(false)
+        scatterChart.isDoubleTapToZoomEnabled = false
 
         scatterChart.invalidate() // 刷新图表
+    }
+
+    private fun onChartClick(view: View) {
+        val chart = view as FrameLayout
+        isExpanded = if (isExpanded) {
+            // 更新所有子视图的布局参数以适应2x2网格
+            for (i in 0 until binding.gridLayout.childCount) {
+                val child = binding.gridLayout.getChildAt(i) as FrameLayout
+                child.visibility = View.VISIBLE
+            }
+            false
+        } else {
+            // 更新所有子视图的布局参数以适应1x1网格（全屏）
+            for (i in 0 until binding.gridLayout.childCount) {
+                val child = binding.gridLayout.getChildAt(i)
+                if (child == chart) {
+                    LogUtils.d(tag + child)
+                    child.visibility = View.VISIBLE// 切换目标 FrameLayout 的可见性
+                } else {
+                    child.visibility = View.GONE
+                    LogUtils.d(tag + child)
+                }
+            }
+            true
+        }
+
+        // 请求重新布局
+        binding.gridLayout.requestLayout()
     }
 
 

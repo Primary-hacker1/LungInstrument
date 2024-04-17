@@ -109,8 +109,6 @@ class CardiopulmonaryFragment : CommonBaseFragment<FragmentCardiopulmonaryBindin
 
     private fun onButtonClick(button: AppCompatButton, position: Int) {
         binding.vpCardiopulmonary.currentItem = position// 切换ViewPager页面
-
-        LogUtils.e(TAG + "点击fragment页面=" + position)
         resetButtonColors()// 切换按钮颜色
         button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.cF5FCFF))
     }

@@ -57,36 +57,65 @@
                 android:columnCount="2"
                 android:rowCount="2">
 
-                <com.github.mikephil.charting.charts.ScatterChart
-                    android:id="@+id/sc_chart1"
+                <com.justsafe.libview.view.DoubleTapFrameLayout
+                    android:id="@+id/chart1"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
+                    android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
-                    android:layout_rowWeight="1" />
+                    android:tag="1">
 
-                <com.github.mikephil.charting.charts.ScatterChart
-                    android:id="@+id/sc_chart2"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_columnWeight="1"
-                    android:layout_rowWeight="1" />
+                    <com.github.mikephil.charting.charts.ScatterChart
+                        android:id="@+id/sc_chart1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </com.justsafe.libview.view.DoubleTapFrameLayout>
 
-                <com.github.mikephil.charting.charts.ScatterChart
-                    android:id="@+id/sc_chart3"
+                <com.justsafe.libview.view.DoubleTapFrameLayout
+                    android:id="@+id/chart2"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
+                    android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
-                    android:layout_rowWeight="1" />
+                    android:tag="2">
 
-                <com.github.mikephil.charting.charts.ScatterChart
-                    android:id="@+id/sc_chart4"
+                    <com.github.mikephil.charting.charts.ScatterChart
+                        android:id="@+id/sc_chart2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </com.justsafe.libview.view.DoubleTapFrameLayout>
+
+                <com.justsafe.libview.view.DoubleTapFrameLayout
+                    android:id="@+id/chart3"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
+                    android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
-                    android:layout_rowWeight="1" />
+                    android:tag="3">
+
+                    <com.github.mikephil.charting.charts.ScatterChart
+                        android:id="@+id/sc_chart3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </com.justsafe.libview.view.DoubleTapFrameLayout>
+
+                <com.justsafe.libview.view.DoubleTapFrameLayout
+                    android:id="@+id/chart4"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:tag="4">
+
+                    <com.github.mikephil.charting.charts.ScatterChart
+                        android:id="@+id/sc_chart4"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </com.justsafe.libview.view.DoubleTapFrameLayout>
+
 
             </GridLayout>
-
 
 
         </LinearLayout>
