@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
+import com.just.machine.model.DynamicResultBean
 import com.just.machine.ui.fragment.cardiopulmonary.DynamicResultFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.databinding.FragmentCompensatoryBinding
@@ -39,6 +40,25 @@ class CompensatoryPointFragment : CommonBaseFragment<FragmentCompensatoryBinding
 
             }
         }
+
+        binding.layoutResult.setChartLayout(FragmentResultLayout.ChartLayout.COMPENSATORY)
+
+        binding.layoutResult.setDynamicResultBeans(
+            mutableListOf(
+                DynamicResultBean("Time", "2024-4-16"),
+                DynamicResultBean("Load", "80"),
+                DynamicResultBean("HR(1/min)", "2024-4-16"),
+                DynamicResultBean("HR(1/min)", "2024-4-16"),
+                DynamicResultBean("HR(1/min)", "2024-4-16"),
+                DynamicResultBean("HR(1/min)", "2024-4-16"),
+                DynamicResultBean("HR(1/min)", "2024-4-16"),
+                DynamicResultBean("HR(1/min)", "2024-4-16"),
+                DynamicResultBean("HR(1/min)", "2024-4-16"),
+                DynamicResultBean("HR(1/min)", "2024-4-16"),
+                DynamicResultBean("HR(1/min)", "2024-4-16"),
+                DynamicResultBean("HR(1/min)", "2024-4-16"),
+            )
+        )
 
     }
 

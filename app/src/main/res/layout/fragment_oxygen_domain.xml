@@ -15,6 +15,10 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <com.just.machine.ui.fragment.cardiopulmonary.result.FragmentResultLayout
+            android:id="@+id/layout_result"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
     </LinearLayout>
 
