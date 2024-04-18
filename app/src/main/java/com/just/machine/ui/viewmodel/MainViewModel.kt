@@ -10,6 +10,14 @@ import com.just.machine.api.UserRepository
 import com.just.machine.dao.PatientBean
 import com.just.machine.dao.PlantRepository
 import com.just.machine.dao.sixmin.SixMinReportBloodRepository
+import com.just.machine.dao.sixmin.SixMinReportBreathingRepository
+import com.just.machine.dao.sixmin.SixMinReportEvaluationRepository
+import com.just.machine.dao.sixmin.SixMinReportHeartEcgRepository
+import com.just.machine.dao.sixmin.SixMinReportHeartRepository
+import com.just.machine.dao.sixmin.SixMinReportInfoRepository
+import com.just.machine.dao.sixmin.SixMinReportOtherRepository
+import com.just.machine.dao.sixmin.SixMinReportPrescriptionRepository
+import com.just.machine.dao.sixmin.SixMinReportStrideRepository
 import com.just.machine.dao.sixmin.SixMinReportWalkRepository
 import com.just.machine.model.Data
 import com.just.machine.model.sixminreport.SixMinReportWalk
@@ -29,7 +37,15 @@ class MainViewModel @Inject constructor(
     private var repository: UserRepository,
     private var plantDao: PlantRepository,
     private var sixMinReportWalkDao: SixMinReportWalkRepository,
-    private var sixMinReportBloodDao: SixMinReportBloodRepository
+    private var sixMinReportBloodDao: SixMinReportBloodRepository,
+    private var sixMinReportBreathingDao: SixMinReportBreathingRepository,
+    private var sixMinReportEvaluationDao: SixMinReportEvaluationRepository,
+    private var sixMinReportHeartDao: SixMinReportHeartRepository,
+    private var sixMinReportHeartEcgDao: SixMinReportHeartEcgRepository,
+    private var sixMinReportInfoDao: SixMinReportInfoRepository,
+    private var sixMinReportOtherDao: SixMinReportOtherRepository,
+    private var sixMinReportPrescriptionDao: SixMinReportPrescriptionRepository,
+    private var sixMinReportStrideDao: SixMinReportStrideRepository,
 ) : BaseViewModel() {
 
     var itemNews: ObservableList<Data> = ObservableArrayList()

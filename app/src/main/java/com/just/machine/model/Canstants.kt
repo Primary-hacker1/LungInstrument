@@ -10,8 +10,10 @@ interface Constants {
         const val me = "我的"
         const val setting = "设置"
         const val patientBean = "patientBean"
-        const val editBloodPressure = "editBloodPressure"
-        const val finishSixMinTest = "finishSixMinTest"
-        const val viewSixMinSelfCheck = "viewSixMinSelfCheck"
+        const val editBloodPressure = "editBloodPressure"//6分钟预生成报告编辑血压
+        const val finishSixMinTest = "finishSixMinTest"//完成6分钟试验
+        const val sixMinSelfCheck = "sixMinSelfCheck"//6分钟试验选择试验前状况评级
+        const val sixMinSelfCheckView = "sixMinSelfCheckView"//6分钟预生成报告查询试验前状况评级
+        const val sixMinPatientInfo = "sixMinSelfCheckView"//6分钟试验患者信息
     }
 }

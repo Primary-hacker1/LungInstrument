@@ -15,8 +15,8 @@ data class SixMinReportEvaluation(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id")
     var id: Long = 0,
     var reportId: String = "",//报告主id
-    var befoFatigueLevel:String = "",//步行前，疲劳量级
-    var befoBreathingLevel:String = "",//步行前，呼吸量级
+    var befoFatigueLevel:Int = 0,//步行前，疲劳量级
+    var befoBreathingLevel:Int = 0,//步行前，呼吸量级
     var fatigueLevel:String = "",//疲劳量级
     var breathingLevel:String = "",//呼吸量级
     var turnsNumber:String = "",//运动圈数

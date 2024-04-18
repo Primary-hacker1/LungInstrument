@@ -255,4 +255,5 @@
     <string name="sixmin_test_report_check_report_comprehensive_evaluation_title">【六分钟步行试验综合评估】</string>
     <string name="sixmin_test_report_check_report_sport_prescription_advice_title">【运动处方建议】</string>
     <string name="data_tables">数据表格</string>
+    <string name="sixmin_test_report_check_report_enter_test">开始试验</string>
 </resources>

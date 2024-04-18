@@ -630,7 +630,7 @@ public class USBTransferUtil {
                             //步数数据
                             if (testType == 1 && (bytes[15] != bytesnull || bytes[16] != bytesnull)) {
                                 byte[] bytesBS = {bytes[15], bytes[16]};
-                                String stepsStr = CRC16Util.bytesToHexString(bytesBS);
+                                stepsStr = CRC16Util.bytesToHexString(bytesBS);
                                 Integer steps = Integer.valueOf(stepsStr, 16);
                                 usbSerialData.setStepsCount(String.valueOf(steps));
                             }

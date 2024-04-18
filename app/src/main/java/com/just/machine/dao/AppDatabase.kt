@@ -13,6 +13,10 @@ import com.just.machine.dao.sixmin.SixMinReportBreathingDao
 import com.just.machine.dao.sixmin.SixMinReportEvaluationDao
 import com.just.machine.dao.sixmin.SixMinReportHeartDao
 import com.just.machine.dao.sixmin.SixMinReportHeartEcgDao
+import com.just.machine.dao.sixmin.SixMinReportInfoDao
+import com.just.machine.dao.sixmin.SixMinReportOtherDao
+import com.just.machine.dao.sixmin.SixMinReportPrescriptionDao
+import com.just.machine.dao.sixmin.SixMinReportStrideDao
 import com.just.machine.dao.sixmin.SixMinReportWalkDao
 import com.just.machine.workers.SeedDatabaseWorker
 import com.just.machine.workers.SeedDatabaseWorker.Companion.KEY_FILENAME
@@ -23,6 +27,10 @@ import com.just.machine.model.sixminreport.SixMinHeartEcg
 import com.just.machine.model.sixminreport.SixMinReportBreathing
 import com.just.machine.model.sixminreport.SixMinReportEvaluation
 import com.just.machine.model.sixminreport.SixMinReportHeartBeat
+import com.just.machine.model.sixminreport.SixMinReportInfo
+import com.just.machine.model.sixminreport.SixMinReportOther
+import com.just.machine.model.sixminreport.SixMinReportPrescription
+import com.just.machine.model.sixminreport.SixMinReportStride
 import com.just.machine.model.sixminreport.SixMinReportWalk
 
 /**
@@ -31,7 +39,7 @@ import com.just.machine.model.sixminreport.SixMinReportWalk
  * 此应用程序的房间数据库
  */
 @Database(
-    entities = [PatientBean::class, SixMinReportWalk::class, SixMinBloodOxygen::class, SixMinHeartEcg::class, SixMinReportBreathing::class, SixMinReportEvaluation::class, SixMinReportHeartBeat::class],
+    entities = [PatientBean::class, SixMinReportWalk::class, SixMinBloodOxygen::class, SixMinHeartEcg::class, SixMinReportBreathing::class, SixMinReportEvaluation::class, SixMinReportHeartBeat::class, SixMinReportInfo::class, SixMinReportOther::class, SixMinReportPrescription::class, SixMinReportStride::class],
     version = 2,
     exportSchema = false
 )
@@ -45,6 +53,10 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun sixMinReportBreathingDao(): SixMinReportBreathingDao
     abstract fun sixMinReportEvaluationDao(): SixMinReportEvaluationDao
     abstract fun sixMinReportHeartDao(): SixMinReportHeartDao
+    abstract fun sixMinReportInfoDao(): SixMinReportInfoDao
+    abstract fun sixMinReportOtherDao(): SixMinReportOtherDao
+    abstract fun sixMinReportPrescriptionDao(): SixMinReportPrescriptionDao
+    abstract fun sixMinReportStrideDao(): SixMinReportStrideDao
 
     companion object {
 
@@ -62,18 +74,15 @@ abstract class AppDatabase : RoomDatabase() {
         // https://medium.com/google-developers/7-pro-tips-for-room-fbadea4bfbd1#4785
         private fun buildDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
-                .addCallback(
-                    object : RoomDatabase.Callback() {
-                        override fun onCreate(db: SupportSQLiteDatabase) {
-                            super.onCreate(db)
-                            val request = OneTimeWorkRequestBuilder<SeedDatabaseWorker>()
-                                .setInputData(workDataOf(KEY_FILENAME to PLANT_DATA_FILENAME))
-                                .build()
-                            WorkManager.getInstance(context).enqueue(request)
-                        }
+                .addCallback(object : RoomDatabase.Callback() {
+                    override fun onCreate(db: SupportSQLiteDatabase) {
+                        super.onCreate(db)
+                        val request = OneTimeWorkRequestBuilder<SeedDatabaseWorker>().setInputData(
+                                workDataOf(KEY_FILENAME to PLANT_DATA_FILENAME)
+                            ).build()
+                        WorkManager.getInstance(context).enqueue(request)
                     }
-                )
-                .build()
+                }).build()
         }
     }
 }
