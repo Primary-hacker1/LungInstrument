@@ -530,7 +530,7 @@ public class USBTransferUtil {
                                 ecgConnection = true;
                             } else if (bytes[4] == (byte) 0x10) {
                                 //断开
-                                ecgConnection = true;
+                                ecgConnection = false;
                             }
 
                             //血氧连接状态
@@ -546,7 +546,7 @@ public class USBTransferUtil {
                             if (bytes[6] == (byte) 0x31) {
                                 bloodPressureConnection = true;
                             } else if (bytes[6] == (byte) 0x30) {
-                                bloodPressureConnection = true;
+                                bloodPressureConnection = false;
                             }
 
                             //电池等级

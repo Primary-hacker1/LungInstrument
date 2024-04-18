@@ -30,5 +30,5 @@ data class SixMinHeartEcg(
     var smallHreatLong: String = "",//心率异常/截图心电数据
     var hreatLong: String = "",//心率异常/截图心电数据
     var hreatRate: String = "",//截取心率值
-    var delFlag: String = "",//删除标记
+    var delFlag: String = "0",//删除标记
 )

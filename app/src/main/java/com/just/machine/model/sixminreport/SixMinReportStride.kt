@@ -25,5 +25,5 @@ data class SixMinReportStride(
     var strideBig: String = "",//步速最大值
     var strideSmall: String = "",//步速最小值
     var strideAverage: String = "",//步速平均值
-    var delFlag: String = "",//删除标记
+    var delFlag: String = "0",//删除标记
 )

@@ -33,5 +33,5 @@ data class SixMinReportHeartBeat(
     var heartState: String = "",//心率变异分析状态，0为没有，1为有
     var heartVarying: String = "",//心脏变时指数
     var heartConclusion: String = "",//心电结论
-    var delFlag: String = "",//删除标记
+    var delFlag: String = "0",//删除标记
 )

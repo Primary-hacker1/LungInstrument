@@ -26,5 +26,5 @@ data class SixMinReportBreathing(
     var breathingSmall: String = "",//呼吸频率最小值
     var breathingAverage: String = "",//呼吸频率平均值
     var breathingAll: String = "",//呼吸，每3秒一个值，6分钟的集合
-    var delFlag: String = "",//删除标记
+    var delFlag: String = "0",//删除标记
 )

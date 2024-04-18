@@ -32,5 +32,5 @@ data class SixMinReportInfo(
     var ecgEdition: String = "",//心电版本
     var restDuration: String = "",//休息时长
     var addTime: String = "",//检验日期
-    var delFlag: String = ""//删除标记
+    var delFlag: String = "0"//删除标记
 )

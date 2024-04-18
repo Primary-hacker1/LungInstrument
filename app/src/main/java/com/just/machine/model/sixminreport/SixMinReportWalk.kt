@@ -25,5 +25,5 @@ data class SixMinReportWalk(
     var walkBig: String = "",//步数最大值
     var walkSmall: String = "",//步数最小值
     var walkAverage: String = "",//步数平均值
-    var delFlag: String = "",//删除标记
+    var delFlag: String = "0",//删除标记
 )

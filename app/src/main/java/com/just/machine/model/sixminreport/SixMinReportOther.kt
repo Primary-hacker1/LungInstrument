@@ -26,5 +26,5 @@ data class SixMinReportOther(
     var badSymptoms: String = "",//自动结束后的不良症状描述
     var useName: String = "",//使用单位名称
     var ecgType: String = "",//导联数量
-    var delFlag: String = "",//删除标记
+    var delFlag: String = "0",//删除标记
 )
