@@ -94,27 +94,27 @@ class SixMinSystemSettingActivity : CommonBaseActivity<ActivitySixminSystemSetti
             sysSettingBean.sysPwd.modifyPwd = binding.sixminEtModifyPwd.text.toString()
             sysSettingBean.sysPwd.confirmPwd = binding.sixminEtConfirmPwd.text.toString()
             //蓝牙设置
-            if(binding.sixminEtBluetoothEcg.text.toString() == ""){
+            if (binding.sixminEtBluetoothEcg.text.toString() == "") {
                 showMsg("心电蓝牙不可为空")
                 return@setOnClickListener
             }
-            if(binding.sixminEtBluetoothEcg.text.toString().length != 12){
+            if (binding.sixminEtBluetoothEcg.text.toString().length != 12) {
                 showMsg("请检查心电蓝牙长度")
                 return@setOnClickListener
             }
-            if(binding.sixminEtBluetoothBlood.text.toString() == ""){
+            if (binding.sixminEtBluetoothBlood.text.toString() == "") {
                 showMsg("血压蓝牙不可为空")
                 return@setOnClickListener
             }
-            if(binding.sixminEtBluetoothBlood.text.toString().length != 12){
+            if (binding.sixminEtBluetoothBlood.text.toString().length != 12) {
                 showMsg("请检查血压蓝牙长度")
                 return@setOnClickListener
             }
-            if(binding.sixminEtBluetoothBloodOxygen.text.toString() == ""){
+            if (binding.sixminEtBluetoothBloodOxygen.text.toString() == "") {
                 showMsg("血氧蓝牙不可为空")
                 return@setOnClickListener
             }
-            if(binding.sixminEtBluetoothBloodOxygen.text.toString().length != 12){
+            if (binding.sixminEtBluetoothBloodOxygen.text.toString().length != 12) {
                 showMsg("请检查血氧蓝牙长度")
                 return@setOnClickListener
             }
@@ -213,7 +213,7 @@ class SixMinSystemSettingActivity : CommonBaseActivity<ActivitySixminSystemSetti
             }
             binding.sixminEtOtherUseOrg.setText(sysSettingBean.sysOther.useOrg)
             binding.sixminEtOtherAreaLength.setText(sysSettingBean.sysOther.areaLength)
-            binding.sixminEtOtherEctType.setText(sysSettingBean.sysOther.ectType)
+            binding.sixminEtOtherEctType.setText(if (sysSettingBean.sysOther.ectType == "1") "单导联" else if (sysSettingBean.sysOther.ectType == "7") "7导联" else "12导联")
             //密码修改
             binding.sixminTvExportPwd.text = sysSettingBean.sysPwd.exportPwd
             binding.sixminEtModifyPwd.setText(sysSettingBean.sysPwd.modifyPwd)
@@ -224,7 +224,7 @@ class SixMinSystemSettingActivity : CommonBaseActivity<ActivitySixminSystemSetti
             binding.sixminEtBluetoothBloodOxygen.setText(sysSettingBean.sysBlue.bloodOxyBlue)
             //系统信息
             val packageInfo = packageManager.getPackageInfo(packageName, 0)
-            sysSettingBean.publishVer = "v${packageInfo.versionName.substring(0,1)}"
+            sysSettingBean.publishVer = "v${packageInfo.versionName.substring(0, 1)}"
             sysSettingBean.completeVer = "v${packageInfo.versionName}"
             binding.sixminTvSystemInfo.text =
                 "发布版本: ${sysSettingBean.publishVer}                     完整版本: ${sysSettingBean.completeVer}                     ${sysSettingBean.copyRight}"

@@ -77,8 +77,8 @@ public class USBTransferUtil {
     public String restBloodOxy = "";//静息血氧集合
     public int restTime = 0;//休息时长
     public String stepsStr = "0";//步数
-    public int checkBSInd = 0;
-    public String checkBSStr = "0";
+    public int checkBSInd = 0;//检查步数字段
+    public String checkBSStr = "0";//检查步数
 
     // 顺序： manager - availableDrivers（所有可用设备） - UsbSerialDriver（目标设备对象） - UsbDeviceConnection（设备连接对象） - UsbSerialPort（设备的端口，一般只有1个）
     private List<UsbSerialDriver> availableDrivers = new ArrayList<>();  // 所有可用设备
@@ -159,12 +159,6 @@ public class USBTransferUtil {
             usbTransferUtil = new USBTransferUtil();
         }
         return usbTransferUtil;
-    }
-
-    public void addOxygenData() {
-        Random random = new Random();
-        int data = random.nextInt(10) + 90;
-        mapBloodOxygen.put(System.currentTimeMillis(), String.valueOf(data));
     }
 
     // 接口 -------------------------
@@ -405,7 +399,7 @@ public class USBTransferUtil {
         }
     }
 
-    private void release() {
+    public void release() {
         map.clear();
         mapNew.clear();
         mapBloodOxygen.clear();

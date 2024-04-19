@@ -16,5 +16,7 @@ interface Constants {
         const val sixMinSelfCheckView = "sixMinSelfCheckView"//6分钟预生成报告查询试验前状况评级
         const val sixMinPatientInfo = "sixMinSelfCheckView"//6分钟试验患者信息
         const val commonDialogContent = "commonDialogContent"//标准dialog显示内容
+        const val commonDialogType = "commonDialogType"//标准dialog类型
+        const val commonDialogStopType = "commonDialogStopType"//标准dialog是否提前停止
     }
 }
