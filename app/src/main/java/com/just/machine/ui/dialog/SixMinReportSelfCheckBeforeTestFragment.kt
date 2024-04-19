@@ -19,6 +19,7 @@ class SixMinReportSelfCheckBeforeTestFragment :
     private var listener: SixMinReportSelfCheckBeforeTestDialogListener? = null
     private val patientSelfList = mutableListOf<SixMinReportPatientSelfBean>()
     private var selectList = mutableListOf<Int>()
+    private var selectStrList = mutableListOf<String>()
     private var selfCheck = ""
 
     companion object {
@@ -29,7 +30,7 @@ class SixMinReportSelfCheckBeforeTestFragment :
         fun startPatientSelfCheckDialogFragment(
             fragmentManager: FragmentManager,
             checkable: String = "1",
-            selfCheck:String = ""
+            selfCheck: String = ""
 
         ): SixMinReportSelfCheckBeforeTestFragment {
 
@@ -52,7 +53,12 @@ class SixMinReportSelfCheckBeforeTestFragment :
     }
 
     interface SixMinReportSelfCheckBeforeTestDialogListener {
-        fun onClickConfirm(befoFatigueLevel: Int, befoBreathingLevel: Int)
+        fun onClickConfirm(
+            befoFatigueLevel: Int,
+            befoBreathingLevel: Int,
+            befoFatigueLevelStr: String,
+            befoBreathingLevelStr: String
+        )
 
         fun onClickClose()
     }
@@ -71,28 +77,40 @@ class SixMinReportSelfCheckBeforeTestFragment :
         val patientSelfItemAdapter = SixMinReportPatientSelfAdapter(this.requireContext())
         patientSelfItemAdapter.setItemsBean(patientSelfList)
         binding.sixminRvPatientSelfCheck.adapter = patientSelfItemAdapter
-        if(selfCheck == ""){
-           binding.sixminReportTvEditBloodPressureConfirm.text = getString(R.string.sixmin_test_report_confirm)
-        }else{
-            binding.sixminReportTvEditBloodPressureConfirm.text = getString(R.string.sixmin_test_report_check_report_enter_test)
+        if (selfCheck == "") {
+            binding.sixminReportTvEditBloodPressureConfirm.text =
+                getString(R.string.sixmin_test_report_confirm)
+        } else {
+            binding.sixminReportTvEditBloodPressureConfirm.text =
+                getString(R.string.sixmin_test_report_check_report_enter_test)
         }
     }
 
     override fun initListener() {
         binding.sixminReportTvEditBloodPressureConfirm.setOnClickListener {
             selectList.clear()
+            selectStrList.clear()
             patientSelfList.forEach {
                 it.itemList.forEach { it1 ->
-                    if(it1.itemCheck == "1"){
+                    if (it1.itemCheck == "1") {
                         selectList.add(it.itemList.indexOf(it1))
+                        selectStrList.add(it.itemName)
                     }
                 }
             }
-            if(selectList.size < 2){
-                Toast.makeText(context,"请选择试验前状况评级",Toast.LENGTH_SHORT).show()
-            }else{
+            if (selectList.size < 2) {
+                if (selectList.isNotEmpty()) {
+                    if (selectList[0] == 0) {
+                        Toast.makeText(context, "请选择试验前的呼吸状况", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(context, "请选择试验前的疲劳状况", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(context, "请选择试验前状况评级", Toast.LENGTH_SHORT).show()
+                }
+            } else {
                 dismiss()
-                listener?.onClickConfirm(selectList[0],selectList[1])
+                listener?.onClickConfirm(selectList[0], selectList[1],selectStrList[0],selectStrList[1])
             }
         }
         binding.sixminReportTvEditBloodPressureClose.setOnClickListener {

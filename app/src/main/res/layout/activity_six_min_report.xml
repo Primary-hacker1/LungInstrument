@@ -715,7 +715,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="10dp"
-                    android:text="@string/sixmin_test_report_export_report"
+                    android:text="@string/sixmin_test_report_close"
                     android:textColor="#2e8fd2"
                     android:textSize="18sp" />
 

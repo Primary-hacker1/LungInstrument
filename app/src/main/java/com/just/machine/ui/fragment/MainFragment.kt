@@ -1,8 +1,11 @@
 package com.just.machine.ui.fragment
 
 import android.content.Intent
+import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
@@ -12,8 +15,13 @@ import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.ui.activity.CardiopulmonaryActivity
 import com.just.machine.ui.activity.PatientActivity
 import com.just.machine.ui.activity.SixMinActivity
+import com.just.machine.ui.dialog.CommonDialogFragment
 import com.just.machine.ui.dialog.PatientDialogFragment
+import com.just.machine.ui.dialog.SixMinReportSelfCheckBeforeTestFragment
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.machine.util.SixMinCmdUtils
+import com.just.machine.util.USBTransferUtil
+import com.just.news.R
 import com.just.news.databinding.FragmentMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,6 +36,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
     private var patientListSize = 0
+    private lateinit var usbTransferUtil: USBTransferUtil
     override fun loadData() {//懒加载
         viewModel.getPatients()
         viewModel.mEventHub.observe(this) {
@@ -43,7 +52,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
     }
 
     override fun initView() {
-
+        initSixMinUsbConnection()
     }
 
     override fun initListener() {
@@ -57,8 +66,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                         override fun onClickConfirmBtn() {//确认
                             SharedPreferencesUtils.instance.isClickBtn = "1"
                             patientDialogFragment.dismiss()
-                            val intent = Intent(activity, SixMinActivity::class.java)
-                            startActivity(intent)
+                            checkBluetoothAndSelfCheck()
                         }
 
                         override fun onClickCleanBtn() {//取消
@@ -66,16 +74,18 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                         }
                     })
                 }
+
                 else -> {
-                    val intent = Intent(activity, SixMinActivity::class.java)
-                    startActivity(intent)
+//                    val intent = Intent(activity, SixMinActivity::class.java)
+//                    startActivity(intent)
+                    checkBluetoothAndSelfCheck()
                 }
             }
         }
 
         binding.btnEcg.setNoRepeatListener {//心肺测试
             var isClick = SharedPreferencesUtils.instance.isClickBtn
-            if(Constants.isDebug){
+            if (Constants.isDebug) {
                 isClick = "1"
             }
             when (isClick) {
@@ -105,7 +115,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
         }
 
         binding.btnPatientInformation.setNoRepeatListener {
-            PatientActivity.startPatientActivity(context,null)
+            PatientActivity.startPatientActivity(context, null)
         }
 
         binding.btnClose.setNoRepeatListener {
@@ -117,4 +127,82 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentMainBinding.inflate(inflater, container, false)
 
+    private fun initSixMinUsbConnection() {
+        usbTransferUtil = USBTransferUtil.getInstance()
+        usbTransferUtil.init(requireContext())
+        usbTransferUtil.connect()
+    }
+
+    private fun checkBluetoothAndSelfCheck() {
+        // if (usbTransferUtil.bloodOxygenConnection && usbTransferUtil.bloodPressureConnection && usbTransferUtil.ecgConnection) {
+//       }else{
+//         }
+        if (USBTransferUtil.isConnectUSB && usbTransferUtil.bloodPressureConnection) {
+            val selfCheckBeforeTestDialogFragment =
+                SixMinReportSelfCheckBeforeTestFragment.startPatientSelfCheckDialogFragment(
+                    activity!!.supportFragmentManager, "1", "1"
+                )
+            selfCheckBeforeTestDialogFragment.setSelfCheckBeforeTestDialogOnClickListener(object :
+                SixMinReportSelfCheckBeforeTestFragment.SixMinReportSelfCheckBeforeTestDialogListener {
+                override fun onClickConfirm(
+                    befoFatigueLevel: Int,
+                    befoBreathingLevel: Int,
+                    befoFatigueLevelStr: String,
+                    befoBreathingLevelStr: String
+                ) {
+                    val intent = Intent(activity, SixMinActivity::class.java)
+                    val bundle = Bundle()
+                    bundle.putString(Constants.sixMinSelfCheckViewSelection,"$befoFatigueLevel-$befoBreathingLevel")
+                    intent.putExtras(bundle)
+                    startActivity(intent)
+                }
+
+                override fun onClickClose() {
+
+                }
+            })
+        } else {
+            activity?.supportFragmentManager?.let { it1 ->
+                val startCommonDialogFragment = CommonDialogFragment.startCommonDialogFragment(
+                    it1, getString(R.string.sixmin_test_enter_test_without_device_connection)
+                )
+                startCommonDialogFragment.setCommonDialogOnClickListener(object :
+                    CommonDialogFragment.CommonDialogClickListener {
+                    override fun onPositiveClick() {
+                        val selfCheckBeforeTestDialogFragment =
+                            SixMinReportSelfCheckBeforeTestFragment.startPatientSelfCheckDialogFragment(
+                                activity!!.supportFragmentManager, "1", "1"
+                            )
+                        selfCheckBeforeTestDialogFragment.setSelfCheckBeforeTestDialogOnClickListener(
+                            object :
+                                SixMinReportSelfCheckBeforeTestFragment.SixMinReportSelfCheckBeforeTestDialogListener {
+                                override fun onClickConfirm(
+                                    befoFatigueLevel: Int,
+                                    befoBreathingLevel: Int,
+                                    befoFatigueLevelStr: String,
+                                    befoBreathingLevelStr: String
+                                ) {
+                                    val intent = Intent(activity, SixMinActivity::class.java)
+                                    val bundle = Bundle()
+                                    bundle.putString(Constants.sixMinSelfCheckViewSelection,"$befoFatigueLevel-$befoBreathingLevel")
+                                    startActivity(intent,bundle)
+                                }
+
+                                override fun onClickClose() {
+
+                                }
+                            })
+                    }
+
+                    override fun onNegativeClick() {
+
+                    }
+
+                    override fun onStopNegativeClick(stopReason: String) {
+
+                    }
+                })
+            }
+        }
+    }
 }

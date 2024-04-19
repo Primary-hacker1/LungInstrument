@@ -152,7 +152,12 @@ class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding
                 )
             selfCheckBeforeTestDialogFragment.setSelfCheckBeforeTestDialogOnClickListener(object:
                 SixMinReportSelfCheckBeforeTestFragment.SixMinReportSelfCheckBeforeTestDialogListener{
-                override fun onClickConfirm(befoFatigueLevel: Int, befoBreathingLevel: Int) {
+                override fun onClickConfirm(
+                    befoFatigueLevel: Int,
+                    befoBreathingLevel: Int,
+                    befoFatigueLevelStr: String,
+                    befoBreathingLevelStr: String
+                ) {
                     Log.d("tag","$befoFatigueLevel$befoBreathingLevel")
                 }
 
@@ -194,7 +199,7 @@ class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding
             reportWalk.walkFive = "100"
             reportWalk.walkSix = "110"
             reportWalk.walkBig = "110"
-            reportWalk.walkSmall = "60"
+            reportWalk.waklSmall = "60"
             reportWalk.walkAverage = "85"
             reportWalk.delFlag = "0"
             viewModel.setSixMinReportWalkData(reportWalk)

@@ -256,4 +256,5 @@
     <string name="sixmin_test_report_check_report_sport_prescription_advice_title">【运动处方建议】</string>
     <string name="data_tables">数据表格</string>
     <string name="sixmin_test_report_check_report_enter_test">开始试验</string>
+    <string name="sixmin_test_enter_test_without_device_connection">设备未连接成功，是否继续试验？</string>
 </resources>

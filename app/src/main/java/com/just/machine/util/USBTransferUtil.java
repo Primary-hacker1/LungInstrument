@@ -18,12 +18,18 @@ import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
 import com.hoho.android.usbserial.util.SerialInputOutputManager;
 import com.just.machine.model.UsbSerialData;
+import com.just.machine.model.sixminreport.SixMinReportEvaluation;
+import com.just.machine.model.sixminreport.SixMinReportWalk;
 import com.just.machine.model.systemsetting.SixMinSysSettingBean;
 import com.just.news.BuildConfig;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,6 +39,8 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * usb 数据传输工具
@@ -55,21 +63,21 @@ public class USBTransferUtil {
     private static final String INTENT_ACTION_GRANT_USB = BuildConfig.APPLICATION_ID + ".INTENT_ACTION_GRANT_USB";  // usb权限请求标识
     private final String IDENTIFICATION = " USB-Serial Controller D";  // 目标设备标识
 
-    private Map<Long, byte[]> map = new HashMap<>();//接收数据
-    private Map<Long, byte[]> mapNew = new TreeMap<>();
-    private Map<Long, String> mapBloodOxygen = new TreeMap<>();//血氧数据
-    private String byteStr = "";
-    private UsbSerialData usbSerialData= null;
-    private boolean isBegin = false;//是否开始试验
-    private int bloodState = 0;
-    private int bloodType = 0; //1运动前血压 2运动后血压
-    private boolean xueyangType = true;
-    private boolean circleBoolean = true;
-    private boolean autoCircleBoolean = true;//自动计圈
-    private int circleCount = 0;
-    private int testType = 0;//0初始状态 1开始 2结束
-    private boolean ignoreBlood = false;//是否忽略测量血压
-    private int updateBluetooth = 0;//
+    public Map<Long, byte[]> map = new HashMap<>();//接收数据
+    public Map<Long, byte[]> mapNew = new TreeMap<>();
+    public Map<Long, String> mapBloodOxygen = new TreeMap<>();//血氧数据
+    public String byteStr = "";
+    public UsbSerialData usbSerialData = null;
+    public boolean isBegin = false;//是否开始试验
+    public int bloodState = 0;
+    public int bloodType = 0; //1运动前血压 2运动后血压
+    public boolean xueyangType = true;
+    public boolean circleBoolean = false;
+    public boolean autoCircleBoolean = true;//自动计圈
+    public int circleCount = 0;
+    public int testType = 0;//0初始状态 1开始 2结束
+    public boolean ignoreBlood = false;//是否忽略测量血压
+    public int updateBluetooth = 0;//
     public boolean ecgConnection = false;//心电连接状态
     public boolean bloodPressureConnection = false;//血压连接状态
     public boolean bloodOxygenConnection = false;//血氧连接状态
@@ -79,6 +87,9 @@ public class USBTransferUtil {
     public String stepsStr = "0";//步数
     public int checkBSInd = 0;//检查步数字段
     public String checkBSStr = "0";//检查步数
+    public String min = "";//每次计圈记住倒计时分钟
+    public String sec1 = "";//每次计圈记住倒计时秒
+    public String sec2 = "";//每次计圈记住倒计时钟
 
     // 顺序： manager - availableDrivers（所有可用设备） - UsbSerialDriver（目标设备对象） - UsbDeviceConnection（设备连接对象） - UsbSerialPort（设备的端口，一般只有1个）
     private List<UsbSerialDriver> availableDrivers = new ArrayList<>();  // 所有可用设备
@@ -95,64 +106,6 @@ public class USBTransferUtil {
 
     // 单例 -------------------------
     private static USBTransferUtil usbTransferUtil;
-
-    public int getBloodState() {
-        return bloodState;
-    }
-
-    public void setBloodState(int bloodState) {
-        this.bloodState = bloodState;
-    }
-
-    public boolean isBegin() {
-        return isBegin;
-    }
-
-    public void setBegin(boolean begin) {
-        isBegin = begin;
-    }
-
-    public boolean isIgnoreBlood() {
-        return ignoreBlood;
-    }
-
-    public void setIgnoreBlood(boolean ignoreBlood) {
-        this.ignoreBlood = ignoreBlood;
-    }
-
-
-    public Map<Long, String> getMapBloodOxygen() {
-        return mapBloodOxygen;
-    }
-
-    public void setMapBloodOxygen(Map<Long, String> mapBloodOxygen) {
-        this.mapBloodOxygen = mapBloodOxygen;
-    }
-
-    public int getBloodType() {
-        return bloodType;
-    }
-
-    public void setBloodType(int bloodType) {
-        this.bloodType = bloodType;
-    }
-
-    public int getTestType() {
-        return testType;
-    }
-
-    public void setTestType(int testType) {
-        this.testType = testType;
-    }
-
-    public int getCircleCount() {
-        return circleCount;
-    }
-
-    public void setCircleCount(int circleCount) {
-        this.circleCount = circleCount;
-        usbSerialData.setCircleCount(String.valueOf(circleCount));
-    }
 
     public static USBTransferUtil getInstance() {
         if (usbTransferUtil == null) {
@@ -409,7 +362,7 @@ public class USBTransferUtil {
         bloodState = 0;
         bloodType = 0; //1运动前血压 2运动后血压
         xueyangType = true;
-        circleBoolean = true;
+        circleBoolean = false;
         autoCircleBoolean = true;//自动计圈
         circleCount = 0;
         testType = 0;//0初始状态 1开始 2结束
@@ -637,6 +590,9 @@ public class USBTransferUtil {
                                 if (circleBoolean && bean.getSysOther().getCircleCountType().equals("0") && qsInt == 1) {
                                     ++circleCount;
                                     usbSerialData.setCircleCount(String.valueOf(circleCount));
+                                    usbSerialData.setCircleMin(min);
+                                    usbSerialData.setCircleSec1(sec1);
+                                    usbSerialData.setCircleSec2(sec2);
                                 }
                             }
 
@@ -658,5 +614,402 @@ public class USBTransferUtil {
                 byteStr = byteStr.substring(2, byteStr.length());
             }
         }
+    }
+
+    /**
+     * 处理步数表
+     *
+     * @param reportWalk
+     * @return
+     */
+    public void dealWalk(SixMinReportWalk reportWalk) {
+        if (null != reportWalk) {
+            int numAll = 0;
+            int len = 0;
+            List<Integer> integers = new ArrayList<>();
+            if (null != reportWalk.getWalkOne()) {
+                integers.add(Integer.parseInt(reportWalk.getWalkOne()));
+                numAll += Integer.parseInt(reportWalk.getWalkOne());
+                ++len;
+            } else {
+                reportWalk.setWalkOne("0");
+            }
+            if (!reportWalk.getWalkTwo().equals("")) {
+                integers.add(Integer.parseInt(reportWalk.getWalkTwo()));
+                numAll += Integer.parseInt(reportWalk.getWalkTwo());
+                ++len;
+            } else {
+                reportWalk.setWalkTwo("0");
+            }
+            if (!reportWalk.getWalkThree().equals("")) {
+                integers.add(Integer.parseInt(reportWalk.getWalkThree()));
+                numAll += Integer.parseInt(reportWalk.getWalkThree());
+                ++len;
+            } else {
+                reportWalk.setWalkThree("0");
+            }
+            if (!reportWalk.getWalkFour().equals("")) {
+                integers.add(Integer.parseInt(reportWalk.getWalkFour()));
+                numAll += Integer.parseInt(reportWalk.getWalkFour());
+                ++len;
+            } else {
+                reportWalk.setWalkFour("0");
+            }
+            if (!reportWalk.getWalkFive().equals("")) {
+                integers.add(Integer.parseInt(reportWalk.getWalkFive()));
+                numAll += Integer.parseInt(reportWalk.getWalkFive());
+                ++len;
+            } else {
+                reportWalk.setWalkFive("0");
+            }
+            if (!reportWalk.getWalkSix().equals("")) {
+                integers.add(Integer.parseInt(reportWalk.getWalkSix()));
+                numAll += Integer.parseInt(reportWalk.getWalkSix());
+                ++len;
+            } else {
+                reportWalk.setWalkSix("0");
+            }
+            Integer min = 0;
+            Integer max = 0;
+            if (integers.size() > 0) {
+                min = Collections.min(integers);
+                max = Collections.max(integers);
+            }
+            reportWalk.setWalkBig(max.toString());
+            reportWalk.setWaklSmall(min.toString());
+            BigDecimal avg = new BigDecimal("0");
+            if (len != 0) {
+                avg = new BigDecimal(numAll).divide(new BigDecimal(len), 0, RoundingMode.HALF_UP);
+            }
+            reportWalk.setWalkAverage(avg.toString());
+        }
+    }
+
+    /**
+     * 预生成报告 自动计圈
+     * 综合评估表
+     *
+     * @param etion
+     * @param min
+     * @param sec
+     * @param jqzhiZD 居中摆放时，实际的圈数
+     * @param type    0：正常流程走完，1主动停止
+     * @return
+     */
+    public SixMinReportEvaluation dealPreption(Integer jqzhiZD, SixMinSysSettingBean systemDto,SixMinReportEvaluation etion, String min, String sec,
+                                         Integer type, int min1, int sec1) {
+        Integer lenKu = 0;
+        Integer tcLocation = 1;
+        BigDecimal len = new BigDecimal(0);//步行圈数的距离
+        if (null != systemDto) {
+            //根据系统设置里的场地长度算出圈的长度
+            etion.setFieldLength(systemDto.getSysOther().getAreaLength());
+            lenKu = Integer.valueOf(systemDto.getSysOther().getAreaLength());
+            //起始摆放
+            len = new BigDecimal(lenKu * Integer.parseInt(etion.getTurnsNumber()) * 2);
+        }
+        //计算未走完的那圈的距离
+        //每次计圈的时候记录一下当前的倒计时，取结束的最后一次，
+        //用最后一次计圈的倒计时当作时间，把走的圈数的长度当作距离，算出速度
+        BigDecimal mainingTime = new BigDecimal(0);//最后一圈的时间
+        if (!TextUtils.isEmpty(min) && !TextUtils.isEmpty(sec)) {
+            mainingTime = new BigDecimal(min + "." + sec);
+        }
+        if (mainingTime.compareTo(BigDecimal.ZERO) == 0) {
+            mainingTime = new BigDecimal("5.59");
+        }
+        //圈数用的时间
+        BigDecimal withTime = new BigDecimal("5.59").subtract(mainingTime);
+        Integer mainingIn = 0;
+        //主动停止的，总时长根据实际时长来
+        if (type == 1) {
+            //停止的时间
+            String time = String.valueOf(min1) + "." + String.valueOf(sec1);
+            if (time.length() == 3) {
+                time = String.valueOf(min1) + ".0" + String.valueOf(sec1);
+            }
+            BigDecimal syTime = new BigDecimal(time).subtract(withTime);
+            String syTimeStr = syTime.toString();
+            //把剩下的时间当作时间，上面的是速度，算出未走完那圈的走了的距离
+            mainingIn = Integer.valueOf(syTimeStr.substring(0, 1)) * 60
+                    + Integer.valueOf(syTimeStr.substring(2, syTimeStr.length()));
+        } else {
+            //把剩下的时间当作时间，上面的是速度，算出未走完那圈的走了的距离
+            mainingIn = Integer.valueOf(min) * 60 + Integer.valueOf(sec);
+        }
+        String minStr = withTime.toString().substring(0, 1);
+        String secStr = withTime.toString().substring(2, withTime.toString().length());
+        //将用了的时间换算成秒
+        Integer minRe = Integer.valueOf(minStr) * 60;
+        Integer timeRe = minRe + Integer.valueOf(secStr);
+        BigDecimal speed;
+        BigDecimal distance;
+        if (withTime.compareTo(BigDecimal.ZERO) == 0) {
+            distance = new BigDecimal("0");
+        } else {
+            speed = len.divide(new BigDecimal(timeRe), 1, RoundingMode.HALF_UP);
+            //剩下的时间里走的距离
+            distance = new BigDecimal(mainingIn).multiply(speed, new MathContext(3));
+        }
+        //最后一圈还剩多少距离
+        BigDecimal unfinished = new BigDecimal(0);
+        if (tcLocation == 1) {
+            //起始摆放
+            lenKu = lenKu * 2;
+        }
+        unfinished = (new BigDecimal(lenKu)).subtract(distance);
+        //如果剩下时间里走的距离超过了一圈的距离，为负数,往前加一圈，以此类推，剩下的再算
+        Integer quanshu = 0;
+        //居中摆放
+        if (tcLocation == 0) {
+            quanshu = jqzhiZD;
+        } else if (tcLocation == 1) {
+            //起始摆放
+            quanshu = Integer.valueOf(etion.getTurnsNumber());
+        }
+        BigDecimal totalDistance;
+        if (unfinished.compareTo(BigDecimal.ZERO) < 0) {
+            do {
+                ++quanshu;
+                len = len.add(new BigDecimal(lenKu));
+                unfinished = (new BigDecimal(lenKu)).add(unfinished);
+                //大于等于0
+            } while (unfinished.compareTo(BigDecimal.ZERO) != 1);
+            etion.setTurnsNumber(quanshu.toString());
+            BigDecimal dec = new BigDecimal(lenKu).subtract(unfinished);
+            dec = len.add(dec);
+            totalDistance = dec;
+            etion.setTotalDistance(dec.toString());
+        } else {
+            BigDecimal dec = len.add(distance);
+            totalDistance = dec;
+            etion.setTotalDistance(dec.toString());
+        }
+        //居中摆放
+        if (tcLocation == 0) {
+            boolean check = checkNumEven(quanshu.toString());
+            BigDecimal intBigDec = new BigDecimal(lenKu).subtract(unfinished);
+            if (check) {
+                quanshu = quanshu / 2;
+            } else {
+                quanshu = (quanshu - 1) / 2;
+                intBigDec = new BigDecimal(lenKu).add(intBigDec);
+            }
+            BigDecimal reDec = intBigDec.add(new BigDecimal(lenKu / 2));
+            if (reDec.compareTo(new BigDecimal(lenKu * 2)) > -1) {
+                ++quanshu;
+                reDec = reDec.subtract(new BigDecimal(lenKu * 2));
+            }
+            unfinished = new BigDecimal(lenKu * 2).subtract(reDec);
+            etion.setTurnsNumber(quanshu.toString());
+            etion.setUnfinishedDistance(unfinished.toString());
+        } else if (tcLocation == 1) {
+            etion.setUnfinishedDistance(unfinished.toString());
+        }
+        //计算代谢当量 (4.928 + 0.023 *距离) / 3.5
+        BigDecimal b3 = dealMetabEquivalent(unfinished);
+        etion.setMetabEquivalent(b3.toString());
+        //计算心肺等级
+        String cardiopuLevel = dealCardiopuLevel(totalDistance);
+        etion.setCardiopuLevel(cardiopuLevel);
+        Integer degree = dealDegree(totalDistance);
+        etion.setCardiopuDegree(degree.toString());
+        return etion;
+    }
+
+    /**
+     * 预生成报告 手动计圈
+     * 综合评估表
+     *
+     * @param etion
+     * @param min
+     * @param sec
+     * @param type  0：正常流程走完，1主动停止
+     * @param min1
+     * @param sec1
+     * @return
+     */
+    public SixMinReportEvaluation dealPreptionSD(SixMinReportEvaluation etion, SixMinSysSettingBean systemDto, String min, String sec,
+                                                 Integer type, int min1, int sec1) {
+        int lenKu = 0;
+        BigDecimal len = new BigDecimal("0");//步行圈数的距离
+        if (null != systemDto) {
+            //根据系统设置里的场地长度算出圈的长度
+            etion.setFieldLength(systemDto.getSysOther().getAreaLength());
+            lenKu = Integer.parseInt(systemDto.getSysOther().getAreaLength());
+            len = BigDecimal.valueOf((long) lenKu * Integer.parseInt(etion.getTurnsNumber()) * 2);
+        }
+        //计算未走完的那圈的距离
+        //每次计圈的时候记录一下当前的倒计时，取结束的最后一次，
+        //用最后一次计圈的倒计时当作时间，把走的圈数的长度当作距离，算出速度
+        BigDecimal mainingTime = new BigDecimal("0");//最后一圈的时间
+        if (!TextUtils.isEmpty(min) && !TextUtils.isEmpty(sec)) {
+            mainingTime = new BigDecimal(min + "." + sec);
+        }
+        if (mainingTime.compareTo(BigDecimal.ZERO) == 0) {
+            mainingTime = new BigDecimal("5.59");
+        }
+        //圈数用的时间
+        BigDecimal withTime = new BigDecimal("5.59").subtract(mainingTime, new MathContext(3));
+        Integer mainingIn = 0;
+        //主动停止的，总时长根据实际时长来
+        if (type == 1) {
+            //停止的时间
+            String time = String.valueOf(min1) + "." + String.valueOf(sec1);
+            if (time.length() == 3) {
+                time = String.valueOf(min1) + ".0" + String.valueOf(sec1);
+            }
+            BigDecimal syTime = new BigDecimal(time).subtract(withTime, new MathContext(3));
+            String syTimeStr = syTime.toString();
+            //把剩下的时间当作时间，上面的是速度，算出未走完那圈的走了的距离
+            mainingIn = Integer.valueOf(syTimeStr.substring(0, 1)) * 60
+                    + Integer.valueOf(syTimeStr.substring(2, syTimeStr.length()));
+        } else {
+            //把剩下的时间当作时间，上面的是速度，算出未走完那圈的走了的距离
+            mainingIn = Integer.valueOf(min) * 60 + Integer.valueOf(sec);
+        }
+        String minStr = withTime.toString().substring(0, 1);
+        String secStr = withTime.toString().substring(2, withTime.toString().length());
+        //将用了的时间换算成秒
+        Integer minRe = Integer.valueOf(minStr) * 60;
+        Integer timeRe = minRe + Integer.valueOf(secStr);
+        BigDecimal speed;
+        BigDecimal distance;
+        if (withTime.compareTo(BigDecimal.ZERO) == 0) {
+            distance = new BigDecimal("0");
+        } else {
+            speed = len.divide(new BigDecimal(timeRe), 1, RoundingMode.HALF_UP);
+            //剩下的时间里走的距离
+            distance = new BigDecimal(mainingIn).multiply(speed, new MathContext(3));
+        }
+        //最后一圈还剩多少距离
+        BigDecimal unfinished = (new BigDecimal(lenKu * 2)).subtract(distance);
+        //如果剩下时间里走的距离超过了一圈的距离，为负数,往前加一圈，以此类推，剩下的再算
+        if (unfinished.compareTo(BigDecimal.ZERO) == -1) {
+            unfinished = new BigDecimal(0);
+        }
+        etion.setUnfinishedDistance(unfinished.toString());
+        etion.setTotalDistance(String.valueOf(len.add(distance)));
+        //计算代谢当量 (4.928 + 0.023 *距离) / 3.5
+        BigDecimal b3 = dealMetabEquivalent(len.add(distance));
+        etion.setMetabEquivalent(String.valueOf(b3));
+        //计算心肺等级
+        String cardiopuLevel = dealCardiopuLevel(len.add(distance));
+        etion.setCardiopuLevel(cardiopuLevel);
+        return etion;
+    }
+
+
+    /**
+     * 计算代谢当量 (4.928 + 0.023 *距离) / 3.5
+     *
+     * @param total
+     * @return
+     */
+    public BigDecimal dealMetabEquivalent(BigDecimal total) {
+        BigDecimal b1 = new BigDecimal("0.023").multiply(total);
+        BigDecimal b2 = b1.add(new BigDecimal("4.928"));
+        BigDecimal b3 = b2.divide(new BigDecimal("3.5"), 1, RoundingMode.HALF_UP);
+        return b3;
+    }
+
+    /**
+     * 心肺功能等级
+     * 等级标准：
+     * 1级：<=299.9m
+     * 2级：300~375m
+     * 3级：375.1~450m
+     * 4级：>=450.1m
+     */
+    public String dealCardiopuLevel(BigDecimal total) {
+        if (total.compareTo(new BigDecimal("299.9")) < 1) {
+            return "I";
+        } else if (total.compareTo(new BigDecimal("300")) > -1 &&
+                total.compareTo(new BigDecimal("374.9")) < 1) {
+            return "II";
+        } else if (total.compareTo(new BigDecimal("375")) > -1 &&
+                total.compareTo(new BigDecimal("449.9")) < 1) {
+            return "III";
+        } else if (total.compareTo(new BigDecimal("450")) > -1) {
+            return "IV";
+        }
+        return "";
+    }
+
+    /**
+     * 心肺程度,1=重度，2=中度，3=轻度
+     * 重度：<=149.9m
+     * 中度：150~450m
+     * 轻度：>=450.1m
+     *
+     * @param total
+     * @return
+     */
+    public String dealCardiopuDegree(BigDecimal total) {
+        if (total.compareTo(new BigDecimal("149.9")) < 1) {
+            return "重度。";
+        } else if (total.compareTo(new BigDecimal("150")) > -1 &&
+                total.compareTo(new BigDecimal("450")) < 1) {
+            return "中度。";
+        } else if (total.compareTo(new BigDecimal("450.1")) > -1) {
+            return "轻度。";
+        }
+        return "";
+    }
+
+    public Integer dealDegree(BigDecimal total) {
+        if (total.compareTo(new BigDecimal("149.9")) < 1) {
+            return 1;
+        } else if (total.compareTo(new BigDecimal("150")) > -1 &&
+                total.compareTo(new BigDecimal("450")) < 1) {
+            return 2;
+        } else if (total.compareTo(new BigDecimal("450.1")) > -1) {
+            return 3;
+        }
+        return 0;
+    }
+
+    /**
+     * 计算六分钟平均步速
+     * 分为试验自动结束和提前停止
+     * @param totalDistance
+     * @param stopOr
+     * @param stopTime
+     * @return
+     */
+    public BigDecimal dealStrideAvg(BigDecimal totalDistance, Integer stopOr, String stopTime) {
+        BigDecimal strideAvg = new BigDecimal("0.0");
+        //自动完成了
+        Integer timeInt = 0;
+        if (stopOr == 0) {
+            timeInt = 360;
+        } else if (stopOr == 1) {
+            //截取试验时间
+            String[] strings = stopTime.split("分");
+            if (strings.length == 2) {
+                Integer minInt = Integer.parseInt(strings[0]);
+                Integer secInt = Integer.valueOf(strings[1].substring(0, strings[1].length() - 1));
+                timeInt = minInt * 60 + secInt;
+            }
+        }
+        if (totalDistance.compareTo(new BigDecimal(0)) == 1 && timeInt > 0) {
+            strideAvg = totalDistance.divide(new BigDecimal(timeInt), 3, BigDecimal.ROUND_HALF_UP);
+            strideAvg = strideAvg.multiply(new BigDecimal(60)).setScale(1, BigDecimal.ROUND_HALF_UP);
+        }
+        return strideAvg;
+    }
+
+    /**
+     * 验证是否为偶数
+     *
+     * @param num
+     * @return
+     */
+    public static boolean checkNumEven(String num) {
+        String str = "^\\d*[02468]$";
+        Pattern p = Pattern.compile(str);
+        Matcher m = p.matcher(num);
+        boolean b = m.matches();
+        return b;
     }
 }

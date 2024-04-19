@@ -14,6 +14,9 @@ public class UsbSerialData {
     private String circleCount;
     private String stepsCount;
 
+    private String circleMin;
+    private String circleSec1;
+    private String circleSec2;
 
     public String getBloodLow() {
         return bloodLow;
@@ -93,6 +96,30 @@ public class UsbSerialData {
 
     public void setStepsCount(String stepsCount) {
         this.stepsCount = stepsCount;
+    }
+
+    public String getCircleMin() {
+        return circleMin;
+    }
+
+    public void setCircleMin(String circleMin) {
+        this.circleMin = circleMin;
+    }
+
+    public String getCircleSec1() {
+        return circleSec1;
+    }
+
+    public void setCircleSec1(String circleSec1) {
+        this.circleSec1 = circleSec1;
+    }
+
+    public String getCircleSec2() {
+        return circleSec2;
+    }
+
+    public void setCircleSec2(String circleSec2) {
+        this.circleSec2 = circleSec2;
     }
 
     @Override
