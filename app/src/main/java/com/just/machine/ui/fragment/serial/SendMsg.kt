@@ -1,6 +1,7 @@
-package com.just.machine.util
+package com.just.machine.ui.fragment.serial
 
 import com.common.network.LogUtils
+import com.just.machine.util.BaseUtil
 import world.shanya.serialport.SerialPort
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.LinkedBlockingQueue
@@ -13,7 +14,7 @@ import java.util.concurrent.TimeUnit
 * */
 class SendMsg(
     message: String,
-    serialPort : SerialPort,
+    serialPort: SerialPort,
     corePoolSize: Int = 2,
     maxPoolSize: Int = 2,
     keepAliveTime: Long = 0L,
@@ -30,7 +31,7 @@ class SendMsg(
         )
 
         try {
-            executor.execute(Producer(myQueue, message, threadSleep,serialPort))
+            executor.execute(Producer(myQueue, message, threadSleep, serialPort))
         } catch (e: Exception) {
             executor = ThreadPoolExecutor(
                 corePoolSize,
@@ -39,7 +40,7 @@ class SendMsg(
                 TimeUnit.MILLISECONDS,
                 LinkedBlockingQueue()
             )
-            executor.execute(Producer(myQueue, message, threadSleep,serialPort))
+            executor.execute(Producer(myQueue, message, threadSleep, serialPort))
         }
         try {
             // 等待生产者线程完成
@@ -57,9 +58,8 @@ class SendMsg(
         private val queue: BlockingQueue<String>,
         private val data: String,
         private val threadSleep: Long,
-        private val  serialPort: SerialPort
-    ) :
-        Runnable {
+        private val serialPort: SerialPort
+    ) : Runnable {
         override fun run() {
             try {
                 queue.put(data)
@@ -67,14 +67,13 @@ class SendMsg(
                 try {
                     send = hexStr2Bytes(data)
                 } catch (e: Exception) {
-                    LogUtils.d("hexStr2Bytes" + e.message)
+                    e.printStackTrace()
                 }
 
                 serialPort.sendData(send)
 
-                // 延时300毫秒
-                Thread.sleep(threadSleep)
-                LogUtils.e("发送串口延时消息：$threadSleep")
+                Thread.sleep(threadSleep)// 延时300毫秒
+
             } catch (e: InterruptedException) {
                 e.printStackTrace()
             }

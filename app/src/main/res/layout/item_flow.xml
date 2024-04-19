@@ -5,7 +5,7 @@
 
         <variable
             name="bean"
-            type="com.just.machine.model.calibration.FlowBean" />
+            type="com.just.machine.dao.calibration.FlowBean" />
 
     </data>
 

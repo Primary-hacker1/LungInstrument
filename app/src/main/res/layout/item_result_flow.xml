@@ -6,7 +6,7 @@
 
         <variable
             name="bean"
-            type="com.just.machine.model.calibration.ResultBean" />
+            type="com.just.machine.dao.calibration.ResultBean" />
     </data>
 
     <LinearLayout

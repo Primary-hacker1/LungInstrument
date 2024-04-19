@@ -5,7 +5,7 @@
 
         <variable
             name="bean"
-            type="com.just.machine.model.calibration.EnvironmentalBean" />
+            type="com.just.machine.dao.calibration.EnvironmentalCalibrationBean" />
 
     </data>
 
@@ -21,7 +21,7 @@
             android:layout_width="@dimen/space_200"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_19"
-            android:text="@{bean.calibrationTime}"
+            android:text="@{bean.createTime}"
             android:textColor="@color/text3"
             android:textSize="13sp" />
 
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="1"
-            android:text="@{bean.conventionalVentilation}"
+            android:text="@{bean.temperature}"
             android:textColor="@color/text3"
             android:textSize="13sp" />
 
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="1"
-            android:text="@{bean.atmosphericPressure}"
+            android:text="@{bean.pressure}"
             android:textColor="@color/text3"
             android:textSize="13sp" />
 
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="1"
-            android:text="@{bean.calibrationMethod}"
+            android:text="手动"
             android:textColor="@color/text3"
             android:textSize="13sp" />
     </LinearLayout>

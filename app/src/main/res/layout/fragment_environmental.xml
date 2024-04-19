@@ -135,12 +135,13 @@
                         android:textSize="14sp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/atv_create_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/space_30"
+                        android:layout_marginTop="@dimen/space_40"
                         android:text="10:00:00"
                         android:textColor="@color/white"
-                        android:textSize="23sp"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <ImageView

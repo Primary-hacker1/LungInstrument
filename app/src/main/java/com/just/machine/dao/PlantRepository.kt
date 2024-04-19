@@ -1,6 +1,5 @@
 package com.just.machine.dao
 
-import com.common.BaseResponseDB
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -13,6 +12,7 @@ import javax.inject.Inject
 class PlantRepository @Inject constructor(private val plantDao: PlantDao) {
 
     suspend fun deletePatient(id: Long) = plantDao.deletePatient(id)
+
     suspend fun updatePatients(patients: PatientBean) =
         plantDao.updatePatients(patients)
 

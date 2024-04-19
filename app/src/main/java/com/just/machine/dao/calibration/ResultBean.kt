@@ -1,4 +1,4 @@
-package com.just.machine.model.calibration
+package com.just.machine.dao.calibration
 
 data class ResultBean(
     var calibrationTime: String? = "",//定标时间

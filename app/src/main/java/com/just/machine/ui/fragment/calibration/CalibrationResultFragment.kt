@@ -11,9 +11,7 @@ import com.common.base.CommonBaseFragment
 import com.common.base.gone
 import com.common.base.setNoRepeatListener
 import com.common.base.visible
-import com.just.machine.model.calibration.IngredientBean
-import com.just.machine.model.calibration.ResultBean
-import com.just.machine.ui.adapter.calibration.IngredientAdapter
+import com.just.machine.dao.calibration.ResultBean
 import com.just.machine.ui.adapter.calibration.ResultFlowAdapter
 import com.just.machine.ui.adapter.calibration.ResultIngredientAdapter
 import com.just.machine.ui.viewmodel.MainViewModel

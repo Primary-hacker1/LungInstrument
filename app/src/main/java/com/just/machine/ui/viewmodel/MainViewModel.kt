@@ -9,6 +9,8 @@ import com.common.viewmodel.LiveDataEvent
 import com.just.machine.api.UserRepository
 import com.just.machine.dao.PatientBean
 import com.just.machine.dao.PlantRepository
+import com.just.machine.dao.calibration.EnvironmentalCalibrationBean
+import com.just.machine.dao.calibration.EnvironmentalCalibrationRepository
 import com.just.machine.dao.sixmin.SixMinReportBloodRepository
 import com.just.machine.dao.sixmin.SixMinReportWalkRepository
 import com.just.machine.model.Data
@@ -29,7 +31,8 @@ class MainViewModel @Inject constructor(
     private var repository: UserRepository,
     private var plantDao: PlantRepository,
     private var sixMinReportWalkDao: SixMinReportWalkRepository,
-    private var sixMinReportBloodDao: SixMinReportBloodRepository
+    private var sixMinReportBloodDao: SixMinReportBloodRepository,
+    private var environmentalDao: EnvironmentalCalibrationRepository,
 ) : BaseViewModel() {
 
     var itemNews: ObservableList<Data> = ObservableArrayList()
@@ -46,6 +49,25 @@ class MainViewModel @Inject constructor(
 //            )
         }
     }
+
+    fun setEnvironmental(bean: EnvironmentalCalibrationBean) {//新增环境定标
+        viewModelScope.launch {
+            val patient = environmentalDao.insertEnvironmental(bean)
+            getEnvironmental()
+        }
+    }
+
+    fun getEnvironmental() {//查询所有环境定标
+        viewModelScope.launch {
+            environmentalDao.getEnvironmentals().collect {
+                mEventHub.value = LiveDataEvent(
+                    LiveDataEvent.EnvironmentalsSuccess, it
+                )
+            }
+        }
+    }
+
+
 
     fun getPatients() {//查询所有患者
         viewModelScope.launch {
@@ -91,7 +113,6 @@ class MainViewModel @Inject constructor(
         }
     }
 
-
     /**
      *@param patient 患者更新数据覆盖原数据
      */
@@ -99,27 +120,6 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             plantDao.updatePatients(patient)
         }
-    }
-
-
-    /**
-     *@param type 协程请求->带loading的
-     */
-    fun getNewsLoading(type: String) {
-        async({ repository.getNews("") }, {
-            //返回结果
-        }, true, {}, {})
-    }
-
-    /**
-     *@param type rxjava请求->直接获取结果的
-     */
-    fun getRxNews(type: String) {
-        repository.getRxNews(type).`as`(auto(this)).subscribes({
-
-        }, {
-
-        })
     }
 
     /**

@@ -7,8 +7,8 @@ interface Constants {
         const val addPatient = "添加患者信息"
         const val patientInformation = "患者管理"
         const val cardiopulmonary = "心肺测试"
-        const val me = "我的"
         const val setting = "设置"
+        const val serialCallback = "serialCallback"//串口返回消息
         const val patientBean = "patientBean"
         const val editBloodPressure = "editBloodPressure"
         const val finishSixMinTest = "finishSixMinTest"

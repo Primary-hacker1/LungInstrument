@@ -14,7 +14,7 @@ import com.common.viewmodel.LiveDataEvent
 import com.just.machine.dao.PatientBean
 import com.just.machine.model.Constants
 import com.just.machine.ui.viewmodel.MainViewModel
-import com.just.machine.util.SendMsg
+import com.just.machine.ui.fragment.serial.SendMsg
 import com.just.news.R
 import com.just.news.databinding.FragmentNewBinding
 import dagger.hilt.android.AndroidEntryPoint

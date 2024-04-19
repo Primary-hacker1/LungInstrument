@@ -12,11 +12,8 @@ import com.common.base.CommonBaseFragment
 import com.common.base.gone
 import com.common.base.setNoRepeatListener
 import com.common.base.visible
-import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.FragmentChildAdapter
-import com.just.machine.ui.adapter.FragmentPagerAdapter
 import com.just.machine.ui.viewmodel.MainViewModel
-import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FragmentCardiopulmonarySettingBinding
 import dagger.hilt.android.AndroidEntryPoint

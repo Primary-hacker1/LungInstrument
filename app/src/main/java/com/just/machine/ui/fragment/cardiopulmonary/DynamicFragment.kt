@@ -224,6 +224,11 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
         textView3.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+    }
+
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentDynamicBinding.inflate(inflater, container, false)
 

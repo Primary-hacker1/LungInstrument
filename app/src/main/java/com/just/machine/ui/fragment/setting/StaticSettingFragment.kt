@@ -17,7 +17,6 @@ import com.just.machine.ui.adapter.setting.FVCSettingAdapter
 import com.just.machine.ui.adapter.setting.MVVSettingAdapter
 import com.just.machine.ui.adapter.setting.SVCSettingAdapter
 import com.just.machine.ui.viewmodel.MainViewModel
-import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FrgamentStaticSettingBinding
 import dagger.hilt.android.AndroidEntryPoint

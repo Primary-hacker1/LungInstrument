@@ -3,7 +3,7 @@ package com.just.machine.ui.adapter.calibration
 import android.content.Context
 import androidx.core.content.ContextCompat
 import com.common.base.BaseRecyclerViewAdapter
-import com.just.machine.model.calibration.ResultBean
+import com.just.machine.dao.calibration.ResultBean
 import com.just.news.R
 import com.just.news.databinding.ItemResultFlowBinding
 

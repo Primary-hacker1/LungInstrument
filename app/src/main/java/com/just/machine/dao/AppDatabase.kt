@@ -8,6 +8,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
+import com.just.machine.dao.calibration.EnvironmentalCalibrationBean
+import com.just.machine.dao.calibration.EnvironmentalCalibrationDao
 import com.just.machine.dao.sixmin.SixMinReportBloodDao
 import com.just.machine.dao.sixmin.SixMinReportBreathingDao
 import com.just.machine.dao.sixmin.SixMinReportEvaluationDao
@@ -31,7 +33,7 @@ import com.just.machine.model.sixminreport.SixMinReportWalk
  * 此应用程序的房间数据库
  */
 @Database(
-    entities = [PatientBean::class, SixMinReportWalk::class, SixMinBloodOxygen::class, SixMinHeartEcg::class, SixMinReportBreathing::class, SixMinReportEvaluation::class, SixMinReportHeartBeat::class],
+    entities = [PatientBean::class, EnvironmentalCalibrationBean::class, SixMinReportWalk::class, SixMinBloodOxygen::class, SixMinHeartEcg::class, SixMinReportBreathing::class, SixMinReportEvaluation::class, SixMinReportHeartBeat::class],
     version = 2,
     exportSchema = false
 )
@@ -39,6 +41,7 @@ import com.just.machine.model.sixminreport.SixMinReportWalk
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun plantDao(): PlantDao
+    abstract fun environmentalCalibrationDao(): EnvironmentalCalibrationDao
     abstract fun sixMinReportWalkDao(): SixMinReportWalkDao
     abstract fun sixMinReportBloodDao(): SixMinReportBloodDao
     abstract fun sixMinReportHeartEcgDao(): SixMinReportHeartEcgDao

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
-import com.just.machine.model.calibration.IngredientBean
+import com.just.machine.dao.calibration.IngredientBean
 import com.just.machine.ui.adapter.calibration.IngredientAdapter
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.databinding.FragmentIngredientBinding
