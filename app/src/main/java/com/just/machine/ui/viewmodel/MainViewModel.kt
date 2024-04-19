@@ -40,7 +40,6 @@ class MainViewModel @Inject constructor(
     private var repository: UserRepository,
     private var plantDao: PlantRepository,
     private var sixMinReportWalkDao: SixMinReportWalkRepository,
-    private var sixMinReportBloodDao: SixMinReportBloodRepository,
     private var environmentalDao: EnvironmentalCalibrationRepository,
     private var sixMinReportBloodDao: SixMinReportBloodRepository,
     private var sixMinReportBreathingDao: SixMinReportBreathingRepository,

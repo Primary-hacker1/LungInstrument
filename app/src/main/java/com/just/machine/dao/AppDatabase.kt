@@ -41,7 +41,7 @@ import com.just.machine.model.sixminreport.SixMinReportWalk
  * 此应用程序的房间数据库
  */
 @Database(
-    entities = [PatientBean::class, SixMinReportWalk::class, SixMinBloodOxygen::class, SixMinHeartEcg::class, SixMinReportBreathing::class, SixMinReportEvaluation::class, SixMinReportHeartBeat::class, SixMinReportInfo::class, SixMinReportOther::class, SixMinReportPrescription::class, SixMinReportStride::class],
+    entities = [PatientBean::class,EnvironmentalCalibrationBean::class, SixMinReportWalk::class, SixMinBloodOxygen::class, SixMinHeartEcg::class, SixMinReportBreathing::class, SixMinReportEvaluation::class, SixMinReportHeartBeat::class, SixMinReportInfo::class, SixMinReportOther::class, SixMinReportPrescription::class, SixMinReportStride::class],
     version = 2,
     exportSchema = false
 )
