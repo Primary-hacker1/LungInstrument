@@ -26,5 +26,5 @@ data class SixMinBloodOxygen(
     var bloodSmall: String = "",//血氧最小值
     var bloodAverage: String = "",//血氧平均值
     var bloodAll: String = "",//血氧，每秒一个值，6分钟的集合
-    var delFlag: String = "",//删除标记
+    var delFlag: String = "0",//删除标记
 )

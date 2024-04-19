@@ -12,8 +12,17 @@ import com.just.machine.dao.PlantRepository
 import com.just.machine.dao.calibration.EnvironmentalCalibrationBean
 import com.just.machine.dao.calibration.EnvironmentalCalibrationRepository
 import com.just.machine.dao.sixmin.SixMinReportBloodRepository
+import com.just.machine.dao.sixmin.SixMinReportBreathingRepository
+import com.just.machine.dao.sixmin.SixMinReportEvaluationRepository
+import com.just.machine.dao.sixmin.SixMinReportHeartEcgRepository
+import com.just.machine.dao.sixmin.SixMinReportHeartRepository
+import com.just.machine.dao.sixmin.SixMinReportInfoRepository
+import com.just.machine.dao.sixmin.SixMinReportOtherRepository
+import com.just.machine.dao.sixmin.SixMinReportPrescriptionRepository
+import com.just.machine.dao.sixmin.SixMinReportStrideRepository
 import com.just.machine.dao.sixmin.SixMinReportWalkRepository
 import com.just.machine.model.Data
+import com.just.machine.model.sixminreport.SixMinReportEvaluation
 import com.just.machine.model.sixminreport.SixMinReportWalk
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
@@ -33,6 +42,15 @@ class MainViewModel @Inject constructor(
     private var sixMinReportWalkDao: SixMinReportWalkRepository,
     private var sixMinReportBloodDao: SixMinReportBloodRepository,
     private var environmentalDao: EnvironmentalCalibrationRepository,
+    private var sixMinReportBloodDao: SixMinReportBloodRepository,
+    private var sixMinReportBreathingDao: SixMinReportBreathingRepository,
+    private var sixMinReportEvaluationDao: SixMinReportEvaluationRepository,
+    private var sixMinReportHeartDao: SixMinReportHeartRepository,
+    private var sixMinReportHeartEcgDao: SixMinReportHeartEcgRepository,
+    private var sixMinReportInfoDao: SixMinReportInfoRepository,
+    private var sixMinReportOtherDao: SixMinReportOtherRepository,
+    private var sixMinReportPrescriptionDao: SixMinReportPrescriptionRepository,
+    private var sixMinReportStrideDao: SixMinReportStrideRepository,
 ) : BaseViewModel() {
 
     var itemNews: ObservableList<Data> = ObservableArrayList()
@@ -123,7 +141,7 @@ class MainViewModel @Inject constructor(
     }
 
     /**
-     * 获取6分钟步数
+     * 插入6分钟报告步数
      */
     fun setSixMinReportWalkData(bean: SixMinReportWalk) {
         viewModelScope.launch {
@@ -132,15 +150,24 @@ class MainViewModel @Inject constructor(
     }
 
     /**
-     * 插入6分钟步数
+     * 获取6分钟报告步数
      */
-    fun getReportWalk(id:String) {
+    fun getSixReportWalk(id: String) {
         viewModelScope.launch {
             sixMinReportWalkDao.getReportWalk(id).collect {
                 mEventHub.value = LiveDataEvent(
                     LiveDataEvent.QuerySuccess, it
                 )
             }
+        }
+    }
+
+    /**
+     * 插入6分钟报告综合评估
+     */
+    fun setSixMinReportEvaluationData(bean: SixMinReportEvaluation) {
+        viewModelScope.launch {
+            sixMinReportEvaluationDao.insertReportEvaluation(bean)
         }
     }
 }

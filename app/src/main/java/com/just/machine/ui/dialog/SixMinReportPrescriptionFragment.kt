@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import com.common.base.BaseDialogFragment
 import com.common.network.LogUtils
+import com.just.machine.model.SixMinReportEditBloodPressure
 import com.just.machine.util.DropDownPopWindow
 import com.just.machine.util.SpinnerHelper
 import com.just.news.R
@@ -15,6 +16,13 @@ import com.just.news.databinding.FragmentDialogSixminReportPrescriptionBinding
 
 class SixMinReportPrescriptionFragment :
     BaseDialogFragment<FragmentDialogSixminReportPrescriptionBinding>() {
+
+    private var listener: SixMinReportPrescriptionDialogListener? = null
+    private lateinit var spStride: SpinnerHelper
+    private lateinit var spDistance: SpinnerHelper
+    private lateinit var spHeatBeat: SpinnerHelper
+    private lateinit var spMetab: SpinnerHelper
+    private lateinit var spTired: SpinnerHelper
 
     companion object {
         /**
@@ -38,6 +46,22 @@ class SixMinReportPrescriptionFragment :
         }
     }
 
+    interface SixMinReportPrescriptionDialogListener {
+        fun onClickConfirm(
+            stride: String,
+            distance: String,
+            heart: String,
+            metab: String,
+            borg: String
+        )
+
+        fun onClickClose()
+    }
+
+    fun setPrescriptionDialogOnClickListener(listener: SixMinReportPrescriptionDialogListener) {
+        this.listener = listener
+    }
+
     override fun start(dialog: Dialog?) {
         dialog?.setCancelable(false)
         dialog?.setCanceledOnTouchOutside(false)
@@ -50,18 +74,29 @@ class SixMinReportPrescriptionFragment :
     override fun initListener() {
         binding.sixminReportTvPrescriptionConfirm.setOnClickListener {
             dismiss()
+            listener?.onClickConfirm(
+                spStride.getSelection().toString(),
+                spDistance.getSelection().toString(),
+                spHeatBeat.getSelection().toString(),
+                spMetab.getSelection().toString(),
+                spTired.getSelection().toString()
+            )
         }
         binding.sixminReportTvPrescriptionClose.setOnClickListener {
             dismiss()
         }
-        val spStride =
-            SpinnerHelper(requireContext(), binding.sixminReportTvPrescriptionStride, R.array.spinner_sixmin_report_description)
+        spStride =
+            SpinnerHelper(
+                requireContext(),
+                binding.sixminReportTvPrescriptionStride,
+                R.array.spinner_sixmin_report_description
+            )
         spStride.setSpinnerSelectionListener(object : SpinnerHelper.SpinnerSelectionListener {
             override fun onItemSelected(selectedItem: String, view: View?) {
-                val textView:TextView = view as TextView
-                if(selectedItem == "出具"){
-                    textView.setTextColor(ContextCompat.getColor(requireContext(),R.color.c2F89DE))
-                }else{
+                val textView: TextView = view as TextView
+                if (selectedItem == "出具") {
+                    textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.c2F89DE))
+                } else {
                     textView.setTextColor(Color.RED)
                 }
             }
@@ -72,13 +107,17 @@ class SixMinReportPrescriptionFragment :
         })
 
         val spDistance =
-            SpinnerHelper(requireContext(), binding.sixminReportTvPrescriptionDistance, R.array.spinner_sixmin_report_description)
+            SpinnerHelper(
+                requireContext(),
+                binding.sixminReportTvPrescriptionDistance,
+                R.array.spinner_sixmin_report_description
+            )
         spDistance.setSpinnerSelectionListener(object : SpinnerHelper.SpinnerSelectionListener {
             override fun onItemSelected(selectedItem: String, view: View?) {
-                val textView:TextView = view as TextView
-                if(selectedItem == "出具"){
-                    textView.setTextColor(ContextCompat.getColor(requireContext(),R.color.c2F89DE))
-                }else{
+                val textView: TextView = view as TextView
+                if (selectedItem == "出具") {
+                    textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.c2F89DE))
+                } else {
                     textView.setTextColor(Color.RED)
                 }
             }
@@ -89,13 +128,17 @@ class SixMinReportPrescriptionFragment :
         })
 
         val spHeatBeat =
-            SpinnerHelper(requireContext(), binding.sixminReportTvPrescriptionHeartbeat, R.array.spinner_sixmin_report_description)
+            SpinnerHelper(
+                requireContext(),
+                binding.sixminReportTvPrescriptionHeartbeat,
+                R.array.spinner_sixmin_report_description
+            )
         spHeatBeat.setSpinnerSelectionListener(object : SpinnerHelper.SpinnerSelectionListener {
             override fun onItemSelected(selectedItem: String, view: View?) {
-                val textView:TextView = view as TextView
-                if(selectedItem == "出具"){
-                    textView.setTextColor(ContextCompat.getColor(requireContext(),R.color.c2F89DE))
-                }else{
+                val textView: TextView = view as TextView
+                if (selectedItem == "出具") {
+                    textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.c2F89DE))
+                } else {
                     textView.setTextColor(Color.RED)
                 }
             }
@@ -106,13 +149,17 @@ class SixMinReportPrescriptionFragment :
         })
 
         val spMetab =
-            SpinnerHelper(requireContext(), binding.sixminReportTvPrescriptionMetab, R.array.spinner_sixmin_report_description)
+            SpinnerHelper(
+                requireContext(),
+                binding.sixminReportTvPrescriptionMetab,
+                R.array.spinner_sixmin_report_description
+            )
         spMetab.setSpinnerSelectionListener(object : SpinnerHelper.SpinnerSelectionListener {
             override fun onItemSelected(selectedItem: String, view: View?) {
-                val textView:TextView = view as TextView
-                if(selectedItem == "出具"){
-                    textView.setTextColor(ContextCompat.getColor(requireContext(),R.color.c2F89DE))
-                }else{
+                val textView: TextView = view as TextView
+                if (selectedItem == "出具") {
+                    textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.c2F89DE))
+                } else {
                     textView.setTextColor(Color.RED)
                 }
             }
@@ -123,13 +170,17 @@ class SixMinReportPrescriptionFragment :
         })
 
         val spTired =
-            SpinnerHelper(requireContext(), binding.sixminReportTvPrescriptionTired, R.array.spinner_sixmin_report_description)
+            SpinnerHelper(
+                requireContext(),
+                binding.sixminReportTvPrescriptionTired,
+                R.array.spinner_sixmin_report_description
+            )
         spTired.setSpinnerSelectionListener(object : SpinnerHelper.SpinnerSelectionListener {
             override fun onItemSelected(selectedItem: String, view: View?) {
-                val textView:TextView = view as TextView
-                if(selectedItem == "出具"){
-                    textView.setTextColor(ContextCompat.getColor(requireContext(),R.color.c2F89DE))
-                }else{
+                val textView: TextView = view as TextView
+                if (selectedItem == "出具") {
+                    textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.c2F89DE))
+                } else {
                     textView.setTextColor(Color.RED)
                 }
             }

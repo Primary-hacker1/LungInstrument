@@ -77,8 +77,8 @@ public class USBTransferUtil {
     public String restBloodOxy = "";//静息血氧集合
     public int restTime = 0;//休息时长
     public String stepsStr = "0";//步数
-    public int checkBSInd = 0;
-    public String checkBSStr = "0";
+    public int checkBSInd = 0;//检查步数字段
+    public String checkBSStr = "0";//检查步数
 
     // 顺序： manager - availableDrivers（所有可用设备） - UsbSerialDriver（目标设备对象） - UsbDeviceConnection（设备连接对象） - UsbSerialPort（设备的端口，一般只有1个）
     private List<UsbSerialDriver> availableDrivers = new ArrayList<>();  // 所有可用设备
@@ -159,12 +159,6 @@ public class USBTransferUtil {
             usbTransferUtil = new USBTransferUtil();
         }
         return usbTransferUtil;
-    }
-
-    public void addOxygenData() {
-        Random random = new Random();
-        int data = random.nextInt(10) + 90;
-        mapBloodOxygen.put(System.currentTimeMillis(), String.valueOf(data));
     }
 
     // 接口 -------------------------
@@ -405,7 +399,7 @@ public class USBTransferUtil {
         }
     }
 
-    private void release() {
+    public void release() {
         map.clear();
         mapNew.clear();
         mapBloodOxygen.clear();
@@ -530,7 +524,7 @@ public class USBTransferUtil {
                                 ecgConnection = true;
                             } else if (bytes[4] == (byte) 0x10) {
                                 //断开
-                                ecgConnection = true;
+                                ecgConnection = false;
                             }
 
                             //血氧连接状态
@@ -546,7 +540,7 @@ public class USBTransferUtil {
                             if (bytes[6] == (byte) 0x31) {
                                 bloodPressureConnection = true;
                             } else if (bytes[6] == (byte) 0x30) {
-                                bloodPressureConnection = true;
+                                bloodPressureConnection = false;
                             }
 
                             //电池等级
@@ -630,7 +624,7 @@ public class USBTransferUtil {
                             //步数数据
                             if (testType == 1 && (bytes[15] != bytesnull || bytes[16] != bytesnull)) {
                                 byte[] bytesBS = {bytes[15], bytes[16]};
-                                String stepsStr = CRC16Util.bytesToHexString(bytesBS);
+                                stepsStr = CRC16Util.bytesToHexString(bytesBS);
                                 Integer steps = Integer.valueOf(stepsStr, 16);
                                 usbSerialData.setStepsCount(String.valueOf(steps));
                             }

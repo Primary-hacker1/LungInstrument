@@ -62,6 +62,7 @@ class SixMinGuideDialogFragment : BaseDialogFragment<FragmentDialogSixminGuideBi
 
     override fun initListener() {
         binding.sixminBtnStartTest.setNoRepeatListener {
+            dismiss()
             listener?.onClickStartTest()
         }
         binding.sixminCbNotSeeAnymore.setOnCheckedChangeListener { _, isChecked ->

@@ -4,6 +4,8 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.text.Html
+import android.util.Log
+import android.util.TypedValue
 import android.view.Gravity
 import android.widget.LinearLayout
 import android.widget.TableRow
@@ -143,17 +145,44 @@ class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding
             }
         }
         binding.sixminReportTvSelfCheckBeforeTest.setNoRepeatListener {
-            val startEditBloodDialogFragment =
+            val selfCheckBeforeTestDialogFragment =
                 SixMinReportSelfCheckBeforeTestFragment.startPatientSelfCheckDialogFragment(
                     supportFragmentManager,
-                    "1"
+                    "0"
                 )
+            selfCheckBeforeTestDialogFragment.setSelfCheckBeforeTestDialogOnClickListener(object:
+                SixMinReportSelfCheckBeforeTestFragment.SixMinReportSelfCheckBeforeTestDialogListener{
+                override fun onClickConfirm(befoFatigueLevel: Int, befoBreathingLevel: Int) {
+                    Log.d("tag","$befoFatigueLevel$befoBreathingLevel")
+                }
+
+                override fun onClickClose() {
+
+                }
+            })
         }
         binding.sixminReportTvPrescription.setNoRepeatListener {
             val prescriptionFragment =
                 SixMinReportPrescriptionFragment.startPrescriptionDialogFragment(
                     supportFragmentManager
                 )
+            prescriptionFragment.setPrescriptionDialogOnClickListener(object:
+                SixMinReportPrescriptionFragment.SixMinReportPrescriptionDialogListener{
+                override fun onClickConfirm(
+                    stride: String,
+                    distance: String,
+                    heart: String,
+                    metab: String,
+                    borg: String
+                ) {
+
+                }
+
+                override fun onClickClose() {
+
+                }
+
+            })
         }
         binding.sixminReportIvGenerateReport.setNoRepeatListener {
             val reportWalk = SixMinReportWalk()
@@ -291,7 +320,7 @@ class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding
                 "/"
             )
         )
-        val padding = dip2px(applicationContext, 1)
+        val padding = dip2px(1.0f)
         for (i in 0 until reportRowList.size) {
             val sixMinReportItemBean = reportRowList[i]
             val newRow = TableRow(applicationContext)
@@ -305,7 +334,7 @@ class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding
 
             for (j in 0..10) {
                 val tvNo = TextView(applicationContext)
-                tvNo.textSize = dip2px(applicationContext, 7).toFloat()
+                tvNo.textSize = dip2px( 7.0f).toFloat()
                 // 设置文字居中
                 tvNo.gravity = if (j == 0) Gravity.START else Gravity.CENTER
                 tvNo.setTextColor(ContextCompat.getColor(this, R.color.text3))
@@ -318,7 +347,7 @@ class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding
                     if (j == 0) 4.2f else if (j == 1 || j == 7 || j == 8 || j == 9 || j == 10) 3f else 2f
                 )
                 lpNo.setMargins(
-                    0, 0, dip2px(applicationContext, 2), 0
+                    0, 0, dip2px(2.0f), 0
                 )
                 tvNo.layoutParams = lpNo
                 // 设置padding和背景颜色
@@ -372,19 +401,19 @@ class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding
                 linearLayout.addView(tvNo)
             }
             newRow.setPadding(
-                dip2px(this, 6),
-                dip2px(this, 3),
-                dip2px(this, 6),
-                dip2px(this, 3)
+                dip2px( 6.0f),
+                dip2px( 3.0f),
+                dip2px( 6.0f),
+                dip2px( 3.0f)
             )
             newRow.addView(linearLayout)
             binding.sixminReportTlPreTable.addView(newRow)
         }
     }
 
-    private fun dip2px(context: Context, dpValue: Int): Int {
-        val scale: Float = context.resources.displayMetrics.density
-        return (dpValue * scale + 0.5f).toInt()
+    private fun dip2px(dpValue: Float): Int {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, resources.displayMetrics)
+            .toInt()
     }
 
     override fun onResume() {

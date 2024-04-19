@@ -19,12 +19,12 @@ data class SixMinReportOther(
     var startLowPressure: String = "",//开始低压
     var stopHighPressure: String = "",//结束高压
     var stopLowPressure: String = "",//结束低压
-    var stopOr: String = "",//是否提前停止试验，0为否，1为是
+    var stopOr: String = "0",//是否提前停止试验，0为否，1为是
     var stopTime: String = "",//停止时间
     var stopReason: String = "",//停止原因(症状描述)
-    var badOr: String = "",//自动结束后是否有不良症状，0为否，1为是
+    var badOr: String = "0",//自动结束后是否有不良症状，0为否，1为是
     var badSymptoms: String = "",//自动结束后的不良症状描述
     var useName: String = "",//使用单位名称
     var ecgType: String = "",//导联数量
-    var delFlag: String = "",//删除标记
+    var delFlag: String = "0",//删除标记
 )

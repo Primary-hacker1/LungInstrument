@@ -45,5 +45,5 @@ data class SixMinReportPrescription(
     var metabState: String = "",//代谢当量的状态，1=出具，2=不出具
     var pllevState: String = "",//borg疲劳的状态，1=出具，2=不出具
     var prescripState: String = "",//处方状态，0=强度版本，1=运动步速版本
-    var delFlag: String = "",//删除标记
+    var delFlag: String = "0",//删除标记
 )

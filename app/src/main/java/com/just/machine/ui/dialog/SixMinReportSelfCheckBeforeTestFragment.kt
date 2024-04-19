@@ -2,6 +2,7 @@ package com.just.machine.ui.dialog
 
 import android.app.Dialog
 import android.os.Bundle
+import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.BaseDialogFragment
@@ -11,10 +12,14 @@ import com.just.machine.model.SixMinReportPatientSelfItemBean
 import com.just.machine.ui.adapter.SixMinReportPatientSelfAdapter
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogSixminReportSelfCheckBeforeTestBinding
-import com.just.news.databinding.ItemSixminReportPatientSelfBinding
 
 class SixMinReportSelfCheckBeforeTestFragment :
     BaseDialogFragment<FragmentDialogSixminReportSelfCheckBeforeTestBinding>() {
+
+    private var listener: SixMinReportSelfCheckBeforeTestDialogListener? = null
+    private val patientSelfList = mutableListOf<SixMinReportPatientSelfBean>()
+    private var selectList = mutableListOf<Int>()
+    private var selfCheck = ""
 
     companion object {
         /**
@@ -23,7 +28,8 @@ class SixMinReportSelfCheckBeforeTestFragment :
          */
         fun startPatientSelfCheckDialogFragment(
             fragmentManager: FragmentManager,
-            checkable: String
+            checkable: String = "1",
+            selfCheck:String = ""
 
         ): SixMinReportSelfCheckBeforeTestFragment {
 
@@ -36,7 +42,8 @@ class SixMinReportSelfCheckBeforeTestFragment :
 
             val bundle = Bundle()
 
-            bundle.putString(Constants.viewSixMinSelfCheck, checkable)
+            bundle.putString(Constants.sixMinSelfCheckView, checkable)
+            bundle.putString(Constants.sixMinSelfCheck, selfCheck)
 
             dialogFragment.arguments = bundle
 
@@ -44,7 +51,15 @@ class SixMinReportSelfCheckBeforeTestFragment :
         }
     }
 
-    private val patientSelfList = mutableListOf<SixMinReportPatientSelfBean>()
+    interface SixMinReportSelfCheckBeforeTestDialogListener {
+        fun onClickConfirm(befoFatigueLevel: Int, befoBreathingLevel: Int)
+
+        fun onClickClose()
+    }
+
+    fun setSelfCheckBeforeTestDialogOnClickListener(listener: SixMinReportSelfCheckBeforeTestDialogListener) {
+        this.listener = listener
+    }
 
     override fun start(dialog: Dialog?) {
         dialog?.setCancelable(false)
@@ -56,11 +71,29 @@ class SixMinReportSelfCheckBeforeTestFragment :
         val patientSelfItemAdapter = SixMinReportPatientSelfAdapter(this.requireContext())
         patientSelfItemAdapter.setItemsBean(patientSelfList)
         binding.sixminRvPatientSelfCheck.adapter = patientSelfItemAdapter
+        if(selfCheck == ""){
+           binding.sixminReportTvEditBloodPressureConfirm.text = getString(R.string.sixmin_test_report_confirm)
+        }else{
+            binding.sixminReportTvEditBloodPressureConfirm.text = getString(R.string.sixmin_test_report_check_report_enter_test)
+        }
     }
 
     override fun initListener() {
         binding.sixminReportTvEditBloodPressureConfirm.setOnClickListener {
-            dismiss()
+            selectList.clear()
+            patientSelfList.forEach {
+                it.itemList.forEach { it1 ->
+                    if(it1.itemCheck == "1"){
+                        selectList.add(it.itemList.indexOf(it1))
+                    }
+                }
+            }
+            if(selectList.size < 2){
+                Toast.makeText(context,"请选择试验前状况评级",Toast.LENGTH_SHORT).show()
+            }else{
+                dismiss()
+                listener?.onClickConfirm(selectList[0],selectList[1])
+            }
         }
         binding.sixminReportTvEditBloodPressureClose.setOnClickListener {
             dismiss()
@@ -68,14 +101,15 @@ class SixMinReportSelfCheckBeforeTestFragment :
     }
 
     override fun initData() {
-        val checkAble = arguments?.getString(Constants.viewSixMinSelfCheck, "")
+        val checkAble = arguments?.getString(Constants.sixMinSelfCheckView, "")
+        selfCheck = arguments?.getString(Constants.sixMinSelfCheck, "").toString()
         patientSelfList.clear()
         val patientBreathSelfItemList = mutableListOf<SixMinReportPatientSelfItemBean>()
         patientBreathSelfItemList.add(
             SixMinReportPatientSelfItemBean(
                 "0级",
                 "没有",
-                "1",
+                "0",
                 if (checkAble == "" || checkAble == "0") "0" else "1"
             )
         )

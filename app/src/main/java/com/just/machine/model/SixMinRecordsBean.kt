@@ -4,7 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.PrimaryKey
 
 data class SixMinRecordsBean(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") var reportId: String? = "0",//报告主id
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id")
+    var reportId: String? = "0",//报告主id
     var reportNo: String? = "",//报告编号
     var testTime: String? = "",//测试日期
     var movementWay: String? = "0",//运动方式，0为步行，1为跑步

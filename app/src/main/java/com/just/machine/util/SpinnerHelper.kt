@@ -66,4 +66,8 @@ class SpinnerHelper(
     fun setSelection(position:Int){
         spinner.setSelection(position)
     }
+
+    fun getSelection():Any{
+        return spinner.selectedItemId
+    }
 }
