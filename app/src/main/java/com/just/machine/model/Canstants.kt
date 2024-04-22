@@ -9,6 +9,7 @@ interface Constants {
         const val cardiopulmonary = "心肺测试"
         const val me = "我的"
         const val setting = "设置"
+        const val serialCallback = "serialCallback"//串口返回消息
         const val patientBean = "patientBean"
         const val editBloodPressure = "editBloodPressure"//6分钟预生成报告编辑血压
         const val finishSixMinTest = "finishSixMinTest"//完成6分钟试验

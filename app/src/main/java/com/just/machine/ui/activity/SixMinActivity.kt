@@ -8,7 +8,6 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -24,7 +23,6 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.gson.Gson
 import com.just.machine.dao.PatientBean
-import com.just.machine.model.CommonSharedPreferences.get
 import com.just.machine.model.Constants
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.UsbSerialData
@@ -39,7 +37,6 @@ import com.just.machine.model.sixminreport.SixMinReportWalk
 import com.just.machine.model.systemsetting.SixMinSysSettingBean
 import com.just.machine.ui.dialog.CommonDialogFragment
 import com.just.machine.ui.dialog.SixMinGuideDialogFragment
-import com.just.machine.ui.dialog.SixMinReportSelfCheckBeforeTestFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.FileUtil
 import com.just.machine.util.FixCountDownTime
@@ -541,25 +538,13 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                     if (binding.sixminTvMeasureBlood.text == getString(R.string.sixmin_measure_blood)) {
                         SixMinCmdUtils.measureBloodPressure()
                     } else {
-                        Toast.makeText(
-                            this,
-                            getString(R.string.sixmin_test_measuring_blood),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showMsg(getString(R.string.sixmin_test_measuring_blood))
                     }
                 } else {
-                    Toast.makeText(
-                        this,
-                        getString(R.string.sixmin_test_blood_pressure_without_connection),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    showMsg(getString(R.string.sixmin_test_blood_pressure_without_connection))
                 }
             } else {
-                Toast.makeText(
-                    this,
-                    getString(R.string.sixmin_test_device_without_connection),
-                    Toast.LENGTH_SHORT
-                ).show()
+                showMsg(getString(R.string.sixmin_test_device_without_connection))
             }
         }
 
@@ -632,11 +617,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                     })
                 }
             } else {
-                Toast.makeText(
-                    this,
-                    getString(R.string.sixmin_test_device_without_connection),
-                    Toast.LENGTH_SHORT
-                ).show()
+                showMsg(getString(R.string.sixmin_test_device_without_connection))
 //                startActivity(Intent(this, SixMinPreReportActivity::class.java))
 //                finish()
             }
@@ -872,18 +853,10 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                             if (binding.sixminTvMeasureBlood.text == getString(R.string.sixmin_measure_blood)) {
                                 SixMinCmdUtils.measureBloodPressure()
                             } else {
-                                Toast.makeText(
-                                    this@SixMinActivity,
-                                    getString(R.string.sixmin_test_measuring_blood),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                showMsg(getString(R.string.sixmin_test_measuring_blood))
                             }
                         } else {
-                            Toast.makeText(
-                                this@SixMinActivity,
-                                getString(R.string.sixmin_test_blood_pressure_without_connection),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            showMsg(getString(R.string.sixmin_test_blood_pressure_without_connection))
                         }
                     }
                 }
@@ -1005,18 +978,10 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                         if (binding.sixminTvMeasureBlood.text == getString(R.string.sixmin_measure_blood)) {
                             SixMinCmdUtils.measureBloodPressure()
                         } else {
-                            Toast.makeText(
-                                this@SixMinActivity,
-                                getString(R.string.sixmin_test_measuring_blood),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            showMsg(getString(R.string.sixmin_test_measuring_blood))
                         }
                     } else {
-                        Toast.makeText(
-                            this@SixMinActivity,
-                            getString(R.string.sixmin_test_blood_pressure_without_connection),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showMsg(getString(R.string.sixmin_test_blood_pressure_without_connection))
                     }
                 }
             } else {
@@ -1150,13 +1115,11 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 FileUtil.getInstance(this).copyAssetsToSD("templates", "templates")
                     .setFileOperateCallback(object : FileUtil.FileOperateCallback {
                         override fun onSuccess() {
-                            Toast.makeText(this@SixMinActivity, "复制成功", Toast.LENGTH_SHORT)
-                                .show()
+                            showMsg("复制成功")
                         }
 
                         override fun onFailed(error: String?) {
-                            Toast.makeText(this@SixMinActivity, "复制失败", Toast.LENGTH_SHORT)
-                                .show()
+                            showMsg("复制失败")
                         }
                     })
             }
@@ -1229,18 +1192,10 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                                 if (binding.sixminTvMeasureBlood.text == getString(R.string.sixmin_measure_blood)) {
                                     SixMinCmdUtils.measureBloodPressure()
                                 } else {
-                                    Toast.makeText(
-                                        this@SixMinActivity,
-                                        getString(R.string.sixmin_test_measuring_blood),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    showMsg(getString(R.string.sixmin_test_measuring_blood))
                                 }
                             } else {
-                                Toast.makeText(
-                                    this@SixMinActivity,
-                                    getString(R.string.sixmin_test_blood_pressure_without_connection),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                showMsg(getString(R.string.sixmin_test_blood_pressure_without_connection))
                             }
                         } else if (startTestUtteranceId == defaultUtteranceId) {
                             autoStartTest()
