@@ -22,6 +22,7 @@ import com.just.machine.dao.sixmin.SixMinReportPrescriptionRepository
 import com.just.machine.dao.sixmin.SixMinReportStrideRepository
 import com.just.machine.dao.sixmin.SixMinReportWalkRepository
 import com.just.machine.model.Data
+import com.just.machine.model.sixminreport.SixMinBloodOxygen
 import com.just.machine.model.sixminreport.SixMinReportEvaluation
 import com.just.machine.model.sixminreport.SixMinReportWalk
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -167,6 +168,28 @@ class MainViewModel @Inject constructor(
     fun setSixMinReportEvaluationData(bean: SixMinReportEvaluation) {
         viewModelScope.launch {
             sixMinReportEvaluationDao.insertReportEvaluation(bean)
+        }
+    }
+
+    /**
+     * 插入6分钟报告血氧数据
+     */
+    fun setSixMinReportBloodOxyData(bean: SixMinBloodOxygen) {
+        viewModelScope.launch {
+            sixMinReportBloodDao.insertReportBloodOxy(bean)
+        }
+    }
+
+    /**
+     * 获取6分钟报告血氧数据
+     */
+    fun getSixMinReportBloodOxyDat(id: String) {
+        viewModelScope.launch {
+            sixMinReportBloodDao.getReportBloodOxy(id).collect {
+                mEventHub.value = LiveDataEvent(
+                    LiveDataEvent.QuerySuccess, it
+                )
+            }
         }
     }
 }

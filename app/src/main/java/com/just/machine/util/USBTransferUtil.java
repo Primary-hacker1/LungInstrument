@@ -18,6 +18,7 @@ import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
 import com.hoho.android.usbserial.util.SerialInputOutputManager;
 import com.just.machine.model.UsbSerialData;
+import com.just.machine.model.sixminreport.SixMinBloodOxygen;
 import com.just.machine.model.sixminreport.SixMinReportEvaluation;
 import com.just.machine.model.sixminreport.SixMinReportWalk;
 import com.just.machine.model.systemsetting.SixMinSysSettingBean;
@@ -32,11 +33,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
@@ -66,6 +65,8 @@ public class USBTransferUtil {
     public Map<Long, byte[]> map = new HashMap<>();//接收数据
     public Map<Long, byte[]> mapNew = new TreeMap<>();
     public Map<Long, String> mapBloodOxygen = new TreeMap<>();//血氧数据
+    public List<Integer> bloodListAvg = new ArrayList<>();//血氧数据，每秒一个值
+    public List<Integer> bloodAllListAvg = new ArrayList<>();//6分钟所有血氧数据
     public String byteStr = "";
     public UsbSerialData usbSerialData = null;
     public boolean isBegin = false;//是否开始试验
@@ -617,6 +618,115 @@ public class USBTransferUtil {
     }
 
     /**
+     * 预生成报告
+     * 报告血氧表的处理
+     *
+     * @return
+     */
+    public void dealBlood(SixMinBloodOxygen reportBlood, String bloodOxyLineData) {
+        //处理静息血氧
+        if(!restBloodOxy.isEmpty()){
+            String[] strings = restBloodOxy.split(",");
+            int bloodTotInt = 0;
+            if (strings.length > 0) {
+                for (String string : strings) {
+                    if(!string.isEmpty()){
+                        int bloodInt = Integer.parseInt(string);
+                        bloodTotInt = bloodTotInt + bloodInt;
+                    }
+                }
+                BigDecimal bloodDec = new BigDecimal(bloodTotInt).divide(new BigDecimal(strings.length), 0, RoundingMode.HALF_UP);
+                int bloodStop = Integer.parseInt(bloodDec.toString());
+                reportBlood.setBloodStop(Integer.toString(bloodStop));
+            }
+        }
+        Integer min = 0;
+        Integer max = 0;
+        if (bloodAllListAvg.size() > 0) {
+            min = Collections.min(bloodAllListAvg);
+            max = Collections.max(bloodAllListAvg);
+        }
+        if (null == reportBlood.getBloodStop()) {
+            reportBlood.setBloodStop("0");
+        }
+        if (null == reportBlood.getBloodOne()) {
+            reportBlood.setBloodOne("0");
+        }
+        if (null == reportBlood.getBloodTwo()) {
+            reportBlood.setBloodTwo("0");
+        }
+        if (null == reportBlood.getBloodThree()) {
+            reportBlood.setBloodThree("0");
+        }
+        if (null == reportBlood.getBloodFour()) {
+            reportBlood.setBloodFour("0");
+        }
+        if (null == reportBlood.getBloodFive()) {
+            reportBlood.setBloodFive("0");
+        }
+        if (null == reportBlood.getBloodSix()) {
+            reportBlood.setBloodSix("0");
+        }
+        //平均值，只是以下七个数据
+        Integer[] number = {
+                Integer.parseInt(reportBlood.getBloodOne()),
+                Integer.parseInt(reportBlood.getBloodTwo()),
+                Integer.parseInt(reportBlood.getBloodThree()),
+                Integer.parseInt(reportBlood.getBloodFour()),
+                Integer.parseInt(reportBlood.getBloodFive()),
+                Integer.parseInt(reportBlood.getBloodSix())
+        };
+        Integer start = 0;
+        int len = 0;
+        for (Integer item : number) {
+            if (item != 0) {
+                ++len;
+            }
+            start += item;
+        }
+        BigDecimal avg = new BigDecimal("0");
+        if (len != 0) {
+            avg = new BigDecimal(start).divide(new BigDecimal(len), 0, RoundingMode.HALF_UP);
+        }
+        reportBlood.setBloodSmall(String.valueOf(min));
+        reportBlood.setBloodBig(String.valueOf(max));
+        reportBlood.setBloodAverage(avg.toString());
+        reportBlood.setBloodAll(bloodOxyLineData);
+    }
+
+    /**
+     * 处理血氧表之前
+     *
+     * @param reportBlood
+     * @param min
+     * @param bloodListAvg
+     */
+    public void dealBloodBe(SixMinBloodOxygen reportBlood, Integer min, List<Integer> bloodListAvg) {
+        if (null != reportBlood && bloodListAvg.size() > 0) {
+            Integer bloodInt = 0;
+            int start = 0;
+            for (Integer item : bloodListAvg) {
+                start += item;
+            }
+            BigDecimal avgBlood = new BigDecimal(start).divide(new BigDecimal(bloodListAvg.size()), 0, RoundingMode.HALF_UP);
+            bloodInt = Integer.parseInt(avgBlood.toString());
+            if (min == 5) {
+                reportBlood.setBloodOne(String.valueOf(bloodInt));
+            } else if (min == 4) {
+                reportBlood.setBloodTwo(String.valueOf(bloodInt));
+            } else if (min == 3) {
+                reportBlood.setBloodThree(String.valueOf(bloodInt));
+            } else if (min == 2) {
+                reportBlood.setBloodFour(String.valueOf(bloodInt));
+            } else if (min == 1) {
+                reportBlood.setBloodFive(String.valueOf(bloodInt));
+            } else if (min == 0) {
+                reportBlood.setBloodSix(String.valueOf(bloodInt));
+            }
+        }
+    }
+
+    /**
      * 处理步数表
      *
      * @param reportWalk
@@ -692,11 +802,10 @@ public class USBTransferUtil {
      * @param etion
      * @param min
      * @param sec
-     * @param jqzhiZD 居中摆放时，实际的圈数
      * @param type    0：正常流程走完，1主动停止
      * @return
      */
-    public SixMinReportEvaluation dealPreption(Integer jqzhiZD, SixMinSysSettingBean systemDto,SixMinReportEvaluation etion, String min, String sec,
+    public SixMinReportEvaluation dealPreption(SixMinSysSettingBean systemDto,SixMinReportEvaluation etion, String min, String sec,
                                          Integer type, int min1, int sec1) {
         Integer lenKu = 0;
         Integer tcLocation = 1;
@@ -762,7 +871,7 @@ public class USBTransferUtil {
         Integer quanshu = 0;
         //居中摆放
         if (tcLocation == 0) {
-            quanshu = jqzhiZD;
+
         } else if (tcLocation == 1) {
             //起始摆放
             quanshu = Integer.valueOf(etion.getTurnsNumber());

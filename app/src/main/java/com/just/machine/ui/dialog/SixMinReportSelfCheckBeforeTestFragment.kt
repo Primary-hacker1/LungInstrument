@@ -94,7 +94,7 @@ class SixMinReportSelfCheckBeforeTestFragment :
                 it.itemList.forEach { it1 ->
                     if (it1.itemCheck == "1") {
                         selectList.add(it.itemList.indexOf(it1))
-                        selectStrList.add(it.itemName)
+                        selectStrList.add(it1.itemName)
                     }
                 }
             }

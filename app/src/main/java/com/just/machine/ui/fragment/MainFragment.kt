@@ -152,7 +152,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                 ) {
                     val intent = Intent(activity, SixMinActivity::class.java)
                     val bundle = Bundle()
-                    bundle.putString(Constants.sixMinSelfCheckViewSelection,"$befoFatigueLevel-$befoBreathingLevel")
+                    bundle.putString(Constants.sixMinSelfCheckViewSelection,"$befoFatigueLevelStr&$befoBreathingLevelStr")
                     intent.putExtras(bundle)
                     startActivity(intent)
                 }
@@ -184,7 +184,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                                 ) {
                                     val intent = Intent(activity, SixMinActivity::class.java)
                                     val bundle = Bundle()
-                                    bundle.putString(Constants.sixMinSelfCheckViewSelection,"$befoFatigueLevel-$befoBreathingLevel")
+                                    bundle.putString(Constants.sixMinSelfCheckViewSelection,"$befoFatigueLevelStr&$befoBreathingLevelStr")
                                     startActivity(intent,bundle)
                                 }
 
