@@ -21,6 +21,7 @@ class SixMinReportSelfCheckBeforeTestFragment :
     private var selectList = mutableListOf<Int>()
     private var selectStrList = mutableListOf<String>()
     private var selfCheck = ""
+    private var selfCheckSelection = ""
 
     companion object {
         /**
@@ -30,7 +31,8 @@ class SixMinReportSelfCheckBeforeTestFragment :
         fun startPatientSelfCheckDialogFragment(
             fragmentManager: FragmentManager,
             checkable: String = "1",
-            selfCheck: String = ""
+            selfCheck: String = "",
+            checkStr:String = ""
 
         ): SixMinReportSelfCheckBeforeTestFragment {
 
@@ -45,6 +47,7 @@ class SixMinReportSelfCheckBeforeTestFragment :
 
             bundle.putString(Constants.sixMinSelfCheckView, checkable)
             bundle.putString(Constants.sixMinSelfCheck, selfCheck)
+            bundle.putString(Constants.sixMinSelfCheckViewSelection, checkStr)
 
             dialogFragment.arguments = bundle
 
@@ -121,6 +124,10 @@ class SixMinReportSelfCheckBeforeTestFragment :
     override fun initData() {
         val checkAble = arguments?.getString(Constants.sixMinSelfCheckView, "")
         selfCheck = arguments?.getString(Constants.sixMinSelfCheck, "").toString()
+        selfCheckSelection = arguments?.getString(Constants.sixMinSelfCheckViewSelection, "").toString()
+        if(selfCheckSelection.isNotEmpty()){
+
+        }
         patientSelfList.clear()
         val patientBreathSelfItemList = mutableListOf<SixMinReportPatientSelfItemBean>()
         patientBreathSelfItemList.add(
@@ -199,7 +206,7 @@ class SixMinReportSelfCheckBeforeTestFragment :
             SixMinReportPatientSelfBean(
                 "呼吸状况等级",
                 "1",
-                patientBreathSelfItemList
+                patientBreathSelfItemList,
             )
         )
         val patientTiredSelfItemList = mutableListOf<SixMinReportPatientSelfItemBean>()
@@ -282,6 +289,7 @@ class SixMinReportSelfCheckBeforeTestFragment :
                 patientTiredSelfItemList
             )
         )
+
     }
 
     override fun getLayout(): Int {

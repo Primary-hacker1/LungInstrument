@@ -46,6 +46,7 @@
         <activity
             android:name="com.just.machine.ui.activity.MainActivity"
             android:exported="false"
+            android:launchMode="singleTask"
             android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />

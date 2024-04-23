@@ -20,6 +20,26 @@ class LiveDataEvent {
 
         const val EnvironmentalsSuccess: Int = 0x05
 
+        const val QuerySixMinReportEvaluationSuccess: Int = 0x06//6分钟报告综合评估
+
+        const val QuerySixMinReportInfoSuccess: Int = 0x07//6分钟报告信息
+
+        const val QuerySixMinReportWalkSuccess: Int = 0x08//6分钟报告步数
+
+        const val QuerySixMinReportBloodOxySuccess: Int = 0x09//6分钟报告血氧
+
+        const val QuerySixMinReportHeartEcgSuccess: Int = 0x10//6分钟报告心电
+
+        const val QuerySixMinReportHeartBeatSuccess: Int = 0x11//6分钟报告心率
+
+        const val QuerySixMinReportOtherSuccess: Int = 0x12//6分钟报告其它
+
+        const val QuerySixMinReportPrescriptionSuccess: Int = 0x13//6分钟报告处方建议
+
+        const val QuerySixMinReportStrideSuccess: Int = 0x14//6分钟报告步速
+
+        const val QuerySixMinReportBreathingSuccess: Int = 0x15//6分钟报告呼吸率
+
         /**
          * @param FAIL -通用错误
          * @return -

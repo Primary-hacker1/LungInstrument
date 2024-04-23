@@ -14,6 +14,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SixMinReportInfoDao {
 
+    @Query("SELECT * FROM sixmin_report_info WHERE delFlag == '0'")
+    fun getReportInfo(): Flow<List<SixMinReportInfo>>
+
     @Query("SELECT * FROM sixmin_report_info WHERE patientId == :id AND delFlag == '0'")
     fun getReportInfoById(id:String): Flow<List<SixMinReportInfo>>
 

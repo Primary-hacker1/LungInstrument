@@ -2,6 +2,7 @@ package com.just.machine.ui.activity
 
 import android.content.Intent
 import android.graphics.Color
+import android.os.Bundle
 import android.os.CountDownTimer
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
@@ -22,6 +23,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.gson.Gson
 import com.just.machine.dao.PatientBean
+import com.just.machine.model.BloodOxyLineEntryBean
 import com.just.machine.model.Constants
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.UsbSerialData
@@ -52,10 +54,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileInputStream
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
 
 @AndroidEntryPoint
 class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech.OnInitListener {
@@ -103,6 +108,12 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 ((18.00 - decimalFormat.format(index).toFloat()).toFloat()), entryData
             )
         )
+        usbTransferUtil.bloodOxyLineData.add(
+            BloodOxyLineEntryBean(
+                ((18.00 - decimalFormat.format(index).toFloat()).toFloat()),
+                entryData
+            )
+        )
         binding.sixminLineChartBloodOxygen.lineData.addDataSet(
             bloodOxyDataSet
         )
@@ -125,6 +136,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         usbTransferUtil = USBTransferUtil.getInstance()
         usbTransferUtil.init(this)
         usbTransferUtil.connect()
+        usbTransferUtil.bloodOxyLineData.clear()
         textToSpeech = TextToSpeech(applicationContext, this)
         usbTransferUtil.setOnUSBDateReceive {
             runOnUiThread {
@@ -139,17 +151,15 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         }
         viewModel.getPatients()
         initClickListener()
+        viewModel.getSixMinReportEvaluation()
     }
 
     private fun initPatientInfo() {
         val date = Date()
         val dateFormat = SimpleDateFormat("yyyyMMddHHmmss", Locale.CHINA)
         val reportNo = dateFormat.format(date)
-        val dateFormat2 = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
-        val addTime = dateFormat2.format(date)
         sixMinReportInfo.patientId = patientBean.patientId.toString()
         sixMinReportInfo.reportNo = reportNo
-        sixMinReportInfo.addTime = addTime
         sixMinReportInfo.patientName = patientBean.name.toString()
         sixMinReportInfo.patientHeight = patientBean.height.toString()
         sixMinReportInfo.patientWeight = patientBean.weight.toString()
@@ -309,7 +319,6 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                             getString(R.string.sixmin_measuring_blood)
                         binding.sixminTvBloodPressureHigh.text = usbSerialData.bloodHigh ?: "---"
                         binding.sixminTvBloodPressureLow.text = usbSerialData.bloodLow ?: "---"
-                        binding.sixminRlStart.isEnabled = false
                     }
 
                     "测量血压失败" -> {
@@ -351,42 +360,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                                         sixMinReportBloodOther.badOr = "1"
                                         sixMinReportBloodOther.badSymptoms = stopReason
 
-                                        usbTransferUtil.dealWalk(sixMinReportWalk)
-                                        usbTransferUtil.dealBlood(
-                                            sixMinReportBloodOxy,
-                                            Gson().toJson(binding.sixminLineChartBloodOxygen)
-                                        )
-                                        if (sysSettingBean.sysOther.circleCountType == "0") {
-                                            usbTransferUtil.dealPreption(
-                                                sysSettingBean,
-                                                sixMinReportEvaluation,
-                                                "5",
-                                                "59",
-                                                0,
-                                                0,
-                                                0
-                                            )
-                                        } else {
-                                            usbTransferUtil.dealPreptionSD(
-                                                sixMinReportEvaluation,
-                                                sysSettingBean,
-                                                "5",
-                                                "59",
-                                                0,
-                                                0,
-                                                0
-                                            )
-                                        }
-                                        viewModel.setSixMinReportBloodOxyData(sixMinReportBloodOxy)
-                                        viewModel.setSixMinReportWalkData(sixMinReportWalk)
-
-                                        startActivity(
-                                            Intent(
-                                                this@SixMinActivity,
-                                                SixMinPreReportActivity::class.java
-                                            )
-                                        )
-                                        finish()
+                                        generateReportData(0, 0, 0)
                                     }
                                 })
                             usbTransferUtil.ignoreBlood = false
@@ -511,46 +485,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                                         usbTransferUtil.ignoreBlood = false
 
                                         sixMinReportBloodOther.badOr = "0"
-                                        usbTransferUtil.dealWalk(sixMinReportWalk)
-                                        usbTransferUtil.dealBlood(
-                                            sixMinReportBloodOxy,
-                                            Gson().toJson(binding.sixminLineChartBloodOxygen)
-                                        )
-                                        if (sysSettingBean.sysOther.circleCountType == "0") {
-                                            usbTransferUtil.dealPreption(
-                                                sysSettingBean,
-                                                sixMinReportEvaluation,
-                                                "5",
-                                                "59",
-                                                0,
-                                                0,
-                                                0
-                                            )
-                                        } else {
-                                            usbTransferUtil.dealPreptionSD(
-                                                sixMinReportEvaluation,
-                                                sysSettingBean,
-                                                "5",
-                                                "59",
-                                                0,
-                                                0,
-                                                0
-                                            )
-                                        }
-                                        viewModel.setSixMinReportBloodOxyData(
-                                            sixMinReportBloodOxy
-                                        )
-                                        viewModel.setSixMinReportWalkData(
-                                            sixMinReportWalk
-                                        )
-
-                                        startActivity(
-                                            Intent(
-                                                this@SixMinActivity,
-                                                SixMinPreReportActivity::class.java
-                                            )
-                                        )
-                                        finish()
+                                        generateReportData(0, 0, 0)
 //                                        if (usbTransferUtil.ignoreBlood) {
 //                                            val startCommonDialogFragment2 =
 //                                                CommonDialogFragment.startCommonDialogFragment(
@@ -674,9 +609,12 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                     }
                 }
                 //圈数数据
-                if (usbSerialData.circleCount != null && usbSerialData.circleCount.isNotEmpty()) {
-                    binding.sixminTvCircleCount.text = usbSerialData.circleCount
+                if (usbTransferUtil.isBegin) {
+                    binding.sixminTvCircleCount.text = usbTransferUtil.circleCount.toString()
+                } else {
+                    binding.sixminTvCircleCount.text = "- -"
                 }
+
                 Log.d("SixMinActivity", usbSerialData.toString())
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -748,42 +686,12 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                                     sixMinReportBloodOther.stopTime = stopTime
                                     sixMinReportBloodOther.stopReason = stopReason
 
-                                    usbTransferUtil.dealWalk(sixMinReportWalk)
-                                    usbTransferUtil.dealBlood(
-                                        sixMinReportBloodOxy,
-                                        Gson().toJson(binding.sixminLineChartBloodOxygen)
-                                    )
-                                    if (sysSettingBean.sysOther.circleCountType == "0") {
-                                        usbTransferUtil.dealPreption(
-                                            sysSettingBean,
-                                            sixMinReportEvaluation,
-                                            "5",
-                                            "59",
-                                            0,
-                                            0,
-                                            0
-                                        )
-                                    } else {
-                                        usbTransferUtil.dealPreptionSD(
-                                            sixMinReportEvaluation,
-                                            sysSettingBean,
-                                            "5",
-                                            "59",
-                                            0,
-                                            0,
-                                            0
-                                        )
-                                    }
-                                    viewModel.setSixMinReportBloodOxyData(sixMinReportBloodOxy)
-                                    viewModel.setSixMinReportWalkData(sixMinReportWalk)
+                                    val min = 5 - usbTransferUtil.min.toString().toInt()
+                                    val sec =
+                                        59 - (usbTransferUtil.sec1 + usbTransferUtil.sec2).toString()
+                                            .toInt()
 
-                                    startActivity(
-                                        Intent(
-                                            this@SixMinActivity,
-                                            SixMinPreReportActivity::class.java
-                                        )
-                                    )
-                                    finish()
+                                    generateReportData(1, min, sec)
                                 }
                             })
                         }
@@ -884,22 +792,17 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         }
         binding.sixminIvCircleCountPlus.setNoRepeatListener {
             if (usbTransferUtil.isBegin) {
-                if (usbSerialData.circleCount == null) {
-                    usbSerialData.circleCount = "0"
-                }
-                usbSerialData.circleCount = (usbSerialData.circleCount.toInt() + 1).toString()
-                usbTransferUtil.circleCount = usbSerialData.circleCount.toInt()
-                binding.sixminTvCircleCount.text = usbSerialData.circleCount
+                usbTransferUtil.circleCount++
+                binding.sixminTvCircleCount.text = usbTransferUtil.circleCount.toString()
             }
         }
         binding.sixminIvCircleCountMinus.setNoRepeatListener {
             if (usbTransferUtil.isBegin) {
-                if (usbSerialData.circleCount == null || usbSerialData.circleCount == "0") {
+                if (usbTransferUtil.circleCount == 0) {
                     return@setNoRepeatListener
                 }
-                usbSerialData.circleCount = (usbSerialData.circleCount.toInt() - 1).toString()
-                usbTransferUtil.circleCount = usbSerialData.circleCount.toInt()
-                binding.sixminTvCircleCount.text = usbSerialData.circleCount
+                usbTransferUtil.circleCount--
+                binding.sixminTvCircleCount.text = usbTransferUtil.circleCount.toString()
             }
         }
         binding.sixminIvIgnoreBlood.setNoRepeatListener {
@@ -910,13 +813,80 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         }
     }
 
+    private fun generateReportData(type: Int, min: Int, sec: Int) {
+
+        sixMinReportInfo.restDuration = usbTransferUtil.restTime.toString()
+
+        sixMinReportEvaluation.turnsNumber =
+            if (binding.sixminTvCircleCount.text.toString() == "- -") "0" else binding.sixminTvCircleCount.text.toString()
+        sixMinReportEvaluation.totalWalk = usbTransferUtil.stepsStr
+
+        usbTransferUtil.dealWalk(sixMinReportWalk)
+        usbTransferUtil.dealBlood(
+            sixMinReportBloodOxy,
+            Gson().toJson(usbTransferUtil.bloodOxyLineData)
+        )
+        if (sysSettingBean.sysOther.circleCountType == "0") {
+            usbTransferUtil.dealPreption(
+                sysSettingBean,
+                sixMinReportEvaluation,
+                "5",
+                "59",
+                type,
+                min,
+                sec
+            )
+        } else {
+            usbTransferUtil.dealPreptionSD(
+                sixMinReportEvaluation,
+                sysSettingBean,
+                "5",
+                "59",
+                type,
+                min,
+                sec
+            )
+        }
+
+        //计算实际运动距离占预测的百分比
+        val bd: BigDecimal =
+            BigDecimal(sixMinReportEvaluation.totalDistance).divide(
+                BigDecimal(if (patientBean.predictDistances == "") "0" else patientBean.predictDistances),
+                2,
+                RoundingMode.HALF_UP
+            )
+        val bd2: BigDecimal = bd.multiply(BigDecimal(100)).setScale(0)
+        sixMinReportEvaluation.accounted = bd2.toString()
+
+        viewModel.setSixMinReportInfo(sixMinReportInfo)
+        viewModel.setSixMinReportBloodOxyData(sixMinReportBloodOxy)
+        viewModel.setSixMinReportWalkData(sixMinReportWalk)
+        viewModel.setSixMinReportEvaluation(sixMinReportEvaluation)
+        viewModel.setSixMinReportOther(sixMinReportBloodOther)
+
+
+        val intent = Intent(
+            this@SixMinActivity,
+            SixMinPreReportActivity::class.java
+        )
+        val bundle = Bundle()
+        bundle.putString(Constants.commonDialogContent, sixMinReportInfo.reportNo)
+        intent.putExtras(bundle)
+        startActivity(intent)
+        finish()
+    }
+
     private fun startStepAndCircle() {
+        val date = Date()
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
+        val addTime = dateFormat.format(date)
+        sixMinReportInfo.addTime = addTime
+
         usbTransferUtil.isBegin = true
         usbTransferUtil.circleBoolean = true
         usbTransferUtil.testType = 1
         binding.sixminTvStart.text = getString(R.string.sixmin_stop)
         binding.sixminTvTestStatus.text = getString(R.string.sixmin_test_testing)
-        usbSerialData.circleCount = "0"
         binding.sixminTvCircleCount.text = "0"
         SixMinCmdUtils.openQSAndBS()
         mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack {
@@ -1063,8 +1033,8 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 if (sysSettingBean.sysOther.broadcastVoice == "1") {
                     speechContent(getString(R.string.sixmin_test_start_timeout))
                 }
-                binding.sixminRlStart.isEnabled = false
                 binding.sixminRlMeasureBlood.isEnabled = false
+                binding.sixminRlStart.isEnabled = false
                 usbTransferUtil.circleBoolean = false
                 usbTransferUtil.isBegin = false
                 usbTransferUtil.testType = 0
@@ -1083,8 +1053,9 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
 
                     }
 
-                    override fun onTick(times: Int) {
 
+                    override fun onTick(times: Int) {
+                        showMsg("正在采集运动恢复心率中，还剩${times}秒")
                     }
 
                     override fun onFinish() {
@@ -1104,8 +1075,11 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                                         showMsg(getString(R.string.sixmin_test_blood_pressure_without_connection))
                                     }
                                 }
+                            } else {
+                                binding.sixminRlMeasureBlood.isEnabled = true
+                                showMsg("请点击测量运动前血压")
                             }
-                        }else{
+                        } else {
                             val startCommonDialogFragment =
                                 CommonDialogFragment.startCommonDialogFragment(
                                     supportFragmentManager,
@@ -1138,46 +1112,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                                         usbTransferUtil.ignoreBlood = false
 
                                         sixMinReportBloodOther.badOr = "0"
-                                        usbTransferUtil.dealWalk(sixMinReportWalk)
-                                        usbTransferUtil.dealBlood(
-                                            sixMinReportBloodOxy,
-                                            Gson().toJson(binding.sixminLineChartBloodOxygen)
-                                        )
-                                        if (sysSettingBean.sysOther.circleCountType == "0") {
-                                            usbTransferUtil.dealPreption(
-                                                sysSettingBean,
-                                                sixMinReportEvaluation,
-                                                "5",
-                                                "59",
-                                                0,
-                                                0,
-                                                0
-                                            )
-                                        } else {
-                                            usbTransferUtil.dealPreptionSD(
-                                                sixMinReportEvaluation,
-                                                sysSettingBean,
-                                                "5",
-                                                "59",
-                                                0,
-                                                0,
-                                                0
-                                            )
-                                        }
-                                        viewModel.setSixMinReportBloodOxyData(
-                                            sixMinReportBloodOxy
-                                        )
-                                        viewModel.setSixMinReportWalkData(
-                                            sixMinReportWalk
-                                        )
-
-                                        startActivity(
-                                            Intent(
-                                                this@SixMinActivity,
-                                                SixMinPreReportActivity::class.java
-                                            )
-                                        )
-                                        finish()
+                                        generateReportData(0, 0, 0)
                                     }
                                 })
                         }
@@ -1447,13 +1382,13 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
     }
 
     private fun initCountDownTimerExt() {
-        mCountDownTime = object : FixCountDownTime(360, 1000) {}
+        mCountDownTime = object : FixCountDownTime(60, 1000) {}
         mCountDownTimeThree = object : CountDownTimer(1080000, 3000) {
             override fun onTick(millisUntilFinished: Long) {
                 if (usbTransferUtil.bloodOxygenConnection) {
                     val mapBloodOxygen = usbTransferUtil.mapBloodOxygen
-                    if (mapBloodOxygen.isNotEmpty()) {
-                        val value = mapBloodOxygen.entries.lastOrNull()?.value ?: "--"
+                    if (mapBloodOxygen.isNotEmpty() && mapBloodOxygen.entries.isNotEmpty()) {
+                        val value = mapBloodOxygen.entries.lastOrNull()!!.value
                         addEntryData(value.toFloat(), (millisUntilFinished / 1000).toInt())
                     }
                 }
@@ -1464,7 +1399,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
             }
         }
         mStartTestCountDownTime = object : FixCountDownTime(5, 1000) {}
-        mGetSportHeartEcgCountDownTime = object : FixCountDownTime(1, 1000) {}
+        mGetSportHeartEcgCountDownTime = object : FixCountDownTime(10, 1000) {}
     }
 
     override fun getViewBinding() = ActivitySixMinBinding.inflate(layoutInflater)
@@ -1560,43 +1495,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                                     mCountDownTime.setmTimes(360)
                                     usbTransferUtil.ignoreBlood = false
 
-                                    usbTransferUtil.dealWalk(sixMinReportWalk)
-                                    usbTransferUtil.dealBlood(
-                                        sixMinReportBloodOxy,
-                                        Gson().toJson(binding.sixminLineChartBloodOxygen)
-                                    )
-                                    if (sysSettingBean.sysOther.circleCountType == "0") {
-                                        usbTransferUtil.dealPreption(
-                                            sysSettingBean,
-                                            sixMinReportEvaluation,
-                                            "5",
-                                            "59",
-                                            0,
-                                            0,
-                                            0
-                                        )
-                                    } else {
-                                        usbTransferUtil.dealPreptionSD(
-                                            sixMinReportEvaluation,
-                                            sysSettingBean,
-                                            "5",
-                                            "59",
-                                            0,
-                                            0,
-                                            0
-                                        )
-                                    }
-                                    viewModel.setSixMinReportBloodOxyData(sixMinReportBloodOxy)
-                                    viewModel.setSixMinReportWalkData(sixMinReportWalk)
-
-
-                                    startActivity(
-                                        Intent(
-                                            this@SixMinActivity,
-                                            SixMinPreReportActivity::class.java
-                                        )
-                                    )
-                                    finish()
+                                    generateReportData(0, 0, 0)
                                 }
 
                                 override fun onNegativeClick() {
@@ -1615,42 +1514,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                                     mCountDownTime.setmTimes(360)
                                     usbTransferUtil.ignoreBlood = false
 
-                                    usbTransferUtil.dealWalk(sixMinReportWalk)
-                                    usbTransferUtil.dealBlood(
-                                        sixMinReportBloodOxy,
-                                        Gson().toJson(binding.sixminLineChartBloodOxygen)
-                                    )
-                                    if (sysSettingBean.sysOther.circleCountType == "0") {
-                                        usbTransferUtil.dealPreption(
-                                            sysSettingBean,
-                                            sixMinReportEvaluation,
-                                            "5",
-                                            "59",
-                                            0,
-                                            0,
-                                            0
-                                        )
-                                    } else {
-                                        usbTransferUtil.dealPreptionSD(
-                                            sixMinReportEvaluation,
-                                            sysSettingBean,
-                                            "5",
-                                            "59",
-                                            0,
-                                            0,
-                                            0
-                                        )
-                                    }
-                                    viewModel.setSixMinReportBloodOxyData(sixMinReportBloodOxy)
-                                    viewModel.setSixMinReportWalkData(sixMinReportWalk)
-
-                                    startActivity(
-                                        Intent(
-                                            this@SixMinActivity,
-                                            SixMinPreReportActivity::class.java
-                                        )
-                                    )
-                                    finish()
+                                    generateReportData(0, 0, 0)
                                 }
 
                                 override fun onStopNegativeClick(stopReason: String) {

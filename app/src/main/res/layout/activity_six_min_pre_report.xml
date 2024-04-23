@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -409,31 +410,241 @@
                                     android:orientation="horizontal">
 
                                     <TextView
-                                        android:id="@+id/sixmin_tv_stride"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
+                                        android:text="运动步速控制在:"
+                                        android:textColor="@color/text3" />
+
+                                    <EditText
+                                        android:id="@+id/sixmin_tv_stride_low"
+                                        android:layout_width="70dp"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:inputType="numberDecimal"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:textStyle="bold"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="~"
+                                        android:textColor="@color/text3" />
+
+                                    <EditText
+                                        android:id="@+id/sixmin_tv_stride_high"
+                                        android:layout_width="70dp"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:inputType="numberDecimal"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="米/分钟"
                                         android:textColor="@color/text3" />
 
                                 </LinearLayout>
 
                             </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/sixmin_tv_single_sport_time_and_distance"
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginTop="5dp"
-                                android:textColor="@color/text3" />
+                                android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/sixmin_tv_sport_heartbeat_and_metab_and_tired_control"
-                                android:layout_width="wrap_content"
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="建议单次运动时长:"
+                                        android:textColor="@color/text3" />
+
+                                    <Spinner
+                                        android:id="@+id/sixmin_sp_sport_time"
+                                        android:layout_width="80dp"
+                                        android:layout_height="25dp"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="@dimen/space_10"
+                                        android:background="@drawable/sp_bg"
+                                        android:gravity="center_vertical"
+                                        android:overlapAnchor="false"
+                                        android:paddingStart="@dimen/space_10"
+                                        android:textSize="16sp"
+                                        tools:ignore="RtlSymmetry" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="5dp"
+                                        android:text="分钟，"
+                                        android:textColor="@color/text3" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="运动距离:"
+                                        android:textColor="@color/text3" />
+
+                                    <EditText
+                                        android:id="@+id/sixmin_tv_distance_low"
+                                        android:layout_width="70dp"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:inputType="numberDecimal"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="~"
+                                        android:textColor="@color/text3"
+                                        android:textStyle="bold" />
+
+                                    <EditText
+                                        android:id="@+id/sixmin_tv_distance_high"
+                                        android:layout_width="70dp"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:inputType="numberDecimal"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="米"
+                                        android:textColor="@color/text3" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginTop="5dp"
-                                android:textColor="@color/text3" />
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="运动心率为:"
+                                        android:textColor="@color/text3" />
+
+                                    <EditText
+                                        android:layout_width="50dp"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:inputType="number"
+                                        android:maxLength="3"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="次"
+                                        android:textColor="@color/text3" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="，代谢当量为:"
+                                        android:textColor="@color/text3" />
+
+                                    <EditText
+                                        android:layout_width="70dp"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:inputType="numberDecimal"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="METs"
+                                        android:textColor="@color/text3" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="，疲劳控制在:"
+                                        android:textColor="@color/text3" />
+
+                                    <EditText
+                                        android:layout_width="30dp"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:inputType="numberDecimal"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="~"
+                                        android:textColor="@color/text3"
+                                        android:textStyle="bold" />
+
+                                    <EditText
+                                        android:layout_width="30dp"
+                                        android:layout_height="wrap_content"
+                                        android:inputType="numberDecimal"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="级"
+                                        android:textColor="@color/text3" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -448,10 +659,22 @@
                                     android:orientation="horizontal">
 
                                     <TextView
-                                        android:id="@+id/sixmin_tv_recommend_time_weekly"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
+                                        android:text="建议每周:"
+                                        android:textColor="@color/text3" />
+
+                                    <EditText
+                                        android:layout_width="50dp"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="次"
                                         android:textColor="@color/text3" />
 
                                 </LinearLayout>

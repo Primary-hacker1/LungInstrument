@@ -15,6 +15,7 @@ import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.ui.activity.CardiopulmonaryActivity
 import com.just.machine.ui.activity.PatientActivity
 import com.just.machine.ui.activity.SixMinActivity
+import com.just.machine.ui.activity.SixMinPreReportActivity
 import com.just.machine.ui.dialog.CommonDialogFragment
 import com.just.machine.ui.dialog.PatientDialogFragment
 import com.just.machine.ui.dialog.SixMinReportSelfCheckBeforeTestFragment
@@ -204,5 +205,10 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                 })
             }
         }
+    }
+
+    override fun onDestroy() {
+        usbTransferUtil.disconnect()
+        super.onDestroy()
     }
 }

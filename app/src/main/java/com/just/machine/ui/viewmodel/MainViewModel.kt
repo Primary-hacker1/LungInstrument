@@ -24,6 +24,8 @@ import com.just.machine.dao.sixmin.SixMinReportWalkRepository
 import com.just.machine.model.Data
 import com.just.machine.model.sixminreport.SixMinBloodOxygen
 import com.just.machine.model.sixminreport.SixMinReportEvaluation
+import com.just.machine.model.sixminreport.SixMinReportInfo
+import com.just.machine.model.sixminreport.SixMinReportOther
 import com.just.machine.model.sixminreport.SixMinReportWalk
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
@@ -192,6 +194,100 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
+    /**
+     * 插入6分钟报告信息
+     */
+    fun setSixMinReportInfo(bean: SixMinReportInfo) {
+        viewModelScope.launch {
+            sixMinReportInfoDao.insertReportInfo(bean)
+        }
+    }
+
+    /**
+     * 获取6分钟报告信息
+     */
+    fun getSixMinReportInfo(id: String) {
+        viewModelScope.launch {
+            sixMinReportInfoDao.getReportInfo(id).collect {
+                mEventHub.value = LiveDataEvent(
+                    LiveDataEvent.QuerySuccess, it
+                )
+            }
+        }
+    }
+
+    /**
+     * 获取6分钟报告信息
+     */
+    fun getSixMinReportInfo() {
+        viewModelScope.launch {
+            sixMinReportInfoDao.getReportInfo().collect {
+                mEventHub.value = LiveDataEvent(
+                    LiveDataEvent.QuerySuccess, it
+                )
+            }
+        }
+    }
+
+    /**
+     * 获取6分钟报综合评估
+     */
+    fun getSixMinReportEvaluationById(id: String) {
+        viewModelScope.launch {
+            sixMinReportEvaluationDao.getReportEvaluationById(id).collect {
+                mEventHub.value = LiveDataEvent(
+                    LiveDataEvent.QuerySuccess, it
+                )
+            }
+        }
+    }
+
+    /**
+     * 获取所有6分钟报综合评估
+     */
+    fun getSixMinReportEvaluation() {
+        viewModelScope.launch {
+            sixMinReportEvaluationDao.getReportEvaluation().collect {
+                mEventHub.value = LiveDataEvent(
+                    LiveDataEvent.QuerySuccess, it
+                )
+            }
+        }
+    }
+
+    /**
+     * 插入6分钟报告综合评估信息
+     */
+    fun setSixMinReportEvaluation(bean: SixMinReportEvaluation) {
+        viewModelScope.launch {
+            sixMinReportEvaluationDao.insertReportEvaluation(bean)
+        }
+    }
+
+    /**
+     * 获取6分钟报告其它信息
+     */
+    fun getSixMinReportOther(id: String) {
+        viewModelScope.launch {
+            sixMinReportOtherDao.getReportOther(id).collect {
+                mEventHub.value = LiveDataEvent(
+                    LiveDataEvent.QuerySuccess, it
+                )
+            }
+        }
+    }
+
+    /**
+     * 插入6分钟报告综合评估信息
+     */
+    fun setSixMinReportOther(bean: SixMinReportOther) {
+        viewModelScope.launch {
+            sixMinReportOtherDao.insertReportOther(bean)
+        }
+    }
+
+
 }
 
 

@@ -16,6 +16,8 @@ class SixMinReportInfoRepository @Inject constructor(private val reportDao: SixM
 
     fun getReportInfo(id:String): Flow<List<SixMinReportInfo>> = reportDao.getReportInfoById(id)
 
+    fun getReportInfo(): Flow<List<SixMinReportInfo>> = reportDao.getReportInfo()
+
     suspend fun insertReportInfo(reportInfo: SixMinReportInfo): Long = reportDao.insertReportInfo(reportInfo)
 
 }

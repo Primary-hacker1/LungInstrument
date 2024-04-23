@@ -12,11 +12,13 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.data.Entry;
 import com.google.gson.Gson;
 import com.hoho.android.usbserial.driver.UsbSerialDriver;
 import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
 import com.hoho.android.usbserial.util.SerialInputOutputManager;
+import com.just.machine.model.BloodOxyLineEntryBean;
 import com.just.machine.model.UsbSerialData;
 import com.just.machine.model.sixminreport.SixMinBloodOxygen;
 import com.just.machine.model.sixminreport.SixMinReportEvaluation;
@@ -67,6 +69,7 @@ public class USBTransferUtil {
     public Map<Long, String> mapBloodOxygen = new TreeMap<>();//血氧数据
     public List<Integer> bloodListAvg = new ArrayList<>();//血氧数据，每秒一个值
     public List<Integer> bloodAllListAvg = new ArrayList<>();//6分钟所有血氧数据
+    public List<BloodOxyLineEntryBean> bloodOxyLineData = new ArrayList<>();//6分钟血氧折线图数据
     public String byteStr = "";
     public UsbSerialData usbSerialData = null;
     public boolean isBegin = false;//是否开始试验
@@ -124,6 +127,14 @@ public class USBTransferUtil {
 
     public void setOnUSBDateReceive(OnUSBDateReceive onUSBDateReceive) {
         this.onUSBDateReceive = onUSBDateReceive;
+    }
+
+    public int getCircleCount() {
+        return circleCount;
+    }
+
+    public void setCircleCount(int circleCount) {
+        this.circleCount = circleCount;
     }
 
     public void init(Context context) {
@@ -378,6 +389,8 @@ public class USBTransferUtil {
         stepsStr = null;//步数
         checkBSInd = 0;
         checkBSStr = null;
+        bloodOxyLineData.clear();
+        bloodOxyLineData = null;
     }
 
 
@@ -590,10 +603,7 @@ public class USBTransferUtil {
                                 SixMinSysSettingBean bean = new SixMinSysSettingBean();
                                 if (circleBoolean && bean.getSysOther().getCircleCountType().equals("0") && qsInt == 1) {
                                     ++circleCount;
-                                    usbSerialData.setCircleCount(String.valueOf(circleCount));
-                                    usbSerialData.setCircleMin(min);
-                                    usbSerialData.setCircleSec1(sec1);
-                                    usbSerialData.setCircleSec2(sec2);
+//                                    usbSerialData.setCircleCount(String.valueOf(circleCount));
                                 }
                             }
 
