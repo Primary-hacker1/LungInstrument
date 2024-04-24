@@ -3,10 +3,13 @@ package com.just.machine.ui.activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Typeface
 import android.text.Html
 import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.TableRow
 import android.widget.TextView
@@ -15,16 +18,20 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseActivity
 import com.common.base.setNoRepeatListener
+import com.common.viewmodel.LiveDataEvent
+import com.just.machine.model.Constants
 import com.just.machine.model.SixMinReportEditBloodPressure
 import com.just.machine.model.SixMinReportItemBean
 import com.just.machine.model.SixMinReportPatientSelfBean
 import com.just.machine.model.SixMinReportPatientSelfItemBean
 import com.just.machine.model.sixminreport.SixMinReportWalk
 import com.just.machine.ui.adapter.SixMinReportPatientSelfAdapter
+import com.just.machine.ui.dialog.CommonDialogFragment
 import com.just.machine.ui.dialog.SixMinReportEditBloodPressureFragment
 import com.just.machine.ui.dialog.SixMinReportPrescriptionFragment
 import com.just.machine.ui.dialog.SixMinReportSelfCheckBeforeTestFragment
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.machine.util.SpinnerHelper
 import com.just.news.R
 import com.just.news.databinding.ActivitySixMinPreReportBinding
 import com.justsafe.libview.util.SystemUtil
@@ -37,14 +44,16 @@ import dagger.hilt.android.AndroidEntryPoint
 class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding>()   {
 
     private val viewModel by viewModels<MainViewModel>()
-
-    private lateinit var generateReportDialog: AlertDialog
-    private lateinit var exitPreReportDialog: AlertDialog
+    private lateinit var spSportTime: SpinnerHelper
     private var reportRowList = mutableListOf<SixMinReportItemBean>()
+    private var sixMinReportNo = "" //6分钟试验报告No
 
     override fun getViewBinding() = ActivitySixMinPreReportBinding.inflate(layoutInflater)
 
     override fun initView() {
+        sixMinReportNo =
+            intent.extras?.getString(Constants.sixMinReportNo).toString()
+        viewModel.getSixMinReportEvaluationById(sixMinReportNo)
         val patientSelfList = mutableListOf<SixMinReportPatientSelfBean>()
         val patientBreathSelfItemList = mutableListOf<SixMinReportPatientSelfItemBean>()
         patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("0级", "没有"))
@@ -94,20 +103,46 @@ class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding
         binding.sixminTvUnfinishCircle.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_unfinish_circles),60))
         binding.sixminTvTotalDistance.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_total_distance),100))
         binding.sixminTvDataStatistics.text = String.format(getString(R.string.sixmin_test_report_data_statistics),10,20,1.4,"重度","一级",144)
-        binding.sixminTvStride.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_stride),20))
-        binding.sixminTvSingleSportTimeAndDistance.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_single_sport_time_and_distance),6,30))
-        binding.sixminTvSportHeartbeatAndMetabAndTiredControl.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_heartbeat_and_metab_and_tired_control),108,1.5,2))
-        binding.sixminTvRecommendTimeWeekly.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_recommend_time_weekly),3))
         binding.sixminRbPrescriptionCycleWeek.isChecked = true
         binding.sixminTvPrescriptionConclusion.text = "本次未能完成六分钟试验，运动了0分11秒，停止原因：心脏周围的组织和体液都能导电，因此可将人体看成为一个具有长、宽、厚三度空间的容积导体。"
         binding.sixminTvReportNote.text = "本次未能完成六分钟试验，运动了0分11秒，停止原因:心脏周围的组织和体液都能导电，因此可将人体看成为一个具有长、宽、厚三度空间的容积导体。"
-        initTable()
         initClickListener()
-        initGenerateReportDialog()
-        initExitPreReportDialog()
+        initTable()
+        initSportTimeSpinner()
+    }
+
+    private fun initSportTimeSpinner() {
+        spSportTime =
+            SpinnerHelper(
+                this,
+                binding.sixminSpSportTime,
+                R.array.spinner_sixmin_report_sport_time
+            )
+        spSportTime.setSelection(0)
+        spSportTime.setSpinnerSelectionListener(object : SpinnerHelper.SpinnerSelectionListener {
+            override fun onItemSelected(selectedItem: String, view: View?) {
+                if(view != null){
+                    val textView: TextView = view as TextView
+                    textView.setTextColor(ContextCompat.getColor(this@SixMinPreReportActivity, R.color.text3))
+                    textView.textSize = 18f
+                    textView.setTypeface(null, Typeface.BOLD);
+                }
+            }
+
+            override fun onNothingSelected() {
+
+            }
+        })
     }
 
     private fun initClickListener() {
+        viewModel.mEventHub.observe(this) {
+            when (it.action) {
+                LiveDataEvent.QuerySuccess -> {
+
+                }
+            }
+        }
         binding.sixminReportTvEditBloodPressure.setOnClickListener {
             if (reportRowList.isNotEmpty()) {
                 val sixMinReportItemBean = reportRowList[reportRowList.size - 1]
@@ -148,11 +183,16 @@ class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding
             val selfCheckBeforeTestDialogFragment =
                 SixMinReportSelfCheckBeforeTestFragment.startPatientSelfCheckDialogFragment(
                     supportFragmentManager,
-                    "0"
+                    "0",""
                 )
             selfCheckBeforeTestDialogFragment.setSelfCheckBeforeTestDialogOnClickListener(object:
                 SixMinReportSelfCheckBeforeTestFragment.SixMinReportSelfCheckBeforeTestDialogListener{
-                override fun onClickConfirm(befoFatigueLevel: Int, befoBreathingLevel: Int) {
+                override fun onClickConfirm(
+                    befoFatigueLevel: Int,
+                    befoBreathingLevel: Int,
+                    befoFatigueLevelStr: String,
+                    befoBreathingLevelStr: String
+                ) {
                     Log.d("tag","$befoFatigueLevel$befoBreathingLevel")
                 }
 
@@ -194,7 +234,7 @@ class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding
             reportWalk.walkFive = "100"
             reportWalk.walkSix = "110"
             reportWalk.walkBig = "110"
-            reportWalk.walkSmall = "60"
+            reportWalk.waklSmall = "60"
             reportWalk.walkAverage = "85"
             reportWalk.delFlag = "0"
             viewModel.setSixMinReportWalkData(reportWalk)
@@ -203,45 +243,26 @@ class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding
             finish()
         }
         binding.sixminReportIvClose.setNoRepeatListener {
-            if(!exitPreReportDialog.isShowing){
-                exitPreReportDialog.show()
-            }
+            val startCommonDialogFragment = CommonDialogFragment.startCommonDialogFragment(
+                supportFragmentManager,
+               "退出将视为放弃生成报告，是否确定?"
+            )
+            startCommonDialogFragment.setCommonDialogOnClickListener(object :
+                CommonDialogFragment.CommonDialogClickListener {
+                override fun onPositiveClick() {
+                    finish()
+                }
+
+                override fun onNegativeClick() {
+
+                }
+
+                override fun onStopNegativeClick(stopReason: String) {
+
+                }
+            })
         }
     }
-
-    private fun initExitPreReportDialog() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("")
-        builder.setMessage("退出将视为放弃生成报告，是否确定?")
-        builder.setPositiveButton(getString(R.string.sixmin_system_setting_check_yes)) { _, _ ->
-            finish()
-        }
-        builder.setNegativeButton(getString(R.string.sixmin_system_setting_check_no)) { _, _ ->
-
-        }
-        exitPreReportDialog = builder.create()
-        exitPreReportDialog.setCanceledOnTouchOutside(false)
-        exitPreReportDialog.setCancelable(false)
-    }
-
-    /**
-     * 是否生成报告
-     */
-    private fun initGenerateReportDialog() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("")
-        builder.setMessage(getString(R.string.sixmin_test_generate_report_tips))
-        builder.setPositiveButton(getString(R.string.sixmin_system_setting_check_yes)) { _, _ ->
-
-        }
-        builder.setNegativeButton(getString(R.string.sixmin_system_setting_check_no)) { _, _ ->
-
-        }
-        generateReportDialog = builder.create()
-        generateReportDialog.setCanceledOnTouchOutside(false)
-        generateReportDialog.setCancelable(false)
-    }
-
 
     private fun initTable() {
         reportRowList.clear()

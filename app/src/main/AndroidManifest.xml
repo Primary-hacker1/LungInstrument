@@ -3,11 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.just.news">
 
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- 文字转语音适配Android11以上 -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 
+    <!-- 文字转语音适配Android11以上 -->
     <queries>
         <intent>
             <action android:name="android.intent.action.TTS_SERVICE" />
@@ -45,7 +46,16 @@
         <activity
             android:name="com.just.machine.ui.activity.MainActivity"
             android:exported="false"
-            android:screenOrientation="landscape" />
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape" >
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                android:resource="@xml/device_filter"/>
+        </activity>
         <activity
             android:name="com.just.machine.ui.activity.PatientActivity"
             android:exported="false"
@@ -62,15 +72,7 @@
             android:name="com.just.machine.ui.activity.SixMinActivity"
             android:exported="false"
             android:launchMode="singleTop"
-            android:screenOrientation="landscape">
-            <intent-filter>
-                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
-                android:resource="@xml/device_filter" />
-        </activity>
+            android:screenOrientation="landscape"/>
         <activity
             android:name="com.just.machine.ui.activity.SixMinSystemSettingActivity"
             android:exported="false"

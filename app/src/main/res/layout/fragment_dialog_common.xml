@@ -36,8 +36,8 @@
 
                 <ImageView
                     android:id="@+id/iv_common_dialog_close"
-                    android:layout_width="23dp"
-                    android:layout_height="23dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="20dp"
@@ -115,7 +115,6 @@
                     android:id="@+id/tv_common_dialog_stop_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
                     android:layout_centerInParent="true"
                     android:text="请选择停止原因"
                     android:textColor="@color/colorWhite"

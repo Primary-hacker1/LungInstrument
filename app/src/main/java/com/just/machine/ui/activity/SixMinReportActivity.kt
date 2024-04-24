@@ -5,9 +5,11 @@ import android.view.Gravity
 import android.widget.LinearLayout
 import android.widget.TableRow
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import com.common.base.CommonBaseActivity
 import com.just.machine.model.SixMinReportItemBean
+import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.ActivitySixMinReportBinding
 import com.justsafe.libview.util.SystemUtil
@@ -19,6 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SixMinReportActivity: CommonBaseActivity<ActivitySixMinReportBinding>()  {
 
+    private val viewModel by viewModels<MainViewModel>()
     private var reportRowList = mutableListOf<SixMinReportItemBean>()
 
     override fun getViewBinding() = ActivitySixMinReportBinding.inflate(layoutInflater)

@@ -15,6 +15,7 @@ import com.common.base.CommonBaseActivity
 import com.common.network.LogUtils
 import com.just.machine.util.ConnectThread
 import com.just.machine.util.ListenerThread
+import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.ActivityMainBinding
 import com.justsafe.libview.nav.FragmentNavigatorHideShow

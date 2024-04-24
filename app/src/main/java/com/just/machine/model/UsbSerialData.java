@@ -14,7 +14,6 @@ public class UsbSerialData {
     private String circleCount;
     private String stepsCount;
 
-
     public String getBloodLow() {
         return bloodLow;
     }

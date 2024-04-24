@@ -336,11 +336,417 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="50dp"
-                        android:text="1、疲劳量级为2级(最大10级)，呼吸量级为4级(最大10级)\n2、六分钟内步行880.0米，230步，实际运动距离占预测距离120%，代谢当量为6.5METs;\n3、运动了6分钟3秒，停止原因:无。" />
+                        android:layout_marginHorizontal="50dp">
+
+                        <TableLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp">
+
+                            <TableRow>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_span="1"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="110dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/tablelayout_cell_stroke_single"
+                                        android:gravity="center"
+                                        android:paddingVertical="5dp"
+                                        android:text="疲劳量级(前/后)"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/tablelayout_cell_stroke_single"
+                                        android:gravity="center"
+                                        android:paddingVertical="5dp"
+                                        android:text="0级/4级"
+                                        android:textSize="12sp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_span="1"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="135dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/tablelayout_cell_stroke_single"
+                                        android:paddingHorizontal="10dp"
+                                        android:paddingVertical="5dp"
+                                        android:text="前一次试验实测距离"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/tablelayout_cell_stroke_single"
+                                        android:gravity="center"
+                                        android:paddingVertical="5dp"
+                                        android:text="116.4米"
+                                        android:textSize="12sp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_span="1"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="170dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/tablelayout_cell_stroke_single"
+                                        android:paddingHorizontal="10dp"
+                                        android:paddingVertical="5dp"
+                                        android:text="总步数"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/tablelayout_cell_stroke"
+                                        android:gravity="center"
+                                        android:paddingVertical="5dp"
+                                        android:text="300步"
+                                        android:textSize="12sp" />
+
+                                </LinearLayout>
+
+                            </TableRow>
+
+                            <TableRow>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_span="1"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="110dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/tablelayout_cell_stroke_single"
+                                        android:gravity="center"
+                                        android:paddingVertical="5dp"
+                                        android:text="呼吸量级(前/后)"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/tablelayout_cell_stroke_single"
+                                        android:gravity="center"
+                                        android:paddingVertical="5dp"
+                                        android:text="0级/2级"
+                                        android:textSize="12sp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_span="1"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="135dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/tablelayout_cell_stroke_single"
+                                        android:paddingHorizontal="10dp"
+                                        android:paddingVertical="5dp"
+                                        android:text="此次试验实测距离"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/tablelayout_cell_stroke_single"
+                                        android:gravity="center"
+                                        android:paddingVertical="5dp"
+                                        android:text="1397.0米"
+                                        android:textSize="12sp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_span="1"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="170dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/tablelayout_cell_stroke_single"
+                                        android:paddingHorizontal="10dp"
+                                        android:paddingVertical="5dp"
+                                        android:text="平均步数"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/tablelayout_cell_stroke"
+                                        android:gravity="center"
+                                        android:paddingVertical="5dp"
+                                        android:text="232.9米/分"
+                                        android:textSize="12sp" />
+
+                                </LinearLayout>
+
+                            </TableRow>
+
+                            <TableRow>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_span="1"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="110dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/tablelayout_cell_stroke_single"
+                                        android:paddingHorizontal="10dp"
+                                        android:paddingVertical="5dp"
+                                        android:text="代谢当量"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/tablelayout_cell_stroke_single"
+                                        android:gravity="center"
+                                        android:paddingVertical="5dp"
+                                        android:text="10.6METs"
+                                        android:textSize="12sp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_span="1"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="135dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/tablelayout_cell_stroke_single"
+                                        android:paddingHorizontal="10dp"
+                                        android:paddingVertical="5dp"
+                                        android:text="此次实测距离占预值"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/tablelayout_cell_stroke_single"
+                                        android:gravity="center"
+                                        android:paddingVertical="5dp"
+                                        android:text="184%"
+                                        android:textSize="12sp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_span="1"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="170dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/tablelayout_cell_stroke_single"
+                                        android:paddingVertical="5dp"
+                                        android:paddingStart="10dp"
+                                        android:text="静止心率(参考值:60-100)"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/tablelayout_cell_stroke"
+                                        android:gravity="center"
+                                        android:paddingVertical="5dp"
+                                        android:text="0bmp"
+                                        android:textSize="12sp" />
+
+                                </LinearLayout>
+
+                            </TableRow>
+
+                            <TableRow>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_span="1"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="110dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/tablelayout_cell_stroke_single"
+                                        android:paddingHorizontal="10dp"
+                                        android:paddingVertical="5dp"
+                                        android:text="心肺功能"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/tablelayout_cell_stroke_single"
+                                        android:gravity="center"
+                                        android:paddingVertical="5dp"
+                                        android:text="IV级"
+                                        android:textSize="12sp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_span="1"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="135dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/tablelayout_cell_stroke_single"
+                                        android:paddingHorizontal="10dp"
+                                        android:paddingVertical="5dp"
+                                        android:text="心功能严重程度"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/tablelayout_cell_stroke_single"
+                                        android:gravity="center"
+                                        android:paddingVertical="5dp"
+                                        android:text="轻度"
+                                        android:textSize="12sp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_span="1"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="170dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/tablelayout_cell_stroke_single"
+                                        android:paddingVertical="5dp"
+                                        android:paddingStart="10dp"
+                                        android:text="运动心率恢复值(参考值:≥12)"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@drawable/tablelayout_cell_stroke"
+                                        android:gravity="center"
+                                        android:paddingVertical="5dp"
+                                        android:text="75"
+                                        android:textSize="12sp" />
+
+                                </LinearLayout>
+
+                            </TableRow>
+
+                            <TableRow>
+
+                                <LinearLayout
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_span="3"
+                                    android:layout_weight="3"
+                                    android:paddingHorizontal="10dp"
+                                    android:paddingVertical="5dp"
+                                    android:background="@drawable/tablelayout_cell_stroke"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="完成6分钟试验，未出现不良症状，中途休息了37秒"
+                                        android:textSize="12sp" />
+
+                                </LinearLayout>
+
+                            </TableRow>
+
+                        </TableLayout>
+
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -715,7 +1121,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="10dp"
-                    android:text="@string/sixmin_test_report_export_report"
+                    android:text="@string/sixmin_test_report_close"
                     android:textColor="#2e8fd2"
                     android:textSize="18sp" />
 
