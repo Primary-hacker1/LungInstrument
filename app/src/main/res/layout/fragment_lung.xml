@@ -138,7 +138,7 @@
             <lecho.lib.hellocharts.view.PreviewLineChartView
                     android:id="@+id/previewChart"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"/>
+                    android:layout_height="150dp" />
 
 
             <com.github.mikephil.charting.charts.LineChart
@@ -158,10 +158,26 @@
                 android:padding="@dimen/space_6">
 
             <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical">
+
+                <lecho.lib.hellocharts.view.PreviewLineChartView
+                        android:id="@+id/previewChartFlow"
+                        android:layout_width="match_parent"
+                        android:background="@drawable/calibration_bg"
+                        android:layout_marginEnd="@dimen/space_6"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content" />
+
+                <lecho.lib.hellocharts.view.PreviewLineChartView
+                        android:id="@+id/previewChartFVC"
+                        android:layout_width="match_parent"
+                        android:background="@drawable/calibration_bg"
+                        android:layout_marginEnd="@dimen/space_6"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content" />
 
                 <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/chart_flow"
@@ -169,6 +185,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/space_6"
                         android:background="@drawable/calibration_bg"
+                        android:visibility="gone"
                         android:layout_weight="1" />
 
                 <com.github.mikephil.charting.charts.LineChart
@@ -177,13 +194,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/space_6"
                         android:layout_marginEnd="@dimen/space_6"
+                        android:visibility="gone"
                         android:background="@drawable/calibration_bg"
                         android:layout_weight="1" />
 
             </LinearLayout>
 
             <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/calibration_bg"

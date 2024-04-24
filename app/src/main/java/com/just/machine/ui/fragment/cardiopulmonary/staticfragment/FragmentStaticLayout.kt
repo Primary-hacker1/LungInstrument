@@ -42,6 +42,7 @@ class FragmentStaticLayout : FrameLayout {
     private val tag = FragmentStaticLayout::class.java.name
 
     var binding: FragmentLungBinding
+
     private var mContext: Context
 
     constructor(context: Context) : super(context) {
@@ -105,6 +106,38 @@ class FragmentStaticLayout : FrameLayout {
 
         initListener()
 
+        val values: MutableList<PointValue> = ArrayList()// 模拟数据
+
+        for (i in 0..99) {
+            values.add(PointValue(i.toFloat(), Math.random().toFloat() * 100))
+        }
+
+        lineChartView(binding.previewChart, values)
+
+        lineChartView(binding.previewChartFlow, values)
+
+        lineChartView(binding.previewChartFVC, values)
+
+        // 获取初始视口数据
+        val initialViewport = binding.previewChart.currentViewport
+
+        // 初始时应用视口数据到 previewChartFlow
+        binding.previewChartFlow.maximumViewport = initialViewport
+        binding.previewChartFlow.currentViewport = initialViewport
+
+        // 设置视口变化监听器，调整视口宽度
+        binding.previewChart.setViewportChangeListener {
+
+            // 将previewChart的视口数据应用到previewChartFlow的坐标轴数据中
+            binding.previewChartFlow.maximumViewport = it
+            binding.previewChartFlow.currentViewport = it
+
+        }
+
+    }
+
+    @Deprecated("暂时不用，用lineChartView这个不支持区域数据动态监听！")
+    private fun initChartLow() {
         val entriesFow = arrayListOf<Entry>()
         // 创建折线图的样本数据
         val entriesFlowFvc = arrayListOf<Entry>()
@@ -119,8 +152,6 @@ class FragmentStaticLayout : FrameLayout {
         }
 
         lineChartFlow(binding.chartFvc, entries, -5f, 5f, 11)
-
-        lineChartView(binding.previewChart, entries)
 
         lineChartFlow(binding.chartFlow, entriesFow, -12f, 9f, 9)
 
@@ -193,23 +224,32 @@ class FragmentStaticLayout : FrameLayout {
      * @param previewChart  另一个区域折线图 echo.lib.hellocharts.view
      * */
     @SuppressLint("ClickableViewAccessibility")
-    private fun lineChartView(previewChart: LineChartView, entries: ArrayList<Entry>) {
-        val values: MutableList<PointValue> = ArrayList()
-        // 模拟数据
-        for (i in 0..99) {
-            values.add(PointValue(i.toFloat(), Math.random().toFloat() * 100))
-        }
+    private fun lineChartView(previewChart: LineChartView, entries: MutableList<PointValue>) {
 
-        val line = Line(values).setColor(Color.BLUE).setHasPoints(false) // 不显示数据点
 
+//        val line = Line(values).setColor(Color.BLUE).setHasPoints(false) // 不显示数据点
+
+        val line = Line(entries)
+
+        line.color = ContextCompat.getColor(context, R.color.colorPrimary) // 设置线条颜色
+
+        line.strokeWidth = 2 // 设置线条粗细
+
+        line.pointRadius = 1 // 设置点的半径大小
+
+        line.isCubic = true // 设置线条为曲线
 
         val lines: MutableList<Line> = ArrayList()
-        lines.add(line)
 
         val data = LineChartData(lines)
 
+        lines.add(line)
+
+        data.lines = lines
+
         // 创建X轴
         val axisX = Axis()
+
         axisX.setTextColor(Color.BLACK) // 设置字体颜色
 
 //        axisX.setName("X Axis") // 设置轴名称
@@ -225,6 +265,7 @@ class FragmentStaticLayout : FrameLayout {
         data.axisYLeft = axisY
 
         previewChart.lineChartData = data
+
         previewChart.zoomType = ZoomType.HORIZONTAL // 限制为水平缩放
 
         // 自动计算视口
@@ -242,7 +283,7 @@ class FragmentStaticLayout : FrameLayout {
 
         val newViewport = Viewport(previewChart.maximumViewport)
         // 确定你希望的视口宽度，例如，始终显示最大视口宽度的10%
-        val desiredWidth = maxViewport.width() * 0.1f
+        val desiredWidth = maxViewport.width() * 0.05f
 
         // 计算中心点
         val midPointX = newViewport.centerX()
@@ -256,12 +297,6 @@ class FragmentStaticLayout : FrameLayout {
         )
 
         previewChart.currentViewport = modifiedViewport
-
-        // 设置视口变化监听器，调整视口宽度
-        previewChart.setViewportChangeListener {
-
-        }
-
 
 
     }

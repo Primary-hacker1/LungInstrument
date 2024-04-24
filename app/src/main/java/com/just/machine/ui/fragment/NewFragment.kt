@@ -58,51 +58,51 @@ class NewFragment : CommonBaseFragment<FragmentNewBinding>() {
             }
         }
 
-        val stringBuilder = StringBuilder()
-
-        val serialPort =
-            SerialPortBuilder
-                .setReceivedDataCallback {
-                    MainScope().launch {
-                        stringBuilder.append(it)
-                        binding.textViewReceiced.text = stringBuilder.toString()
-                    }
-                }
-                .isDebug(Constants.isDebug)
-                .setConnectionStatusCallback { status, bluetoothDevice ->
-                    MainScope().launch {
-                        if (status) {
-                            if (ActivityCompat.checkSelfPermission(
-                                    activity!!,
-                                    Manifest.permission.BLUETOOTH_CONNECT
-                                ) != PackageManager.PERMISSION_GRANTED
-                            ) {
-                                return@launch
-                            }
-
-                            binding.textViewConnectInfo.text =
-                                "设备名称:\t${bluetoothDevice?.name}\n" +
-                                        "设备地址:\t${bluetoothDevice?.address}\n" +
-                                        "设备类型:\t${bluetoothDevice?.type}"
-
-                        }else {
-                            binding.textViewConnectInfo.text = ""
-                        }
-                    }
-                }
-                .build(activity!!)
-
-        binding.buttonConnect.setOnClickListener {
-            serialPort.openDiscoveryActivity()
-        }
-
-        binding.buttonDisconnect.setOnClickListener {
-            serialPort.disconnect()
-        }
-
-        binding.buttonSend.setOnClickListener {
-            SendMsg(binding.editTextTextSend.text.toString(),serialPort)
-        }
+//        val stringBuilder = StringBuilder()
+//
+//        val serialPort =
+//            SerialPortBuilder
+//                .setReceivedDataCallback {
+//                    MainScope().launch {
+//                        stringBuilder.append(it)
+//                        binding.textViewReceiced.text = stringBuilder.toString()
+//                    }
+//                }
+//                .isDebug(Constants.isDebug)
+//                .setConnectionStatusCallback { status, bluetoothDevice ->
+//                    MainScope().launch {
+//                        if (status) {
+//                            if (ActivityCompat.checkSelfPermission(
+//                                    activity!!,
+//                                    Manifest.permission.BLUETOOTH_CONNECT
+//                                ) != PackageManager.PERMISSION_GRANTED
+//                            ) {
+//                                return@launch
+//                            }
+//
+//                            binding.textViewConnectInfo.text =
+//                                "设备名称:\t${bluetoothDevice?.name}\n" +
+//                                        "设备地址:\t${bluetoothDevice?.address}\n" +
+//                                        "设备类型:\t${bluetoothDevice?.type}"
+//
+//                        }else {
+//                            binding.textViewConnectInfo.text = ""
+//                        }
+//                    }
+//                }
+//                .build(activity!!)
+//
+//        binding.buttonConnect.setOnClickListener {
+//            serialPort.openDiscoveryActivity()
+//        }
+//
+//        binding.buttonDisconnect.setOnClickListener {
+//            serialPort.disconnect()
+//        }
+//
+//        binding.buttonSend.setOnClickListener {
+//            SendMsg(binding.editTextTextSend.text.toString(),serialPort)
+//        }
     }
 
     override fun initListener() {

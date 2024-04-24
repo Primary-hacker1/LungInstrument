@@ -148,15 +148,15 @@ object MudbusProtocol {
         // 计算 CRC 校验码
         val crcValue =
             crc32ToByteArray(
-                calculateCRC32(response.sliceArray(2 until 12))
+                calculateCRC32(response.sliceArray(3 until 12))
             )
 
         // 提取接收到的 CRC 校验码
         val receivedCRC = response.sliceArray(12 until 16)
 
-        // 验证 CRC 校验码
         if (!crcValue.contentEquals(receivedCRC)) {
             // CRC 校验失败，返回空
+            LogUtils.e(tag + "CRC 校验失败==" + crcValue)
             return null
         }
 
@@ -432,7 +432,6 @@ object MudbusProtocol {
 
         return packet
     }
-
 
 
     // 解析动态肺测试数据

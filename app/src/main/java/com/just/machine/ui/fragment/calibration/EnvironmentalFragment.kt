@@ -52,7 +52,7 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
                     humidity,
                     pressure
                 )
-                LiveDataBus.get().with("测试测试").value = environmentData
+                LiveDataBus.get().with(Constants.serialCallback).value = environmentData
 
                 return@setNoRepeatListener
             }
@@ -64,7 +64,7 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
 
         }
 
-        LiveDataBus.get().with("测试测试").observe(this) {//解析串口消息
+        LiveDataBus.get().with(Constants.serialCallback).observe(this) {//解析串口消息
             if (it is ByteArray) {
 //                if(BaseUtil.isDoubleClick()) return@observe//有个粘性事件先不处理
                 LogUtils.e(tag + BaseUtil.bytes2HexStr(it) + "字节长度" + BaseUtil.bytes2HexStr(it).length)
