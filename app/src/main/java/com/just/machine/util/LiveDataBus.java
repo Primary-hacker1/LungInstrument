@@ -59,10 +59,12 @@ public class LiveDataBus {
 
         private boolean isCallOnObserve() {
             StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-            for (StackTraceElement element : stackTrace) {
-                if ("android.arch.lifecycle.LiveData".equals(element.getClassName()) &&
-                        "observeForever".equals(element.getMethodName())) {
-                    return true;
+            if (stackTrace != null && stackTrace.length > 0) {
+                for (StackTraceElement element : stackTrace) {
+                    if ("android.arch.lifecycle.LiveData".equals(element.getClassName()) &&
+                            "observeForever".equals(element.getMethodName())) {
+                        return true;
+                    }
                 }
             }
             return false;
@@ -132,3 +134,4 @@ public class LiveDataBus {
     }
 
 }
+

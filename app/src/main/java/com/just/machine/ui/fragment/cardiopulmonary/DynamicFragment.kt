@@ -9,16 +9,24 @@ import androidx.viewpager2.widget.ViewPager2
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
+import com.just.machine.dao.CPETParameter
+import com.just.machine.model.Constants
+import com.just.machine.model.LungTestData
 import com.just.machine.ui.adapter.CustomSpinnerAdapter
 import com.just.machine.ui.adapter.FragmentPagerAdapter
 import com.just.machine.ui.fragment.cardiopulmonary.dynamic.DynamicDataFragment
 import com.just.machine.ui.fragment.cardiopulmonary.dynamic.RoutineFragment
 import com.just.machine.ui.fragment.cardiopulmonary.dynamic.WassermanFragment
+import com.just.machine.ui.fragment.serial.MudbusProtocol
+import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.machine.util.BaseUtil
+import com.just.machine.util.DynamicUtil
 import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FragmentDynamicBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.random.Random
 
 
 /**
@@ -95,11 +103,11 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
         LiveDataBus.get().with("msg").observe(this) {//串口消息
             if (it is ArrayList<*>) {
-                val dataList = it as ArrayList<Pair<String, String>>
+                val dataList = it as ArrayList<CPETParameter>
                 // 在这里对数据进行解析和处理
                 for (pair in dataList) {
-                    val key = pair.first
-                    val value = pair.second
+                    val key = pair.parameterName
+                    val value = pair.lowRange
                     // 对每个 Pair 中的数据进行相应的操作，例如更新 UI 或执行其他逻辑
                     LogUtils.d(tag + value)
                 }
@@ -108,22 +116,53 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
             }
         }
 
-        var title = 111//模拟串口数据
-        var title1 = 222//模拟串口数据
-
         binding.llStart.setNoRepeatListener {
+            if (Constants.isDebug) {
 
-            title++
+                LiveDataBus.get().with("msg").value = DynamicUtil.spinnerItemData()
 
-            title1++
+                // 调用生成主控板返回数据方法并打印生成的数据
+                val controlBoardResponse = LungTestData(
+                    temperature = Random.nextInt(0, 100), // 模拟温度数据
+                    humidity = Random.nextInt(0, 100), // 模拟湿度数据
+                    atmosphericPressure = Random.nextInt(800, 1200).toFloat(), // 模拟大气压力数据
+                    highRangeFlowSensorData = Random.nextInt(0, 100), // 模拟高量程流量传感器数据
+                    lowRangeFlowSensorData = Random.nextInt(0, 100), // 模拟低量程流量传感器数据
+                    co2SensorData = Random.nextInt(0, 100), // 模拟CO2传感器数据
+                    o2SensorData = Random.nextInt(0, 100), // 模拟O2传感器数据
+                    gasFlowSpeedSensorData = Random.nextInt(0, 100), // 模拟气体流速传感器数据
+                    gasPressureSensorData = Random.nextInt(0, 100), // 模拟气体压力传感器数据
+                    bloodOxygen = Random.nextInt(0, 100), // 模拟血氧数据
+                    batteryLevel = Random.nextInt(0, 100) // 模拟电池电量数据
+                )
 
-            LiveDataBus.get().with("msg").value = mutableListOf(
-                Pair("111", title.toString()),
-                Pair("222", title1.toString()),
-                Pair("333", "item")
-            )
+                val data = MudbusProtocol.generateLungTestData(
+                    controlBoardResponse
+                )
+
+                LogUtils.e(tag + BaseUtil.bytes2HexStr(data) + "发送的数据")
+
+                LiveDataBus.get().with("动态心肺测试").value = data
+
+                return@setNoRepeatListener
+            }
+
+            SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)//发送流量定标
+        }
+
+        LiveDataBus.get().with("动态心肺测试").observe(this) {//解析串口消息
+            if (it is ByteArray) {
+//                if (BaseUtil.isDoubleClick()) return@observe//有个粘性事件先不处理
+                LogUtils.e(tag + BaseUtil.bytes2HexStr(it) + "字节长度" + BaseUtil.bytes2HexStr(it).length)
+                val data = MudbusProtocol.parseLungTestData(it)
+                if (data != null) {
+                    val bean = data
+                    LogUtils.e(tag + data.toString())
+                }
+            }
         }
     }
+
 
     private fun initViewPager() {
 
@@ -169,7 +208,8 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
         //这个必须写，不然会产生Fata
         binding.vpTitle.isSaveEnabled = false
 
-        binding.vpTitle.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        binding.vpTitle.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 // 当页面被选中时执行你的操作

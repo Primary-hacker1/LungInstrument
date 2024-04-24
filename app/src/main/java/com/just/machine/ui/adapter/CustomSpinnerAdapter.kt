@@ -6,12 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import com.just.machine.dao.CPETParameter
 import com.just.news.R
 
-class CustomSpinnerAdapter(context: Context, private val dataList: MutableList<Pair<String, String>>? = ArrayList()) :
-    ArrayAdapter<Pair<String, String>>(context, R.layout.custom_spinner_item, dataList!!) {
+class CustomSpinnerAdapter(context: Context, private val dataList: MutableList<CPETParameter>? = ArrayList()) :
+    ArrayAdapter<CPETParameter>(context, R.layout.custom_spinner_item, dataList!!) {
 
-    fun updateSpinnerText(dataList: MutableList<Pair<String, String>>) {
+    fun updateSpinnerText(dataList: MutableList<CPETParameter>) {
         // 清空适配器原有数据
         clear()
         // 将新数据添加到适配器
@@ -35,8 +36,8 @@ class CustomSpinnerAdapter(context: Context, private val dataList: MutableList<P
         val spinnerText = view.findViewById<TextView>(R.id.spinner_text)
         val pair = dataList?.get(position)
 
-        spinnerTitle.text = pair?.first
-        spinnerText.text = pair?.second
+        spinnerTitle.text = pair?.parameterName
+        spinnerText.text = pair?.lowRange.toString()
 
         return view
     }

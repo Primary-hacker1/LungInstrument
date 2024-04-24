@@ -1,6 +1,7 @@
 package com.just.machine.ui.fragment.cardiopulmonary.staticfragment
 
 import CustomMarkerView
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
@@ -27,6 +28,14 @@ import com.just.machine.model.staticlung.RoutineLungBean
 import com.just.machine.ui.adapter.RoutineLungAdapter
 import com.just.news.R
 import com.just.news.databinding.FragmentLungBinding
+import lecho.lib.hellocharts.gesture.ZoomType
+import lecho.lib.hellocharts.model.Axis
+import lecho.lib.hellocharts.model.Line
+import lecho.lib.hellocharts.model.LineChartData
+import lecho.lib.hellocharts.model.PointValue
+import lecho.lib.hellocharts.model.Viewport
+import lecho.lib.hellocharts.view.LineChartView
+
 
 class FragmentStaticLayout : FrameLayout {
 
@@ -111,6 +120,8 @@ class FragmentStaticLayout : FrameLayout {
 
         lineChartFlow(binding.chartFvc, entries, -5f, 5f, 11)
 
+        lineChartView(binding.previewChart, entries)
+
         lineChartFlow(binding.chartFlow, entriesFow, -12f, 9f, 9)
 
         lineChartFlow(binding.chartFvcFlow, entriesFlowFvc, -12f, 9f, 9)
@@ -176,6 +187,83 @@ class FragmentStaticLayout : FrameLayout {
         }
 
         binding.rvFvc.adapter = adapter
+    }
+
+    /**
+     * @param previewChart  另一个区域折线图 echo.lib.hellocharts.view
+     * */
+    @SuppressLint("ClickableViewAccessibility")
+    private fun lineChartView(previewChart: LineChartView, entries: ArrayList<Entry>) {
+        val values: MutableList<PointValue> = ArrayList()
+        // 模拟数据
+        for (i in 0..99) {
+            values.add(PointValue(i.toFloat(), Math.random().toFloat() * 100))
+        }
+
+        val line = Line(values).setColor(Color.BLUE).setHasPoints(false) // 不显示数据点
+
+
+        val lines: MutableList<Line> = ArrayList()
+        lines.add(line)
+
+        val data = LineChartData(lines)
+
+        // 创建X轴
+        val axisX = Axis()
+        axisX.setTextColor(Color.BLACK) // 设置字体颜色
+
+//        axisX.setName("X Axis") // 设置轴名称
+
+        axisX.setMaxLabelChars(6) // 最多几个字符显示在x轴的标签里
+
+        // 创建Y轴
+        val axisY: Axis = Axis().setHasLines(true)
+        axisY.setTextColor(Color.BLACK)
+//        axisY.setName("Y Axis")
+
+        data.axisXBottom = axisX
+        data.axisYLeft = axisY
+
+        previewChart.lineChartData = data
+        previewChart.zoomType = ZoomType.HORIZONTAL // 限制为水平缩放
+
+        // 自动计算视口
+        val viewport = Viewport(previewChart.maximumViewport)
+        viewport.top = 110f // 为顶部增加一些额外空间
+
+        previewChart.maximumViewport = viewport
+        previewChart.currentViewport = viewport
+
+        // 假设你已经初始化了图表数据
+        // 设置最大视口和初始视口
+        val maxViewport = Viewport(previewChart.maximumViewport)
+        previewChart.maximumViewport = maxViewport
+
+
+        val newViewport = Viewport(previewChart.maximumViewport)
+        // 确定你希望的视口宽度，例如，始终显示最大视口宽度的10%
+        val desiredWidth = maxViewport.width() * 0.1f
+
+        // 计算中心点
+        val midPointX = newViewport.centerX()
+
+        // 设置新的视口，以中心点为中心，左右扩展 desiredWidth / 2
+        val modifiedViewport = Viewport(
+            midPointX - desiredWidth / 2,
+            newViewport.top,
+            midPointX + desiredWidth / 2,
+            newViewport.bottom
+        )
+
+        previewChart.currentViewport = modifiedViewport
+
+        // 设置视口变化监听器，调整视口宽度
+        previewChart.setViewportChangeListener {
+
+        }
+
+
+
     }
 
 

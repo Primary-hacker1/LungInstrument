@@ -71,6 +71,7 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
 
         lineChartFlow(binding.chartFvc, entries, -5f, 5f, 11)
 
+
         val lineChartFvc = binding.chartFvc
 
         // 设置 MarkerView

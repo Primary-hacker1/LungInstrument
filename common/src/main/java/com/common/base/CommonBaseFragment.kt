@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 
 abstract class CommonBaseFragment<VB : ViewDataBinding> : Fragment() {
 
@@ -62,7 +64,12 @@ abstract class CommonBaseFragment<VB : ViewDataBinding> : Fragment() {
     }
 
     protected open fun navigate(view: View, id: Int) {
-        Navigation.findNavController(view).navigate(id)
+        val navOptions = NavOptions.Builder()
+            .setLaunchSingleTop(true)  // 这样可以确保在片段已位于堆栈顶部时不会重新创建片段
+            .build()
+
+        findNavController().navigate(id, null, navOptions)
+//        Navigation.findNavController(view).navigate(id)
     }
 
     protected open fun navigate(view: View, id: Int, bundle: Bundle?) {

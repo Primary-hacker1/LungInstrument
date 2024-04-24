@@ -5,9 +5,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
+import com.common.base.setNoRepeatListener
+import com.common.network.LogUtils
 import com.just.machine.dao.calibration.FlowBean
+import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.calibration.FlowAdapter
+import com.just.machine.ui.fragment.serial.MudbusProtocol
+import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.machine.util.BaseUtil
+import com.just.machine.util.LiveDataBus
 import com.just.news.databinding.FragmentFlowBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,10 +40,49 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
             flowAdapter.toggleItemBackground(position)
         }
 
-        flowAdapter.setItemsBean(mutableListOf
-            (FlowBean("容积1","3","3.003")))
+        flowAdapter.setItemsBean(
+            mutableListOf
+                (FlowBean(0, 1, "容积1", "3", "3.003"))
+        )
 
         binding.rvFlow.adapter = flowAdapter
+
+
+        binding.llStart.setNoRepeatListener {
+            if (Constants.isDebug) {
+                val smallRangeFlow = 120 // 例如，120 L/min
+                val largeRangeFlow = 3000 // 例如，3000 L/min
+
+                val data = MudbusProtocol.generateFlowCalibrationCommand(
+                    smallRangeFlow,
+                    largeRangeFlow,
+                )
+
+                LogUtils.e(tag + BaseUtil.bytes2HexStr(data) + "发送的数据")
+
+                LiveDataBus.get().with("测试").value = data
+
+                return@setNoRepeatListener
+            }
+
+            SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)//发送流量定标
+        }
+
+        LiveDataBus.get().with("测试").observe(this) {//解析串口消息
+            if (it is ByteArray) {
+                LogUtils.e(tag + BaseUtil.bytes2HexStr(it) + "字节长度" + BaseUtil.bytes2HexStr(it).length)
+                val data = MudbusProtocol.parseFlowCalibrationData(it)
+                if (data != null) {
+                    val (smallRangeFlow,largeRangeFlow) = data
+
+                    LogUtils.e(tag+smallRangeFlow)
+
+                    LogUtils.e(tag+largeRangeFlow)
+
+                }
+
+            }
+        }
 
     }
 

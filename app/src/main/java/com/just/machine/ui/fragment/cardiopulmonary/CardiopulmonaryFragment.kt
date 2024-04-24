@@ -16,6 +16,8 @@ import com.common.network.LogUtils
 import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.FragmentChildAdapter
 import com.just.machine.ui.adapter.FragmentPagerAdapter
+import com.just.machine.ui.fragment.NewFragment
+import com.just.machine.ui.fragment.calibration.CalibrationFragment
 import com.just.machine.ui.fragment.calibration.EnvironmentalFragment
 import com.just.machine.ui.fragment.setting.CardiopulmonarySettingFragment
 import com.just.machine.ui.viewmodel.MainViewModel
@@ -26,6 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 /**
  *create by 2020/6/19
+ * 心肺测试
  *@author zt
  */
 @AndroidEntryPoint
@@ -48,15 +51,15 @@ class CardiopulmonaryFragment : CommonBaseFragment<FragmentCardiopulmonaryBindin
 
         val adapter = FragmentChildAdapter(this)
 
-        adapter.addFragment(EnvironmentalFragment(), "EnvironmentalFragment")
+        adapter.addFragment(NewFragment())//随便加个fragment
 
-        adapter.addFragment(StaticLungFragment(), "StaticLungFragment")
+        adapter.addFragment(StaticLungFragment())
 
-        adapter.addFragment(DynamicFragment(), "DynamicFragment")
+        adapter.addFragment(DynamicFragment())
 
-        adapter.addFragment(DynamicResultFragment(), "DynamicResultFragment")
+        adapter.addFragment(DynamicResultFragment())
 
-        adapter.addFragment(CardiopulmonarySettingFragment(), "CardiopulmonarySettingFragment")
+        adapter.addFragment(NewFragment())
 
         binding.vpCardiopulmonary.adapter = adapter
 
@@ -71,7 +74,6 @@ class CardiopulmonaryFragment : CommonBaseFragment<FragmentCardiopulmonaryBindin
 
         binding.btnEnvironment.setOnClickListener {
             navigate(it, R.id.calibrationFragment)//fragment跳转
-            onButtonClick(binding.btnEnvironment, 0)
         }
 
         binding.btnStatic.setOnClickListener {
@@ -87,7 +89,6 @@ class CardiopulmonaryFragment : CommonBaseFragment<FragmentCardiopulmonaryBindin
         }
 
         binding.btnSetting.setNoRepeatListener {
-            onButtonClick(binding.btnSetting, 4)
             navigate(it, R.id.cardiopulmonarySettingFragment)
         }
 

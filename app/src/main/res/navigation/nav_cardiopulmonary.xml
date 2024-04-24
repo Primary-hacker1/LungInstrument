@@ -68,4 +68,10 @@
         android:label="breatheHardInFragment"
         tools:layout="@layout/fragment_breathe">
     </fragment_navigator>
+
+    <fragment_navigator
+            android:id="@+id/newFragment"
+            android:name="com.just.machine.ui.fragment.NewFragment"
+            android:label="newFragment"
+            tools:layout="@layout/fragment_new" />
 </navigation>

@@ -13,6 +13,7 @@ import com.common.base.gone
 import com.common.base.setNoRepeatListener
 import com.common.base.visible
 import com.just.machine.model.Constants
+import com.just.machine.ui.adapter.FragmentChildAdapter
 import com.just.machine.ui.adapter.FragmentPagerAdapter
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
@@ -34,7 +35,7 @@ class CalibrationFragment : CommonBaseFragment<FragmentCalibrationBinding>() {
         binding.toolbar.tvRight.gone()
         binding.toolbar.ivTitleBack.visible()
 
-        val adapter = FragmentPagerAdapter(requireActivity())
+        val adapter = FragmentChildAdapter(this)
 
         adapter.addFragment(EnvironmentalFragment())
         adapter.addFragment(FlowFragment())

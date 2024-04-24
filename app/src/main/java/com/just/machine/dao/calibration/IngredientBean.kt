@@ -1,6 +1,15 @@
 package com.just.machine.dao.calibration
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "ingredient")
 data class IngredientBean(
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id")
+    val ingredientId: Long = 0,
+
+    val userId: Long,
     var inspiratoryIndicators: String? = "",//吸气标准指标
     var calibratedValue: String? = "",//标定值
     var actual: String? = "",//实际值
