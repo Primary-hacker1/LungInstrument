@@ -20,6 +20,7 @@ import com.just.machine.dao.PatientBean
 import com.just.machine.model.CardiopulmonaryRecordsBean
 import com.just.machine.model.Constants
 import com.just.machine.model.SixMinRecordsBean
+import com.just.machine.model.sixminreport.SixMinReportInfo
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.CommonUtil
 import com.just.news.R
@@ -178,7 +179,7 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
 
                 val sixMinRecordsBeans: MutableList<SixMinRecordsBean> = ArrayList()//六分钟测试记录
 
-                val sixMinRecordsBean = SixMinRecordsBean("", "123456", "2024-3-7 13:00")
+                val sixMinRecordsBean = SixMinRecordsBean()
 
                 val cardiopulmonaryRecordsBean = CardiopulmonaryRecordsBean(
                     "测试1",

@@ -1,5 +1,6 @@
 package com.just.machine.dao.sixmin
 
+import com.just.machine.model.SixMinRecordsBean
 import com.just.machine.model.sixminreport.SixMinBloodOxygen
 import com.just.machine.model.sixminreport.SixMinReportInfo
 import com.just.machine.model.sixminreport.SixMinReportWalk
@@ -14,9 +15,9 @@ import javax.inject.Inject
  */
 class SixMinReportInfoRepository @Inject constructor(private val reportDao: SixMinReportInfoDao) {
 
-    fun getReportInfo(id:String): Flow<List<SixMinReportInfo>> = reportDao.getReportInfoById(id)
+    fun getReportInfo(id:String,reportNo:String): Flow<List<SixMinRecordsBean>> = reportDao.getReportInfoById(id,reportNo)
 
-    fun getReportInfo(): Flow<List<SixMinReportInfo>> = reportDao.getReportInfo()
+    fun getReportInfo(): Flow<List<SixMinRecordsBean>> = reportDao.getReportInfo()
 
     suspend fun insertReportInfo(reportInfo: SixMinReportInfo): Long = reportDao.insertReportInfo(reportInfo)
 

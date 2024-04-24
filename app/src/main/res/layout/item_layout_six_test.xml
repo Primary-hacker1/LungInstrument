@@ -20,7 +20,7 @@
             android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_18"
-            android:text="@{item.testTime}"
+            android:text="@{item.infoBean.addTime}"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -28,7 +28,7 @@
             android:id="@+id/atv_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{item.reportNo}"
+            android:text="@{item.infoBean.reportNo}"
             android:textSize="16sp"
             android:textStyle="bold" />
 

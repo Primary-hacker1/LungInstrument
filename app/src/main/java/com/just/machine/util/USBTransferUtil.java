@@ -390,7 +390,6 @@ public class USBTransferUtil {
         checkBSInd = 0;
         checkBSStr = null;
         bloodOxyLineData.clear();
-        bloodOxyLineData = null;
     }
 
 
@@ -591,8 +590,9 @@ public class USBTransferUtil {
                             //步数数据
                             if (testType == 1 && (bytes[15] != bytesnull || bytes[16] != bytesnull)) {
                                 byte[] bytesBS = {bytes[15], bytes[16]};
-                                stepsStr = CRC16Util.bytesToHexString(bytesBS);
-                                Integer steps = Integer.valueOf(stepsStr, 16);
+                                String stepsHexStr = CRC16Util.bytesToHexString(bytesBS);
+                                Integer steps = Integer.valueOf(stepsHexStr, 16);
+                                stepsStr = String.valueOf(steps);
                                 usbSerialData.setStepsCount(String.valueOf(steps));
                             }
                             //圈数数据
@@ -619,7 +619,7 @@ public class USBTransferUtil {
                         }
                     }
 
-                    LiveDataBus.get().with("111").postValue(new Gson().toJson(usbSerialData));
+                    LiveDataBus.get().with("simMinTest").postValue(new Gson().toJson(usbSerialData));
                 }
             } else {
                 byteStr = byteStr.substring(2, byteStr.length());
@@ -747,7 +747,7 @@ public class USBTransferUtil {
             int numAll = 0;
             int len = 0;
             List<Integer> integers = new ArrayList<>();
-            if (null != reportWalk.getWalkOne()) {
+            if (!reportWalk.getWalkOne().equals("")) {
                 integers.add(Integer.parseInt(reportWalk.getWalkOne()));
                 numAll += Integer.parseInt(reportWalk.getWalkOne());
                 ++len;
