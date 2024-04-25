@@ -1,14 +1,9 @@
 package com.just.machine.ui.activity
 
 
-import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import androidx.activity.viewModels
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import com.common.base.CommonBaseActivity
@@ -28,7 +23,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class CardiopulmonaryActivity : CommonBaseActivity<ActivityCardiopulmonaryBinding>() {
 
-    private val REQUEST_BLUETOOTH_PERMISSION = 1
 
     private val viewModel by viewModels<MainViewModel>()
 
