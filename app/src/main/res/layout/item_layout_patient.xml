@@ -82,14 +82,25 @@
 
 
         <LinearLayout
-            android:layout_width="80dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:gravity="center_vertical">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_action"
+                android:layout_width="@dimen/space_19"
+                android:layout_height="@dimen/space_19"
+                android:textSize="18sp"
+                android:background="@drawable/motion"
+                android:padding="@dimen/space_5"
+                android:textStyle="bold" />
+
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_update"
                 android:layout_width="@dimen/space_19"
                 android:layout_height="@dimen/space_19"
+                android:layout_marginStart="@dimen/space_19"
                 android:textSize="18sp"
                 android:background="@drawable/update"
                 android:padding="@dimen/space_5"

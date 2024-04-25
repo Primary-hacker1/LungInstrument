@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.core.content.ContextCompat
 import com.common.base.BaseRecyclerViewAdapter
 import com.just.machine.model.SixMinRecordsBean
+import com.just.machine.model.sixminreport.SixMinReportInfo
 import com.just.news.R
 import com.just.news.databinding.ItemLayoutSixTestBinding
 
@@ -12,11 +13,11 @@ import com.just.news.databinding.ItemLayoutSixTestBinding
  * 患者六分钟测试数据
  *@author zt
  */
-class SixMinAdapter(var context: Context) : BaseRecyclerViewAdapter<SixMinRecordsBean, ItemLayoutSixTestBinding>() {
+class SixMinAdapter(var context: Context) : BaseRecyclerViewAdapter<SixMinReportInfo, ItemLayoutSixTestBinding>() {
 
     private var selectedItem = -1
 
-    override fun bindData(item: SixMinRecordsBean, position: Int) {
+    override fun bindData(item: SixMinReportInfo, position: Int) {
         binding.item = item
         if (position == selectedItem) {
             binding.llItem.setBackgroundColor(ContextCompat.getColor(context, R.color.cf4f5fa))

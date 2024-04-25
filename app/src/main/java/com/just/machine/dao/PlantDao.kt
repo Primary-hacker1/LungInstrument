@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.common.BaseResponseDB
+import com.just.machine.model.PatientInfoBean
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -29,7 +30,7 @@ interface PlantDao {
     fun getNameOrId(nameId: String): Flow<List<PatientBean>>
 
     @Query("SELECT * FROM patients ORDER BY addTime DESC")
-    fun getPatients(): Flow<List<PatientBean>>
+    fun getPatients(): Flow<List<PatientInfoBean>>
 
     @Query("SELECT * FROM patients WHERE id = :id")//条件查询
     fun getPatient(id: Long): Flow<PatientBean?>

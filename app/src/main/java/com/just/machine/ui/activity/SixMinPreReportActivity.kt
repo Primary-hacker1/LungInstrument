@@ -64,7 +64,7 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
             intent.extras?.getString(Constants.sixMinPatientInfo).toString()
         sixMinReportNo =
             intent.extras?.getString(Constants.sixMinReportNo).toString()
-        viewModel.getSixMinReportInfoById(sixMinPatientId,sixMinReportNo)
+        viewModel.getSixMinReportInfoById(sixMinPatientId.toLong(),sixMinReportNo)
         val patientSelfList = mutableListOf<SixMinReportPatientSelfBean>()
         val patientBreathSelfItemList = mutableListOf<SixMinReportPatientSelfItemBean>()
         patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("0级", "没有"))
@@ -90,10 +90,10 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
         patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("3级", "中度"))
         patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("4级", "有点疲劳"))
         patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("5-6级", "疲劳"))
-        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("7-9级", "非常疲劳"))
+        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("7-8级", "非常疲劳"))
         patientTiredSelfItemList.add(
             SixMinReportPatientSelfItemBean(
-                "10级",
+                "9-10级",
                 "非常非常疲劳(几乎到极限)"
             )
         )
@@ -186,7 +186,7 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
 //                            sixMinReportItem.sixMinValue =
 //                                "${bean.highBloodPressureAfter}/${bean.lowBloodPressureAfter}"
                             viewModel.updateSixMinReportOther(sixMinRecordsBean.infoBean.reportNo,bean.highBloodPressureBefore.toString(),bean.lowBloodPressureBefore.toString(),bean.highBloodPressureAfter.toString(),bean.lowBloodPressureAfter.toString())
-                            viewModel.getSixMinReportInfoById(sixMinPatientId,sixMinReportNo)
+                            viewModel.getSixMinReportInfoById(sixMinPatientId.toLong(),sixMinReportNo)
                             binding.sixminReportTlPreTable.removeAllViews()
                         }
                     }

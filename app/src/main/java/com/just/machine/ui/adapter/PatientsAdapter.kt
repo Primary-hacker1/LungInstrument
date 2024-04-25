@@ -5,6 +5,7 @@ import androidx.core.content.ContextCompat
 import com.common.base.BaseRecyclerViewAdapter
 import com.common.base.setNoRepeatListener
 import com.just.machine.dao.PatientBean
+import com.just.machine.model.PatientInfoBean
 import com.just.news.R
 import com.just.news.databinding.ItemLayoutPatientBinding
 
@@ -29,6 +30,10 @@ class PatientsAdapter(var context: Context) :
             listener?.onUpdateItem(item)
         }
 
+        binding.btnAction.setNoRepeatListener {
+            listener?.onActionItem(item)
+        }
+
         if (position == selectedItem) {
             binding.llItem.setBackgroundColor(ContextCompat.getColor(context, R.color.cf4f5fa))
         } else {
@@ -46,6 +51,7 @@ class PatientsAdapter(var context: Context) :
     interface PatientListener {
         fun onDeleteItem(bean: PatientBean)
         fun onUpdateItem(bean: PatientBean)
+        fun onActionItem(bean: PatientBean)
     }
 
     /**

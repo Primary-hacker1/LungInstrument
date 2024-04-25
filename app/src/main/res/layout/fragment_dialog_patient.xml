@@ -152,6 +152,7 @@
                         android:layout_marginStart="@dimen/space_10"
                         android:maxLines="1"
                         android:singleLine="true"
+                        android:inputType="numberDecimal"
                         android:textColorHint="@color/login_hit"
                         android:textSize="15sp"
                         app:ed_backgroundColor="true" />
@@ -180,6 +181,7 @@
                         android:layout_marginStart="@dimen/space_10"
                         android:maxLines="1"
                         android:singleLine="true"
+                        android:inputType="numberDecimal"
                         android:textColorHint="@color/login_hit"
                         android:textSize="15sp"
                         app:ed_backgroundColor="true" />

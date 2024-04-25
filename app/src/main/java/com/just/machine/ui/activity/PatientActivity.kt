@@ -18,10 +18,12 @@ import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
 import com.just.machine.dao.PatientBean
 import com.just.machine.model.Constants
+import com.just.machine.model.PatientInfoBean
 import com.just.machine.ui.adapter.CardiopulAdapter
 import com.just.machine.ui.adapter.PatientsAdapter
 import com.just.machine.ui.adapter.SixMinAdapter
 import com.just.machine.ui.dialog.PatientDialogFragment
+import com.just.machine.ui.dialog.SelectActionDialogFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.ActivityPatientBinding
@@ -44,7 +46,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
          */
         fun startPatientActivity(context: Context?, jumpFlag: String?) {
             val intent = Intent(context, PatientActivity::class.java)
-            intent.putExtra(Constants.finishSixMinTest,jumpFlag)
+            intent.putExtra(Constants.finishSixMinTest, jumpFlag)
             context?.startActivity(intent)
         }
     }
@@ -56,10 +58,11 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
     private var bean: PatientBean? = null
 
     val beans: MutableList<PatientBean> = ArrayList()
+    private val patientInfoBeans: MutableList<PatientInfoBean> = ArrayList()
 
     private val adapter: PatientsAdapter = PatientsAdapter(this)
 
-    private var jumpFlag:String? = null
+    private var jumpFlag: String? = null
 
 
     private fun initToolbar() {
@@ -102,7 +105,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
         initOnClick()
         jumpFlag = intent.getStringExtra(Constants.finishSixMinTest)
-        if(jumpFlag != null && jumpFlag == "finishSixMinTest"){
+        if (jumpFlag != null && jumpFlag == "finishSixMinTest") {
             setButtonStyle(
                 binding.btnCardiopulmonary,
                 binding.btnSixMin,
@@ -124,11 +127,20 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
         LogUtils.d(tag + bean.toString())
 
-        sixMinAdapter = SixMinAdapter(this)
+        if (patientInfoBeans.isNotEmpty()) {
+            patientInfoBeans.forEach { it ->
+                if (bean?.patientId == it.infoBean.patientId) {
+                    it.sixMinReportInfo.sortByDescending { it.addTime }
+                    sixMinAdapter.setItemsBean(it.sixMinReportInfo)
+                }
+            }
+        }
 
-        bean?.sixMinRecordsBean?.let { it1 -> sixMinAdapter.setItemsBean(it1) }
+//        sixMinAdapter = SixMinAdapter(this)
 
-        binding.rvSixTest.adapter = sixMinAdapter
+//        bean?.sixMinRecordsBean?.let { it1 -> sixMinAdapter.setItemsBean(it1) }
+
+//        binding.rvSixTest.adapter = sixMinAdapter
 
 
         cardiopulmonaryAdapter = CardiopulAdapter(this)
@@ -142,12 +154,14 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
     private fun beanQuery(any: Any) {
         if (any is List<*>) {
             beans.clear()
+            patientInfoBeans.clear()
 
             val datas = any as MutableList<*>
 
             for (num in 0 until datas.size) {
-                val bean = datas[num] as PatientBean
-                beans.add(bean)
+                val bean = datas[num] as PatientInfoBean
+                beans.add(bean.infoBean)
+                patientInfoBeans.add(bean)
             }
 
             adapter.setItemsBean(beans)
@@ -155,6 +169,19 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
             LogUtils.d(tag + beans.toString())
 
             binding.rvList.adapter = adapter
+
+            if (patientInfoBeans.isNotEmpty()) {
+
+                binding.rvSixTest.layoutManager = LinearLayoutManager(this)
+
+                sixMinAdapter = SixMinAdapter(this)
+
+                patientInfoBeans[0].sixMinReportInfo.sortByDescending { it.addTime }
+
+                patientInfoBeans[0].sixMinReportInfo.let { it1 -> sixMinAdapter.setItemsBean(it1) }
+
+                binding.rvSixTest.adapter = sixMinAdapter
+            }
         }
     }
 
@@ -189,6 +216,10 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                     supportFragmentManager,
                     bean
                 )//修改患者信息
+            }
+
+            override fun onActionItem(bean: PatientBean) {
+                SelectActionDialogFragment.startSelectActionDialogFragment(supportFragmentManager)
             }
         })
 

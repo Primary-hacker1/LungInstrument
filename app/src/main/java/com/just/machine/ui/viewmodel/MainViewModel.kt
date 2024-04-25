@@ -211,7 +211,7 @@ class MainViewModel @Inject constructor(
     /**
      * 获取6分钟报告信息
      */
-    fun getSixMinReportInfoById(id: String,reportNo:String) {
+    fun getSixMinReportInfoById(id: Long,reportNo:String) {
         viewModelScope.launch {
             sixMinReportInfoDao.getReportInfo(id,reportNo).collect {
                 mEventHub.value = LiveDataEvent(

@@ -1,5 +1,6 @@
 package com.just.machine.dao
 
+import com.just.machine.model.PatientInfoBean
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -16,7 +17,7 @@ class PlantRepository @Inject constructor(private val plantDao: PlantDao) {
     suspend fun updatePatients(patients: PatientBean) =
         plantDao.updatePatients(patients)
 
-    fun getPatients(): Flow<List<PatientBean>> = plantDao.getPatients()
+    fun getPatients(): Flow<List<PatientInfoBean>> = plantDao.getPatients()
 
     fun getNameOrId(nameId: String): Flow<List<PatientBean>> = plantDao.getNameOrId(nameId)
 
