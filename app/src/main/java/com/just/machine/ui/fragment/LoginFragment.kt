@@ -29,10 +29,25 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
 
     override fun initView() {
 
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//            if (ContextCompat.checkSelfPermission(
+//                    this,
+//                    Manifest.permission.BLUETOOTH_CONNECT
+//                ) != PackageManager.PERMISSION_GRANTED
+//            ) {
+//                ActivityCompat.requestPermissions(
+//                    this,
+//                    arrayOf(Manifest.permission.BLUETOOTH_CONNECT),
+//                    REQUEST_BLUETOOTH_PERMISSION
+//                )
+//            }
+//        }
+
         activityResultLauncher.launch(
             arrayListOf(Manifest.permission.BLUETOOTH).apply {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
                     add(Manifest.permission.BLUETOOTH_ADMIN)
+                    add(Manifest.permission.BLUETOOTH_CONNECT)
                 }
             }.toTypedArray()
         )

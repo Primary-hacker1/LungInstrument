@@ -1,17 +1,135 @@
 package com.justsafe.libview.view
 
+import android.app.ActionBar
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
+import com.justsafe.libview.R
+import lecho.lib.hellocharts.gesture.ZoomType
+import lecho.lib.hellocharts.model.Axis
+import lecho.lib.hellocharts.model.Line
+import lecho.lib.hellocharts.model.LineChartData
+import lecho.lib.hellocharts.model.PointValue
+import lecho.lib.hellocharts.model.Viewport
 import lecho.lib.hellocharts.view.PreviewLineChartView
 
-class CustomPreviewLineChartView(context: Context, attrs: AttributeSet?) : PreviewLineChartView(context, attrs) {
+class CustomPreviewLineChartView(context: Context, attrs: AttributeSet?) :
+    PreviewLineChartView(context, attrs) {
 
     private var yAxisTitle1: String = ""
+
     private var yAxisTitle2: String = ""
-    private var topPadding: Float = 0f // 顶部偏移量
+
+    private var topPadding: Float = -50f // 顶部偏移量
+
+    private var entries: MutableList<PointValue> = ArrayList()
+
+
+    /**
+     *@param data 折线图数据
+     *@param title1 左上方标题1
+     *@param title2 左上方标题2
+     * */
+    fun setData(data: MutableList<PointValue>, title1: String? = "Vol", title2: String? = "[L/S]") {
+        setYAxisTitles(title1.toString(), title2.toString())
+        entries.clear()
+        entries.addAll(data)
+        setupLineChart()
+    }
+
+    private fun setupLineChart() {
+
+        val line = Line(entries)
+
+        line.color = ContextCompat.getColor(context, R.color.colorPrimary) // 设置线条颜色
+
+        line.strokeWidth = 2 // 设置线条粗细
+
+        line.pointRadius = 1 // 设置点的半径大小
+
+        line.isCubic = true // 设置线条为曲线
+
+        val lines: MutableList<Line> = ArrayList()
+
+        val data = LineChartData(lines)
+
+        lines.add(line)
+
+        data.lines = lines
+
+        // 创建X轴
+        val axisX = Axis()
+
+        axisX.setTextColor(Color.BLACK) // 设置字体颜色
+
+        axisX.textSize = 8
+
+//        axisX.setName("X Axis") // 设置轴名称
+
+        axisX.setMaxLabelChars(6) // 最多几个字符显示在x轴的标签里
+
+        // 创建Y轴
+        val axisY: Axis = Axis().setHasLines(true)
+
+        axisY.setTextColor(Color.BLACK)
+
+//        axisY.setName("Y Axis")
+
+        axisY.textSize = 8
+
+        data.axisXBottom = axisX
+
+        data.axisYLeft = axisY
+
+        lineChartData = data
+
+        zoomType = ZoomType.HORIZONTAL // 限制为水平缩放
+
+        // 自动计算视口
+        val viewport = Viewport(maximumViewport)
+        viewport.top = 110f // 为顶部增加一些额外空间
+
+        maximumViewport = viewport
+        currentViewport = viewport
+
+        // 假设你已经初始化了图表数据
+        // 设置最大视口和初始视口
+        val maxViewport = Viewport(maximumViewport)
+        maximumViewport = maxViewport
+
+
+        val newViewport = Viewport(maximumViewport)
+        // 确定你希望的视口宽度，例如，始终显示最大视口宽度的10%
+        val desiredWidth = maxViewport.width() * 0.05f
+
+        // 计算中心点
+        val midPointX = newViewport.centerX()
+
+        // 设置新的视口，以中心点为中心，左右扩展 desiredWidth / 2
+        val modifiedViewport = Viewport(
+            midPointX - desiredWidth / 2,
+            newViewport.top,
+            midPointX + desiredWidth / 2,
+            newViewport.bottom
+        )
+
+
+//        val params = LinearLayout.LayoutParams(
+//            ViewGroup.LayoutParams.MATCH_PARENT,
+//            ViewGroup.LayoutParams.MATCH_PARENT
+//        )
+//        // 设置上下内边距，调整X轴和Y轴之间的距离
+//        params.setMargins(0, 30, 0, -5)
+//
+//        layoutParams = params
+
+        currentViewport = modifiedViewport
+    }
 
     fun setTopPadding(padding: Float) {
         topPadding = padding

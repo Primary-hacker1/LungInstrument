@@ -1,16 +1,13 @@
 package com.just.machine.ui.fragment.cardiopulmonary.staticfragment
 
 import CustomMarkerView
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.widget.Button
 import android.widget.FrameLayout
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,14 +27,7 @@ import com.just.machine.model.staticlung.RoutineLungBean
 import com.just.machine.ui.adapter.RoutineLungAdapter
 import com.just.news.R
 import com.just.news.databinding.FragmentLungBinding
-import com.justsafe.libview.view.CustomPreviewLineChartView
-import lecho.lib.hellocharts.gesture.ZoomType
-import lecho.lib.hellocharts.model.Axis
-import lecho.lib.hellocharts.model.Line
-import lecho.lib.hellocharts.model.LineChartData
 import lecho.lib.hellocharts.model.PointValue
-import lecho.lib.hellocharts.model.Viewport
-import lecho.lib.hellocharts.view.LineChartView
 
 
 class FragmentStaticLayout : FrameLayout {
@@ -115,11 +105,11 @@ class FragmentStaticLayout : FrameLayout {
             values.add(PointValue(i.toFloat(), Math.random().toFloat() * 100))
         }
 
-        lineChartView(binding.previewChart, values)
+        binding.previewChart.setData(values)
 
-        lineChartView(binding.previewChartFlow, values)
+        binding.previewChartFlow.setData(values)
 
-        lineChartView(binding.previewChartFVC, values)
+        binding.previewChartFVC.setData(values)
 
         // 获取初始视口数据
         val initialViewport = binding.previewChart.currentViewport
@@ -221,96 +211,6 @@ class FragmentStaticLayout : FrameLayout {
 
         binding.rvFvc.adapter = adapter
     }
-
-    /**
-     * @param previewChart  另一个区域折线图 echo.lib.hellocharts.view
-     * */
-    @SuppressLint("ClickableViewAccessibility")
-    private fun lineChartView(previewChart: CustomPreviewLineChartView, entries: MutableList<PointValue>) {
-
-//        val line = Line(values).setColor(Color.BLUE).setHasPoints(false) // 不显示数据点
-
-        val line = Line(entries)
-
-        line.color = ContextCompat.getColor(context, R.color.colorPrimary) // 设置线条颜色
-
-        line.strokeWidth = 2 // 设置线条粗细
-
-        line.pointRadius = 1 // 设置点的半径大小
-
-        line.isCubic = true // 设置线条为曲线
-
-        val lines: MutableList<Line> = ArrayList()
-
-        val data = LineChartData(lines)
-
-        lines.add(line)
-
-        data.lines = lines
-
-        // 创建X轴
-        val axisX = Axis()
-
-        axisX.setTextColor(Color.BLACK) // 设置字体颜色
-
-//        axisX.setName("X Axis") // 设置轴名称
-
-        axisX.textSize = 8
-
-        axisX.setMaxLabelChars(6) // 最多几个字符显示在x轴的标签里
-
-        // 创建Y轴
-        val axisY: Axis = Axis().setHasLines(true)
-
-        axisY.setTextColor(Color.BLACK)
-
-//        axisY.setName("Y Axis")
-
-        axisY.textSize = 8
-
-        data.axisXBottom = axisX
-
-        data.axisYLeft = axisY
-
-        previewChart.setTopPadding(-30f) // 设置顶部偏移量为50给标题空出位置
-
-        previewChart.setYAxisTitles("Title 1", "Title 2")
-
-        previewChart.lineChartData = data
-
-        previewChart.zoomType = ZoomType.HORIZONTAL // 限制为水平缩放
-
-        // 自动计算视口
-        val viewport = Viewport(previewChart.maximumViewport)
-        viewport.top = 110f // 为顶部增加一些额外空间
-
-        previewChart.maximumViewport = viewport
-        previewChart.currentViewport = viewport
-
-        // 假设你已经初始化了图表数据
-        // 设置最大视口和初始视口
-        val maxViewport = Viewport(previewChart.maximumViewport)
-        previewChart.maximumViewport = maxViewport
-
-
-        val newViewport = Viewport(previewChart.maximumViewport)
-        // 确定你希望的视口宽度，例如，始终显示最大视口宽度的10%
-        val desiredWidth = maxViewport.width() * 0.05f
-
-        // 计算中心点
-        val midPointX = newViewport.centerX()
-
-        // 设置新的视口，以中心点为中心，左右扩展 desiredWidth / 2
-        val modifiedViewport = Viewport(
-            midPointX - desiredWidth / 2,
-            newViewport.top,
-            midPointX + desiredWidth / 2,
-            newViewport.bottom
-        )
-
-        previewChart.currentViewport = modifiedViewport
-    }
-
 
     private fun initData() {
         routineLungList = mutableListOf(

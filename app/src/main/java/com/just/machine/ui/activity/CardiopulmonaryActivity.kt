@@ -50,21 +50,6 @@ class CardiopulmonaryActivity : CommonBaseActivity<ActivityCardiopulmonaryBindin
     override fun initView() {
         initToolbar()
         initNavigationView()
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.BLUETOOTH_CONNECT
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.BLUETOOTH_CONNECT),
-                    REQUEST_BLUETOOTH_PERMISSION
-                )
-            }
-        }
-
         SerialPortManager.initialize(this)
         SerialPortManager.sendMessage(MudbusProtocol.HANDSHAKE_COMMAND)//握手
 

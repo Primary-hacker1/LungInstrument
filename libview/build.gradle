@@ -60,4 +60,7 @@ dependencies {
 
     //chart
     api libview.hellocharts
+
+    //chart
+    api presentationDependencies.android_chart
 }
