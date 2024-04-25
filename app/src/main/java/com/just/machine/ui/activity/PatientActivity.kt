@@ -3,6 +3,7 @@ package com.just.machine.ui.activity
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.TextView
@@ -19,15 +20,22 @@ import com.common.viewmodel.LiveDataEvent
 import com.just.machine.dao.PatientBean
 import com.just.machine.model.Constants
 import com.just.machine.model.PatientInfoBean
+import com.just.machine.model.sixminreport.SixMinReportInfo
 import com.just.machine.ui.adapter.CardiopulAdapter
 import com.just.machine.ui.adapter.PatientsAdapter
 import com.just.machine.ui.adapter.SixMinAdapter
+import com.just.machine.ui.dialog.CommonDialogFragment
+import com.just.machine.ui.dialog.DeleteWarnDialogFragment
+import com.just.machine.ui.dialog.DeleteWarnDialogFragment.Companion.startDeleteWarnDialogFragment
 import com.just.machine.ui.dialog.PatientDialogFragment
 import com.just.machine.ui.dialog.SelectActionDialogFragment
+import com.just.machine.ui.dialog.SixMinReportSelfCheckBeforeTestFragment
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.ActivityPatientBinding
 import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.internal.filterList
 
 
 /**
@@ -39,6 +47,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
+    private lateinit var usbTransferUtil: USBTransferUtil
 
     companion object {
         /**
@@ -76,6 +85,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
     override fun initView() {
         initToolbar()
+        usbTransferUtil = USBTransferUtil.getInstance()
 
         viewModel.getPatients()//查询数据库
 
@@ -181,6 +191,39 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                 patientInfoBeans[0].sixMinReportInfo.let { it1 -> sixMinAdapter.setItemsBean(it1) }
 
                 binding.rvSixTest.adapter = sixMinAdapter
+
+                sixMinAdapter.setItemOnClickListener(object : SixMinAdapter.SixMinReportListener {
+                    override fun onDeleteItem(bean: SixMinReportInfo) {
+                        val startDeleteWarnDialogFragment =
+                            startDeleteWarnDialogFragment(
+                                supportFragmentManager,
+                                "确认删除该试验记录吗?"
+                            )
+                        startDeleteWarnDialogFragment.setDeleteWarnDialogListener(object :
+                            DeleteWarnDialogFragment.DeleteWarnDialogListener {
+                            override fun onClickConfirm() {
+                                viewModel.deleteSixMinReportInfo(bean.reportNo)
+                                viewModel.getPatients()//查询数据库
+                            }
+                        })
+                    }
+
+                    override fun onUpdateItem(bean: SixMinReportInfo) {
+                        val intent = Intent(
+                            this@PatientActivity,
+                            SixMinPreReportActivity::class.java
+                        )
+                        val bundle = Bundle()
+                        bundle.putString(Constants.sixMinPatientInfo, bean.patientId.toString())
+                        bundle.putString(Constants.sixMinReportNo, bean.reportNo)
+                        intent.putExtras(bundle)
+                        startActivity(intent)
+                    }
+
+                    override fun onCheckItem(bean: SixMinReportInfo) {
+
+                    }
+                })
             }
         }
     }
@@ -208,7 +251,14 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
         adapter.setItemOnClickListener(object : PatientsAdapter.PatientListener {
             override fun onDeleteItem(bean: PatientBean) {
-                viewModel.deletePatient(bean.patientId)
+                val startDeleteWarnDialogFragment =
+                    startDeleteWarnDialogFragment(supportFragmentManager, "确认删除该患者吗?")
+                startDeleteWarnDialogFragment.setDeleteWarnDialogListener(object :
+                    DeleteWarnDialogFragment.DeleteWarnDialogListener {
+                    override fun onClickConfirm() {
+                        viewModel.deletePatient(bean.patientId)
+                    }
+                })
             }
 
             override fun onUpdateItem(bean: PatientBean) {
@@ -219,7 +269,100 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
             }
 
             override fun onActionItem(bean: PatientBean) {
-                SelectActionDialogFragment.startSelectActionDialogFragment(supportFragmentManager)
+                val startSelectActionDialogFragment =
+                    SelectActionDialogFragment.startSelectActionDialogFragment(
+                        supportFragmentManager
+                    )
+                startSelectActionDialogFragment.setSelectActionDialogListener(object :
+                    SelectActionDialogFragment.SelectActionDialogListener {
+                    override fun onClickConfirm(actionType: Int) {
+                        //0 心肺测试  1 6分钟测试
+                        if (actionType == 0) {
+
+                        } else {
+                            if (usbTransferUtil.isConnectUSB && usbTransferUtil.bloodOxygenConnection && usbTransferUtil.ecgConnection && usbTransferUtil.bloodPressureConnection) {
+                                val selfCheckBeforeTestDialogFragment =
+                                    SixMinReportSelfCheckBeforeTestFragment.startPatientSelfCheckDialogFragment(
+                                        supportFragmentManager, "1", "1"
+                                    )
+                                selfCheckBeforeTestDialogFragment.setSelfCheckBeforeTestDialogOnClickListener(
+                                    object :
+                                        SixMinReportSelfCheckBeforeTestFragment.SixMinReportSelfCheckBeforeTestDialogListener {
+                                        override fun onClickConfirm(
+                                            befoFatigueLevel: Int,
+                                            befoBreathingLevel: Int,
+                                            befoFatigueLevelStr: String,
+                                            befoBreathingLevelStr: String
+                                        ) {
+                                            val intent = Intent(
+                                                this@PatientActivity,
+                                                SixMinActivity::class.java
+                                            )
+                                            val bundle = Bundle()
+                                            bundle.putString(
+                                                Constants.sixMinSelfCheckViewSelection,
+                                                "$befoFatigueLevelStr&$befoBreathingLevelStr"
+                                            )
+                                            intent.putExtras(bundle)
+                                            startActivity(intent)
+                                        }
+
+                                        override fun onClickClose() {
+
+                                        }
+                                    })
+                            } else {
+                                val startCommonDialogFragment =
+                                    CommonDialogFragment.startCommonDialogFragment(
+                                        supportFragmentManager,
+                                        getString(R.string.sixmin_test_enter_test_without_device_connection)
+                                    )
+                                startCommonDialogFragment.setCommonDialogOnClickListener(object :
+                                    CommonDialogFragment.CommonDialogClickListener {
+                                    override fun onPositiveClick() {
+                                        val selfCheckBeforeTestDialogFragment =
+                                            SixMinReportSelfCheckBeforeTestFragment.startPatientSelfCheckDialogFragment(
+                                                supportFragmentManager, "1", "1"
+                                            )
+                                        selfCheckBeforeTestDialogFragment.setSelfCheckBeforeTestDialogOnClickListener(
+                                            object :
+                                                SixMinReportSelfCheckBeforeTestFragment.SixMinReportSelfCheckBeforeTestDialogListener {
+                                                override fun onClickConfirm(
+                                                    befoFatigueLevel: Int,
+                                                    befoBreathingLevel: Int,
+                                                    befoFatigueLevelStr: String,
+                                                    befoBreathingLevelStr: String
+                                                ) {
+                                                    val intent = Intent(
+                                                        this@PatientActivity,
+                                                        SixMinActivity::class.java
+                                                    )
+                                                    val bundle = Bundle()
+                                                    bundle.putString(
+                                                        Constants.sixMinSelfCheckViewSelection,
+                                                        "$befoFatigueLevelStr&$befoBreathingLevelStr"
+                                                    )
+                                                    startActivity(intent, bundle)
+                                                }
+
+                                                override fun onClickClose() {
+
+                                                }
+                                            })
+                                    }
+
+                                    override fun onNegativeClick() {
+
+                                    }
+
+                                    override fun onStopNegativeClick(stopReason: String) {
+
+                                    }
+                                })
+                            }
+                        }
+                    }
+                })
             }
         })
 
@@ -273,7 +416,6 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
             binding.llSixMin.gone()
             binding.llCardiopulmonary.visible()
         }
-
     }
 
     private fun setButtonStyle(

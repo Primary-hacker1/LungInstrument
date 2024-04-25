@@ -22,4 +22,7 @@ interface SixMinReportInfoDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertReportInfo(infoBean: SixMinReportInfo): Long
+
+    @Query("UPDATE sixmin_report_info SET delFlag = '1' WHERE reportNo ==:reportNo")
+    suspend fun deleteReportInfo(reportNo:String)
 }

@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.FragmentManager
 import com.common.base.BaseDialogFragment
+import com.common.base.setNoRepeatListener
 import com.just.machine.model.Constants
 import com.just.machine.model.SixMinReportEditBloodPressure
 import com.just.news.R
@@ -61,7 +62,7 @@ class SixMinReportEditBloodPressureFragment :
     }
 
     override fun initListener() {
-        binding.sixminReportTvEditBloodPressureConfirm.setOnClickListener {
+        binding.sixminReportTvEditBloodPressureConfirm.setNoRepeatListener {
             dismiss()
             val highBefore = binding.sixminReportEditBloodPressureHighBefore.text.toString()
             val lowBefore = binding.sixminReportEditBloodPressureLowBefore.text.toString()

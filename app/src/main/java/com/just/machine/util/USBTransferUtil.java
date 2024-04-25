@@ -56,7 +56,7 @@ public class USBTransferUtil {
     private byte bytesnull = (byte) 0x00;
 
     private String TAG = "USBTransferUtil";
-    public static boolean isConnectUSB = false;  // 连接标识
+    public boolean isConnectUSB = false;  // 连接标识
     private Context my_context;
     private UsbManager manager;  // usb管理器
 

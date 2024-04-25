@@ -230,7 +230,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
      * 显示引导弹窗
      */
     private fun showGuideDialog() {
-        if (USBTransferUtil.isConnectUSB) {
+        if (usbTransferUtil.isConnectUSB) {
             if (sysSettingBean.sysOther.broadcastVoice == "1") {
                 val sixMinGuide = SharedPreferencesUtils.instance.sixMinGuide
                 if (sixMinGuide == null || sixMinGuide == "") {
@@ -584,7 +584,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                     }
                 }
                 //血氧数据
-                if (usbSerialData.bloodOxygen != null && usbSerialData.bloodOxygen != "" && usbSerialData.bloodOxygen != "--") {
+                if (usbSerialData.bloodOxygen != null && usbSerialData.bloodOxygen != "" && usbSerialData.bloodOxygen != "---") {
                     if (usbSerialData.bloodOxygen.toInt() > sysSettingBean.sysAlarm.bloodOxy.toInt()) {
                         binding.sixminTvBloodOxygen.setTextColor(
                             ContextCompat.getColor(
@@ -600,7 +600,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                     }
                     binding.sixminTvBloodOxygen.text = usbSerialData.bloodOxygen
                 } else {
-                    binding.sixminTvBloodOxygen.text = "--"
+                    binding.sixminTvBloodOxygen.text = "---"
                     if (usbTransferUtil.bloodOxygenConnection) {
                         binding.sixminTvBloodOxygen.setTextColor(
                             ContextCompat.getColor(
@@ -629,7 +629,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         })
 
         binding.sixminRlMeasureBlood.setNoRepeatListener {
-            if (USBTransferUtil.isConnectUSB) {
+            if (usbTransferUtil.isConnectUSB) {
                 if (usbTransferUtil.bloodPressureConnection) {
                     if (binding.sixminTvMeasureBlood.text == getString(R.string.sixmin_measure_blood)) {
                         SixMinCmdUtils.measureBloodPressure()
@@ -645,7 +645,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         }
 
         binding.sixminRlStart.setNoRepeatListener {
-            if (USBTransferUtil.isConnectUSB) {
+            if (usbTransferUtil.isConnectUSB) {
                 if (!usbTransferUtil.isBegin) {
                     startStepAndCircle()
                 } else {
@@ -1627,7 +1627,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
     }
 
     override fun onResume() {
-        if (!USBTransferUtil.isConnectUSB) {
+        if (!usbTransferUtil.isConnectUSB) {
             binding.sixminIvEcg.setImageResource(R.mipmap.xinlvno)
             binding.sixminIvBloodPressure.setImageResource(R.mipmap.xueyano)
             binding.sixminIvBloodOxygen.setImageResource(R.mipmap.xueyangno)

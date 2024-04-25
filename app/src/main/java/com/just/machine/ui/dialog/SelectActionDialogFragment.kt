@@ -12,7 +12,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SelectActionDialogFragment : BaseDialogFragment<FragmentDialogSelectActionBinding>() {
 
-
     companion object {
         /**
          * @param fragmentManager FragmentManager
@@ -22,7 +21,6 @@ class SelectActionDialogFragment : BaseDialogFragment<FragmentDialogSelectAction
 
             fragmentManager: FragmentManager,
 
-            bean: PatientBean? = PatientBean()
 
         ): SelectActionDialogFragment {
 
@@ -44,10 +42,12 @@ class SelectActionDialogFragment : BaseDialogFragment<FragmentDialogSelectAction
 
     override fun initListener() {
         binding.ivBtnSixmin.setNoRepeatListener {
-
+            listener?.onClickConfirm(1)
+            dismiss()
         }
         binding.ivBtnXf.setNoRepeatListener {
-
+            listener?.onClickConfirm(0)
+            dismiss()
         }
     }
 
@@ -57,5 +57,14 @@ class SelectActionDialogFragment : BaseDialogFragment<FragmentDialogSelectAction
 
     override fun getLayout(): Int {
         return R.layout.fragment_dialog_select_action
+    }
+
+    private var listener: SelectActionDialogListener? = null
+    interface SelectActionDialogListener {
+        fun onClickConfirm(actionType:Int)
+    }
+
+    fun setSelectActionDialogListener(listener: SelectActionDialogListener) {
+        this.listener = listener
     }
 }
