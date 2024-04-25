@@ -13,9 +13,9 @@ import com.just.machine.dao.ChatItemConverter
 @TypeConverters(ChatItemConverter::class)
 data class SixMinReportInfo(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id")
-    var id: Long = 0,
+    val id: Long = 0,
     var reportNo: String = "",//报告编号
-    var patientId: String = "",//患者id
+    var patientId: Long = 0,//患者id
     var patientName: String = "",//患者姓名
     var patientSix: String = "",//患者性别
     var patientAge: String = "",//患者年龄

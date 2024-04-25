@@ -25,6 +25,7 @@ import com.google.gson.Gson
 import com.just.machine.dao.PatientBean
 import com.just.machine.model.BloodOxyLineEntryBean
 import com.just.machine.model.Constants
+import com.just.machine.model.PatientInfoBean
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.UsbSerialData
 import com.just.machine.model.sixminreport.SixMinBloodOxygen
@@ -75,7 +76,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
     private lateinit var mStartTestCountDownTime: FixCountDownTime//6分钟试验倒计时
     private lateinit var mGetSportHeartEcgCountDownTime: FixCountDownTime//采集运动心率倒计时
     private lateinit var bloodOxyDataSet: LineDataSet
-    private lateinit var patientBean: PatientBean//患者信息
+    private lateinit var patientBean: PatientInfoBean//患者信息
     private lateinit var sysSettingBean: SixMinSysSettingBean//系统设置
     private var colorList = mutableListOf(0)
     private var notShowAnymore = false
@@ -153,26 +154,27 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         }
         viewModel.getPatients()
         initClickListener()
+        viewModel.getSixMinReportInfo()
     }
 
     private fun initPatientInfo() {
         val date = Date()
         val dateFormat = SimpleDateFormat("yyyyMMddHHmmss", Locale.CHINA)
         val reportNo = dateFormat.format(date)
-        sixMinReportInfo.patientId = patientBean.patientId.toString()
+        sixMinReportInfo.patientId = patientBean.infoBean.patientId
         sixMinReportInfo.reportNo = reportNo
-        sixMinReportInfo.patientName = patientBean.name.toString()
-        sixMinReportInfo.patientHeight = patientBean.height.toString()
-        sixMinReportInfo.patientWeight = patientBean.weight.toString()
-        sixMinReportInfo.patientSix = patientBean.sex.toString()
-        sixMinReportInfo.patientAge = patientBean.age.toString()
-        sixMinReportInfo.patientBmi = patientBean.BMI.toString()
-        sixMinReportInfo.patientStride = patientBean.stride.toString()
-        sixMinReportInfo.clinicalDiagnosis = patientBean.clinicalDiagnosis.toString()
-        sixMinReportInfo.medicineUse = patientBean.currentMedications.toString()
-        sixMinReportInfo.predictionDistance = patientBean.predictDistances.toString()
-        sixMinReportInfo.medicalNo = patientBean.medicalRecordNumber.toString()
-        sixMinReportInfo.medicalHistory = patientBean.diseaseHistory.toString()
+        sixMinReportInfo.patientName = patientBean.infoBean.name.toString()
+        sixMinReportInfo.patientHeight = patientBean.infoBean.height.toString()
+        sixMinReportInfo.patientWeight = patientBean.infoBean.weight.toString()
+        sixMinReportInfo.patientSix = patientBean.infoBean.sex.toString()
+        sixMinReportInfo.patientAge = patientBean.infoBean.age.toString()
+        sixMinReportInfo.patientBmi = patientBean.infoBean.BMI.toString()
+        sixMinReportInfo.patientStride = patientBean.infoBean.stride.toString()
+        sixMinReportInfo.clinicalDiagnosis = patientBean.infoBean.clinicalDiagnosis.toString()
+        sixMinReportInfo.medicineUse = patientBean.infoBean.currentMedications.toString()
+        sixMinReportInfo.predictionDistance = patientBean.infoBean.predictDistances.toString()
+        sixMinReportInfo.medicalNo = patientBean.infoBean.medicalRecordNumber.toString()
+        sixMinReportInfo.medicalHistory = patientBean.infoBean.diseaseHistory.toString()
         sixMinReportInfo.bsHxl = sysSettingBean.sysOther.stepsOrBreath
 
         sixMinReportBloodOther.reportId = sixMinReportInfo.reportNo
@@ -261,6 +263,10 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
             when (it.action) {
                 LiveDataEvent.QuerySuccess -> {
                     it.any?.let { it1 -> beanQuery(it1) }
+                }
+
+                LiveDataEvent.QuerySixMinReportInfoSuccess -> {
+
                 }
             }
         }
@@ -855,7 +861,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         //计算实际运动距离占预测的百分比
         val bd: BigDecimal =
             BigDecimal(sixMinReportEvaluation.totalDistance).divide(
-                BigDecimal(if (patientBean.predictDistances == "") "1" else patientBean.predictDistances),
+                BigDecimal(if (patientBean.infoBean.predictDistances == "") "1" else patientBean.infoBean.predictDistances),
                 2,
                 RoundingMode.HALF_UP
             )
@@ -879,7 +885,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
             SixMinPreReportActivity::class.java
         )
         val bundle = Bundle()
-        bundle.putString(Constants.sixMinPatientInfo, sixMinReportInfo.patientId)
+        bundle.putString(Constants.sixMinPatientInfo, sixMinReportInfo.patientId.toString())
         bundle.putString(Constants.sixMinReportNo, sixMinReportInfo.reportNo)
         intent.putExtras(bundle)
         startActivity(intent)
@@ -968,7 +974,8 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                                 if (sysSettingBean.sysOther.broadcastVoice == "1") {
                                     speechContent(getString(R.string.sixmin_test_start_count_down_four_tips))
                                 }
-                                sixMinReportWalk.walkTwo = usbTransferUtil.stepsStr
+                                sixMinReportWalk.walkTwo =
+                                    (usbTransferUtil.stepsStr.toInt() - sixMinReportWalk.walkOne.toInt()).toString()
                                 usbTransferUtil.dealBloodBe(
                                     sixMinReportBloodOxy,
                                     minute,
@@ -981,7 +988,8 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                                 if (sysSettingBean.sysOther.broadcastVoice == "1") {
                                     speechContent(getString(R.string.sixmin_test_start_count_down_three_tips))
                                 }
-                                sixMinReportWalk.walkThree = usbTransferUtil.stepsStr
+                                sixMinReportWalk.walkThree =
+                                    (usbTransferUtil.stepsStr.toInt() - sixMinReportWalk.walkOne.toInt() - sixMinReportWalk.walkTwo.toInt()).toString()
                                 usbTransferUtil.dealBloodBe(
                                     sixMinReportBloodOxy,
                                     minute,
@@ -994,7 +1002,8 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                                 if (sysSettingBean.sysOther.broadcastVoice == "1") {
                                     speechContent(getString(R.string.sixmin_test_start_count_down_two_tips))
                                 }
-                                sixMinReportWalk.walkFour = usbTransferUtil.stepsStr
+                                sixMinReportWalk.walkFour =
+                                    (usbTransferUtil.stepsStr.toInt() - sixMinReportWalk.walkThree.toInt() - sixMinReportWalk.walkTwo.toInt() - sixMinReportWalk.walkOne.toInt()).toString()
                                 usbTransferUtil.dealBloodBe(
                                     sixMinReportBloodOxy,
                                     minute,
@@ -1007,18 +1016,8 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                                 if (sysSettingBean.sysOther.broadcastVoice == "1") {
                                     speechContent(getString(R.string.sixmin_test_start_count_down_one_tips))
                                 }
-                                sixMinReportWalk.walkFive = usbTransferUtil.stepsStr
-                                usbTransferUtil.dealBloodBe(
-                                    sixMinReportBloodOxy,
-                                    minute,
-                                    usbTransferUtil.bloodListAvg
-                                )
-                                usbTransferUtil.bloodListAvg.clear()
-                            }
-
-                            0 -> {
-                                sixMinReportWalk.walkSix =
-                                    (usbTransferUtil.stepsStr.toInt() - sixMinReportWalk.walkFive.toInt() - sixMinReportWalk.walkFour.toInt() - sixMinReportWalk.walkThree.toInt() - sixMinReportWalk.walkTwo.toInt() - sixMinReportWalk.walkOne.toInt()).toString()
+                                sixMinReportWalk.walkFive =
+                                    (usbTransferUtil.stepsStr.toInt() - sixMinReportWalk.walkFour.toInt() - sixMinReportWalk.walkThree.toInt() - sixMinReportWalk.walkTwo.toInt() - sixMinReportWalk.walkOne.toInt()).toString()
                                 usbTransferUtil.dealBloodBe(
                                     sixMinReportBloodOxy,
                                     minute,
@@ -1040,6 +1039,15 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
             }
 
             override fun onFinish() {
+                sixMinReportWalk.walkSix =
+                    (usbTransferUtil.stepsStr.toInt() - sixMinReportWalk.walkFive.toInt() - sixMinReportWalk.walkFour.toInt() - sixMinReportWalk.walkThree.toInt() - sixMinReportWalk.walkTwo.toInt() - sixMinReportWalk.walkOne.toInt()).toString()
+                usbTransferUtil.dealBloodBe(
+                    sixMinReportBloodOxy,
+                    0,
+                    usbTransferUtil.bloodListAvg
+                )
+                usbTransferUtil.bloodListAvg.clear()
+
                 if (sysSettingBean.sysOther.broadcastVoice == "1") {
                     speechContent(getString(R.string.sixmin_test_start_timeout))
                 }
@@ -1263,13 +1271,13 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         try {
             if (any is List<*>) {
                 val datas = any as MutableList<*>
-                patientBean = datas[0] as PatientBean
-                binding.sixminTvTestPatientName.text = patientBean.name
-                binding.sixminTvTestPatientSex.text = patientBean.sex
-                binding.sixminTvTestPatientAge.text = patientBean.age
-                binding.sixminTvTestPatientHight.text = patientBean.height
-                binding.sixminTvTestPatientWeight.text = patientBean.weight
-                binding.sixminTvTestPatientBmi.text = patientBean.BMI
+                patientBean = datas[0] as PatientInfoBean
+                binding.sixminTvTestPatientName.text = patientBean.infoBean.name
+                binding.sixminTvTestPatientSex.text = patientBean.infoBean.sex
+                binding.sixminTvTestPatientAge.text = patientBean.infoBean.age
+                binding.sixminTvTestPatientHight.text = patientBean.infoBean.height
+                binding.sixminTvTestPatientWeight.text = patientBean.infoBean.weight
+                binding.sixminTvTestPatientBmi.text = patientBean.infoBean.BMI
 
                 initPatientInfo()
             }
@@ -1409,7 +1417,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                             addEntryData(value.toFloat(), (millisUntilFinished / 1000).toInt())
                         }
                     }
-                }catch (e:Exception){
+                } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }

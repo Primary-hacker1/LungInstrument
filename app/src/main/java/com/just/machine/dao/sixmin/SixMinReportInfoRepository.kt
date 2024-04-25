@@ -15,7 +15,7 @@ import javax.inject.Inject
  */
 class SixMinReportInfoRepository @Inject constructor(private val reportDao: SixMinReportInfoDao) {
 
-    fun getReportInfo(id:String,reportNo:String): Flow<List<SixMinRecordsBean>> = reportDao.getReportInfoById(id,reportNo)
+    fun getReportInfo(id:Long,reportNo:String): Flow<List<SixMinRecordsBean>> = reportDao.getReportInfoById(id,reportNo)
 
     fun getReportInfo(): Flow<List<SixMinRecordsBean>> = reportDao.getReportInfo()
 

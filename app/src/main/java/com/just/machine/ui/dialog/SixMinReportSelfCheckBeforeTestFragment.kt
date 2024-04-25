@@ -248,14 +248,14 @@ class SixMinReportSelfCheckBeforeTestFragment :
         )
         patientTiredSelfItemList.add(
             SixMinReportPatientSelfItemBean(
-                "7-9级", "非常疲劳", if (fatigueLevel == "7-9") "1" else "0", if (checkAble == "" || checkAble == "0") "0" else "1"
+                "7-8级", "非常疲劳", if (fatigueLevel == "7-8") "1" else "0", if (checkAble == "" || checkAble == "0") "0" else "1"
             )
         )
         patientTiredSelfItemList.add(
             SixMinReportPatientSelfItemBean(
-                "10级",
+                "9-10级",
                 "非常非常疲劳(几乎到极限)",
-                if (fatigueLevel == "10") "1" else "0",
+                if (fatigueLevel == "9-10") "1" else "0",
                 if (checkAble == "" || checkAble == "0") "0" else "1"
             )
         )
@@ -343,12 +343,12 @@ class SixMinReportSelfCheckBeforeTestFragment :
                 conclusion = "您当前的疲劳状况为：(5-6级)疲劳状况疲劳"
             }
 
-            "7-9" -> {
-                conclusion = "您当前的疲劳状况为：(7-9级)疲劳状况非常疲劳"
+            "7-8" -> {
+                conclusion = "您当前的疲劳状况为：(7-8级)疲劳状况非常疲劳"
             }
 
-            "10" -> {
-                conclusion = "您当前的疲劳状况为：(10级)疲劳状况非常非常疲劳(几乎到极限)"
+            "9-10" -> {
+                conclusion = "您当前的疲劳状况为：(9-10级)疲劳状况非常非常疲劳(几乎到极限)"
             }
 
             else -> {

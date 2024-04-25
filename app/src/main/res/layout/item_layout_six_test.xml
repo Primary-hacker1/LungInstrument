@@ -5,7 +5,7 @@
 
         <variable
             name="item"
-            type="com.just.machine.model.SixMinRecordsBean" />
+            type="com.just.machine.model.sixminreport.SixMinReportInfo" />
     </data>
 
     <LinearLayout
@@ -20,7 +20,7 @@
             android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_18"
-            android:text="@{item.infoBean.addTime}"
+            android:text="@{item.addTime}"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -28,7 +28,7 @@
             android:id="@+id/atv_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{item.infoBean.reportNo}"
+            android:text="@{item.reportNo}"
             android:textSize="16sp"
             android:textStyle="bold" />
 
