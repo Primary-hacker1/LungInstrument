@@ -69,7 +69,7 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
             entries.add(Entry(index.toFloat(), index.toFloat() / 6 - 3))
         }
 
-        binding.chartFvc.setLineChartFlow(entries, -5f, 5f, 11)
+        binding.chartFvc.setLineChartFlow(mutableListOf(), -5f, 5f, 11)
 
         val lineChartFvc = binding.chartFvc
 

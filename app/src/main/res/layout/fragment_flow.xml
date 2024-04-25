@@ -286,6 +286,12 @@
                             android:padding="@dimen/space_6"
                             android:layout_height="wrap_content" />
 
+                    <com.justsafe.libview.view.BaseLineChart
+                            android:id="@+id/chart_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="@dimen/space_6" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -302,6 +308,12 @@
                             android:text="流速-容量"
                             android:padding="@dimen/space_6"
                             android:layout_height="wrap_content" />
+
+                    <com.justsafe.libview.view.BaseLineChart
+                            android:id="@+id/chart_speed"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="@dimen/space_6" />
 
                 </LinearLayout>
 

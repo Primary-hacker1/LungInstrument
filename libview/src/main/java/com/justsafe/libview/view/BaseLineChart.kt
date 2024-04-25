@@ -14,17 +14,51 @@ import com.justsafe.libview.R
 
 class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context, attrs) {
 
+    val entries = arrayListOf<Entry>()// 创建折线图的样本数据
+
     /**
-    * @param entriesFow 数据
-    * @param title2 标题2y轴单位
-    * */
-     fun setLineChartFlow(
-        entriesFow: ArrayList<Entry>,//xy数据
-        fl: Float? = 0f,//y轴最小值
-        fl1: Float? = 0f,//y轴最大值
+     * @param entriesList 数据
+     * @param title2 标题2y轴单位
+     * */
+    fun setLineChartFlow(
+        entriesList : MutableList<LineDataSet>?=ArrayList(),
+        yAxisMinimum: Float? = 0f,//y轴最小值
+        yAxisMaximum: Float? = 0f,//y轴最大值
         count: Int? = 0,//y轴的个数
         title2: String? = "[L/S]"
     ) {
+
+        for (index in 0..30) {
+            entries.add(Entry(index.toFloat(), index.toFloat() / 6 ))
+        }
+
+        val dataSet1 = LineDataSet(entries, "Data Set 1")
+        dataSet1.color = ContextCompat.getColor(context, R.color.colorPrimary) // 设置曲线颜色
+        dataSet1.setCircleColor(Color.BLUE) // 设置曲线上的数据点颜色
+        dataSet1.lineWidth = 2f // 设置曲线宽度
+        dataSet1.circleRadius = 3f // 设置曲线上的数据点半径
+        dataSet1.valueTextSize = 10f // 设置数据点值的字体大小
+        dataSet1.valueTextColor = ContextCompat.getColor(context, R.color.Indigo_colorPrimary) // 设置曲线颜色
+        dataSet1.setDrawValues(false) // 设置是否绘制数据点的值
+        dataSet1.mode = LineDataSet.Mode.CUBIC_BEZIER // 设置曲线模式为三次贝塞尔曲线
+
+        entriesList?.add(dataSet1)
+
+        val lineDataSets = mutableListOf<ILineDataSet>()
+
+        entriesList?.let { lineDataSets.addAll(it) }
+
+        val lineData = LineData(lineDataSets)
+        data = lineData
+
+        xAxis.granularity = 1f     //这个很重要
+
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+
+        xAxis.setLabelCount(entries.size, true)//x刻度多少个
+
+        // 禁用X轴的刻度线
+        xAxis.setDrawGridLines(false)
 
         // 设置标题
         description.text = title2
@@ -33,17 +67,17 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
         description.textColor = Color.BLACK
 
         // 设置 Y 轴的最小值和最大值，以确保包含所有单数刻度
-        if (fl != null) {
-            axisLeft.axisMinimum = fl
+        if (yAxisMinimum != null) {
+            axisLeft.axisMinimum = yAxisMinimum
         } // 设置 Y 轴最小值
-        if (fl1 != null) {
-            axisLeft.axisMaximum = fl1
+        if (yAxisMaximum != null) {
+            axisLeft.axisMaximum = yAxisMaximum
         } // 设置 Y 轴最大值
-        if (fl != null) {
-            axisRight.axisMinimum = fl
+        if (yAxisMinimum != null) {
+            axisRight.axisMinimum = yAxisMinimum
         } // 设置 Y 轴最小值
-        if (fl1 != null) {
-            axisRight.axisMaximum = fl1
+        if (yAxisMaximum != null) {
+            axisRight.axisMaximum = yAxisMaximum
         } // 设置 Y 轴最大值
 
         setExtraOffsets(0f, 0f, 0f, 0f) // 上、左、下、右边距
@@ -66,37 +100,8 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
                 count, true
             )
         } // y轴刻度多少个
-        // 创建 LineDataSet 对象并添加数据集
-        val dataSet1 = LineDataSet(entriesFow, "Data Set 1")
-
-        dataSet1.color = ContextCompat.getColor(context, R.color.colorPrimary) // 设置曲线颜色
-        dataSet1.setCircleColor(Color.BLUE) // 设置曲线上的数据点颜色
-        dataSet1.lineWidth = 2f // 设置曲线宽度
-        dataSet1.circleRadius = 3f // 设置曲线上的数据点半径
-        dataSet1.valueTextSize = 10f // 设置数据点值的字体大小
-        dataSet1.valueTextColor = Color.BLUE // 设置数据点值的颜色
-        dataSet1.setDrawValues(false) // 设置是否绘制数据点的值
-        dataSet1.mode = LineDataSet.Mode.CUBIC_BEZIER // 设置曲线模式为三次贝塞尔曲线
-
-        val xAxis = xAxis
-
-        xAxis.granularity = 1f     //这个很重要
-
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
-
-        xAxis.setLabelCount(entriesFow.size, true)//x刻度多少个
-
-        // 禁用X轴的刻度线
-        xAxis.setDrawGridLines(false)
-
-        val lineDataSets = mutableListOf<ILineDataSet>()
-        lineDataSets.add(dataSet1)
-
-        val lineData = LineData(lineDataSets)
-        data = lineData
 
         // 刷新图表
         invalidate()
     }
-
 }
