@@ -17,6 +17,7 @@ import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.BaseUtil
 import com.just.machine.util.LiveDataBus
+import com.just.news.R
 import com.just.news.databinding.FragmentFlowBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -50,12 +51,14 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
 
         binding.rvFlow.adapter = flowAdapter
 
-        binding.chartTime.setLineChartFlow(mutableListOf(), -5f, 5f, 11)
+        binding.chartTime.setLineDataSetData(
+            mutableListOf()
+        )//设置数据
 
         binding.llStart.setNoRepeatListener {
             if (Constants.isDebug) {
-                val smallRangeFlow = 120 // 例如，120 L/min
-                val largeRangeFlow = 3000 // 例如，3000 L/min
+                val smallRangeFlow = 0 // 例如，120 L/min
+                val largeRangeFlow = 30 // 例如，3000 L/min
 
                 val data = MudbusProtocol.generateFlowCalibrationCommand(
                     smallRangeFlow,
@@ -77,11 +80,11 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
                 LogUtils.e(tag + BaseUtil.bytes2HexStr(it) + "字节长度" + BaseUtil.bytes2HexStr(it).length)
                 val data = MudbusProtocol.parseFlowCalibrationData(it)
                 if (data != null) {
-                    val (smallRangeFlow,largeRangeFlow) = data
+                    val (smallRangeFlow, largeRangeFlow) = data
 
-                    LogUtils.e(tag+smallRangeFlow)
+                    LogUtils.e(tag + smallRangeFlow)
 
-                    LogUtils.e(tag+largeRangeFlow)
+                    LogUtils.e(tag + largeRangeFlow)
 
                 }
 
