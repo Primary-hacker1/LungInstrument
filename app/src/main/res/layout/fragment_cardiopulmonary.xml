@@ -6,92 +6,98 @@
         <import type="com.just.news.R" />
 
         <variable
-            name="vm"
-            type="com.just.machine.ui.viewmodel.MainViewModel" />
+                name="vm"
+                type="com.just.machine.ui.viewmodel.MainViewModel" />
     </data>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/cF5FCFF"
-        android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/cF5FCFF"
+            android:orientation="vertical">
 
         <include
-            android:id="@+id/toolbar"
-            layout="@layout/view_toolbar"
-            setTitleImage="@{R.drawable.back}" />
+                android:id="@+id/toolbar"
+                layout="@layout/view_toolbar"
+                setTitleImage="@{R.drawable.back}" />
 
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_environment"
-                    android:layout_width="96dp"
-                    android:layout_height="73dp"
-                    android:background="@color/white"
-                    android:drawableTop="@drawable/ic_calibration"
-                    android:padding="@dimen/space_10"
-                    android:text="系统定标" />
+                        android:id="@+id/btn_environment"
+                        android:layout_width="96dp"
+                        android:layout_height="73dp"
+                        android:background="@color/white"
+                        android:drawableTop="@drawable/ic_calibration"
+                        android:padding="@dimen/space_10"
+                        android:textSize="@dimen/space_14"
+                        android:text="系统定标" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_static"
-                    android:layout_width="96dp"
-                    android:layout_height="73dp"
-                    android:background="@color/white"
-                    android:drawableTop="@drawable/ic_dynamic"
-                    android:padding="@dimen/space_10"
-                    android:text="静态肺测试" />
+                        android:id="@+id/btn_static"
+                        android:layout_width="96dp"
+                        android:layout_height="73dp"
+                        android:background="@color/white"
+                        android:drawableTop="@drawable/ic_dynamic"
+                        android:padding="@dimen/space_10"
+                        android:textSize="@dimen/space_14"
+                        android:text="静态肺测试" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_dynamic"
-                    android:layout_width="96dp"
-                    android:layout_height="73dp"
-                    android:background="@color/white"
-                    android:drawableTop="@drawable/ic_dynamic"
-                    android:padding="@dimen/space_10"
-                    android:text="动态肺测试" />
+                        android:id="@+id/btn_dynamic"
+                        android:layout_width="96dp"
+                        android:layout_height="73dp"
+                        android:background="@color/white"
+                        android:drawableTop="@drawable/ic_dynamic"
+                        android:padding="@dimen/space_10"
+                        android:text="动态肺测试"
+                        android:textSize="@dimen/space_14" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_dynamic_result"
-                    android:layout_width="96dp"
-                    android:layout_height="73dp"
-                    android:background="@color/white"
-                    android:drawableTop="@drawable/dynamic_result"
-                    android:padding="@dimen/space_10"
-                    android:text="运动评估" />
+                        android:id="@+id/btn_dynamic_result"
+                        android:layout_width="96dp"
+                        android:layout_height="73dp"
+                        android:background="@color/white"
+                        android:drawableTop="@drawable/dynamic_result"
+                        android:padding="@dimen/space_10"
+                        android:textSize="@dimen/space_14"
+                        android:text="运动评估" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_setting"
-                    android:layout_width="96dp"
-                    android:layout_height="73dp"
-                    android:background="@color/white"
-                    android:drawableTop="@drawable/ic_setting"
-                    android:padding="@dimen/space_10"
-                    android:text="系统设置" />
+                        android:id="@+id/btn_setting"
+                        android:layout_width="96dp"
+                        android:layout_height="73dp"
+                        android:background="@color/white"
+                        android:drawableTop="@drawable/ic_setting"
+                        android:padding="@dimen/space_10"
+                        android:textSize="@dimen/space_14"
+                        android:text="系统设置" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_close"
-                    android:layout_width="96dp"
-                    android:layout_height="73dp"
-                    android:background="@color/white"
-                    android:drawableTop="@drawable/ic_clos"
-                    android:padding="@dimen/space_10"
-                    android:text="退出程序" />
+                        android:id="@+id/btn_close"
+                        android:layout_width="96dp"
+                        android:layout_height="73dp"
+                        android:background="@color/white"
+                        android:drawableTop="@drawable/ic_clos"
+                        android:padding="@dimen/space_10"
+                        android:textSize="@dimen/space_14"
+                        android:text="退出程序" />
 
             </LinearLayout>
 
             <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/vp_cardiopulmonary"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                    android:id="@+id/vp_cardiopulmonary"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
         </LinearLayout>
 

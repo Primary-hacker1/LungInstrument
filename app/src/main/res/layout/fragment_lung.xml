@@ -135,9 +135,10 @@
             </RelativeLayout>
 
             <!-- 在你的 activity_main.xml 或相应的布局文件中 -->
-            <lecho.lib.hellocharts.view.PreviewLineChartView
+            <com.justsafe.libview.view.CustomPreviewLineChartView
                     android:id="@+id/previewChart"
                     android:layout_width="match_parent"
+                    android:paddingTop="@dimen/space_8"
                     android:layout_height="150dp" />
 
 
@@ -163,7 +164,7 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                <lecho.lib.hellocharts.view.PreviewLineChartView
+                <com.justsafe.libview.view.CustomPreviewLineChartView
                         android:id="@+id/previewChartFlow"
                         android:layout_width="match_parent"
                         android:background="@drawable/calibration_bg"
@@ -171,7 +172,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content" />
 
-                <lecho.lib.hellocharts.view.PreviewLineChartView
+                <com.justsafe.libview.view.CustomPreviewLineChartView
                         android:id="@+id/previewChartFVC"
                         android:layout_width="match_parent"
                         android:background="@drawable/calibration_bg"

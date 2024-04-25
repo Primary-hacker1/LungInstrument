@@ -5,10 +5,12 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,6 +30,7 @@ import com.just.machine.model.staticlung.RoutineLungBean
 import com.just.machine.ui.adapter.RoutineLungAdapter
 import com.just.news.R
 import com.just.news.databinding.FragmentLungBinding
+import com.justsafe.libview.view.CustomPreviewLineChartView
 import lecho.lib.hellocharts.gesture.ZoomType
 import lecho.lib.hellocharts.model.Axis
 import lecho.lib.hellocharts.model.Line
@@ -127,7 +130,6 @@ class FragmentStaticLayout : FrameLayout {
 
         // 设置视口变化监听器，调整视口宽度
         binding.previewChart.setViewportChangeListener {
-
             // 将previewChart的视口数据应用到previewChartFlow的坐标轴数据中
             binding.previewChartFlow.maximumViewport = it
             binding.previewChartFlow.currentViewport = it
@@ -224,8 +226,7 @@ class FragmentStaticLayout : FrameLayout {
      * @param previewChart  另一个区域折线图 echo.lib.hellocharts.view
      * */
     @SuppressLint("ClickableViewAccessibility")
-    private fun lineChartView(previewChart: LineChartView, entries: MutableList<PointValue>) {
-
+    private fun lineChartView(previewChart: CustomPreviewLineChartView, entries: MutableList<PointValue>) {
 
 //        val line = Line(values).setColor(Color.BLUE).setHasPoints(false) // 不显示数据点
 
@@ -254,15 +255,26 @@ class FragmentStaticLayout : FrameLayout {
 
 //        axisX.setName("X Axis") // 设置轴名称
 
+        axisX.textSize = 8
+
         axisX.setMaxLabelChars(6) // 最多几个字符显示在x轴的标签里
 
         // 创建Y轴
         val axisY: Axis = Axis().setHasLines(true)
+
         axisY.setTextColor(Color.BLACK)
+
 //        axisY.setName("Y Axis")
 
+        axisY.textSize = 8
+
         data.axisXBottom = axisX
+
         data.axisYLeft = axisY
+
+        previewChart.setTopPadding(-30f) // 设置顶部偏移量为50给标题空出位置
+
+        previewChart.setYAxisTitles("Title 1", "Title 2")
 
         previewChart.lineChartData = data
 
@@ -297,8 +309,6 @@ class FragmentStaticLayout : FrameLayout {
         )
 
         previewChart.currentViewport = modifiedViewport
-
-
     }
 
 

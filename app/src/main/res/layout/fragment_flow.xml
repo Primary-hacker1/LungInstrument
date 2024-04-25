@@ -1,110 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
     </data>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="@dimen/space_9">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="@dimen/space_9">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimens_50dp"
-            android:background="@drawable/calibration_bg">
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimens_50dp"
+                android:background="@drawable/calibration_bg">
 
 
             <LinearLayout
-                android:id="@+id/ll_title"
-                android:layout_width="83dp"
-                android:layout_height="35dp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints">
+                    android:id="@+id/ll_title"
+                    android:layout_width="83dp"
+                    android:layout_height="35dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="MissingConstraints">
 
                 <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:src="@drawable/flow"
-                    tools:ignore="ContentDescription" />
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:src="@drawable/flow"
+                        tools:ignore="ContentDescription" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:text="@string/flow"
-                    android:textColor="@color/text7"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="@string/flow"
+                        android:textColor="@color/text7"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
 
             </LinearLayout>
 
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/space_28"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints">
-
-                <LinearLayout
-                    android:id="@+id/ll_start"
-                    android:layout_width="83dp"
-                    android:layout_height="35dp"
-                    android:background="@drawable/save_bg"
-                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/space_28"
                     android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="MissingConstraints">
 
+                <LinearLayout
+                        android:id="@+id/ll_start"
+                        android:layout_width="83dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/save_bg"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        tools:ignore="MissingConstraints">
+
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/baseline_play"
-                        tools:ignore="ContentDescription" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/baseline_play"
+                            tools:ignore="ContentDescription" />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:text="@string/begin"
-                        android:textColor="@color/colorWhile"
-                        android:textSize="12sp" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:text="@string/begin"
+                            android:textColor="@color/colorWhile"
+                            android:textSize="12sp" />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/ll_save"
-                    android:layout_width="83dp"
-                    android:layout_height="35dp"
-                    android:layout_marginStart="@dimen/space_12"
-                    android:background="@drawable/save_bg_line"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    tools:ignore="MissingConstraints">
+                        android:id="@+id/ll_save"
+                        android:layout_width="83dp"
+                        android:layout_height="35dp"
+                        android:layout_marginStart="@dimen/space_12"
+                        android:background="@drawable/save_bg_line"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        tools:ignore="MissingConstraints">
 
                     <ImageView
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:src="@drawable/save_icon"
-                        tools:ignore="ContentDescription" />
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@drawable/save_icon"
+                            tools:ignore="ContentDescription" />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:text="@string/save"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="12sp" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:text="@string/save"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="12sp" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -112,151 +112,152 @@
 
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="380dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_9"
-                android:background="@drawable/calibration_bg"
-                android:orientation="vertical">
+                    android:layout_width="380dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/space_9"
+                    android:background="@drawable/calibration_bg"
+                    android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/space_6">
-
-                    <View
-                        android:layout_width="@dimen/space_3"
-                        android:layout_height="14dp"
-                        android:background="@color/text7" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_5"
-                        android:text="@string/Inspiratory_calibration"
-                        android:textColor="@color/text7"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/space_6">
+
+                    <View
+                            android:layout_width="@dimen/space_3"
+                            android:layout_height="14dp"
+                            android:background="@color/text7" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_5"
+                            android:text="@string/Inspiratory_calibration"
+                            android:textColor="@color/text7"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/ll_item"
-                    android:layout_width="match_parent"
-                    android:layout_height="25dp"
-                    android:layout_marginHorizontal="@dimen/space_6"
-                    android:background="@color/cf4f5fa"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                        android:id="@+id/ll_item"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:layout_marginHorizontal="@dimen/space_6"
+                        android:background="@color/cf4f5fa"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="88dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_19"
-                        android:text="吸气标定指标"
-                        android:textColor="@color/text3"
-                        android:textSize="11sp" />
+                            android:layout_width="88dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_19"
+                            android:text="吸气标定指标"
+                            android:textColor="@color/text3"
+                            android:textSize="11sp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:maxLines="1"
-                        android:text="标定值"
-                        android:textColor="@color/text3"
-                        android:textSize="11sp" />
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:text="标定值"
+                            android:textColor="@color/text3"
+                            android:textSize="11sp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:maxLines="1"
-                        android:text="实际值"
-                        android:textColor="@color/text3"
-                        android:textSize="11sp" />
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:text="实际值"
+                            android:textColor="@color/text3"
+                            android:textSize="11sp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:maxLines="1"
-                        android:text="误差率"
-                        android:textColor="@color/text3"
-                        android:textSize="11sp" />
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:text="误差率"
+                            android:textColor="@color/text3"
+                            android:textSize="11sp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:maxLines="1"
-                        android:text="标定结果"
-                        android:textColor="@color/text3"
-                        android:textSize="11sp" />
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:text="标定结果"
+                            android:textColor="@color/text3"
+                            android:textSize="11sp" />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_flow"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                        android:id="@+id/rv_flow"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/space_9"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableStart="@drawable/prompt"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:padding="@dimen/space_9"
-                        android:text="提示 请按照开始后的操作提示抽拉定标筒，抽啦过程中"
-                        android:textColor="@color/text3"
-                        android:textSize="11sp"
-                        tools:ignore="RtlHardcoded" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:padding="@dimen/space_9"
-                        android:text="避免停顿，抽拉必须达到3L的容量"
-                        android:textColor="@color/text3"
-                        android:textSize="11sp"
-                        tools:ignore="RtlHardcoded" />
-
-                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/space_9"
                         android:gravity="center"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/prompt"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:padding="@dimen/space_9"
+                            android:text="提示 请按照开始后的操作提示抽拉定标筒，抽啦过程中"
+                            android:textColor="@color/text3"
+                            android:textSize="11sp"
+                            tools:ignore="RtlHardcoded" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:padding="@dimen/space_9"
+                            android:text="避免停顿，抽拉必须达到3L的容量"
+                            android:textColor="@color/text3"
+                            android:textSize="11sp"
+                            tools:ignore="RtlHardcoded" />
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_9"
+                            android:gravity="center"
+                            android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/flow_up" />
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/flow_up" />
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/space_16"
-                            android:background="@drawable/flow_pull"
-                            android:gravity="center"
-                            android:text="@string/pull"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/space_16"
+                                android:background="@drawable/flow_pull"
+                                android:gravity="center"
+                                android:text="@string/pull"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
 
                     </LinearLayout>
 
@@ -265,41 +266,42 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:layout_margin="@dimen/space_9"
-                android:orientation="vertical">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_margin="@dimen/space_9"
+                    android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:background="@drawable/calibration_bg"
-                    android:orientation="vertical">
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:background="@drawable/calibration_bg"
+                        android:orientation="vertical">
+
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:text="容量-时间"
-                        android:padding="@dimen/space_6"
-                        android:layout_height="wrap_content"/>
+                            android:layout_width="wrap_content"
+                            android:text="容量-时间"
+                            android:padding="@dimen/space_6"
+                            android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginTop="@dimen/space_9"
-                    android:gravity="center_horizontal"
-                    android:background="@drawable/calibration_bg"
-                    android:orientation="vertical">
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:layout_marginTop="@dimen/space_9"
+                        android:gravity="center_horizontal"
+                        android:background="@drawable/calibration_bg"
+                        android:orientation="vertical">
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:text="流速-容量"
-                        android:padding="@dimen/space_6"
-                        android:layout_height="wrap_content"/>
+                            android:layout_width="wrap_content"
+                            android:text="流速-容量"
+                            android:padding="@dimen/space_6"
+                            android:layout_height="wrap_content" />
 
                 </LinearLayout>
 

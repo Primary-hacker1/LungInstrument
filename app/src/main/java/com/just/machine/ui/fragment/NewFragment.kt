@@ -1,11 +1,8 @@
 package com.just.machine.ui.fragment
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import com.common.base.*
@@ -14,13 +11,9 @@ import com.common.viewmodel.LiveDataEvent
 import com.just.machine.dao.PatientBean
 import com.just.machine.model.Constants
 import com.just.machine.ui.viewmodel.MainViewModel
-import com.just.machine.ui.fragment.serial.SendMsg
 import com.just.news.R
 import com.just.news.databinding.FragmentNewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
-import world.shanya.serialport.SerialPortBuilder
 
 /**
  *create by 2020/6/19

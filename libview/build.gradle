@@ -57,4 +57,7 @@ dependencies {
     //时间选择器
     api 'com.google.android.material:material:1.1.0'
     api 'com.github.loperSeven:DateTimePicker:0.5.8'
+
+    //chart
+    api libview.hellocharts
 }

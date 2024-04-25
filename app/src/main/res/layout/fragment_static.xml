@@ -52,7 +52,7 @@
                         android:layout_marginStart="5dp"
                         android:text="@string/staticLungTest"
                         android:textColor="@color/text9"
-                        android:textSize="12sp"
+                        android:textSize="@dimen/space_12"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -66,7 +66,7 @@
                     android:gravity="center"
                     android:text="@string/routine"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/space_14"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/ll_"
                     tools:ignore="MissingConstraints" />
@@ -79,7 +79,7 @@
                     android:gravity="center"
                     android:text="@string/forcedVitalCapacity"
                     android:textColor="@color/cD9D9D9"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/space_14"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/btn_routine"
                     tools:ignore="MissingConstraints" />
@@ -92,7 +92,7 @@
                     android:gravity="center"
                     android:text="@string/maxiVentilation"
                     android:textColor="@color/cD9D9D9"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/space_14"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/btn_forced"
                     tools:ignore="MissingConstraints" />

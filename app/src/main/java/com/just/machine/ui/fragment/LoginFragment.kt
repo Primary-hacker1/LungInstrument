@@ -1,7 +1,10 @@
 package com.just.machine.ui.fragment
 
+import android.Manifest
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
 import com.common.base.gone
@@ -25,6 +28,14 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
     private val viewModel by viewModels<MainViewModel>()
 
     override fun initView() {
+
+        activityResultLauncher.launch(
+            arrayListOf(Manifest.permission.BLUETOOTH).apply {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+                    add(Manifest.permission.BLUETOOTH_ADMIN)
+                }
+            }.toTypedArray()
+        )
 
         if (!SharedPreferencesUtils.instance.user.equals("")) {
             MainActivity.startMainActivity(context)
@@ -61,6 +72,8 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
 //            activity?.finish()
 //            SharedPreferencesUtils.instance.logout()
 //        }
+
+
     }
  
     override fun initListener() {
@@ -73,6 +86,26 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
     override fun loadData() {
 
     }
+
+    private val activityResultLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        )
+        { permissions ->
+            val allGranted = permissions.all { it.value }
+            if (allGranted){//
+
+            }
+            permissions.entries.forEach {
+                val permissionName = it.key
+                val isGranted = it.value
+                if (isGranted) {
+
+                } else {
+                    toast("${permissionName}被拒绝了，请在应用设置里打开权限")
+                }
+            }
+        }
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentLoginBinding.inflate(inflater, container, false)

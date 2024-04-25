@@ -31,6 +31,8 @@ class LoginActivity : CommonBaseActivity<ActivityLoginBinding>() {//布局ID
 
     }
 
+
+
     override fun getViewBinding() = ActivityLoginBinding.inflate(layoutInflater)
 
 }
