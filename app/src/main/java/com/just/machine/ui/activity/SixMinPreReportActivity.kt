@@ -19,11 +19,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseActivity
 import com.common.base.setNoRepeatListener
 import com.common.viewmodel.LiveDataEvent
+import com.just.machine.dao.PatientBean
 import com.just.machine.model.Constants
+import com.just.machine.model.SixMinRecordsBean
 import com.just.machine.model.SixMinReportEditBloodPressure
 import com.just.machine.model.SixMinReportItemBean
 import com.just.machine.model.SixMinReportPatientSelfBean
 import com.just.machine.model.SixMinReportPatientSelfItemBean
+import com.just.machine.model.sixminreport.SixMinReportEvaluation
 import com.just.machine.model.sixminreport.SixMinReportWalk
 import com.just.machine.ui.adapter.SixMinReportPatientSelfAdapter
 import com.just.machine.ui.dialog.CommonDialogFragment
@@ -32,28 +35,36 @@ import com.just.machine.ui.dialog.SixMinReportPrescriptionFragment
 import com.just.machine.ui.dialog.SixMinReportSelfCheckBeforeTestFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.SpinnerHelper
+import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.ActivitySixMinPreReportBinding
 import com.justsafe.libview.util.SystemUtil
 import dagger.hilt.android.AndroidEntryPoint
+import java.math.BigDecimal
 
 /**
  * 6分钟预生成报告
  */
 @AndroidEntryPoint
-class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding>()   {
+class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
     private lateinit var spSportTime: SpinnerHelper
     private var reportRowList = mutableListOf<SixMinReportItemBean>()
-    private var sixMinReportNo = "" //6分钟试验报告No
+    private var sixMinPatientId = "" //患者id
+    private var sixMinReportNo = "" //报告id
+    private lateinit var usbTransferUtil: USBTransferUtil
+    private var sixMinRecordsBean: SixMinRecordsBean = SixMinRecordsBean()//6分钟报告信息
 
     override fun getViewBinding() = ActivitySixMinPreReportBinding.inflate(layoutInflater)
 
     override fun initView() {
+        usbTransferUtil = USBTransferUtil.getInstance()
+        sixMinPatientId =
+            intent.extras?.getString(Constants.sixMinPatientInfo).toString()
         sixMinReportNo =
             intent.extras?.getString(Constants.sixMinReportNo).toString()
-        viewModel.getSixMinReportEvaluationById(sixMinReportNo)
+        viewModel.getSixMinReportInfoById(sixMinPatientId,sixMinReportNo)
         val patientSelfList = mutableListOf<SixMinReportPatientSelfBean>()
         val patientBreathSelfItemList = mutableListOf<SixMinReportPatientSelfItemBean>()
         patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("0级", "没有"))
@@ -74,9 +85,8 @@ class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding
         )
         val patientTiredSelfItemList = mutableListOf<SixMinReportPatientSelfItemBean>()
         patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("0级", "没有"))
-        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("0.5级", "非常轻松"))
-        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("1级", "轻松"))
-        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("2级", "很轻"))
+        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("1级", "非常轻松"))
+        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("2级", "轻松"))
         patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("3级", "中度"))
         patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("4级", "有点疲劳"))
         patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("5-6级", "疲劳"))
@@ -98,16 +108,14 @@ class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding
         val patientSelfItemAdapter = SixMinReportPatientSelfAdapter(this)
         patientSelfItemAdapter.setItemsBean(patientSelfList)
         binding.sixminRvPatientSelfCheck.adapter = patientSelfItemAdapter
+
         binding.sixminRbSportTypeWalk.isChecked = true
-        binding.sixminTvFinishCircle.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_finish_circles),20))
-        binding.sixminTvUnfinishCircle.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_unfinish_circles),60))
-        binding.sixminTvTotalDistance.text = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_total_distance),100))
-        binding.sixminTvDataStatistics.text = String.format(getString(R.string.sixmin_test_report_data_statistics),10,20,1.4,"重度","一级",144)
         binding.sixminRbPrescriptionCycleWeek.isChecked = true
-        binding.sixminTvPrescriptionConclusion.text = "本次未能完成六分钟试验，运动了0分11秒，停止原因：心脏周围的组织和体液都能导电，因此可将人体看成为一个具有长、宽、厚三度空间的容积导体。"
-        binding.sixminTvReportNote.text = "本次未能完成六分钟试验，运动了0分11秒，停止原因:心脏周围的组织和体液都能导电，因此可将人体看成为一个具有长、宽、厚三度空间的容积导体。"
+        binding.sixminTvPrescriptionConclusion.text =
+            "本次未能完成六分钟试验，运动了0分11秒，停止原因：心脏周围的组织和体液都能导电，因此可将人体看成为一个具有长、宽、厚三度空间的容积导体。"
+        binding.sixminTvReportNote.text =
+            "本次未能完成六分钟试验，运动了0分11秒，停止原因:心脏周围的组织和体液都能导电，因此可将人体看成为一个具有长、宽、厚三度空间的容积导体。"
         initClickListener()
-        initTable()
         initSportTimeSpinner()
     }
 
@@ -121,9 +129,14 @@ class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding
         spSportTime.setSelection(0)
         spSportTime.setSpinnerSelectionListener(object : SpinnerHelper.SpinnerSelectionListener {
             override fun onItemSelected(selectedItem: String, view: View?) {
-                if(view != null){
+                if (view != null) {
                     val textView: TextView = view as TextView
-                    textView.setTextColor(ContextCompat.getColor(this@SixMinPreReportActivity, R.color.text3))
+                    textView.setTextColor(
+                        ContextCompat.getColor(
+                            this@SixMinPreReportActivity,
+                            R.color.text3
+                        )
+                    )
                     textView.textSize = 18f
                     textView.setTypeface(null, Typeface.BOLD);
                 }
@@ -138,8 +151,8 @@ class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding
     private fun initClickListener() {
         viewModel.mEventHub.observe(this) {
             when (it.action) {
-                LiveDataEvent.QuerySuccess -> {
-
+                LiveDataEvent.QuerySixMinReportInfoSuccess ->{
+                    it.any?.let { it1 -> beanQuery(it1) }
                 }
             }
         }
@@ -167,33 +180,38 @@ class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding
                     SixMinReportEditBloodPressureFragment.SixMinReportEditBloodDialogListener {
                     override fun onClickConfirm(bean: SixMinReportEditBloodPressure) {
                         if (reportRowList.isNotEmpty()) {
-                            val sixMinReportItem = reportRowList[reportRowList.size - 1]
-                            sixMinReportItem.stillnessValue =
-                                "${bean.highBloodPressureBefore}/${bean.lowBloodPressureBefore}"
-                            sixMinReportItem.sixMinValue =
-                                "${bean.highBloodPressureAfter}/${bean.lowBloodPressureAfter}"
+//                            val sixMinReportItem = reportRowList[reportRowList.size - 1]
+//                            sixMinReportItem.stillnessValue =
+//                                "${bean.highBloodPressureBefore}/${bean.lowBloodPressureBefore}"
+//                            sixMinReportItem.sixMinValue =
+//                                "${bean.highBloodPressureAfter}/${bean.lowBloodPressureAfter}"
+                            viewModel.updateSixMinReportOther(sixMinRecordsBean.infoBean.reportNo,bean.highBloodPressureBefore.toString(),bean.lowBloodPressureBefore.toString(),bean.highBloodPressureAfter.toString(),bean.lowBloodPressureAfter.toString())
+                            viewModel.getSixMinReportInfoById(sixMinPatientId,sixMinReportNo)
                             binding.sixminReportTlPreTable.removeAllViews()
-                            initTable()
                         }
                     }
                 })
             }
         }
         binding.sixminReportTvSelfCheckBeforeTest.setNoRepeatListener {
+            var selfCheckSelection = ""
+            if(sixMinRecordsBean.evaluationBean[0].befoFatigueLevel != "" && sixMinRecordsBean.evaluationBean[0].befoBreathingLevel != ""){
+                selfCheckSelection = "${sixMinRecordsBean.evaluationBean[0].befoBreathingLevel}&${sixMinRecordsBean.evaluationBean[0].befoFatigueLevel}"
+            }
             val selfCheckBeforeTestDialogFragment =
                 SixMinReportSelfCheckBeforeTestFragment.startPatientSelfCheckDialogFragment(
                     supportFragmentManager,
-                    "0",""
+                    "0", "",selfCheckSelection
                 )
-            selfCheckBeforeTestDialogFragment.setSelfCheckBeforeTestDialogOnClickListener(object:
-                SixMinReportSelfCheckBeforeTestFragment.SixMinReportSelfCheckBeforeTestDialogListener{
+            selfCheckBeforeTestDialogFragment.setSelfCheckBeforeTestDialogOnClickListener(object :
+                SixMinReportSelfCheckBeforeTestFragment.SixMinReportSelfCheckBeforeTestDialogListener {
                 override fun onClickConfirm(
                     befoFatigueLevel: Int,
                     befoBreathingLevel: Int,
                     befoFatigueLevelStr: String,
                     befoBreathingLevelStr: String
                 ) {
-                    Log.d("tag","$befoFatigueLevel$befoBreathingLevel")
+                    Log.d("tag", "$befoFatigueLevel$befoBreathingLevel")
                 }
 
                 override fun onClickClose() {
@@ -206,8 +224,8 @@ class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding
                 SixMinReportPrescriptionFragment.startPrescriptionDialogFragment(
                     supportFragmentManager
                 )
-            prescriptionFragment.setPrescriptionDialogOnClickListener(object:
-                SixMinReportPrescriptionFragment.SixMinReportPrescriptionDialogListener{
+            prescriptionFragment.setPrescriptionDialogOnClickListener(object :
+                SixMinReportPrescriptionFragment.SixMinReportPrescriptionDialogListener {
                 override fun onClickConfirm(
                     stride: String,
                     distance: String,
@@ -225,27 +243,14 @@ class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding
             })
         }
         binding.sixminReportIvGenerateReport.setNoRepeatListener {
-            val reportWalk = SixMinReportWalk()
-            reportWalk.reportId = "123456789"
-            reportWalk.walkOne = "60"
-            reportWalk.walkTwo = "70"
-            reportWalk.walkThree = "80"
-            reportWalk.walkFour = "90"
-            reportWalk.walkFive = "100"
-            reportWalk.walkSix = "110"
-            reportWalk.walkBig = "110"
-            reportWalk.waklSmall = "60"
-            reportWalk.walkAverage = "85"
-            reportWalk.delFlag = "0"
-            viewModel.setSixMinReportWalkData(reportWalk)
             //生成报告
-            startActivity(Intent(this,SixMinReportActivity::class.java))
+            startActivity(Intent(this, SixMinReportActivity::class.java))
             finish()
         }
         binding.sixminReportIvClose.setNoRepeatListener {
             val startCommonDialogFragment = CommonDialogFragment.startCommonDialogFragment(
                 supportFragmentManager,
-               "退出将视为放弃生成报告，是否确定?"
+                "退出将视为放弃生成报告，是否确定?"
             )
             startCommonDialogFragment.setCommonDialogOnClickListener(object :
                 CommonDialogFragment.CommonDialogClickListener {
@@ -264,7 +269,53 @@ class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding
         }
     }
 
+    private fun beanQuery(any: Any) {
+        try {
+            if (any is List<*>) {
+                val datas = any as MutableList<*>
+                sixMinRecordsBean = datas[0] as SixMinRecordsBean
+
+                binding.sixminTvFinishCircle.text =
+                    Html.fromHtml(String.format(getString(R.string.sixmin_test_report_finish_circles), sixMinRecordsBean.evaluationBean[0].turnsNumber))
+                binding.sixminTvUnfinishCircle.text = Html.fromHtml(
+                    String.format(
+                        getString(R.string.sixmin_test_report_unfinish_circles),
+                        sixMinRecordsBean.evaluationBean[0].unfinishedDistance
+                    )
+                )
+                binding.sixminTvTotalDistance.text =
+                    Html.fromHtml(String.format(getString(R.string.sixmin_test_report_total_distance), sixMinRecordsBean.evaluationBean[0].totalDistance))
+                val stopTime = sixMinRecordsBean.otherBean[0].stopTime
+                val type = sixMinRecordsBean.otherBean[0].stopOr
+                val strideAvg = usbTransferUtil.dealStrideAvg(
+                    BigDecimal(sixMinRecordsBean.evaluationBean[0].totalDistance),
+                    type.toInt(),
+                    stopTime
+                )
+                val cardiopuDegreeStr = when(sixMinRecordsBean.evaluationBean[0].cardiopuDegree){
+                    "1" -> "重度"
+                    "2" -> "中度"
+                    else -> "轻度"
+                }
+                binding.sixminTvDataStatistics.text = String.format(
+                    getString(R.string.sixmin_test_report_data_statistics),
+                    sixMinRecordsBean.evaluationBean[0].totalDistance,
+                    strideAvg,
+                    sixMinRecordsBean.evaluationBean[0].metabEquivalent,
+                    cardiopuDegreeStr,
+                    sixMinRecordsBean.evaluationBean[0].cardiopuLevel,
+                    sixMinRecordsBean.infoBean.restDuration
+                )
+
+                initTable()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     private fun initTable() {
+        binding.sixminReportTlPreTable.removeAllViews()
         reportRowList.clear()
         reportRowList.add(
             SixMinReportItemBean(
@@ -299,43 +350,47 @@ class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding
         reportRowList.add(
             SixMinReportItemBean(
                 "血氧(%)",
-                "80",
-                "80",
-                "80",
-                "80",
-                "80",
-                "80",
-                "80",
-                "80",
-                "80",
-                "80"
+                sixMinRecordsBean.bloodOxyBean[0].bloodStop,
+                sixMinRecordsBean.bloodOxyBean[0].bloodOne,
+                sixMinRecordsBean.bloodOxyBean[0].bloodTwo,
+                sixMinRecordsBean.bloodOxyBean[0].bloodThree,
+                sixMinRecordsBean.bloodOxyBean[0].bloodFour,
+                sixMinRecordsBean.bloodOxyBean[0].bloodFive,
+                sixMinRecordsBean.bloodOxyBean[0].bloodSix,
+                sixMinRecordsBean.bloodOxyBean[0].bloodBig,
+                sixMinRecordsBean.bloodOxyBean[0].bloodSmall,
+                sixMinRecordsBean.bloodOxyBean[0].bloodAverage
             )
         )
         reportRowList.add(
             SixMinReportItemBean(
                 "步数",
-                "70",
-                "70",
-                "70",
-                "70",
-                "70",
-                "70",
-                "70",
-                "70",
-                "70",
-                "70"
+                sixMinRecordsBean.walkBean[0].walkStop,
+                sixMinRecordsBean.walkBean[0].walkOne,
+                sixMinRecordsBean.walkBean[0].walkTwo,
+                sixMinRecordsBean.walkBean[0].walkThree,
+                sixMinRecordsBean.walkBean[0].walkFour,
+                sixMinRecordsBean.walkBean[0].walkFive,
+                sixMinRecordsBean.walkBean[0].walkSix,
+                sixMinRecordsBean.walkBean[0].walkBig,
+                sixMinRecordsBean.walkBean[0].waklSmall,
+                sixMinRecordsBean.walkBean[0].walkAverage
             )
         )
+        val startHighBlood = sixMinRecordsBean.otherBean[0].startHighPressure
+        val startLowBlood = sixMinRecordsBean.otherBean[0].startLowPressure
+        val endHighBlood = sixMinRecordsBean.otherBean[0].stopHighPressure
+        val endLowBlood = sixMinRecordsBean.otherBean[0].stopLowPressure
         reportRowList.add(
             SixMinReportItemBean(
                 "血压(mmHg)",
-                "105/68",
+                "$startHighBlood/$startLowBlood",
                 "/",
                 "/",
                 "/",
                 "/",
                 "/",
-                "/",
+                "$endHighBlood/$endLowBlood",
                 "/",
                 "/",
                 "/"
@@ -355,7 +410,7 @@ class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding
 
             for (j in 0..10) {
                 val tvNo = TextView(applicationContext)
-                tvNo.textSize = dip2px( 7.0f).toFloat()
+                tvNo.textSize = dip2px(7.0f).toFloat()
                 // 设置文字居中
                 tvNo.gravity = if (j == 0) Gravity.START else Gravity.CENTER
                 tvNo.setTextColor(ContextCompat.getColor(this, R.color.text3))
@@ -422,10 +477,10 @@ class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding
                 linearLayout.addView(tvNo)
             }
             newRow.setPadding(
-                dip2px( 6.0f),
-                dip2px( 3.0f),
-                dip2px( 6.0f),
-                dip2px( 3.0f)
+                dip2px(6.0f),
+                dip2px(3.0f),
+                dip2px(6.0f),
+                dip2px(3.0f)
             )
             newRow.addView(linearLayout)
             binding.sixminReportTlPreTable.addView(newRow)
@@ -433,12 +488,16 @@ class SixMinPreReportActivity: CommonBaseActivity<ActivitySixMinPreReportBinding
     }
 
     private fun dip2px(dpValue: Float): Int {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, resources.displayMetrics)
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            dpValue,
+            resources.displayMetrics
+        )
             .toInt()
     }
 
     override fun onResume() {
-        SystemUtil.immersive(this,true)
+        SystemUtil.immersive(this, true)
         super.onResume()
     }
 

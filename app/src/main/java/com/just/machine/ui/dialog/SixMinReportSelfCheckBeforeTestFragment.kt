@@ -20,8 +20,8 @@ class SixMinReportSelfCheckBeforeTestFragment :
     private val patientSelfList = mutableListOf<SixMinReportPatientSelfBean>()
     private var selectList = mutableListOf<Int>()
     private var selectStrList = mutableListOf<String>()
-    private var selfCheck = ""
-    private var selfCheckSelection = ""
+    private var selfCheck = "" //"" 右边按钮为确定 其它为进入试验
+    private var selfCheckSelection = "" // ""没有选择 其它根据内容将对应的复选框选中
 
     companion object {
         /**
@@ -29,18 +29,15 @@ class SixMinReportSelfCheckBeforeTestFragment :
          * @param bean 修改传过来的bean数据
          */
         fun startPatientSelfCheckDialogFragment(
-            fragmentManager: FragmentManager,
-            checkable: String = "1",
-            selfCheck: String = "",
-            checkStr:String = ""
+            fragmentManager: FragmentManager, checkable: String = "1",//是否可以选择  1可以选择 其它不可以
+            selfCheck: String = "", checkStr: String = ""
 
         ): SixMinReportSelfCheckBeforeTestFragment {
 
             val dialogFragment = SixMinReportSelfCheckBeforeTestFragment()
 
             dialogFragment.show(
-                fragmentManager,
-                SixMinReportSelfCheckBeforeTestFragment::javaClass.toString()
+                fragmentManager, SixMinReportSelfCheckBeforeTestFragment::javaClass.toString()
             )
 
             val bundle = Bundle()
@@ -97,7 +94,8 @@ class SixMinReportSelfCheckBeforeTestFragment :
                 it.itemList.forEach { it1 ->
                     if (it1.itemCheck == "1") {
                         selectList.add(it.itemList.indexOf(it1))
-                        selectStrList.add(it1.itemName)
+                        val index = it1.itemName.indexOf("级")
+                        selectStrList.add(it1.itemName.substring(0, index))
                     }
                 }
             }
@@ -113,7 +111,9 @@ class SixMinReportSelfCheckBeforeTestFragment :
                 }
             } else {
                 dismiss()
-                listener?.onClickConfirm(selectList[0], selectList[1],selectStrList[0],selectStrList[1])
+                listener?.onClickConfirm(
+                    selectList[0], selectList[1], selectStrList[0], selectStrList[1]
+                )
             }
         }
         binding.sixminReportTvEditBloodPressureClose.setOnClickListener {
@@ -124,9 +124,14 @@ class SixMinReportSelfCheckBeforeTestFragment :
     override fun initData() {
         val checkAble = arguments?.getString(Constants.sixMinSelfCheckView, "")
         selfCheck = arguments?.getString(Constants.sixMinSelfCheck, "").toString()
-        selfCheckSelection = arguments?.getString(Constants.sixMinSelfCheckViewSelection, "").toString()
-        if(selfCheckSelection.isNotEmpty()){
-
+        selfCheckSelection =
+            arguments?.getString(Constants.sixMinSelfCheckViewSelection, "").toString()
+        var breathLevel = ""
+        var fatigueLevel = ""
+        if (selfCheckSelection.isNotEmpty() && selfCheckSelection.contains("&")) {
+            val split = selfCheckSelection.split("&")
+            breathLevel = split[0]
+            fatigueLevel = split[1]
         }
         patientSelfList.clear()
         val patientBreathSelfItemList = mutableListOf<SixMinReportPatientSelfItemBean>()
@@ -134,7 +139,7 @@ class SixMinReportSelfCheckBeforeTestFragment :
             SixMinReportPatientSelfItemBean(
                 "0级",
                 "没有",
-                "0",
+                if (breathLevel == "0") "1" else "0",
                 if (checkAble == "" || checkAble == "0") "0" else "1"
             )
         )
@@ -142,7 +147,7 @@ class SixMinReportSelfCheckBeforeTestFragment :
             SixMinReportPatientSelfItemBean(
                 "0.5级",
                 "非常非常轻",
-                "0",
+                if (breathLevel == "0.5") "1" else "0",
                 if (checkAble == "" || checkAble == "0") "0" else "1"
             )
         )
@@ -150,7 +155,7 @@ class SixMinReportSelfCheckBeforeTestFragment :
             SixMinReportPatientSelfItemBean(
                 "1级",
                 "非常轻",
-                "0",
+                if (breathLevel == "1") "1" else "0",
                 if (checkAble == "" || checkAble == "0") "0" else "1"
             )
         )
@@ -158,7 +163,7 @@ class SixMinReportSelfCheckBeforeTestFragment :
             SixMinReportPatientSelfItemBean(
                 "2级",
                 "很轻",
-                "0",
+                if (breathLevel == "2") "1" else "0",
                 if (checkAble == "" || checkAble == "0") "0" else "1"
             )
         )
@@ -166,7 +171,7 @@ class SixMinReportSelfCheckBeforeTestFragment :
             SixMinReportPatientSelfItemBean(
                 "3级",
                 "中度",
-                "0",
+                if (breathLevel == "3") "1" else "0",
                 if (checkAble == "" || checkAble == "0") "0" else "1"
             )
         )
@@ -174,7 +179,7 @@ class SixMinReportSelfCheckBeforeTestFragment :
             SixMinReportPatientSelfItemBean(
                 "4级",
                 "较严重",
-                "0",
+                if (breathLevel == "4") "1" else "0",
                 if (checkAble == "" || checkAble == "0") "0" else "1"
             )
         )
@@ -182,7 +187,7 @@ class SixMinReportSelfCheckBeforeTestFragment :
             SixMinReportPatientSelfItemBean(
                 "5-6级",
                 "严重",
-                "0",
+                if (breathLevel == "5-6") "1" else "0",
                 if (checkAble == "" || checkAble == "0") "0" else "1"
             )
         )
@@ -190,7 +195,7 @@ class SixMinReportSelfCheckBeforeTestFragment :
             SixMinReportPatientSelfItemBean(
                 "7-9级",
                 "非常严重",
-                "0",
+                if (breathLevel == "7-9") "1" else "0",
                 if (checkAble == "" || checkAble == "0") "0" else "1"
             )
         )
@@ -198,7 +203,7 @@ class SixMinReportSelfCheckBeforeTestFragment :
             SixMinReportPatientSelfItemBean(
                 "10级",
                 "非常非常严重",
-                "0",
+                if (breathLevel == "10") "1" else "0",
                 if (checkAble == "" || checkAble == "0") "0" else "1"
             )
         )
@@ -207,78 +212,50 @@ class SixMinReportSelfCheckBeforeTestFragment :
                 "呼吸状况等级",
                 "1",
                 patientBreathSelfItemList,
+                parseBreathLevel(breathLevel),
             )
         )
         val patientTiredSelfItemList = mutableListOf<SixMinReportPatientSelfItemBean>()
         patientTiredSelfItemList.add(
             SixMinReportPatientSelfItemBean(
-                "0级",
-                "没有",
-                "0",
-                if (checkAble == "" || checkAble == "0") "0" else "1"
+                "0级", "没有", if (fatigueLevel == "0") "1" else "0", if (checkAble == "" || checkAble == "0") "0" else "1"
             )
         )
         patientTiredSelfItemList.add(
             SixMinReportPatientSelfItemBean(
-                "0.5级",
-                "非常轻松",
-                "0",
-                if (checkAble == "" || checkAble == "0") "0" else "1"
+                "1级", "非常轻松", if (fatigueLevel == "1") "1" else "0", if (checkAble == "" || checkAble == "0") "0" else "1"
             )
         )
         patientTiredSelfItemList.add(
             SixMinReportPatientSelfItemBean(
-                "1级",
-                "轻松",
-                "0",
-                if (checkAble == "" || checkAble == "0") "0" else "1"
+                "2级", "轻松", if (fatigueLevel == "2") "1" else "0", if (checkAble == "" || checkAble == "0") "0" else "1"
             )
         )
         patientTiredSelfItemList.add(
             SixMinReportPatientSelfItemBean(
-                "2级",
-                "很轻",
-                "0",
-                if (checkAble == "" || checkAble == "0") "0" else "1"
+                "3级", "中度", if (fatigueLevel == "3") "1" else "0", if (checkAble == "" || checkAble == "0") "0" else "1"
             )
         )
         patientTiredSelfItemList.add(
             SixMinReportPatientSelfItemBean(
-                "3级",
-                "中度",
-                "0",
-                if (checkAble == "" || checkAble == "0") "0" else "1"
+                "4级", "有点疲劳", if (fatigueLevel == "4") "1" else "0", if (checkAble == "" || checkAble == "0") "0" else "1"
             )
         )
         patientTiredSelfItemList.add(
             SixMinReportPatientSelfItemBean(
-                "4级",
-                "有点疲劳",
-                "0",
-                if (checkAble == "" || checkAble == "0") "0" else "1"
+                "5-6级", "疲劳", if (fatigueLevel == "5-6") "1" else "0", if (checkAble == "" || checkAble == "0") "0" else "1"
             )
         )
         patientTiredSelfItemList.add(
             SixMinReportPatientSelfItemBean(
-                "5-6级",
-                "疲劳",
-                "0",
-                if (checkAble == "" || checkAble == "0") "0" else "1"
-            )
-        )
-        patientTiredSelfItemList.add(
-            SixMinReportPatientSelfItemBean(
-                "7-9级",
-                "非常疲劳",
-                "0",
-                if (checkAble == "" || checkAble == "0") "0" else "1"
+                "7-9级", "非常疲劳", if (fatigueLevel == "7-9") "1" else "0", if (checkAble == "" || checkAble == "0") "0" else "1"
             )
         )
         patientTiredSelfItemList.add(
             SixMinReportPatientSelfItemBean(
                 "10级",
                 "非常非常疲劳(几乎到极限)",
-                "0",
+                if (fatigueLevel == "10") "1" else "0",
                 if (checkAble == "" || checkAble == "0") "0" else "1"
             )
         )
@@ -286,14 +263,102 @@ class SixMinReportSelfCheckBeforeTestFragment :
             SixMinReportPatientSelfBean(
                 "疲劳状况等级",
                 "2",
-                patientTiredSelfItemList
+                patientTiredSelfItemList,
+                parseFatigueLevel(fatigueLevel),
             )
         )
 
     }
 
+    private fun parseBreathLevel(breathLevel: String): String {
+        var conclusion = ""
+        when (breathLevel) {
+            "0" -> {
+                conclusion = "您当前的呼吸状况为：(0级)没有呼吸困难状况"
+            }
+
+            "0.5" -> {
+                conclusion = "您当前的呼吸状况为：(0.5级)呼吸困难状况非常非常轻"
+            }
+
+            "1" -> {
+                conclusion = "您当前的呼吸状况为：(1级)呼吸困难状况非常轻"
+            }
+
+            "2" -> {
+                conclusion = "您当前的呼吸状况为：(2级)呼吸困难状况很轻"
+            }
+
+            "3" -> {
+                conclusion = "您当前的呼吸状况为：(3级)呼吸困难状况中度"
+            }
+
+            "4" -> {
+                conclusion = "您当前的呼吸状况为：(4级)呼吸困难状况较严重"
+            }
+
+            "5-6" -> {
+                conclusion = "您当前的呼吸状况为：(5-6级)呼吸困难状况严重"
+            }
+
+            "7-9" -> {
+                conclusion = "您当前的呼吸状况为：(7-9级)呼吸困难状况非常严重"
+            }
+
+            "10" -> {
+                conclusion = "您当前的呼吸状况为：(10级)呼吸困难状况非常非常重"
+            }
+
+            else -> {
+                conclusion = ""
+            }
+        }
+        return conclusion
+    }
+
+    private fun parseFatigueLevel(fatigueLevel: String): String {
+        var conclusion = ""
+        when (fatigueLevel) {
+            "0" -> {
+                conclusion = "您当前的疲劳状况为：(0级)没有疲劳状况"
+            }
+
+            "1" -> {
+                conclusion = "您当前的疲劳状况为：(1级)疲劳状况非常轻松"
+            }
+
+            "2" -> {
+                conclusion = "您当前的疲劳状况为：(2级)疲劳状况轻松"
+            }
+
+            "3" -> {
+                conclusion = "您当前的疲劳状况为：(3级)疲劳状况中度"
+            }
+
+            "4" -> {
+                conclusion = "您当前的疲劳状况为：(4级)疲劳状况有点疲劳"
+            }
+
+            "5-6" -> {
+                conclusion = "您当前的疲劳状况为：(5-6级)疲劳状况疲劳"
+            }
+
+            "7-9" -> {
+                conclusion = "您当前的疲劳状况为：(7-9级)疲劳状况非常疲劳"
+            }
+
+            "10" -> {
+                conclusion = "您当前的疲劳状况为：(10级)疲劳状况非常非常疲劳(几乎到极限)"
+            }
+
+            else -> {
+                conclusion = ""
+            }
+        }
+        return conclusion
+    }
+
     override fun getLayout(): Int {
         return R.layout.fragment_dialog_sixmin_report_self_check_before_test
     }
-
 }

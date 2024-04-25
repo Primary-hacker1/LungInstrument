@@ -9,7 +9,7 @@ import com.just.machine.dao.ChatItemConverter
 /**
  * 6分钟报告综合评估
  */
-@Entity(tableName = "sixmin_report_evaruation")
+@Entity(tableName = "sixmin_report_evaluation")
 @TypeConverters(ChatItemConverter::class)
 data class SixMinReportEvaluation(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id")

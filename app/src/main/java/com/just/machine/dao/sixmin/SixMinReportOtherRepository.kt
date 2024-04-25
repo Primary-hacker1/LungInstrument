@@ -14,8 +14,23 @@ import javax.inject.Inject
  */
 class SixMinReportOtherRepository @Inject constructor(private val reportDao: SixMinReportOtherDao) {
 
-    fun getReportOther(id:String): Flow<List<SixMinReportOther>> = reportDao.getReportOtherById(id)
+    suspend fun updateReportOther(
+        reportNo: String,
+        beforeHigh: String,
+        beforeLow: String,
+        afterHigh: String,
+        afterLow: String
+    ) = reportDao.updateReportOther(
+        reportNo,
+        beforeHigh,
+        beforeLow,
+        afterHigh,
+        afterLow
+    )
 
-    suspend fun insertReportOther(reportOther: SixMinReportOther): Long = reportDao.insertReportOther(reportOther)
+    fun getReportOther(id: String): Flow<List<SixMinReportOther>> = reportDao.getReportOtherById(id)
+
+    suspend fun insertReportOther(reportOther: SixMinReportOther): Long =
+        reportDao.insertReportOther(reportOther)
 
 }
