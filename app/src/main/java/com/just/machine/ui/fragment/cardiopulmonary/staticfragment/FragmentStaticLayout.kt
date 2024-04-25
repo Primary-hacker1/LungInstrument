@@ -130,12 +130,6 @@ class FragmentStaticLayout : FrameLayout {
 
     @Deprecated("暂时不用，用lineChartView这个不支持区域数据动态监听！")
     private fun initChartLow() {
-        val entriesFow = arrayListOf<Entry>()
-        // 创建折线图的样本数据
-        val entriesFlowFvc = arrayListOf<Entry>()
-        for (index in 0..6) {
-            entriesFow.add(Entry(index.toFloat(), index.toFloat() / 6 - 3))
-        }
 
         // 创建折线图的样本数据
         val entries = arrayListOf<Entry>()
@@ -143,11 +137,6 @@ class FragmentStaticLayout : FrameLayout {
             entries.add(Entry(index.toFloat(), index.toFloat() / 6 - 3))
         }
 
-        lineChartFlow(binding.chartFvc, entries, -5f, 5f, 11)
-
-        lineChartFlow(binding.chartFlow, entriesFow, -12f, 9f, 9)
-
-        lineChartFlow(binding.chartFvcFlow, entriesFlowFvc, -12f, 9f, 9)
 
         val lineChartFvc = binding.chartFvc
 
@@ -228,76 +217,6 @@ class FragmentStaticLayout : FrameLayout {
                 "50%时呼气流逝(ERV)", "20", "9", "1", "111", "11"
             )
         )
-    }
-
-
-    private fun lineChartFlow(
-        lineChart: LineChart,
-        entriesFow: ArrayList<Entry>,//xy数据
-        fl: Float,//y轴最小值
-        fl1: Float,//y轴最大值
-        count: Int//y轴的个数
-    ) {
-
-        // 设置标题
-        lineChart.description.text = "[L/S]"
-        lineChart.description.setPosition(80f, 22f)
-        lineChart.description.textSize = 9f
-        lineChart.description.textColor = Color.BLACK
-
-        // 设置 Y 轴的最小值和最大值，以确保包含所有单数刻度
-        lineChart.axisLeft.axisMinimum = fl // 设置 Y 轴最小值
-        lineChart.axisLeft.axisMaximum = fl1 // 设置 Y 轴最大值
-        lineChart.axisRight.axisMinimum = fl // 设置 Y 轴最小值
-        lineChart.axisRight.axisMaximum = fl1 // 设置 Y 轴最大值
-
-        lineChart.setExtraOffsets(0f, 0f, 0f, 0f) // 上、左、下、右边距
-
-        // 设置 LineChart 可以拖动
-        lineChart.isDragEnabled = true
-
-        // 设置 LineChart 的缩放
-        lineChart.setScaleEnabled(false)
-
-        lineChart.setPinchZoom(false)
-
-        lineChart.axisLeft.setLabelCount(
-            count, true
-        ) // y轴刻度多少个
-        lineChart.axisRight.setLabelCount(
-            count, true
-        ) // y轴刻度多少个
-        // 创建 LineDataSet 对象并添加数据集
-        val dataSet1 = LineDataSet(entriesFow, "Data Set 1")
-
-        dataSet1.color = ContextCompat.getColor(context, R.color.colorPrimary) // 设置曲线颜色
-        dataSet1.setCircleColor(Color.BLUE) // 设置曲线上的数据点颜色
-        dataSet1.lineWidth = 2f // 设置曲线宽度
-        dataSet1.circleRadius = 3f // 设置曲线上的数据点半径
-        dataSet1.valueTextSize = 10f // 设置数据点值的字体大小
-        dataSet1.valueTextColor = Color.BLUE // 设置数据点值的颜色
-        dataSet1.setDrawValues(false) // 设置是否绘制数据点的值
-        dataSet1.mode = LineDataSet.Mode.CUBIC_BEZIER // 设置曲线模式为三次贝塞尔曲线
-
-        val xAxis = lineChart.xAxis
-
-        xAxis.granularity = 1f     //这个很重要
-
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
-
-        xAxis.setLabelCount(entriesFow.size, true)//x刻度多少个
-
-        // 禁用X轴的刻度线
-        xAxis.setDrawGridLines(false)
-
-        val lineDataSets = mutableListOf<ILineDataSet>()
-        lineDataSets.add(dataSet1)
-
-        val lineData = LineData(lineDataSets)
-        lineChart.data = lineData
-
-        // 刷新图表
-        lineChart.invalidate()
     }
 
     // 用于保存按钮样式的映射

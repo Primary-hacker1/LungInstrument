@@ -134,7 +134,7 @@
 
             </RelativeLayout>
 
-            <com.github.mikephil.charting.charts.LineChart
+            <com.justsafe.libview.view.BaseLineChart
                 android:id="@+id/chart_fvc"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
