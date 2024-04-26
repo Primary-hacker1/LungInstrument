@@ -79,7 +79,7 @@ public class USBTransferUtil {
     public boolean circleBoolean = false;
     public boolean autoCircleBoolean = true;//自动计圈
     public int circleCount = 0;
-    public int testType = 0;//0初始状态 1开始 2结束
+    public int testType = 0;//0初始状态 1开始 2结束 3采集运动后心率
     public boolean ignoreBlood = false;//是否忽略测量血压
     public int updateBluetooth = 0;//
     public boolean ecgConnection = false;//心电连接状态

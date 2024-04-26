@@ -20,6 +20,7 @@ import com.common.viewmodel.LiveDataEvent
 import com.just.machine.dao.PatientBean
 import com.just.machine.model.Constants
 import com.just.machine.model.PatientInfoBean
+import com.just.machine.model.SixMinRecordsBean
 import com.just.machine.model.sixminreport.SixMinReportInfo
 import com.just.machine.ui.adapter.CardiopulAdapter
 import com.just.machine.ui.adapter.PatientsAdapter
@@ -98,8 +99,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         viewModel.mEventHub.observe(this) {
             when (it.action) {
                 LiveDataEvent.SUCCESS -> {
-                    if (it.any is Int)
-                        LogUtils.e(tag + it.any)
+                    if (it.any is Int) LogUtils.e(tag + it.any)
                 }
 
                 LiveDataEvent.QueryPatient, LiveDataEvent.QueryPatientNull -> {//查询患者
@@ -109,7 +109,6 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                 LiveDataEvent.QueryNameId, LiveDataEvent.QuerySuccess -> {
                     it.any?.let { it1 -> beanQuery(it1) }
                 }
-
             }
         }
 
@@ -141,7 +140,8 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
             patientInfoBeans.forEach { it ->
                 if (bean?.patientId == it.infoBean.patientId) {
                     it.sixMinReportInfo.sortByDescending { it.addTime }
-                    sixMinAdapter.setItemsBean(it.sixMinReportInfo)
+                    val filter = it.sixMinReportInfo.filter { it.delFlag == "0" }
+                    sixMinAdapter.setItemsBean(filter as MutableList<SixMinReportInfo>)
                 }
             }
         }
@@ -188,17 +188,17 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
                 patientInfoBeans[0].sixMinReportInfo.sortByDescending { it.addTime }
 
-                patientInfoBeans[0].sixMinReportInfo.let { it1 -> sixMinAdapter.setItemsBean(it1) }
+                val filter = patientInfoBeans[0].sixMinReportInfo.filter { it.delFlag == "0" }
+
+                filter.let { it1 -> sixMinAdapter.setItemsBean(it1 as MutableList<SixMinReportInfo>) }
 
                 binding.rvSixTest.adapter = sixMinAdapter
 
                 sixMinAdapter.setItemOnClickListener(object : SixMinAdapter.SixMinReportListener {
                     override fun onDeleteItem(bean: SixMinReportInfo) {
-                        val startDeleteWarnDialogFragment =
-                            startDeleteWarnDialogFragment(
-                                supportFragmentManager,
-                                "确认删除该试验记录吗?"
-                            )
+                        val startDeleteWarnDialogFragment = startDeleteWarnDialogFragment(
+                            supportFragmentManager, "确认删除该试验记录吗?"
+                        )
                         startDeleteWarnDialogFragment.setDeleteWarnDialogListener(object :
                             DeleteWarnDialogFragment.DeleteWarnDialogListener {
                             override fun onClickConfirm() {
@@ -210,8 +210,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
                     override fun onUpdateItem(bean: SixMinReportInfo) {
                         val intent = Intent(
-                            this@PatientActivity,
-                            SixMinPreReportActivity::class.java
+                            this@PatientActivity, SixMinPreReportActivity::class.java
                         )
                         val bundle = Bundle()
                         bundle.putString(Constants.sixMinPatientInfo, bean.patientId.toString())
@@ -263,8 +262,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
             override fun onUpdateItem(bean: PatientBean) {
                 PatientDialogFragment.startPatientDialogFragment(
-                    supportFragmentManager,
-                    bean
+                    supportFragmentManager, bean
                 )//修改患者信息
             }
 
@@ -295,8 +293,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                                             befoBreathingLevelStr: String
                                         ) {
                                             val intent = Intent(
-                                                this@PatientActivity,
-                                                SixMinActivity::class.java
+                                                this@PatientActivity, SixMinActivity::class.java
                                             )
                                             val bundle = Bundle()
                                             bundle.putString(
@@ -428,8 +425,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         textView1.setTextColor(ContextCompat.getColor(this, R.color.cD9D9D9))
         textView2.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
         textView1.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
-        textView2.background =
-            ContextCompat.getDrawable(this, R.drawable.super_edittext_bg)
+        textView2.background = ContextCompat.getDrawable(this, R.drawable.super_edittext_bg)
         showRecyclerView.gone()
         hideRecyclerView.visible()
     }

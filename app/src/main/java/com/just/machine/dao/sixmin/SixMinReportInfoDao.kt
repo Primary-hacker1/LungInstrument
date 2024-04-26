@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SixMinReportInfoDao {
 
-    @Query("SELECT * FROM sixmin_report_info WHERE delFlag == '0' ORDER BY addTime DESC")
+    @Query("SELECT * FROM sixmin_report_info ORDER BY addTime DESC")
     fun getReportInfo(): Flow<List<SixMinRecordsBean>>
 
     @Query("SELECT * FROM sixmin_report_info WHERE patientId == :id AND reportNo ==:reportNo AND delFlag == '0' ORDER BY addTime DESC")

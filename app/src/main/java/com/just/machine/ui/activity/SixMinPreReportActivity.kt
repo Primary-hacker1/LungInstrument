@@ -226,7 +226,7 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                                 return
                             }
                         }
-
+                        startEditBloodDialogFragment.dismiss()
                         viewModel.updateSixMinReportOther(sixMinRecordsBean.infoBean.reportNo,bean.highBloodPressureBefore.toString(),bean.lowBloodPressureBefore.toString(),bean.highBloodPressureAfter.toString(),bean.lowBloodPressureAfter.toString())
                         viewModel.getSixMinReportInfoById(sixMinPatientId.toLong(),sixMinReportNo)
                         binding.sixminReportTlPreTable.removeAllViews()
@@ -338,7 +338,7 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                     "2" -> "中度"
                     else -> "轻度"
                 }
-                binding.sixminTvDataStatistics.text = String.format(
+                binding.sixminTvDataStatistics.text = Html.fromHtml(String.format(
                     getString(R.string.sixmin_test_report_data_statistics),
                     sixMinRecordsBean.evaluationBean[0].totalDistance,
                     strideAvg,
@@ -346,7 +346,7 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                     cardiopuDegreeStr,
                     sixMinRecordsBean.evaluationBean[0].cardiopuLevel,
                     sixMinRecordsBean.infoBean.restDuration
-                )
+                ))
 
                 initTable()
             }

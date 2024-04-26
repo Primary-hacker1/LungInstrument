@@ -63,7 +63,6 @@ class SixMinReportEditBloodPressureFragment :
 
     override fun initListener() {
         binding.sixminReportTvEditBloodPressureConfirm.setNoRepeatListener {
-            dismiss()
             val highBefore = binding.sixminReportEditBloodPressureHighBefore.text.toString()
             val lowBefore = binding.sixminReportEditBloodPressureLowBefore.text.toString()
             val highAfter = binding.sixminReportEditBloodPressureHighAfter.text.toString()
