@@ -17,6 +17,9 @@ import com.just.news.R
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 
+/**
+ * 6分钟试验引导dialog
+ */
 @AndroidEntryPoint
 class SixMinGuideDialogFragment : BaseDialogFragment<FragmentDialogSixminGuideBinding>(), TextToSpeech.OnInitListener  {
 

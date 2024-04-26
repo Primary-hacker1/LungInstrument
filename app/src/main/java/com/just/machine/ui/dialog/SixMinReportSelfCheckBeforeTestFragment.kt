@@ -14,6 +14,9 @@ import com.just.machine.ui.adapter.SixMinReportPatientSelfAdapter
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogSixminReportSelfCheckBeforeTestBinding
 
+/**
+ * 6分钟选择试验前呼吸和疲劳状况等级dialog
+ */
 class SixMinReportSelfCheckBeforeTestFragment :
     BaseDialogFragment<FragmentDialogSixminReportSelfCheckBeforeTestBinding>() {
 

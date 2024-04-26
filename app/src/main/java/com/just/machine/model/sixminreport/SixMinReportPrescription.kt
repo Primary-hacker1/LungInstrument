@@ -1,5 +1,7 @@
 package com.just.machine.model.sixminreport
 
+import android.os.Parcel
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -46,4 +48,91 @@ data class SixMinReportPrescription(
     var pllevState: String = "",//borg疲劳的状态，1=出具，2=不出具
     var prescripState: String = "",//处方状态，0=强度版本，1=运动步速版本
     var delFlag: String = "0",//删除标记
-)
+) : Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readLong(),
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!
+    ) {
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeLong(id)
+        parcel.writeString(reportId)
+        parcel.writeString(movementWay)
+        parcel.writeString(movementTime)
+        parcel.writeString(movementDistance)
+        parcel.writeString(movementSteps)
+        parcel.writeString(movementWeeklyNumber)
+        parcel.writeString(movementCycle)
+        parcel.writeString(cycleUnit)
+        parcel.writeString(heartBigg)
+        parcel.writeString(heartBefore)
+        parcel.writeString(heartAfter)
+        parcel.writeString(pilaoControl)
+        parcel.writeString(qiangduBefore)
+        parcel.writeString(qiangduAfter)
+        parcel.writeString(remarke)
+        parcel.writeString(remarkeName)
+        parcel.writeString(remarkeNameYs)
+        parcel.writeString(pllevBefore)
+        parcel.writeString(pllevAfter)
+        parcel.writeString(strideBefore)
+        parcel.writeString(strideAfter)
+        parcel.writeString(strideFormula)
+        parcel.writeString(movementDistanceAfter)
+        parcel.writeString(distanceFormula)
+        parcel.writeString(distanceState)
+        parcel.writeString(heartrateRate)
+        parcel.writeString(heartrateState)
+        parcel.writeString(metabMet)
+        parcel.writeString(metabState)
+        parcel.writeString(pllevState)
+        parcel.writeString(prescripState)
+        parcel.writeString(delFlag)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<SixMinReportPrescription> {
+        override fun createFromParcel(parcel: Parcel): SixMinReportPrescription {
+            return SixMinReportPrescription(parcel)
+        }
+
+        override fun newArray(size: Int): Array<SixMinReportPrescription?> {
+            return arrayOfNulls(size)
+        }
+    }
+}

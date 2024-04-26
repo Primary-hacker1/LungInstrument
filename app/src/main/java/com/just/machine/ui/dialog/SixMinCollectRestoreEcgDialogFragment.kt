@@ -13,6 +13,9 @@ import com.just.news.R
 import com.just.news.databinding.FragmentDialogSixminCollectRestoreEcgBinding
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * 6分钟试验采集运动后恢复心率dialog
+ */
 @AndroidEntryPoint
 class SixMinCollectRestoreEcgDialogFragment :
     BaseDialogFragment<FragmentDialogSixminCollectRestoreEcgBinding>() {

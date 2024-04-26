@@ -277,7 +277,8 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
         binding.sixminReportTvPrescription.setNoRepeatListener {
             val prescriptionFragment =
                 SixMinReportPrescriptionFragment.startPrescriptionDialogFragment(
-                    supportFragmentManager
+                    supportFragmentManager,
+                    sixMinReportPrescription
                 )
             prescriptionFragment.setPrescriptionDialogOnClickListener(object :
                 SixMinReportPrescriptionFragment.SixMinReportPrescriptionDialogListener {

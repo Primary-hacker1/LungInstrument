@@ -184,6 +184,8 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                                     val intent = Intent(activity, SixMinActivity::class.java)
                                     val bundle = Bundle()
                                     bundle.putString(Constants.sixMinSelfCheckViewSelection,"$befoFatigueLevelStr&$befoBreathingLevelStr")
+                                    bundle.putString(Constants.sixMinPatientInfo,"")
+                                    intent.putExtras(bundle)
                                     startActivity(intent,bundle)
                                 }
 
