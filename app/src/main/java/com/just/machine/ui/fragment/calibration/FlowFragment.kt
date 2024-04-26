@@ -57,18 +57,21 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
             yAxisMinimum = -5f,
             yAxisMaximum = 5f,
             countMaxX = 30f,
-            countY = 1,
-            countX = 1,
+            countY = 1f,
+            countX = 1f,
             titleCentent = "容量-时间"
         )
 
+        binding.chartSpeed.setLineDataSetData(
+            binding.chartSpeed.flowDataSetList()
+        )//设置数据
 
         binding.chartSpeed.setLineChartFlow(
             yAxisMinimum = -15f,
             yAxisMaximum = 15f,
             countMaxX = 4f,
-            countY = 1,
-            countX = 5,
+            countY = 3f,
+            countX = 0.2f,
             titleCentent = "流速-容量"
         )
 

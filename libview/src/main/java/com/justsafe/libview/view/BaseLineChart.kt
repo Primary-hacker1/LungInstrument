@@ -10,12 +10,15 @@ import android.util.AttributeSet
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.justsafe.libview.R
+import kotlin.math.ceil
 
 /**
  * 自定义的基础折线图控件，继承自 LineChart。
@@ -51,72 +54,104 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
         yAxisMinimum: Float? = 0f,
         yAxisMaximum: Float? = 0f,
         countMaxX: Float? = 0f,
-        countY: Int? = 1,//y轴分成多少个
-        countX: Int? = 1,//x轴分成多少个=countMaxX/countX
+        countY: Float? = 1.5f, // Y 轴每个标签的间隔
+        countX: Float? = 1f, // X 轴每个标签的间隔（由X轴刻度数和X轴标签数量决定）
         title1: String? = "[Vol]",
         title2: String? = "[L/S]",
         titleCentent: String? = ""
     ) {
-
+        // 设置标题
         this.title1 = title1.toString()
         this.title2 = title2.toString()
         this.titleCentent = titleCentent.toString()
-        xAxis.granularity = 1f
 
-        xAxis.setLabelCount((countMaxX!! / countX!!).toInt(), true)
+        // 设置 X 轴属性
+        xAxis.granularity = countX!!
 
-        xAxis.axisMaximum = countMaxX
+        xAxis.setLabelCount(((xAxis.axisMaximum - xAxis.axisMinimum) / xAxis.granularity + 1).toInt(), true)
+
+        xAxis.axisMaximum = countMaxX!!
 
         xAxis.setDrawGridLines(false)
 
         xAxis.position = XAxis.XAxisPosition.BOTTOM
+        // xAxis.setCenterAxisLabels(true)
 
-//        xAxis.setCenterAxisLabels(true)
-
+        // 设置描述
         description.text = ""
-
         description.setPosition(80f, 22f)
-
         description.textSize = 9f
-
         description.textColor = Color.BLACK
 
-        if (yAxisMinimum != null) {
+        // 设置 Y 轴最小值和最大值
+        if (yAxisMinimum != null && yAxisMaximum != null) {
             axisLeft.axisMinimum = yAxisMinimum
             axisRight.axisMinimum = yAxisMinimum
-        }
-
-        if (yAxisMaximum != null) {
             axisLeft.axisMaximum = yAxisMaximum
             axisRight.axisMaximum = yAxisMaximum
+
+            val range = yAxisMaximum - yAxisMinimum
+
+            val numY = ceil((range / countY!!).toDouble()).toInt()  // 使用Math.ceil确保覆盖全部范围
+
+            // 应用自定义的ValueFormatter
+            axisLeft.valueFormatter = CustomYAxisValueFormatter()
+            axisRight.valueFormatter = CustomYAxisValueFormatter()
+
+            axisLeft.granularity = countY
+            axisRight.granularity = countY
+
+            // 根据实际数据调整labelCount
+            axisLeft.setLabelCount(((axisLeft.axisMaximum - axisLeft.axisMinimum) / axisLeft.granularity + 1).toInt(), true)
+            axisRight.setLabelCount(((axisRight.axisMaximum - axisRight.axisMinimum) / axisRight.granularity + 1).toInt(), true)
+
+            // 创建自定义格式化器实例
+            val customYAxisFormatter = CustomYAxisValueFormatter()
+
+            // 设置到Y轴
+            axisLeft.valueFormatter = customYAxisFormatter
+            axisRight.valueFormatter = customYAxisFormatter
+
+            Log.e(tag, "$numY-----y轴的个数")
         }
 
-        val numY = ((yAxisMaximum!! - yAxisMinimum!!) / countY!!).toInt()
 
-        Log.e(tag, "-------------$numY+\$tag")
+        xAxis.textSize = 8f
+        axisLeft.textSize = 8f
+        axisRight.textSize = 8f
 
-
-        xAxis.textSize = 6f
-        axisLeft.textSize = 6f
-        axisRight.textSize = 6f
-
-        // 获取左侧 Y 轴
-        val leftAxis = axisLeft
-        // 设置 Y 轴标签数量
-        leftAxis.labelCount = numY// 设置为您想要的标签数量
-
-        // 获取右侧 Y 轴
-        val rightAxis = axisRight
-        // 设置 Y 轴标签数量
-        rightAxis.labelCount = numY // 设置为您想要的标签数量
-
+        // 设置其他图表属性
         setExtraOffsets(0f, 25f, 0f, 0f)
         isDragEnabled = true
         setScaleEnabled(false)
         setPinchZoom(false)
 
+        // 刷新图表
         invalidate()
     }
+
+
+//    class CustomYAxisValueFormatter : ValueFormatter() {
+//        override fun getAxisLabel(value: Float, axis: AxisBase?): String {
+//            // 检查值是否为0.5的倍数
+//            return if (value % 1.5f == 0f) {
+//                // 返回标签显示值
+//                value.toString()
+//            } else {
+//                // 不是0.5的倍数则返回空字符串，表示不显示该标签
+//                ""
+//            }
+//        }
+//    }
+
+    // 自定义ValueFormatter
+    class CustomYAxisValueFormatter : ValueFormatter() {
+        override fun getAxisLabel(value: Float, axis: AxisBase?): String {
+            return String.format("%.1f", value)
+        }
+    }
+
+
 
     /**
      * 设置折线图的数据。
