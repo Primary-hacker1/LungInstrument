@@ -666,6 +666,7 @@
                                         android:textColor="@color/text3" />
 
                                     <EditText
+                                        android:inputType="number"
                                         android:layout_width="50dp"
                                         android:layout_height="wrap_content"
                                         android:gravity="center" />

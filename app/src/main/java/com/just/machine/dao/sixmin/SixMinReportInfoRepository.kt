@@ -21,4 +21,5 @@ class SixMinReportInfoRepository @Inject constructor(private val reportDao: SixM
 
     suspend fun insertReportInfo(reportInfo: SixMinReportInfo): Long = reportDao.insertReportInfo(reportInfo)
 
+    suspend fun deleteReportInfo(reportNo: String) = reportDao.deleteReportInfo(reportNo)
 }

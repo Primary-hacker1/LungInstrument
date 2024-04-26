@@ -500,17 +500,21 @@
                                         android:layout_gravity="center_vertical"
                                         android:orientation="vertical">
 
-                                        <ImageView
+                                        <ImageButton
                                             android:id="@+id/sixmin_iv_circle_count_plus"
                                             android:layout_width="22dp"
                                             android:layout_height="22dp"
                                             android:layout_weight="1"
+                                            android:scaleType="centerInside"
+                                            android:background="@null"
                                             android:src="@mipmap/circle_plus" />
 
-                                        <ImageView
+                                        <ImageButton
+                                            android:background="@null"
                                             android:id="@+id/sixmin_iv_circle_count_minus"
                                             android:layout_width="22dp"
                                             android:layout_height="22dp"
+                                            android:scaleType="centerInside"
                                             android:layout_weight="1"
                                             android:src="@mipmap/circle_minus" />
 

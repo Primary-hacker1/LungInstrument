@@ -138,7 +138,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
         // if (usbTransferUtil.bloodOxygenConnection && usbTransferUtil.bloodPressureConnection && usbTransferUtil.ecgConnection) {
 //       }else{
 //         }
-        if (USBTransferUtil.isConnectUSB && usbTransferUtil.bloodPressureConnection) {
+        if (usbTransferUtil.isConnectUSB && usbTransferUtil.bloodOxygenConnection && usbTransferUtil.ecgConnection && usbTransferUtil.bloodPressureConnection) {
             val selfCheckBeforeTestDialogFragment =
                 SixMinReportSelfCheckBeforeTestFragment.startPatientSelfCheckDialogFragment(
                     activity!!.supportFragmentManager, "1", "1"

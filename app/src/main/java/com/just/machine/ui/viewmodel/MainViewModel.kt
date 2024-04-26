@@ -209,6 +209,15 @@ class MainViewModel @Inject constructor(
     }
 
     /**
+     * 删除6分钟报告信息
+     */
+    fun deleteSixMinReportInfo(reportNo: String){
+        viewModelScope.launch {
+            sixMinReportInfoDao.deleteReportInfo(reportNo)
+        }
+    }
+
+    /**
      * 获取6分钟报告信息
      */
     fun getSixMinReportInfoById(id: Long,reportNo:String) {

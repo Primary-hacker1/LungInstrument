@@ -3,6 +3,8 @@ package com.just.machine.ui.adapter
 import android.content.Context
 import androidx.core.content.ContextCompat
 import com.common.base.BaseRecyclerViewAdapter
+import com.common.base.setNoRepeatListener
+import com.just.machine.dao.PatientBean
 import com.just.machine.model.SixMinRecordsBean
 import com.just.machine.model.sixminreport.SixMinReportInfo
 import com.just.news.R
@@ -19,6 +21,17 @@ class SixMinAdapter(var context: Context) : BaseRecyclerViewAdapter<SixMinReport
 
     override fun bindData(item: SixMinReportInfo, position: Int) {
         binding.item = item
+
+        binding.btnCheck.setNoRepeatListener {
+            listener?.onCheckItem(item)
+        }
+        binding.btnUpdate.setNoRepeatListener {
+            listener?.onUpdateItem(item)
+        }
+        binding.btnDelete.setNoRepeatListener {
+            listener?.onDeleteItem(item)
+        }
+
         if (position == selectedItem) {
             binding.llItem.setBackgroundColor(ContextCompat.getColor(context, R.color.cf4f5fa))
         } else {
@@ -42,5 +55,15 @@ class SixMinAdapter(var context: Context) : BaseRecyclerViewAdapter<SixMinReport
         notifyDataSetChanged()
     }
 
+    private var listener: SixMinReportListener? = null
 
+    interface SixMinReportListener {
+        fun onDeleteItem(bean: SixMinReportInfo)
+        fun onUpdateItem(bean: SixMinReportInfo)
+        fun onCheckItem(bean: SixMinReportInfo)
+    }
+
+    fun setItemOnClickListener(listener: SixMinReportListener) {
+        this.listener = listener
+    }
 }

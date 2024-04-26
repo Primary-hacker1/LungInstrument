@@ -179,16 +179,57 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                 startEditBloodDialogFragment.setEditBloodDialogOnClickListener(object :
                     SixMinReportEditBloodPressureFragment.SixMinReportEditBloodDialogListener {
                     override fun onClickConfirm(bean: SixMinReportEditBloodPressure) {
-                        if (reportRowList.isNotEmpty()) {
-//                            val sixMinReportItem = reportRowList[reportRowList.size - 1]
-//                            sixMinReportItem.stillnessValue =
-//                                "${bean.highBloodPressureBefore}/${bean.lowBloodPressureBefore}"
-//                            sixMinReportItem.sixMinValue =
-//                                "${bean.highBloodPressureAfter}/${bean.lowBloodPressureAfter}"
-                            viewModel.updateSixMinReportOther(sixMinRecordsBean.infoBean.reportNo,bean.highBloodPressureBefore.toString(),bean.lowBloodPressureBefore.toString(),bean.highBloodPressureAfter.toString(),bean.lowBloodPressureAfter.toString())
-                            viewModel.getSixMinReportInfoById(sixMinPatientId.toLong(),sixMinReportNo)
-                            binding.sixminReportTlPreTable.removeAllViews()
+                        val highBloodPressureBefore = bean.highBloodPressureBefore
+                        val lowBloodPressureBefore = bean.lowBloodPressureBefore
+                        val highBloodPressureAfter = bean.highBloodPressureAfter
+                        val lowBloodPressureAfter = bean.lowBloodPressureAfter
+
+                        if(highBloodPressureBefore?.isNotEmpty() == true){
+                            if(highBloodPressureBefore.toInt() == 0 || highBloodPressureBefore.toInt() > 999){
+                                showMsg("请检查试验前 收缩压值")
+                                return
+                            }
+                            if(lowBloodPressureBefore?.isEmpty() == true){
+                                showMsg("请检查试验前 舒张压值")
+                                return
+                            }
                         }
+                        if(lowBloodPressureBefore?.isNotEmpty() == true){
+                            if(lowBloodPressureBefore.toInt() == 0 || lowBloodPressureBefore.toInt() > 999){
+                                showMsg("请检查试验前 舒张压值")
+                                return
+                            }
+                            if(highBloodPressureBefore?.isEmpty() == true){
+                                showMsg("请检查试验前 收缩压值")
+                                return
+                            }
+                        }
+
+                        if(highBloodPressureAfter?.isNotEmpty() == true){
+                            if(highBloodPressureAfter.toInt() == 0 || highBloodPressureAfter.toInt() > 999){
+                                showMsg("请检查试验后 收缩压值")
+                                return
+                            }
+                            if(lowBloodPressureAfter?.isEmpty() == true){
+                                showMsg("请检查试验后 舒张压值")
+                                return
+                            }
+                        }
+
+                        if(lowBloodPressureAfter?.isNotEmpty() == true){
+                            if(lowBloodPressureAfter.toInt() == 0 || lowBloodPressureAfter.toInt() > 999){
+                                showMsg("请检查试验后 舒张压值")
+                                return
+                            }
+                            if(highBloodPressureAfter?.isEmpty() == true){
+                                showMsg("请检查试验后 收缩压值")
+                                return
+                            }
+                        }
+                        startEditBloodDialogFragment.dismiss()
+                        viewModel.updateSixMinReportOther(sixMinRecordsBean.infoBean.reportNo,bean.highBloodPressureBefore.toString(),bean.lowBloodPressureBefore.toString(),bean.highBloodPressureAfter.toString(),bean.lowBloodPressureAfter.toString())
+                        viewModel.getSixMinReportInfoById(sixMinPatientId.toLong(),sixMinReportNo)
+                        binding.sixminReportTlPreTable.removeAllViews()
                     }
                 })
             }
@@ -297,7 +338,7 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                     "2" -> "中度"
                     else -> "轻度"
                 }
-                binding.sixminTvDataStatistics.text = String.format(
+                binding.sixminTvDataStatistics.text = Html.fromHtml(String.format(
                     getString(R.string.sixmin_test_report_data_statistics),
                     sixMinRecordsBean.evaluationBean[0].totalDistance,
                     strideAvg,
@@ -305,7 +346,7 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                     cardiopuDegreeStr,
                     sixMinRecordsBean.evaluationBean[0].cardiopuLevel,
                     sixMinRecordsBean.infoBean.restDuration
-                )
+                ))
 
                 initTable()
             }
