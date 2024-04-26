@@ -24,6 +24,7 @@ import kotlin.math.ceil
  * 自定义的基础折线图控件，继承自 LineChart。
  * 提供了设置折线图基本属性和数据的方法。
  */
+@Deprecated("废弃，x轴不支持自定义个数！")
 class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context, attrs) {
 
     private val tag = BaseLineChart::class.java.simpleName
@@ -47,15 +48,15 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
      * @param yAxisMinimum Y 轴的最小值
      * @param yAxisMaximum Y 轴的最大值
      * @param countMaxX X 轴的刻度数
-     * @param countY Y 轴的刻度数
+     * @param granularityY Y 轴的刻度数
      * @param title2 Y 轴的标题
      */
     fun setLineChartFlow(
         yAxisMinimum: Float? = 0f,
         yAxisMaximum: Float? = 0f,
         countMaxX: Float? = 0f,
-        countY: Float? = 1.5f, // Y 轴每个标签的间隔
-        countX: Float? = 1f, // X 轴每个标签的间隔（由X轴刻度数和X轴标签数量决定）
+        granularityY: Float? = 1.5f, // Y 轴每个标签的间隔
+        granularityX: Float? = 1f, // X 轴每个标签的间隔（由X轴刻度数和X轴标签数量决定）
         title1: String? = "[Vol]",
         title2: String? = "[L/S]",
         titleCentent: String? = ""
@@ -64,18 +65,27 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
         this.title1 = title1.toString()
         this.title2 = title2.toString()
         this.titleCentent = titleCentent.toString()
+        // 创建自定义格式化器实例
+        val customYAxisFormatter = CustomYAxisValueFormatter()
 
         // 设置 X 轴属性
-        xAxis.granularity = countX!!
-
-        xAxis.setLabelCount(((xAxis.axisMaximum - xAxis.axisMinimum) / xAxis.granularity + 1).toInt(), true)
-
-        xAxis.axisMaximum = countMaxX!!
-
+//        xAxis.valueFormatter = CustomYAxisValueFormatter()
+        xAxis.granularity = granularityX!!  // 每个标签间隔1
+        xAxis.axisMinimum = 0f  // X轴最小值设置为0（如果需要）
+        xAxis.axisMaximum = countMaxX!!  // 你已经有这一步
+        axisLeft.valueFormatter = customYAxisFormatter
+        xAxis.setLabelCount((xAxis.axisMaximum - xAxis.axisMinimum + 1).toInt(), true)
         xAxis.setDrawGridLines(false)
+
+        // 创建自定义的 X 轴
+        val customXAxis = CustomAxis()
+
 
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         // xAxis.setCenterAxisLabels(true)
+
+        Log.e("Chart", "X axis max: ${xAxis.axisMaximum}, granularity: ${xAxis.granularity}, label count: ${xAxis.labelCount}")
+
 
         // 设置描述
         description.text = ""
@@ -92,21 +102,20 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
 
             val range = yAxisMaximum - yAxisMinimum
 
-            val numY = ceil((range / countY!!).toDouble()).toInt()  // 使用Math.ceil确保覆盖全部范围
+            val numY = ceil((range / granularityY!!).toDouble()).toInt()  // 使用Math.ceil确保覆盖全部范围
 
             // 应用自定义的ValueFormatter
             axisLeft.valueFormatter = CustomYAxisValueFormatter()
             axisRight.valueFormatter = CustomYAxisValueFormatter()
 
-            axisLeft.granularity = countY
-            axisRight.granularity = countY
+            axisLeft.granularity = granularityY
+            axisRight.granularity = granularityY
 
             // 根据实际数据调整labelCount
             axisLeft.setLabelCount(((axisLeft.axisMaximum - axisLeft.axisMinimum) / axisLeft.granularity + 1).toInt(), true)
             axisRight.setLabelCount(((axisRight.axisMaximum - axisRight.axisMinimum) / axisRight.granularity + 1).toInt(), true)
 
-            // 创建自定义格式化器实例
-            val customYAxisFormatter = CustomYAxisValueFormatter()
+
 
             // 设置到Y轴
             axisLeft.valueFormatter = customYAxisFormatter
@@ -126,23 +135,10 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
         setScaleEnabled(false)
         setPinchZoom(false)
 
-        // 刷新图表
+        notifyDataSetChanged()  // 通知数据变更
         invalidate()
     }
 
-
-//    class CustomYAxisValueFormatter : ValueFormatter() {
-//        override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-//            // 检查值是否为0.5的倍数
-//            return if (value % 1.5f == 0f) {
-//                // 返回标签显示值
-//                value.toString()
-//            } else {
-//                // 不是0.5的倍数则返回空字符串，表示不显示该标签
-//                ""
-//            }
-//        }
-//    }
 
     // 自定义ValueFormatter
     class CustomYAxisValueFormatter : ValueFormatter() {
@@ -172,9 +168,6 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
 
         data = lineData
 
-//        xAxis.setLabelCount(originalXAxisMaximum.toInt(), true)
-//
-//        xAxis.axisMaximum = (originalXAxisMaximum / 1)
     }
 
 
@@ -292,9 +285,28 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
         val viewWidth = width
         val centerX = (viewWidth - verticalTextBounds.width()) / 2 + verticalTextPaint.measureText(verticalText) / 2 // 文本的水平居中位置
         val centerY = verticalTextHeight // 文本的顶部位置
-        canvas?.drawText(verticalText, centerX.toFloat(), centerY.toFloat(), verticalTextPaint)
+        canvas?.drawText(verticalText, centerX, centerY.toFloat(), verticalTextPaint)
     }
 
+    class CustomAxis : AxisBase() {
+        override fun setLabelCount(count: Int) {
+            // 自定义最大标签数量为100
+            val maxLabelCount = 100
+            val minLabelCount = 2 // 最小标签数量
+            // 如果传入的标签数量超过最大限制，则将标签数量设置为最大值
+            if (count > maxLabelCount) {
+                super.setLabelCount(maxLabelCount)
+            }
+            // 如果传入的标签数量小于最小限制，则将标签数量设置为最小值
+            else if (count < minLabelCount) {
+                super.setLabelCount(minLabelCount)
+            }
+            // 否则，直接使用传入的标签数量
+            else {
+                super.setLabelCount(count)
+            }
+        }
+    }
 
 }
 

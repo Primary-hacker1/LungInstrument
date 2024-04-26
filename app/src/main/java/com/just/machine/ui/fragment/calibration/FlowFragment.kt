@@ -57,8 +57,8 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
             yAxisMinimum = -5f,
             yAxisMaximum = 5f,
             countMaxX = 30f,
-            countY = 1f,
-            countX = 1f,
+            granularityY = 1f,
+            granularityX = 1f,
             titleCentent = "容量-时间"
         )
 
@@ -70,8 +70,8 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
             yAxisMinimum = -15f,
             yAxisMaximum = 15f,
             countMaxX = 4f,
-            countY = 3f,
-            countX = 0.2f,
+            granularityY = 3f,
+            granularityX = 0.2f,
             titleCentent = "流速-容量"
         )
 
