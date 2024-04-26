@@ -1,273 +1,273 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
     </data>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:background="@drawable/calibration_bg"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:background="@drawable/calibration_bg"
+                android:orientation="vertical">
+
             <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:gravity="center_vertical">
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:gravity="center_vertical">
 
                 <TextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="380dp"
-                    android:text="常规"
-                    android:textSize="13sp" />
+                        android:id="@+id/title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="380dp"
+                        android:text="常规"
+                        android:textSize="13sp" />
 
                 <CheckBox
-                    android:id="@+id/checkbox"
-                    style="@style/CustomCheckBox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="300dp"
-                    android:layout_marginTop="@dimen/space_10"
-                    android:layout_toRightOf="@+id/title"
-                    android:checked="true"
-                    android:text="自动最佳"
-                    android:textSize="12sp"
-                    tools:ignore="RtlHardcoded" />
+                        android:id="@+id/checkbox"
+                        style="@style/CustomCheckBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="300dp"
+                        android:layout_marginTop="@dimen/space_10"
+                        android:layout_toRightOf="@+id/title"
+                        android:checked="true"
+                        android:text="自动最佳"
+                        android:textSize="12sp"
+                        tools:ignore="RtlHardcoded" />
 
                 <Button
-                    android:id="@+id/btn_test1"
-                    android:layout_width="@dimen/space_25"
-                    android:layout_height="@dimen/space_25"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="@dimen/space_30"
-                    android:layout_toRightOf="@+id/checkbox"
-                    android:background="@drawable/circle"
-                    android:text="1"
-                    android:textColor="@color/colorPrimary"
-                    tools:ignore="RtlHardcoded">
+                        android:id="@+id/btn_test1"
+                        android:layout_width="@dimen/space_25"
+                        android:layout_height="@dimen/space_25"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="@dimen/space_30"
+                        android:layout_toRightOf="@+id/checkbox"
+                        android:background="@drawable/circle"
+                        android:text="1"
+                        android:textColor="@color/colorPrimary"
+                        tools:ignore="RtlHardcoded">
 
                 </Button>
 
                 <Button
-                    android:id="@+id/btn_test2"
-                    android:layout_width="@dimen/space_25"
-                    android:layout_height="@dimen/space_25"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="@dimen/space_15"
-                    android:layout_toRightOf="@+id/btn_test1"
-                    android:background="@drawable/circle"
-                    android:text="2"
-                    android:textColor="@color/colorPrimary"
-                    tools:ignore="RtlHardcoded">
+                        android:id="@+id/btn_test2"
+                        android:layout_width="@dimen/space_25"
+                        android:layout_height="@dimen/space_25"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="@dimen/space_15"
+                        android:layout_toRightOf="@+id/btn_test1"
+                        android:background="@drawable/circle"
+                        android:text="2"
+                        android:textColor="@color/colorPrimary"
+                        tools:ignore="RtlHardcoded">
 
                 </Button>
 
                 <Button
-                    android:id="@+id/btn_test3"
-                    android:layout_width="@dimen/space_25"
-                    android:layout_height="@dimen/space_25"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="@dimen/space_15"
-                    android:layout_toRightOf="@+id/btn_test2"
-                    android:background="@drawable/circle"
-                    android:text="3"
-                    android:textColor="@color/colorPrimary"
-                    tools:ignore="RtlHardcoded">
+                        android:id="@+id/btn_test3"
+                        android:layout_width="@dimen/space_25"
+                        android:layout_height="@dimen/space_25"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="@dimen/space_15"
+                        android:layout_toRightOf="@+id/btn_test2"
+                        android:background="@drawable/circle"
+                        android:text="3"
+                        android:textColor="@color/colorPrimary"
+                        tools:ignore="RtlHardcoded">
 
                 </Button>
 
                 <Button
-                    android:id="@+id/btn_test4"
-                    android:layout_width="@dimen/space_25"
-                    android:layout_height="@dimen/space_25"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="@dimen/space_15"
-                    android:layout_toRightOf="@+id/btn_test3"
-                    android:background="@drawable/circle"
-                    android:text="4"
-                    android:textColor="@color/colorPrimary"
-                    tools:ignore="RtlHardcoded">
+                        android:id="@+id/btn_test4"
+                        android:layout_width="@dimen/space_25"
+                        android:layout_height="@dimen/space_25"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="@dimen/space_15"
+                        android:layout_toRightOf="@+id/btn_test3"
+                        android:background="@drawable/circle"
+                        android:text="4"
+                        android:textColor="@color/colorPrimary"
+                        tools:ignore="RtlHardcoded">
 
                 </Button>
 
                 <Button
-                    android:id="@+id/btn_test5"
-                    android:layout_width="@dimen/space_25"
-                    android:layout_height="@dimen/space_25"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="@dimen/space_15"
-                    android:layout_toRightOf="@+id/btn_test4"
-                    android:background="@drawable/circle"
-                    android:text="5"
-                    android:textColor="@color/colorPrimary"
-                    tools:ignore="RtlHardcoded">
+                        android:id="@+id/btn_test5"
+                        android:layout_width="@dimen/space_25"
+                        android:layout_height="@dimen/space_25"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="@dimen/space_15"
+                        android:layout_toRightOf="@+id/btn_test4"
+                        android:background="@drawable/circle"
+                        android:text="5"
+                        android:textColor="@color/colorPrimary"
+                        tools:ignore="RtlHardcoded">
 
                 </Button>
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_start"
-                    android:layout_width="wrap_content"
-                    android:drawableLeft="@drawable/btn_start"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/space_10"
-                    android:layout_centerInParent="true"
-                    android:gravity="center"
-                    android:textSize="@dimen/space_13"
-                    android:layout_marginLeft="@dimen/space_25"
-                    android:layout_toRightOf="@+id/btn_test5"
-                    android:background="@null"
-                    android:text="手动最佳"
-                    tools:ignore="RtlHardcoded"/>
+                        android:id="@+id/btn_start"
+                        android:layout_width="wrap_content"
+                        android:drawableLeft="@drawable/btn_start"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="@dimen/space_10"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:textSize="@dimen/space_13"
+                        android:layout_marginLeft="@dimen/space_25"
+                        android:layout_toRightOf="@+id/btn_test5"
+                        android:background="@null"
+                        android:text="手动最佳"
+                        tools:ignore="RtlHardcoded" />
 
 
             </RelativeLayout>
 
             <com.justsafe.libview.view.BaseLineChart
-                android:id="@+id/chart_fvc"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/space_6" />
+                    android:id="@+id/chart_fvc"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/space_6" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.5"
-            android:orientation="horizontal"
-            android:padding="@dimen/space_6">
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.5"
+                android:orientation="horizontal"
+                android:padding="@dimen/space_6">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/calibration_bg"
-                android:orientation="vertical"
-                android:padding="@dimen/space_10">
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/calibration_bg"
+                    android:orientation="vertical"
+                    android:padding="@dimen/space_10">
 
 
                 <LinearLayout
-                    android:id="@+id/ll_Cardiopulmonary"
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:layout_marginTop="@dimen/space_16"
-                    android:background="#f4f5fa"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
+                        android:id="@+id/ll_Cardiopulmonary"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="@dimen/space_16"
+                        android:background="#f4f5fa"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:visibility="visible">
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="160dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_19"
-                        android:text="项目"
-                        android:textColor="@color/text3"
-                        android:textSize="13sp" />
+                            android:layout_width="160dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_19"
+                            android:text="项目"
+                            android:textColor="@color/text3"
+                            android:textSize="13sp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:maxLines="1"
-                        android:text="单位"
-                        android:textColor="@color/text3"
-                        android:textSize="13sp" />
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:text="单位"
+                            android:textColor="@color/text3"
+                            android:textSize="13sp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:maxLines="1"
-                        android:text="预计值"
-                        android:textColor="@color/text3"
-                        android:textSize="13sp" />
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:text="预计值"
+                            android:textColor="@color/text3"
+                            android:textSize="13sp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:maxLines="1"
-                        android:text="最佳值"
-                        android:textColor="@color/text3"
-                        android:textSize="13sp" />
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:text="最佳值"
+                            android:textColor="@color/text3"
+                            android:textSize="13sp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:maxLines="1"
-                        android:text="B/P(%)"
-                        android:textColor="@color/text3"
-                        android:textSize="13sp" />
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:text="B/P(%)"
+                            android:textColor="@color/text3"
+                            android:textSize="13sp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/atv_test1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:maxLines="1"
-                        android:text="测试1"
-                        android:textColor="@color/text3"
-                        android:textSize="13sp" />
+                            android:id="@+id/atv_test1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:text="测试1"
+                            android:textColor="@color/text3"
+                            android:textSize="13sp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/atv_test2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:maxLines="1"
-                        android:text="测试2"
-                        android:textColor="@color/text3"
-                        android:textSize="13sp" />
+                            android:id="@+id/atv_test2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:text="测试2"
+                            android:textColor="@color/text3"
+                            android:textSize="13sp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/atv_test3"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:maxLines="1"
-                        android:text="测试3"
-                        android:textColor="@color/text3"
-                        android:textSize="13sp" />
+                            android:id="@+id/atv_test3"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:text="测试3"
+                            android:textColor="@color/text3"
+                            android:textSize="13sp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/atv_test4"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:maxLines="1"
-                        android:text="测试4"
-                        android:textColor="@color/text3"
-                        android:textSize="13sp" />
+                            android:id="@+id/atv_test4"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:text="测试4"
+                            android:textColor="@color/text3"
+                            android:textSize="13sp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/atv_test5"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:maxLines="1"
-                        android:text="测试5"
-                        android:textColor="@color/text3"
-                        android:textSize="13sp" />
+                            android:id="@+id/atv_test5"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:text="测试5"
+                            android:textColor="@color/text3"
+                            android:textSize="13sp" />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_fvc"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="visible" />
+                        android:id="@+id/rv_fvc"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="visible" />
 
 
             </LinearLayout>

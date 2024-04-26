@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
-import com.github.mikephil.charting.data.Entry
 import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.calibration.FlowAdapter
@@ -17,7 +16,6 @@ import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.BaseUtil
 import com.just.machine.util.LiveDataBus
-import com.just.news.R
 import com.just.news.databinding.FragmentFlowBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -52,8 +50,27 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
         binding.rvFlow.adapter = flowAdapter
 
         binding.chartTime.setLineDataSetData(
-            mutableListOf()
+            binding.chartTime.flowDataSetList()
         )//设置数据
+
+        binding.chartTime.setLineChartFlow(
+            yAxisMinimum = -5f,
+            yAxisMaximum = 5f,
+            countMaxX = 30f,
+            countY = 1,
+            countX = 1,
+            titleCentent = "容量-时间"
+        )
+
+
+        binding.chartSpeed.setLineChartFlow(
+            yAxisMinimum = -15f,
+            yAxisMaximum = 15f,
+            countMaxX = 4f,
+            countY = 1,
+            countX = 5,
+            titleCentent = "流速-容量"
+        )
 
         binding.llStart.setNoRepeatListener {
             if (Constants.isDebug) {

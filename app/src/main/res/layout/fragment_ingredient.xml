@@ -176,7 +176,7 @@
                             android:textSize="13sp"
                             android:textStyle="bold" />
 
-                        <androidx.appcompat.widget.AppCompatTextView
+                        <EditText
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/space_15"
@@ -194,7 +194,7 @@
                             android:textSize="13sp"
                             android:textStyle="bold" />
 
-                        <androidx.appcompat.widget.AppCompatTextView
+                        <EditText
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/space_15"
@@ -230,7 +230,7 @@
                             android:textSize="13sp"
                             android:textStyle="bold" />
 
-                        <androidx.appcompat.widget.AppCompatTextView
+                        <EditText
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/space_15"
@@ -248,7 +248,7 @@
                             android:textSize="13sp"
                             android:textStyle="bold" />
 
-                        <androidx.appcompat.widget.AppCompatTextView
+                        <EditText
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/space_15"
@@ -294,7 +294,7 @@
                             android:textSize="13sp"
                             android:textStyle="bold" />
 
-                        <androidx.appcompat.widget.AppCompatTextView
+                        <EditText
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/space_15"
@@ -312,7 +312,7 @@
                             android:textSize="13sp"
                             android:textStyle="bold" />
 
-                        <androidx.appcompat.widget.AppCompatTextView
+                        <EditText
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/space_5"
@@ -540,11 +540,12 @@
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/space_6"
-                        android:text="成分定标" />
+                    <com.justsafe.libview.view.BaseLineChart
+                            android:id="@+id/chart_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="@dimen/space_6" />
+
 
                 </LinearLayout>
 

@@ -43,7 +43,7 @@ class FragmentResultLayout : FrameLayout {
         EXTREMUM,//极值分析
         OXYGEN,//无氧域分析
         COMPENSATORY,//呼吸代偿点分析
-        SLOP,//斜率分析
+//        SLOP,//斜率分析
         FLOWRATE//动态流速环分析
     }
 
@@ -178,7 +178,7 @@ class FragmentResultLayout : FrameLayout {
                 setupScatterChart(binding.scChart3, scatterData, ChartAxisSettings())
             }
 
-            ChartLayout.SLOP -> TODO()
+//            ChartLayout.SLOP -> TODO()
             ChartLayout.FLOWRATE -> TODO()
         }
     }

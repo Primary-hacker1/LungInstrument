@@ -49,6 +49,17 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
             )
         )
 
+        binding.chartView.setLineDataSetData(binding.chartView.flowDataSetList())
+
+        binding.chartView.setLineChartFlow(
+            yAxisMinimum = 0f,
+            yAxisMaximum = 30f,
+            countMaxX = 60f,
+            countY = 1,
+            countX = 2,
+            titleCentent = "成分定标"
+        )
+
         binding.rvIngredient.adapter = ingredientAdapter
 
         binding.materialSwitch.setOnCheckedChangeListener { _, isChecked ->

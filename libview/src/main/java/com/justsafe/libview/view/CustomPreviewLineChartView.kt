@@ -1,13 +1,10 @@
 package com.justsafe.libview.view
 
-import android.app.ActionBar
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
-import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.justsafe.libview.R
 import lecho.lib.hellocharts.gesture.ZoomType

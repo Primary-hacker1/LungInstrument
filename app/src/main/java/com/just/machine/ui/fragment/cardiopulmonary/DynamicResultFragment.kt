@@ -45,7 +45,7 @@ class DynamicResultFragment : CommonBaseFragment<FragmentDynamicResultBinding>()
         adapter.addFragment(ExtremumAnalysisFragment())
         adapter.addFragment(OxygenDomainFragment())
         adapter.addFragment(CompensatoryPointFragment())
-        adapter.addFragment(SlopeFragment())
+//        adapter.addFragment(SlopeFragment())
         adapter.addFragment(FlowRateLoopsFragment())
 
         binding.viewpager.setCurrentItem(1, true)
@@ -76,7 +76,7 @@ class DynamicResultFragment : CommonBaseFragment<FragmentDynamicResultBinding>()
             Pair("运动极值分析", R.drawable.ic_extremum),
             Pair("无氧域分析", R.drawable.ic_oxygen),
             Pair("呼吸代偿点分析", R.drawable.ic_compensatory),
-            Pair("斜率分析", R.drawable.ic_slope),
+//            Pair("斜率分析", R.drawable.ic_slope),
             Pair("动态流速环分析", R.drawable.ic_rate_loops)
         )
 

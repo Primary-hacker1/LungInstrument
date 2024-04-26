@@ -280,12 +280,6 @@
                         android:background="@drawable/calibration_bg"
                         android:orientation="vertical">
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="wrap_content"
-                            android:text="容量-时间"
-                            android:padding="@dimen/space_6"
-                            android:layout_height="wrap_content" />
-
                     <com.justsafe.libview.view.BaseLineChart
                             android:id="@+id/chart_time"
                             android:layout_width="match_parent"
@@ -302,12 +296,6 @@
                         android:gravity="center_horizontal"
                         android:background="@drawable/calibration_bg"
                         android:orientation="vertical">
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="wrap_content"
-                            android:text="流速-容量"
-                            android:padding="@dimen/space_6"
-                            android:layout_height="wrap_content" />
 
                     <com.justsafe.libview.view.BaseLineChart
                             android:id="@+id/chart_speed"
