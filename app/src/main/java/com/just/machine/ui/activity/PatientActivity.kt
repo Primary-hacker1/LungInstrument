@@ -300,6 +300,10 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                                                 Constants.sixMinSelfCheckViewSelection,
                                                 "$befoFatigueLevelStr&$befoBreathingLevelStr"
                                             )
+                                            bundle.putString(
+                                                Constants.sixMinPatientInfo,
+                                                bean.patientId.toString()
+                                            )
                                             intent.putExtras(bundle)
                                             startActivity(intent)
                                         }
@@ -339,6 +343,11 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                                                         Constants.sixMinSelfCheckViewSelection,
                                                         "$befoFatigueLevelStr&$befoBreathingLevelStr"
                                                     )
+                                                    bundle.putString(
+                                                        Constants.sixMinPatientInfo,
+                                                        bean.patientId.toString()
+                                                    )
+                                                    intent.putExtras(bundle)
                                                     startActivity(intent, bundle)
                                                 }
 
@@ -382,7 +391,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                 PatientDialogFragment.startPatientDialogFragment(supportFragmentManager)//添加患者修改患者信息
             patientDialogFragment.setDialogOnClickListener(object :
                 PatientDialogFragment.PatientDialogListener {
-                override fun onClickConfirmBtn() {//确认
+                override fun onClickConfirmBtn(patientId:String) {//确认
 
                 }
 

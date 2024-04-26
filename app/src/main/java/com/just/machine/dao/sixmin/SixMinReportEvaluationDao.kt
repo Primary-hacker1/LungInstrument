@@ -22,4 +22,7 @@ interface SixMinReportEvaluationDao {
 
     @Insert
     suspend fun insertReportEvaluation(walkBean: SixMinReportEvaluation): Long
+
+    @Query("UPDATE sixmin_report_evaluation SET fatigueLevel=:fatigueLevel,breathingLevel=:breathLevel WHERE reportId ==:reportNo")
+    suspend fun updateReportEvaluation(reportNo:String,fatigueLevel: String,breathLevel:String)
 }

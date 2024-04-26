@@ -6,6 +6,7 @@
     </data>
 
     <LinearLayout
+        android:id="@+id/ll_collect_restore_ecg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20dp"
@@ -33,10 +34,9 @@
 
             <TextView
                 android:id="@+id/sixmin_restore_tv_ecg_time"
-                android:layout_width="wrap_content"
+                android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:text="59"
                 android:textColor="@color/text3"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -51,7 +51,7 @@
         <Button
             android:id="@+id/sixmin_report_btn_restore_ecg_confirm"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="35dp"
             android:layout_gravity="end"
             android:layout_marginTop="10dp"
             android:background="@drawable/sixmin_start_bg"

@@ -15,13 +15,13 @@ data class SixMinReportPrescription(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id")
     var id: Long = 0,
     var reportId: String = "",//报告主id
-    var movementWay: String = "0",//运动方式，0为步行，1为跑步
+    var movementWay: String = "",//运动方式，0为步行，1为跑步
     var movementTime: String = "",//运动时间
     var movementDistance: String = "",//运动距离(米)
     var movementSteps: String = "",//运动步数
     var movementWeeklyNumber: String = "",//每周运动次数
     var movementCycle: String = "",//运动周期
-    var cycleUnit: String = "",//运动周期单位，0为周，1为月，2为年
+    var cycleUnit: String = "0",//运动周期单位，0为周，1为月，2为年
     var heartBigg: String = "",//最大心率
     var heartBefore: String = "",//最佳心率区间，前
     var heartAfter: String = "",//最佳心率区间，后

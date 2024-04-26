@@ -38,7 +38,6 @@ class SixMinReportPatientSelfAdapter(var mContext: Context) :
         sixMinReportPatientSelfItemAdapter.setItemOnCheckListener(object :
             SixMinReportPatientSelfItemAdapter.PatientReportItemClickListener {
             override fun onReportItemCheck(childPosition: Int, isChecked: Boolean) {
-//                listener?.onReportItemCheck(position,isChecked,mView)
                 item.itemConclusion = if(position ==0) "您当前的呼吸状况为: (${item.itemList[childPosition].itemName})呼吸困难状况${item.itemList[childPosition].itemLevel}" else "您当前的疲劳状况为: (${item.itemList[childPosition].itemName})疲劳状况${item.itemList[childPosition].itemLevel}"
                 binding.sixminReportTvPatientSelfConclusion.post {
                     notifyDataSetChanged()

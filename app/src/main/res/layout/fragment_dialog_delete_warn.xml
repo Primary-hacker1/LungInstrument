@@ -58,13 +58,13 @@
         </LinearLayout>
 
         <LinearLayout
-            android:paddingHorizontal="50dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="30dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingHorizontal="30dp">
 
             <TextView
                 android:id="@+id/tv_delete_warn_dialog_positive"

@@ -628,6 +628,33 @@ public class USBTransferUtil {
     }
 
     /**
+     * 处理运动步速
+     *
+     * @param percentStr
+     * @param strideAverage
+     * @return
+     */
+    public String dealYdbsStrs(String percentStr, BigDecimal strideAverage) {
+        String ydbsStr = (strideAverage.multiply(new BigDecimal(percentStr))
+                .setScale(1, BigDecimal.ROUND_HALF_UP)).toString();
+        return ydbsStr;
+    }
+
+    /**
+     * 处理推荐距离
+     *
+     * @param percentStr
+     * @param strideAverage
+     * @param shichang
+     * @return
+     */
+    public String dealtjjlStrs(String percentStr, BigDecimal strideAverage, Integer shichang) {
+        String tjjlStr = (strideAverage.multiply(new BigDecimal(percentStr)).multiply(new BigDecimal(shichang))
+                .setScale(1, BigDecimal.ROUND_HALF_UP)).toString();
+        return tjjlStr;
+    }
+
+    /**
      * 预生成报告
      * 报告血氧表的处理
      *

@@ -73,7 +73,7 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
     private var isUpdate: Boolean = false
 
     interface PatientDialogListener {
-        fun onClickConfirmBtn()
+        fun onClickConfirmBtn(patientId:String)
         fun onClickCleanBtn()
     }
 
@@ -260,7 +260,7 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
 
             }
 
-            listener?.onClickConfirmBtn()
+            listener?.onClickConfirmBtn(patient.patientId.toString())
 
             hideKeyboard(it.windowToken)
 

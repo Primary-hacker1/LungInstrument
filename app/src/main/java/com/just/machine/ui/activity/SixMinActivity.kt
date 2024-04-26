@@ -100,7 +100,9 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         SixMinReportPrescription()//6分钟报告处方信息
     private var sixMinReportBreathing: SixMinReportBreathing = SixMinReportBreathing()//6分钟报告呼吸率信息
     private var selfCheckSelection = "" //试验前疲劳和呼吸量级
+    private var testPatientId = "" //试验的患者id
     private lateinit var startRestoreEcgDialogFragment: SixMinCollectRestoreEcgDialogFragment
+    private var timeRemain = "" //采集恢复心电倒计时
 
     private fun addEntryData(entryData: Float, times: Int) {
 
@@ -132,6 +134,8 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         binding.sixminRlMeasureBlood.isEnabled = false
         selfCheckSelection =
             intent.extras?.getString(Constants.sixMinSelfCheckViewSelection).toString()
+        testPatientId =
+            intent.extras?.getString(Constants.sixMinPatientInfo).toString()
         initSysInfo()
         initCountDownTimerExt()
         copyAssetsFilesToSD()
@@ -264,10 +268,6 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
             when (it.action) {
                 LiveDataEvent.QuerySuccess -> {
                     it.any?.let { it1 -> beanQuery(it1) }
-                }
-
-                LiveDataEvent.QuerySixMinReportInfoSuccess -> {
-
                 }
             }
         }
@@ -602,7 +602,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                     }
                     binding.sixminTvBloodOxygen.text = usbSerialData.bloodOxygen
                 } else {
-                    binding.sixminTvBloodOxygen.text = "---"
+                    binding.sixminTvBloodOxygen.text = "--"
                     if (usbTransferUtil.bloodOxygenConnection) {
                         binding.sixminTvBloodOxygen.setTextColor(
                             ContextCompat.getColor(
@@ -710,16 +710,6 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
 
                         }
                     })
-                    val intent = Intent(
-                        this@SixMinActivity,
-                        SixMinPreReportActivity::class.java
-                    )
-                    val bundle = Bundle()
-                    bundle.putString(Constants.sixMinPatientInfo, "1")
-                    bundle.putString(Constants.sixMinReportNo, "0")
-                    intent.putExtras(bundle)
-                    startActivity(intent)
-                    finish()
                 }
             } else {
                 showMsg(getString(R.string.sixmin_test_device_without_connection))
@@ -820,16 +810,22 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         }
         binding.sixminIvIgnoreBlood.setNoRepeatListener {
             if (usbTransferUtil.testType == 3) {
-                if(startRestoreEcgDialogFragment.dialog?.isShowing == false){
-                    startRestoreEcgDialogFragment.dialog?.show()
+                if (!startRestoreEcgDialogFragment.isVisible) {
+                    SixMinCollectRestoreEcgDialogFragment.startRestoreEcgDialogFragment(
+                        supportFragmentManager,
+                        timeRemain
+                    )
                 }
-            }else{
+            } else {
                 binding.sixminIvIgnoreBlood.setBackgroundResource(R.drawable.sixmin_ignore_blood_pressure_disable)
                 usbTransferUtil.ignoreBlood = true
             }
         }
     }
 
+    /**
+     * 插入数据库
+     */
     private fun generateReportData(type: Int, min: Int, sec: Int) {
 
         sixMinReportInfo.restDuration = usbTransferUtil.restTime.toString()
@@ -886,12 +882,20 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         viewModel.setSixMinReportStride(sixMinReportStride)
 
         usbTransferUtil.release()
+
+        jumpToPreReport()
+    }
+
+    /**
+     * 跳转预生成报告
+     */
+    private fun jumpToPreReport(){
         val intent = Intent(
             this@SixMinActivity,
             SixMinPreReportActivity::class.java
         )
         val bundle = Bundle()
-        bundle.putString(Constants.sixMinPatientInfo, sixMinReportInfo.patientId.toString())
+        bundle.putString(Constants.sixMinPatientInfo, patientBean.infoBean.patientId.toString())
         bundle.putString(Constants.sixMinReportNo, sixMinReportInfo.reportNo)
         intent.putExtras(bundle)
         startActivity(intent)
@@ -1061,8 +1065,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 binding.sixminRlMeasureBlood.isEnabled = false
                 binding.sixminRlStart.isEnabled = false
                 usbTransferUtil.circleBoolean = false
-                usbTransferUtil.isBegin = false
-                usbTransferUtil.testType = 0
+//                usbTransferUtil.isBegin = false
                 usbTransferUtil.bloodType = 2
                 SixMinCmdUtils.closeQSAndBS()
 
@@ -1078,14 +1081,15 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                         usbTransferUtil.testType = 3
                         startRestoreEcgDialogFragment =
                             SixMinCollectRestoreEcgDialogFragment.startRestoreEcgDialogFragment(
-                                supportFragmentManager
+                                supportFragmentManager,
+                                timeRemain
                             )
                     }
 
 
                     override fun onTick(times: Int) {
-//                        showMsg("正在采集运动恢复心率中，还剩${times}秒")
-                        LiveDataBus.get().with("simMinRestore").postValue(times)
+                        timeRemain = times.toString()
+                        LiveDataBus.get().with("simMinRestore").postValue(timeRemain)
                     }
 
                     override fun onFinish() {
@@ -1108,7 +1112,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                                 }
                             } else {
                                 binding.sixminRlMeasureBlood.isEnabled = true
-                                showMsg("请点击测量运动前血压")
+                                showMsg("请点击测量运动后血压")
                             }
                         } else {
                             val startCommonDialogFragment =
@@ -1142,7 +1146,8 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                                         mCountDownTime.setmTimes(360)
                                         usbTransferUtil.ignoreBlood = false
 
-                                        sixMinReportBloodOther.badOr = "0"
+                                        sixMinReportBloodOther.badOr = "1"
+                                        sixMinReportBloodOther.badSymptoms = stopReason
                                         generateReportData(0, 0, 0)
                                     }
                                 })
@@ -1281,7 +1286,16 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         try {
             if (any is List<*>) {
                 val datas = any as MutableList<*>
-                patientBean = datas[0] as PatientInfoBean
+                if (testPatientId.isNotEmpty()) {
+                    datas.forEach {
+                        val patientInfoBean = it as PatientInfoBean
+                        if (patientInfoBean.infoBean.patientId.toString() == testPatientId) {
+                            patientBean = patientInfoBean
+                        }
+                    }
+                } else {
+                    patientBean = datas[0] as PatientInfoBean
+                }
                 binding.sixminTvTestPatientName.text = patientBean.infoBean.name
                 binding.sixminTvTestPatientSex.text = patientBean.infoBean.sex
                 binding.sixminTvTestPatientAge.text = patientBean.infoBean.age

@@ -1,10 +1,13 @@
 package com.just.machine.ui.dialog
 
 import android.app.Dialog
+import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import com.common.base.BaseDialogFragment
 import com.common.base.setNoRepeatListener
+import com.just.machine.model.Constants
 import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogSixminCollectRestoreEcgBinding
@@ -14,6 +17,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class SixMinCollectRestoreEcgDialogFragment :
     BaseDialogFragment<FragmentDialogSixminCollectRestoreEcgBinding>() {
 
+    private var timeRemaining = ""
+
     companion object {
         /**
          * @param fragmentManager FragmentManager
@@ -22,13 +27,21 @@ class SixMinCollectRestoreEcgDialogFragment :
         fun startRestoreEcgDialogFragment(
 
             fragmentManager: FragmentManager,
+            timeRemain:String
 
             ): SixMinCollectRestoreEcgDialogFragment {
 
             val dialogFragment = SixMinCollectRestoreEcgDialogFragment()
 
-            dialogFragment.show(fragmentManager, SixMinCollectRestoreEcgDialogFragment::javaClass.toString())
+            dialogFragment.show(
+                fragmentManager,
+                SixMinCollectRestoreEcgDialogFragment::javaClass.toString()
+            )
+            val bundle = Bundle()
 
+            bundle.putString("timeRemain", timeRemain)
+
+            dialogFragment.arguments = bundle
             return dialogFragment
         }
     }
@@ -39,12 +52,16 @@ class SixMinCollectRestoreEcgDialogFragment :
     }
 
     override fun initView() {
-
+        if(timeRemaining == ""){
+            timeRemaining = "59"
+        }
+        binding.sixminRestoreTvEcgTime.text = timeRemaining
     }
 
     override fun initListener() {
         LiveDataBus.get().with("simMinRestore").observe(this, Observer {
-            binding.sixminRestoreTvEcgTime.text =  it.toString()
+            timeRemaining = it.toString()
+            binding.sixminRestoreTvEcgTime.text = timeRemaining
         })
         binding.sixminReportBtnRestoreEcgConfirm.setNoRepeatListener {
             dismiss()
@@ -52,7 +69,7 @@ class SixMinCollectRestoreEcgDialogFragment :
     }
 
     override fun initData() {
-
+        timeRemaining = arguments?.getString("timeRemain","").toString()
     }
 
     override fun getLayout(): Int {

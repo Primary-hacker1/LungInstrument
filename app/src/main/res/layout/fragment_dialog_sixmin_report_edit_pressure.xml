@@ -44,12 +44,12 @@
 
             <EditText
                 android:id="@+id/sixmin_report_edit_blood_pressure_high_before"
-                android:layout_width="wrap_content"
+                android:layout_width="45dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:inputType="number"
                 android:maxLength="3"
-                android:text="134"
+                android:text=""
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -62,12 +62,12 @@
 
             <EditText
                 android:id="@+id/sixmin_report_edit_blood_pressure_low_before"
-                android:layout_width="wrap_content"
+                android:layout_width="45dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:inputType="number"
                 android:maxLength="3"
-                android:text="134"
+                android:text=""
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -97,12 +97,12 @@
 
             <EditText
                 android:id="@+id/sixmin_report_edit_blood_pressure_high_after"
-                android:layout_width="wrap_content"
+                android:layout_width="45dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:inputType="number"
                 android:maxLength="3"
-                android:text="134"
+                android:text=""
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -115,12 +115,12 @@
 
             <EditText
                 android:id="@+id/sixmin_report_edit_blood_pressure_low_after"
-                android:layout_width="wrap_content"
+                android:layout_width="45dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:inputType="number"
                 android:maxLength="3"
-                android:text="134"
+                android:text=""
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
