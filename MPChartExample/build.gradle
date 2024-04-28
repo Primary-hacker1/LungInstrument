@@ -1,0 +1,34 @@
+plugins {
+    id 'com.android.library'
+//    id 'com.github.dcendents.android-maven'
+}
+
+android {
+    def globalConfiguration = rootProject.extensions.getByName("ext")
+    compileSdkVersion androidCompileSdkVersion
+    buildToolsVersion androidBuildToolsVersion
+
+    defaultConfig {
+        minSdkVersion globalConfiguration["androidMinSdkVersion"]
+        targetSdkVersion globalConfiguration["androidTargetSdkVersion"]
+        versionCode globalConfiguration["androidVersionCode"]
+        versionName globalConfiguration["androidVersionName"]
+        ndkVersion globalConfiguration["androidNdkVersion"]
+
+        multiDexEnabled globalConfiguration["androidMultiDexEnabled"]
+        testInstrumentationRunner globalConfiguration["testInstrumentationRunner"]
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation "androidx.appcompat:appcompat:1.0.2"
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation project(':MPChartLib')
+}

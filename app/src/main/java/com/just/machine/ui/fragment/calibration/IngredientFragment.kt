@@ -56,7 +56,7 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
             yAxisMaximum = 30f,
             countMaxX = 60f,
             granularityY = 1.5f,
-            granularityX = 1f,
+            granularityX = 2f,
             titleCentent = "成分定标"
         )
 

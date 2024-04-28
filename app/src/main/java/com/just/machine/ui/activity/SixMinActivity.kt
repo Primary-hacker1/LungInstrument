@@ -20,9 +20,7 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.gson.Gson
-import com.just.machine.dao.PatientBean
 import com.just.machine.model.BloodOxyLineEntryBean
 import com.just.machine.model.Constants
 import com.just.machine.model.PatientInfoBean
@@ -52,6 +50,7 @@ import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.ActivitySixMinBinding
 import com.justsafe.libview.util.SystemUtil
+import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.File

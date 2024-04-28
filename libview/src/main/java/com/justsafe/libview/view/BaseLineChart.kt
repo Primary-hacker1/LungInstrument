@@ -15,9 +15,9 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.justsafe.libview.R
+import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import kotlin.math.ceil
 
 /**
@@ -74,18 +74,12 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
         xAxis.axisMinimum = 0f  // X轴最小值设置为0（如果需要）
         xAxis.axisMaximum = countMaxX!!  // 你已经有这一步
         axisLeft.valueFormatter = customYAxisFormatter
-        xAxis.setLabelCount((xAxis.axisMaximum - xAxis.axisMinimum + 1).toInt(), true)
+        xAxis.setLabelCount(((xAxis.axisMaximum - xAxis.axisMinimum) / granularityX + 1).toInt(), true)
         xAxis.setDrawGridLines(false)
 
-        // 创建自定义的 X 轴
-        val customXAxis = CustomAxis()
-
-
         xAxis.position = XAxis.XAxisPosition.BOTTOM
+
         // xAxis.setCenterAxisLabels(true)
-
-        Log.e("Chart", "X axis max: ${xAxis.axisMaximum}, granularity: ${xAxis.granularity}, label count: ${xAxis.labelCount}")
-
 
         // 设置描述
         description.text = ""
@@ -112,9 +106,14 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
             axisRight.granularity = granularityY
 
             // 根据实际数据调整labelCount
-            axisLeft.setLabelCount(((axisLeft.axisMaximum - axisLeft.axisMinimum) / axisLeft.granularity + 1).toInt(), true)
-            axisRight.setLabelCount(((axisRight.axisMaximum - axisRight.axisMinimum) / axisRight.granularity + 1).toInt(), true)
-
+            axisLeft.setLabelCount(
+                ((axisLeft.axisMaximum - axisLeft.axisMinimum) / axisLeft.granularity + 1).toInt(),
+                true
+            )
+            axisRight.setLabelCount(
+                ((axisRight.axisMaximum - axisRight.axisMinimum) / axisRight.granularity + 1).toInt(),
+                true
+            )
 
 
             // 设置到Y轴
@@ -123,7 +122,6 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
 
             Log.e(tag, "$numY-----y轴的个数")
         }
-
 
         xAxis.textSize = 8f
         axisLeft.textSize = 8f
@@ -146,7 +144,6 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
             return String.format("%.1f", value)
         }
     }
-
 
 
     /**
@@ -283,7 +280,9 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
         verticalTextPaint.getTextBounds(verticalText, 0, verticalText.length, verticalTextBounds)
         val verticalTextHeight = verticalTextBounds.height()
         val viewWidth = width
-        val centerX = (viewWidth - verticalTextBounds.width()) / 2 + verticalTextPaint.measureText(verticalText) / 2 // 文本的水平居中位置
+        val centerX = (viewWidth - verticalTextBounds.width()) / 2 + verticalTextPaint.measureText(
+            verticalText
+        ) / 2 // 文本的水平居中位置
         val centerY = verticalTextHeight // 文本的顶部位置
         canvas?.drawText(verticalText, centerX, centerY.toFloat(), verticalTextPaint)
     }

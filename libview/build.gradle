@@ -58,9 +58,14 @@ dependencies {
     api 'com.google.android.material:material:1.1.0'
     api 'com.github.loperSeven:DateTimePicker:0.5.8'
 
+
+    api project(path: ':MPChartLib')
+
+    api project(path: ':MPChartExample')
+
     //chart
     api libview.hellocharts
 
     //chart
-    api presentationDependencies.android_chart
+//    api presentationDependencies.android_chart
 }
