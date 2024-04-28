@@ -83,13 +83,14 @@ class FragmentStaticLayout : FrameLayout {
 
     fun setInitView(title: String) {
         binding.title.text = title
-        when(title){
-            "常规" ->{
+        when (title) {
+            "常规" -> {
                 binding.llChat.gone()
                 binding.previewChart.gone()
                 binding.chartFvc.visible()
             }
-            else ->{
+
+            else -> {
                 binding.llChat.visible()
                 binding.previewChart.visible()
                 binding.chartFvc.gone()
@@ -108,6 +109,12 @@ class FragmentStaticLayout : FrameLayout {
 
         initListener()
 
+        initChartLow()
+
+        initChartNow()
+    }
+
+    private fun initChartNow() {
         val values: MutableList<PointValue> = ArrayList()// 模拟数据
 
         for (i in 0..99) {
@@ -134,7 +141,6 @@ class FragmentStaticLayout : FrameLayout {
             binding.previewChartFlow.currentViewport = it
 
         }
-
     }
 
     @Deprecated("暂时不用，用lineChartView这个不支持区域数据动态监听！")
@@ -145,10 +151,6 @@ class FragmentStaticLayout : FrameLayout {
         for (index in 0..30) {
             entries.add(Entry(index.toFloat(), index.toFloat() / 6 - 3))
         }
-
-
-        val lineChartFvc = binding.chartFvc
-
 
         binding.rvFvc.layoutManager = LinearLayoutManager(context)
 
@@ -164,17 +166,17 @@ class FragmentStaticLayout : FrameLayout {
     private fun initData() {
         routineLungList = mutableListOf(
             RoutineLungBean(
-                "用力肺活量(ERV)", "20", "9", "1", "111", "11"
+                "用力肺活量(ERV)", "20", "9", "1", "111", "1", "2", "3", "4", "5"
             ), RoutineLungBean(
-                "一秒量(ERV)", "20", "9", "1", "111", "11"
+                "一秒量(ERV)", "20", "9", "1", "111", "11", "2", "3", "4", "5"
             ), RoutineLungBean(
-                "一秒率(ERV)", "20", "9", "1", "111", "11"
+                "一秒率(ERV)", "20", "9", "1", "111", "11", "2", "3", "4", "5"
             ), RoutineLungBean(
-                "用力呼气峰流速(ERV)", "20", "9", "1", "111", "11"
+                "用力呼气峰流速(ERV)", "20", "9", "1", "111", "11", "2", "3", "4", "5"
             ), RoutineLungBean(
-                "25%时呼气流逝(ERV)", "20", "9", "1", "111", "11"
+                "25%时呼气流逝(ERV)", "20", "9", "1", "111", "11", "2", "3", "4", "5"
             ), RoutineLungBean(
-                "50%时呼气流逝(ERV)", "20", "9", "1", "111", "11"
+                "50%时呼气流逝(ERV)", "20", "9", "1", "111", "11", "2", "3", "4", "5"
             )
         )
     }
@@ -274,6 +276,11 @@ class FragmentStaticLayout : FrameLayout {
 
     }
 
+    /**
+     * @param clickType 点击的按钮是测试几
+     * @param buttonText 点击的按钮更新text
+     * @param otherList 更新adapter的数据
+     * */
     private fun handleButtonClick(
         clickType: Click,
         buttonText: String,
@@ -281,7 +288,7 @@ class FragmentStaticLayout : FrameLayout {
 //        isStart: Boolean
     ) {
         onCLickbutton = clickType
-        binding.atvTest.text = buttonText
+        binding.atvTest1.text = buttonText
 
         routineLungList?.forEachIndexed { index, bean ->
             if (index < otherList.size) {
@@ -290,13 +297,13 @@ class FragmentStaticLayout : FrameLayout {
         }
 
         routineLungList?.let {
+            LogUtils.e(tag + it.toString())
             adapter.setItemsBean(it)
         }
 
         when (clickType) {
             Click.TEST1 -> {
                 val isStart1 = button == binding.btnTest1
-                LogUtils.e(tag + isStart1)
                 if (!isStart1) {
                     setButtonStyle(binding.btnTest1, true)
                 }

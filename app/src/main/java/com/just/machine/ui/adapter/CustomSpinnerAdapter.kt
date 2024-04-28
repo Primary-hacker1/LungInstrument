@@ -32,11 +32,13 @@ class CustomSpinnerAdapter(context: Context, private val dataList: MutableList<C
 
     private fun createItemView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.custom_spinner_item, parent, false)
+        val spinnerTitleName = view.findViewById<TextView>(R.id.spinner_title_name)
         val spinnerTitle = view.findViewById<TextView>(R.id.spinner_title)
         val spinnerText = view.findViewById<TextView>(R.id.spinner_text)
         val pair = dataList?.get(position)
 
         spinnerTitle.text = pair?.parameterName
+        spinnerTitleName.text = pair?.parameterNameCH
         spinnerText.text = pair?.lowRange.toString()
 
         return view

@@ -11,4 +11,10 @@ data class RoutineLungBean(
     var test3: String? = "",//测试
     var test4: String? = "",//测试
     var test5: String? = "",//测试
-)
+){
+
+    override fun toString(): String {
+        return "RoutineLungBean(severalParticipants=$severalParticipants, unit=$unit, estimated=$estimated, " +
+                "optimalValue=$optimalValue, bp=$bp, test1=$test1, test2=$test2, test3=$test3, test4=$test4, test5=$test5)"
+    }
+}

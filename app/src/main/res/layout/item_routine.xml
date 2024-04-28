@@ -17,8 +17,8 @@
         android:orientation="horizontal">
 
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="160dp"
+        <com.justsafe.libview.text.MarqueeTextView
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_19"
             android:text="@{bean.severalParticipants}"
@@ -64,7 +64,7 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/atv_test1"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="1"
             android:text="@{bean.test1}"
@@ -74,7 +74,7 @@
         <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/atv_test2"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:maxLines="1"
                 android:text="@{bean.test2}"
@@ -84,7 +84,7 @@
         <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/atv_test3"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:maxLines="1"
                 android:text="@{bean.test3}"
@@ -94,7 +94,7 @@
         <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/atv_test4"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:maxLines="1"
                 android:text="@{bean.test4}"
@@ -104,7 +104,7 @@
         <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/atv_test5"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:maxLines="1"
                 android:text="@{bean.test5}"
