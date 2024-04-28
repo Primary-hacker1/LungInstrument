@@ -8,8 +8,8 @@ import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
 import com.just.machine.model.DynamicResultBean
 import com.just.machine.ui.fragment.cardiopulmonary.DynamicResultFragment
+import com.just.machine.ui.fragment.cardiopulmonary.FragmentResultLayout
 import com.just.machine.ui.viewmodel.MainViewModel
-import com.just.news.databinding.FragmentDynamicCleanBinding
 import com.just.news.databinding.FragmentOxygenDomainBinding
 import dagger.hilt.android.AndroidEntryPoint
 

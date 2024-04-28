@@ -1,4 +1,4 @@
-package com.just.machine.ui.fragment.cardiopulmonary.result
+package com.just.machine.ui.fragment.cardiopulmonary
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -19,10 +19,8 @@ import com.github.mikephil.charting.data.ScatterDataSet
 import com.github.mikephil.charting.interfaces.datasets.IScatterDataSet
 import com.just.machine.model.DynamicResultBean
 import com.just.machine.ui.adapter.ResultAdapter
-import com.just.machine.util.BaseUtil
 import com.just.news.R
 import com.just.news.databinding.FragmentResultBinding
-import com.justsafe.libview.view.DoubleTapFrameLayout
 
 
 class FragmentResultLayout : FrameLayout {

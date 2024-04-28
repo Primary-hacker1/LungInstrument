@@ -1,8 +1,7 @@
-package com.just.machine.ui.fragment.cardiopulmonary.staticfragment
+package com.just.machine.ui.fragment.cardiopulmonary
 
 import CustomMarkerView
 import android.content.Context
-import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -11,7 +10,9 @@ import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.common.base.gone
 import com.common.base.setNoRepeatListener
+import com.common.base.visible
 import com.common.network.LogUtils
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
@@ -82,6 +83,19 @@ class FragmentStaticLayout : FrameLayout {
 
     fun setInitView(title: String) {
         binding.title.text = title
+        when(title){
+            "常规" ->{
+                binding.llChat.gone()
+                binding.previewChart.gone()
+                binding.chartFvc.visible()
+            }
+            else ->{
+                binding.llChat.visible()
+                binding.previewChart.visible()
+                binding.chartFvc.gone()
+            }
+
+        }
     }
 
     fun setData(test1: MutableList<String>) {
@@ -135,55 +149,6 @@ class FragmentStaticLayout : FrameLayout {
 
         val lineChartFvc = binding.chartFvc
 
-        // 设置 MarkerView
-        val markerView = CustomMarkerView(context, R.layout.custom_marker_view)
-        lineChartFvc.marker = markerView
-
-
-        // 监听 LineChart 的拖动事件
-        lineChartFvc.onChartGestureListener = object : OnChartGestureListener {
-            override fun onChartGestureStart(
-                me: MotionEvent?,
-                lastPerformedGesture: ChartTouchListener.ChartGesture?
-            ) {
-            }
-
-            override fun onChartGestureEnd(
-                me: MotionEvent?,
-                lastPerformedGesture: ChartTouchListener.ChartGesture?
-            ) {
-                // 获取当前拖动的范围
-                val lowestVisibleX = lineChartFvc.lowestVisibleX
-                val highestVisibleX = lineChartFvc.highestVisibleX
-
-                // 计算拖动的秒数范围
-                val secondsRange = highestVisibleX - lowestVisibleX
-
-                // 如果拖动的范围大于等于 5 秒，则更新 MarkerView
-                if (secondsRange >= 5f) {
-                    // 设置 MarkerView 的内容
-                    markerView.refreshContent(null, null)
-                }
-            }
-
-            // 其他拖动事件回调
-            override fun onChartLongPressed(me: MotionEvent?) {}
-            override fun onChartDoubleTapped(me: MotionEvent?) {}
-            override fun onChartSingleTapped(me: MotionEvent?) {}
-            override fun onChartFling(
-                me1: MotionEvent?,
-                me2: MotionEvent?,
-                velocityX: Float,
-                velocityY: Float
-            ) {
-            }
-
-            override fun onChartScale(me: MotionEvent?, scaleX: Float, scaleY: Float) {}
-            override fun onChartTranslate(me: MotionEvent?, dX: Float, dY: Float) {}
-        }
-
-        // 刷新图表
-        lineChartFvc.invalidate()
 
         binding.rvFvc.layoutManager = LinearLayoutManager(context)
 
@@ -218,23 +183,6 @@ class FragmentStaticLayout : FrameLayout {
     private var button: Button? = null
 
     fun initListener() {
-        // 设置选中值监听器
-        binding.chartFvc.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
-            override fun onValueSelected(e: Entry?, h: Highlight?) {
-                // 当用户选择值时触发该方法
-                if (e == null) return
-
-                // 获取选中的值
-                val xValue = e.x
-                val yValue = e.y
-
-                LogUtils.d(tag + "Selected value: x = $xValue, y = $yValue")
-            }
-
-            override fun onNothingSelected() {
-                // 当没有值被选中时触发该方法
-            }
-        })
 
         binding.btnTest1.setNoRepeatListener {
 
