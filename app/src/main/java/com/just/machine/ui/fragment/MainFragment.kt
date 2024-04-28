@@ -64,10 +64,10 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                         PatientDialogFragment.startPatientDialogFragment(parentFragmentManager)//添加患者修改患者信息
                     patientDialogFragment.setDialogOnClickListener(object :
                         PatientDialogFragment.PatientDialogListener {
-                        override fun onClickConfirmBtn() {//确认
+                        override fun onClickConfirmBtn(patientId:String) {//确认
                             SharedPreferencesUtils.instance.isClickBtn = "1"
                             patientDialogFragment.dismiss()
-                            checkBluetoothAndSelfCheck()
+                            checkBluetoothAndSelfCheck(patientId)
                         }
 
                         override fun onClickCleanBtn() {//取消
@@ -79,7 +79,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                 else -> {
 //                    val intent = Intent(activity, SixMinActivity::class.java)
 //                    startActivity(intent)
-                    checkBluetoothAndSelfCheck()
+                    checkBluetoothAndSelfCheck("")
                 }
             }
         }
@@ -95,7 +95,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                         PatientDialogFragment.startPatientDialogFragment(parentFragmentManager)//添加患者修改患者信息
                     patientDialogFragment.setDialogOnClickListener(object :
                         PatientDialogFragment.PatientDialogListener {
-                        override fun onClickConfirmBtn() {//确认
+                        override fun onClickConfirmBtn(patientId:String) {//确认
                             SharedPreferencesUtils.instance.isClickBtn = "1"
                             patientDialogFragment.dismiss()
                             CardiopulmonaryActivity.startCardiopulmonaryActivity(context)
@@ -134,10 +134,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
         usbTransferUtil.connect()
     }
 
-    private fun checkBluetoothAndSelfCheck() {
-        // if (usbTransferUtil.bloodOxygenConnection && usbTransferUtil.bloodPressureConnection && usbTransferUtil.ecgConnection) {
-//       }else{
-//         }
+    private fun checkBluetoothAndSelfCheck(patientId:String) {
         if (usbTransferUtil.isConnectUSB && usbTransferUtil.bloodOxygenConnection && usbTransferUtil.ecgConnection && usbTransferUtil.bloodPressureConnection) {
             val selfCheckBeforeTestDialogFragment =
                 SixMinReportSelfCheckBeforeTestFragment.startPatientSelfCheckDialogFragment(
@@ -154,6 +151,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                     val intent = Intent(activity, SixMinActivity::class.java)
                     val bundle = Bundle()
                     bundle.putString(Constants.sixMinSelfCheckViewSelection,"$befoFatigueLevelStr&$befoBreathingLevelStr")
+                    bundle.putString(Constants.sixMinPatientInfo, patientId)
                     intent.putExtras(bundle)
                     startActivity(intent)
                 }
@@ -186,6 +184,8 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                                     val intent = Intent(activity, SixMinActivity::class.java)
                                     val bundle = Bundle()
                                     bundle.putString(Constants.sixMinSelfCheckViewSelection,"$befoFatigueLevelStr&$befoBreathingLevelStr")
+                                    bundle.putString(Constants.sixMinPatientInfo,"")
+                                    intent.putExtras(bundle)
                                     startActivity(intent,bundle)
                                 }
 

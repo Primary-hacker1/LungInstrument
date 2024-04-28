@@ -10,6 +10,9 @@ import com.just.machine.model.SixMinReportEditBloodPressure
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogSixminReportEditPressureBinding
 
+/**
+ * 6分钟预生成报告编辑血压dialog
+ */
 class SixMinReportEditBloodPressureFragment :
     BaseDialogFragment<FragmentDialogSixminReportEditPressureBinding>() {
 

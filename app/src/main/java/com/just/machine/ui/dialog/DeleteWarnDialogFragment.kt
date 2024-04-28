@@ -9,6 +9,9 @@ import com.just.machine.model.Constants
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogDeleteWarnBinding
 
+/**
+ * 删除条目警告dialog
+ */
 class DeleteWarnDialogFragment : BaseDialogFragment<FragmentDialogDeleteWarnBinding>() {
 
     private var listener: DeleteWarnDialogListener? = null

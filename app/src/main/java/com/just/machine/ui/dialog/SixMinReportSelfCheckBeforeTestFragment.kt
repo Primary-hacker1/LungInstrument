@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.BaseDialogFragment
+import com.common.base.setNoRepeatListener
 import com.just.machine.model.Constants
 import com.just.machine.model.SixMinReportPatientSelfBean
 import com.just.machine.model.SixMinReportPatientSelfItemBean
@@ -13,6 +14,9 @@ import com.just.machine.ui.adapter.SixMinReportPatientSelfAdapter
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogSixminReportSelfCheckBeforeTestBinding
 
+/**
+ * 6分钟选择试验前呼吸和疲劳状况等级dialog
+ */
 class SixMinReportSelfCheckBeforeTestFragment :
     BaseDialogFragment<FragmentDialogSixminReportSelfCheckBeforeTestBinding>() {
 
@@ -87,7 +91,7 @@ class SixMinReportSelfCheckBeforeTestFragment :
     }
 
     override fun initListener() {
-        binding.sixminReportTvEditBloodPressureConfirm.setOnClickListener {
+        binding.sixminReportTvEditBloodPressureConfirm.setNoRepeatListener {
             selectList.clear()
             selectStrList.clear()
             patientSelfList.forEach {
@@ -95,25 +99,45 @@ class SixMinReportSelfCheckBeforeTestFragment :
                     if (it1.itemCheck == "1") {
                         selectList.add(it.itemList.indexOf(it1))
                         val index = it1.itemName.indexOf("级")
-                        selectStrList.add(it1.itemName.substring(0, index))
+                        selectStrList.add("${it.itemName}&${it1.itemName.substring(0, index)}")
                     }
                 }
             }
-            if (selectList.size < 2) {
-                if (selectList.isNotEmpty()) {
-                    if (selectList[0] == 0) {
-                        Toast.makeText(context, "请选择试验前的呼吸状况", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(context, "请选择试验前的疲劳状况", Toast.LENGTH_SHORT).show()
-                    }
+//            if (selectList.size < 2) {
+//                if (selectList.isNotEmpty()) {
+//                    if (selectList[0] == 0) {
+//                        Toast.makeText(context, "请选择试验前的呼吸状况", Toast.LENGTH_SHORT).show()
+//                    } else {
+//                        Toast.makeText(context, "请选择试验前的疲劳状况", Toast.LENGTH_SHORT).show()
+//                    }
+//                } else {
+//                    Toast.makeText(context, "请选择试验前状况评级", Toast.LENGTH_SHORT).show()
+//                }
+//            } else {
+//                dismiss()
+//                listener?.onClickConfirm(
+//                    selectList[0], selectList[1], selectStrList[0], selectStrList[1]
+//                )
+//            }
+
+            if (selectStrList.isNotEmpty()) {
+                if (selectStrList.size > 1) {
+                    dismiss()
+                    listener?.onClickConfirm(
+                        selectList[0], selectList[1], selectStrList[0].split("&")[1], selectStrList[1].split("&")[1]
+                    )
                 } else {
-                    Toast.makeText(context, "请选择试验前状况评级", Toast.LENGTH_SHORT).show()
+                    val split = selectStrList[0].split("&")
+                    if (split[0] == "呼吸状况等级") {
+                        Toast.makeText(context, "请选择试验前的疲劳状况", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(context, "请选择试验前的呼吸状况", Toast.LENGTH_SHORT).show()
+                    }
+                    return@setNoRepeatListener
                 }
             } else {
-                dismiss()
-                listener?.onClickConfirm(
-                    selectList[0], selectList[1], selectStrList[0], selectStrList[1]
-                )
+                Toast.makeText(context, "请选择试验前状况评级", Toast.LENGTH_SHORT).show()
+                return@setNoRepeatListener
             }
         }
         binding.sixminReportTvEditBloodPressureClose.setOnClickListener {

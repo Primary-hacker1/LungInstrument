@@ -279,6 +279,15 @@ class MainViewModel @Inject constructor(
     }
 
     /**
+     * 更新6分钟报告综合评估信息
+     */
+    fun updateSixMinReportEvaluation(reportNo:String,fatigueLevel:String,breathLevel:String) {
+        viewModelScope.launch {
+            sixMinReportEvaluationDao.updateReportEvaluation(reportNo,fatigueLevel,breathLevel)
+        }
+    }
+
+    /**
      * 获取6分钟报告其它信息
      */
     fun getSixMinReportOther(id: String) {

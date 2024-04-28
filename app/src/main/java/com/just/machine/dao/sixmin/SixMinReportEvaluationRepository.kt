@@ -15,7 +15,7 @@ class SixMinReportEvaluationRepository @Inject constructor(private val reportDao
 
     fun getReportEvaluation(): Flow<List<SixMinReportEvaluation>> = reportDao.getReportEvaluation()
     fun getReportEvaluationById(id:String): Flow<List<SixMinReportEvaluation>> = reportDao.getReportEvaluationById(id)
-
     suspend fun insertReportEvaluation(reportEvaluation: SixMinReportEvaluation): Long = reportDao.insertReportEvaluation(reportEvaluation)
+    suspend fun updateReportEvaluation(reportNo:String,fatigueLevel: String,breathLevel:String) = reportDao.updateReportEvaluation(reportNo,fatigueLevel,breathLevel)
 
 }

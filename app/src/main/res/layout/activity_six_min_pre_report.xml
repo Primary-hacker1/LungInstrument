@@ -417,7 +417,7 @@
                                         android:textColor="@color/text3" />
 
                                     <EditText
-                                        android:id="@+id/sixmin_tv_stride_low"
+                                        android:id="@+id/sixmin_pre_et_stride_low"
                                         android:layout_width="70dp"
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
@@ -425,15 +425,15 @@
                                         android:textStyle="bold" />
 
                                     <TextView
-                                        android:textStyle="bold"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:text="~"
-                                        android:textColor="@color/text3" />
+                                        android:textColor="@color/text3"
+                                        android:textStyle="bold" />
 
                                     <EditText
-                                        android:id="@+id/sixmin_tv_stride_high"
+                                        android:id="@+id/sixmin_pre_et_stride_high"
                                         android:layout_width="70dp"
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
@@ -506,7 +506,7 @@
                                         android:textColor="@color/text3" />
 
                                     <EditText
-                                        android:id="@+id/sixmin_tv_distance_low"
+                                        android:id="@+id/sixmin_pre_et_distance_low"
                                         android:layout_width="70dp"
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
@@ -522,7 +522,7 @@
                                         android:textStyle="bold" />
 
                                     <EditText
-                                        android:id="@+id/sixmin_tv_distance_high"
+                                        android:id="@+id/sixmin_pre_et_distance_high"
                                         android:layout_width="70dp"
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
@@ -558,6 +558,7 @@
                                         android:textColor="@color/text3" />
 
                                     <EditText
+                                        android:id="@+id/sixmin_pre_et_sport_ecg"
                                         android:layout_width="50dp"
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
@@ -569,7 +570,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
-                                        android:text="次"
+                                        android:text="bmp"
                                         android:textColor="@color/text3" />
 
                                 </LinearLayout>
@@ -587,6 +588,7 @@
                                         android:textColor="@color/text3" />
 
                                     <EditText
+                                        android:id="@+id/sixmin_pre_et_metab"
                                         android:layout_width="70dp"
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
@@ -615,6 +617,7 @@
                                         android:textColor="@color/text3" />
 
                                     <EditText
+                                        android:id="@+id/sixmin_pre_et_tired_control_low"
                                         android:layout_width="30dp"
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
@@ -630,8 +633,10 @@
                                         android:textStyle="bold" />
 
                                     <EditText
+                                        android:id="@+id/sixmin_pre_et_tired_control_high"
                                         android:layout_width="30dp"
                                         android:layout_height="wrap_content"
+                                        android:gravity="center"
                                         android:inputType="numberDecimal"
                                         android:textStyle="bold" />
 
@@ -666,10 +671,11 @@
                                         android:textColor="@color/text3" />
 
                                     <EditText
-                                        android:inputType="number"
+                                        android:id="@+id/sixmin_pre_et_weekly_count"
                                         android:layout_width="50dp"
                                         android:layout_height="wrap_content"
-                                        android:gravity="center" />
+                                        android:gravity="center"
+                                        android:inputType="number" />
 
                                     <TextView
                                         android:layout_width="wrap_content"
