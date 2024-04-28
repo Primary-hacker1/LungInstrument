@@ -91,10 +91,12 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
             }
 
             hideKeyboard(it.windowToken)
+
             if (binding.atvUser.text?.isEmpty() == true) {
                 toast("用户名不能为空！")
                 return@setNoRepeatListener
             }
+
             if (binding.atvPass.text?.isEmpty() == true) {
                 toast("密码不能为空！")
                 return@setNoRepeatListener
@@ -108,13 +110,6 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
 
             activity?.finish()
         }
-
-//        binding.toolbar.ivTitleBack.setOnClickListener {
-//            activity?.finish()
-//            SharedPreferencesUtils.instance.logout()
-//        }
-
-
     }
  
     override fun initListener() {

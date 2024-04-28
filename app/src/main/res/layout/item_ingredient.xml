@@ -74,5 +74,16 @@
             android:text="@{bean.o2t90}"
             android:textColor="@color/text3"
             android:textSize="11sp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/atv_offset"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:text="@{bean.offset}"
+                android:textColor="@color/text3"
+                android:textSize="11sp" />
+
     </LinearLayout>
 </layout>

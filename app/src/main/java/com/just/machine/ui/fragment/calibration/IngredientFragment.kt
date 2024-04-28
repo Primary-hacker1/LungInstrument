@@ -36,7 +36,7 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
 
         binding.rvIngredient.layoutManager = LinearLayoutManager(requireContext())
 
-        ingredientAdapter.setItemClickListener { item, position ->
+        ingredientAdapter.setItemClickListener { _, position ->
             ingredientAdapter.toggleItemBackground(position)
         }
 

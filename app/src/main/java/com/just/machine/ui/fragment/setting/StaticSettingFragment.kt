@@ -52,23 +52,16 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
 
         adapterSvc.setItemsBean(
             mutableListOf(
-                SvcSettingBean("1", "2", "3", true),
-                SvcSettingBean("2", "2", "3", true),
-                SvcSettingBean("3", "2", "3", true),
-                SvcSettingBean("4", "2", "3", false),
-                SvcSettingBean("5", "2", "3", false),
-                SvcSettingBean("6", "2", "3", false),
-                SvcSettingBean("7", "2", "3", true),
-                SvcSettingBean("8", "2", "3", true),
-                SvcSettingBean("9", "2", "3", false),
-                SvcSettingBean("10", "2", "3", true),
-                SvcSettingBean("11", "5", "6", true)
+                SvcSettingBean("SVC", "2", "3", true),
+                SvcSettingBean("VC_ex", "2", "3", true),
+                SvcSettingBean("ERV", "2", "3", true),
+                SvcSettingBean("IRV", "2", "3", true),
+                SvcSettingBean("VT", "2", "3", true),
+                SvcSettingBean("IC", "2", "3", true),
             )
         )
 
-
         binding.rvSvc.adapter = adapterSvc
-
 
         adapterFvc.setItemsBean(
             mutableListOf(
@@ -82,8 +75,10 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
 
         adapterMvv.setItemsBean(
             mutableListOf(
-                MvvSettingBean("1", "2", "3", true),
-                MvvSettingBean("4", "5", "6", false)
+                MvvSettingBean("MVV", "2", "3", true),
+                MvvSettingBean("TIME_MVV", "5", "6", false),
+                MvvSettingBean("BF", "5", "6", false),
+                MvvSettingBean("TIMES", "5", "6", false),
             )
         )
 

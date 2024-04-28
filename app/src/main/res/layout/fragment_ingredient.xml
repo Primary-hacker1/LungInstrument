@@ -365,7 +365,7 @@
                         <androidx.appcompat.widget.AppCompatTextView
                                 android:layout_width="88dp"
                                 android:layout_height="wrap_content"
-                                android:text="吸气标定指标"
+                                android:text="浓度指标"
                                 android:textColor="@color/text3"
                                 android:textSize="11sp" />
 
@@ -392,7 +392,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:maxLines="1"
-                                android:text="误差率"
+                                android:text="误差"
                                 android:textColor="@color/text3"
                                 android:textSize="11sp" />
 
@@ -411,6 +411,15 @@
                                 android:layout_weight="1"
                                 android:maxLines="1"
                                 android:text="@string/o_t90_ms"
+                                android:textColor="@color/text3"
+                                android:textSize="11sp" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:maxLines="1"
+                                android:text="Offset"
                                 android:textColor="@color/text3"
                                 android:textSize="11sp" />
                     </LinearLayout>
@@ -509,7 +518,16 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:maxLines="1"
-                                android:text="CO₂T90(ms)"
+                                android:text="@string/o_t90_ms"
+                                android:textColor="@color/text3"
+                                android:textSize="11sp" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:maxLines="1"
+                                android:text="Offset"
                                 android:textColor="@color/text3"
                                 android:textSize="11sp" />
                     </LinearLayout>

@@ -7,5 +7,8 @@ data class RoutineLungBean(
     var optimalValue: String? = "",//最佳值
     var bp: String? = "",//B/P(%)
     var test1: String? = "",//测试
-) {
-}
+    var test2: String? = "",//测试
+    var test3: String? = "",//测试
+    var test4: String? = "",//测试
+    var test5: String? = "",//测试
+)

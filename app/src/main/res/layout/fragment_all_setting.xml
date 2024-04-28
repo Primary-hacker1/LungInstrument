@@ -1,95 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <import type="com.just.news.R" />
 
         <variable
-            name="vm"
-            type="com.just.machine.ui.viewmodel.MainViewModel" />
+                name="vm"
+                type="com.just.machine.ui.viewmodel.MainViewModel" />
     </data>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
         <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="60dp"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="60dp"
+                        android:orientation="horizontal">
 
                     <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        tools:ignore="UselessParent">
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            tools:ignore="UselessParent">
 
                         <LinearLayout
-                            android:id="@+id/ll_other_layout"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="25dp"
-                            android:orientation="horizontal"
-                            tools:ignore="DisableBaselineAlignment">
+                                android:id="@+id/ll_other_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="25dp"
+                                android:orientation="horizontal"
+                                tools:ignore="DisableBaselineAlignment">
 
                             <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="70dp"
-                                android:layout_weight="2"
-                                android:background="@drawable/frame_with_color_d6d6d6"
-                                android:gravity="center"
-                                android:orientation="vertical">
+                                    android:layout_width="0dp"
+                                    android:layout_height="70dp"
+                                    android:layout_weight="2"
+                                    android:background="@drawable/frame_with_color_d6d6d6"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
 
 
                                 <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="57dp"
-                                    android:layout_marginEnd="44dp"
-                                    android:orientation="horizontal">
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="57dp"
+                                        android:layout_marginEnd="44dp"
+                                        android:orientation="horizontal">
 
                                     <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:text="@string/hospital_name_mao"
-                                        android:textColor="@color/text3"
-                                        android:textSize="14sp"
-                                        tools:ignore="TooDeepLayout" />
-
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="23dp"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_marginStart="10dp"
-                                        android:background="@drawable/frame_with_color_d6d6d6">
-
-                                        <EditText
-                                            android:id="@+id/edit_hospital_name"
-                                            android:layout_width="match_parent"
+                                            android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
-                                            android:layout_marginStart="20dp"
-                                            android:background="@null"
-                                            android:backgroundTint="@null"
-                                            android:hint="@string/hospital_name"
+                                            android:text="@string/hospital_name_mao"
                                             android:textColor="@color/text3"
-                                            android:textSize="12sp"
-                                            tools:ignore="Autofill,TextFields" />
+                                            android:textSize="14sp"
+                                            tools:ignore="TooDeepLayout" />
+
+                                    <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="23dp"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginStart="10dp"
+                                            android:background="@drawable/frame_with_color_d6d6d6">
+
+                                        <EditText
+                                                android:id="@+id/edit_hospital_name"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center_vertical"
+                                                android:layout_marginStart="20dp"
+                                                android:background="@null"
+                                                android:backgroundTint="@null"
+                                                android:hint="@string/hospital_name"
+                                                android:textColor="@color/text3"
+                                                android:textSize="12sp"
+                                                tools:ignore="Autofill,TextFields" />
                                     </LinearLayout>
                                 </LinearLayout>
                             </LinearLayout>
@@ -97,536 +97,553 @@
                         </LinearLayout>
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignStart="@id/ll_other_layout"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginTop="13dp"
-                            android:background="@color/white"
-                            android:text="@string/hospital_settings"
-                            android:textColor="@color/text3"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-                    </RelativeLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="60dp"
-                    android:layout_marginTop="14dp"
-                    android:orientation="horizontal">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        tools:ignore="UselessParent">
-
-                        <LinearLayout
-                            android:id="@+id/ll_password_layout"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="25dp"
-                            android:orientation="horizontal">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/space_100"
-                                android:background="@drawable/frame_with_color_d6d6d6"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginStart="88dp"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:text="@string/login_pass_mao"
-                                        android:textColor="@color/text3"
-                                        android:textSize="14sp" />
-
-                                    <EditText
-                                        android:id="@+id/edit_login_pass"
-                                        android:layout_width="169dp"
-                                        android:layout_height="22dp"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_marginStart="10dp"
-                                        android:background="@drawable/frame_with_color_d6d6d6"
-                                        android:paddingStart="10dp"
-                                        android:text="@string/_123456789"
-                                        android:textColor="@color/text3"
-                                        android:textSize="14sp"
-                                        tools:ignore="RtlSymmetry" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_marginStart="10dp"
-                                        android:text="@string/update_pass"
-                                        android:textColor="@color/text3"
-                                        android:textSize="14sp" />
-
-                                    <EditText
-                                        android:id="@+id/edit_update_pass"
-                                        android:layout_width="169dp"
-                                        android:layout_height="22dp"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_marginStart="10dp"
-                                        android:background="@drawable/frame_with_color_d6d6d6"
-                                        android:paddingStart="10dp"
-                                        android:text="@string/_123456789"
-                                        android:textColor="@color/text3"
-                                        android:textSize="14sp"
-                                        tools:ignore="Autofill,RtlSymmetry,TextFields" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_marginStart="10dp"
-                                        android:text="@string/confirm_password"
-                                        android:textColor="@color/text3"
-                                        android:textSize="14sp" />
-
-                                    <EditText
-                                        android:layout_width="169dp"
-                                        android:layout_height="22dp"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_marginStart="10dp"
-                                        android:background="@drawable/frame_with_color_d6d6d6"
-                                        android:paddingStart="10dp"
-                                        android:text="@string/_123456789"
-                                        android:textColor="@color/text3"
-                                        android:textSize="14sp"
-                                        tools:ignore="Autofill,RtlSymmetry,TextFields" />
-
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginStart="88dp"
-                                    android:layout_marginTop="@dimen/space_5"
-                                    android:gravity="center_vertical"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:text="@string/export_passwords"
-                                        android:textColor="@color/text3"
-                                        android:textSize="14sp" />
-
-                                    <TextView
-                                        android:layout_width="169dp"
-                                        android:layout_height="22dp"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_marginStart="10dp"
-                                        android:background="@drawable/frame_with_color_d6d6d6"
-                                        android:paddingStart="10dp"
-                                        android:text="@string/_123456789"
-                                        android:textColor="@color/text3"
-                                        android:textSize="14sp"
-                                        tools:ignore="RtlSymmetry" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_marginStart="10dp"
-                                        android:text="@string/update_pass"
-                                        android:textColor="@color/text3"
-                                        android:textSize="14sp" />
-
-                                    <EditText
-                                        android:layout_width="169dp"
-                                        android:layout_height="22dp"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_marginStart="10dp"
-                                        android:background="@drawable/frame_with_color_d6d6d6"
-                                        android:paddingStart="10dp"
-                                        android:text="@string/_123456789"
-                                        android:textColor="@color/text3"
-                                        android:textSize="14sp"
-                                        tools:ignore="Autofill,RtlSymmetry,TextFields" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_marginStart="10dp"
-                                        android:text="@string/confirm_password"
-                                        android:textColor="@color/text3"
-                                        android:textSize="14sp" />
-
-                                    <EditText
-                                        android:layout_width="169dp"
-                                        android:layout_height="22dp"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_marginStart="10dp"
-                                        android:background="@drawable/frame_with_color_d6d6d6"
-                                        android:paddingStart="10dp"
-                                        android:text="@string/_123456789"
-                                        android:textColor="@color/text3"
-                                        android:textSize="14sp"
-                                        tools:ignore="Autofill,RtlSymmetry,TextFields" />
-
-
-                                </LinearLayout>
-
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignStart="@id/ll_password_layout"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginTop="13dp"
-                            android:background="@color/white"
-                            android:text="@string/sixmin_system_setting_password"
-                            android:textColor="@color/text3"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                    </RelativeLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="60dp"
-                    android:layout_marginTop="14dp"
-                    android:orientation="horizontal">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <LinearLayout
-                            android:id="@+id/ll_bluetooth_layout"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="25dp"
-                            android:orientation="horizontal">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="80dp"
-                                android:gravity="center"
-                                android:background="@drawable/frame_with_color_d6d6d6"
-                                android:orientation="vertical">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginStart="88dp"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:text="预计值方案："
-                                        android:textColor="@color/text3"
-                                        android:textSize="14sp" />
-
-                                    <Spinner
-                                        android:id="@+id/sp_scenarios"
-                                        android:layout_width="180dp"
-                                        android:layout_height="25dp"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_marginStart="@dimen/space_10"
-                                        android:background="@drawable/sp_bg"
-                                        android:gravity="center_vertical"
-                                        android:paddingStart="@dimen/space_10"
-                                        android:textSize="14sp"
-                                        tools:ignore="RtlSymmetry" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_marginStart="10dp"
-                                        android:text="方案编辑"
-                                        android:textColor="@color/colorPrimary"
-                                        android:textSize="14sp" />
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginStart="88dp"
-                                    android:layout_marginTop="@dimen/space_9"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:text="    呼吸面罩："
-                                        android:textColor="@color/text3"
-                                        android:textSize="14sp" />
-
-                                    <Spinner
-                                        android:id="@+id/sp_breathing"
-                                        android:layout_width="180dp"
-                                        android:layout_height="25dp"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_marginStart="@dimen/space_10"
-                                        android:background="@drawable/sp_bg"
-                                        android:gravity="center_vertical"
-                                        android:paddingStart="@dimen/space_10"
-                                        android:textSize="14sp"
-                                        tools:ignore="RtlSymmetry" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_marginStart="10dp"
-                                        android:textColor="@color/text3"
-                                        android:text="测试死腔"
-                                        android:textSize="14sp" />
-
-                                    <EditText
-                                        android:layout_width="169dp"
-                                        android:layout_height="22dp"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_marginStart="10dp"
-                                        android:background="@drawable/frame_with_color_d6d6d6"
-                                        android:paddingStart="10dp"
-                                        android:text="@string/_123456789"
-                                        android:textColor="@color/text3"
-                                        android:textSize="14sp"
-                                        tools:ignore="Autofill,RtlSymmetry,TextFields" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_marginStart="10dp"
-                                        android:text="@string/ml"
-                                        android:textColor="@color/text3"
-                                        android:textSize="14sp" />
-
-                                </LinearLayout>
-
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignStart="@id/ll_bluetooth_layout"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginTop="13dp"
-                            android:background="@color/white"
-                            android:text="@string/test_parameters"
-                            android:textColor="@color/text3"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                    </RelativeLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="90dp"
-                    android:layout_marginHorizontal="60dp"
-                    android:layout_marginTop="14dp"
-                    android:orientation="horizontal">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <LinearLayout
-                            android:id="@+id/ll_system_info"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="25dp"
-                            android:background="@drawable/frame_with_color_d6d6d6"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/sixmin_tv_system_info"
                                 android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginStart="88dp"
-                                android:gravity="center_vertical"
-                                android:padding="@dimen/space_10"
-                                android:text="@string/data_backup_"
-                                android:textColor="@color/colorPrimary"
-                                android:textSize="13sp" />
-
-                            <TextView
-                                android:id="@+id/tv_data_restoration"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginStart="88dp"
-                                android:gravity="center_vertical"
-                                android:padding="@dimen/space_10"
-                                android:text="@string/data_restoration"
-                                android:textColor="@color/colorPrimary"
-                                android:textSize="13sp" />
-
-
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignStart="@id/ll_system_info"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginTop="13dp"
-                            android:background="@color/white"
-                            android:text="@string/data_backup"
-                            android:textColor="@color/text3"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/space_18"
-                        android:layout_weight="1">
-
-                        <LinearLayout
-                            android:id="@+id/ll_device_management"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="25dp"
-                            android:background="@drawable/frame_with_color_d6d6d6"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginStart="18dp"
-                                android:gravity="center_vertical"
-                                android:padding="@dimen/space_10"
-                                android:text="@string/ECG"
+                                android:layout_height="wrap_content"
+                                android:layout_alignStart="@id/ll_other_layout"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginTop="13dp"
+                                android:background="@color/white"
+                                android:text="@string/hospital_settings"
                                 android:textColor="@color/text3"
-                                android:textSize="14sp" />
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+                    </RelativeLayout>
+                </LinearLayout>
 
-                            <Spinner
-                                android:id="@+id/sp_ecg"
-                                android:layout_width="@dimen/space_200"
-                                android:layout_height="25dp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginStart="@dimen/space_10"
-                                android:background="@drawable/sp_bg"
-                                android:gravity="center_vertical"
-                                android:paddingStart="@dimen/space_10"
-                                android:textSize="14sp"
-                                tools:ignore="RtlSymmetry" />
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="60dp"
+                        android:layout_marginTop="14dp"
+                        android:orientation="horizontal">
 
-                            <Button
-                                android:id="@+id/btn_device_overhaul"
-                                android:layout_width="wrap_content"
-                                android:layout_height="25dp"
-                                android:layout_marginStart="@dimen/space_36"
-                                android:background="@drawable/frame_with_color_d6d6d6"
-                                android:text="@string/device_overhaul"
-                                android:textSize="14sp" />
+                    <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            tools:ignore="UselessParent">
 
+                        <LinearLayout
+                                android:id="@+id/ll_password_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="25dp"
+                                android:orientation="horizontal">
+
+                            <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/space_100"
+                                    android:background="@drawable/frame_with_color_d6d6d6"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
+
+                                <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="88dp"
+                                        android:orientation="horizontal">
+
+                                    <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:text="@string/login_pass_mao"
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp" />
+
+                                    <EditText
+                                            android:id="@+id/edit_login_pass"
+                                            android:layout_width="169dp"
+                                            android:layout_height="22dp"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginStart="10dp"
+                                            android:inputType="none"
+                                            android:background="@drawable/frame_with_color_d6d6d6"
+                                            android:paddingStart="10dp"
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp"
+                                            tools:ignore="RtlSymmetry" />
+
+                                    <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginStart="10dp"
+                                            android:text="@string/update_pass"
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp" />
+
+                                    <EditText
+                                            android:id="@+id/edit_update_pass"
+                                            android:layout_width="169dp"
+                                            android:layout_height="22dp"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginStart="10dp"
+                                            android:background="@drawable/frame_with_color_d6d6d6"
+                                            android:paddingStart="10dp"
+                                            android:inputType="textPassword"
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp"
+                                            tools:ignore="Autofill,RtlSymmetry,TextFields" />
+
+                                    <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginStart="10dp"
+                                            android:text="@string/confirm_password"
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp" />
+
+                                    <EditText
+                                            android:id="@+id/edit_confirm_pass"
+                                            android:layout_width="169dp"
+                                            android:layout_height="22dp"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginStart="10dp"
+                                            android:background="@drawable/frame_with_color_d6d6d6"
+                                            android:paddingStart="10dp"
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp"
+                                            android:inputType="textPassword"
+                                            tools:ignore="Autofill,RtlSymmetry,TextFields" />
+
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="88dp"
+                                        android:layout_marginTop="@dimen/space_5"
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal">
+
+                                    <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:text="@string/export_passwords"
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp" />
+
+                                    <TextView
+                                            android:layout_width="169dp"
+                                            android:layout_height="22dp"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginStart="10dp"
+                                            android:background="@drawable/frame_with_color_d6d6d6"
+                                            android:paddingStart="10dp"
+                                            android:inputType="none"
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp"
+                                            tools:ignore="RtlSymmetry" />
+
+                                    <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginStart="10dp"
+                                            android:text="@string/update_pass"
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp" />
+
+                                    <EditText
+                                            android:layout_width="169dp"
+                                            android:layout_height="22dp"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginStart="10dp"
+                                            android:background="@drawable/frame_with_color_d6d6d6"
+                                            android:paddingStart="10dp"
+                                            android:inputType="textPassword"
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp"
+                                            tools:ignore="Autofill,RtlSymmetry,TextFields" />
+
+                                    <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginStart="10dp"
+                                            android:text="@string/confirm_password"
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp" />
+
+                                    <EditText
+                                            android:layout_width="169dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginStart="10dp"
+                                            android:background="@drawable/frame_with_color_d6d6d6"
+                                            android:paddingStart="10dp"
+                                            android:inputType="textPassword"
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp"
+                                            tools:ignore="Autofill,RtlSymmetry,TextFields" />
+
+
+                                </LinearLayout>
+
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignStart="@id/ll_device_management"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginTop="13dp"
-                            android:background="@color/white"
-                            android:text="@string/device_management"
-                            android:textColor="@color/text3"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignStart="@id/ll_password_layout"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginTop="13dp"
+                                android:background="@color/white"
+                                android:text="@string/sixmin_system_setting_password"
+                                android:textColor="@color/text3"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
 
                     </RelativeLayout>
 
                 </LinearLayout>
 
-
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="90dp"
-                    android:layout_marginHorizontal="60dp"
-                    android:layout_marginTop="14dp"
-                    android:orientation="horizontal">
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="60dp"
+                        android:layout_marginTop="14dp"
+                        android:orientation="horizontal">
 
                     <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
 
                         <LinearLayout
-                            android:id="@+id/ll_info_layout"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="25dp"
-                            android:orientation="horizontal">
-
-                            <LinearLayout
+                                android:id="@+id/ll_bluetooth_layout"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:background="@drawable/frame_with_color_d6d6d6"
-                                android:orientation="vertical">
+                                android:layout_marginTop="25dp"
+                                android:orientation="horizontal">
 
-                                <TextView
-                                    android:id="@+id/tv_system_info1"
+                            <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="80dp"
+                                    android:gravity="center"
+                                    android:background="@drawable/frame_with_color_d6d6d6"
+                                    android:orientation="vertical">
+
+                                <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="88dp"
+                                        android:orientation="horizontal">
+
+                                    <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:text="预计值方案："
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp" />
+
+                                    <Spinner
+                                            android:id="@+id/sp_scenarios"
+                                            android:layout_width="180dp"
+                                            android:layout_height="25dp"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginStart="@dimen/space_10"
+                                            android:background="@drawable/sp_bg"
+                                            android:gravity="center_vertical"
+                                            android:paddingStart="@dimen/space_10"
+                                            android:textSize="14sp"
+                                            tools:ignore="RtlSymmetry" />
+
+                                    <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginStart="10dp"
+                                            android:text="方案编辑"
+                                            android:textColor="@color/colorPrimary"
+                                            android:textSize="14sp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="88dp"
+                                        android:layout_marginTop="@dimen/space_9"
+                                        android:orientation="horizontal">
+
+                                    <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:text="    呼吸面罩："
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp" />
+
+                                    <Spinner
+                                            android:id="@+id/sp_breathing"
+                                            android:layout_width="180dp"
+                                            android:layout_height="25dp"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginStart="@dimen/space_10"
+                                            android:background="@drawable/sp_bg"
+                                            android:gravity="center_vertical"
+                                            android:paddingStart="@dimen/space_10"
+                                            android:textSize="14sp"
+                                            tools:ignore="RtlSymmetry" />
+
+                                    <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginStart="10dp"
+                                            android:textColor="@color/text3"
+                                            android:text="测试死腔"
+                                            android:textSize="14sp" />
+
+                                    <EditText
+                                            android:layout_width="169dp"
+                                            android:layout_height="22dp"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginStart="10dp"
+                                            android:background="@drawable/frame_with_color_d6d6d6"
+                                            android:paddingStart="10dp"
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp"
+                                            tools:ignore="Autofill,RtlSymmetry,TextFields" />
+
+                                    <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginStart="10dp"
+                                            android:text="@string/ml"
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp" />
+
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignStart="@id/ll_bluetooth_layout"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginTop="13dp"
+                                android:background="@color/white"
+                                android:text="@string/test_parameters"
+                                android:textColor="@color/text3"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="90dp"
+                        android:layout_marginHorizontal="60dp"
+                        android:layout_marginTop="14dp"
+                        android:orientation="horizontal">
+
+                    <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                        <LinearLayout
+                                android:id="@+id/ll_system_info"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="25dp"
+                                android:background="@drawable/frame_with_color_d6d6d6"
+                                android:orientation="horizontal">
+
+                            <TextView
+                                    android:id="@+id/sixmin_tv_system_info"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginStart="88dp"
                                     android:gravity="center_vertical"
-                                    android:text="发布版本：v1 完整版本：v1.0.2.210708 @2020知心健（南京）科技有限公司版权所有"
-                                    android:textColor="@color/text3"
+                                    android:padding="@dimen/space_10"
+                                    android:text="@string/data_backup_"
+                                    android:textColor="@color/colorPrimary"
                                     android:textSize="13sp" />
+
+                            <TextView
+                                    android:id="@+id/tv_data_restoration"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginStart="88dp"
+                                    android:gravity="center_vertical"
+                                    android:padding="@dimen/space_10"
+                                    android:text="@string/data_restoration"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="13sp" />
+
+
+                        </LinearLayout>
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignStart="@id/ll_system_info"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginTop="13dp"
+                                android:background="@color/white"
+                                android:text="@string/data_backup"
+                                android:textColor="@color/text3"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="@dimen/space_18"
+                            android:layout_weight="1">
+
+                        <LinearLayout
+                                android:id="@+id/ll_device_management"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="25dp"
+                                android:background="@drawable/frame_with_color_d6d6d6"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginStart="18dp"
+                                    android:gravity="center_vertical"
+                                    android:padding="@dimen/space_10"
+                                    android:text="@string/ECG"
+                                    android:textColor="@color/text3"
+                                    android:textSize="14sp" />
+
+                            <Spinner
+                                    android:id="@+id/sp_ecg"
+                                    android:layout_width="@dimen/space_200"
+                                    android:layout_height="25dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginStart="@dimen/space_10"
+                                    android:background="@drawable/sp_bg"
+                                    android:gravity="center_vertical"
+                                    android:paddingStart="@dimen/space_10"
+                                    android:textSize="14sp"
+                                    tools:ignore="RtlSymmetry" />
+
+                            <Button
+                                    android:id="@+id/btn_device_overhaul"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="25dp"
+                                    android:layout_marginStart="@dimen/space_36"
+                                    android:background="@drawable/frame_with_color_d6d6d6"
+                                    android:text="@string/device_overhaul"
+                                    android:textSize="14sp" />
+
+
+                        </LinearLayout>
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignStart="@id/ll_device_management"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginTop="13dp"
+                                android:background="@color/white"
+                                android:text="@string/device_management"
+                                android:textColor="@color/text3"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="90dp"
+                        android:layout_marginHorizontal="60dp"
+                        android:layout_marginTop="14dp"
+                        android:orientation="horizontal">
+
+                    <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                        <LinearLayout
+                                android:id="@+id/ll_info_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="25dp"
+                                android:orientation="horizontal">
+
+                            <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/frame_with_color_d6d6d6"
+                                    android:orientation="horizontal">
+
+                                <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="88dp"
+                                        android:gravity="center_vertical"
+                                        android:text="发布版本：v"
+                                        android:textColor="@color/text3"
+                                        android:textSize="13sp" />
+
+                                <TextView
+                                        android:id="@+id/tv_system_info1"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center_vertical"
+                                        android:gravity="center_vertical"
+                                        android:textColor="@color/text3"
+                                        android:textSize="13sp" />
+
+                                <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center_vertical"
+                                        android:gravity="center_vertical"
+                                        android:text=" @2024知心健（南京）科技有限公司版权所有"
+                                        android:textColor="@color/text3"
+                                        android:textSize="13sp" />
 
                             </LinearLayout>
 
                         </LinearLayout>
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignStart="@id/ll_info_layout"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginTop="13dp"
-                            android:background="@color/white"
-                            android:text="@string/sixmin_system_setting_info"
-                            android:textColor="@color/text3"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignStart="@id/ll_info_layout"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginTop="13dp"
+                                android:background="@color/white"
+                                android:text="@string/sixmin_system_setting_info"
+                                android:textColor="@color/text3"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
 
                     </RelativeLayout>
 

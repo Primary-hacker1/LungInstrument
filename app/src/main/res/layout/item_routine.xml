@@ -70,5 +70,45 @@
             android:text="@{bean.test1}"
             android:textColor="@color/text3"
             android:textSize="12sp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/atv_test2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:text="@{bean.test2}"
+                android:textColor="@color/text3"
+                android:textSize="12sp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/atv_test3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:text="@{bean.test3}"
+                android:textColor="@color/text3"
+                android:textSize="12sp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/atv_test4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:text="@{bean.test4}"
+                android:textColor="@color/text3"
+                android:textSize="12sp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/atv_test5"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:text="@{bean.test5}"
+                android:textColor="@color/text3"
+                android:textSize="12sp" />
     </LinearLayout>
 </layout>

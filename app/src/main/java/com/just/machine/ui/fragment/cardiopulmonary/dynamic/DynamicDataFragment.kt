@@ -29,7 +29,6 @@ class DynamicDataFragment : CommonBaseFragment<FragmentDynamicDataBinding>() {
 
     }
 
-
     override fun initView() {
     }
 

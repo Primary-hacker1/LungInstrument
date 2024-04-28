@@ -1,8 +1,11 @@
 package com.just.machine.ui.fragment.setting
 
+import android.annotation.SuppressLint
+import android.content.pm.PackageInfo
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.pm.PackageInfoCompat
 import androidx.fragment.app.viewModels
 import com.common.base.*
 import com.common.network.LogUtils
@@ -24,13 +27,19 @@ class AllSettingFragment : CommonBaseFragment<FragmentAllSettingBinding>() {
 
     }
 
+    @SuppressLint("SetTextI18n")
     override fun initView() {
+
+        val packageInfo: PackageInfo = requireContext().packageManager.getPackageInfo(requireContext().packageName, 0)
+        val versionName: String = packageInfo.versionName
+        val versionCode: Long = PackageInfoCompat.getLongVersionCode(packageInfo)
+        binding.tvSystemInfo1.text = "$versionCode 完整版本：v$versionName"
     }
 
     override fun initListener() {
 
         val spScenarios =
-            SpinnerHelper(requireContext(), binding.spScenarios, R.array.spinner_items)
+            SpinnerHelper(requireContext(), binding.spScenarios, R.array.spScenarios_items)
         spScenarios.setSpinnerSelectionListener(object : SpinnerHelper.SpinnerSelectionListener {
             override fun onItemSelected(selectedItem: String, view: View?) {
 
@@ -42,7 +51,7 @@ class AllSettingFragment : CommonBaseFragment<FragmentAllSettingBinding>() {
         })
 
         val spBreathing =
-            SpinnerHelper(requireContext(), binding.spBreathing, R.array.spinner_items)
+            SpinnerHelper(requireContext(), binding.spBreathing, R.array.spBreathing_items)
         spBreathing.setSpinnerSelectionListener(object : SpinnerHelper.SpinnerSelectionListener {
             override fun onItemSelected(selectedItem: String, view: View?) {
 
