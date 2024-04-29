@@ -24,7 +24,6 @@ import kotlin.math.ceil
  * 自定义的基础折线图控件，继承自 LineChart。
  * 提供了设置折线图基本属性和数据的方法。
  */
-@Deprecated("废弃，x轴不支持自定义个数！")
 class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context, attrs) {
 
     private val tag = BaseLineChart::class.java.simpleName
