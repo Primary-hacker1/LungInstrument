@@ -67,14 +67,15 @@
                             android:text="@string/sixmin_test_report_sport_calculate_formula"
                             android:textColor="@color/text3" />
 
-                        <TextView
+                        <Spinner
+                            android:id="@+id/sixmin_report_stride_formula"
                             android:layout_width="380dp"
                             android:layout_height="22dp"
                             android:layout_marginStart="10dp"
                             android:background="@drawable/sixmin_report_prescription_formula_bg"
+                            android:overlapAnchor="false"
                             android:paddingStart="10dp"
-                            android:paddingEnd="20dp"
-                            android:text="6分钟平均步行速度×（50%~60%）" />
+                            android:paddingEnd="20dp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -117,13 +118,14 @@
                             android:text="@string/sixmin_test_report_sport_calculate_formula"
                             android:textColor="@color/text3" />
 
-                        <TextView
+                        <Spinner
+                            android:id="@+id/sixmin_report_distance_formula"
                             android:layout_width="380dp"
                             android:layout_height="22dp"
                             android:layout_marginStart="10dp"
                             android:background="@drawable/sixmin_report_prescription_formula_bg"
-                            android:paddingStart="10dp"
-                            android:text="6分钟平均步行速度×（50%~60%）×建议单次运动时长" />
+                            android:overlapAnchor="false"
+                            android:paddingStart="10dp" />
                     </LinearLayout>
 
                 </LinearLayout>

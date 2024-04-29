@@ -217,7 +217,7 @@
                                     android:textColor="@color/text3" />
 
                                 <EditText
-                                    android:id="@+id/sixmin_tv_finish_circle"
+                                    android:id="@+id/sixmin_et_finish_circle"
                                     android:layout_width="35dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
@@ -829,24 +829,18 @@
 
                             <EditText
                                 android:id="@+id/sixmin_et_report_note"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/text3" />
 
-                            <LinearLayout
+                            <RelativeLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <View
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="2" />
+                                android:layout_height="wrap_content">
 
                                 <LinearLayout
-                                    android:layout_width="0dp"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
+                                    android:layout_alignParentEnd="true"
                                     android:orientation="horizontal">
 
                                     <TextView
@@ -858,13 +852,13 @@
 
                                     <EditText
                                         android:id="@+id/sixmin_et_recommend_doctor"
-                                        android:layout_width="match_parent"
+                                        android:layout_width="100dp"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical" />
 
                                 </LinearLayout>
 
-                            </LinearLayout>
+                            </RelativeLayout>
 
                         </LinearLayout>
 
@@ -923,12 +917,17 @@
                         android:paddingHorizontal="20dp"
                         android:paddingBottom="20dp" />
 
-                    <ImageView
-                        android:id="@+id/sixmin_report_iv_generate_report"
+                    <TextView
+                        android:id="@+id/sixmin_report_tv_generate_report"
                         android:layout_width="150dp"
                         android:layout_height="57dp"
+                        android:textSize="16sp"
                         android:layout_gravity="center_horizontal"
-                        android:src="@mipmap/generate_report" />
+                        android:background="@drawable/sixmin_ignore_blood_pressure_enable"
+                        android:gravity="center"
+                        android:src="@mipmap/generate_report"
+                        android:text="生成报告"
+                        android:textColor="@color/colorWhite" />
 
                 </LinearLayout>
 

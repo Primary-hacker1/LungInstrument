@@ -220,7 +220,7 @@
     <string name="sixmin_test_report_finish_circles"><![CDATA[圈数:<font color="#000000"><Big><b>&#160;&#160;&#160;%s</b></Big></font>&#160;&#160;&#160;圈]]></string>
     <string name="sixmin_test_report_unfinish_circles"><![CDATA[未走完的那圈还剩下:<font color="#000000"><Big><b>&#160;&#160;&#160;%s</b></Big></font>&#160;&#160;&#160;米]]></string>
     <string name="sixmin_test_report_total_distance"><![CDATA[总距离:<font color="#000000"><Big><b>&#160;&#160;&#160;%s</b></Big></font>&#160;&#160;&#160;米]]></string>
-    <string name="sixmin_test_report_data_statistics"><![CDATA[在六分钟内走了%s米，平均步速为%s米/分钟，代谢当量为%sMETs，心功能严重程度为%s，根据多项指标评估，心肺功能评级为%s级，中途停留了<font color="#000000"><Big><b>&#160;&#160;&#160;%s&#160;&#160;&#160;</b></Big></font>秒]]></string>
+    <string name="sixmin_test_report_data_statistics"><![CDATA[在六分钟内走了%s米，平均步速为%s米/分钟，代谢当量为%sMETs，心功能严重程度为%s，根据多项指标评估，心肺功能评级为%s级。中途停留了<font color="#000000"><Big><b>&#160;&#160;&#160;%s&#160;&#160;&#160;</b></Big></font>秒]]></string>
     <string name="sixmin_test_report_stride"><![CDATA[运动步速控制在:<font color="#000000"><Big><b>&#160;&#160;&#160;%s</b></Big></font>&#160;&#160;&#160;米/分钟]]></string>
     <string name="sixmin_test_report_single_sport_time_and_distance"><![CDATA[单次运动时长:<font color="#000000"><Big><b>&#160;&#160;&#160;%s</b></Big></font>&#160;&#160;&#160;分钟，运动距离:<font color="#000000"><Big><b>&#160;&#160;&#160;%s</b></Big></font>&#160;&#160;&#160;米]]></string>
     <string name="sixmin_test_report_heartbeat_and_metab_and_tired_control"><![CDATA[运动心率为:<font color="#000000"><Big><b>&#160;&#160;&#160;%s</b></Big></font>&#160;&#160;&#160;bmp，代谢当量为:<font color="#000000"><Big><b>&#160;&#160;&#160;%s</b></Big></font>&#160;&#160;&#160;METs，疲劳控制在:<font color="#000000"><Big><b>&#160;&#160;&#160;%s</b></Big></font>&#160;&#160;&#160;级]]></string>
@@ -259,9 +259,12 @@
     <string name="data_tables">数据表格</string>
     <string name="sixmin_test_report_check_report_enter_test">进入试验</string>
     <string name="sixmin_test_enter_test_without_device_connection">设备未连接成功，是否继续试验？</string>
-    <string-array name="spinner_sixmin_report_sport_time">
-        <item>10</item>
-        <item>20</item>
-        <item>30</item>
+    <string-array name="spinner_sixmin_report_stide_formula">
+        <item>6分钟平均步行速度×(50%~60%)</item>
+        <item>6分钟平均步行速度×(70%~80%)</item>
+    </string-array>
+    <string-array name="spinner_sixmin_report_distance_formula">
+        <item>6分钟平均步行速度×(50%~60%)×建议单次运动时长</item>
+        <item>6分钟平均步行速度×(70%~80%)×建议单次运动时长</item>
     </string-array>
 </resources>

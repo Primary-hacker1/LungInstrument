@@ -845,8 +845,15 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
      */
     private fun generateReportData(min: String, sec: String, type: Int, min1: Int, sec1: Int) {
         try {
-            sixMinReportInfo.restDuration = usbTransferUtil.restTime.toString()
-
+            if(sysSettingBean.sysOther.showResetTime == "1"){
+                if(type == 1){
+                    sixMinReportInfo.restDuration = (usbTransferUtil.restTime-1).toString()
+                }else if(type == 0){
+                    sixMinReportInfo.restDuration = usbTransferUtil.restTime.toString()
+                }
+            }else if(sysSettingBean.sysOther.showResetTime == "0"){
+                sixMinReportInfo.restDuration = "-1"
+            }
             sixMinReportEvaluation.turnsNumber = usbTransferUtil.circleCount.toString()
             sixMinReportEvaluation.totalWalk = usbTransferUtil.stepsStr
 
@@ -916,17 +923,21 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
      * 跳转预生成报告
      */
     private fun jumpToPreReport() {
-        val intent = Intent(
-            this@SixMinActivity,
-            SixMinPreReportActivity::class.java
-        )
-        val bundle = Bundle()
-        bundle.putString(Constants.sixMinPatientInfo, patientBean.infoBean.patientId.toString())
-        bundle.putString(Constants.sixMinReportNo, sixMinReportInfo.reportNo)
-        bundle.putString(Constants.sixMinReportType, "1")
-        intent.putExtras(bundle)
-        startActivity(intent)
-        finish()
+
+        lifecycleScope.launch {
+            kotlinx.coroutines.delay(0L)
+            val intent = Intent(
+                this@SixMinActivity,
+                SixMinPreReportActivity::class.java
+            )
+            val bundle = Bundle()
+            bundle.putString(Constants.sixMinPatientInfo, patientBean.infoBean.patientId.toString())
+            bundle.putString(Constants.sixMinReportNo, sixMinReportInfo.reportNo)
+            bundle.putString(Constants.sixMinReportType, "1")
+            intent.putExtras(bundle)
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun startStepAndCircle() {
@@ -935,6 +946,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         val addTime = dateFormat.format(date)
         sixMinReportInfo.addTime = addTime
 
+        usbTransferUtil.bloodType = 1
         usbTransferUtil.isBegin = true
         usbTransferUtil.circleBoolean = true
         usbTransferUtil.testType = 1
@@ -942,6 +954,8 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
         binding.sixminTvTestStatus.text = getString(R.string.sixmin_test_testing)
         binding.sixminTvCircleCount.text = "0"
         binding.sixminIvIgnoreBlood.isEnabled = true
+        binding.sixminRlStart.isEnabled = true
+        binding.sixminRlMeasureBlood.isEnabled = true
         SixMinCmdUtils.openQSAndBS()
         mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack {
             override fun onStart() {
