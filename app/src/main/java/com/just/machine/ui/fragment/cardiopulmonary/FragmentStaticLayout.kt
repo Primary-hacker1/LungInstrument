@@ -15,49 +15,26 @@ import com.common.base.setNoRepeatListener
 import com.common.base.visible
 import com.common.network.LogUtils
 import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.highlight.Highlight
-import com.github.mikephil.charting.listener.ChartTouchListener
-import com.github.mikephil.charting.listener.OnChartGestureListener
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.just.machine.model.staticlung.RoutineLungBean
 import com.just.machine.ui.adapter.RoutineLungAdapter
 import com.just.news.R
 import com.just.news.databinding.FragmentLungBinding
 import lecho.lib.hellocharts.model.PointValue
 
+class FragmentStaticLayout @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : FrameLayout(context, attrs, defStyleAttr) {
 
-class FragmentStaticLayout : FrameLayout {
+    private val binding: FragmentLungBinding = DataBindingUtil.inflate(
+        LayoutInflater.from(context),
+        R.layout.fragment_lung,
+        this,
+        true
+    )
 
     private val tag = FragmentStaticLayout::class.java.name
-
-    var binding: FragmentLungBinding
-
-    private var mContext: Context
-
-    constructor(context: Context) : super(context) {
-        mContext = context
-        val layoutInflater = LayoutInflater.from(context)
-        binding = DataBindingUtil.inflate(layoutInflater, getLayout(), this, true)
-        initView()
-    }
-
-    constructor(context: Context, attributes: AttributeSet?) : super(context, attributes) {
-        mContext = context
-        val layoutInflater = LayoutInflater.from(context)
-        binding = DataBindingUtil.inflate(layoutInflater, getLayout(), this, true)
-        initView()
-    }
-
-    constructor(context: Context, attributes: AttributeSet?, int: Int) : super(
-        context,
-        attributes,
-        int
-    ) {
-        mContext = context
-        val layoutInflater = LayoutInflater.from(context)
-        binding = DataBindingUtil.inflate(layoutInflater, getLayout(), this, true)
-        initView()
-    }
 
 
     private var test1 = listOf("value1", "value2", "value3", "value4", "value5", "value6")
@@ -79,6 +56,10 @@ class FragmentStaticLayout : FrameLayout {
 
     enum class Click {
         TEST1, TEST2, TEST3, TEST4, TEST5
+    }
+
+    init {
+        initView()
     }
 
     fun setInitView(title: String) {
@@ -150,6 +131,19 @@ class FragmentStaticLayout : FrameLayout {
         for (index in 0..30) {
             entries.add(Entry(index.toFloat(), index.toFloat() / 6 - 3))
         }
+
+        binding.chartFvc.setLineDataSetData(
+            binding.chartFvc.flowDataSetList()
+        )//设置数据
+
+        binding.chartFvc.setLineChartFlow(
+            yAxisMinimum = -5f,
+            yAxisMaximum = 5f,
+            countMaxX = 30f,
+            granularityY = 1f,
+            granularityX = 1f,
+            titleCentent = "容量-时间"
+        )
 
         binding.rvFvc.layoutManager = LinearLayoutManager(context)
 

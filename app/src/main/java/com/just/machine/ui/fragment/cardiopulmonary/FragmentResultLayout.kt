@@ -23,13 +23,20 @@ import com.just.news.R
 import com.just.news.databinding.FragmentResultBinding
 
 
-class FragmentResultLayout : FrameLayout {
+class FragmentResultLayout @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : FrameLayout(context, attrs, defStyleAttr) {
+
+    private val binding: FragmentResultBinding = DataBindingUtil.inflate(
+        LayoutInflater.from(context),
+        R.layout.fragment_lung,
+        this,
+        true
+    )
 
     private val tag = FragmentResultLayout::class.java.name
-
-    var binding: FragmentResultBinding
-
-    private var mContext: Context
 
     private var adapter: ResultAdapter? = null
 
@@ -45,30 +52,6 @@ class FragmentResultLayout : FrameLayout {
         FLOWRATE//动态流速环分析
     }
 
-    constructor(context: Context) : super(context) {
-        mContext = context
-        val layoutInflater = LayoutInflater.from(context)
-        binding = DataBindingUtil.inflate(layoutInflater, getLayout(), this, true)
-        initView()
-    }
-
-    constructor(context: Context, attributes: AttributeSet?) : super(context, attributes) {
-        mContext = context
-        val layoutInflater = LayoutInflater.from(context)
-        binding = DataBindingUtil.inflate(layoutInflater, getLayout(), this, true)
-        initView()
-    }
-
-    constructor(context: Context, attributes: AttributeSet?, int: Int) : super(
-        context,
-        attributes,
-        int
-    ) {
-        mContext = context
-        val layoutInflater = LayoutInflater.from(context)
-        binding = DataBindingUtil.inflate(layoutInflater, getLayout(), this, true)
-        initView()
-    }
 
     private fun initView() {
         adapter = ResultAdapter(context)
