@@ -141,7 +141,7 @@
                     android:layout_height="match_parent" />
 
 
-            <com.google.android.material.internal.BaselineLayout
+            <com.justsafe.libview.view.BaseLineChart
                     android:id="@+id/chart_fvc"
                     android:visibility="gone"
                     android:layout_width="match_parent"

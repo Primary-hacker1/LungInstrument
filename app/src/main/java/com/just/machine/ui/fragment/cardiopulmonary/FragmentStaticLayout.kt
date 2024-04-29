@@ -89,7 +89,6 @@ class FragmentStaticLayout : FrameLayout {
                 binding.previewChart.gone()
                 binding.chartFvc.visible()
             }
-
             else -> {
                 binding.llChat.visible()
                 binding.previewChart.visible()
@@ -162,6 +161,8 @@ class FragmentStaticLayout : FrameLayout {
 
         binding.rvFvc.adapter = adapter
     }
+
+
 
     private fun initData() {
         routineLungList = mutableListOf(
