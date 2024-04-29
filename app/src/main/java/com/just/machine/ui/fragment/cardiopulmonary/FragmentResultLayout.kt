@@ -18,6 +18,7 @@ import com.github.mikephil.charting.data.ScatterData
 import com.github.mikephil.charting.data.ScatterDataSet
 import com.github.mikephil.charting.interfaces.datasets.IScatterDataSet
 import com.just.machine.model.DynamicResultBean
+import com.just.machine.model.staticlung.LungFormula
 import com.just.machine.ui.adapter.ResultAdapter
 import com.just.news.R
 import com.just.news.databinding.FragmentResultBinding
@@ -31,7 +32,7 @@ class FragmentResultLayout @JvmOverloads constructor(
 
     private val binding: FragmentResultBinding = DataBindingUtil.inflate(
         LayoutInflater.from(context),
-        R.layout.fragment_lung,
+        R.layout.fragment_result,
         this,
         true
     )
@@ -50,6 +51,12 @@ class FragmentResultLayout @JvmOverloads constructor(
         COMPENSATORY,//呼吸代偿点分析
 //        SLOP,//斜率分析
         FLOWRATE//动态流速环分析
+    }
+
+    init {
+        initView()
+        val lungFormula = LungFormula()
+        lungFormula.main()
     }
 
 
