@@ -32,7 +32,7 @@ class SixMinReportPatientSelfItemAdapter(var mContext: Context) :
         binding.siminReportRbPatientSelfItem.isChecked = item.itemCheck == "1"
         binding.siminReportRbPatientSelfItem.isEnabled = item.itemStatus == "1"
         if(item.itemStatus == "0"){
-            binding.siminReportRbPatientSelfItem.alpha = 0.2f
+            binding.siminReportRbPatientSelfItem.alpha = 0.5f
         }else{
             binding.siminReportRbPatientSelfItem.alpha = 1.0f
         }

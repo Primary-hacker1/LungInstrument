@@ -1,7 +1,6 @@
 package com.just.machine.ui.activity
 
 import android.content.Intent
-import android.graphics.Typeface
 import android.text.Html
 import android.util.Log
 import android.util.TypedValue
@@ -24,19 +23,21 @@ import com.just.machine.model.SixMinReportEditBloodPressure
 import com.just.machine.model.SixMinReportItemBean
 import com.just.machine.model.SixMinReportPatientSelfBean
 import com.just.machine.model.SixMinReportPatientSelfItemBean
+import com.just.machine.model.sixminreport.SixMinReportEvaluation
 import com.just.machine.model.sixminreport.SixMinReportOther
 import com.just.machine.model.sixminreport.SixMinReportPrescription
+import com.just.machine.model.sixminreport.SixMinReportStride
 import com.just.machine.ui.adapter.SixMinReportPatientSelfAdapter
 import com.just.machine.ui.dialog.CommonDialogFragment
 import com.just.machine.ui.dialog.SixMinReportEditBloodPressureFragment
 import com.just.machine.ui.dialog.SixMinReportPrescriptionFragment
 import com.just.machine.ui.dialog.SixMinReportSelfCheckBeforeTestFragment
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.machine.util.SnappingStepper
 import com.just.machine.util.SpinnerHelper
 import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.ActivitySixMinPreReportBinding
-import com.justsafe.libview.util.StringUtils
 import com.justsafe.libview.util.SystemUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -50,10 +51,10 @@ import java.math.BigDecimal
 class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
-    private lateinit var spSportTime: SpinnerHelper
     private var reportRowList = mutableListOf<SixMinReportItemBean>()
     private var sixMinPatientId = "" //患者id
     private var sixMinReportNo = "" //报告id
+    private var sixMinReportType = "" //跳转类型 1新增 2编辑
     private lateinit var usbTransferUtil: USBTransferUtil
     private var sixMinRecordsBean: SixMinRecordsBean = SixMinRecordsBean()//6分钟报告信息
     private var patientSelfList = mutableListOf<SixMinReportPatientSelfBean>()
@@ -61,6 +62,9 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
     private var sixMinReportPrescription: SixMinReportPrescription =
         SixMinReportPrescription()//6分钟报告处方信息
     private var sixMinReportBloodOther: SixMinReportOther = SixMinReportOther()//6分钟其它信息
+    private var sixMinReportStride: SixMinReportStride = SixMinReportStride()//6分钟步速信息
+    private var sixMinReportEvaluation: SixMinReportEvaluation = SixMinReportEvaluation()//6分钟综合评估信息
+    private var strideAvg: BigDecimal = BigDecimal(0.00)
 
     override fun getViewBinding() = ActivitySixMinPreReportBinding.inflate(layoutInflater)
 
@@ -70,6 +74,8 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
             intent.extras?.getString(Constants.sixMinPatientInfo).toString()
         sixMinReportNo =
             intent.extras?.getString(Constants.sixMinReportNo).toString()
+        sixMinReportType =
+            intent.extras?.getString(Constants.sixMinReportType).toString()
         patientSelfList.clear()
         val patientBreathSelfItemList = mutableListOf<SixMinReportPatientSelfItemBean>()
         patientBreathSelfItemList.clear()
@@ -117,7 +123,7 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
         binding.sixminRvPatientSelfCheck.adapter = patientSelfItemAdapter
 
         initClickListener()
-        initSportTimeSpinner()
+        initValueChangeListener()
 
         lifecycleScope.launch {
             kotlinx.coroutines.delay(500L)
@@ -125,31 +131,22 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
         }
     }
 
-    private fun initSportTimeSpinner() {
-        spSportTime =
-            SpinnerHelper(
-                this,
-                binding.sixminSpSportTime,
-                R.array.spinner_sixmin_report_sport_time
-            )
-        spSportTime.setSelection(0)
-        spSportTime.setSpinnerSelectionListener(object : SpinnerHelper.SpinnerSelectionListener {
-            override fun onItemSelected(selectedItem: String, view: View?) {
-                if (view != null) {
-                    val textView: TextView = view as TextView
-                    textView.setTextColor(
-                        ContextCompat.getColor(
-                            this@SixMinPreReportActivity,
-                            R.color.text3
-                        )
-                    )
-                    textView.textSize = 18f
-                    textView.setTypeface(null, Typeface.BOLD)
-                    sixMinReportPrescription.movementTime = selectedItem
-                }
-            }
+    private fun initValueChangeListener() {
+        binding.sixminPreSpSportTime.setOnValueChangeListener { _, value ->
+            sixMinReportPrescription.movementTime = value.toString()
+            updatePrescriptionView()
+        }
 
-            override fun onNothingSelected() {
+        binding.sixminPreSpWeeklyCount.setOnValueChangeListener(object:
+            SnappingStepper.SnappingStepperValueChangeListener{
+            override fun onValueChange(view: View?, value: Int) {
+
+            }
+        })
+
+        binding.sixminPreSpPrescriptionPeriod.setOnValueChangeListener(object:
+            SnappingStepper.SnappingStepperValueChangeListener{
+            override fun onValueChange(view: View?, value: Int) {
 
             }
         })
@@ -278,7 +275,7 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
             val prescriptionFragment =
                 SixMinReportPrescriptionFragment.startPrescriptionDialogFragment(
                     supportFragmentManager,
-                    sixMinReportPrescription
+                    sixMinReportPrescription,
                 )
             prescriptionFragment.setPrescriptionDialogOnClickListener(object :
                 SixMinReportPrescriptionFragment.SixMinReportPrescriptionDialogListener {
@@ -289,7 +286,27 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                     metab: String,
                     borg: String
                 ) {
-
+                    if (stride == "出具") {
+                        sixMinReportPrescription.distanceState = "1"
+                    } else {
+                        sixMinReportPrescription.distanceState = "2"
+                    }
+                    if (heart == "出具") {
+                        sixMinReportPrescription.heartrateState = "1"
+                    } else {
+                        sixMinReportPrescription.heartrateState = "2"
+                    }
+                    if (metab == "出具") {
+                        sixMinReportPrescription.metabState = "1"
+                    } else {
+                        sixMinReportPrescription.metabState = "2"
+                    }
+                    if (borg == "出具") {
+                        sixMinReportPrescription.prescripState = "1"
+                    } else {
+                        sixMinReportPrescription.prescripState = "2"
+                    }
+                    updatePrescriptionView()
                 }
 
                 override fun onClickClose() {
@@ -352,6 +369,16 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                 }
             })
         }
+        binding.sixminRbSportTypeWalk.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked){
+                sixMinReportPrescription.movementWay = "0"
+            }
+        }
+        binding.sixminRbSportTypeRun.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked){
+                sixMinReportPrescription.movementWay = "1"
+            }
+        }
     }
 
     private fun beanQuery(any: Any) {
@@ -361,23 +388,19 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                 sixMinRecordsBean = datas[0] as SixMinRecordsBean
 
                 sixMinReportPrescription = sixMinRecordsBean.prescriptionBean[0]
+                sixMinReportPrescription.prescripState = "1"
                 sixMinReportBloodOther = sixMinRecordsBean.otherBean[0]
+                sixMinReportStride = sixMinRecordsBean.strideBean[0]
+                sixMinReportEvaluation = sixMinRecordsBean.evaluationBean[0]
+
+                initTable()
 
                 Log.d("sixMinRecordsBean", Gson().toJson(sixMinRecordsBean))
 
-                binding.sixminTvFinishCircle.text =
-                    Html.fromHtml(
-                        String.format(
-                            getString(R.string.sixmin_test_report_finish_circles),
-                            sixMinRecordsBean.evaluationBean[0].turnsNumber
-                        )
-                    )
-                binding.sixminTvUnfinishCircle.text = Html.fromHtml(
-                    String.format(
-                        getString(R.string.sixmin_test_report_unfinish_circles),
-                        sixMinRecordsBean.evaluationBean[0].unfinishedDistance
-                    )
-                )
+                binding.sixminTvFinishCircle.setText(sixMinRecordsBean.evaluationBean[0].turnsNumber)
+
+                binding.sixminTvUnfinishCircle.setText(sixMinRecordsBean.evaluationBean[0].unfinishedDistance)
+
                 binding.sixminTvTotalDistance.text =
                     Html.fromHtml(
                         String.format(
@@ -387,7 +410,7 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                     )
                 val stopTime = sixMinRecordsBean.otherBean[0].stopTime
                 val type = sixMinRecordsBean.otherBean[0].stopOr
-                val strideAvg = usbTransferUtil.dealStrideAvg(
+                strideAvg = usbTransferUtil.dealStrideAvg(
                     BigDecimal(sixMinRecordsBean.evaluationBean[0].totalDistance),
                     type.toInt(),
                     stopTime
@@ -408,31 +431,17 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                         sixMinRecordsBean.infoBean.restDuration
                     )
                 )
-                if (sixMinReportPrescription.movementWay == "" ||sixMinReportPrescription.movementWay == "0") {
+                if (sixMinReportPrescription.movementWay == "" || sixMinReportPrescription.movementWay == "0") {
                     binding.sixminRbSportTypeWalk.isChecked = true
                 } else {
                     binding.sixminRbSportTypeRun.isChecked = true
                 }
 
-                if (sixMinReportPrescription.movementTime != "") {
-                    when (sixMinReportPrescription.movementTime) {
-                        "10" -> {
-                            spSportTime.setSelection(0)
-                        }
-
-                        "20" -> {
-                            spSportTime.setSelection(1)
-                        }
-
-                        "30" -> {
-                            spSportTime.setSelection(2)
-                        }
-                    }
+                if(sixMinReportPrescription.movementTime != ""){
+                    binding.sixminPreSpSportTime.value = sixMinReportPrescription.movementTime.toInt()
                 }
 
                 updatePrescriptionView()
-
-                initTable()
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -440,62 +449,184 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
     }
 
     private fun updatePrescriptionView() {
-        binding.sixminPreEtStrideLow.setText(sixMinReportPrescription.strideBefore)
-        binding.sixminPreEtStrideHigh.setText(sixMinReportPrescription.strideAfter)
-
-        binding.sixminPreEtDistanceLow.setText(sixMinReportPrescription.movementDistance)
-        binding.sixminPreEtDistanceHigh.setText(sixMinReportPrescription.movementDistanceAfter)
-
-        binding.sixminPreEtSportEcg.setText(sixMinReportPrescription.heartrateRate)
-        binding.sixminPreEtMetab.setText(sixMinReportPrescription.metabMet)
-
-        binding.sixminPreEtTiredControlLow.setText(sixMinReportPrescription.pllevBefore)
-        binding.sixminPreEtTiredControlHigh.setText(sixMinReportPrescription.pllevAfter)
-
-        binding.sixminPreEtWeeklyCount.setText(sixMinReportPrescription.movementWeeklyNumber)
-
-        if (sixMinReportPrescription.cycleUnit != "") {
-            when (sixMinReportPrescription.cycleUnit) {
-                "0" -> {
-                    binding.sixminRbPrescriptionCycleWeek.isChecked = true
-                }
-
-                "1" -> {
-                    binding.sixminRbPrescriptionCycleMonth.isChecked = true
-                }
-
-                "2" -> {
-                    binding.sixminRbPrescriptionCycleYear.isChecked = true
+        try {
+            //运动步速
+            var ydbsStr1 = ""
+            var ydbsStr2 = ""
+            if (sixMinReportPrescription.movementWay.isEmpty()) {
+                ydbsStr1 = usbTransferUtil.dealYdbsStrs(
+                    "0.5",
+                    BigDecimal(if (sixMinReportStride.strideAverage == "") "0.00" else sixMinReportStride.strideAverage)
+                )
+                ydbsStr2 = usbTransferUtil.dealYdbsStrs(
+                    "0.6",
+                    BigDecimal(if (sixMinReportStride.strideAverage == "") "0.00" else sixMinReportStride.strideAverage)
+                )
+            } else {
+                //强度版本
+                if (sixMinReportPrescription.prescripState == "0") {
+                    ydbsStr1 = usbTransferUtil.dealYdbsStrs("0.5", strideAvg)
+                    ydbsStr2 = usbTransferUtil.dealYdbsStrs("0.6", strideAvg)
+                } else if (sixMinReportPrescription.prescripState == "1") {
+                    //验证是否出具
+                    if (sixMinReportPrescription.distanceState == "1") {
+                        ydbsStr1 = sixMinReportPrescription.strideBefore
+                        ydbsStr2 = sixMinReportPrescription.strideAfter
+                    } else if (sixMinReportPrescription.distanceState == "2") {
+                        ydbsStr1 = "/"
+                        ydbsStr2 = "/"
+                    }
                 }
             }
-        }
 
-        binding.sixminTvPrescriptionConclusion.text =
-            "本次未能完成六分钟试验，运动了0分11秒，停止原因：心脏周围的组织和体液都能导电，因此可将人体看成为一个具有长、宽、厚三度空间的容积导体。"
+            binding.sixminPreEtStrideLow.setText(ydbsStr1)
+            binding.sixminPreEtStrideHigh.setText(ydbsStr2)
 
-
-        if (sixMinReportBloodOther.stopOr == "1") {
-            var reasonStr: String = sixMinReportBloodOther.stopReason
-            if (reasonStr.isEmpty()) {
-                reasonStr = "无"
+            //运动周期
+            var zhouqiStrs: Array<String>? = arrayOf()
+            zhouqiStrs = if (sixMinReportPrescription.movementWay.isEmpty()) {
+                val cf3qiangduStrs: Array<String> =
+                    usbTransferUtil.dealQiangdu(BigDecimal(sixMinReportEvaluation.metabEquivalent))
+                usbTransferUtil.dealzhouqi(cf3qiangduStrs)
+            } else {
+                val sj: String = sixMinReportPrescription.movementTime
+                val mn: String = sixMinReportPrescription.movementWeeklyNumber
+                arrayOf(sj, mn)
             }
-            binding.sixminTvPrescriptionConclusion.text  = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_test_conclusion_unfinish),sixMinReportBloodOther.stopTime,reasonStr))
-        } else if (sixMinReportBloodOther.stopOr == "0") {
-            var badSymptomsStr: String = sixMinReportBloodOther.badSymptoms
-            if (badSymptomsStr.isEmpty()) {
-                badSymptomsStr = "无"
+
+            if (!zhouqiStrs.isNullOrEmpty()) {
+                binding.sixminPreSpSportTime.value = zhouqiStrs[0].toInt()
+                binding.sixminPreSpWeeklyCount.value = zhouqiStrs[1].toInt()
             }
-            binding.sixminTvPrescriptionConclusion.text  = "<html>本次完成六分钟试验，结束后的不良症状：$badSymptomsStr</html>"
-            binding.sixminTvPrescriptionConclusion.text  = Html.fromHtml(String.format(getString(R.string.sixmin_test_report_test_conclusion_finish),badSymptomsStr))
-        }
 
-        if (sixMinReportPrescription.remarke == "") {
-            binding.sixminTvReportNote.text = "无"
-        } else {
-            binding.sixminTvReportNote.text = sixMinReportPrescription.remarke
-        }
+            //运动距离
+            var ydjlStr1 = ""
+            var ydjlStr2 = ""
+            if (sixMinReportPrescription.movementWay.isEmpty()) {
+                ydjlStr1 = usbTransferUtil.dealtjjlStrs(
+                    "0.5",
+                    BigDecimal(if (sixMinReportStride.strideAverage == "") "0.00" else sixMinReportStride.strideAverage),
+                    zhouqiStrs!![0].toInt()
+                )
+                ydjlStr2 = usbTransferUtil.dealtjjlStrs(
+                    "0.6",
+                    BigDecimal(if (sixMinReportStride.strideAverage == "") "0.00" else sixMinReportStride.strideAverage),
+                    zhouqiStrs[0].toInt()
+                )
+            } else {
+                //强度版本
+                if (sixMinReportPrescription.prescripState == "0") {
+                    ydjlStr1 = sixMinReportPrescription.movementDistance
+                    ydjlStr2 = sixMinReportPrescription.movementDistance
+                } else if (sixMinReportPrescription.prescripState == "1") {
+                    //验证是否出具
+                    if (sixMinReportPrescription.distanceState == "1") {
+                        ydjlStr1 = sixMinReportPrescription.movementDistance
+                        ydjlStr2 = sixMinReportPrescription.movementDistanceAfter
+                    } else if (sixMinReportPrescription.distanceState == "2") {
+                        ydjlStr1 = "/"
+                        ydjlStr2 = "/"
+                    }
+                }
+            }
+            binding.sixminPreEtDistanceLow.setText(ydjlStr1)
+            binding.sixminPreEtDistanceHigh.setText(ydjlStr2)
 
-        binding.sixminEtRecommendDoctor.setText(sixMinReportPrescription.remarkeName)
+            //运动心率
+            var ydxlStr = ""
+            if (sixMinReportPrescription.movementWay.isNotEmpty()) {
+                //验证是否出具
+                if (sixMinReportPrescription.heartrateState == "1") {
+                    ydxlStr = sixMinReportPrescription.heartrateRate
+                } else if (sixMinReportPrescription.distanceState == "2") {
+                    ydxlStr = "/"
+                }
+            }
+            binding.sixminPreEtSportEcg.setText(ydxlStr)
+
+            //代谢当量
+            var dxdlStr = ""
+            if (sixMinReportPrescription.movementWay.isNotEmpty()) {
+                //验证是否出具
+                if (sixMinReportPrescription.metabState == "1") {
+                    dxdlStr = sixMinReportPrescription.metabMet
+                } else if (sixMinReportPrescription.metabState == "2") {
+                    dxdlStr = "/"
+                }
+            }
+            binding.sixminPreEtMetab.setText(dxdlStr)
+
+            //疲劳控制
+            var plzhi1Str = "4"
+            var plzhi2Str = "6"
+            if (sixMinReportPrescription.movementWay.isNotEmpty()) {
+                //验证是否出具
+                if (sixMinReportPrescription.pllevState == "1") {
+                    plzhi1Str = sixMinReportPrescription.pllevBefore
+                    plzhi2Str = sixMinReportPrescription.pllevAfter
+                } else if (sixMinReportPrescription.metabState == "2") {
+                    plzhi1Str = "/"
+                    plzhi2Str = "/"
+                }
+            }
+            binding.sixminPreEtTiredControlLow.setText(plzhi1Str)
+            binding.sixminPreEtTiredControlHigh.setText(plzhi2Str)
+
+            //处方周期
+            if (sixMinReportPrescription.movementWay.isEmpty()) {
+                binding.sixminPreSpPrescriptionPeriod.value = sixMinReportPrescription.movementCycle.toInt()
+                binding.sixminRbPrescriptionCycleWeek.isChecked = true
+            } else {
+                when (sixMinReportPrescription.cycleUnit) {
+                    "0" -> {
+                        binding.sixminRbPrescriptionCycleWeek.isChecked = true
+                    }
+
+                    "1" -> {
+                        binding.sixminRbPrescriptionCycleMonth.isChecked = true
+                    }
+
+                    else -> {
+                        binding.sixminRbPrescriptionCycleYear.isChecked = true
+                    }
+                }
+            }
+
+            //试验结论
+            if (sixMinReportBloodOther.stopOr == "1") {
+                var reasonStr: String = sixMinReportBloodOther.stopReason
+                if (reasonStr.isEmpty()) {
+                    reasonStr = "无"
+                }
+                binding.sixminTvPrescriptionConclusion.text = Html.fromHtml(
+                    String.format(
+                        getString(R.string.sixmin_test_report_test_conclusion_unfinish),
+                        sixMinReportBloodOther.stopTime,
+                        reasonStr
+                    )
+                )
+            } else if (sixMinReportBloodOther.stopOr == "0") {
+                var badSymptomsStr: String = sixMinReportBloodOther.badSymptoms
+                if (badSymptomsStr.isEmpty()) {
+                    badSymptomsStr = "无"
+                }
+                binding.sixminTvPrescriptionConclusion.text = Html.fromHtml(
+                    String.format(
+                        getString(R.string.sixmin_test_report_test_conclusion_finish),
+                        badSymptomsStr
+                    )
+                )
+            }
+
+            //注意事项
+            if(sixMinReportPrescription.movementWay.isNotEmpty() && sixMinReportPrescription.remarke.isNotEmpty()){
+                binding.sixminEtReportNote.setText(sixMinReportPrescription.remarke)
+            }
+
+            binding.sixminEtRecommendDoctor.setText(sixMinReportPrescription.remarkeName)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun initTable() {

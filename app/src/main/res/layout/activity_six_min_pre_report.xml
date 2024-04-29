@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:stepper="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -150,7 +151,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="0.75dp"
                                 android:layout_marginStart="20dp"
-                                android:layout_marginTop="30dp"
+                                android:layout_marginTop="25dp"
                                 android:layout_marginEnd="5dp"
                                 android:background="#231815" />
 
@@ -195,9 +196,9 @@
                             android:orientation="horizontal">
 
                             <LinearLayout
-                                android:layout_width="0dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
+                                android:layout_gravity="center_vertical"
                                 android:orientation="horizontal">
 
                                 <ImageView
@@ -208,11 +209,30 @@
                                     android:src="@mipmap/circle_finish" />
 
                                 <TextView
-                                    android:id="@+id/sixmin_tv_finish_circle"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginStart="5dp"
+                                    android:text="圈数:"
+                                    android:textColor="@color/text3" />
+
+                                <EditText
+                                    android:id="@+id/sixmin_tv_finish_circle"
+                                    android:layout_width="35dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginHorizontal="5dp"
+                                    android:gravity="center"
+                                    android:inputType="number"
+                                    android:textColor="@color/text3"
+                                    android:textSize="19sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:text="圈"
                                     android:textColor="@color/text3" />
 
                             </LinearLayout>
@@ -220,7 +240,9 @@
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1.5"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="10dp"
+                                android:layout_weight="1.8"
                                 android:orientation="horizontal">
 
                                 <ImageView
@@ -231,19 +253,39 @@
                                     android:src="@mipmap/circle_unfinish" />
 
                                 <TextView
-                                    android:id="@+id/sixmin_tv_unfinish_circle"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginStart="5dp"
+                                    android:text="未走完的那圈还剩下:"
+                                    android:textColor="@color/text3" />
+
+                                <EditText
+                                    android:id="@+id/sixmin_tv_unfinish_circle"
+                                    android:layout_width="80dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginHorizontal="5dp"
+                                    android:gravity="center"
+                                    android:inputType="numberDecimal"
+                                    android:textColor="@color/text3"
+                                    android:textSize="19sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:text="米"
                                     android:textColor="@color/text3" />
 
                             </LinearLayout>
 
                             <LinearLayout
-                                android:layout_width="0dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="10dp"
                                 android:orientation="horizontal">
 
                                 <ImageView
@@ -469,18 +511,27 @@
                                         android:text="建议单次运动时长:"
                                         android:textColor="@color/text3" />
 
-                                    <Spinner
-                                        android:id="@+id/sixmin_sp_sport_time"
-                                        android:layout_width="80dp"
+                                    <!--                                    <Spinner-->
+                                    <!--                                        android:id="@+id/sixmin_sp_sport_time"-->
+                                    <!--                                        android:layout_width="80dp"-->
+                                    <!--                                        android:layout_height="25dp"-->
+                                    <!--                                        android:layout_gravity="center_vertical"-->
+                                    <!--                                        android:layout_marginStart="@dimen/space_10"-->
+                                    <!--                                        android:background="@drawable/sp_bg"-->
+                                    <!--                                        android:gravity="center_vertical"-->
+                                    <!--                                        android:overlapAnchor="false"-->
+                                    <!--                                        android:paddingStart="@dimen/space_10"-->
+                                    <!--                                        android:textSize="16sp"-->
+                                    <!--                                        tools:ignore="RtlSymmetry" />-->
+
+                                    <com.just.machine.util.SnappingStepper
+                                        android:id="@+id/sixmin_pre_sp_sport_time"
+                                        android:layout_width="85dp"
                                         android:layout_height="25dp"
                                         android:layout_gravity="center_vertical"
-                                        android:layout_marginStart="@dimen/space_10"
-                                        android:background="@drawable/sp_bg"
-                                        android:gravity="center_vertical"
-                                        android:overlapAnchor="false"
-                                        android:paddingStart="@dimen/space_10"
-                                        android:textSize="16sp"
-                                        tools:ignore="RtlSymmetry" />
+                                        android:layout_marginEnd="20dp"
+                                        stepper:min="5"
+                                        stepper:step="5" />
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -670,12 +721,22 @@
                                         android:text="建议每周:"
                                         android:textColor="@color/text3" />
 
-                                    <EditText
-                                        android:id="@+id/sixmin_pre_et_weekly_count"
-                                        android:layout_width="50dp"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:inputType="number" />
+                                    <!--                                    <EditText-->
+                                    <!--                                        android:id="@+id/sixmin_pre_et_weekly_count"-->
+                                    <!--                                        android:layout_width="50dp"-->
+                                    <!--                                        android:layout_height="wrap_content"-->
+                                    <!--                                        android:gravity="center"-->
+                                    <!--                                        android:inputType="number"-->
+                                    <!--                                        android:textStyle="bold" />-->
+
+                                    <com.just.machine.util.SnappingStepper
+                                        android:id="@+id/sixmin_pre_sp_weekly_count"
+                                        android:layout_width="85dp"
+                                        android:layout_height="25dp"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginEnd="20dp"
+                                        stepper:min="1"
+                                        stepper:step="1" />
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -698,6 +759,15 @@
                                         android:layout_gravity="center_vertical"
                                         android:text="，处方周期: "
                                         android:textColor="@color/text3" />
+
+                                    <com.just.machine.util.SnappingStepper
+                                        android:id="@+id/sixmin_pre_sp_prescription_period"
+                                        android:layout_width="85dp"
+                                        android:layout_height="25dp"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginEnd="20dp"
+                                        stepper:min="1"
+                                        stepper:step="1" />
 
                                     <RadioGroup
                                         android:layout_width="wrap_content"
@@ -757,8 +827,8 @@
                                 android:text="注意事项:"
                                 android:textColor="@color/text3" />
 
-                            <TextView
-                                android:id="@+id/sixmin_tv_report_note"
+                            <EditText
+                                android:id="@+id/sixmin_et_report_note"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/text3" />

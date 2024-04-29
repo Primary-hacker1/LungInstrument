@@ -22,6 +22,7 @@ import com.just.machine.model.BloodOxyLineEntryBean;
 import com.just.machine.model.UsbSerialData;
 import com.just.machine.model.sixminreport.SixMinBloodOxygen;
 import com.just.machine.model.sixminreport.SixMinReportEvaluation;
+import com.just.machine.model.sixminreport.SixMinReportStride;
 import com.just.machine.model.sixminreport.SixMinReportWalk;
 import com.just.machine.model.systemsetting.SixMinSysSettingBean;
 import com.just.news.BuildConfig;
@@ -368,7 +369,7 @@ public class USBTransferUtil {
         map.clear();
         mapNew.clear();
         mapBloodOxygen.clear();
-        byteStr = null;
+        byteStr = "";
         usbSerialData = null;
         isBegin = false;//是否开始试验
         bloodState = 0;
@@ -384,11 +385,11 @@ public class USBTransferUtil {
         bloodPressureConnection = false;//血压连接状态
         bloodOxygenConnection = false;//血氧连接状态
         batteryLevel = 0;//电池电量
-        restBloodOxy = null;//静息血氧集合
+        restBloodOxy = "";//静息血氧集合
         restTime = 0;//休息时长
-        stepsStr = null;//步数
+        stepsStr = "";//步数
         checkBSInd = 0;
-        checkBSStr = null;
+        checkBSStr = "";
         bloodOxyLineData.clear();
     }
 
@@ -628,6 +629,68 @@ public class USBTransferUtil {
     }
 
     /**
+     * 运动强度
+     * 较低强度：30~39%，较轻，<2.9MET;
+     * 中强度：40~59%，稍累，3~5.9MET；
+     * 高强度：60~89%，累，>6MET;
+     *
+     * @param metabEquivalent
+     * @return
+     */
+    public String[] dealQiangdu(BigDecimal metabEquivalent) {
+        String[] strings = null;
+        String qiangduzhi1 = "";
+        String qiangduzhi2 = "";
+        if (null == metabEquivalent) {
+            metabEquivalent = new BigDecimal("0");
+        }
+        //低强度
+        if ((metabEquivalent.compareTo(new BigDecimal("2.9")) < 1)) {
+            qiangduzhi1 = "30";
+            qiangduzhi2 = "39";
+        } else if ((metabEquivalent.compareTo(new BigDecimal("3")) > -1) &&
+                (metabEquivalent.compareTo(new BigDecimal("5.9")) < 1)) {
+            //中强度
+            qiangduzhi1 = "40";
+            qiangduzhi2 = "59";
+        } else if (metabEquivalent.compareTo(new BigDecimal("6")) > -1) {
+            //高强度
+            qiangduzhi1 = "60";
+            qiangduzhi2 = "89";
+        }
+        strings = new String[]{qiangduzhi1, qiangduzhi2};
+        return strings;
+    }
+
+    /**
+     * 处理运动周期
+     * 【运动时间，运动频度】
+     *
+     * @param qiangduStrs
+     * @return
+     */
+    public String[] dealzhouqi(String[] qiangduStrs) {
+        String[] strings = null;
+        if (qiangduStrs.length > 1) {
+            Integer qd1 = Integer.valueOf(qiangduStrs[0]);
+            Integer qd2 = Integer.valueOf(qiangduStrs[1]);
+            //低强度
+            if (qd2 < 40) {
+                strings = new String[]{"10", "3"};
+            } else if (qd1 >= 40 && qd2 < 60) {
+                //中强度
+                strings = new String[]{"30", "3"};
+            } else if (qd1 >= 60) {
+                //高强度
+                strings = new String[]{"30", "3"};
+            } else {
+                strings = new String[]{"30", "3"};
+            }
+        }
+        return strings;
+    }
+
+    /**
      * 处理运动步速
      *
      * @param percentStr
@@ -652,6 +715,62 @@ public class USBTransferUtil {
         String tjjlStr = (strideAverage.multiply(new BigDecimal(percentStr)).multiply(new BigDecimal(shichang))
                 .setScale(1, BigDecimal.ROUND_HALF_UP)).toString();
         return tjjlStr;
+    }
+
+    /**
+     * 处理步速表
+     *
+     * @param reportStride
+     */
+    public void dealStride(SixMinReportStride reportStride, BigDecimal totalDistance, int timeInt) {
+        if (null != reportStride) {
+            List<BigDecimal> integers = new ArrayList<>();
+            reportStride.setStrideStop("0");
+            if (!reportStride.getStrideOne().isEmpty()) {
+                integers.add(BigDecimal.valueOf(Integer.parseInt(reportStride.getStrideOne())));
+            } else {
+                reportStride.setStrideOne("0.00");
+            }
+            if (!reportStride.getStrideTwo().isEmpty()) {
+                integers.add(BigDecimal.valueOf(Integer.parseInt(reportStride.getStrideTwo())));
+            } else {
+                reportStride.setStrideTwo("0.00");
+            }
+            if (!reportStride.getStrideThree().isEmpty()) {
+                integers.add(BigDecimal.valueOf(Integer.parseInt(reportStride.getStrideThree())));
+            } else {
+                reportStride.setStrideThree("0.00");
+            }
+            if (!reportStride.getStrideFour().isEmpty()) {
+                integers.add(BigDecimal.valueOf(Integer.parseInt(reportStride.getStrideFour())));
+            } else {
+                reportStride.setStrideFour("0.00");
+            }
+            if (!reportStride.getStrideFive().isEmpty()) {
+                integers.add(BigDecimal.valueOf(Integer.parseInt(reportStride.getStrideFive())));
+            } else {
+                reportStride.setStrideFive("0.00");
+            }
+            if (!reportStride.getStrideSix().isEmpty()) {
+                integers.add(BigDecimal.valueOf(Integer.parseInt(reportStride.getStrideSix())));
+            } else {
+                reportStride.setStrideSix("0.00");
+            }
+            BigDecimal min = new BigDecimal(0.00);
+            BigDecimal max = new BigDecimal(0.00);
+            if (integers.size() > 0) {
+                min = Collections.min(integers);
+                max = Collections.max(integers);
+            }
+            reportStride.setStrideBig(max.toString());
+            reportStride.setStrideSmall(min.toString());
+            BigDecimal avg = new BigDecimal("0.00");
+            if (totalDistance.compareTo(new BigDecimal(0)) == 1 && timeInt > 0) {
+                avg = totalDistance.divide(new BigDecimal(timeInt), 3, BigDecimal.ROUND_HALF_UP);
+                avg = avg.multiply(new BigDecimal(60)).setScale(1, BigDecimal.ROUND_HALF_UP);
+            }
+            reportStride.setStrideAverage(avg.toString());
+        }
     }
 
     /**

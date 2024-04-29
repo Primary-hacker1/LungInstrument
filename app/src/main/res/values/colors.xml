@@ -13,4 +13,8 @@
     <color name="c2F89DE">#2f89de</color>
     <color name="c965919">#965919</color>
 
+    <color name="cl_snappingstepper_button_normal">#2f89de</color>
+    <color name="cl_snappingstepper_button_press">#1f567b</color>
+    <color name="cl_snappingstepper_text">#000000</color>
+
 </resources>

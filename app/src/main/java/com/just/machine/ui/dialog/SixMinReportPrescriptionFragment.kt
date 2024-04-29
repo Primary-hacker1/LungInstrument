@@ -8,12 +8,8 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import com.common.base.BaseDialogFragment
-import com.common.network.LogUtils
-import com.just.machine.dao.PatientBean
 import com.just.machine.model.Constants
-import com.just.machine.model.SixMinReportEditBloodPressure
 import com.just.machine.model.sixminreport.SixMinReportPrescription
-import com.just.machine.util.DropDownPopWindow
 import com.just.machine.util.SpinnerHelper
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogSixminReportPrescriptionBinding
@@ -39,9 +35,10 @@ class SixMinReportPrescriptionFragment :
          */
         fun startPrescriptionDialogFragment(
 
-            fragmentManager: FragmentManager, bean: SixMinReportPrescription
+            fragmentManager: FragmentManager,
+            bean: SixMinReportPrescription,
 
-        ): SixMinReportPrescriptionFragment {
+            ): SixMinReportPrescriptionFragment {
 
             val dialogFragment = SixMinReportPrescriptionFragment()
 
@@ -83,11 +80,11 @@ class SixMinReportPrescriptionFragment :
         binding.sixminReportTvPrescriptionConfirm.setOnClickListener {
             dismiss()
             listener?.onClickConfirm(
-                spStride.getSelection().toString(),
-                spDistance.getSelection().toString(),
-                spHeatBeat.getSelection().toString(),
-                spMetab.getSelection().toString(),
-                spTired.getSelection().toString()
+                if (spStride.getSelection() == 0) "出具" else "不出具",
+                if (spDistance.getSelection() == 0) "出具" else "不出具",
+                if (spHeatBeat.getSelection() == 0) "出具" else "不出具",
+                if (spMetab.getSelection() == 0) "出具" else "不出具",
+                if (spTired.getSelection() == 0) "出具" else "不出具"
             )
         }
         binding.sixminReportTvPrescriptionClose.setOnClickListener {
@@ -114,7 +111,7 @@ class SixMinReportPrescriptionFragment :
             }
         })
 
-        val spDistance = SpinnerHelper(
+        spDistance = SpinnerHelper(
             requireContext(),
             binding.sixminReportTvPrescriptionDistance,
             R.array.spinner_sixmin_report_description
@@ -134,7 +131,7 @@ class SixMinReportPrescriptionFragment :
             }
         })
 
-        val spHeatBeat = SpinnerHelper(
+        spHeatBeat = SpinnerHelper(
             requireContext(),
             binding.sixminReportTvPrescriptionHeartbeat,
             R.array.spinner_sixmin_report_description
@@ -154,7 +151,7 @@ class SixMinReportPrescriptionFragment :
             }
         })
 
-        val spMetab = SpinnerHelper(
+        spMetab = SpinnerHelper(
             requireContext(),
             binding.sixminReportTvPrescriptionMetab,
             R.array.spinner_sixmin_report_description
@@ -174,7 +171,7 @@ class SixMinReportPrescriptionFragment :
             }
         })
 
-        val spTired = SpinnerHelper(
+        spTired = SpinnerHelper(
             requireContext(),
             binding.sixminReportTvPrescriptionTired,
             R.array.spinner_sixmin_report_description
@@ -193,6 +190,27 @@ class SixMinReportPrescriptionFragment :
 
             }
         })
+
+        if (prescriptionBean.distanceState == "1" || prescriptionBean.distanceState == "") {
+            spDistance.setSelection(0)
+        } else {
+            spDistance.setSelection(1)
+        }
+        if (prescriptionBean.heartrateState == "1" || prescriptionBean.heartrateState == "") {
+            spHeatBeat.setSelection(0)
+        } else {
+            spHeatBeat.setSelection(1)
+        }
+        if (prescriptionBean.metabState == "1" || prescriptionBean.metabState == "") {
+            spMetab.setSelection(0)
+        } else {
+            spMetab.setSelection(1)
+        }
+        if (prescriptionBean.pllevState == "1" || prescriptionBean.pllevState == "") {
+            spTired.setSelection(0)
+        } else {
+            spTired.setSelection(1)
+        }
     }
 
     override fun initData() {
