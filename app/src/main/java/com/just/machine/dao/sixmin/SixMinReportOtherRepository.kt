@@ -14,6 +14,8 @@ import javax.inject.Inject
  */
 class SixMinReportOtherRepository @Inject constructor(private val reportDao: SixMinReportOtherDao) {
 
+    fun deleteReportOther(id:String) = reportDao.deleteReportOtherReal(id)
+
     suspend fun updateReportOther(
         reportNo: String,
         beforeHigh: String,

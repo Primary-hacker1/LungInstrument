@@ -368,6 +368,33 @@ class MainViewModel @Inject constructor(
             sixMinReportHeartDao.insertReportHeart(bean)
         }
     }
+
+    /**
+     * 更新6分钟处方参数
+     */
+    fun updateSixMinReportPrescription(bean: SixMinReportPrescription) {
+        viewModelScope.launch {
+            sixMinReportPrescriptionDao.updateReportPrescription(bean)
+        }
+    }
+
+    /**
+     * 永久删除6分钟报告信息
+     */
+    fun deleteSixMinReportInfoReal(reportId: String) {
+        viewModelScope.launch {
+            sixMinReportInfoDao.deleteReportInfoReal(reportId)
+            sixMinReportBloodDao.deleteReportBloodOxyReal(reportId)
+            sixMinReportBreathingDao.deleteReportBreathing(reportId)
+            sixMinReportEvaluationDao.deleteReportEvaluation(reportId)
+            sixMinReportHeartDao.deleteReportHeart(reportId)
+            sixMinReportHeartEcgDao.deleteReportHeartEcg(reportId)
+            sixMinReportOtherDao.deleteReportOther(reportId)
+            sixMinReportPrescriptionDao.deleteReportPrescription(reportId)
+            sixMinReportStrideDao.deleteReportStride(reportId)
+            sixMinReportWalkDao.deleteReportWalk(reportId)
+        }
+    }
 }
 
 

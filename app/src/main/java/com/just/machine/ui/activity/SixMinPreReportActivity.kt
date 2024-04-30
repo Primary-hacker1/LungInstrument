@@ -1,6 +1,7 @@
 package com.just.machine.ui.activity
 
 import android.content.Intent
+import android.os.Bundle
 import android.text.Html
 import android.util.Log
 import android.util.TypedValue
@@ -71,52 +72,139 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
         sixMinReportNo = intent.extras?.getString(Constants.sixMinReportNo).toString()
         sixMinReportType = intent.extras?.getString(Constants.sixMinReportType).toString()
         patientSelfList.clear()
+        lifecycleScope.launch {
+            kotlinx.coroutines.delay(0L)
+            viewModel.getSixMinReportInfoById(sixMinPatientId.toLong(), sixMinReportNo)
+        }
+        initClickListener()
+    }
+
+    private fun initSelfCheck() {
+        val fatigueLevel = sixMinReportEvaluation.fatigueLevel
+        val breathingLevel = sixMinReportEvaluation.breathingLevel
+
+        patientSelfList.clear()
         val patientBreathSelfItemList = mutableListOf<SixMinReportPatientSelfItemBean>()
-        patientBreathSelfItemList.clear()
-        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("0级", "没有"))
-        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("0.5级", "非常非常轻"))
-        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("1级", "非常轻"))
-        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("2级", "很轻"))
-        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("3级", "中度"))
-        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("4级", "较严重"))
-        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("5-6级", "严重"))
-        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("7-9级", "非常严重"))
-        patientBreathSelfItemList.add(SixMinReportPatientSelfItemBean("10级", "非常非常严重"))
+        patientBreathSelfItemList.add(
+            SixMinReportPatientSelfItemBean(
+                "0级", "没有", if (breathingLevel == "0") "1" else "0",
+                if (sixMinReportPrescription.movementWay == "") "1" else "0"
+            )
+        )
+        patientBreathSelfItemList.add(
+            SixMinReportPatientSelfItemBean(
+                "0.5级", "非常非常轻", if (breathingLevel == "0.5") "1" else "0",
+                if (sixMinReportPrescription.movementWay == "") "1" else "0"
+            )
+        )
+        patientBreathSelfItemList.add(
+            SixMinReportPatientSelfItemBean(
+                "1级", "非常轻", if (breathingLevel == "1") "1" else "0",
+                if (sixMinReportPrescription.movementWay == "") "1" else "0"
+            )
+        )
+        patientBreathSelfItemList.add(
+            SixMinReportPatientSelfItemBean(
+                "2级", "很轻", if (breathingLevel == "2") "1" else "0",
+                if (sixMinReportPrescription.movementWay == "") "1" else "0"
+            )
+        )
+        patientBreathSelfItemList.add(
+            SixMinReportPatientSelfItemBean(
+                "3级", "中度", if (breathingLevel == "3") "1" else "0",
+                if (sixMinReportPrescription.movementWay == "") "1" else "0"
+            )
+        )
+        patientBreathSelfItemList.add(
+            SixMinReportPatientSelfItemBean(
+                "4级", "较严重", if (breathingLevel == "4") "1" else "0",
+                if (sixMinReportPrescription.movementWay == "") "1" else "0"
+            )
+        )
+        patientBreathSelfItemList.add(
+            SixMinReportPatientSelfItemBean(
+                "5-6级", "严重", if (breathingLevel == "5-6") "1" else "0",
+                if (sixMinReportPrescription.movementWay == "") "1" else "0"
+            )
+        )
+        patientBreathSelfItemList.add(
+            SixMinReportPatientSelfItemBean(
+                "7-9级", "非常严重", if (breathingLevel == "7-9") "1" else "0",
+                if (sixMinReportPrescription.movementWay == "") "1" else "0"
+            )
+        )
+        patientBreathSelfItemList.add(
+            SixMinReportPatientSelfItemBean(
+                "10级", "非常非常严重", if (breathingLevel == "10") "1" else "0",
+                if (sixMinReportPrescription.movementWay == "") "1" else "0"
+            )
+        )
         patientSelfList.add(
             SixMinReportPatientSelfBean(
-                "呼吸状况等级", "1", patientBreathSelfItemList
+                "呼吸状况等级", "1", patientBreathSelfItemList,
+                usbTransferUtil.dealSelfCheckBreathingLevel(breathingLevel)
             )
         )
         val patientTiredSelfItemList = mutableListOf<SixMinReportPatientSelfItemBean>()
         patientTiredSelfItemList.clear()
-        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("0级", "没有"))
-        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("1级", "非常轻松"))
-        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("2级", "轻松"))
-        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("3级", "中度"))
-        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("4级", "有点疲劳"))
-        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("5-6级", "疲劳"))
-        patientTiredSelfItemList.add(SixMinReportPatientSelfItemBean("7-8级", "非常疲劳"))
         patientTiredSelfItemList.add(
             SixMinReportPatientSelfItemBean(
-                "9-10级", "非常非常疲劳(几乎到极限)"
+                "0级", "没有", if (fatigueLevel == "0") "1" else "0",
+                if (sixMinReportPrescription.movementWay == "") "1" else "0"
+            )
+        )
+        patientTiredSelfItemList.add(
+            SixMinReportPatientSelfItemBean(
+                "1级", "非常轻松", if (fatigueLevel == "1") "1" else "0",
+                if (sixMinReportPrescription.movementWay == "") "1" else "0"
+            )
+        )
+        patientTiredSelfItemList.add(
+            SixMinReportPatientSelfItemBean(
+                "2级", "轻松", if (fatigueLevel == "2") "1" else "0",
+                if (sixMinReportPrescription.movementWay == "") "1" else "0"
+            )
+        )
+        patientTiredSelfItemList.add(
+            SixMinReportPatientSelfItemBean(
+                "3级", "中度", if (fatigueLevel == "3") "1" else "0",
+                if (sixMinReportPrescription.movementWay == "") "1" else "0"
+            )
+        )
+        patientTiredSelfItemList.add(
+            SixMinReportPatientSelfItemBean(
+                "4级", "有点疲劳", if (fatigueLevel == "4") "1" else "0",
+                if (sixMinReportPrescription.movementWay == "") "1" else "0"
+            )
+        )
+        patientTiredSelfItemList.add(
+            SixMinReportPatientSelfItemBean(
+                "5-6级", "疲劳", if (fatigueLevel == "5-6") "1" else "0",
+                if (sixMinReportPrescription.movementWay == "") "1" else "0"
+            )
+        )
+        patientTiredSelfItemList.add(
+            SixMinReportPatientSelfItemBean(
+                "7-8级", "非常疲劳", if (fatigueLevel == "7-8") "1" else "0",
+                if (sixMinReportPrescription.movementWay == "") "1" else "0"
+            )
+        )
+        patientTiredSelfItemList.add(
+            SixMinReportPatientSelfItemBean(
+                "9-10级", "非常非常疲劳(几乎到极限)", if (fatigueLevel == "10") "1" else "0",
+                if (sixMinReportPrescription.movementWay == "") "1" else "0"
             )
         )
         patientSelfList.add(
             SixMinReportPatientSelfBean(
-                "疲劳状况等级", "2", patientTiredSelfItemList
+                "疲劳状况等级", "2", patientTiredSelfItemList,
+                usbTransferUtil.dealSelfCheckFatigueLevel(fatigueLevel)
             )
         )
         binding.sixminRvPatientSelfCheck.layoutManager = LinearLayoutManager(this)
         val patientSelfItemAdapter = SixMinReportPatientSelfAdapter(this)
         patientSelfItemAdapter.setItemsBean(patientSelfList)
         binding.sixminRvPatientSelfCheck.adapter = patientSelfItemAdapter
-
-        initClickListener()
-
-        lifecycleScope.launch {
-            kotlinx.coroutines.delay(500L)
-            viewModel.getSixMinReportInfoById(sixMinPatientId.toLong(), sixMinReportNo)
-        }
     }
 
     /**
@@ -300,9 +388,9 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                         sixMinReportPrescription.metabState = "2"
                     }
                     if (borg == "出具") {
-                        sixMinReportPrescription.prescripState = "1"
+                        sixMinReportPrescription.pllevState = "1"
                     } else {
-                        sixMinReportPrescription.prescripState = "2"
+                        sixMinReportPrescription.pllevState = "2"
                     }
                     sixMinReportPrescription.strideFormula = strideFormula
                     sixMinReportPrescription.distanceFormula = distanceFormula
@@ -316,54 +404,191 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
             })
         }
         binding.sixminReportTvGenerateReport.setNoRepeatListener {
-            val text = binding.sixminReportTvGenerateReport.text
-            if (text == "生成报告") {
-                selectStrList.clear()
-                patientSelfList.forEach {
-                    it.itemList.forEach { it1 ->
-                        if (it1.itemCheck == "1") {
-                            val index = it1.itemName.indexOf("级")
-                            selectStrList.add("${it.itemName}&${it1.itemName.substring(0, index)}")
+            try {
+                val text = binding.sixminReportTvGenerateReport.text
+                if (text == "生成报告") {
+                    //生成报告
+                    selectStrList.clear()
+                    patientSelfList.forEach {
+                        it.itemList.forEach { it1 ->
+                            if (it1.itemCheck == "1") {
+                                val index = it1.itemName.indexOf("级")
+                                selectStrList.add(
+                                    "${it.itemName}&${
+                                        it1.itemName.substring(
+                                            0,
+                                            index
+                                        )
+                                    }"
+                                )
+                            }
                         }
                     }
-                }
-                if (selectStrList.isNotEmpty()) {
-                    if (selectStrList.size > 1) {
-                        viewModel.updateSixMinReportEvaluation(
-                            sixMinRecordsBean.evaluationBean[0].reportId,
-                            selectStrList[1].split("&")[1],
-                            selectStrList[0].split("&")[1]
-                        )
-                    } else {
-                        val split = selectStrList[0].split("&")
-                        if (split[0] == "呼吸状况等级") {
-                            showMsg("请选择疲劳状况等级")
+                    if (selectStrList.isNotEmpty()) {
+                        if (selectStrList.size > 1) {
+                            viewModel.updateSixMinReportEvaluation(
+                                sixMinRecordsBean.evaluationBean[0].reportId,
+                                selectStrList[1].split("&")[1],
+                                selectStrList[0].split("&")[1]
+                            )
                         } else {
-                            showMsg("请选择呼吸状况等级")
+                            val split = selectStrList[0].split("&")
+                            if (split[0] == "呼吸状况等级") {
+                                showMsg("请进行患者自评疲劳量级")
+                            } else {
+                                showMsg("请进行患者自评呼吸量级")
+                            }
+                            return@setNoRepeatListener
                         }
+                    } else {
+                        showMsg("请进行患者自评呼吸和疲劳量级")
                         return@setNoRepeatListener
                     }
+
+                    val circleNum = binding.sixminEtFinishCircle.text.toString()
+                    if (circleNum.isEmpty() || circleNum.length > 2) {
+                        showMsg("请检查圈数值")
+                        return@setNoRepeatListener
+                    }
+
+                    if (sixMinReportPrescription.heartrateState.isEmpty() || sixMinReportPrescription.heartrateState == "1") {
+                        val heartEcg = binding.sixminPreEtSportEcg.text.toString()
+                        if (heartEcg.isEmpty() || heartEcg.length > 30) {
+                            showMsg("请检查运动心率值")
+                            return@setNoRepeatListener
+                        }
+                    }
+
+                    if (sixMinReportPrescription.metabState.isEmpty() || sixMinReportPrescription.metabState == "1") {
+                        val metab = binding.sixminPreEtMetab.text.toString()
+                        if (metab.isEmpty() || metab.length > 30) {
+                            showMsg("请检查代谢当量值")
+                            return@setNoRepeatListener
+                        }
+                    }
+
+                    if (sixMinReportPrescription.pllevState.isEmpty() || sixMinReportPrescription.pllevState == "1") {
+                        val tireLow = binding.sixminPreEtTiredControlLow.text.toString()
+                        val tireHigh = binding.sixminPreEtTiredControlHigh.text.toString()
+                        if (tireLow.isEmpty() || tireHigh.isEmpty()) {
+                            showMsg("请检查疲劳程度控制")
+                            return@setNoRepeatListener
+                        }
+                        if (tireLow.toInt() < 0 || tireLow.toInt() > 10 || tireHigh.toInt() < 0 || tireHigh.toInt() > 10) {
+                            showMsg("请检查疲劳程度值，最大值为10")
+                            return@setNoRepeatListener
+                        }
+
+                        if (tireLow.toInt() > tireHigh.toInt()) {
+                            showMsg("请检查疲劳程度控制，起始值不可大于终止值")
+                            return@setNoRepeatListener
+                        }
+                    }
+
+                    val doctorName = binding.sixminEtRecommendDoctor.text.toString()
+                    if (doctorName.isEmpty() || doctorName.length > 5) {
+                        showMsg("建议医生，长度不能大于5")
+                        return@setNoRepeatListener
+                    }
+
+                    sixMinReportPrescription.movementWay =
+                        if (binding.sixminRbSportTypeWalk.isChecked) "0" else "1"
+                    sixMinReportPrescription.movementTime =
+                        binding.sixminPreSpSportTime.value.toString()
+                    sixMinReportPrescription.strideBefore =
+                        binding.sixminPreEtStrideLow.text.toString()
+                    sixMinReportPrescription.strideAfter =
+                        binding.sixminPreEtStrideHigh.text.toString()
+                    sixMinReportPrescription.movementDistance =
+                        binding.sixminPreEtDistanceLow.text.toString()
+                    sixMinReportPrescription.movementDistanceAfter =
+                        binding.sixminPreEtDistanceHigh.text.toString()
+                    sixMinReportPrescription.heartrateRate =
+                        binding.sixminPreEtSportEcg.text.toString()
+                    sixMinReportPrescription.metabMet = binding.sixminPreEtMetab.text.toString()
+                    sixMinReportPrescription.pllevBefore =
+                        binding.sixminPreEtTiredControlLow.text.toString()
+                    sixMinReportPrescription.pllevAfter =
+                        binding.sixminPreEtTiredControlHigh.text.toString()
+                    if(sixMinReportPrescription.pllevState == "1" ||sixMinReportPrescription.pllevState.isEmpty()){
+                        sixMinReportPrescription.pilaoControl = usbTransferUtil.dealPiLaoKZ(
+                            binding.sixminPreEtTiredControlLow.text.toString().toInt(),
+                            binding.sixminPreEtTiredControlHigh.text.toString().toInt()
+                        )
+                    }
+                    sixMinReportPrescription.movementWeeklyNumber =
+                        binding.sixminPreSpWeeklyCount.value.toString()
+                    sixMinReportPrescription.movementCycle =
+                        binding.sixminPreSpPrescriptionPeriod.value.toString()
+                    sixMinReportPrescription.cycleUnit =
+                        if (binding.sixminRbPrescriptionCycleWeek.isChecked) "0" else if (binding.sixminRbPrescriptionCycleMonth.isChecked) "1" else "2"
+                    sixMinReportPrescription.heartrateRate = binding.sixminPreEtSportEcg.text.toString()
+                    sixMinReportPrescription.remarkeName = binding.sixminEtRecommendDoctor.text.toString()
+
+                    viewModel.updateSixMinReportPrescription(sixMinReportPrescription)
+
+                    val intent = Intent(
+                        this@SixMinPreReportActivity,
+                        SixMinReportActivity::class.java
+                    )
+                    val bundle = Bundle()
+                    bundle.putString(Constants.sixMinPatientInfo, sixMinPatientId)
+                    bundle.putString(Constants.sixMinReportNo, sixMinReportNo)
+                    intent.putExtras(bundle)
+                    startActivity(intent)
+                    finish()
                 } else {
-                    showMsg("请选择呼吸和疲劳状况等级")
-                    return@setNoRepeatListener
+                    //保存报告
+
+                    sixMinReportPrescription.movementWay =
+                        if (binding.sixminRbSportTypeWalk.isChecked) "0" else "1"
+                    sixMinReportPrescription.movementTime =
+                        binding.sixminPreSpSportTime.value.toString()
+                    sixMinReportPrescription.strideBefore =
+                        binding.sixminPreEtStrideLow.text.toString()
+                    sixMinReportPrescription.strideAfter =
+                        binding.sixminPreEtStrideHigh.text.toString()
+                    sixMinReportPrescription.movementDistance =
+                        binding.sixminPreEtDistanceLow.text.toString()
+                    sixMinReportPrescription.movementDistanceAfter =
+                        binding.sixminPreEtDistanceHigh.text.toString()
+                    sixMinReportPrescription.heartrateRate =
+                        binding.sixminPreEtSportEcg.text.toString()
+                    sixMinReportPrescription.metabMet = binding.sixminPreEtMetab.text.toString()
+                    sixMinReportPrescription.pllevBefore =
+                        binding.sixminPreEtTiredControlLow.text.toString()
+                    sixMinReportPrescription.pllevAfter =
+                        binding.sixminPreEtTiredControlHigh.text.toString()
+                    if(sixMinReportPrescription.pllevState == "1" ||sixMinReportPrescription.pllevState.isEmpty()){
+                        sixMinReportPrescription.pilaoControl = usbTransferUtil.dealPiLaoKZ(
+                            binding.sixminPreEtTiredControlLow.text.toString().toInt(),
+                            binding.sixminPreEtTiredControlHigh.text.toString().toInt()
+                        )
+                    }
+                    sixMinReportPrescription.movementWeeklyNumber =
+                        binding.sixminPreSpWeeklyCount.value.toString()
+                    sixMinReportPrescription.movementCycle =
+                        binding.sixminPreSpPrescriptionPeriod.value.toString()
+                    sixMinReportPrescription.cycleUnit =
+                        if (binding.sixminRbPrescriptionCycleWeek.isChecked) "0" else if (binding.sixminRbPrescriptionCycleMonth.isChecked) "1" else "2"
+                    sixMinReportPrescription.heartrateRate = binding.sixminPreEtSportEcg.text.toString()
+                    sixMinReportPrescription.remarkeName = binding.sixminEtRecommendDoctor.text.toString()
+
+                    viewModel.updateSixMinReportPrescription(sixMinReportPrescription)
+
+                    val intent = Intent(
+                        this@SixMinPreReportActivity,
+                        SixMinReportActivity::class.java
+                    )
+                    val bundle = Bundle()
+                    bundle.putString(Constants.sixMinPatientInfo, sixMinPatientId)
+                    bundle.putString(Constants.sixMinReportNo, sixMinReportNo)
+                    intent.putExtras(bundle)
+                    startActivity(intent)
+                    finish()
                 }
-
-                val circleNum = binding.sixminEtFinishCircle.text.toString()
-                if(circleNum.isEmpty() || circleNum.length > 2){
-                    showMsg("请检查圈数值")
-                    return@setNoRepeatListener
-                }
-
-
-                sixMinReportPrescription.movementWay =
-                    if (binding.sixminRbSportTypeWalk.isChecked) "0" else "1"
-                viewModel.setSixMinReportPrescription(sixMinReportPrescription)
-
-                //生成报告
-                startActivity(Intent(this, SixMinReportActivity::class.java))
-                finish()
-            } else {
-                //保存报告
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
         binding.sixminReportIvClose.setNoRepeatListener {
@@ -374,6 +599,7 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                 startCommonDialogFragment.setCommonDialogOnClickListener(object :
                     CommonDialogFragment.CommonDialogClickListener {
                     override fun onPositiveClick() {
+                        viewModel.deleteSixMinReportInfoReal(sixMinReportPrescription.reportId)
                         finish()
                     }
 
@@ -506,14 +732,17 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                 sixMinReportEvaluation = sixMinRecordsBean.evaluationBean[0]
 
                 initTable()
+                initSelfCheck()
 
                 Log.d("sixMinRecordsBean", Gson().toJson(sixMinRecordsBean))
 
                 binding.sixminEtFinishCircle.setText(sixMinRecordsBean.evaluationBean[0].turnsNumber)
-                binding.sixminEtFinishCircle.isEnabled = sixMinReportPrescription.movementWay.isEmpty()
+                binding.sixminEtFinishCircle.isEnabled =
+                    sixMinReportPrescription.movementWay.isEmpty()
 
                 binding.sixminTvUnfinishCircle.setText(sixMinRecordsBean.evaluationBean[0].unfinishedDistance)
-                binding.sixminTvUnfinishCircle.isEnabled = sixMinReportPrescription.movementWay.isEmpty()
+                binding.sixminTvUnfinishCircle.isEnabled =
+                    sixMinReportPrescription.movementWay.isEmpty()
 
                 binding.sixminTvTotalDistance.text = Html.fromHtml(
                     String.format(
@@ -640,7 +869,7 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                     ydjlStr2 = sixMinReportPrescription.movementDistance
                 } else if (sixMinReportPrescription.prescripState == "1") {
                     //验证是否出具
-                    if (sixMinReportPrescription.distanceState == "1") {
+                    if (sixMinReportPrescription.distanceState == "1" || sixMinReportPrescription.distanceState.isEmpty()) {
                         ydjlStr1 = sixMinReportPrescription.movementDistance
                         ydjlStr2 = sixMinReportPrescription.movementDistanceAfter
                     } else if (sixMinReportPrescription.distanceState == "2") {
@@ -656,9 +885,9 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
             var ydxlStr = ""
             if (sixMinReportPrescription.movementWay.isNotEmpty()) {
                 //验证是否出具
-                if (sixMinReportPrescription.heartrateState == "1") {
+                if (sixMinReportPrescription.heartrateState == "1" || sixMinReportPrescription.heartrateState.isEmpty()) {
                     ydxlStr = sixMinReportPrescription.heartrateRate
-                } else if (sixMinReportPrescription.distanceState == "2") {
+                } else if (sixMinReportPrescription.heartrateState == "2") {
                     ydxlStr = "/"
                 }
             }
@@ -668,7 +897,7 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
             var dxdlStr = ""
             if (sixMinReportPrescription.movementWay.isNotEmpty()) {
                 //验证是否出具
-                if (sixMinReportPrescription.metabState == "1") {
+                if (sixMinReportPrescription.metabState == "1" || sixMinReportPrescription.metabState.isEmpty()) {
                     dxdlStr = sixMinReportPrescription.metabMet
                 } else if (sixMinReportPrescription.metabState == "2") {
                     dxdlStr = "/"
@@ -681,7 +910,7 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
             var plzhi2Str = "6"
             if (sixMinReportPrescription.movementWay.isNotEmpty()) {
                 //验证是否出具
-                if (sixMinReportPrescription.pllevState == "1") {
+                if (sixMinReportPrescription.pllevState == "1" || sixMinReportPrescription.pllevState.isEmpty()) {
                     plzhi1Str = sixMinReportPrescription.pllevBefore
                     plzhi2Str = sixMinReportPrescription.pllevAfter
                 } else if (sixMinReportPrescription.metabState == "2") {
@@ -780,21 +1009,39 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                 sixMinRecordsBean.bloodOxyBean[0].bloodAverage
             )
         )
-        reportRowList.add(
-            SixMinReportItemBean(
-                "步数",
-                sixMinRecordsBean.walkBean[0].walkStop,
-                sixMinRecordsBean.walkBean[0].walkOne,
-                sixMinRecordsBean.walkBean[0].walkTwo,
-                sixMinRecordsBean.walkBean[0].walkThree,
-                sixMinRecordsBean.walkBean[0].walkFour,
-                sixMinRecordsBean.walkBean[0].walkFive,
-                sixMinRecordsBean.walkBean[0].walkSix,
-                sixMinRecordsBean.walkBean[0].walkBig,
-                sixMinRecordsBean.walkBean[0].waklSmall,
-                sixMinRecordsBean.walkBean[0].walkAverage
+        if(sixMinRecordsBean.infoBean.bsHxl == "0"){
+            reportRowList.add(
+                SixMinReportItemBean(
+                    "步数",
+                    sixMinRecordsBean.walkBean[0].walkStop,
+                    sixMinRecordsBean.walkBean[0].walkOne,
+                    sixMinRecordsBean.walkBean[0].walkTwo,
+                    sixMinRecordsBean.walkBean[0].walkThree,
+                    sixMinRecordsBean.walkBean[0].walkFour,
+                    sixMinRecordsBean.walkBean[0].walkFive,
+                    sixMinRecordsBean.walkBean[0].walkSix,
+                    sixMinRecordsBean.walkBean[0].walkBig,
+                    sixMinRecordsBean.walkBean[0].waklSmall,
+                    sixMinRecordsBean.walkBean[0].walkAverage
+                )
             )
-        )
+        }else{
+            reportRowList.add(
+                SixMinReportItemBean(
+                    "呼吸率",
+                    sixMinRecordsBean.breathingBean[0].breathingStop,
+                    sixMinRecordsBean.breathingBean[0].breathingOne,
+                    sixMinRecordsBean.breathingBean[0].breathingTwo,
+                    sixMinRecordsBean.breathingBean[0].breathingThree,
+                    sixMinRecordsBean.breathingBean[0].breathingFour,
+                    sixMinRecordsBean.breathingBean[0].breathingFive,
+                    sixMinRecordsBean.breathingBean[0].breathingSix,
+                    sixMinRecordsBean.breathingBean[0].breathingBig,
+                    sixMinRecordsBean.breathingBean[0].breathingSmall,
+                    sixMinRecordsBean.breathingBean[0].breathingAverage
+                )
+            )
+        }
         val startHighBlood = sixMinRecordsBean.otherBean[0].startHighPressure
         val startLowBlood = sixMinRecordsBean.otherBean[0].startLowPressure
         val endHighBlood = sixMinRecordsBean.otherBean[0].stopHighPressure

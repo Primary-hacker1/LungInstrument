@@ -629,6 +629,149 @@ public class USBTransferUtil {
     }
 
     /**
+     * 呼吸状况等级
+     * @param breathingLevel
+     * @return
+     */
+    public String dealSelfCheckBreathingLevel(String breathingLevel) {
+        String breathingLevelStr = "";
+        switch (breathingLevel) {
+            case "0":
+                breathingLevelStr = "您当前的呼吸状况为：(0级)没有呼吸困难状况";
+                break;
+            case "0.5":
+                breathingLevelStr = "您当前的呼吸状况为：(0.5级)呼吸困难状况非常非常轻";
+                break;
+            case "1":
+                breathingLevelStr = "您当前的呼吸状况为：(1级)呼吸困难状况非常轻";
+                break;
+            case "2":
+                breathingLevelStr = "您当前的呼吸状况为：(2级)呼吸困难状况很轻";
+                break;
+            case "3":
+                breathingLevelStr = "您当前的呼吸状况为：(3级)呼吸困难状况中度";
+                break;
+            case "4":
+                breathingLevelStr = "您当前的呼吸状况为：(4级)呼吸困难状况较严重";
+                break;
+            case "5-6":
+                breathingLevelStr = "您当前的呼吸状况为：(5-6级)呼吸困难状况严重";
+                break;
+            case "7-9":
+                breathingLevelStr = "您当前的呼吸状况为：(7-9级)呼吸困难状况非常严重";
+                break;
+            case "10":
+                breathingLevelStr = "您当前的呼吸状况为：(10级)呼吸困难状况非常非常重";
+                break;
+        }
+        return breathingLevelStr;
+    }
+
+    /**
+     * 疲劳状况等级
+     * @param fatigueLevel
+     * @return
+     */
+    public String dealSelfCheckFatigueLevel(String fatigueLevel) {
+        String fatigueLevelStr = "";
+        switch (fatigueLevel) {
+            case "0":
+                fatigueLevelStr = "您当前的疲劳状况为：(0级)没有疲劳状况";
+                break;
+            case "1":
+                fatigueLevelStr = "您当前的疲劳状况为：(1级)疲劳状况非常轻松";
+                break;
+            case "2":
+                fatigueLevelStr = "您当前的疲劳状况为：(2级)疲劳状况轻松";
+                break;
+            case "3":
+                fatigueLevelStr = "您当前的疲劳状况为：(3级)疲劳状况中度";
+                break;
+            case "4":
+                fatigueLevelStr = "您当前的疲劳状况为：(4级)疲劳状况有点疲劳";
+                break;
+            case "5-6":
+                fatigueLevelStr = "您当前的疲劳状况为：(5-6级)疲劳状况疲劳";
+                break;
+            case "7-8":
+                fatigueLevelStr = "您当前的疲劳状况为：(7-8级)疲劳状况非常疲劳";
+                break;
+            case "9-10":
+                fatigueLevelStr = "您当前的疲劳状况为：(9-10级)疲劳状况非常非常疲劳(几乎到极限)";
+                break;
+        }
+        return fatigueLevelStr;
+    }
+
+    /**
+     * 疲劳度控制
+     * 疲劳等级
+     *
+     * @param pl1
+     * @param pl2
+     * @return
+     */
+    public String dealPiLaoKZ(Integer pl1, Integer pl2) {
+        String pilaoKZ = "";
+        String pl1Str = "";
+        String pl2Str = "";
+        if (pl1 == 0) {
+            pl1Str = "没有疲劳状况";
+        }
+        if (pl2 == 0) {
+            pl2Str = "没有疲劳状况";
+        }
+        if (pl1 == 1) {
+            pl1Str = "非常轻松";
+        }
+        if (pl2 == 1) {
+            pl2Str = "非常轻松";
+        }
+        if (pl1 == 2) {
+            pl1Str = "轻松";
+        }
+        if (pl2 == 2) {
+            pl2Str = "轻松";
+        }
+        if (pl1 == 3) {
+            pl1Str = "中度";
+        }
+        if (pl2 == 3) {
+            pl2Str = "中度";
+        }
+        if (pl1 == 4) {
+            pl1Str = "有点疲劳";
+        }
+        if (pl2 == 4) {
+            pl2Str = "有点疲劳";
+        }
+        if (pl1 == 5 || pl1 == 6) {
+            pl1Str = "疲劳";
+        }
+        if (pl2 == 5 || pl2 == 6) {
+            pl2Str = "疲劳";
+        }
+        if (pl1 == 7 || pl1 == 8) {
+            pl1Str = "非常疲劳";
+        }
+        if (pl2 == 7 || pl2 == 8) {
+            pl2Str = "非常疲劳";
+        }
+        if (pl1 == 9 || pl1 == 10) {
+            pl1Str = "非常非常疲劳(几乎到极限)";
+        }
+        if (pl2 == 9 || pl2 == 10) {
+            pl2Str = "非常非常疲劳(几乎到极限)";
+        }
+        if ((pl1 == 5 && pl2 == 6) || (pl1 == 7 && pl2 == 8) || (pl1 == 9 && pl2 == 10)) {
+            pilaoKZ = pl1Str + "(" + pl1 + "-" + pl2 + "级)";
+        } else {
+            pilaoKZ = pl1Str + "-" + pl2Str + "(" + pl1 + "-" + pl2 + "级)";
+        }
+        return pilaoKZ;
+    }
+
+    /**
      * 运动强度
      * 较低强度：30~39%，较轻，<2.9MET;
      * 中强度：40~59%，稍累，3~5.9MET；
@@ -781,12 +924,12 @@ public class USBTransferUtil {
      */
     public void dealBlood(SixMinBloodOxygen reportBlood, String bloodOxyLineData) {
         //处理静息血氧
-        if(!restBloodOxy.isEmpty()){
+        if (!restBloodOxy.isEmpty()) {
             String[] strings = restBloodOxy.split(",");
             int bloodTotInt = 0;
             if (strings.length > 0) {
                 for (String string : strings) {
-                    if(!string.isEmpty()){
+                    if (!string.isEmpty()) {
                         int bloodInt = Integer.parseInt(string);
                         bloodTotInt = bloodTotInt + bloodInt;
                     }
@@ -958,11 +1101,11 @@ public class USBTransferUtil {
      * @param etion
      * @param min
      * @param sec
-     * @param type    0：正常流程走完，1主动停止
+     * @param type  0：正常流程走完，1主动停止
      * @return
      */
-    public SixMinReportEvaluation dealPreption(SixMinSysSettingBean systemDto,SixMinReportEvaluation etion, String min, String sec,
-                                         Integer type, int min1, int sec1) {
+    public SixMinReportEvaluation dealPreption(SixMinSysSettingBean systemDto, SixMinReportEvaluation etion, String min, String sec,
+                                               Integer type, int min1, int sec1) {
         Integer lenKu = 0;
         Integer tcLocation = 1;
         BigDecimal len = new BigDecimal(0);//步行圈数的距离
@@ -1237,6 +1380,7 @@ public class USBTransferUtil {
     /**
      * 计算六分钟平均步速
      * 分为试验自动结束和提前停止
+     *
      * @param totalDistance
      * @param stopOr
      * @param stopTime

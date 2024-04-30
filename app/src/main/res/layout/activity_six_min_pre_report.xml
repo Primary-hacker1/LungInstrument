@@ -464,6 +464,7 @@
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
                                         android:inputType="numberDecimal"
+                                        android:textColor="@color/text3"
                                         android:textStyle="bold" />
 
                                     <TextView
@@ -480,6 +481,7 @@
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
                                         android:inputType="numberDecimal"
+                                        android:textColor="@color/text3"
                                         android:textStyle="bold" />
 
                                     <TextView
@@ -510,19 +512,6 @@
                                         android:layout_gravity="center_vertical"
                                         android:text="建议单次运动时长:"
                                         android:textColor="@color/text3" />
-
-                                    <!--                                    <Spinner-->
-                                    <!--                                        android:id="@+id/sixmin_sp_sport_time"-->
-                                    <!--                                        android:layout_width="80dp"-->
-                                    <!--                                        android:layout_height="25dp"-->
-                                    <!--                                        android:layout_gravity="center_vertical"-->
-                                    <!--                                        android:layout_marginStart="@dimen/space_10"-->
-                                    <!--                                        android:background="@drawable/sp_bg"-->
-                                    <!--                                        android:gravity="center_vertical"-->
-                                    <!--                                        android:overlapAnchor="false"-->
-                                    <!--                                        android:paddingStart="@dimen/space_10"-->
-                                    <!--                                        android:textSize="16sp"-->
-                                    <!--                                        tools:ignore="RtlSymmetry" />-->
 
                                     <com.just.machine.util.SnappingStepper
                                         android:id="@+id/sixmin_pre_sp_sport_time"
@@ -562,6 +551,7 @@
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
                                         android:inputType="numberDecimal"
+                                        android:textColor="@color/text3"
                                         android:textStyle="bold" />
 
                                     <TextView
@@ -578,6 +568,7 @@
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
                                         android:inputType="numberDecimal"
+                                        android:textColor="@color/text3"
                                         android:textStyle="bold" />
 
                                     <TextView
@@ -615,6 +606,7 @@
                                         android:gravity="center"
                                         android:inputType="number"
                                         android:maxLength="3"
+                                        android:textColor="@color/text3"
                                         android:textStyle="bold" />
 
                                     <TextView
@@ -644,6 +636,7 @@
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
                                         android:inputType="numberDecimal"
+                                        android:textColor="@color/text3"
                                         android:textStyle="bold" />
 
                                     <TextView
@@ -673,6 +666,7 @@
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
                                         android:inputType="numberDecimal"
+                                        android:textColor="@color/text3"
                                         android:textStyle="bold" />
 
                                     <TextView
@@ -689,6 +683,7 @@
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
                                         android:inputType="numberDecimal"
+                                        android:textColor="@color/text3"
                                         android:textStyle="bold" />
 
                                     <TextView
@@ -720,14 +715,6 @@
                                         android:layout_gravity="center_vertical"
                                         android:text="建议每周:"
                                         android:textColor="@color/text3" />
-
-                                    <!--                                    <EditText-->
-                                    <!--                                        android:id="@+id/sixmin_pre_et_weekly_count"-->
-                                    <!--                                        android:layout_width="50dp"-->
-                                    <!--                                        android:layout_height="wrap_content"-->
-                                    <!--                                        android:gravity="center"-->
-                                    <!--                                        android:inputType="number"-->
-                                    <!--                                        android:textStyle="bold" />-->
 
                                     <com.just.machine.util.SnappingStepper
                                         android:id="@+id/sixmin_pre_sp_weekly_count"
@@ -854,7 +841,9 @@
                                         android:id="@+id/sixmin_et_recommend_doctor"
                                         android:layout_width="100dp"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical" />
+                                        android:layout_gravity="center_vertical"
+                                        android:gravity="center"
+                                        android:textColor="@color/text3" />
 
                                 </LinearLayout>
 
@@ -920,14 +909,15 @@
                     <TextView
                         android:id="@+id/sixmin_report_tv_generate_report"
                         android:layout_width="150dp"
-                        android:layout_height="57dp"
-                        android:textSize="16sp"
+                        android:layout_height="45dp"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
                         android:background="@drawable/sixmin_ignore_blood_pressure_enable"
                         android:gravity="center"
                         android:src="@mipmap/generate_report"
                         android:text="生成报告"
-                        android:textColor="@color/colorWhite" />
+                        android:textColor="@color/colorWhite"
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 

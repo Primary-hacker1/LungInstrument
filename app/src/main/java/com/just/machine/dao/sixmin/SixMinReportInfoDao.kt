@@ -14,6 +14,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SixMinReportInfoDao {
 
+    @Query("DELETE FROM sixmin_report_info WHERE reportNo == :id")
+    fun deleteReportInfoReal(id:String)
+
     @Query("SELECT * FROM sixmin_report_info ORDER BY addTime DESC")
     fun getReportInfo(): Flow<List<SixMinRecordsBean>>
 

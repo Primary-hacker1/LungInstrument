@@ -14,6 +14,8 @@ import javax.inject.Inject
  */
 class SixMinReportBreathingRepository @Inject constructor(private val reportDao: SixMinReportBreathingDao) {
 
+    fun deleteReportBreathing(id:String) = reportDao.deleteReportBreathingReal(id)
+
     fun getReportBreathing(id:String): Flow<List<SixMinReportBreathing>> = reportDao.getReportBreathingById(id)
 
     suspend fun insertReportBreathing(reportBreathing: SixMinReportBreathing): Long = reportDao.insertReportBreathing(reportBreathing)

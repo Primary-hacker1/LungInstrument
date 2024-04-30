@@ -15,6 +15,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SixMinReportOtherDao {
 
+    @Query("DELETE FROM sixmin_report_other WHERE reportId == :id")
+    fun deleteReportOtherReal(id:String)
+
     @Query("UPDATE sixmin_report_other SET startHighPressure =:beforeHigh, startLowPressure =:beforeLow , stopHighPressure =:afterHigh , stopLowPressure =:afterLow WHERE reportId =:reportNo")
     suspend fun updateReportOther(
         reportNo: String, beforeHigh: String, beforeLow: String, afterHigh: String, afterLow: String
