@@ -676,6 +676,8 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                         if (binding.sixminRbPrescriptionCycleWeek.isChecked) "0" else if (binding.sixminRbPrescriptionCycleMonth.isChecked) "1" else "2"
 
                     viewModel.updateSixMinReportPrescription(sixMinReportPrescription)
+                    viewModel.updateSixMinReportEvaluation(sixMinReportEvaluation)
+                    viewModel.updateSixMinReportInfo(sixMinReportInfo)
 
                     val intent = Intent(
                         this@SixMinPreReportActivity,
@@ -854,6 +856,8 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                         if (binding.sixminRbPrescriptionCycleWeek.isChecked) "0" else if (binding.sixminRbPrescriptionCycleMonth.isChecked) "1" else "2"
 
                     viewModel.updateSixMinReportPrescription(sixMinReportPrescription)
+                    viewModel.updateSixMinReportEvaluation(sixMinReportEvaluation)
+                    viewModel.updateSixMinReportInfo(sixMinReportInfo)
 
                     val intent = Intent(
                         this@SixMinPreReportActivity,

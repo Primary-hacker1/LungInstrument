@@ -379,6 +379,24 @@ class MainViewModel @Inject constructor(
     }
 
     /**
+     * 更新6分钟综合评估
+     */
+    fun updateSixMinReportEvaluation(bean: SixMinReportEvaluation) {
+        viewModelScope.launch {
+            sixMinReportEvaluationDao.updateReportEvaluationAll(bean)
+        }
+    }
+
+    /**
+     * 更新6分钟报告信息
+     */
+    fun updateSixMinReportInfo(bean: SixMinReportInfo) {
+        viewModelScope.launch {
+            sixMinReportInfoDao.updateReportInfoAll(bean)
+        }
+    }
+
+    /**
      * 永久删除6分钟报告信息
      */
     fun deleteSixMinReportInfoReal(reportId: String) {

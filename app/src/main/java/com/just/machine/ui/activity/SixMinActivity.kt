@@ -424,7 +424,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                                 usbSerialData.bloodLowFront ?: "---"
                             sixMinReportBloodOther.startHighPressure = usbSerialData.bloodHighFront
                             sixMinReportBloodOther.startLowPressure = usbSerialData.bloodLowFront
-                            if (sysSettingBean.sysOther.broadcastVoice == "1") {
+                            if (sysSettingBean.sysOther.broadcastVoice == "1" || sysSettingBean.sysOther.broadcastVoice == "0") {
                                 bloodBeforeUtteranceId = System.currentTimeMillis().toString()
                                 speechContent(str, bloodBeforeUtteranceId)
                             } else {
@@ -438,7 +438,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                                     override fun onPositiveClick() {
                                         usbTransferUtil.bloodType = 1
                                         if (sysSettingBean.sysOther.autoStart == "1") {
-                                            if (sysSettingBean.sysOther.broadcastVoice == "1") {
+                                            if (sysSettingBean.sysOther.broadcastVoice == "1" || sysSettingBean.sysOther.broadcastVoice == "0") {
                                                 startTestUtteranceId =
                                                     System.currentTimeMillis().toString()
                                                 speechContent(
@@ -468,7 +468,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                             sixMinReportBloodOther.stopHighPressure = usbSerialData.bloodHighBehind
                             sixMinReportBloodOther.stopLowPressure = usbSerialData.bloodLowBehind
                             bloodEndUtteranceId = System.currentTimeMillis().toString()
-                            if (sysSettingBean.sysOther.broadcastVoice == "1") {
+                            if (sysSettingBean.sysOther.broadcastVoice == "1" || sysSettingBean.sysOther.broadcastVoice == "0") {
                                 speechContent(str, bloodEndUtteranceId)
                             } else {
                                 val startCommonDialogFragment =
@@ -1010,7 +1010,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                     if (second == 0) {
                         when (minute) {
                             5 -> {
-                                if (sysSettingBean.sysOther.broadcastVoice == "1") {
+                                if (sysSettingBean.sysOther.broadcastVoice == "1" || sysSettingBean.sysOther.broadcastVoice == "0") {
                                     speechContent(getString(R.string.sixmin_test_start_count_down_five_tips))
                                 }
                                 sixMinReportWalk.walkOne = usbTransferUtil.stepsStr
@@ -1023,7 +1023,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                             }
 
                             4 -> {
-                                if (sysSettingBean.sysOther.broadcastVoice == "1") {
+                                if (sysSettingBean.sysOther.broadcastVoice == "1" || sysSettingBean.sysOther.broadcastVoice == "0") {
                                     speechContent(getString(R.string.sixmin_test_start_count_down_four_tips))
                                 }
                                 sixMinReportWalk.walkTwo =
@@ -1037,7 +1037,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                             }
 
                             3 -> {
-                                if (sysSettingBean.sysOther.broadcastVoice == "1") {
+                                if (sysSettingBean.sysOther.broadcastVoice == "1" || sysSettingBean.sysOther.broadcastVoice == "0") {
                                     speechContent(getString(R.string.sixmin_test_start_count_down_three_tips))
                                 }
                                 sixMinReportWalk.walkThree =
@@ -1051,7 +1051,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                             }
 
                             2 -> {
-                                if (sysSettingBean.sysOther.broadcastVoice == "1") {
+                                if (sysSettingBean.sysOther.broadcastVoice == "1" || sysSettingBean.sysOther.broadcastVoice == "0") {
                                     speechContent(getString(R.string.sixmin_test_start_count_down_two_tips))
                                 }
                                 sixMinReportWalk.walkFour =
@@ -1065,7 +1065,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                             }
 
                             1 -> {
-                                if (sysSettingBean.sysOther.broadcastVoice == "1") {
+                                if (sysSettingBean.sysOther.broadcastVoice == "1" || sysSettingBean.sysOther.broadcastVoice == "0") {
                                     speechContent(getString(R.string.sixmin_test_start_count_down_one_tips))
                                 }
                                 sixMinReportWalk.walkFive =
@@ -1081,7 +1081,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                     }
 
                     if (minute == 0 && second == 16) {
-                        if (sysSettingBean.sysOther.broadcastVoice == "1") {
+                        if (sysSettingBean.sysOther.broadcastVoice == "1" || sysSettingBean.sysOther.broadcastVoice == "0") {
                             speechContent(getString(R.string.sixmin_test_start_count_down_zero_tips))
                         }
                     }
@@ -1101,7 +1101,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 )
                 usbTransferUtil.bloodListAvg.clear()
 
-                if (sysSettingBean.sysOther.broadcastVoice == "1") {
+                if (sysSettingBean.sysOther.broadcastVoice == "1" || sysSettingBean.sysOther.broadcastVoice == "0") {
                     speechContent(getString(R.string.sixmin_test_start_timeout))
                 }
                 binding.sixminRlMeasureBlood.isEnabled = false
@@ -1301,7 +1301,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
 //            }
             if (sysSettingBean.sysOther.autoMeasureBlood == "1") {
                 //是否播报语音
-                if (sysSettingBean.sysOther.broadcastVoice == "1") {
+                if (sysSettingBean.sysOther.broadcastVoice == "1" || sysSettingBean.sysOther.broadcastVoice == "0") {
                     measureBloodUtteranceId = System.currentTimeMillis().toString()
                     speechContent(
                         getString(R.string.sixmin_test_start_measure_blood_front),
@@ -1551,7 +1551,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                                 override fun onPositiveClick() {
                                     usbTransferUtil.bloodType = 1
                                     if (sysSettingBean.sysOther.autoStart == "1") {
-                                        if (sysSettingBean.sysOther.broadcastVoice == "1") {
+                                        if (sysSettingBean.sysOther.broadcastVoice == "1" || sysSettingBean.sysOther.broadcastVoice == "0") {
                                             startTestUtteranceId =
                                                 System.currentTimeMillis().toString()
                                             speechContent(
@@ -1686,7 +1686,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                         imageId = R.mipmap.one
                     }
                 }
-                if (sysSettingBean.sysOther.broadcastVoice == "1") {
+                if (sysSettingBean.sysOther.broadcastVoice == "1" || sysSettingBean.sysOther.broadcastVoice == "0") {
                     speechContent(times.toString())
                 }
                 lifecycleScope.launch {
@@ -1699,7 +1699,7 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                 lifecycleScope.launch {
                     kotlinx.coroutines.delay(1000L)
                     binding.sixminIvCountdownTime.visibility = View.GONE
-                    if (sysSettingBean.sysOther.broadcastVoice == "1") {
+                    if (sysSettingBean.sysOther.broadcastVoice == "1" || sysSettingBean.sysOther.broadcastVoice == "0") {
                         stepsAndCircleUtteranceId =
                             System.currentTimeMillis().toString()
                         speechContent("请开始步行。", stepsAndCircleUtteranceId)

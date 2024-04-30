@@ -1,6 +1,7 @@
 package com.just.machine.dao.sixmin
 
 import com.just.machine.model.sixminreport.SixMinReportEvaluation
+import com.just.machine.model.sixminreport.SixMinReportPrescription
 import com.just.machine.model.sixminreport.SixMinReportWalk
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -13,6 +14,7 @@ import javax.inject.Inject
  */
 class SixMinReportEvaluationRepository @Inject constructor(private val reportDao: SixMinReportEvaluationDao) {
 
+    suspend fun  updateReportEvaluationAll(bean: SixMinReportEvaluation) = reportDao.updateReportEvaluationAll(bean)
     fun deleteReportEvaluation(id:String) = reportDao.deleteReportEvaluationReal(id)
     fun getReportEvaluation(): Flow<List<SixMinReportEvaluation>> = reportDao.getReportEvaluation()
     fun getReportEvaluationById(id:String): Flow<List<SixMinReportEvaluation>> = reportDao.getReportEvaluationById(id)
