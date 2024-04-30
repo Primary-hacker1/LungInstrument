@@ -8,12 +8,8 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import com.common.base.BaseDialogFragment
-import com.common.network.LogUtils
-import com.just.machine.dao.PatientBean
 import com.just.machine.model.Constants
-import com.just.machine.model.SixMinReportEditBloodPressure
 import com.just.machine.model.sixminreport.SixMinReportPrescription
-import com.just.machine.util.DropDownPopWindow
 import com.just.machine.util.SpinnerHelper
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogSixminReportPrescriptionBinding
@@ -30,6 +26,8 @@ class SixMinReportPrescriptionFragment :
     private lateinit var spHeatBeat: SpinnerHelper
     private lateinit var spMetab: SpinnerHelper
     private lateinit var spTired: SpinnerHelper
+    private lateinit var spStrideFormula: SpinnerHelper
+    private lateinit var spDistanceFormula: SpinnerHelper
     private var prescriptionBean = SixMinReportPrescription()
 
     companion object {
@@ -39,9 +37,10 @@ class SixMinReportPrescriptionFragment :
          */
         fun startPrescriptionDialogFragment(
 
-            fragmentManager: FragmentManager, bean: SixMinReportPrescription
+            fragmentManager: FragmentManager,
+            bean: SixMinReportPrescription,
 
-        ): SixMinReportPrescriptionFragment {
+            ): SixMinReportPrescriptionFragment {
 
             val dialogFragment = SixMinReportPrescriptionFragment()
 
@@ -60,7 +59,13 @@ class SixMinReportPrescriptionFragment :
 
     interface SixMinReportPrescriptionDialogListener {
         fun onClickConfirm(
-            stride: String, distance: String, heart: String, metab: String, borg: String
+            stride: String,
+            distance: String,
+            heart: String,
+            metab: String,
+            borg: String,
+            strideFormula: String,
+            distanceFormula: String
         )
 
         fun onClickClose()
@@ -83,11 +88,13 @@ class SixMinReportPrescriptionFragment :
         binding.sixminReportTvPrescriptionConfirm.setOnClickListener {
             dismiss()
             listener?.onClickConfirm(
-                spStride.getSelection().toString(),
-                spDistance.getSelection().toString(),
-                spHeatBeat.getSelection().toString(),
-                spMetab.getSelection().toString(),
-                spTired.getSelection().toString()
+                if (spStride.getSelection() == 0) "出具" else "不出具",
+                if (spDistance.getSelection() == 0) "出具" else "不出具",
+                if (spHeatBeat.getSelection() == 0) "出具" else "不出具",
+                if (spMetab.getSelection() == 0) "出具" else "不出具",
+                if (spTired.getSelection() == 0) "出具" else "不出具",
+                if (spStrideFormula.getSelection() == 0) "0" else "1",
+                if (spDistanceFormula.getSelection() == 0) "0" else "1",
             )
         }
         binding.sixminReportTvPrescriptionClose.setOnClickListener {
@@ -114,7 +121,7 @@ class SixMinReportPrescriptionFragment :
             }
         })
 
-        val spDistance = SpinnerHelper(
+        spDistance = SpinnerHelper(
             requireContext(),
             binding.sixminReportTvPrescriptionDistance,
             R.array.spinner_sixmin_report_description
@@ -134,7 +141,7 @@ class SixMinReportPrescriptionFragment :
             }
         })
 
-        val spHeatBeat = SpinnerHelper(
+        spHeatBeat = SpinnerHelper(
             requireContext(),
             binding.sixminReportTvPrescriptionHeartbeat,
             R.array.spinner_sixmin_report_description
@@ -154,7 +161,7 @@ class SixMinReportPrescriptionFragment :
             }
         })
 
-        val spMetab = SpinnerHelper(
+        spMetab = SpinnerHelper(
             requireContext(),
             binding.sixminReportTvPrescriptionMetab,
             R.array.spinner_sixmin_report_description
@@ -174,7 +181,7 @@ class SixMinReportPrescriptionFragment :
             }
         })
 
-        val spTired = SpinnerHelper(
+        spTired = SpinnerHelper(
             requireContext(),
             binding.sixminReportTvPrescriptionTired,
             R.array.spinner_sixmin_report_description
@@ -193,6 +200,68 @@ class SixMinReportPrescriptionFragment :
 
             }
         })
+
+        spStrideFormula = SpinnerHelper(
+            requireContext(),
+            binding.sixminReportStrideFormula,
+            R.array.spinner_sixmin_report_stide_formula
+        )
+        spStrideFormula.setSpinnerSelectionListener(object :
+            SpinnerHelper.SpinnerSelectionListener {
+            override fun onItemSelected(selectedItem: String, view: View?) {
+                val textView: TextView = view as TextView
+            }
+
+            override fun onNothingSelected() {
+
+            }
+        })
+
+        spDistanceFormula = SpinnerHelper(
+            requireContext(),
+            binding.sixminReportDistanceFormula,
+            R.array.spinner_sixmin_report_distance_formula
+        )
+        spDistanceFormula.setSpinnerSelectionListener(object :
+            SpinnerHelper.SpinnerSelectionListener {
+            override fun onItemSelected(selectedItem: String, view: View?) {
+            }
+
+            override fun onNothingSelected() {
+
+            }
+        })
+
+        if (prescriptionBean.distanceState == "1" || prescriptionBean.distanceState == "") {
+            spStride.setSelection(0)
+        } else {
+            spStride.setSelection(1)
+        }
+        if (prescriptionBean.heartrateState == "1" || prescriptionBean.heartrateState == "") {
+            spHeatBeat.setSelection(0)
+        } else {
+            spHeatBeat.setSelection(1)
+        }
+        if (prescriptionBean.metabState == "1" || prescriptionBean.metabState == "") {
+            spMetab.setSelection(0)
+        } else {
+            spMetab.setSelection(1)
+        }
+        if (prescriptionBean.pllevState == "1" || prescriptionBean.pllevState == "") {
+            spTired.setSelection(0)
+        } else {
+            spTired.setSelection(1)
+        }
+        if (prescriptionBean.strideFormula == "0" || prescriptionBean.distanceFormula == "") {
+            spStrideFormula.setSelection(0)
+        } else {
+            spStrideFormula.setSelection(1)
+        }
+        if (prescriptionBean.distanceFormula == "0" || prescriptionBean.distanceFormula == "") {
+            spDistanceFormula.setSelection(0)
+        } else {
+            spDistanceFormula.setSelection(1)
+        }
     }
 
     override fun initData() {

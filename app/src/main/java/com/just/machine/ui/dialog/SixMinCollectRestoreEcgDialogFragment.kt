@@ -65,6 +65,9 @@ class SixMinCollectRestoreEcgDialogFragment :
         LiveDataBus.get().with("simMinRestore").observe(this, Observer {
             timeRemaining = it.toString()
             binding.sixminRestoreTvEcgTime.text = timeRemaining
+            if(timeRemaining == "0"){
+               dismiss()
+            }
         })
         binding.sixminReportBtnRestoreEcgConfirm.setNoRepeatListener {
             dismiss()

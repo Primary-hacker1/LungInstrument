@@ -82,6 +82,8 @@ dependencies {
     implementation project(path: ':autosize')
     implementation project(path: ':serialport')
     implementation project(path: ':usbSerialForAndroid')
+    implementation project(path: ':MPChartExample')
+    implementation project(path: ':MPChartLib')
 
     implementation gradleBase.core
     implementation gradleBase.appcompat

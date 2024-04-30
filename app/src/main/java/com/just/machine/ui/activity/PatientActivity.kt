@@ -20,7 +20,6 @@ import com.common.viewmodel.LiveDataEvent
 import com.just.machine.dao.PatientBean
 import com.just.machine.model.Constants
 import com.just.machine.model.PatientInfoBean
-import com.just.machine.model.SixMinRecordsBean
 import com.just.machine.model.sixminreport.SixMinReportInfo
 import com.just.machine.ui.adapter.CardiopulAdapter
 import com.just.machine.ui.adapter.PatientsAdapter
@@ -36,7 +35,6 @@ import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.ActivityPatientBinding
 import dagger.hilt.android.AndroidEntryPoint
-import okhttp3.internal.filterList
 
 
 /**
@@ -215,6 +213,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                         val bundle = Bundle()
                         bundle.putString(Constants.sixMinPatientInfo, bean.patientId.toString())
                         bundle.putString(Constants.sixMinReportNo, bean.reportNo)
+                        bundle.putString(Constants.sixMinReportType, "2")
                         intent.putExtras(bundle)
                         startActivity(intent)
                     }

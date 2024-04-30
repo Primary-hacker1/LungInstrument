@@ -70,15 +70,20 @@ class CommonDialogFragment : BaseDialogFragment<FragmentDialogCommonBinding>() {
     }
 
     override fun initView() {
-        if(dialogType == ""){
+        if(dialogType.isEmpty()){
             binding.llCommonDialog.visibility = View.VISIBLE
             binding.llCommonDialogStop.visibility = View.GONE
         }else{
             binding.llCommonDialog.visibility = View.GONE
             binding.llCommonDialogStop.visibility = View.VISIBLE
         }
-        if(dialogContent != ""){
+        if(dialogContent.isNotEmpty()){
             binding.tvCommonDialogContent.text = dialogContent
+            if(dialogContent.contains("生成报告")){
+                binding.ivCommonDialogClose.visibility = View.VISIBLE
+            }else{
+                binding.ivCommonDialogClose.visibility = View.INVISIBLE
+            }
         }
         if(stopType == "0"){
             binding.tvCommonDialogStopTitle.text = "是否有不良症状"

@@ -23,5 +23,6 @@ interface Constants {
         const val commonDialogStopType = "commonDialogStopType"//标准dialog是否提前停止
         const val deleteWarnDialogContent= "deleteWarnDialogContent"//删除提示对话框内容
         const val prescriptionBean= "prescriptionBean"//6分钟处方参数
+        const val sixMinReportType= "sixMinReportType"//6分钟跳转预生成报告类型 1,试验结束跳转 2，患者管理跳转去编辑
     }
 }

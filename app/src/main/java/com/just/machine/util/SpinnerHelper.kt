@@ -68,6 +68,6 @@ class SpinnerHelper(
     }
 
     fun getSelection():Any{
-        return spinner.selectedItemId
+        return spinner.selectedItemPosition
     }
 }
