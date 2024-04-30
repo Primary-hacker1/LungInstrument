@@ -4,6 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
+import com.common.network.LogUtils
+import com.just.machine.model.SharedPreferencesUtils
+import com.just.machine.model.staticlung.LungFormula
 import com.just.machine.model.staticlung.RoutineLungBean
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.databinding.FragmentBreatheBinding
@@ -30,8 +33,37 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
 
     override fun initView() {
         initData()
+
         val layout = binding.fragmentLayout
+
         layout.setInitView("常规")
+
+//        viewModel.getPatientsMax()
+//
+//        viewModel.mEventHub.observe(this) {
+//            when (it.action) {
+//                MaxPatient -> {//最新的患者
+//                    if(it.any is PatientBean){
+//                        val bean = it.any as PatientBean
+//                        bean.age
+//                        bean.sex
+//                        bean.height
+//                        bean.weight
+//                    }
+//                    LogUtils.e(tag + it.any)
+//                }
+//            }
+//        }
+
+        val bean = SharedPreferencesUtils.instance.patientBean
+        LogUtils.e(tag + bean.toString())
+        val age = bean?.age?.toDouble()
+        val sex = bean?.sex
+        val isMale = sex == "男"
+        val height = bean?.height?.toDouble()
+        val weight = bean?.weight?.toDouble()
+
+        LungFormula.main(age = age, heightCm = height, weightKg = weight, isMale = isMale)
     }
 
     override fun initListener() {

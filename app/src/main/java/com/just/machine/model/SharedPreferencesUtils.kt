@@ -4,7 +4,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.fragment.app.Fragment
+import com.google.gson.Gson
 import com.just.machine.App
+import com.just.machine.dao.PatientBean
 
 
 /**
@@ -21,6 +23,7 @@ class SharedPreferencesUtils private constructor() {
         private const val PASS = "per_user_pass"
         private const val SIX_MIN_SYS_SETTING = "per_six_min_sys_setting"
         private const val SIX_MIN_TEST_GUIDE = "per_six_min_test_guide"
+        private const val PATIENTBEAN = "per_patient_bean"
     }
 
     var user: String? = null
@@ -83,6 +86,23 @@ class SharedPreferencesUtils private constructor() {
             CommonSharedPreferences.setSPValue(SIX_MIN_TEST_GUIDE, serialNo)
         }
 
+    var patientBean: PatientBean? = PatientBean()
+        get() {
+            if (field == null) {
+                // 从 SharedPreferences 中获取 PatientBean 对象
+                field =
+                    CommonSharedPreferences.getBean(PATIENTBEAN, PatientBean())
+            }
+            return field
+        }
+        set(serialNo) {
+            if (serialNo != null) {
+                // 将 PatientBean 对象保存到 SharedPreferences 中
+                CommonSharedPreferences.setBean(PATIENTBEAN, serialNo)
+            }
+            field = serialNo
+        }
+
     /**
      * 登录信息销毁
      */
@@ -103,6 +123,36 @@ object CommonSharedPreferences {
      */
 
     private const val USER = "Settings"
+
+    private val gson = Gson()
+
+    /**
+     * 将一个 PatientBean 对象保存到指定的 SharedPreferences 中
+     * @param key 名称
+     * @param value PatientBean 对象
+     */
+    fun setBean(key: String, value: PatientBean) {
+        val gson = Gson()
+        val json = gson.toJson(value)
+        val mShareConfig = App.instance!!.getSharedPreferences(USER, Context.MODE_PRIVATE)
+        put(mShareConfig, key, json)
+    }
+
+    /**
+     * 从指定的 SharedPreferences 中获取一个 PatientBean 对象
+     * @param key 名称
+     * @param defValue 默认值，如果 SharedPreferences 中找不到对应的值，将会返回默认值
+     * @return PatientBean 对象，如果找不到对应的值，返回默认值
+     */
+    fun getBean(key: String, defValue: PatientBean): PatientBean? {
+        val mShareConfig = App.instance!!.getSharedPreferences(USER, Context.MODE_PRIVATE)
+        val json = get(mShareConfig, key, "") // 从 SharedPreferences 中获取保存的 JSON 字符串
+        if (json.isNotEmpty()) {
+            val gson = Gson()
+            return gson.fromJson(json, PatientBean::class.java) // 将 JSON 字符串转换为 PatientBean 对象
+        }
+        return defValue
+    }
 
     /**
      * 储存一个受SharedPreferences支持的数据到指定的Key中
@@ -236,8 +286,10 @@ object CommonSharedPreferences {
             is String -> value = mShareConfig.getString(key, defValue as String) as T
             is Long -> value =
                 java.lang.Long.valueOf(mShareConfig.getLong(key, defValue as Long)) as T
+
             is Boolean -> value =
                 java.lang.Boolean.valueOf(mShareConfig.getBoolean(key, defValue as Boolean)) as T
+
             is Int -> value = Integer.valueOf(mShareConfig.getInt(key, defValue as Int)) as T
             is Float -> value =
                 java.lang.Float.valueOf(mShareConfig.getFloat(key, defValue as Float)) as T

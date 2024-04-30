@@ -66,6 +66,8 @@ dependencies {
     //chart
     api libview.hellocharts
 
+    api 'net.objecthunter:exp4j:0.4.8'
+
     //chart
 //    api presentationDependencies.android_chart
 }

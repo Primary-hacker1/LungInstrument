@@ -40,6 +40,8 @@ class LiveDataEvent {
 
         const val QuerySixMinReportBreathingSuccess: Int = 0x15//6分钟报告呼吸率
 
+        const val MaxPatient: Int = 0x16//6分钟报告呼吸率
+
         /**
          * @param FAIL -通用错误
          * @return -

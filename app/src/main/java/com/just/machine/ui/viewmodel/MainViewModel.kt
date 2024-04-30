@@ -3,7 +3,6 @@ package com.just.machine.ui.viewmodel
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.viewModelScope
-import com.common.base.subscribes
 import com.common.viewmodel.BaseViewModel
 import com.common.viewmodel.LiveDataEvent
 import com.just.machine.api.UserRepository
@@ -22,6 +21,7 @@ import com.just.machine.dao.sixmin.SixMinReportPrescriptionRepository
 import com.just.machine.dao.sixmin.SixMinReportStrideRepository
 import com.just.machine.dao.sixmin.SixMinReportWalkRepository
 import com.just.machine.model.Data
+import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.sixminreport.SixMinBloodOxygen
 import com.just.machine.model.sixminreport.SixMinHeartEcg
 import com.just.machine.model.sixminreport.SixMinReportBreathing
@@ -67,6 +67,7 @@ class MainViewModel @Inject constructor(
      */
     fun setDates(patient: PatientBean) {
         viewModelScope.launch {
+            SharedPreferencesUtils.instance.patientBean = patient//存到本地
             val patient = plantDao.insertPatient(patient)
             getPatients()
 //            mEventHub.value = LiveDataEvent(
@@ -101,6 +102,22 @@ class MainViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun getPatientsMax() {//查询最新患者
+        viewModelScope.launch {
+            val patient = plantDao.getMaxPatient()
+            patient?.let {
+                it.collect { patientData ->
+                    if (patientData != null) {
+                        mEventHub.value = LiveDataEvent(
+                            LiveDataEvent.MaxPatient, patientData
+                        )
+                    }
+                }
+            }
+        }
+
     }
 
     fun getNameOrId(nameOrId: String) {//模糊查询姓名和病历号
@@ -211,7 +228,7 @@ class MainViewModel @Inject constructor(
     /**
      * 删除6分钟报告信息
      */
-    fun deleteSixMinReportInfo(reportNo: String){
+    fun deleteSixMinReportInfo(reportNo: String) {
         viewModelScope.launch {
             sixMinReportInfoDao.deleteReportInfo(reportNo)
         }
@@ -220,9 +237,9 @@ class MainViewModel @Inject constructor(
     /**
      * 获取6分钟报告信息
      */
-    fun getSixMinReportInfoById(id: Long,reportNo:String) {
+    fun getSixMinReportInfoById(id: Long, reportNo: String) {
         viewModelScope.launch {
-            sixMinReportInfoDao.getReportInfo(id,reportNo).collect {
+            sixMinReportInfoDao.getReportInfo(id, reportNo).collect {
                 mEventHub.value = LiveDataEvent(
                     LiveDataEvent.QuerySixMinReportInfoSuccess, it
                 )
@@ -281,9 +298,9 @@ class MainViewModel @Inject constructor(
     /**
      * 更新6分钟报告综合评估信息
      */
-    fun updateSixMinReportEvaluation(reportNo:String,fatigueLevel:String,breathLevel:String) {
+    fun updateSixMinReportEvaluation(reportNo: String, fatigueLevel: String, breathLevel: String) {
         viewModelScope.launch {
-            sixMinReportEvaluationDao.updateReportEvaluation(reportNo,fatigueLevel,breathLevel)
+            sixMinReportEvaluationDao.updateReportEvaluation(reportNo, fatigueLevel, breathLevel)
         }
     }
 
@@ -320,7 +337,13 @@ class MainViewModel @Inject constructor(
         afterLow: String
     ) {
         viewModelScope.launch {
-            sixMinReportOtherDao.updateReportOther(reportNo,beforeHigh,beforeLow,afterHigh,afterLow)
+            sixMinReportOtherDao.updateReportOther(
+                reportNo,
+                beforeHigh,
+                beforeLow,
+                afterHigh,
+                afterLow
+            )
         }
     }
 

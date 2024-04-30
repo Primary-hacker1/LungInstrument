@@ -44,4 +44,7 @@ interface PlantDao {
 
     @Insert
     suspend fun insertPatient(patients: PatientBean): Long
+
+    @Query("SELECT * FROM patients  WHERE Id = (SELECT MAX(Id) FROM patients)")//查询最新插入的患者信息
+    fun getMaxPatient(): Flow<PatientBean>?
 }

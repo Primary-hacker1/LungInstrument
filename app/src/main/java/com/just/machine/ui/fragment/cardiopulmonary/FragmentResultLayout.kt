@@ -55,8 +55,6 @@ class FragmentResultLayout @JvmOverloads constructor(
 
     init {
         initView()
-        val lungFormula = LungFormula()
-        lungFormula.main()
     }
 
 

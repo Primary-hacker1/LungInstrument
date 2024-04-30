@@ -97,6 +97,10 @@ class CardiopulmonaryFragment : CommonBaseFragment<FragmentCardiopulmonaryBindin
             activity?.finish()
         }
 
+        binding.toolbar.ivTitleBack.setNoRepeatListener {
+            activity?.finish()
+        }
+
         val navController = findNavController()//fragment返回数据处理
 
         navController.currentBackStackEntry?.savedStateHandle?.getLiveData<String>("key")?.observe(
