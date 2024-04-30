@@ -238,11 +238,10 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:layout_width="0dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginStart="10dp"
-                                android:layout_weight="1.8"
                                 android:orientation="horizontal">
 
                                 <ImageView
@@ -261,7 +260,7 @@
                                     android:textColor="@color/text3" />
 
                                 <EditText
-                                    android:id="@+id/sixmin_tv_unfinish_circle"
+                                    android:id="@+id/sixmin_et_unfinish_circle"
                                     android:layout_width="80dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
@@ -325,6 +324,40 @@
                                 android:layout_marginStart="5dp"
                                 android:textColor="@color/text3" />
 
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/sixmin_pre_ll_reset_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="30dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_gravity="center_vertical"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:text="中途休息了"
+                                android:textColor="@color/text3" />
+
+                            <EditText
+                                android:gravity="center"
+                                android:id="@+id/sixmin_pre_et_reset_time"
+                                android:layout_width="80dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginHorizontal="5dp"
+                                android:textColor="@color/text3"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_gravity="center_vertical"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:text="秒。"
+                                android:textColor="@color/text3" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -912,7 +945,7 @@
                         android:layout_height="45dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="10dp"
-                        android:background="@drawable/sixmin_ignore_blood_pressure_enable"
+                        android:background="@drawable/sixmin_generate_report_button_bg"
                         android:gravity="center"
                         android:src="@mipmap/generate_report"
                         android:text="生成报告"

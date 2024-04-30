@@ -6,6 +6,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CommonUtil {
 
@@ -114,5 +116,23 @@ public class CommonUtil {
             e.printStackTrace();
         }
         return "";
+    }
+
+    /**
+     * 检验数字(整数和小数)
+     * "0+"包括0的正数
+     *
+     * @param num
+     * @param type
+     * @return
+     */
+    public static boolean checkNum(String num, String type) {
+        String eL = "";
+        if (type.equals("0+")) {
+            eL = "^(\\+)?\\d+(\\.\\d{1,1})?$";// 非负整数
+        }
+        Pattern p = Pattern.compile(eL);
+        Matcher m = p.matcher(num);
+        return m.matches();
     }
 }
