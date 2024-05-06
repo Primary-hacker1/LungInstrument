@@ -9,6 +9,7 @@ import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.staticlung.LungFormula
 import com.just.machine.model.staticlung.RoutineLungBean
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.machine.model.staticlung.DynamicBean
 import com.just.news.databinding.FragmentBreatheBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,11 +29,10 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
 
     }
 
-    private var routineLungList: MutableList<RoutineLungBean>? = ArrayList()
+    private var routineLungList: MutableList<RoutineLungBean> = ArrayList()
 
 
     override fun initView() {
-        initData()
 
         val layout = binding.fragmentLayout
 
@@ -55,15 +55,8 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
 //            }
 //        }
 
-        val bean = SharedPreferencesUtils.instance.patientBean
-        LogUtils.e(tag + bean.toString())
-        val age = bean?.age?.toDouble()
-        val sex = bean?.sex
-        val isMale = sex == "男"
-        val height = bean?.height?.toDouble()
-        val weight = bean?.weight?.toDouble()
+        initData()
 
-        LungFormula.main(age = age, heightCm = height, weightKg = weight, isMale = isMale)
     }
 
     override fun initListener() {
@@ -71,21 +64,97 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
     }
 
     private fun initData() {
+        val bean = SharedPreferencesUtils.instance.patientBean
+        LogUtils.e(tag + bean.toString())
+        val age = bean?.age?.toDoubleOrNull()
+        val sex = bean?.sex
+        val isMale = sex == "男"
+        val height = bean?.height?.toDoubleOrNull()
+        val weight = bean?.weight?.toDoubleOrNull()
+
+        val beanSVC = DynamicBean.spinnerItemData("SVC")
+        val lungSVC = LungFormula.main(
+            parameter = "SVC", age = age, heightCm = height, weightKg = weight, isMale = isMale
+        )
+
+        val beanVCEX = DynamicBean.spinnerItemData("VC_ex")
+
+        val beanERV = DynamicBean.spinnerItemData("ERV")
+        val lungERV = LungFormula.main(
+            parameter = "ERV", age = age, heightCm = height, weightKg = weight, isMale = isMale
+        )
+
+        val beanVT = DynamicBean.spinnerItemData("VT")
+
+        val beanIC = DynamicBean.spinnerItemData("IC")
+        val lungIC = LungFormula.main(
+            parameter = "IC", age = age, heightCm = height, weightKg = weight, isMale = isMale
+        )
+
         routineLungList = mutableListOf(
             RoutineLungBean(
-                "用力肺活量(ERV)", "20", "9", "1", "111", "1", "2", "3", "4", "5"
-            ), RoutineLungBean(
-                "一秒量(ERV)", "20", "9", "1", "111", "1", "2", "3", "4", "5"
-            ), RoutineLungBean(
-                "一秒率(ERV)", "20", "9", "1", "111", "1", "2", "3", "4", "5"
-            ), RoutineLungBean(
-                "用力呼气峰流速(ERV)", "20", "9", "1", "111", "1", "2", "3", "4", "5"
-            ), RoutineLungBean(
-                "25%时呼气流逝(ERV)", "20", "9", "1", "111", "1", "2", "3", "4", "5"
-            ), RoutineLungBean(
-                "50%时呼气流逝(ERV)", "20", "9", "1", "111", "1", "2", "3", "4", "5"
-            )
+                beanSVC?.parameterNameCH + "(" + beanSVC?.parameterName + ")",
+                beanSVC?.unit,
+                lungSVC.toString(),
+                "1",
+                "111",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5"
+            ),
+            RoutineLungBean(
+                beanVCEX?.parameterNameCH + "(" + beanVCEX?.parameterName + ")",
+                beanVCEX?.unit,
+                "-",
+                "1",
+                "111",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5"
+            ),
+            RoutineLungBean(
+                beanERV?.parameterNameCH + "(" + beanERV?.parameterName + ")",
+                beanERV?.unit,
+                lungERV.toString(),
+                "1",
+                "111",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5"
+            ),
+            RoutineLungBean(
+                beanVT?.parameterNameCH + "(" + beanVT?.parameterName + ")",
+                beanVT?.unit,
+                "-",
+                "1",
+                "111",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5"
+            ),
+            RoutineLungBean(
+                beanIC?.parameterNameCH + "(" + beanIC?.parameterName + ")",
+                beanIC?.unit,
+                lungIC.toString(),
+                "1",
+                "111",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5"
+            ),
         )
+
+        binding.fragmentLayout.setLungData(routineLungList)
     }
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =

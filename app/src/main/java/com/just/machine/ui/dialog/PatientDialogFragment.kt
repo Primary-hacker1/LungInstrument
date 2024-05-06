@@ -163,15 +163,17 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
 
         binding.btnYes.setNoRepeatListener {
 
-            if (!Constants.isDebug) {
+            if (Constants.isDebug) {
 
                 patient.name = "张三$index"
 
-                patient.age = (1 + index).toString()
+                patient.age = (18 + index).toString()
 
-                patient.sex = "男$index"
+                patient.sex = "男"
 
                 patient.height = "18$index"
+
+                patient.weight = "130"
 
                 patient.addTime = "2024-3-6 13:00"
 
@@ -195,6 +197,8 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
                 patient.sixMinRecordsBean = sixMinRecordsBeans
 
                 viewModel.setDates(patient)//新增患者
+
+                listener?.onClickConfirmBtn(patient.patientId.toString())
 
                 return@setNoRepeatListener
             }

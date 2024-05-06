@@ -23,6 +23,7 @@ import com.just.machine.ui.fragment.setting.CardiopulmonarySettingFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.FragmentCardiopulmonaryBinding
+import com.justsafe.libview.util.DateUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -41,8 +42,13 @@ class CardiopulmonaryFragment : CommonBaseFragment<FragmentCardiopulmonaryBindin
     }
 
     private fun initToolbar() {
+        binding.toolbar.tvRight.setTime(
+            System.currentTimeMillis(),
+            DateUtils.nowTimeDataString
+        )
+
         binding.toolbar.title = Constants.cardiopulmonary//标题
-        binding.toolbar.tvRight.gone()
+//        binding.toolbar.tvRight.gone()
         binding.toolbar.ivTitleBack.visible()
     }
 

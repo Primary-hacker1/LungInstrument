@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="MissingDefaultResource">
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:ignore="MissingDefaultResource">
 
     <data>
 
@@ -11,59 +11,59 @@
 
 
         <variable
-            name="title"
-            type="String" />
+                name="title"
+                type="String" />
 
         <variable
-            name="titleRight"
-            type="String" />
+                name="titleRight"
+                type="String" />
 
         <variable
-            name="setTitleImage"
-            type="Integer" />
+                name="setTitleImage"
+                type="Integer" />
 
         <variable
-            name="setRightOnClick"
-            type="Integer" />
+                name="setRightOnClick"
+                type="Integer" />
 
     </data>
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/colorPrimary"
-        android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/colorPrimary"
+            android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/iv_title_back"
-            setImage="@{setTitleImage}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="60dp"
-            />
+                android:id="@+id/iv_title_back"
+                setImage="@{setTitleImage}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="60dp" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            setText="@{title}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="@color/colorWhile"
-            android:textSize="22sp"
-            android:textStyle="bold" />
+                setText="@{title}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="@color/colorWhile"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_right"
-            setText="@{titleRight}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="10dp"
-            android:textColor="@color/colorWhile"
-            android:textSize="16sp"
-            tools:ignore="RelativeOverlap" />
+        <com.just.machine.util.TimeView
+                android:id="@+id/tv_right"
+                setText="@{titleRight}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:textColor="@color/colorWhile"
+                android:textSize="16sp"
+                android:layout_marginRight="@dimen/space_10"
+                tools:ignore="RelativeOverlap" />
 
     </RelativeLayout>
 </layout>

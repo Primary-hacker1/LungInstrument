@@ -70,6 +70,7 @@ class FragmentStaticLayout @JvmOverloads constructor(
                 binding.previewChart.gone()
                 binding.chartFvc.visible()
             }
+
             else -> {
                 binding.llChat.visible()
                 binding.previewChart.visible()
@@ -79,13 +80,7 @@ class FragmentStaticLayout @JvmOverloads constructor(
         }
     }
 
-    fun setData(test1: MutableList<String>) {
-        this.test1 = test1
-    }
-
     fun initView() {
-
-        initData()
 
         initListener()
 
@@ -157,23 +152,15 @@ class FragmentStaticLayout @JvmOverloads constructor(
     }
 
 
-
-    private fun initData() {
-        routineLungList = mutableListOf(
-            RoutineLungBean(
-                "用力肺活量(ERV)", "20", "9", "1", "111", "1", "2", "3", "4", "5"
-            ), RoutineLungBean(
-                "一秒量(ERV)", "20", "9", "1", "111", "11", "2", "3", "4", "5"
-            ), RoutineLungBean(
-                "一秒率(ERV)", "20", "9", "1", "111", "11", "2", "3", "4", "5"
-            ), RoutineLungBean(
-                "用力呼气峰流速(ERV)", "20", "9", "1", "111", "11", "2", "3", "4", "5"
-            ), RoutineLungBean(
-                "25%时呼气流逝(ERV)", "20", "9", "1", "111", "11", "2", "3", "4", "5"
-            ), RoutineLungBean(
-                "50%时呼气流逝(ERV)", "20", "9", "1", "111", "11", "2", "3", "4", "5"
+    fun setLungData(beans: MutableList<RoutineLungBean>) {
+        routineLungList?.clear()
+        routineLungList?.addAll(beans)
+        LogUtils.e(tag + beans.toString())
+        routineLungList?.let {
+            adapter.setItemsBean(
+                it
             )
-        )
+        }
     }
 
     // 用于保存按钮样式的映射

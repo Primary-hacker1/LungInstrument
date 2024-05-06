@@ -21,7 +21,7 @@ import com.just.machine.ui.fragment.serial.MudbusProtocol
 import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.BaseUtil
-import com.just.machine.util.DynamicUtil
+import com.just.machine.model.staticlung.DynamicBean
 import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FragmentDynamicBinding
@@ -119,7 +119,7 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
         binding.llStart.setNoRepeatListener {
             if (Constants.isDebug) {
 
-                LiveDataBus.get().with("msg").value = DynamicUtil.spinnerItemData()
+                LiveDataBus.get().with("msg").value = DynamicBean.spinnerItemDatas()
 
                 // 调用生成主控板返回数据方法并打印生成的数据
                 val controlBoardResponse = LungTestData(

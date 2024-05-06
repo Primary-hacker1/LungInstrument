@@ -48,6 +48,8 @@ data class LungFormula(
             .replace("AgeAdjust", ageAdjust.toString())
             .replace("WeightKg", weightKg.toString())
 
+        LogUtils.e(tag + "substitutedExpression===$substitutedExpression")
+
         return ExpressionBuilder(substitutedExpression).build().evaluate()
     }
 
@@ -60,7 +62,7 @@ data class LungFormula(
             age: Double? = 25.0,
             weightKg: Double? = 100.0,
             isMale: Boolean? = true
-        ) {
+        ): Double? {
             val formulas = listOf(
                 LungFormula(
                     2,
@@ -264,23 +266,23 @@ data class LungFormula(
             )
 
             val lungFormula = LungFormula()
-            var value: Double
+            var value: Double? = 0.0
             for (formula in formulas) {
-                var value = heightCm?.let {
-                    if (age != null) {
-                        if (weightKg != null) {
-                            if (isMale != null) {
-//                                if (formula.parameter != parameter) return
-                                lungFormula.calculateLungValue(
-                                    formula,
-                                    it, age, weightKg, isMale
-                                )
-                            }
-                        }
+                if (formula.parameter != parameter) continue // 如果不匹配，继续检查下一个
+                value =
+                    if (heightCm != null && age != null && weightKg != null && isMale != null) {
+                        lungFormula.calculateLungValue(formula, heightCm, age, weightKg, isMale)
+                    } else {
+                        0.0 // 或者其他你认为合适的默认值
                     }
-                }
                 LogUtils.e("${formula.preName} ${formula.type}: $value")
             }
+
+            // 保证格式化发生在有效值更新之后
+            value = "%.2f".format(value ?: 0.0).toDouble()
+
+            return value
+
         }
     }
 }

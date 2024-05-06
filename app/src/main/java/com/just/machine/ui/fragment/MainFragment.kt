@@ -86,9 +86,9 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
 
         binding.btnEcg.setNoRepeatListener {//心肺测试
             var isClick = SharedPreferencesUtils.instance.isClickBtn
-            if (Constants.isDebug) {
-                isClick = "1"
-            }
+//            if (Constants.isDebug) {
+//                isClick = "1"
+//            }
             when (isClick) {
                 "" -> {
                     val patientDialogFragment =
@@ -96,7 +96,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                     patientDialogFragment.setDialogOnClickListener(object :
                         PatientDialogFragment.PatientDialogListener {
                         override fun onClickConfirmBtn(patientId:String) {//确认
-                            SharedPreferencesUtils.instance.isClickBtn = "1"
+//                            SharedPreferencesUtils.instance.isClickBtn = "1"
                             patientDialogFragment.dismiss()
                             CardiopulmonaryActivity.startCardiopulmonaryActivity(context)
                         }
