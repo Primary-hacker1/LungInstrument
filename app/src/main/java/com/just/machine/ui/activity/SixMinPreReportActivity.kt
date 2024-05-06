@@ -618,9 +618,9 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                             showMsg("请检查运动心率值")
                             return@setNoRepeatListener
                         }
+                        sixMinReportPrescription.heartrateRate =
+                            binding.sixminPreEtSportEcg.text.toString()
                     }
-                    sixMinReportPrescription.heartrateRate =
-                        binding.sixminPreEtSportEcg.text.toString()
 
                     if (sixMinReportPrescription.metabState.isEmpty() || sixMinReportPrescription.metabState == "1") {
                         val metab = binding.sixminPreEtMetab.text.toString()
@@ -628,8 +628,8 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                             showMsg("请检查代谢当量值")
                             return@setNoRepeatListener
                         }
+                        sixMinReportPrescription.metabMet = binding.sixminPreEtMetab.text.toString()
                     }
-                    sixMinReportPrescription.metabMet = binding.sixminPreEtMetab.text.toString()
 
                     if (sixMinReportPrescription.pllevState.isEmpty() || sixMinReportPrescription.pllevState == "1") {
                         val tireLow = binding.sixminPreEtTiredControlLow.text.toString()
@@ -647,15 +647,14 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                             showMsg("请检查疲劳程度控制，起始值不可大于终止值")
                             return@setNoRepeatListener
                         }
-                    }
-                    sixMinReportPrescription.pllevBefore =
-                        binding.sixminPreEtTiredControlLow.text.toString()
-                    sixMinReportPrescription.pllevAfter =
-                        binding.sixminPreEtTiredControlHigh.text.toString()
-                    if (sixMinReportPrescription.pllevState == "1" || sixMinReportPrescription.pllevState.isEmpty()) {
+
+                        sixMinReportPrescription.pllevBefore =
+                            tireLow
+                        sixMinReportPrescription.pllevAfter =
+                            tireHigh
                         sixMinReportPrescription.pilaoControl = usbTransferUtil.dealPiLaoKZ(
-                            binding.sixminPreEtTiredControlLow.text.toString().toInt(),
-                            binding.sixminPreEtTiredControlHigh.text.toString().toInt()
+                            tireLow.toInt(),
+                            tireHigh.toInt()
                         )
                     }
 
@@ -798,9 +797,9 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                             showMsg("请检查运动心率值")
                             return@setNoRepeatListener
                         }
+                        sixMinReportPrescription.heartrateRate =
+                            binding.sixminPreEtSportEcg.text.toString()
                     }
-                    sixMinReportPrescription.heartrateRate =
-                        binding.sixminPreEtSportEcg.text.toString()
 
                     if (sixMinReportPrescription.metabState.isEmpty() || sixMinReportPrescription.metabState == "1") {
                         val metab = binding.sixminPreEtMetab.text.toString()
@@ -808,8 +807,9 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                             showMsg("请检查代谢当量值")
                             return@setNoRepeatListener
                         }
+
+                        sixMinReportPrescription.metabMet = binding.sixminPreEtMetab.text.toString()
                     }
-                    sixMinReportPrescription.metabMet = binding.sixminPreEtMetab.text.toString()
 
                     if (sixMinReportPrescription.pllevState.isEmpty() || sixMinReportPrescription.pllevState == "1") {
                         val tireLow = binding.sixminPreEtTiredControlLow.text.toString()
@@ -827,12 +827,11 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                             showMsg("请检查疲劳程度控制，起始值不可大于终止值")
                             return@setNoRepeatListener
                         }
-                    }
-                    sixMinReportPrescription.pllevBefore =
-                        binding.sixminPreEtTiredControlLow.text.toString()
-                    sixMinReportPrescription.pllevAfter =
-                        binding.sixminPreEtTiredControlHigh.text.toString()
-                    if (sixMinReportPrescription.pllevState == "1" || sixMinReportPrescription.pllevState.isEmpty()) {
+
+                        sixMinReportPrescription.pllevBefore =
+                            binding.sixminPreEtTiredControlLow.text.toString()
+                        sixMinReportPrescription.pllevAfter =
+                            binding.sixminPreEtTiredControlHigh.text.toString()
                         sixMinReportPrescription.pilaoControl = usbTransferUtil.dealPiLaoKZ(
                             binding.sixminPreEtTiredControlLow.text.toString().toInt(),
                             binding.sixminPreEtTiredControlHigh.text.toString().toInt()
@@ -1114,8 +1113,8 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                         ydbsStr1 = sixMinReportPrescription.strideBefore
                         ydbsStr2 = sixMinReportPrescription.strideAfter
                     } else if (sixMinReportPrescription.distanceState == "2") {
-                        ydbsStr1 = "/"
-                        ydbsStr2 = "/"
+                        ydbsStr1 = "\\"
+                        ydbsStr2 = "\\"
                     }
                 }
             }
@@ -1165,8 +1164,8 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                         ydjlStr1 = sixMinReportPrescription.movementDistance
                         ydjlStr2 = sixMinReportPrescription.movementDistanceAfter
                     } else if (sixMinReportPrescription.distanceState == "2") {
-                        ydjlStr1 = "/"
-                        ydjlStr2 = "/"
+                        ydjlStr1 = "\\"
+                        ydjlStr2 = "\\"
                     }
                 }
             }
@@ -1180,7 +1179,7 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                 if (sixMinReportPrescription.heartrateState == "1" || sixMinReportPrescription.heartrateState.isEmpty()) {
                     ydxlStr = sixMinReportPrescription.heartrateRate
                 } else if (sixMinReportPrescription.heartrateState == "2") {
-                    ydxlStr = "/"
+                    ydxlStr = "\\"
                 }
             }
             binding.sixminPreEtSportEcg.setText(ydxlStr)
@@ -1192,7 +1191,7 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                 if (sixMinReportPrescription.metabState == "1" || sixMinReportPrescription.metabState.isEmpty()) {
                     dxdlStr = sixMinReportPrescription.metabMet
                 } else if (sixMinReportPrescription.metabState == "2") {
-                    dxdlStr = "/"
+                    dxdlStr = "\\"
                 }
             }
             binding.sixminPreEtMetab.setText(dxdlStr)
@@ -1206,8 +1205,8 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                     plzhi1Str = sixMinReportPrescription.pllevBefore
                     plzhi2Str = sixMinReportPrescription.pllevAfter
                 } else if (sixMinReportPrescription.metabState == "2") {
-                    plzhi1Str = "/"
-                    plzhi2Str = "/"
+                    plzhi1Str = "\\"
+                    plzhi2Str = "\\"
                 }
             }
             binding.sixminPreEtTiredControlLow.setText(plzhi1Str)
@@ -1367,7 +1366,7 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
 
             for (j in 0..10) {
                 val tvNo = TextView(applicationContext)
-                tvNo.textSize = dip2px(7.0f).toFloat()
+                tvNo.textSize = dip2px(6.0f).toFloat()
                 // 设置文字居中
                 tvNo.gravity = if (j == 0) Gravity.START else Gravity.CENTER
                 tvNo.setTextColor(ContextCompat.getColor(this, R.color.text3))

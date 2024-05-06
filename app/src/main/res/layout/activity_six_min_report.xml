@@ -140,7 +140,7 @@
                             android:gravity="center"
                             android:text="@string/sixmin_test_report_check_report_title"
                             android:textColor="#000000"
-                            android:textSize="24sp"
+                            android:textSize="20sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -148,7 +148,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:gravity="center"
-                            android:text="@string/sixmin_test_report_check_report_title_english" />
+                            android:text="@string/sixmin_test_report_check_report_title_english"
+                            android:textColor="@color/text3" />
 
                     </LinearLayout>
 
@@ -286,7 +287,7 @@
                         android:layout_marginEnd="50dp"
                         android:text="@string/sixmin_test_report_check_report_data_statistics_title"
                         android:textColor="#000000"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <FrameLayout
@@ -346,7 +347,7 @@
                         android:layout_marginEnd="50dp"
                         android:text="@string/sixmin_test_report_check_report_comprehensive_evaluation_title"
                         android:textColor="#000000"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -377,17 +378,18 @@
                                         android:gravity="center"
                                         android:paddingVertical="5dp"
                                         android:text="疲劳量级(前/后)"
+                                        android:textColor="@color/text3"
                                         android:textSize="12sp" />
 
                                     <TextView
-                                        android:id="@+id/sixmin_report_tv_tired_level"
+                                        android:id="@+id/sixmin_report_tv_evaluation_tired_level"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:background="@drawable/tablelayout_cell_stroke_single"
                                         android:gravity="center"
                                         android:paddingVertical="5dp"
-                                        android:text="0级/4级"
+                                        android:text="0级/7-9级"
                                         android:textSize="12sp" />
 
                                 </LinearLayout>
@@ -407,9 +409,11 @@
                                         android:paddingHorizontal="10dp"
                                         android:paddingVertical="5dp"
                                         android:text="前一次试验实测距离"
+                                        android:textColor="@color/text3"
                                         android:textSize="12sp" />
 
                                     <TextView
+                                        android:id="@+id/sixmin_report_tv_last_test_distance"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
@@ -437,9 +441,11 @@
                                         android:paddingHorizontal="10dp"
                                         android:paddingVertical="5dp"
                                         android:text="总步数"
+                                        android:textColor="@color/text3"
                                         android:textSize="12sp" />
 
                                     <TextView
+                                        android:id="@+id/sixmin_report_tv_total_steps"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
@@ -471,9 +477,11 @@
                                         android:gravity="center"
                                         android:paddingVertical="5dp"
                                         android:text="呼吸量级(前/后)"
+                                        android:textColor="@color/text3"
                                         android:textSize="12sp" />
 
                                     <TextView
+                                        android:id="@+id/sixmin_report_tv_breathing_level"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
@@ -501,9 +509,11 @@
                                         android:paddingHorizontal="10dp"
                                         android:paddingVertical="5dp"
                                         android:text="此次试验实测距离"
+                                        android:textColor="@color/text3"
                                         android:textSize="12sp" />
 
                                     <TextView
+                                        android:id="@+id/sixmin_report_tv_this_test_distance"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
@@ -530,10 +540,12 @@
                                         android:background="@drawable/tablelayout_cell_stroke_single"
                                         android:paddingHorizontal="10dp"
                                         android:paddingVertical="5dp"
-                                        android:text="平均步数"
+                                        android:text="平均步速"
+                                        android:textColor="@color/text3"
                                         android:textSize="12sp" />
 
                                     <TextView
+                                        android:id="@+id/sixmin_report_tv_average_stride"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
@@ -565,16 +577,18 @@
                                         android:paddingHorizontal="10dp"
                                         android:paddingVertical="5dp"
                                         android:text="代谢当量"
+                                        android:textColor="@color/text3"
                                         android:textSize="12sp" />
 
                                     <TextView
+                                        android:id="@+id/sixmin_report_tv_evaluation_metab"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:background="@drawable/tablelayout_cell_stroke_single"
                                         android:gravity="center"
                                         android:paddingVertical="5dp"
-                                        android:text="10.6METs"
+                                        android:text="10.68METs"
                                         android:textSize="12sp" />
 
                                 </LinearLayout>
@@ -595,9 +609,11 @@
                                         android:paddingHorizontal="10dp"
                                         android:paddingVertical="5dp"
                                         android:text="此次实测距离占预值"
+                                        android:textColor="@color/text3"
                                         android:textSize="12sp" />
 
                                     <TextView
+                                        android:id="@+id/sixmin_report_tv_accounted"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
@@ -625,9 +641,11 @@
                                         android:paddingVertical="5dp"
                                         android:paddingStart="10dp"
                                         android:text="静止心率(参考值:60-100)"
+                                        android:textColor="@color/text3"
                                         android:textSize="12sp" />
 
                                     <TextView
+                                        android:id="@+id/sixmin_report_tv_stop_heart_beat"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
@@ -659,9 +677,11 @@
                                         android:paddingHorizontal="10dp"
                                         android:paddingVertical="5dp"
                                         android:text="心肺功能"
+                                        android:textColor="@color/text3"
                                         android:textSize="12sp" />
 
                                     <TextView
+                                        android:id="@+id/sixmin_report_tv_cardiopulmonary_level"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
@@ -689,9 +709,11 @@
                                         android:paddingHorizontal="10dp"
                                         android:paddingVertical="5dp"
                                         android:text="心功能严重程度"
+                                        android:textColor="@color/text3"
                                         android:textSize="12sp" />
 
                                     <TextView
+                                        android:id="@+id/sixmin_report_tv_cardiac_function_level"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
@@ -719,9 +741,11 @@
                                         android:paddingVertical="5dp"
                                         android:paddingStart="10dp"
                                         android:text="运动心率恢复值(参考值:≥12)"
+                                        android:textColor="@color/text3"
                                         android:textSize="12sp" />
 
                                     <TextView
+                                        android:id="@+id/sixmin_report_tv_evaluation_sport_restore_heart_beat"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
@@ -742,12 +766,13 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_span="3"
                                     android:layout_weight="3"
-                                    android:paddingHorizontal="10dp"
-                                    android:paddingVertical="5dp"
                                     android:background="@drawable/tablelayout_cell_stroke"
-                                    android:orientation="horizontal">
+                                    android:orientation="horizontal"
+                                    android:paddingHorizontal="10dp"
+                                    android:paddingVertical="5dp">
 
                                     <TextView
+                                        android:id="@+id/sixmin_report_tv_conclusion"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
@@ -770,7 +795,7 @@
                         android:layout_marginEnd="50dp"
                         android:text="@string/sixmin_test_report_check_report_sport_prescription_advice_title"
                         android:textColor="#000000"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -792,7 +817,8 @@
                                     android:layout_span="1"
                                     android:layout_weight="1"
                                     android:gravity="center"
-                                    android:text="【运动模式】" />
+                                    android:text="【运动模式】"
+                                    android:textColor="@color/text3" />
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
@@ -801,21 +827,43 @@
                                     android:layout_span="1"
                                     android:layout_weight="1"
                                     android:background="@drawable/tablelayout_cell_stroke_single"
-                                    android:orientation="horizontal"
-                                    android:paddingStart="26dp">
+                                    android:orientation="horizontal">
+
+                                    <RadioButton
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:visibility="invisible" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="步行"
+                                        android:visibility="invisible" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_span="1"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
 
                                     <RadioButton
                                         android:id="@+id/sixmin_report_rb_walk"
-                                        android:enabled="false"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical" />
+                                        android:layout_gravity="center_vertical"
+                                        android:enabled="false" />
 
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
-                                        android:text="步行" />
+                                        android:text="跑步" />
 
                                 </LinearLayout>
 
@@ -825,239 +873,344 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_span="1"
                                     android:layout_weight="1"
-                                    android:orientation="horizontal"
-                                    android:visibility="gone">
+                                    android:orientation="horizontal">
 
                                     <RadioButton
-                                        android:enabled="false"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical" />
+                                        android:layout_gravity="center_vertical"
+                                        android:enabled="false"
+                                        android:visibility="invisible" />
 
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
-                                        android:text="步行" />
+                                        android:text="步行"
+                                        android:visibility="invisible" />
 
                                 </LinearLayout>
 
                                 <LinearLayout
-                                    android:layout_width="match_parent"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_span="1"
                                     android:layout_weight="1"
                                     android:background="@drawable/tablelayout_cell_stroke_single"
-                                    android:orientation="horizontal"
-                                    android:paddingStart="26dp">
+                                    android:orientation="horizontal">
 
                                     <RadioButton
-                                        android:id="@+id/sixmin_report_rb_run"
-                                        android:enabled="false"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical" />
+                                        android:layout_gravity="center_vertical"
+                                        android:enabled="false"
+                                        android:visibility="invisible" />
 
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
-                                        android:text="跑步" />
+                                        android:text="跑步"
+                                        android:visibility="invisible" />
 
                                 </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_span="1"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+
+                                    <RadioButton
+                                        android:id="@+id/sixmin_report_rb_run"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:enabled="false" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="步行"
+                                        android:textSize="12sp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_span="1"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+
+                                    <RadioButton
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:enabled="false"
+                                        android:visibility="invisible" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="跑步"
+                                        android:textSize="12sp"
+                                        android:visibility="invisible" />
+
+                                </LinearLayout>
+
+                            </TableRow>
+
+                            <TableRow android:background="@drawable/tablelayout_cell_stroke">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:padding="2dp"
+                                    android:text="【运动强度】"
+                                    android:textColor="@color/text3"
+                                    android:textSize="12sp" />
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
-                                    android:layout_span="1"
-                                    android:layout_weight="1"
-                                    android:orientation="horizontal"
-                                    android:visibility="gone">
+                                    android:layout_span="6"
+                                    android:layout_weight="6"
+                                    android:background="@drawable/tablelayout_cell_stroke"
+                                    android:orientation="vertical">
 
-                                    <CheckBox
-                                        android:layout_width="wrap_content"
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical" />
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="80dp"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/tablelayout_cell_stroke_single"
+                                            android:gravity="center"
+                                            android:padding="2dp"
+                                            android:text="运动步速"
+                                            android:textColor="@color/text3"
+                                            android:textSize="12sp" />
+
+                                        <LinearLayout
+                                            android:layout_width="169.5dp"
+                                            android:layout_height="wrap_content">
+
+                                            <TextView
+                                                android:id="@+id/sixmin_report_tv_sport_stride"
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="2"
+                                                android:background="@drawable/tablelayout_cell_stroke_single"
+                                                android:gravity="center"
+                                                android:padding="2dp"
+                                                android:text="116.5~139.7米/分钟"
+                                                android:textSize="12sp" />
+
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:layout_width="80dp"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/tablelayout_cell_stroke_single"
+                                            android:gravity="center"
+                                            android:padding="2dp"
+                                            android:text="运动距离"
+                                            android:textColor="@color/text3"
+                                            android:textSize="12sp" />
+
+                                        <TextView
+                                            android:id="@+id/sixmin_report_tv_sport_distance"
+                                            android:layout_width="200dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="2"
+                                            android:background="@drawable/tablelayout_cell_stroke"
+                                            android:gravity="center"
+                                            android:padding="2dp"
+                                            android:text="3493.5~4192.2米"
+                                            android:textSize="12sp" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="80dp"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/tablelayout_cell_stroke_single"
+                                            android:gravity="center"
+                                            android:padding="2dp"
+                                            android:text="运动时间"
+                                            android:textColor="@color/text3"
+                                            android:textSize="12sp" />
+
+                                        <LinearLayout
+                                            android:layout_width="169.5dp"
+                                            android:layout_height="wrap_content">
+
+                                            <TextView
+                                                android:id="@+id/sixmin_report_tv_sport_time"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/tablelayout_cell_stroke_single"
+                                                android:gravity="center"
+                                                android:padding="2dp"
+                                                android:text="30分钟"
+                                                android:textSize="12sp" />
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:background="@drawable/tablelayout_cell_stroke_single"
+                                                android:gravity="center"
+                                                android:padding="2dp"
+                                                android:text="运动心率"
+                                                android:textColor="@color/text3"
+                                                android:textSize="12sp" />
+
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:id="@+id/sixmin_report_tv_prescription_heart_beat"
+                                            android:layout_width="80dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:background="@drawable/tablelayout_cell_stroke_single"
+                                            android:gravity="center"
+                                            android:padding="2dp"
+                                            android:text="120bmp"
+                                            android:textSize="12sp" />
+
+                                        <TextView
+                                            android:layout_width="70dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:background="@drawable/tablelayout_cell_stroke_single"
+                                            android:gravity="center"
+                                            android:padding="2dp"
+                                            android:text="运动周期"
+                                            android:textColor="@color/text3"
+                                            android:textSize="12sp" />
+
+                                        <TextView
+                                            android:id="@+id/sixmin_report_tv_sport_peroid"
+                                            android:layout_width="92dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:background="@drawable/tablelayout_cell_stroke"
+                                            android:gravity="center"
+                                            android:padding="2dp"
+                                            android:text="3次/周，5周"
+                                            android:textSize="12sp" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="80dp"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/tablelayout_cell_stroke_single"
+                                            android:gravity="center"
+                                            android:padding="2dp"
+                                            android:text="自觉疲劳程度"
+                                            android:textColor="@color/text3"
+                                            android:textSize="12sp" />
+
+                                        <TextView
+                                            android:id="@+id/sixmin_report_tv_prescription_tired_level"
+                                            android:layout_width="265dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="3"
+                                            android:background="@drawable/tablelayout_cell_stroke_single"
+                                            android:padding="2dp"
+                                            android:textSize="12sp" />
+
+                                        <TextView
+                                            android:layout_width="75dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:background="@drawable/tablelayout_cell_stroke_single"
+                                            android:gravity="center"
+                                            android:padding="2dp"
+                                            android:text="代谢当量"
+                                            android:textColor="@color/text3"
+                                            android:textSize="12sp" />
+
+                                        <TextView
+                                            android:id="@+id/sixmin_report_tv_prescription_metab"
+                                            android:layout_width="102dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="2"
+                                            android:background="@drawable/tablelayout_cell_stroke"
+                                            android:gravity="center"
+                                            android:padding="2dp"
+                                            android:text="3.68METs"
+                                            android:textSize="12sp" />
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                            </TableRow>
+
+                            <TableRow android:background="@drawable/tablelayout_cell_stroke">
+
+                                <TextView
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text="【注意事项】"
+                                    android:textColor="@color/text3"
+                                    android:textSize="12sp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_span="6"
+                                    android:layout_weight="6"
+                                    android:background="@drawable/tablelayout_cell_stroke"
+                                    android:orientation="vertical">
 
                                     <TextView
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
-                                        android:text="跑步" />
-
-                                </LinearLayout>
-
-                            </TableRow>
-
-                            <TableRow android:background="@drawable/tablelayout_cell_stroke">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_weight="1"
-                                    android:gravity="center"
-                                    android:padding="2dp"
-                                    android:text="【运动时间】" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_weight="1"
-                                    android:background="@drawable/tablelayout_cell_stroke"
-                                    android:gravity="center"
-                                    android:padding="2dp"
-                                    android:text="运动节奏" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_weight="1"
-                                    android:background="@drawable/tablelayout_cell_stroke"
-                                    android:gravity="center"
-                                    android:padding="2dp"
-                                    android:text="3100米/30分钟" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_weight="1"
-                                    android:background="@drawable/tablelayout_cell_stroke"
-                                    android:gravity="center"
-                                    android:padding="2dp"
-                                    android:text="运动周期" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_weight="1"
-                                    android:background="@drawable/tablelayout_cell_stroke"
-                                    android:gravity="center"
-                                    android:padding="2dp"
-                                    android:text="2次/日 4周" />
-                            </TableRow>
-
-                            <TableRow
-                                android:background="@drawable/tablelayout_cell_stroke"
-                                android:collapseColumns="1">
-
-                                <TextView
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_weight="1"
-                                    android:gravity="center"
-                                    android:padding="2dp"
-                                    android:text="【运动强度】" />
-
-                                <LinearLayout
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_weight="1"
-                                    android:background="@drawable/tablelayout_cell_stroke"
-                                    android:orientation="vertical">
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:padding="2dp"
-                                        android:text="运动强度控制" />
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
                                         android:background="@drawable/tablelayout_cell_stroke"
-                                        android:gravity="center"
                                         android:padding="2dp"
-                                        android:text="自觉疲劳程度" />
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_weight="1"
-                                    android:background="@drawable/tablelayout_cell_stroke"
-                                    android:orientation="vertical">
+                                        android:text="运动过程中一旦出现胸闷、胸痛、眩晕、心慌、气短等症状，请立即停止运动，若症状缓解不明显，请及时就医详诊。"
+                                        android:textSize="12sp" />
 
                                     <TextView
+                                        android:id="@+id/sixmin_report_tv_note"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:padding="2dp"
-                                        android:text="60-80%" />
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
                                         android:background="@drawable/tablelayout_cell_stroke"
-                                        android:gravity="center"
-                                        android:padding="2dp"
-                                        android:text="4级-有点疲劳" />
+                                        android:padding="10dp"
+                                        android:textSize="12sp" />
 
                                 </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_weight="1"
-                                    android:background="@drawable/tablelayout_cell_stroke"
-                                    android:orientation="vertical">
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:padding="2dp"
-                                        android:text="储备心率" />
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:background="@drawable/tablelayout_cell_stroke"
-                                        android:gravity="center"
-                                        android:padding="2dp"
-                                        android:text="最佳心率" />
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_weight="1"
-                                    android:background="@drawable/tablelayout_cell_stroke"
-                                    android:orientation="vertical">
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center"
-                                        android:padding="2dp"
-                                        android:text="100bpm" />
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:background="@drawable/tablelayout_cell_stroke"
-                                        android:gravity="center"
-                                        android:padding="2dp"
-                                        android:text="130-150bpm" />
-
-                                </LinearLayout>
-
-                            </TableRow>
-
-                            <TableRow android:background="@drawable/tablelayout_cell_stroke">
-
-                                <TextView
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_weight="1"
-                                    android:gravity="center"
-                                    android:text="【注意事项】" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_span="4"
-                                    android:layout_weight="4"
-                                    android:background="@drawable/tablelayout_cell_stroke"
-                                    android:padding="10dp"
-                                    android:text="运动过程中一旦出现胸闷、胸痛、眩晕、心慌、气短等症状，请立即停止运动，若症状缓解不明显，请及时就医详诊。运动过程中一旦出现胸闷、胸痛、眩晕、心慌、气短等症状，请立即停止运动，若症状缓解不明显，请及时就医详诊运动过程中一旦出现胸闷、胸痛、眩晕、心慌、气短等症状，请立即停止运动，若症状缓解不明显，请及时就医详诊" />
 
                             </TableRow>
 
@@ -1079,23 +1232,28 @@
                         android:layout_marginTop="10dp">
 
                         <TextView
+                            android:id="@+id/sixmin_report_tv_check_doctor"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/sixmin_test_report_check_doctor" />
+                            android:text="@string/sixmin_test_report_check_doctor"
+                            android:textSize="12sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
                             android:layout_weight="1"
-                            android:text="第1页/共2页" />
+                            android:text="第1页/共2页"
+                            android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/sixmin_report_tv_test_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_weight="1"
-                            android:text="检验时间: 2024-04-16 14.59.03" />
+                            android:text="检验时间: 2024-04-16 14.59.03"
+                            android:textSize="12sp" />
 
                     </RelativeLayout>
 
@@ -1121,13 +1279,13 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/sixmin_report_export_report_bg"
                 android:orientation="horizontal"
                 android:paddingHorizontal="20dp"
-                android:paddingVertical="8dp">
+                android:paddingVertical="8dp"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="22dp"
@@ -1148,6 +1306,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/sixmin_report_ll_print_report"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"

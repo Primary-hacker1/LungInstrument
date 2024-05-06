@@ -78,7 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="36dp"
-            android:layout_marginTop="24dp">
+            android:layout_marginTop="12dp">
 
             <LinearLayout
                 android:id="@+id/sixmin_ll_pre_report"
@@ -151,7 +151,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="0.75dp"
                                 android:layout_marginStart="20dp"
-                                android:layout_marginTop="25dp"
+                                android:layout_marginTop="20dp"
                                 android:layout_marginEnd="5dp"
                                 android:background="#231815" />
 
@@ -161,7 +161,7 @@
                                 android:layout_gravity="bottom"
                                 android:layout_marginStart="15dp"
                                 android:layout_marginEnd="5dp"
-                                android:layout_marginBottom="25dp"
+                                android:layout_marginBottom="20dp"
                                 android:background="#231815" />
 
                             <View
@@ -192,7 +192,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:layout_marginTop="10dp"
                             android:orientation="horizontal">
 
                             <LinearLayout
@@ -202,8 +201,8 @@
                                 android:orientation="horizontal">
 
                                 <ImageView
-                                    android:layout_width="22dp"
-                                    android:layout_height="22dp"
+                                    android:layout_width="18dp"
+                                    android:layout_height="18dp"
                                     android:layout_gravity="center_vertical"
                                     android:scaleType="centerInside"
                                     android:src="@mipmap/circle_finish" />
@@ -214,7 +213,8 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginStart="5dp"
                                     android:text="圈数:"
-                                    android:textColor="@color/text3" />
+                                    android:textColor="@color/text3"
+                                    android:textSize="12sp" />
 
                                 <EditText
                                     android:id="@+id/sixmin_et_finish_circle"
@@ -225,7 +225,7 @@
                                     android:gravity="center"
                                     android:inputType="number"
                                     android:textColor="@color/text3"
-                                    android:textSize="19sp"
+                                    android:textSize="16sp"
                                     android:textStyle="bold" />
 
                                 <TextView
@@ -233,7 +233,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:text="圈"
-                                    android:textColor="@color/text3" />
+                                    android:textColor="@color/text3"
+                                    android:textSize="12sp" />
 
                             </LinearLayout>
 
@@ -245,8 +246,8 @@
                                 android:orientation="horizontal">
 
                                 <ImageView
-                                    android:layout_width="22dp"
-                                    android:layout_height="22dp"
+                                    android:layout_width="18dp"
+                                    android:layout_height="18dp"
                                     android:layout_gravity="center_vertical"
                                     android:scaleType="centerInside"
                                     android:src="@mipmap/circle_unfinish" />
@@ -257,7 +258,8 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginStart="5dp"
                                     android:text="未走完的那圈还剩下:"
-                                    android:textColor="@color/text3" />
+                                    android:textColor="@color/text3"
+                                    android:textSize="12sp" />
 
                                 <EditText
                                     android:id="@+id/sixmin_et_unfinish_circle"
@@ -268,7 +270,7 @@
                                     android:gravity="center"
                                     android:inputType="numberDecimal"
                                     android:textColor="@color/text3"
-                                    android:textSize="19sp"
+                                    android:textSize="16sp"
                                     android:textStyle="bold" />
 
                                 <TextView
@@ -276,7 +278,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:text="米"
-                                    android:textColor="@color/text3" />
+                                    android:textColor="@color/text3"
+                                    android:textSize="12sp" />
 
                             </LinearLayout>
 
@@ -288,8 +291,8 @@
                                 android:orientation="horizontal">
 
                                 <ImageView
-                                    android:layout_width="22dp"
-                                    android:layout_height="22dp"
+                                    android:layout_width="18dp"
+                                    android:layout_height="18dp"
                                     android:layout_gravity="center_vertical"
                                     android:scaleType="centerInside"
                                     android:src="@mipmap/total_distance" />
@@ -300,7 +303,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginStart="5dp"
-                                    android:textColor="@color/text3" />
+                                    android:textColor="@color/text3"
+                                    android:textSize="12sp" />
 
                             </LinearLayout>
                         </LinearLayout>
@@ -312,8 +316,8 @@
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:layout_width="22dp"
-                                android:layout_height="22dp"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
                                 android:scaleType="centerInside"
                                 android:src="@mipmap/conclusion" />
 
@@ -322,7 +326,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="5dp"
-                                android:textColor="@color/text3" />
+                                android:textColor="@color/text3"
+                                android:textSize="12sp" />
 
                         </LinearLayout>
 
@@ -334,37 +339,39 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:layout_gravity="center_vertical"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
                                 android:layout_marginStart="5dp"
                                 android:text="中途休息了"
-                                android:textColor="@color/text3" />
+                                android:textColor="@color/text3"
+                                android:textSize="12sp" />
 
                             <EditText
-                                android:gravity="center"
                                 android:id="@+id/sixmin_pre_et_reset_time"
                                 android:layout_width="80dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginHorizontal="5dp"
+                                android:gravity="center"
                                 android:textColor="@color/text3"
+                                android:textSize="16sp"
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:layout_gravity="center_vertical"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
                                 android:layout_marginStart="5dp"
                                 android:text="秒。"
-                                android:textColor="@color/text3" />
+                                android:textColor="@color/text3"
+                                android:textSize="12sp" />
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="10dp"
-                            android:layout_marginBottom="10dp"
                             android:orientation="horizontal">
 
                             <TextView
@@ -373,7 +380,8 @@
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginStart="10dp"
                                 android:text="心电结论:"
-                                android:textColor="@color/text3" />
+                                android:textColor="@color/text3"
+                                android:textSize="12sp" />
 
                             <EditText
                                 android:id="@+id/sixmin_et_heart_beat_conclusion"
@@ -381,7 +389,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginStart="5dp"
-                                android:layout_weight="1" />
+                                android:layout_weight="1"
+                                android:textSize="14sp" />
 
                         </LinearLayout>
 
@@ -433,8 +442,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/sixmin_report_content_bg"
                             android:orientation="vertical"
-                            android:paddingHorizontal="20dp"
-                            android:paddingVertical="10dp">
+                            android:paddingHorizontal="20dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -452,7 +460,8 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:text="建议运动方式:"
-                                        android:textColor="@color/text3" />
+                                        android:textColor="@color/text3"
+                                        android:textSize="12sp" />
 
                                     <RadioGroup
                                         android:layout_width="wrap_content"
@@ -465,14 +474,16 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:buttonTint="@color/colorPrimary"
-                                            android:text="步行" />
+                                            android:text="步行"
+                                            android:textSize="12sp" />
 
                                         <RadioButton
                                             android:id="@+id/sixmin_rb_sport_type_run"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:buttonTint="@color/colorPrimary"
-                                            android:text="跑步" />
+                                            android:text="跑步"
+                                            android:textSize="12sp" />
                                     </RadioGroup>
 
                                 </LinearLayout>
@@ -489,7 +500,8 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:text="运动步速控制在:"
-                                        android:textColor="@color/text3" />
+                                        android:textColor="@color/text3"
+                                        android:textSize="12sp" />
 
                                     <EditText
                                         android:id="@+id/sixmin_pre_et_stride_low"
@@ -498,6 +510,7 @@
                                         android:gravity="center"
                                         android:inputType="numberDecimal"
                                         android:textColor="@color/text3"
+                                        android:textSize="16sp"
                                         android:textStyle="bold" />
 
                                     <TextView
@@ -506,6 +519,7 @@
                                         android:layout_gravity="center_vertical"
                                         android:text="~"
                                         android:textColor="@color/text3"
+                                        android:textSize="12sp"
                                         android:textStyle="bold" />
 
                                     <EditText
@@ -515,6 +529,7 @@
                                         android:gravity="center"
                                         android:inputType="numberDecimal"
                                         android:textColor="@color/text3"
+                                        android:textSize="16sp"
                                         android:textStyle="bold" />
 
                                     <TextView
@@ -522,7 +537,8 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:text="米/分钟"
-                                        android:textColor="@color/text3" />
+                                        android:textColor="@color/text3"
+                                        android:textSize="12sp" />
 
                                 </LinearLayout>
 
@@ -544,7 +560,8 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:text="建议单次运动时长:"
-                                        android:textColor="@color/text3" />
+                                        android:textColor="@color/text3"
+                                        android:textSize="12sp" />
 
                                     <com.just.machine.util.SnappingStepper
                                         android:id="@+id/sixmin_pre_sp_sport_time"
@@ -561,7 +578,8 @@
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="5dp"
                                         android:text="分钟，"
-                                        android:textColor="@color/text3" />
+                                        android:textColor="@color/text3"
+                                        android:textSize="12sp" />
 
                                 </LinearLayout>
 
@@ -576,7 +594,8 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:text="运动距离:"
-                                        android:textColor="@color/text3" />
+                                        android:textColor="@color/text3"
+                                        android:textSize="12sp" />
 
                                     <EditText
                                         android:id="@+id/sixmin_pre_et_distance_low"
@@ -585,6 +604,7 @@
                                         android:gravity="center"
                                         android:inputType="numberDecimal"
                                         android:textColor="@color/text3"
+                                        android:textSize="16sp"
                                         android:textStyle="bold" />
 
                                     <TextView
@@ -593,6 +613,7 @@
                                         android:layout_gravity="center_vertical"
                                         android:text="~"
                                         android:textColor="@color/text3"
+                                        android:textSize="12sp"
                                         android:textStyle="bold" />
 
                                     <EditText
@@ -602,6 +623,7 @@
                                         android:gravity="center"
                                         android:inputType="numberDecimal"
                                         android:textColor="@color/text3"
+                                        android:textSize="16sp"
                                         android:textStyle="bold" />
 
                                     <TextView
@@ -609,7 +631,8 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:text="米"
-                                        android:textColor="@color/text3" />
+                                        android:textColor="@color/text3"
+                                        android:textSize="12sp" />
 
                                 </LinearLayout>
 
@@ -630,7 +653,8 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:text="运动心率为:"
-                                        android:textColor="@color/text3" />
+                                        android:textColor="@color/text3"
+                                        android:textSize="12sp" />
 
                                     <EditText
                                         android:id="@+id/sixmin_pre_et_sport_ecg"
@@ -640,6 +664,7 @@
                                         android:inputType="number"
                                         android:maxLength="3"
                                         android:textColor="@color/text3"
+                                        android:textSize="16sp"
                                         android:textStyle="bold" />
 
                                     <TextView
@@ -647,7 +672,8 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:text="bmp"
-                                        android:textColor="@color/text3" />
+                                        android:textColor="@color/text3"
+                                        android:textSize="12sp" />
 
                                 </LinearLayout>
 
@@ -661,7 +687,8 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:text="，代谢当量为:"
-                                        android:textColor="@color/text3" />
+                                        android:textColor="@color/text3"
+                                        android:textSize="12sp" />
 
                                     <EditText
                                         android:id="@+id/sixmin_pre_et_metab"
@@ -670,6 +697,7 @@
                                         android:gravity="center"
                                         android:inputType="numberDecimal"
                                         android:textColor="@color/text3"
+                                        android:textSize="16sp"
                                         android:textStyle="bold" />
 
                                     <TextView
@@ -677,7 +705,8 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:text="METs"
-                                        android:textColor="@color/text3" />
+                                        android:textColor="@color/text3"
+                                        android:textSize="12sp" />
 
                                 </LinearLayout>
 
@@ -691,7 +720,8 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:text="，疲劳控制在:"
-                                        android:textColor="@color/text3" />
+                                        android:textColor="@color/text3"
+                                        android:textSize="12sp" />
 
                                     <EditText
                                         android:id="@+id/sixmin_pre_et_tired_control_low"
@@ -700,6 +730,7 @@
                                         android:gravity="center"
                                         android:inputType="numberDecimal"
                                         android:textColor="@color/text3"
+                                        android:textSize="16sp"
                                         android:textStyle="bold" />
 
                                     <TextView
@@ -708,6 +739,7 @@
                                         android:layout_gravity="center_vertical"
                                         android:text="~"
                                         android:textColor="@color/text3"
+                                        android:textSize="12sp"
                                         android:textStyle="bold" />
 
                                     <EditText
@@ -717,6 +749,7 @@
                                         android:gravity="center"
                                         android:inputType="numberDecimal"
                                         android:textColor="@color/text3"
+                                        android:textSize="16sp"
                                         android:textStyle="bold" />
 
                                     <TextView
@@ -724,7 +757,8 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:text="级"
-                                        android:textColor="@color/text3" />
+                                        android:textColor="@color/text3"
+                                        android:textSize="12sp" />
 
                                 </LinearLayout>
 
@@ -747,7 +781,8 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:text="建议每周:"
-                                        android:textColor="@color/text3" />
+                                        android:textColor="@color/text3"
+                                        android:textSize="12sp" />
 
                                     <com.just.machine.util.SnappingStepper
                                         android:id="@+id/sixmin_pre_sp_weekly_count"
@@ -763,7 +798,8 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:text="次"
-                                        android:textColor="@color/text3" />
+                                        android:textColor="@color/text3"
+                                        android:textSize="12sp" />
 
                                 </LinearLayout>
 
@@ -778,7 +814,8 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:text="，处方周期: "
-                                        android:textColor="@color/text3" />
+                                        android:textColor="@color/text3"
+                                        android:textSize="12sp" />
 
                                     <com.just.machine.util.SnappingStepper
                                         android:id="@+id/sixmin_pre_sp_prescription_period"
@@ -800,21 +837,24 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:buttonTint="@color/colorPrimary"
-                                            android:text="周" />
+                                            android:text="周"
+                                            android:textSize="12sp" />
 
                                         <RadioButton
                                             android:id="@+id/sixmin_rb_prescription_cycle_month"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:buttonTint="@color/colorPrimary"
-                                            android:text="月" />
+                                            android:text="月"
+                                            android:textSize="12sp" />
 
                                         <RadioButton
                                             android:id="@+id/sixmin_rb_prescription_cycle_year"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:buttonTint="@color/colorPrimary"
-                                            android:text="年" />
+                                            android:text="年"
+                                            android:textSize="12sp" />
                                     </RadioGroup>
 
                                 </LinearLayout>
@@ -826,10 +866,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:layout_marginTop="5dp"
+                                android:layout_marginVertical="10dp"
                                 android:layout_marginEnd="10dp"
-                                android:layout_marginBottom="10dp"
-                                android:textColor="@color/text3" />
+                                android:textColor="@color/text3"
+                                android:textSize="12sp" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -845,13 +885,15 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="注意事项:"
-                                android:textColor="@color/text3" />
+                                android:textColor="@color/text3"
+                                android:textSize="12sp" />
 
                             <EditText
                                 android:id="@+id/sixmin_et_report_note"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/text3" />
+                                android:textColor="@color/text3"
+                                android:textSize="13sp" />
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
@@ -864,6 +906,7 @@
                                     android:orientation="horizontal">
 
                                     <TextView
+                                        android:textSize="12sp"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
@@ -871,6 +914,7 @@
                                         android:textColor="@color/text3" />
 
                                     <EditText
+                                        android:textSize="13sp"
                                         android:id="@+id/sixmin_et_recommend_doctor"
                                         android:layout_width="100dp"
                                         android:layout_height="wrap_content"

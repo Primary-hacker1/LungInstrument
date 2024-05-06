@@ -370,7 +370,6 @@ public class USBTransferUtil {
         mapNew.clear();
         mapBloodOxygen.clear();
         byteStr = "";
-        usbSerialData = null;
         isBegin = false;//是否开始试验
         bloodState = 0;
         bloodType = 0; //1运动前血压 2运动后血压

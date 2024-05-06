@@ -27,7 +27,7 @@
             android:layout_marginStart="10dp"
             android:text="0级"
             android:textColor="@color/text3"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/simin_report_tv_patient_self_item_level"
@@ -37,6 +37,6 @@
             android:layout_marginStart="20dp"
             android:text="非常非常轻"
             android:textColor="@color/text3"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
     </LinearLayout>
 </layout>

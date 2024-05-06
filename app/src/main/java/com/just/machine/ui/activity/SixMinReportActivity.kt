@@ -1,7 +1,6 @@
 package com.just.machine.ui.activity
 
 import android.content.Context
-import android.text.Html
 import android.util.Log
 import android.view.Gravity
 import android.widget.LinearLayout
@@ -14,13 +13,9 @@ import com.common.base.CommonBaseActivity
 import com.common.viewmodel.LiveDataEvent
 import com.google.gson.Gson
 import com.just.machine.model.Constants
-import com.just.machine.model.PatientInfoBean
 import com.just.machine.model.SixMinRecordsBean
 import com.just.machine.model.SixMinReportItemBean
 import com.just.machine.model.sixminreport.SixMinReportEvaluation
-import com.just.machine.model.sixminreport.SixMinReportOther
-import com.just.machine.model.sixminreport.SixMinReportPrescription
-import com.just.machine.model.sixminreport.SixMinReportStride
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.USBTransferUtil
 import com.just.news.R
@@ -62,12 +57,11 @@ class SixMinReportActivity : CommonBaseActivity<ActivitySixMinReportBinding>() {
     private fun initClickListener() {
         viewModel.mEventHub.observe(this) {
             when (it.action) {
-                LiveDataEvent.QuerySixMinReportInfoSuccess -> {
-                    it.any?.let { it1 -> beanQuery(it1) }
-                }
-
                 LiveDataEvent.QuerySixMinReportEvaluationSuccess -> {
                     it.any?.let { it1 -> beanQueryEvaluation(it1) }
+                }
+                LiveDataEvent.QuerySixMinReportInfoSuccess -> {
+                    it.any?.let { it1 -> beanQuery(it1) }
                 }
             }
         }
@@ -82,14 +76,14 @@ class SixMinReportActivity : CommonBaseActivity<ActivitySixMinReportBinding>() {
             if (any is List<*>) {
                 reportEvaluationList.clear()
                 val datas = any as MutableList<*>
-                if(datas.isNotEmpty()){
+                if (datas.isNotEmpty()) {
                     for (num in 0 until datas.size) {
                         val bean = datas[num] as SixMinReportEvaluation
                         reportEvaluationList.add(bean)
                     }
                 }
             }
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
@@ -114,16 +108,16 @@ class SixMinReportActivity : CommonBaseActivity<ActivitySixMinReportBinding>() {
         reportRowList.add(
             SixMinReportItemBean(
                 "心率(bpm)",
-                sixMinRecordsBean.heartBeatBean[0].heartStop,
-                sixMinRecordsBean.heartBeatBean[0].heartOne,
-                sixMinRecordsBean.heartBeatBean[0].heartTwo,
-                sixMinRecordsBean.heartBeatBean[0].heartThree,
-                sixMinRecordsBean.heartBeatBean[0].heartFour,
-                sixMinRecordsBean.heartBeatBean[0].heartFive,
-                sixMinRecordsBean.heartBeatBean[0].heartSix,
-                sixMinRecordsBean.heartBeatBean[0].heartBig,
-                sixMinRecordsBean.heartBeatBean[0].heartSmall,
-                sixMinRecordsBean.heartBeatBean[0].heartAverage
+                if (sixMinRecordsBean.heartBeatBean[0].heartStop == "") "0" else sixMinRecordsBean.heartBeatBean[0].heartStop,
+                if (sixMinRecordsBean.heartBeatBean[0].heartOne == "") "0" else sixMinRecordsBean.heartBeatBean[0].heartOne,
+                if (sixMinRecordsBean.heartBeatBean[0].heartTwo == "") "0" else sixMinRecordsBean.heartBeatBean[0].heartTwo,
+                if (sixMinRecordsBean.heartBeatBean[0].heartThree == "") "0" else sixMinRecordsBean.heartBeatBean[0].heartThree,
+                if (sixMinRecordsBean.heartBeatBean[0].heartFour == "") "0" else sixMinRecordsBean.heartBeatBean[0].heartFour,
+                if (sixMinRecordsBean.heartBeatBean[0].heartFive == "") "0" else sixMinRecordsBean.heartBeatBean[0].heartFive,
+                if (sixMinRecordsBean.heartBeatBean[0].heartSix == "") "0" else sixMinRecordsBean.heartBeatBean[0].heartSix,
+                if (sixMinRecordsBean.heartBeatBean[0].heartBig == "") "0" else sixMinRecordsBean.heartBeatBean[0].heartBig,
+                if (sixMinRecordsBean.heartBeatBean[0].heartSmall == "") "0" else sixMinRecordsBean.heartBeatBean[0].heartSmall,
+                if (sixMinRecordsBean.heartBeatBean[0].heartAverage == "") "0" else sixMinRecordsBean.heartBeatBean[0].heartAverage
             )
         )
         reportRowList.add(
@@ -161,16 +155,16 @@ class SixMinReportActivity : CommonBaseActivity<ActivitySixMinReportBinding>() {
             reportRowList.add(
                 SixMinReportItemBean(
                     "呼吸率",
-                    sixMinRecordsBean.breathingBean[0].breathingStop,
-                    sixMinRecordsBean.breathingBean[0].breathingOne,
-                    sixMinRecordsBean.breathingBean[0].breathingTwo,
-                    sixMinRecordsBean.breathingBean[0].breathingThree,
-                    sixMinRecordsBean.breathingBean[0].breathingFour,
-                    sixMinRecordsBean.breathingBean[0].breathingFive,
-                    sixMinRecordsBean.breathingBean[0].breathingSix,
-                    sixMinRecordsBean.breathingBean[0].breathingBig,
-                    sixMinRecordsBean.breathingBean[0].breathingSmall,
-                    sixMinRecordsBean.breathingBean[0].breathingAverage
+                    if (sixMinRecordsBean.breathingBean[0].breathingStop == "") "0" else sixMinRecordsBean.breathingBean[0].breathingStop,
+                    if (sixMinRecordsBean.breathingBean[0].breathingOne == "") "0" else sixMinRecordsBean.breathingBean[0].breathingOne,
+                    if (sixMinRecordsBean.breathingBean[0].breathingTwo == "") "0" else sixMinRecordsBean.breathingBean[0].breathingTwo,
+                    if (sixMinRecordsBean.breathingBean[0].breathingThree == "") "0" else sixMinRecordsBean.breathingBean[0].breathingThree,
+                    if (sixMinRecordsBean.breathingBean[0].breathingFour == "") "0" else sixMinRecordsBean.breathingBean[0].breathingFour,
+                    if (sixMinRecordsBean.breathingBean[0].breathingFive == "") "0" else sixMinRecordsBean.breathingBean[0].breathingFive,
+                    if (sixMinRecordsBean.breathingBean[0].breathingSix == "") "0" else sixMinRecordsBean.breathingBean[0].breathingSix,
+                    if (sixMinRecordsBean.breathingBean[0].breathingBig == "") "0" else sixMinRecordsBean.breathingBean[0].breathingBig,
+                    if (sixMinRecordsBean.breathingBean[0].breathingSmall == "") "0" else sixMinRecordsBean.breathingBean[0].breathingSmall,
+                    if (sixMinRecordsBean.breathingBean[0].breathingAverage == "") "0" else sixMinRecordsBean.breathingBean[0].breathingAverage
                 )
             )
         }
@@ -315,34 +309,150 @@ class SixMinReportActivity : CommonBaseActivity<ActivitySixMinReportBinding>() {
                 initTable()
 
                 //综合评估
+                binding.sixminReportTvEvaluationTiredLevel.text =
+                    "${sixMinRecordsBean.evaluationBean[0].befoFatigueLevel}级/${sixMinRecordsBean.evaluationBean[0].fatigueLevel}级"
+                binding.sixminReportTvBreathingLevel.text =
+                    "${sixMinRecordsBean.evaluationBean[0].befoBreathingLevel}级/${sixMinRecordsBean.evaluationBean[0].breathingLevel}级"
+                val lastDistance = getLastDistance()
+                binding.sixminReportTvLastTestDistance.text = lastDistance
+                binding.sixminReportTvTotalSteps.text =
+                    "${sixMinRecordsBean.evaluationBean[0].totalWalk}步"
+                binding.sixminReportTvThisTestDistance.text =
+                    "${sixMinRecordsBean.evaluationBean[0].totalDistance}米"
+                binding.sixminReportTvAverageStride.text =
+                    "${sixMinRecordsBean.strideBean[0].strideAverage}米/分钟"
+                binding.sixminReportTvEvaluationMetab.text =
+                    "${sixMinRecordsBean.evaluationBean[0].metabEquivalent}METs"
+                binding.sixminReportTvAccounted.text =
+                    "${sixMinRecordsBean.evaluationBean[0].accounted}%"
+                binding.sixminReportTvStopHeartBeat.text =
+                    if (sixMinRecordsBean.heartBeatBean[0].heartStop.isNotEmpty())
+                        "${sixMinRecordsBean.heartBeatBean[0].heartStop}bmp" else "0bmp"
+                //心肺功能
+                var cardiopuLevel: String = ""
+                when (sixMinRecordsBean.evaluationBean[0].cardiopuLevel) {
+                    "一" -> {
+                        cardiopuLevel = "I"
+                    }
+
+                    "二" -> {
+                        cardiopuLevel = "II"
+                    }
+
+                    "三" -> {
+                        cardiopuLevel = "III"
+                    }
+
+                    "四" -> {
+                        cardiopuLevel = "IV"
+                    }
+                    else ->{
+                        cardiopuLevel = "I"
+                    }
+                }
+                binding.sixminReportTvCardiopulmonaryLevel.text = "${cardiopuLevel}级"
+                //心功能严重程度
+                var cardiacFunctionLeve = ""
+                when (sixMinRecordsBean.evaluationBean[0].cardiopuDegree) {
+
+                    "1" -> {
+                        cardiacFunctionLeve = "重度"
+                    }
+
+                    "2" -> {
+                        cardiacFunctionLeve = "中度"
+                    }
+
+                    "3" -> {
+                        cardiacFunctionLeve = "轻度"
+                    }
+
+                    else -> {
+                        cardiacFunctionLeve =
+                            usbTransferUtil.dealCardiopuDegree(BigDecimal(sixMinRecordsBean.evaluationBean[0].totalDistance))
+                        cardiacFunctionLeve =
+                            cardiacFunctionLeve.substring(0, cardiacFunctionLeve.length - 1)
+                    }
+                }
+                binding.sixminReportTvCardiacFunctionLevel.text = cardiacFunctionLeve
 
                 //处方建议
-                if (sixMinRecordsBean.prescriptionBean[0].movementWay == "0") {
+                if (sixMinRecordsBean.prescriptionBean[0].movementWay == "0" || sixMinRecordsBean.prescriptionBean[0].movementWay == "") {
                     binding.sixminReportRbWalk.isChecked = true
-                    binding.sixminReportRbRun.isChecked = false
                 } else {
                     binding.sixminReportRbRun.isChecked = true
-                    binding.sixminReportRbWalk.isChecked = false
                 }
 
                 Log.d("sixMinRecordsBean", Gson().toJson(sixMinRecordsBean))
 
-                val stopTime = sixMinRecordsBean.otherBean[0].stopTime
-                val type = sixMinRecordsBean.otherBean[0].stopOr
-                strideAvg = usbTransferUtil.dealStrideAvg(
-                    BigDecimal(sixMinRecordsBean.evaluationBean[0].totalDistance),
-                    type.toInt(),
-                    stopTime
-                )
-                val cardiopuDegreeStr = when (sixMinRecordsBean.evaluationBean[0].cardiopuDegree) {
-                    "1" -> "重度"
-                    "2" -> "中度"
-                    else -> "轻度"
+                val stopOr = sixMinRecordsBean.otherBean[0].stopOr
+                val sb = StringBuilder()
+                if(stopOr == "1"){
+                    if(sixMinRecordsBean.otherBean[0].stopReason.isEmpty()){
+                        sb.append("步行了" + sixMinRecordsBean.otherBean[0].stopTime + "，停止原因：无。")
+                    }else{
+                        sb.append("步行了" + sixMinRecordsBean.otherBean[0].stopTime + "，停止原因：" + sixMinRecordsBean.otherBean[0].stopReason + "。")
+                    }
+                }else{
+                    if(sixMinRecordsBean.otherBean[0].badSymptoms.isEmpty()){
+                        sb.append("完成六分钟试验，未出现不良症状。")
+                    }else{
+                        sb.append("完成六分钟试验，不良症状：" + sixMinRecordsBean.otherBean[0].badSymptoms + "。")
+                    }
                 }
+
+                if(sixMinRecordsBean.infoBean.restDuration != "-1"){
+                    sb.append("中途休息了"+sixMinRecordsBean.infoBean.restDuration+"秒。")
+                }
+
+                binding.sixminReportTvConclusion.text = sb.toString()
+
+                binding.sixminReportTvSportStride.text = "${sixMinRecordsBean.prescriptionBean[0].strideBefore}~${sixMinRecordsBean.prescriptionBean[0].strideAfter}米/分钟"
+                binding.sixminReportTvSportDistance.text = "${sixMinRecordsBean.prescriptionBean[0].movementDistance}~${sixMinRecordsBean.prescriptionBean[0].movementDistanceAfter}米"
+                binding.sixminReportTvSportTime.text = "${sixMinRecordsBean.prescriptionBean[0].movementTime}分钟"
+                binding.sixminReportTvPrescriptionHeartBeat.text = "${sixMinRecordsBean.prescriptionBean[0].heartrateRate}bmp"
+                var unit = ""
+                unit = when(sixMinRecordsBean.prescriptionBean[0].cycleUnit){
+                    "0" -> {
+                        "周"
+                    }
+
+                    "1" -> {
+                        "月"
+                    }
+
+                    else -> {
+                        "年"
+                    }
+                }
+                binding.sixminReportTvSportPeroid.text = "${sixMinRecordsBean.prescriptionBean[0].movementWeeklyNumber}次/周，${sixMinRecordsBean.prescriptionBean[0].movementCycle}$unit"
+                binding.sixminReportTvPrescriptionTiredLevel.text = sixMinRecordsBean.prescriptionBean[0].pilaoControl
+                binding.sixminReportTvPrescriptionMetab.text = "${sixMinRecordsBean.prescriptionBean[0].metabMet}METs"
+                binding.sixminReportTvNote.text = sixMinRecordsBean.prescriptionBean[0].remarke
+                binding.sixminReportTvCheckDoctor.text = "检验医生：${sixMinRecordsBean.prescriptionBean[0].remarkeName}"
+                binding.sixminReportTvTestDate.text = sixMinRecordsBean.infoBean.addTime
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    private fun getLastDistance():String {
+        var distance = "/"
+        if (reportEvaluationList.size > 1) {
+            for (i in 0 until reportEvaluationList.size) {
+                val evaluation = reportEvaluationList[i]
+                if (evaluation.reportId == sixMinRecordsBean.infoBean.reportNo) {
+                    if (i == 0) {
+                        break
+                    } else {
+                        val infoBe = reportEvaluationList[i - 1]
+                        distance =  infoBe.totalDistance
+                    }
+                }
+            }
+        }
+        return distance
     }
 
     private fun dip2px(context: Context, dpValue: Int): Int {
