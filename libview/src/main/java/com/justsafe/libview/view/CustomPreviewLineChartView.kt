@@ -9,11 +9,13 @@ import androidx.core.content.ContextCompat
 import com.justsafe.libview.R
 import lecho.lib.hellocharts.gesture.ZoomType
 import lecho.lib.hellocharts.model.Axis
+import lecho.lib.hellocharts.model.AxisValue
 import lecho.lib.hellocharts.model.Line
 import lecho.lib.hellocharts.model.LineChartData
 import lecho.lib.hellocharts.model.PointValue
 import lecho.lib.hellocharts.model.Viewport
 import lecho.lib.hellocharts.view.PreviewLineChartView
+
 
 class CustomPreviewLineChartView(context: Context, attrs: AttributeSet?) :
     PreviewLineChartView(context, attrs) {
@@ -68,7 +70,7 @@ class CustomPreviewLineChartView(context: Context, attrs: AttributeSet?) :
 
 //        axisX.setName("X Axis") // 设置轴名称
 
-        axisX.setMaxLabelChars(6) // 最多几个字符显示在x轴的标签里
+        axisX.setMaxLabelChars(7) //最多几个X轴坐标，意思就是你的缩放让X轴上数据的个数7<=x<=mAxisValues.length
 
         // 创建Y轴
         val axisY: Axis = Axis().setHasLines(true)
@@ -82,6 +84,20 @@ class CustomPreviewLineChartView(context: Context, attrs: AttributeSet?) :
         data.axisXBottom = axisX
 
         data.axisYLeft = axisY
+
+        axisY.setMaxLabelChars(32) // 最大字符数，用于计算轴的空间
+
+        val yAxisMin = 1
+        val yAxisMax = 32
+        axisY.setHasLines(true) // 显示网格线
+
+        val yAxisValues: MutableList<AxisValue> = ArrayList()
+        for (i in yAxisMin..yAxisMax) {
+            yAxisValues.add(AxisValue(i.toFloat()).setLabel(i.toString()))
+        }
+        axisY.setValues(yAxisValues)
+        data.axisYLeft = axisY
+
 
         lineChartData = data
 
@@ -114,16 +130,6 @@ class CustomPreviewLineChartView(context: Context, attrs: AttributeSet?) :
             midPointX + desiredWidth / 2,
             newViewport.bottom
         )
-
-
-//        val params = LinearLayout.LayoutParams(
-//            ViewGroup.LayoutParams.MATCH_PARENT,
-//            ViewGroup.LayoutParams.MATCH_PARENT
-//        )
-//        // 设置上下内边距，调整X轴和Y轴之间的距离
-//        params.setMargins(0, 30, 0, -5)
-//
-//        layoutParams = params
 
         currentViewport = modifiedViewport
     }

@@ -132,6 +132,7 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
         setScaleEnabled(false)
         setPinchZoom(false)
 
+
         notifyDataSetChanged()  // 通知数据变更
         invalidate()
     }
@@ -175,10 +176,10 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
     fun flowDataSetList(
         valueTextColor: Int? = R.color.Indigo_colorPrimary,
         dataSetColors: List<Int>? = listOf(
+            R.color.cFF5B5B,
             R.color.gray,
-            R.color.gray,
-            R.color.gray,
-            R.color.gray
+            R.color.wheel_title_bar_ok_color,
+            R.color.attend_bg
         ),
     ): MutableList<LineDataSet> {
 
@@ -230,8 +231,6 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
 
             dataSet.color = ContextCompat.getColor(context, color)
 
-//            Log.e(tag, "$index-----$color")
-
             dataSet.setCircleColor(Color.BLUE)
 
             dataSet.lineWidth = 2f
@@ -247,6 +246,10 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
 
             dataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
         }
+
+        // 4. 创建自定义渲染器的实例，并将其应用到 LineChart 中
+        val customRenderer = CustomLineChartRenderer(this, animator, viewPortHandler)
+        renderer = customRenderer
 
         return list
     }
@@ -285,26 +288,5 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
         val centerY = verticalTextHeight // 文本的顶部位置
         canvas?.drawText(verticalText, centerX, centerY.toFloat(), verticalTextPaint)
     }
-
-    class CustomAxis : AxisBase() {
-        override fun setLabelCount(count: Int) {
-            // 自定义最大标签数量为100
-            val maxLabelCount = 100
-            val minLabelCount = 2 // 最小标签数量
-            // 如果传入的标签数量超过最大限制，则将标签数量设置为最大值
-            if (count > maxLabelCount) {
-                super.setLabelCount(maxLabelCount)
-            }
-            // 如果传入的标签数量小于最小限制，则将标签数量设置为最小值
-            else if (count < minLabelCount) {
-                super.setLabelCount(minLabelCount)
-            }
-            // 否则，直接使用传入的标签数量
-            else {
-                super.setLabelCount(count)
-            }
-        }
-    }
-
 }
 
