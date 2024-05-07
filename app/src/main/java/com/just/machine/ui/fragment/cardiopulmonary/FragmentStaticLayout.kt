@@ -92,8 +92,8 @@ class FragmentStaticLayout @JvmOverloads constructor(
     private fun initChartNow() {
         val values: MutableList<PointValue> = ArrayList()// 模拟数据
 
-        for (i in 0..99) {
-            values.add(PointValue(i.toFloat(), Math.random().toFloat() * 100))
+        for (i in 0..25) {
+            values.add(PointValue(i.toFloat(), Math.random().toFloat() * 25))
         }
 
         binding.previewChart.setData(values)

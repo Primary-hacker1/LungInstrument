@@ -42,6 +42,8 @@ public class AxesRenderer {
             '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
             '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'};
 
+    private int manualYAxisLabelsCount = 25;
+
     private Chart chart;
     private ChartComputator computator;
     private int axisMargin;
@@ -62,6 +64,11 @@ public class AxesRenderer {
     private int[] tiltedLabelYTranslation = new int[4];
     private FontMetricsInt[] fontMetricsTab = new FontMetricsInt[]{new FontMetricsInt(), new FontMetricsInt(),
             new FontMetricsInt(), new FontMetricsInt()};
+
+    public void setManualYAxisLabelsCount(int count) {
+        manualYAxisLabelsCount = count;
+    }
+
     /**
      * Holds formatted axis value label.
      */
@@ -417,9 +424,16 @@ public class AxesRenderer {
         if (scale == 0) {
             scale = 1;
         }
-        int module = (int) Math.max(1,
-                Math.ceil((axis.getValues().size() * labelDimensionForStepsTab[position] * 1.5) / scale));
-        //Reinitialize tab to hold lines coordinates.
+
+        int module;
+        if (manualYAxisLabelsCount != -1) {
+            module = Math.max(1, axis.getValues().size() / manualYAxisLabelsCount);
+        } else {
+            module = (int) Math.max(1,
+                    Math.ceil((axis.getValues().size() * labelDimensionForStepsTab[position] * 1.5) / scale));
+        }
+
+
         if (axis.hasLines() && (linesDrawBufferTab[position].length < axis.getValues().size() * 4)) {
             linesDrawBufferTab[position] = new float[axis.getValues().size() * 4];
         }

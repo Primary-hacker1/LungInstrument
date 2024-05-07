@@ -60,26 +60,26 @@ android.libraryVariants.all { variant ->
 }
 
 android.libraryVariants
-publishing {
-    publications {
-        maven(MavenPublication) {
-            artifact "${project.buildDir}/outputs/aar/${project.name}-release.aar"
-            artifactId = POM_ARTIFACT_ID
-            groupId = GROUP
-            version = VERSION_NAME
-        }
-    }
-
-    repositories {
-        maven {
-            credentials {
-                username 'nexusUser'
-                password 'nexusPass'
-            }
-            url "http://your-nexus-url/"
-        }
-    }
-}
+//publishing {
+//    publications {
+//        maven(MavenPublication) {
+//            artifact "${project.buildDir}/outputs/aar/${project.name}-release.aar"
+//            artifactId = POM_ARTIFACT_ID
+//            groupId = GROUP
+//            version = VERSION_NAME
+//        }
+//    }
+//
+//    repositories {
+//        maven {
+//            credentials {
+//                username 'nexusUser'
+//                password 'nexusPass'
+//            }
+//            url "http://your-nexus-url/"
+//        }
+//    }
+//}
 
 dependencies {
     implementation gradleBase.core

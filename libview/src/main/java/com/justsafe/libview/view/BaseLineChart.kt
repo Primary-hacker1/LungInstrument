@@ -140,6 +140,7 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
 
     // 自定义ValueFormatter
     class CustomYAxisValueFormatter : ValueFormatter() {
+        @SuppressLint("DefaultLocale")
         override fun getAxisLabel(value: Float, axis: AxisBase?): String {
             return String.format("%.1f", value)
         }

@@ -14,6 +14,7 @@ import lecho.lib.hellocharts.model.Line
 import lecho.lib.hellocharts.model.LineChartData
 import lecho.lib.hellocharts.model.PointValue
 import lecho.lib.hellocharts.model.Viewport
+import lecho.lib.hellocharts.renderer.AxesRenderer
 import lecho.lib.hellocharts.view.PreviewLineChartView
 
 
@@ -85,17 +86,26 @@ class CustomPreviewLineChartView(context: Context, attrs: AttributeSet?) :
 
         data.axisYLeft = axisY
 
-        axisY.setMaxLabelChars(32) // 最大字符数，用于计算轴的空间
+        axisY.setMaxLabelChars(25) // 最大字符数，用于计算轴的空间
 
         val yAxisMin = 1
-        val yAxisMax = 32
-        axisY.setHasLines(true) // 显示网格线
+
+        val yAxisMax = 25
 
         val yAxisValues: MutableList<AxisValue> = ArrayList()
+
         for (i in yAxisMin..yAxisMax) {
             yAxisValues.add(AxisValue(i.toFloat()).setLabel(i.toString()))
         }
+
+        val axesRenderer = AxesRenderer(context, this)
+
+        axesRenderer.setManualYAxisLabelsCount(5) // 设置手动 Y 轴标签的个数为 5
+
+
+
         axisY.setValues(yAxisValues)
+
         data.axisYLeft = axisY
 
 
@@ -105,7 +115,7 @@ class CustomPreviewLineChartView(context: Context, attrs: AttributeSet?) :
 
         // 自动计算视口
         val viewport = Viewport(maximumViewport)
-        viewport.top = 110f // 为顶部增加一些额外空间
+        viewport.top = 25f // 为顶部增加一些额外空间
 
         maximumViewport = viewport
         currentViewport = viewport
@@ -176,6 +186,7 @@ class CustomPreviewLineChartView(context: Context, attrs: AttributeSet?) :
         this.yAxisTitle2 = title2
         invalidate() // 重新绘制视图以更新标题
     }
+
 }
 
 
