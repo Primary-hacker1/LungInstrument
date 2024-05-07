@@ -63,11 +63,13 @@ dependencies {
 
     api project(path: ':MPChartExample')
 
-    //chart
-    api libview.hellocharts
+    api project(path: ':hellocharts-library')
 
     api 'net.objecthunter:exp4j:0.4.8'
 
     //chart
-//    api presentationDependencies.android_chart
+    //    api libview.hellocharts
+
+    //chart
+    //    api presentationDependencies.android_chart
 }
