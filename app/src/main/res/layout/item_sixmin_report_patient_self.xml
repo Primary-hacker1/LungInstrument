@@ -41,7 +41,7 @@
                     android:ems="1"
                     android:text="212121"
                     android:textColor="@color/text3"
-                    android:textSize="15sp">
+                    android:textSize="14sp">
 
                 </TextView>
 
@@ -67,7 +67,7 @@
                     android:layout_height="35dp"
                     android:layout_marginTop="5dp"
                     android:textColor="@color/text3"
-                    android:textSize="14sp">
+                    android:textSize="13sp">
 
                 </TextView>
 

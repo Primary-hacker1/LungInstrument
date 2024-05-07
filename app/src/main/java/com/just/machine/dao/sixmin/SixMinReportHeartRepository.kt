@@ -14,6 +14,7 @@ import javax.inject.Inject
  */
 class SixMinReportHeartRepository @Inject constructor(private val reportDao: SixMinReportHeartDao) {
 
+    fun deleteReportHeart(id:String) = reportDao.deleteReportHeartReal(id)
     fun getReportHeart(id:String): Flow<List<SixMinReportHeartBeat>> = reportDao.getReportHeartById(id)
 
     suspend fun insertReportHeart(reportHeart: SixMinReportHeartBeat): Long = reportDao.insertReportHeart(reportHeart)

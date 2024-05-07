@@ -15,6 +15,8 @@ import javax.inject.Inject
  */
 class SixMinReportInfoRepository @Inject constructor(private val reportDao: SixMinReportInfoDao) {
 
+    suspend fun updateReportInfoAll(bean: SixMinReportInfo) = reportDao.updateReportInfoAll(bean)
+    fun deleteReportInfoReal(id:String) = reportDao.deleteReportInfoReal(id)
     fun getReportInfo(id:Long,reportNo:String): Flow<List<SixMinRecordsBean>> = reportDao.getReportInfoById(id,reportNo)
 
     fun getReportInfo(): Flow<List<SixMinRecordsBean>> = reportDao.getReportInfo()

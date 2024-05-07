@@ -2,9 +2,11 @@ package com.just.machine.dao.sixmin
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.just.machine.model.sixminreport.SixMinBloodOxygen
 import com.just.machine.model.sixminreport.SixMinReportEvaluation
+import com.just.machine.model.sixminreport.SixMinReportPrescription
 import com.just.machine.model.sixminreport.SixMinReportWalk
 import kotlinx.coroutines.flow.Flow
 
@@ -13,6 +15,12 @@ import kotlinx.coroutines.flow.Flow
  */
 @Dao
 interface SixMinReportEvaluationDao {
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateReportEvaluationAll(bean: SixMinReportEvaluation)
+
+    @Query("DELETE FROM sixmin_report_evaluation WHERE reportId == :id")
+    fun deleteReportEvaluationReal(id:String)
 
     @Query("SELECT * FROM sixmin_report_evaluation WHERE delFlag == '0'")
     fun getReportEvaluation(): Flow<List<SixMinReportEvaluation>>

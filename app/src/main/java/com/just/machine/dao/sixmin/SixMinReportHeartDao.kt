@@ -13,6 +13,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SixMinReportHeartDao {
 
+    @Query("DELETE FROM sixmin_report_heart WHERE reportId == :id")
+    fun deleteReportHeartReal(id:String)
+
     @Query("SELECT * FROM sixmin_report_heart WHERE reportId == :id AND delFlag == '0'")
     fun getReportHeartById(id:String): Flow<List<SixMinReportHeartBeat>>
 

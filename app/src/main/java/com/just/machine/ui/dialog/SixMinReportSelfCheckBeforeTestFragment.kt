@@ -11,6 +11,7 @@ import com.just.machine.model.Constants
 import com.just.machine.model.SixMinReportPatientSelfBean
 import com.just.machine.model.SixMinReportPatientSelfItemBean
 import com.just.machine.ui.adapter.SixMinReportPatientSelfAdapter
+import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogSixminReportSelfCheckBeforeTestBinding
 
@@ -26,6 +27,7 @@ class SixMinReportSelfCheckBeforeTestFragment :
     private var selectStrList = mutableListOf<String>()
     private var selfCheck = "" //"" 右边按钮为确定 其它为进入试验
     private var selfCheckSelection = "" // ""没有选择 其它根据内容将对应的复选框选中
+    private lateinit var usbTransferUtil: USBTransferUtil
 
     companion object {
         /**
@@ -103,22 +105,6 @@ class SixMinReportSelfCheckBeforeTestFragment :
                     }
                 }
             }
-//            if (selectList.size < 2) {
-//                if (selectList.isNotEmpty()) {
-//                    if (selectList[0] == 0) {
-//                        Toast.makeText(context, "请选择试验前的呼吸状况", Toast.LENGTH_SHORT).show()
-//                    } else {
-//                        Toast.makeText(context, "请选择试验前的疲劳状况", Toast.LENGTH_SHORT).show()
-//                    }
-//                } else {
-//                    Toast.makeText(context, "请选择试验前状况评级", Toast.LENGTH_SHORT).show()
-//                }
-//            } else {
-//                dismiss()
-//                listener?.onClickConfirm(
-//                    selectList[0], selectList[1], selectStrList[0], selectStrList[1]
-//                )
-//            }
 
             if (selectStrList.isNotEmpty()) {
                 if (selectStrList.size > 1) {
@@ -146,6 +132,7 @@ class SixMinReportSelfCheckBeforeTestFragment :
     }
 
     override fun initData() {
+        usbTransferUtil = USBTransferUtil.getInstance()
         val checkAble = arguments?.getString(Constants.sixMinSelfCheckView, "")
         selfCheck = arguments?.getString(Constants.sixMinSelfCheck, "").toString()
         selfCheckSelection =
@@ -236,7 +223,7 @@ class SixMinReportSelfCheckBeforeTestFragment :
                 "呼吸状况等级",
                 "1",
                 patientBreathSelfItemList,
-                parseBreathLevel(breathLevel),
+                usbTransferUtil.dealSelfCheckBreathingLevel(breathLevel),
             )
         )
         val patientTiredSelfItemList = mutableListOf<SixMinReportPatientSelfItemBean>()
@@ -288,98 +275,10 @@ class SixMinReportSelfCheckBeforeTestFragment :
                 "疲劳状况等级",
                 "2",
                 patientTiredSelfItemList,
-                parseFatigueLevel(fatigueLevel),
+                usbTransferUtil.dealSelfCheckFatigueLevel(fatigueLevel),
             )
         )
 
-    }
-
-    private fun parseBreathLevel(breathLevel: String): String {
-        var conclusion = ""
-        when (breathLevel) {
-            "0" -> {
-                conclusion = "您当前的呼吸状况为：(0级)没有呼吸困难状况"
-            }
-
-            "0.5" -> {
-                conclusion = "您当前的呼吸状况为：(0.5级)呼吸困难状况非常非常轻"
-            }
-
-            "1" -> {
-                conclusion = "您当前的呼吸状况为：(1级)呼吸困难状况非常轻"
-            }
-
-            "2" -> {
-                conclusion = "您当前的呼吸状况为：(2级)呼吸困难状况很轻"
-            }
-
-            "3" -> {
-                conclusion = "您当前的呼吸状况为：(3级)呼吸困难状况中度"
-            }
-
-            "4" -> {
-                conclusion = "您当前的呼吸状况为：(4级)呼吸困难状况较严重"
-            }
-
-            "5-6" -> {
-                conclusion = "您当前的呼吸状况为：(5-6级)呼吸困难状况严重"
-            }
-
-            "7-9" -> {
-                conclusion = "您当前的呼吸状况为：(7-9级)呼吸困难状况非常严重"
-            }
-
-            "10" -> {
-                conclusion = "您当前的呼吸状况为：(10级)呼吸困难状况非常非常重"
-            }
-
-            else -> {
-                conclusion = ""
-            }
-        }
-        return conclusion
-    }
-
-    private fun parseFatigueLevel(fatigueLevel: String): String {
-        var conclusion = ""
-        when (fatigueLevel) {
-            "0" -> {
-                conclusion = "您当前的疲劳状况为：(0级)没有疲劳状况"
-            }
-
-            "1" -> {
-                conclusion = "您当前的疲劳状况为：(1级)疲劳状况非常轻松"
-            }
-
-            "2" -> {
-                conclusion = "您当前的疲劳状况为：(2级)疲劳状况轻松"
-            }
-
-            "3" -> {
-                conclusion = "您当前的疲劳状况为：(3级)疲劳状况中度"
-            }
-
-            "4" -> {
-                conclusion = "您当前的疲劳状况为：(4级)疲劳状况有点疲劳"
-            }
-
-            "5-6" -> {
-                conclusion = "您当前的疲劳状况为：(5-6级)疲劳状况疲劳"
-            }
-
-            "7-8" -> {
-                conclusion = "您当前的疲劳状况为：(7-8级)疲劳状况非常疲劳"
-            }
-
-            "9-10" -> {
-                conclusion = "您当前的疲劳状况为：(9-10级)疲劳状况非常非常疲劳(几乎到极限)"
-            }
-
-            else -> {
-                conclusion = ""
-            }
-        }
-        return conclusion
     }
 
     override fun getLayout(): Int {

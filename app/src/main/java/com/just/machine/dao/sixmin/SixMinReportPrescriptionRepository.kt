@@ -14,6 +14,10 @@ import javax.inject.Inject
  */
 class SixMinReportPrescriptionRepository @Inject constructor(private val reportDao: SixMinReportPrescriptionDao) {
 
+    suspend fun updateReportPrescription(bean: SixMinReportPrescription) = reportDao.updateReportPrescription(bean)
+
+    fun deleteReportPrescription(id:String) = reportDao.deleteReportPrescriptionReal(id)
+
     fun getReportPrescription(id:String): Flow<List<SixMinReportPrescription>> = reportDao.getReportPrescriptionById(id)
 
     suspend fun insertReportPrescription(reportPrescription: SixMinReportPrescription): Long = reportDao.insertReportPrescription(reportPrescription)
