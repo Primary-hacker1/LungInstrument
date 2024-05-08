@@ -252,8 +252,8 @@ public class Axis {
     public Axis setMaxLabelChars(int maxLabelChars) {
         if (maxLabelChars < 0) {
             maxLabelChars = 0;
-        } else if (maxLabelChars > 80) {
-            maxLabelChars = 80;
+        } else if (maxLabelChars > 300) {
+            maxLabelChars = 300;
         }
         this.maxLabelChars = maxLabelChars;
         return this;

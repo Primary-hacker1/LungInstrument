@@ -30,6 +30,8 @@ public interface Chart {
 
     public AxesRenderer getAxesRenderer();
 
+    public void setAxesRenderer(AxesRenderer axesRenderer);
+
     public ChartComputator getChartComputator();
 
     public ChartTouchHandler getTouchHandler();

@@ -194,6 +194,11 @@ public abstract class AbstractChartView extends View implements Chart {
     }
 
     @Override
+    public void setAxesRenderer(AxesRenderer axesRenderer) {
+        this.axesRenderer = axesRenderer;
+    }
+
+    @Override
     public ChartComputator getChartComputator() {
         return chartComputator;
     }
