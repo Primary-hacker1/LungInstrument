@@ -1,17 +1,21 @@
-package com.just.machine.ui.activity
+package com.just.machine.ui.fragment.sixmin
 
 import android.content.Context
 import android.graphics.Color
 import android.util.Log
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TableRow
 import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.common.base.CommonBaseActivity
+import androidx.navigation.fragment.findNavController
+import com.common.base.CommonBaseFragment
+import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -21,15 +25,14 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.just.machine.model.BloodOxyLineEntryBean
-import com.just.machine.model.Constants
 import com.just.machine.model.SixMinRecordsBean
 import com.just.machine.model.SixMinReportItemBean
 import com.just.machine.model.sixminreport.SixMinReportEvaluation
+import com.just.machine.ui.activity.SixMinDetectActivity
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.USBTransferUtil
 import com.just.news.R
-import com.just.news.databinding.ActivitySixMinReportBinding
-import com.justsafe.libview.util.SystemUtil
+import com.just.news.databinding.FragmentSixminReportBinding
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -38,17 +41,16 @@ import java.math.BigDecimal
 
 
 /**
- * 6分钟报告
+ *create by 2020/6/19
+ *@author zt
  */
 @AndroidEntryPoint
-class SixMinReportActivity : CommonBaseActivity<ActivitySixMinReportBinding>() {
+class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
+    private lateinit var mActivity: SixMinDetectActivity
     private var reportRowList = mutableListOf<SixMinReportItemBean>()
     private var reportEvaluationList = mutableListOf<SixMinReportEvaluation>()
-    private var sixMinPatientId = "" //患者id
-    private var sixMinReportNo = "" //报告id
-    private var sixMinReportType = "" //跳转类型 1新增 2编辑
     private var pngSavePath = "" //报告图片保存路劲
     private lateinit var usbTransferUtil: USBTransferUtil
     private var sixMinRecordsBean: SixMinRecordsBean = SixMinRecordsBean()//6分钟报告信息
@@ -57,13 +59,15 @@ class SixMinReportActivity : CommonBaseActivity<ActivitySixMinReportBinding>() {
     private lateinit var breathingDataSet: LineDataSet
     private lateinit var stepsDataSet: LineDataSet
 
-    override fun getViewBinding() = ActivitySixMinReportBinding.inflate(layoutInflater)
+    override fun loadData() {//懒加载
+
+    }
+
 
     override fun initView() {
-        usbTransferUtil = USBTransferUtil.getInstance()
-        sixMinPatientId = intent.extras?.getString(Constants.sixMinPatientInfo).toString()
-        sixMinReportNo = intent.extras?.getString(Constants.sixMinReportNo).toString()
-        sixMinReportType = intent.extras?.getString(Constants.sixMinReportType).toString()
+        if (activity is SixMinDetectActivity) {
+            mActivity = activity as SixMinDetectActivity
+        }
         initLineChart(binding.sixminReportLineChartBloodOxygen, 1)
         initLineChart(binding.sixminReportLineChartHeartBeat, 2)
         initLineChart(binding.sixminReportLineChartBreathing, 3)
@@ -71,12 +75,11 @@ class SixMinReportActivity : CommonBaseActivity<ActivitySixMinReportBinding>() {
         viewModel.getSixMinReportEvaluation()
         lifecycleScope.launch {
             kotlinx.coroutines.delay(200L)
-            viewModel.getSixMinReportInfoById(sixMinPatientId.toLong(), sixMinReportNo)
+            viewModel.getSixMinReportInfoById(mActivity.sixMinPatientId.toLong(), mActivity.sixMinReportNo)
         }
-        initClickListener()
     }
 
-    private fun initClickListener() {
+    override fun initListener() {
         viewModel.mEventHub.observe(this) {
             when (it.action) {
                 LiveDataEvent.QuerySixMinReportEvaluationSuccess -> {
@@ -88,41 +91,38 @@ class SixMinReportActivity : CommonBaseActivity<ActivitySixMinReportBinding>() {
                 }
             }
         }
-        binding.sixminReportIvClose.setOnClickListener {
-            if (sixMinReportType == "1") {
-                PatientActivity.startPatientActivity(this, "finishSixMinTest")
-                finish()
-            } else {
-                finish()
-            }
-        }
-
         binding.sixminReportLlExportReport.setOnClickListener {
 
         }
 
         binding.sixminReportLlPrintReport.setOnClickListener {
             val bloodPng = File(
-                getExternalFilesDir("")?.absolutePath,
+                mActivity.getExternalFilesDir("")?.absolutePath,
                 pngSavePath + File.separator + "imageBlood.png"
             )
             val heartPng = File(
-                getExternalFilesDir("")?.absolutePath,
+                mActivity.getExternalFilesDir("")?.absolutePath,
                 pngSavePath + File.separator + "imageHeart.png"
             )
-            val hsHxlPng = if(sixMinRecordsBean.infoBean.bsHxl.isEmpty() || sixMinRecordsBean.infoBean.bsHxl == "0"){
-                File(
-                    getExternalFilesDir("")?.absolutePath,
-                    pngSavePath + File.separator + "imageBreathing.png"
-                )
-            }else{
-                File(
-                    getExternalFilesDir("")?.absolutePath,
-                    pngSavePath + File.separator + "imageSteps.png"
-                )
-            }
+            val hsHxlPng =
+                if (sixMinRecordsBean.infoBean.bsHxl.isEmpty() || sixMinRecordsBean.infoBean.bsHxl == "0") {
+                    File(
+                        mActivity.getExternalFilesDir("")?.absolutePath,
+                        pngSavePath + File.separator + "imageBreathing.png"
+                    )
+                } else {
+                    File(
+                        mActivity.getExternalFilesDir("")?.absolutePath,
+                        pngSavePath + File.separator + "imageSteps.png"
+                    )
+
+                }
         }
     }
+
+    override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentSixminReportBinding.inflate(inflater, container, false)
+
 
     private fun beanQueryEvaluation(any: Any) {
         try {
@@ -237,24 +237,24 @@ class SixMinReportActivity : CommonBaseActivity<ActivitySixMinReportBinding>() {
                 "/"
             )
         )
-        val padding = dip2px(applicationContext, 1)
+        val padding = dip2px(mActivity.applicationContext, 1)
         for (i in 0 until reportRowList.size) {
             val sixMinReportItemBean = reportRowList[i]
-            val newRow = TableRow(applicationContext)
+            val newRow = TableRow(mActivity.applicationContext)
             val layoutParams = TableRow.LayoutParams()
             newRow.layoutParams = layoutParams
 
             val linearLayout = LinearLayout(
-                applicationContext
+                mActivity.applicationContext
             )
             linearLayout.orientation = LinearLayout.HORIZONTAL
 
             for (j in 0..10) {
-                val tvNo = TextView(applicationContext)
-                tvNo.textSize = dip2px(applicationContext, 7).toFloat()
+                val tvNo = TextView(mActivity.applicationContext)
+                tvNo.textSize = dip2px(mActivity.applicationContext, 7).toFloat()
                 // 设置文字居中
                 tvNo.gravity = if (j == 0) Gravity.START else Gravity.CENTER
-                tvNo.setTextColor(ContextCompat.getColor(this, R.color.text3))
+                tvNo.setTextColor(ContextCompat.getColor(mActivity, R.color.text3))
                 // 设置表格中的数据不自动换行
                 tvNo.setSingleLine()
                 // 设置边框和weight
@@ -264,7 +264,7 @@ class SixMinReportActivity : CommonBaseActivity<ActivitySixMinReportBinding>() {
                     if (j == 0) 4.2f else if (j == 1 || j == 7 || j == 8 || j == 9 || j == 10) 3f else 2f
                 )
                 lpNo.setMargins(
-                    0, 0, dip2px(applicationContext, 2), 0
+                    0, 0, dip2px(mActivity.applicationContext, 2), 0
                 )
                 tvNo.layoutParams = lpNo
                 // 设置padding和背景颜色
@@ -318,10 +318,10 @@ class SixMinReportActivity : CommonBaseActivity<ActivitySixMinReportBinding>() {
                 linearLayout.addView(tvNo)
             }
             newRow.setPadding(
-                dip2px(this, 6),
-                dip2px(this, 3),
-                dip2px(this, 6),
-                dip2px(this, 3)
+                dip2px(mActivity, 6),
+                dip2px(mActivity, 3),
+                dip2px(mActivity, 6),
+                dip2px(mActivity, 3)
             )
             newRow.addView(linearLayout)
             binding.sixminReportTable.addView(newRow)
@@ -546,19 +546,27 @@ class SixMinReportActivity : CommonBaseActivity<ActivitySixMinReportBinding>() {
 
                 pngSavePath =
                     File.separator + "sixminreportpng" + File.separator + sixMinRecordsBean.infoBean.reportNo
-                val file = File(getExternalFilesDir("")?.absolutePath, pngSavePath)
+                val file = File(mActivity.getExternalFilesDir("")?.absolutePath, pngSavePath)
                 if (!file.exists()) {
                     file.mkdirs()
                 }
 
-                binding.sixminReportLineChartBloodOxygen.saveToPath(this, "imageBlood", pngSavePath)
-                binding.sixminReportLineChartHeartBeat.saveToPath(this, "imageHeart", pngSavePath)
+                binding.sixminReportLineChartBloodOxygen.saveToPath(
+                    mActivity,
+                    "imageBlood",
+                    pngSavePath
+                )
+                binding.sixminReportLineChartHeartBeat.saveToPath(
+                    mActivity,
+                    "imageHeart",
+                    pngSavePath
+                )
                 binding.sixminReportLineChartBreathing.saveToPath(
-                    this,
+                    mActivity,
                     "imageBreathing",
                     pngSavePath
                 )
-                binding.sixminReportLineChartSteps.saveToPath(this, "imageSteps", pngSavePath)
+                binding.sixminReportLineChartSteps.saveToPath(mActivity, "imageSteps", pngSavePath)
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -603,7 +611,7 @@ class SixMinReportActivity : CommonBaseActivity<ActivitySixMinReportBinding>() {
             description.text = ""
             xAxis?.apply {
                 textSize = 10f
-                textColor = ContextCompat.getColor(this@SixMinReportActivity, R.color.text3)
+                textColor = ContextCompat.getColor(mActivity, R.color.text3)
                 //X轴最大值和最小值
                 axisMaximum = 6F
                 axisMinimum = 0F
@@ -630,14 +638,14 @@ class SixMinReportActivity : CommonBaseActivity<ActivitySixMinReportBinding>() {
                 }
             }
             axisLeft?.apply {
-                textColor = ContextCompat.getColor(this@SixMinReportActivity, R.color.text3)
+                textColor = ContextCompat.getColor(mActivity, R.color.text3)
                 //左侧Y轴的最大值和最小值
                 axisMaximum = if (type == 1) 100f else if (type == 2) 180f else 60f
                 axisMinimum = if (type == 1) 80f else if (type == 2) 30f else 10f
                 setLabelCount(6, true)
                 //绘制网格线(样式虚线)
                 enableGridDashedLine(2f, 2f, 0f)
-                gridColor = ContextCompat.getColor(this@SixMinReportActivity, R.color.text3)
+                gridColor = ContextCompat.getColor(mActivity, R.color.text3)
                 setDrawGridLines(true)
                 setDrawAxisLine(false) //绘制左边Y轴是否显示
                 setDrawZeroLine(false) //是否开启0线
@@ -654,7 +662,7 @@ class SixMinReportActivity : CommonBaseActivity<ActivitySixMinReportBinding>() {
                     bloodOxyDataSet = LineDataSet(null, "")
                     bloodOxyDataSet.lineWidth = 1.0f
                     bloodOxyDataSet.color =
-                        ContextCompat.getColor(this@SixMinReportActivity, R.color.text3)
+                        ContextCompat.getColor(mActivity, R.color.text3)
                     bloodOxyDataSet.setDrawValues(false)
                     bloodOxyDataSet.setDrawCircles(false)
                     bloodOxyDataSet.setDrawCircleHole(false)
@@ -668,7 +676,7 @@ class SixMinReportActivity : CommonBaseActivity<ActivitySixMinReportBinding>() {
                     heartBeatDataSet = LineDataSet(null, "")
                     heartBeatDataSet.lineWidth = 1.0f
                     heartBeatDataSet.color =
-                        ContextCompat.getColor(this@SixMinReportActivity, R.color.text3)
+                        ContextCompat.getColor(mActivity, R.color.text3)
                     heartBeatDataSet.setDrawValues(false)
                     heartBeatDataSet.setDrawCircles(false)
                     heartBeatDataSet.setDrawCircleHole(false)
@@ -682,7 +690,7 @@ class SixMinReportActivity : CommonBaseActivity<ActivitySixMinReportBinding>() {
                     breathingDataSet = LineDataSet(null, "")
                     breathingDataSet.lineWidth = 1.0f
                     breathingDataSet.color =
-                        ContextCompat.getColor(this@SixMinReportActivity, R.color.text3)
+                        ContextCompat.getColor(mActivity, R.color.text3)
                     breathingDataSet.setDrawValues(false)
                     breathingDataSet.setDrawCircles(false)
                     breathingDataSet.setDrawCircleHole(false)
@@ -696,7 +704,7 @@ class SixMinReportActivity : CommonBaseActivity<ActivitySixMinReportBinding>() {
                     stepsDataSet = LineDataSet(null, "")
                     stepsDataSet.lineWidth = 1.0f
                     stepsDataSet.color =
-                        ContextCompat.getColor(this@SixMinReportActivity, R.color.text3)
+                        ContextCompat.getColor(mActivity, R.color.text3)
                     stepsDataSet.setDrawValues(false)
                     stepsDataSet.setDrawCircles(false)
                     stepsDataSet.setDrawCircleHole(false)
@@ -714,15 +722,4 @@ class SixMinReportActivity : CommonBaseActivity<ActivitySixMinReportBinding>() {
         return (dpValue * scale + 0.5f).toInt()
     }
 
-    override fun onResume() {
-        SystemUtil.immersive(this, true)
-        super.onResume()
-    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (hasFocus) {
-            SystemUtil.immersive(this, true)
-        }
-    }
 }

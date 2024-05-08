@@ -1541,7 +1541,7 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      * @param pathOnSD e.g. "folder1/folder2/folder3"
      * @return returns true on success, false on error
      */
-    public boolean saveToPath(String title, String pathOnSD) {
+    public boolean saveToPath(Context context,String title, String pathOnSD) {
 
 
 
@@ -1549,7 +1549,7 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
 
         OutputStream stream = null;
         try {
-            stream = new FileOutputStream(Environment.getExternalStorageDirectory().getPath()
+            stream = new FileOutputStream(context.getExternalFilesDir("").getAbsolutePath()
                     + pathOnSD + "/" + title
                     + ".png");
 

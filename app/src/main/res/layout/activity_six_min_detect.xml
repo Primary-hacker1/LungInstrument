@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.just.news.R" />
+
+        <variable
+            name="viewModel"
+            type="com.just.machine.ui.viewmodel.MainViewModel" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/sixmin_ll_devices_status"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="#2f89de">
+
+            <ImageView
+                android:id="@+id/sixmin_iv_close"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/back" />
+
+            <TextView
+                android:id="@+id/sixmin_tv_test_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/sixmin_test_title"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/sixmin_iv_ecg"
+                android:layout_width="25dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:layout_toStartOf="@id/sixmin_iv_blood_pressure"
+                android:src="@mipmap/xinlvno" />
+
+            <ImageView
+                android:id="@+id/sixmin_iv_blood_pressure"
+                android:layout_width="25dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:layout_toStartOf="@id/sixmin_iv_blood_oxygen"
+                android:src="@mipmap/xueyano" />
+
+            <ImageView
+                android:id="@+id/sixmin_iv_blood_oxygen"
+                android:layout_width="25dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:layout_toStartOf="@id/sixmin_iv_battery_status"
+                android:src="@mipmap/xueyangno" />
+
+            <ImageView
+                android:id="@+id/sixmin_iv_battery_status"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="30dp"
+                android:src="@mipmap/dianchi00" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <fragment
+                    android:id="@+id/sixmin_detect_layout"
+                    android:name="com.justsafe.libview.nav.NavHostFragmentHideShow"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:defaultNavHost="true" />
+            </FrameLayout>
+        </RelativeLayout>
+
+    </LinearLayout>
+</layout>

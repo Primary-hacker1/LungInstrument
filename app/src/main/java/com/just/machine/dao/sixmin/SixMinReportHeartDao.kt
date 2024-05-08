@@ -2,6 +2,7 @@ package com.just.machine.dao.sixmin
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.just.machine.model.sixminreport.SixMinReportHeartBeat
 import com.just.machine.model.sixminreport.SixMinReportWalk
@@ -19,6 +20,6 @@ interface SixMinReportHeartDao {
     @Query("SELECT * FROM sixmin_report_heart WHERE reportId == :id AND delFlag == '0'")
     fun getReportHeartById(id:String): Flow<List<SixMinReportHeartBeat>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertReportHeart(heartBean: SixMinReportHeartBeat): Long
 }
