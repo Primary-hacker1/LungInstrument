@@ -17,9 +17,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore.Images;
-
 import androidx.annotation.RequiresApi;
-
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -570,10 +568,9 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      * Highlights any y-value at the given x-value in the given DataSet.
      * Provide -1 as the dataSetIndex to undo all highlighting.
      * This method will call the listener.
-     *
-     * @param x            The x-value to highlight
+     * @param x The x-value to highlight
      * @param dataSetIndex The dataset index to search in
-     * @param dataIndex    The data index to search in (only used in CombinedChartView currently)
+     * @param dataIndex The data index to search in (only used in CombinedChartView currently)
      */
     public void highlightValue(float x, int dataSetIndex, int dataIndex) {
         highlightValue(x, dataSetIndex, dataIndex, true);
@@ -583,8 +580,7 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      * Highlights any y-value at the given x-value in the given DataSet.
      * Provide -1 as the dataSetIndex to undo all highlighting.
      * This method will call the listener.
-     *
-     * @param x            The x-value to highlight
+     * @param x The x-value to highlight
      * @param dataSetIndex The dataset index to search in
      */
     public void highlightValue(float x, int dataSetIndex) {
@@ -595,11 +591,10 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      * Highlights the value at the given x-value and y-value in the given DataSet.
      * Provide -1 as the dataSetIndex to undo all highlighting.
      * This method will call the listener.
-     *
-     * @param x            The x-value to highlight
-     * @param y            The y-value to highlight. Supply `NaN` for "any"
+     * @param x The x-value to highlight
+     * @param y The y-value to highlight. Supply `NaN` for "any"
      * @param dataSetIndex The dataset index to search in
-     * @param dataIndex    The data index to search in (only used in CombinedChartView currently)
+     * @param dataIndex The data index to search in (only used in CombinedChartView currently)
      */
     public void highlightValue(float x, float y, int dataSetIndex, int dataIndex) {
         highlightValue(x, y, dataSetIndex, dataIndex, true);
@@ -609,9 +604,8 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      * Highlights the value at the given x-value and y-value in the given DataSet.
      * Provide -1 as the dataSetIndex to undo all highlighting.
      * This method will call the listener.
-     *
-     * @param x            The x-value to highlight
-     * @param y            The y-value to highlight. Supply `NaN` for "any"
+     * @param x The x-value to highlight
+     * @param y The y-value to highlight. Supply `NaN` for "any"
      * @param dataSetIndex The dataset index to search in
      */
     public void highlightValue(float x, float y, int dataSetIndex) {
@@ -621,10 +615,9 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
     /**
      * Highlights any y-value at the given x-value in the given DataSet.
      * Provide -1 as the dataSetIndex to undo all highlighting.
-     *
-     * @param x            The x-value to highlight
+     * @param x The x-value to highlight
      * @param dataSetIndex The dataset index to search in
-     * @param dataIndex    The data index to search in (only used in CombinedChartView currently)
+     * @param dataIndex The data index to search in (only used in CombinedChartView currently)
      * @param callListener Should the listener be called for this change
      */
     public void highlightValue(float x, int dataSetIndex, int dataIndex, boolean callListener) {
@@ -634,8 +627,7 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
     /**
      * Highlights any y-value at the given x-value in the given DataSet.
      * Provide -1 as the dataSetIndex to undo all highlighting.
-     *
-     * @param x            The x-value to highlight
+     * @param x The x-value to highlight
      * @param dataSetIndex The dataset index to search in
      * @param callListener Should the listener be called for this change
      */
@@ -646,11 +638,10 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
     /**
      * Highlights any y-value at the given x-value in the given DataSet.
      * Provide -1 as the dataSetIndex to undo all highlighting.
-     *
-     * @param x            The x-value to highlight
-     * @param y            The y-value to highlight. Supply `NaN` for "any"
+     * @param x The x-value to highlight
+     * @param y The y-value to highlight. Supply `NaN` for "any"
      * @param dataSetIndex The dataset index to search in
-     * @param dataIndex    The data index to search in (only used in CombinedChartView currently)
+     * @param dataIndex The data index to search in (only used in CombinedChartView currently)
      * @param callListener Should the listener be called for this change
      */
     public void highlightValue(float x, float y, int dataSetIndex, int dataIndex, boolean callListener) {
@@ -665,9 +656,8 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
     /**
      * Highlights any y-value at the given x-value in the given DataSet.
      * Provide -1 as the dataSetIndex to undo all highlighting.
-     *
-     * @param x            The x-value to highlight
-     * @param y            The y-value to highlight. Supply `NaN` for "any"
+     * @param x The x-value to highlight
+     * @param y The y-value to highlight. Supply `NaN` for "any"
      * @param dataSetIndex The dataset index to search in
      * @param callListener Should the listener be called for this change
      */
@@ -922,7 +912,7 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      *
      * @param durationMillisX
      * @param durationMillisY
-     * @param easing          a custom easing function to be used on the animation phase
+     * @param easing         a custom easing function to be used on the animation phase
      */
     @RequiresApi(11)
     public void animateXY(int durationMillisX, int durationMillisY, EasingFunction easing) {
@@ -1551,27 +1541,29 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      * @param pathOnSD e.g. "folder1/folder2/folder3"
      * @return returns true on success, false on error
      */
-    public boolean saveToPath(Context context, String title, String pathOnSD) {
+    public boolean saveToPath(Context context,String title, String pathOnSD) {
 
         String imagePath = context.getExternalFilesDir("").getAbsolutePath() + pathOnSD + "/" + title + ".png";
         File imageFile = new File(imagePath);
+        if(imageFile.exists()){
+            return false;
+        }
 
         Bitmap b = getChartBitmap();
 
         OutputStream stream = null;
         try {
-            if (!imageFile.exists()) {
-                stream = new FileOutputStream(context.getExternalFilesDir("").getAbsolutePath()
-                        + pathOnSD + "/" + title
-                        + ".png");
+            stream = new FileOutputStream(context.getExternalFilesDir("").getAbsolutePath()
+                    + pathOnSD + "/" + title
+                    + ".png");
 
-                /*
-                 * Write bitmap to file using JPEG or PNG and 40% quality hint for
-                 * JPEG.
-                 */
-                b.compress(CompressFormat.PNG, 40, stream);
-                stream.close();
-            }
+            /*
+             * Write bitmap to file using JPEG or PNG and 40% quality hint for
+             * JPEG.
+             */
+            b.compress(CompressFormat.PNG, 40, stream);
+
+            stream.close();
         } catch (Exception e) {
             e.printStackTrace();
             return false;
