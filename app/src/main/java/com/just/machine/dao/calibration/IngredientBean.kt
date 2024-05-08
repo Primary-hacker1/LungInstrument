@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 data class IngredientBean(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id")
     val ingredientId: Long = 0,
-
+    val createTime: String? = "",
     val userId: Long,
     var inspiratoryIndicators: String? = "",//浓度
     var calibratedValue: String? = "",//标定值

@@ -43,9 +43,9 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
         ingredientAdapter.setItemsBean(
             mutableListOf
                 (
-                IngredientBean(0,1,"容积1", "3", "3.003"),
-                IngredientBean(0,1,"容积1", "3", "3.003"),
-                IngredientBean(0,1,"容积1", "3", "3.003"),
+                IngredientBean(0,"" ,1,"容积1", "3", "3.003"),
+                IngredientBean(0,"" ,1,"容积1", "3", "3.003"),
+                IngredientBean(0,"" ,1,"容积1", "3", "3.003"),
             )
         )
 

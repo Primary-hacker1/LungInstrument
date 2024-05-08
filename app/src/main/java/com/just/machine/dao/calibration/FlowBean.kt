@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 data class FlowBean(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id")
     val flowId: Long = 0,
-
+    val createTime: String? = "",
     val userId: Long,
     var inspiratoryIndicators: String? = "",//吸气标准指标
     var calibratedValue: String? = "",//标定值

@@ -44,7 +44,7 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
 
         flowAdapter.setItemsBean(
             mutableListOf
-                (FlowBean(0, 1, "容积1", "3", "3.003"))
+                (FlowBean(0,"" ,1, "容积1", "3", "3.003"))
         )
 
         binding.rvFlow.adapter = flowAdapter

@@ -9,7 +9,7 @@ import com.just.machine.api.UserRepository
 import com.just.machine.dao.PatientBean
 import com.just.machine.dao.PlantRepository
 import com.just.machine.dao.calibration.EnvironmentalCalibrationBean
-import com.just.machine.dao.calibration.EnvironmentalCalibrationRepository
+import com.just.machine.dao.calibration.CalibrationRepository
 import com.just.machine.dao.sixmin.SixMinReportBloodRepository
 import com.just.machine.dao.sixmin.SixMinReportBreathingRepository
 import com.just.machine.dao.sixmin.SixMinReportEvaluationRepository
@@ -48,7 +48,7 @@ class MainViewModel @Inject constructor(
     private var repository: UserRepository,
     private var plantDao: PlantRepository,
     private var sixMinReportWalkDao: SixMinReportWalkRepository,
-    private var environmentalDao: EnvironmentalCalibrationRepository,
+    private var environmentalDao: CalibrationRepository,
     private var sixMinReportBloodDao: SixMinReportBloodRepository,
     private var sixMinReportBreathingDao: SixMinReportBreathingRepository,
     private var sixMinReportEvaluationDao: SixMinReportEvaluationRepository,

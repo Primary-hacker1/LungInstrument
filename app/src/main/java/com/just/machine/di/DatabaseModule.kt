@@ -5,7 +5,7 @@ package com.just.machine.di
 import android.content.Context
 import com.just.machine.dao.AppDatabase
 import com.just.machine.dao.PlantDao
-import com.just.machine.dao.calibration.EnvironmentalCalibrationDao
+import com.just.machine.dao.calibration.CalibrationDao
 import com.just.machine.dao.sixmin.SixMinReportBloodDao
 import com.just.machine.dao.sixmin.SixMinReportBreathingDao
 import com.just.machine.dao.sixmin.SixMinReportEvaluationDao
@@ -41,7 +41,7 @@ object DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideEnvironmentalDao(appDatabase: AppDatabase): EnvironmentalCalibrationDao {
+    fun provideEnvironmentalDao(appDatabase: AppDatabase): CalibrationDao {
         return appDatabase.environmentalCalibrationDao()
     }
 
