@@ -1,7 +1,10 @@
 package com.just.machine.util;
 
 import android.text.TextUtils;
+import android.util.Base64;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -134,5 +137,25 @@ public class CommonUtil {
         Pattern p = Pattern.compile(eL);
         Matcher m = p.matcher(num);
         return m.matches();
+    }
+
+    /**
+     * 图片转base64
+     *
+     * @param imagePath
+     * @return
+     */
+    public static String imageTobase64(String imagePath) {
+        InputStream in = null;
+        byte[] data = null;
+        try {
+            in = new FileInputStream(imagePath);
+            data = new byte[in.available()];
+            in.read(data);
+            in.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Base64.encodeToString(data, Base64.DEFAULT);
     }
 }

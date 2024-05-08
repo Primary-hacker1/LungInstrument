@@ -64,8 +64,8 @@
                 <TextView
                     android:id="@+id/sixmin_report_tv_patient_self_conclusion"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="8dp"
                     android:textColor="@color/text3"
                     android:textSize="12sp">
                 </TextView>

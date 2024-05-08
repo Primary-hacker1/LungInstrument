@@ -1,5 +1,7 @@
 package com.just.machine.ui.activity
 
+import android.content.Intent
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import com.common.base.CommonBaseActivity
 import com.google.gson.Gson
@@ -17,6 +19,9 @@ import com.just.machine.model.sixminreport.SixMinReportPrescription
 import com.just.machine.model.sixminreport.SixMinReportStride
 import com.just.machine.model.sixminreport.SixMinReportWalk
 import com.just.machine.model.systemsetting.SixMinSysSettingBean
+import com.just.machine.ui.dialog.CommonDialogFragment
+import com.just.machine.ui.fragment.sixmin.SixMinPreReportFragment
+import com.just.machine.ui.fragment.sixmin.SixMinReportFragment
 import com.just.machine.util.FileUtil
 import com.just.machine.util.USBTransferUtil
 import com.just.news.R
@@ -24,6 +29,7 @@ import com.just.news.databinding.ActivitySixMinDetectBinding
 import com.justsafe.libview.util.SystemUtil
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
+
 
 @AndroidEntryPoint
 class SixMinDetectActivity : CommonBaseActivity<ActivitySixMinDetectBinding>() {
@@ -39,8 +45,7 @@ class SixMinDetectActivity : CommonBaseActivity<ActivitySixMinDetectBinding>() {
     var sixMinReportStride: SixMinReportStride = SixMinReportStride()//6分钟步速
     var sixMinReportEvaluation: SixMinReportEvaluation = SixMinReportEvaluation()//6分钟综合评估
     var sixMinReportInfo: SixMinReportInfo = SixMinReportInfo()//6分钟报告信息
-    var sixMinReportPrescription: SixMinReportPrescription =
-        SixMinReportPrescription()//6分钟报告处方信息
+    var sixMinReportPrescription: SixMinReportPrescription = SixMinReportPrescription()//6分钟报告处方信息
     var sixMinReportBreathing: SixMinReportBreathing = SixMinReportBreathing()//6分钟报告呼吸率信息
     var selfCheckSelection = "" //试验前疲劳和呼吸量级
     var sixMinPatientId = "" //试验的患者id
@@ -70,11 +75,10 @@ class SixMinDetectActivity : CommonBaseActivity<ActivitySixMinDetectBinding>() {
 
     private fun initUsbConnection() {
         selfCheckSelection =
-            intent.extras?.getString(Constants.sixMinSelfCheckViewSelection,"").toString()
-        sixMinPatientId =
-            intent.extras?.getString(Constants.sixMinPatientInfo,"").toString()
-        sixMinReportNo = intent.extras?.getString(Constants.sixMinReportNo,"").toString()
-        sixMinReportType = intent.extras?.getString(Constants.sixMinReportType,"").toString()
+            intent.extras?.getString(Constants.sixMinSelfCheckViewSelection, "").toString()
+        sixMinPatientId = intent.extras?.getString(Constants.sixMinPatientInfo, "").toString()
+        sixMinReportNo = intent.extras?.getString(Constants.sixMinReportNo, "").toString()
+        sixMinReportType = intent.extras?.getString(Constants.sixMinReportType, "").toString()
 
         usbTransferUtil = USBTransferUtil.getInstance()
         usbTransferUtil.init(this)
@@ -95,25 +99,67 @@ class SixMinDetectActivity : CommonBaseActivity<ActivitySixMinDetectBinding>() {
 
     private fun initClickListener() {
         binding.sixminIvClose.setOnClickListener {
-            onBackPressed()
+            val navHostFragment =
+                supportFragmentManager.primaryNavigationFragment as NavHostFragment?
+            val currentFragment: Fragment? =
+                navHostFragment!!.childFragmentManager.primaryNavigationFragment
+            if (currentFragment is SixMinPreReportFragment) {
+                if (sixMinReportType.isEmpty() || sixMinReportType == "1") {
+                    val startCommonDialogFragment = CommonDialogFragment.startCommonDialogFragment(
+                        supportFragmentManager, "退出将视为放弃生成报告，是否确定?"
+                    )
+                    startCommonDialogFragment.setCommonDialogOnClickListener(object :
+                        CommonDialogFragment.CommonDialogClickListener {
+                        override fun onPositiveClick() {
+                            finish()
+                        }
+
+                        override fun onNegativeClick() {
+
+                        }
+
+                        override fun onStopNegativeClick(stopReason: String) {
+
+                        }
+                    })
+                }else{
+                    finish()
+                }
+            } else if (currentFragment is SixMinReportFragment) {
+                if (sixMinReportType.isEmpty() || sixMinReportType == "1") {
+                    PatientActivity.startPatientActivity(this, "finishSixMinTest")
+                }
+                finish()
+            } else {
+                if (usbTransferUtil.isBegin) {
+                    val startCommonDialogFragment = CommonDialogFragment.startCommonDialogFragment(
+                        supportFragmentManager,
+                        getString(R.string.sixmin_test_start_exit_test_tips)
+                    )
+                    startCommonDialogFragment.setCommonDialogOnClickListener(object :
+                        CommonDialogFragment.CommonDialogClickListener {
+                        override fun onPositiveClick() {
+                            finish()
+                        }
+
+                        override fun onNegativeClick() {
+
+                        }
+
+                        override fun onStopNegativeClick(stopReason: String) {
+
+                        }
+                    })
+                } else {
+                    onBackPressed()
+                }
+            }
         }
     }
 
     private fun initNavigationView() {
-//        val navHostFragment =
-//            supportFragmentManager.findFragmentById(R.id.sixmin_detect_layout) as NavHostFragment
-//        val navControllerNavigation =
-//            Navigation.findNavController(this, R.id.sixmin_detect_layout)
-//        val navigator =
-//            FragmentNavigatorHideShow(
-//                this,
-//                navHostFragment.childFragmentManager,
-//                R.id.sixmin_detect_layout
-//            )
-//        navControllerNavigation.navigatorProvider.addNavigator(navigator)
-//        navControllerNavigation.setGraph(R.navigation.nav_sixmin)
-
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.sixmin_detect_layout) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.sixmin_detect_layout) as NavHostFragment
         val navController = navHostFragment.navController
         val navGraph = navController.navInflater.inflate(R.navigation.nav_sixmin)
 
@@ -164,23 +210,23 @@ class SixMinDetectActivity : CommonBaseActivity<ActivitySixMinDetectBinding>() {
         }
     }
 
-    fun setToolbarTitle(title:String){
+    fun setToolbarTitle(title: String) {
         binding.sixminTvTestStatus.text = title
     }
 
-    fun setBatterStatus(res:Int){
+    fun setBatterStatus(res: Int) {
         binding.sixminIvBatteryStatus.setImageResource(res)
     }
 
-    fun setEcgStatus(res:Int){
+    fun setEcgStatus(res: Int) {
         binding.sixminIvEcg.setImageResource(res)
     }
 
-    fun setBloodOxyStatus(res:Int){
+    fun setBloodOxyStatus(res: Int) {
         binding.sixminIvBloodOxygen.setImageResource(res)
     }
 
-    fun setBloodPressureStatus(res:Int){
+    fun setBloodPressureStatus(res: Int) {
         binding.sixminIvBloodPressure.setImageResource(res)
     }
 
@@ -192,5 +238,63 @@ class SixMinDetectActivity : CommonBaseActivity<ActivitySixMinDetectBinding>() {
             binding.sixminIvBloodOxygen.setImageResource(R.mipmap.xueyangno)
         }
         SystemUtil.immersive(this, true)
+    }
+
+    override fun onBackPressed() {
+        val navHostFragment =
+            supportFragmentManager.primaryNavigationFragment as NavHostFragment?
+        val currentFragment: Fragment? =
+            navHostFragment!!.childFragmentManager.primaryNavigationFragment
+        if (currentFragment is SixMinPreReportFragment) {
+            if (sixMinReportType.isEmpty() || sixMinReportType == "1") {
+                val startCommonDialogFragment = CommonDialogFragment.startCommonDialogFragment(
+                    supportFragmentManager, "退出将视为放弃生成报告，是否确定?"
+                )
+                startCommonDialogFragment.setCommonDialogOnClickListener(object :
+                    CommonDialogFragment.CommonDialogClickListener {
+                    override fun onPositiveClick() {
+                        finish()
+                    }
+
+                    override fun onNegativeClick() {
+
+                    }
+
+                    override fun onStopNegativeClick(stopReason: String) {
+
+                    }
+                })
+            }else{
+                finish()
+            }
+        } else if (currentFragment is SixMinReportFragment) {
+            if (sixMinReportType.isEmpty() || sixMinReportType == "1") {
+                PatientActivity.startPatientActivity(this, "finishSixMinTest")
+            }
+            finish()
+        } else {
+            if (usbTransferUtil.isBegin) {
+                val startCommonDialogFragment = CommonDialogFragment.startCommonDialogFragment(
+                    supportFragmentManager,
+                    getString(R.string.sixmin_test_start_exit_test_tips)
+                )
+                startCommonDialogFragment.setCommonDialogOnClickListener(object :
+                    CommonDialogFragment.CommonDialogClickListener {
+                    override fun onPositiveClick() {
+                        finish()
+                    }
+
+                    override fun onNegativeClick() {
+
+                    }
+
+                    override fun onStopNegativeClick(stopReason: String) {
+
+                    }
+                })
+            } else {
+                super.onBackPressed()
+            }
+        }
     }
 }
