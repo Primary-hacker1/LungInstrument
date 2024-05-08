@@ -91,6 +91,7 @@ class MainActivity : CommonBaseActivity<ActivityMainBinding>() {
         LogUtils.d(MySystemParams.getInstance(this).toString())
         initSocket()
         initNavigationView()
+        requestStoragePermission()
     }
 
     private fun initSocket() {

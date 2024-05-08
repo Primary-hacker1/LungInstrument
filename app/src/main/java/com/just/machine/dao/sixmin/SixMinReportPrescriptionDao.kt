@@ -25,6 +25,6 @@ interface SixMinReportPrescriptionDao {
     @Query("SELECT * FROM sixmin_report_prescription WHERE reportId == :id AND delFlag == '0'")
     fun getReportPrescriptionById(id:String): Flow<List<SixMinReportPrescription>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertReportPrescription(prescriptionBean: SixMinReportPrescription): Long
 }

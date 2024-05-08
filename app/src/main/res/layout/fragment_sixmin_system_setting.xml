@@ -1,0 +1,1108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="com.just.news.R" />
+
+        <variable
+            name="vm"
+            type="com.just.machine.ui.viewmodel.MainViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        android:orientation="vertical">
+
+<!--        <include-->
+<!--            android:id="@+id/toolbar"-->
+<!--            layout="@layout/view_toolbar"-->
+<!--            setTitleImage="@{R.drawable.back}" />-->
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/sixmin_ll_save"
+                    android:layout_width="83dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="13dp"
+                    android:layout_marginEnd="60dp"
+                    android:background="@drawable/save_bg"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@mipmap/save" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="5dp"
+                        android:text="@string/save"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="320dp"
+                    android:layout_marginHorizontal="60dp"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="19dp"
+                        android:layout_weight="1.5">
+
+                        <LinearLayout
+                            android:id="@+id/sixmin_ll_alarm_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="25dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1.5"
+                                android:background="@drawable/frame_with_color_d6d6d6"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginStart="30dp"
+                                    android:layout_marginTop="20dp"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/sixmin_system_setting_systolic_pressure_alarm"
+                                            android:textColor="@color/text3"
+                                            android:textSize="17sp"
+                                            android:textStyle="bold" />
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal">
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="@string/sixmin_system_setting_systolic_pressure_alarm_prefix"
+                                                android:textColor="@color/text3"
+                                                android:textSize="13sp" />
+
+                                            <EditText
+                                                android:id="@+id/sixmin_et_alarm_sys_pressure"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginHorizontal="5dp"
+                                                android:backgroundTint="@color/colorPrimary"
+                                                android:inputType="number"
+                                                android:maxLength="3"
+                                                android:textColor="@color/colorPrimary"
+                                                android:textSize="20sp"
+                                                android:textStyle="bold" />
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="@string/sixmin_system_setting_blood_pressure_unit"
+                                                android:textColor="@color/text3"
+                                                android:textSize="13sp" />
+
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/sixmin_system_setting_diastolic_pressure_alarm"
+                                            android:textColor="@color/text3"
+                                            android:textSize="17sp"
+                                            android:textStyle="bold" />
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal">
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="@string/sixmin_system_setting_diastolic_pressure_alarm_prefix"
+                                                android:textColor="@color/text3"
+                                                android:textSize="13sp" />
+
+                                            <EditText
+                                                android:id="@+id/sixmin_et_alarm_dias_pressure"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginHorizontal="5dp"
+                                                android:backgroundTint="@color/colorPrimary"
+                                                android:inputType="number"
+                                                android:maxLength="3"
+                                                android:textColor="@color/colorPrimary"
+                                                android:textSize="20sp"
+                                                android:textStyle="bold" />
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="@string/sixmin_system_setting_blood_pressure_unit"
+                                                android:textColor="@color/text3"
+                                                android:textSize="13sp" />
+
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginStart="30dp"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/sixmin_system_setting_heartbeat_alarm"
+                                            android:textColor="@color/text3"
+                                            android:textSize="17sp"
+                                            android:textStyle="bold" />
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal">
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="@string/sixmin_system_setting_heartbeat_alarm_prefix"
+                                                android:textColor="@color/text3"
+                                                android:textSize="13sp" />
+
+                                            <EditText
+                                                android:id="@+id/sixmin_et_alarm_ecg"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginHorizontal="5dp"
+                                                android:backgroundTint="@color/colorPrimary"
+                                                android:inputType="number"
+                                                android:maxLength="3"
+                                                android:textColor="@color/colorPrimary"
+                                                android:textSize="20sp"
+                                                android:textStyle="bold" />
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="@string/sixmin_system_setting_heartbeat_unit"
+                                                android:textColor="@color/text3"
+                                                android:textSize="13sp" />
+
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/sixmin_system_setting_blood_oxygen_alarm"
+                                            android:textColor="@color/text3"
+                                            android:textSize="17sp"
+                                            android:textStyle="bold" />
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal">
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="@string/sixmin_system_setting_blood_oxygen_alarm_prefix"
+                                                android:textColor="@color/text3"
+                                                android:textSize="13sp" />
+
+                                            <EditText
+                                                android:id="@+id/sixmin_et_alarm_blood_oxygen"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginHorizontal="5dp"
+                                                android:backgroundTint="@color/colorPrimary"
+                                                android:inputType="number"
+                                                android:maxLength="2"
+                                                android:textColor="@color/colorPrimary"
+                                                android:textSize="20sp"
+                                                android:textStyle="bold" />
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="@string/sixmin_system_setting_blood_oxygen_unit"
+                                                android:textColor="@color/text3"
+                                                android:textSize="13sp" />
+
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignStart="@id/sixmin_ll_alarm_layout"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="13dp"
+                            android:background="@color/white"
+                            android:text="@string/sixmin_system_setting_alarm"
+                            android:textColor="@color/text3"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2">
+
+                        <LinearLayout
+                            android:id="@+id/sixmin_ll_other_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="25dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:background="@drawable/frame_with_color_d6d6d6"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="57dp"
+                                    android:layout_marginTop="13dp"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="@string/sixmin_system_setting_circle_method"
+                                        android:textColor="@color/text3"
+                                        android:textSize="14sp" />
+
+                                    <RelativeLayout
+                                        android:id="@+id/sixmin_rl_auto_circle_count"
+                                        android:layout_width="64dp"
+                                        android:layout_height="64dp"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="30dp"
+                                        android:background="@drawable/sixmin_circle_select_bg">
+
+                                        <TextView
+                                            android:id="@+id/sixmin_tv_auto_circle_count"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerInParent="true"
+                                            android:text="@string/sixmin_system_setting_circle_auto"
+                                            android:textColor="@color/colorPrimary"
+                                            android:textSize="13sp" />
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:id="@+id/sixmin_rl_handle_circle_count"
+                                        android:layout_width="64dp"
+                                        android:layout_height="64dp"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="30dp"
+                                        android:background="@drawable/sixmin_circle_unselect_bg">
+
+                                        <TextView
+                                            android:id="@+id/sixmin_tv_handle_circle_count"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerInParent="true"
+                                            android:text="@string/sixmin_system_setting_circle_handle"
+                                            android:textColor="@color/text3"
+                                            android:textSize="13sp" />
+                                    </RelativeLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="57dp"
+                                    android:layout_marginTop="13dp"
+                                    android:layout_marginEnd="44dp"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="@string/sixmin_system_setting_end_user"
+                                        android:textColor="@color/text3"
+                                        android:textSize="14sp" />
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="23dp"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="10dp"
+                                        android:background="@drawable/frame_with_color_d6d6d6">
+
+                                        <EditText
+                                            android:id="@+id/sixmin_et_other_use_org"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginStart="20dp"
+                                            android:background="@null"
+                                            android:backgroundTint="@null"
+                                            android:maxLines="1"
+                                            android:textColor="@color/text3"
+                                            android:textSize="12sp" />
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="57dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginEnd="44dp"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:text="@string/sixmin_system_setting_area_length"
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp" />
+
+                                        <LinearLayout
+                                            android:layout_width="115dp"
+                                            android:layout_height="23dp"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginStart="10dp"
+                                            android:background="@drawable/frame_with_color_d6d6d6">
+
+                                            <EditText
+                                                android:id="@+id/sixmin_et_other_area_length"
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center_vertical"
+                                                android:layout_marginStart="20dp"
+                                                android:layout_weight="1"
+                                                android:background="@null"
+                                                android:backgroundTint="@null"
+                                                android:inputType="number"
+                                                android:maxLength="5"
+                                                android:textColor="@color/text3"
+                                                android:textSize="12sp" />
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center_vertical"
+                                                android:layout_marginEnd="10dp"
+                                                android:text="@string/sixmin_system_setting_area_length_unit"
+                                                android:textColor="@color/text3"
+                                                android:textSize="12sp" />
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:text="@string/sixmin_system_setting_broadcast_guidance_voice"
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp" />
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical">
+
+                                            <RadioGroup
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="horizontal">
+
+                                                <RadioButton
+                                                    android:buttonTint="@color/colorPrimary"
+                                                    android:id="@+id/rb_broadcast_guidance_voice_yes"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="@string/sixmin_system_setting_check_yes" />
+
+                                                <RadioButton
+                                                    android:buttonTint="@color/colorPrimary"
+                                                    android:id="@+id/rb_broadcast_guidance_voice_no"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="@string/sixmin_system_setting_check_no" />
+                                            </RadioGroup>
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="30dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginEnd="44dp"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:text="@string/sixmin_system_setting_ecg_lead_type"
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp" />
+
+                                        <LinearLayout
+                                            android:layout_width="115dp"
+                                            android:layout_height="23dp"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginStart="10dp"
+                                            android:background="@drawable/frame_with_color_d6d6d6">
+
+                                            <EditText
+                                                android:id="@+id/sixmin_et_other_ect_type"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center_vertical"
+                                                android:layout_marginStart="20dp"
+                                                android:background="@null"
+                                                android:backgroundTint="@null"
+                                                android:textColor="@color/text3"
+                                                android:textSize="12sp" />
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:text="@string/sixmin_system_setting_auto_mearsure_blood"
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp" />
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical">
+
+                                            <RadioGroup
+                                                android:buttonTint="@color/colorPrimary"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="horizontal">
+
+                                                <RadioButton
+                                                    android:buttonTint="@color/colorPrimary"
+                                                    android:id="@+id/rb_auto_mearsure_blood_yes"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="@string/sixmin_system_setting_check_yes" />
+
+                                                <RadioButton
+                                                    android:buttonTint="@color/colorPrimary"
+                                                    android:id="@+id/rb_auto_mearsure_blood_no"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="@string/sixmin_system_setting_check_no" />
+                                            </RadioGroup>
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="38dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginEnd="44dp"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:text="@string/sixmin_system_setting_steps_or_breath"
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp" />
+
+                                        <RadioGroup
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="5dp"
+                                            android:orientation="horizontal">
+
+                                            <RadioButton
+                                                android:buttonTint="@color/colorPrimary"
+                                                android:id="@+id/rb_steps_or_breath_steps"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="@string/sixmin_system_setting_steps_or_breath_steps" />
+
+                                            <RadioButton
+                                                android:buttonTint="@color/colorPrimary"
+                                                android:id="@+id/rb_steps_or_breath_breath"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="@string/sixmin_system_setting_steps_or_breath_breath" />
+                                        </RadioGroup>
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:text="@string/sixmin_system_setting_auto_start_test"
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp" />
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical">
+
+                                            <RadioGroup
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="horizontal">
+
+                                                <RadioButton
+                                                    android:buttonTint="@color/colorPrimary"
+                                                    android:id="@+id/rb_auto_start_test_yes"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="@string/sixmin_system_setting_check_yes" />
+
+                                                <RadioButton
+                                                    android:buttonTint="@color/colorPrimary"
+                                                    android:id="@+id/rb_auto_start_test_no"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="@string/sixmin_system_setting_check_no" />
+                                            </RadioGroup>
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="38dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginEnd="44dp"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal"
+                                        android:visibility="invisible">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:text="@string/sixmin_system_setting_position_of_trolley"
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp" />
+
+                                        <RadioGroup
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="5dp"
+                                            android:orientation="horizontal">
+
+                                            <RadioButton
+                                                android:buttonTint="@color/colorPrimary"
+                                                android:id="@+id/rb_position_of_trolley_middle"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="@string/sixmin_system_setting_position_of_trolley_middle" />
+
+                                            <RadioButton
+                                                android:buttonTint="@color/colorPrimary"
+                                                android:id="@+id/rb_position_of_trolley_start"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="@string/sixmin_system_setting_position_of_trolley_start" />
+                                        </RadioGroup>
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:text="@string/sixmin_system_setting_show_rest_time"
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp" />
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical">
+
+                                            <RadioGroup
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="horizontal">
+
+                                                <RadioButton
+                                                    android:buttonTint="@color/colorPrimary"
+                                                    android:id="@+id/rb_show_rest_time_yes"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="@string/sixmin_system_setting_check_yes" />
+
+                                                <RadioButton
+                                                    android:buttonTint="@color/colorPrimary"
+                                                    android:id="@+id/rb_show_rest_time_no"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="@string/sixmin_system_setting_check_no" />
+                                            </RadioGroup>
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignStart="@id/sixmin_ll_other_layout"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="13dp"
+                            android:background="@color/white"
+                            android:text="@string/sixmin_system_setting_other"
+                            android:textColor="@color/text3"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    android:layout_marginHorizontal="60dp"
+                    android:layout_marginTop="14dp"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:id="@+id/sixmin_ll_password_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="25dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/frame_with_color_d6d6d6"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginStart="88dp"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="@string/sixmin_system_setting_export_pwd"
+                                        android:textColor="@color/text3"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:id="@+id/sixmin_tv_export_pwd"
+                                        android:layout_width="169dp"
+                                        android:layout_height="22dp"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="10dp"
+                                        android:background="@drawable/frame_with_color_d6d6d6"
+                                        android:paddingStart="10dp"
+                                        android:textColor="@color/text3"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="10dp"
+                                        android:text="@string/sixmin_system_setting_modify_pwd"
+                                        android:textColor="@color/text3"
+                                        android:textSize="14sp" />
+
+                                    <EditText
+                                        android:id="@+id/sixmin_et_modify_pwd"
+                                        android:layout_width="169dp"
+                                        android:layout_height="22dp"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="10dp"
+                                        android:background="@drawable/frame_with_color_d6d6d6"
+                                        android:maxLines="1"
+                                        android:paddingStart="10dp"
+                                        android:textColor="@color/text3"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="10dp"
+                                        android:text="@string/sixmin_system_setting_confirm_pwd"
+                                        android:textColor="@color/text3"
+                                        android:textSize="14sp" />
+
+                                    <EditText
+                                        android:id="@+id/sixmin_et_confirm_pwd"
+                                        android:layout_width="169dp"
+                                        android:layout_height="22dp"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="10dp"
+                                        android:background="@drawable/frame_with_color_d6d6d6"
+                                        android:maxLines="1"
+                                        android:paddingStart="10dp"
+                                        android:textColor="@color/text3"
+                                        android:textSize="14sp" />
+
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignStart="@id/sixmin_ll_password_layout"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="13dp"
+                            android:background="@color/white"
+                            android:text="@string/sixmin_system_setting_password"
+                            android:textColor="@color/text3"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    android:layout_marginHorizontal="60dp"
+                    android:layout_marginTop="14dp"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:id="@+id/sixmin_ll_bluetooth_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="25dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/frame_with_color_d6d6d6"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginStart="88dp"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="@string/sixmin_system_setting_bluetooth_ecg"
+                                        android:textColor="@color/text3"
+                                        android:textSize="14sp" />
+
+                                    <EditText
+                                        android:id="@+id/sixmin_et_bluetooth_ecg"
+                                        android:layout_width="169dp"
+                                        android:layout_height="22dp"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="10dp"
+                                        android:background="@drawable/frame_with_color_d6d6d6"
+                                        android:paddingStart="10dp"
+                                        android:maxLength="12"
+                                        android:maxLines="1"
+                                        android:textColor="@color/text3"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="10dp"
+                                        android:text="@string/sixmin_system_setting_bluetooth_blood"
+                                        android:textColor="@color/text3"
+                                        android:textSize="14sp" />
+
+                                    <EditText
+                                        android:id="@+id/sixmin_et_bluetooth_blood"
+                                        android:layout_width="169dp"
+                                        android:layout_height="22dp"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="10dp"
+                                        android:background="@drawable/frame_with_color_d6d6d6"
+                                        android:paddingStart="10dp"
+                                        android:maxLength="12"
+                                        android:maxLines="1"
+                                        android:textColor="@color/text3"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="10dp"
+                                        android:text="@string/sixmin_system_setting_bluetooth_blood_oxygen"
+                                        android:textColor="@color/text3"
+                                        android:textSize="14sp" />
+
+                                    <EditText
+                                        android:id="@+id/sixmin_et_bluetooth_blood_oxygen"
+                                        android:layout_width="169dp"
+                                        android:layout_height="22dp"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="10dp"
+                                        android:background="@drawable/frame_with_color_d6d6d6"
+                                        android:paddingStart="10dp"
+                                        android:maxLines="1"
+                                        android:maxLength="12"
+                                        android:textColor="@color/text3"
+                                        android:textSize="14sp" />
+
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignStart="@id/sixmin_ll_bluetooth_layout"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="13dp"
+                            android:background="@color/white"
+                            android:text="@string/sixmin_system_setting_bluetooth"
+                            android:textColor="@color/text3"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    android:layout_marginHorizontal="60dp"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="50dp"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:id="@+id/sixmin_ll_info_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="25dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/frame_with_color_d6d6d6"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/sixmin_tv_system_info"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginStart="88dp"
+                                    android:gravity="center_vertical"
+                                    android:textColor="@color/text3"
+                                    android:textSize="13sp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignStart="@id/sixmin_ll_info_layout"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="13dp"
+                            android:background="@color/white"
+                            android:text="@string/sixmin_system_setting_info"
+                            android:textColor="@color/text3"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+    </LinearLayout>
+</layout>

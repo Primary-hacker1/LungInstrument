@@ -1,9 +1,7 @@
 package com.just.machine.model
 
 import androidx.room.Embedded
-import androidx.room.Entity
 import androidx.room.Relation
-import com.just.machine.dao.calibration.EnvironmentalCalibrationBean
 import com.just.machine.model.sixminreport.SixMinBloodOxygen
 import com.just.machine.model.sixminreport.SixMinHeartEcg
 import com.just.machine.model.sixminreport.SixMinReportBreathing

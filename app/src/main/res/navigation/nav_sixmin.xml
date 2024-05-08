@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_sixmin"
+    app:startDestination="@id/sixMinFragment">
+
+    <!--  hold_state_fragment 保活机制  -->
+    <fragment_navigator
+        android:id="@+id/sixMinFragment"
+        android:name="com.just.machine.ui.fragment.sixmin.SixMinFragment"
+        android:label="mainFragment"
+        tools:layout="@layout/fragment_sixmin">
+        <action
+            android:id="@+id/action_SixMinFragment_to_SixMinPreReportFragment"
+            app:destination="@id/sixMinPreReportFragment" />
+
+        <action
+            android:id="@+id/action_SixMinFragment_to_SixMinSystemSettingFragment"
+            app:destination="@id/sixMinSystemSettingFragment" />
+    </fragment_navigator>
+
+    <fragment_navigator
+        android:id="@+id/sixMinPreReportFragment"
+        android:name="com.just.machine.ui.fragment.sixmin.SixMinPreReportFragment"
+        android:label="sixMinPreReportFragment"
+        tools:layout="@layout/fragment_sixmin_pre_report">
+        <action
+            android:id="@+id/action_SixMinFragment_to_SixMinReportFragment"
+            app:destination="@id/sixMinReportFragment" />
+    </fragment_navigator>
+
+    <fragment_navigator
+        android:id="@+id/sixMinReportFragment"
+        android:name="com.just.machine.ui.fragment.sixmin.SixMinReportFragment"
+        android:label="sixMinReportFragment"
+        tools:layout="@layout/fragment_sixmin_report">
+
+    </fragment_navigator>
+
+    <fragment_navigator
+        android:id="@+id/sixMinSystemSettingFragment"
+        android:name="com.just.machine.ui.fragment.sixmin.SixMinSystemSettingFragment"
+        android:label="sixMinSystemSettingFragment"
+        tools:layout="@layout/fragment_sixmin_system_setting">
+
+    </fragment_navigator>
+
+</navigation>

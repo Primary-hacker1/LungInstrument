@@ -208,7 +208,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
                     override fun onUpdateItem(bean: SixMinReportInfo) {
                         val intent = Intent(
-                            this@PatientActivity, SixMinPreReportActivity::class.java
+                            this@PatientActivity, SixMinDetectActivity::class.java
                         )
                         val bundle = Bundle()
                         bundle.putString(Constants.sixMinPatientInfo, bean.patientId.toString())
@@ -292,7 +292,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                                             befoBreathingLevelStr: String
                                         ) {
                                             val intent = Intent(
-                                                this@PatientActivity, SixMinActivity::class.java
+                                                this@PatientActivity, SixMinDetectActivity::class.java
                                             )
                                             val bundle = Bundle()
                                             bundle.putString(
@@ -335,7 +335,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                                                 ) {
                                                     val intent = Intent(
                                                         this@PatientActivity,
-                                                        SixMinActivity::class.java
+                                                        SixMinDetectActivity::class.java
                                                     )
                                                     val bundle = Bundle()
                                                     bundle.putString(

@@ -15,6 +15,7 @@ import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.ui.activity.CardiopulmonaryActivity
 import com.just.machine.ui.activity.PatientActivity
 import com.just.machine.ui.activity.SixMinActivity
+import com.just.machine.ui.activity.SixMinDetectActivity
 import com.just.machine.ui.activity.SixMinPreReportActivity
 import com.just.machine.ui.dialog.CommonDialogFragment
 import com.just.machine.ui.dialog.PatientDialogFragment
@@ -148,7 +149,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                     befoFatigueLevelStr: String,
                     befoBreathingLevelStr: String
                 ) {
-                    val intent = Intent(activity, SixMinActivity::class.java)
+                    val intent = Intent(activity, SixMinDetectActivity::class.java)
                     val bundle = Bundle()
                     bundle.putString(Constants.sixMinSelfCheckViewSelection,"$befoFatigueLevelStr&$befoBreathingLevelStr")
                     bundle.putString(Constants.sixMinPatientInfo, patientId)
@@ -181,7 +182,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                                     befoFatigueLevelStr: String,
                                     befoBreathingLevelStr: String
                                 ) {
-                                    val intent = Intent(activity, SixMinActivity::class.java)
+                                    val intent = Intent(activity, SixMinDetectActivity::class.java)
                                     val bundle = Bundle()
                                     bundle.putString(Constants.sixMinSelfCheckViewSelection,"$befoFatigueLevelStr&$befoBreathingLevelStr")
                                     bundle.putString(Constants.sixMinPatientInfo,"")

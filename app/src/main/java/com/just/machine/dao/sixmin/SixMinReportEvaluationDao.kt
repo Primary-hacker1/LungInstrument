@@ -28,7 +28,7 @@ interface SixMinReportEvaluationDao {
     @Query("SELECT * FROM sixmin_report_evaluation WHERE reportId == :id AND delFlag == '0'")
     fun getReportEvaluationById(id:String): Flow<List<SixMinReportEvaluation>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertReportEvaluation(walkBean: SixMinReportEvaluation): Long
 
     @Query("UPDATE sixmin_report_evaluation SET fatigueLevel=:fatigueLevel,breathingLevel=:breathLevel WHERE reportId ==:reportNo")

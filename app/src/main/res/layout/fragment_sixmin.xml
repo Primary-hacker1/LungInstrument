@@ -1,0 +1,955 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#f5fcff"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/sixmin_fl_patient_and_test_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/sixmin_ll_patient_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="1dp"
+                        android:background="#cc2F89DE"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:id="@+id/ll_patient_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="20dp"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@mipmap/xingming"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:text="@string/sixmin_test_patient_info_name"
+                                android:textColor="@color/white"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/sixmin_tv_test_patient_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:textColor="@color/white"
+                                android:textSize="15sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_patient_sex"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:src="@mipmap/xingbie"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:text="@string/sixmin_test_patient_info_sex"
+                                android:textColor="@color/white"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/sixmin_tv_test_patient_sex"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:textColor="@color/white"
+                                android:textSize="15sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_patient_age"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:src="@mipmap/nianlin"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:text="@string/sixmin_test_patient_info_age"
+                                android:textColor="@color/white"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/sixmin_tv_test_patient_age"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:textColor="@color/white"
+                                android:textSize="15sp" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_patient_high"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:src="@mipmap/shengao"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:text="@string/sixmin_test_patient_info_height"
+                                android:textColor="@color/white"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/sixmin_tv_test_patient_hight"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:textColor="@color/white"
+                                android:textSize="15sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_patient_weight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:src="@mipmap/tizhong"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:text="@string/sixmin_test_patient_info_weight"
+                                android:textColor="@color/white"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/sixmin_tv_test_patient_weight"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:textColor="@color/white"
+                                android:textSize="15sp" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_patient_bmi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:src="@mipmap/bmi"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:text="@string/sixmin_test_patient_info_bmi"
+                                android:textColor="@color/white"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/sixmin_tv_test_patient_bmi"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:textColor="@color/white"
+                                android:textSize="15sp" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/sixmin_iv_ignore_blood"
+                            android:layout_width="60dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:background="@drawable/sixmin_ignore_blood_pressure_bg"
+                            android:gravity="center"
+                            android:text="@string/sixmin_test_ignore_measure_blood_pressure"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="15sp" />
+
+                        <ImageView
+                            android:id="@+id/sixmin_iv_system_setting"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:src="@mipmap/xtsz" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/sixmin_blood_oxygen_bg"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4.5"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:id="@+id/sixmin_ll_line_chart_blood_oxygen"
+                                android:layout_width="match_parent"
+                                android:layout_height="160dp"
+                                android:orientation="vertical">
+
+                                <com.github.mikephil.charting.charts.LineChart
+                                    android:id="@+id/sixmin_line_chart_blood_oxygen"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/sixmin_ll_line_chart_heart_beat"
+                                android:layout_width="match_parent"
+                                android:layout_height="160dp"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <com.github.mikephil.charting.charts.LineChart
+                                    android:id="@+id/sixmin_line_chart_heart_beat"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_weight="3"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="105dp"
+                                android:background="@drawable/sixmin_circle_bg"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:layout_marginStart="30dp"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:text="@string/sixmin_test_blood_oxygen_title"
+                                            android:textColor="@color/white"
+                                            android:textSize="11sp" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginTop="25dp"
+                                            android:text="@string/sixmin_test_ecg_title"
+                                            android:textColor="@color/white"
+                                            android:textSize="11sp" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="15dp"
+                                        android:layout_marginEnd="20dp"
+                                        android:gravity="center"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/sixmin_tv_blood_oxygen"
+                                            android:layout_width="25dp"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/oswald"
+                                            android:text="--"
+                                            android:textColor="@color/white"
+                                            android:textSize="18sp"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:id="@+id/sixmin_tv_heart_beat"
+                                            android:layout_width="25dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="10dp"
+                                            android:fontFamily="@font/oswald"
+                                            android:text="---"
+                                            android:textColor="@color/white"
+                                            android:textSize="18sp"
+                                            android:textStyle="bold" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:text="%"
+                                            android:textColor="@color/white"
+                                            android:textSize="11sp" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginTop="25dp"
+                                            android:text="@string/sixmin_system_setting_heartbeat_unit"
+                                            android:textColor="@color/white"
+                                            android:textSize="11sp" />
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+
+                                    <RelativeLayout
+                                        android:layout_width="100dp"
+                                        android:layout_height="100dp"
+                                        android:layout_gravity="center_vertical">
+
+                                        <ImageView
+                                            android:layout_width="75dp"
+                                            android:layout_height="75dp"
+                                            android:layout_centerInParent="true"
+                                            android:src="@mipmap/jiquan2" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerInParent="true"
+                                            android:text="@string/sixmin_circle_count"
+                                            android:textColor="@color/white"
+                                            android:textSize="16sp"
+                                            android:textStyle="bold" />
+
+                                    </RelativeLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center_vertical"
+                                        android:orientation="vertical">
+
+                                        <ImageButton
+                                            android:id="@+id/sixmin_iv_circle_count_plus"
+                                            android:layout_width="22dp"
+                                            android:layout_height="22dp"
+                                            android:layout_weight="1"
+                                            android:scaleType="centerInside"
+                                            android:background="@null"
+                                            android:src="@mipmap/circle_plus" />
+
+                                        <ImageButton
+                                            android:background="@null"
+                                            android:id="@+id/sixmin_iv_circle_count_minus"
+                                            android:layout_width="22dp"
+                                            android:layout_height="22dp"
+                                            android:scaleType="centerInside"
+                                            android:layout_weight="1"
+                                            android:src="@mipmap/circle_minus" />
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginEnd="20dp"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="@string/sixmin_test_circle_count_title"
+                                        android:textColor="@color/white"
+                                        android:textSize="12sp" />
+
+                                    <RelativeLayout
+                                        android:layout_width="47dp"
+                                        android:layout_height="55dp"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginHorizontal="5dp"
+                                        android:background="@mipmap/jiquank">
+
+                                        <TextView
+                                            android:id="@+id/sixmin_tv_circle_count"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerInParent="true"
+                                            android:fontFamily="@font/oswald"
+                                            android:paddingBottom="5dp"
+                                            android:text="- -"
+                                            android:textColor="@color/white"
+                                            android:textSize="20sp"
+                                            android:textStyle="bold" />
+                                    </RelativeLayout>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="@string/sixmin_test_circle_count_unit"
+                                        android:textColor="@color/white"
+                                        android:textSize="12sp" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="105dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginVertical="5dp"
+                                android:background="@drawable/sixmin_blood_bg"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="30dp"
+                                        android:layout_weight="3"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="8dp"
+                                            android:text="@string/sixmin_test_blood_pressure_begin"
+                                            android:textColor="@color/white"
+                                            android:textSize="12sp" />
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal">
+
+                                            <LinearLayout
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center_vertical"
+                                                android:layout_marginTop="3dp"
+                                                android:orientation="horizontal">
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="@string/sixmin_blood_pressure_high"
+                                                    android:textColor="@color/white"
+                                                    android:textSize="10sp" />
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="/"
+                                                    android:textColor="@color/white"
+                                                    android:textSize="11sp" />
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="@string/sixmin_blood_pressure_low"
+                                                    android:textColor="@color/white"
+                                                    android:textSize="10sp" />
+
+                                            </LinearLayout>
+
+                                            <LinearLayout
+                                                android:layout_width="70dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center_vertical"
+                                                android:layout_marginStart="30dp"
+                                                android:orientation="horizontal">
+
+                                                <TextView
+                                                    android:id="@+id/sixmin_tv_blood_pressure_high_front"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:fontFamily="@font/oswald"
+                                                    android:text="---"
+                                                    android:textColor="@color/white"
+                                                    android:textSize="18sp"
+                                                    android:textStyle="bold" />
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:fontFamily="@font/oswald"
+                                                    android:text="/"
+                                                    android:textColor="@color/white"
+                                                    android:textSize="16sp"
+                                                    android:textStyle="bold" />
+
+                                                <TextView
+                                                    android:id="@+id/sixmin_tv_blood_pressure_low_front"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:fontFamily="@font/oswald"
+                                                    android:text="---"
+                                                    android:textColor="@color/white"
+                                                    android:textSize="18sp"
+                                                    android:textStyle="bold" />
+
+                                            </LinearLayout>
+
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/sixmin_test_blood_pressure_after"
+                                            android:textColor="@color/white"
+                                            android:textSize="12sp" />
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal">
+
+                                            <LinearLayout
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center_vertical"
+                                                android:layout_marginTop="3dp"
+                                                android:orientation="horizontal">
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="@string/sixmin_blood_pressure_high"
+                                                    android:textColor="@color/white"
+                                                    android:textSize="10sp" />
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="/"
+                                                    android:textColor="@color/white"
+                                                    android:textSize="11sp" />
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="@string/sixmin_blood_pressure_low"
+                                                    android:textColor="@color/white"
+                                                    android:textSize="10sp" />
+
+                                            </LinearLayout>
+
+                                            <LinearLayout
+                                                android:layout_width="70dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center_vertical"
+                                                android:layout_marginStart="30dp"
+                                                android:orientation="horizontal">
+
+                                                <TextView
+                                                    android:id="@+id/sixmin_tv_blood_pressure_high_behind"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:fontFamily="@font/oswald"
+                                                    android:text="---"
+                                                    android:textColor="@color/white"
+                                                    android:textSize="18sp"
+                                                    android:textStyle="bold" />
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:fontFamily="@font/oswald"
+                                                    android:text="/"
+                                                    android:textColor="@color/white"
+                                                    android:textSize="16sp"
+                                                    android:textStyle="bold" />
+
+                                                <TextView
+                                                    android:id="@+id/sixmin_tv_blood_pressure_low_behind"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:fontFamily="@font/oswald"
+                                                    android:text="---"
+                                                    android:textColor="@color/white"
+                                                    android:textSize="18sp"
+                                                    android:textStyle="bold" />
+
+                                            </LinearLayout>
+
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <ImageView
+                                    android:layout_width="0dp"
+                                    android:layout_height="80dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginEnd="20dp"
+                                    android:layout_weight="1"
+                                    android:src="@mipmap/xiantiao1" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_weight="2"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="8dp"
+                                            android:text="@string/sixmin_blood_pressure_high"
+                                            android:textColor="@color/white"
+                                            android:textSize="12sp" />
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal">
+
+                                            <TextView
+                                                android:id="@+id/sixmin_tv_blood_pressure_high"
+                                                android:layout_width="28dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center_vertical"
+                                                android:fontFamily="@font/oswald"
+                                                android:text="---"
+                                                android:textColor="@color/white"
+                                                android:textSize="18sp"
+                                                android:textStyle="bold" />
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center_vertical"
+                                                android:layout_marginStart="10dp"
+                                                android:layout_marginTop="3dp"
+                                                android:text="@string/sixmin_system_setting_blood_pressure_unit"
+                                                android:textColor="@color/white"
+                                                android:textSize="10sp" />
+
+                                        </LinearLayout>
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="2dp"
+                                            android:text="@string/sixmin_blood_pressure_low"
+                                            android:textColor="@color/white"
+                                            android:textSize="12sp" />
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal">
+
+                                            <TextView
+                                                android:id="@+id/sixmin_tv_blood_pressure_low"
+                                                android:layout_width="28dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center_vertical"
+                                                android:fontFamily="@font/oswald"
+                                                android:text="---"
+                                                android:textColor="@color/white"
+                                                android:textSize="18sp"
+                                                android:textStyle="bold" />
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center_vertical"
+                                                android:layout_marginStart="10dp"
+                                                android:layout_marginTop="3dp"
+                                                android:text="@string/sixmin_system_setting_blood_pressure_unit"
+                                                android:textColor="@color/white"
+                                                android:textSize="10sp" />
+
+                                        </LinearLayout>
+                                    </LinearLayout>
+
+                                    <RelativeLayout
+                                        android:id="@+id/sixmin_rl_measure_blood"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="20dp">
+
+                                        <ImageView
+                                            android:layout_width="75dp"
+                                            android:layout_height="75dp"
+                                            android:layout_centerInParent="true"
+                                            android:src="@mipmap/celiangxueya1" />
+
+                                        <TextView
+                                            android:id="@+id/sixmin_tv_measure_blood"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerInParent="true"
+                                            android:gravity="center"
+                                            android:text="@string/sixmin_measure_blood"
+                                            android:textColor="#4998e2"
+                                            android:textSize="16sp"
+                                            android:textStyle="bold" />
+
+                                    </RelativeLayout>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="105dp"
+                                android:layout_gravity="center_vertical"
+                                android:background="@drawable/sixmin_start_bg"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <RelativeLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical">
+
+                                    <ImageView
+                                        android:layout_width="120dp"
+                                        android:layout_height="120dp"
+                                        android:layout_centerInParent="true"
+                                        android:src="@mipmap/jishi" />
+
+                                    <TextView
+                                        android:id="@+id/sixmin_tv_start_min"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerInParent="true"
+                                        android:fontFamily="@font/oswald"
+                                        android:paddingEnd="82dp"
+                                        android:paddingBottom="10dp"
+                                        android:text="5"
+                                        android:textColor="#3BB8A9"
+                                        android:textSize="38sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/sixmin_tv_start_sec1"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerInParent="true"
+                                        android:fontFamily="@font/oswald"
+                                        android:paddingStart="2dp"
+                                        android:paddingBottom="10dp"
+                                        android:text="5"
+                                        android:textColor="#3BB8A9"
+                                        android:textSize="38sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/sixmin_tv_start_sec2"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerInParent="true"
+                                        android:fontFamily="@font/oswald"
+                                        android:paddingStart="80dp"
+                                        android:paddingBottom="10dp"
+                                        android:text="9"
+                                        android:textColor="#3BB8A9"
+                                        android:textSize="38sp"
+                                        android:textStyle="bold" />
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/sixmin_rl_start"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginStart="50dp">
+
+                                    <ImageView
+                                        android:layout_width="80dp"
+                                        android:layout_height="80dp"
+                                        android:layout_centerInParent="true"
+                                        android:src="@mipmap/kaishi2" />
+
+                                    <TextView
+                                        android:id="@+id/sixmin_tv_start"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerInParent="true"
+                                        android:paddingTop="10dp"
+                                        android:text="@string/sixmin_start"
+                                        android:textColor="#36cfb4"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+
+                                </RelativeLayout>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginVertical="10dp">
+
+                        <com.justsafe.libview.ecg.EcgView
+                            android:id="@+id/sixmin_ecg"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btn_measure_blood"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="测量血压"
+                        android:visibility="gone" />
+
+                    <Button
+                        android:id="@+id/btn_speech_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="文字转语音"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/sixmin_iv_countdown_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/colorPrimary"
+                    android:padding="20dp"
+                    android:src="@mipmap/five"
+                    android:visibility="gone" />
+
+            </FrameLayout>
+        </ScrollView>
+
+    </LinearLayout>
+</layout>

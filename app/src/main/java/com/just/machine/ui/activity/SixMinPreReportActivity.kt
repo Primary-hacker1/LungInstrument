@@ -685,6 +685,7 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                     val bundle = Bundle()
                     bundle.putString(Constants.sixMinPatientInfo, sixMinPatientId)
                     bundle.putString(Constants.sixMinReportNo, sixMinReportNo)
+                    bundle.putString(Constants.sixMinReportType, sixMinReportType)
                     intent.putExtras(bundle)
                     startActivity(intent)
                     finish()
@@ -865,6 +866,7 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                     val bundle = Bundle()
                     bundle.putString(Constants.sixMinPatientInfo, sixMinPatientId)
                     bundle.putString(Constants.sixMinReportNo, sixMinReportNo)
+                    bundle.putString(Constants.sixMinReportType, sixMinReportType)
                     intent.putExtras(bundle)
                     startActivity(intent)
                     finish()
@@ -1028,12 +1030,8 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
                 binding.sixminEtUnfinishCircle.isEnabled =
                     sixMinReportPrescription.movementWay.isEmpty()
 
-                binding.sixminTvTotalDistance.text = Html.fromHtml(
-                    String.format(
-                        getString(R.string.sixmin_test_report_total_distance),
-                        sixMinRecordsBean.evaluationBean[0].totalDistance
-                    )
-                )
+                binding.sixminTvTotalDistance.text =  sixMinRecordsBean.evaluationBean[0].totalDistance
+
                 val stopTime = sixMinRecordsBean.otherBean[0].stopTime
                 val type = sixMinRecordsBean.otherBean[0].stopOr
                 strideAvg = usbTransferUtil.dealStrideAvg(
@@ -1282,7 +1280,7 @@ class SixMinPreReportActivity : CommonBaseActivity<ActivitySixMinPreReportBindin
         )
         reportRowList.add(
             SixMinReportItemBean(
-                "心率(bpm)", "60", "60", "60", "60", "60", "60", "60", "60", "60", "60"
+                "心率(bpm)", sixMinRecordsBean.heartBeatBean[0].heartStop, sixMinRecordsBean.heartBeatBean[0].heartOne, sixMinRecordsBean.heartBeatBean[0].heartTwo, sixMinRecordsBean.heartBeatBean[0].heartThree, sixMinRecordsBean.heartBeatBean[0].heartFour, sixMinRecordsBean.heartBeatBean[0].heartFive, sixMinRecordsBean.heartBeatBean[0].heartSix, sixMinRecordsBean.heartBeatBean[0].heartBig, sixMinRecordsBean.heartBeatBean[0].heartSmall, sixMinRecordsBean.heartBeatBean[0].heartAverage
             )
         )
         reportRowList.add(

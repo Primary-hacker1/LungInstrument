@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FileUtil {
@@ -106,6 +107,9 @@ public class FileUtil {
      */
     public long getFolderSize(String folderPath) {
         File file = new File(folderPath);
+        if(!file.exists()){
+           file.mkdirs();
+        }
 
         if (file.isDirectory()) { // 判断路径对应的是否为文件夹
             long size = 0;
@@ -124,6 +128,28 @@ public class FileUtil {
         } else {
             throw new IllegalArgumentException("The path is not a directory.");
         }
+    }
+
+    /**
+     * 获取指定路径下文件
+     * @param pathStr
+     * @return
+     */
+    public List<File> getPathFiles(String pathStr){
+        List<File> listFile = new ArrayList<>();
+        File directory = new File(context.getExternalFilesDir("").getAbsolutePath(), pathStr);
+        if (directory.exists() && directory.isDirectory()) {
+            // 获取目录下所有文件和目录
+            File[] files = directory.listFiles();
+
+            if (files != null) {
+                listFile.addAll(Arrays.asList(files));
+            }
+
+        } else {
+            System.out.println("目录不存在或不是一个目录");
+        }
+        return listFile;
     }
 
     public interface FileOperateCallback {

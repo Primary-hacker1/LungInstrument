@@ -19,6 +19,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:layout_marginTop="6dp"
                 android:orientation="vertical">
 
@@ -26,7 +27,7 @@
                     android:id="@+id/sixmin_report_iv_patient_self"
                     android:layout_width="26dp"
                     android:layout_height="22dp"
-                    android:layout_gravity="center_horizontal"
+                    android:layout_gravity="center"
                     android:layout_marginStart="2dp"
                     android:scaleType="centerInside"
                     android:src="@mipmap/breath" />
@@ -35,13 +36,12 @@
                     android:id="@+id/sixmin_report_tv_patient_self_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
+                    android:layout_gravity="center"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="5dp"
                     android:ems="1"
-                    android:text="212121"
                     android:textColor="@color/text3"
-                    android:textSize="14sp">
+                    android:textSize="13sp">
 
                 </TextView>
 
@@ -64,11 +64,10 @@
                 <TextView
                     android:id="@+id/sixmin_report_tv_patient_self_conclusion"
                     android:layout_width="wrap_content"
-                    android:layout_height="35dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"
                     android:textColor="@color/text3"
-                    android:textSize="13sp">
-
+                    android:textSize="12sp">
                 </TextView>
 
             </LinearLayout>

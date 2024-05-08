@@ -386,7 +386,7 @@ public class USBTransferUtil {
         batteryLevel = 0;//电池电量
         restBloodOxy = "";//静息血氧集合
         restTime = 0;//休息时长
-        stepsStr = "";//步数
+        stepsStr = "0";//步数
         checkBSInd = 0;
         checkBSStr = "";
         bloodOxyLineData.clear();
@@ -867,7 +867,7 @@ public class USBTransferUtil {
     public void dealStride(SixMinReportStride reportStride, BigDecimal totalDistance, int timeInt) {
         if (null != reportStride) {
             List<BigDecimal> integers = new ArrayList<>();
-            reportStride.setStrideStop("0");
+            reportStride.setStrideStop("0.00");
             if (!reportStride.getStrideOne().isEmpty()) {
                 integers.add(BigDecimal.valueOf(Integer.parseInt(reportStride.getStrideOne())));
             } else {
@@ -907,12 +907,27 @@ public class USBTransferUtil {
             reportStride.setStrideBig(max.toString());
             reportStride.setStrideSmall(min.toString());
             BigDecimal avg = new BigDecimal("0.00");
-            if (totalDistance.compareTo(new BigDecimal(0)) == 1 && timeInt > 0) {
-                avg = totalDistance.divide(new BigDecimal(timeInt), 3, BigDecimal.ROUND_HALF_UP);
-                avg = avg.multiply(new BigDecimal(60)).setScale(1, BigDecimal.ROUND_HALF_UP);
+            if (totalDistance.compareTo(new BigDecimal(0)) > 0 && timeInt > 0) {
+                avg = totalDistance.divide(new BigDecimal(timeInt), 3, RoundingMode.HALF_UP);
+                avg = avg.multiply(new BigDecimal(60)).setScale(1, RoundingMode.HALF_UP);
             }
             reportStride.setStrideAverage(avg.toString());
         }
+    }
+
+    /**
+     * 计算平均步速
+     * @param totalDistance
+     * @param timeInt
+     * @return
+     */
+    public String getAvgStride(BigDecimal totalDistance, int timeInt){
+        BigDecimal avg = new BigDecimal("0.00");
+        if (totalDistance.compareTo(new BigDecimal(0)) > 0 && timeInt > 0) {
+            avg = totalDistance.divide(new BigDecimal(timeInt), 3, RoundingMode.HALF_UP);
+            avg = avg.multiply(new BigDecimal(60)).setScale(1, RoundingMode.HALF_UP);
+        }
+        return avg.toString();
     }
 
     /**

@@ -2,6 +2,7 @@ package com.just.machine.dao.sixmin
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.just.machine.model.sixminreport.SixMinBloodOxygen
 import com.just.machine.model.sixminreport.SixMinReportWalk
@@ -19,6 +20,6 @@ interface SixMinReportBloodDao {
     @Query("SELECT * FROM sixmin_report_blood WHERE reportId == :id AND delFlag == '0'")
     fun getReportBlood(id:String): Flow<List<SixMinBloodOxygen>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertReportBlood(bloodOxygen: SixMinBloodOxygen): Long
 }
