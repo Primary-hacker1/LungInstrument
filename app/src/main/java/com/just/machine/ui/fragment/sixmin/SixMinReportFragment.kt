@@ -13,9 +13,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.common.base.CommonBaseFragment
-import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -30,13 +28,18 @@ import com.just.machine.model.SixMinReportItemBean
 import com.just.machine.model.sixminreport.SixMinReportEvaluation
 import com.just.machine.ui.activity.SixMinDetectActivity
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.machine.util.CommonUtil
 import com.just.machine.util.USBTransferUtil
+import com.just.machine.util.WordUtil
 import com.just.news.R
 import com.just.news.databinding.FragmentSixminReportBinding
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
 import java.math.BigDecimal
 
 
@@ -74,8 +77,10 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         initLineChart(binding.sixminReportLineChartSteps, 4)
         viewModel.getSixMinReportEvaluation()
         lifecycleScope.launch {
-            kotlinx.coroutines.delay(200L)
-            viewModel.getSixMinReportInfoById(mActivity.sixMinPatientId.toLong(), mActivity.sixMinReportNo)
+            kotlinx.coroutines.delay(1000L)
+            viewModel.getSixMinReportInfoById(
+                mActivity.sixMinPatientId.toLong(), mActivity.sixMinReportNo
+            )
         }
     }
 
@@ -96,28 +101,181 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         }
 
         binding.sixminReportLlPrintReport.setOnClickListener {
-            val bloodPng = File(
-                mActivity.getExternalFilesDir("")?.absolutePath,
-                pngSavePath + File.separator + "imageBlood.png"
-            )
-            val heartPng = File(
-                mActivity.getExternalFilesDir("")?.absolutePath,
-                pngSavePath + File.separator + "imageHeart.png"
-            )
-            val hsHxlPng =
-                if (sixMinRecordsBean.infoBean.bsHxl.isEmpty() || sixMinRecordsBean.infoBean.bsHxl == "0") {
-                    File(
-                        mActivity.getExternalFilesDir("")?.absolutePath,
-                        pngSavePath + File.separator + "imageBreathing.png"
-                    )
-                } else {
-                    File(
-                        mActivity.getExternalFilesDir("")?.absolutePath,
-                        pngSavePath + File.separator + "imageSteps.png"
-                    )
+            try {
+                val bloodPng = File(
+                    mActivity.getExternalFilesDir("")?.absolutePath,
+                    pngSavePath + File.separator + "imageBlood.png"
+                )
+                val heartPng = File(
+                    mActivity.getExternalFilesDir("")?.absolutePath,
+                    pngSavePath + File.separator + "imageHeart.png"
+                )
+                val hsHxlPng =
+                    if (sixMinRecordsBean.infoBean.bsHxl.isEmpty() || sixMinRecordsBean.infoBean.bsHxl == "0") {
+                        File(
+                            mActivity.getExternalFilesDir("")?.absolutePath,
+                            pngSavePath + File.separator + "imageBreathing.png"
+                        )
+                    } else {
+                        File(
+                            mActivity.getExternalFilesDir("")?.absolutePath,
+                            pngSavePath + File.separator + "imageSteps.png"
+                        )
 
+                    }
+
+                val templatePath = File.separator+"templates" + File.separator + "报告模板3页-无截图.xml"
+                var pageNum = 0
+                val root = mutableMapOf<String, Any>()
+                dealPageOne(root)
+                dealPageTow(root, bloodPng, heartPng, hsHxlPng)
+                pageNum = 2
+                root["pageNum"] = pageNum
+                val byteArrayOutputStream = WordUtil.process(root, templatePath)
+
+                var fileOutputStream: FileOutputStream? = null
+                val docPath =
+                    mActivity.getExternalFilesDir("")?.absolutePath + File.separator + "sixminreport" + File.separator + "六分钟步行试验检测报告.doc"
+                try {
+                    fileOutputStream = FileOutputStream(docPath)
+                    fileOutputStream.write(byteArrayOutputStream.toByteArray())
+                } catch (e: FileNotFoundException) {
+                    e.printStackTrace()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                } finally {
+                    try {
+                        fileOutputStream?.close()
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
                 }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
+    }
+
+    private fun dealPageOne(root: MutableMap<String, Any>) {
+        var patientName = sixMinRecordsBean.infoBean.patientName
+        if (patientName.length > 9) {
+            patientName = patientName.substring(0, 7)
+            patientName += "..."
+        }
+        root["patientName"] = patientName
+        root["xingbieStr"] = sixMinRecordsBean.infoBean.patientSix
+        root["patientAge"] = sixMinRecordsBean.infoBean.patientAge
+        root["patientHeight"] = sixMinRecordsBean.infoBean.patientHeight
+        root["patientWeight"] = sixMinRecordsBean.infoBean.patientWeight
+        root["patientBmi"] = sixMinRecordsBean.infoBean.patientBmi
+        root["medicalNo"] = sixMinRecordsBean.infoBean.medicalNo
+        root["predictionDistance"] = sixMinRecordsBean.infoBean.predictionDistance
+        root["medicalHistory"] = sixMinRecordsBean.infoBean.medicalHistory
+        root["clinicalDiagnosis"] = sixMinRecordsBean.infoBean.clinicalDiagnosis
+        root["medicineUse"] = sixMinRecordsBean.infoBean.medicineUse
+        var bianhaoStr: String = sixMinRecordsBean.infoBean.reportNo
+        if (bianhaoStr.length >= 12) {
+            val newBianhao = bianhaoStr.substring(6, 12)
+            bianhaoStr = bianhaoStr.replace(newBianhao.toRegex(), "******")
+        }
+        root["reportNo"] = bianhaoStr
+        root["useName"] = mActivity.sysSettingBean.sysOther.useOrg
+        dealPageTable(root)
+        //综合评估
+        var befoFatigueLevel: String = sixMinRecordsBean.evaluationBean[0].befoFatigueLevel
+        if (befoFatigueLevel.isNotEmpty()) {
+            befoFatigueLevel += "级"
+        }
+        root["fatigueLevel"] =
+            befoFatigueLevel + "/" + sixMinRecordsBean.evaluationBean[0].fatigueLevel + "级"
+        root["totalDistanceBefore"] = getLastDistance()
+        root["totalWalk"] = sixMinRecordsBean.evaluationBean[0].totalWalk
+        var befoBreathingLevel: String = sixMinRecordsBean.evaluationBean[0].befoBreathingLevel
+        if (befoBreathingLevel.isNotEmpty()) {
+            befoBreathingLevel += "级"
+        }
+        root["breathingLevel"] =
+            befoBreathingLevel + "/" + sixMinRecordsBean.evaluationBean[0].breathingLevel + "级";
+    }
+
+    private fun dealPageTable(root: MutableMap<String, Any>) {
+        root["xinlv0"] = sixMinRecordsBean.heartBeatBean[0].heartStop
+        root["xinlv1"] = sixMinRecordsBean.heartBeatBean[0].heartOne
+        root["xinlv2"] = sixMinRecordsBean.heartBeatBean[0].heartTwo
+        root["xinlv3"] = sixMinRecordsBean.heartBeatBean[0].heartThree
+        root["xinlv4"] = sixMinRecordsBean.heartBeatBean[0].heartFour
+        root["xinlv5"] = sixMinRecordsBean.heartBeatBean[0].heartFive
+        root["xinlv6"] = sixMinRecordsBean.heartBeatBean[0].heartSix
+        root["xinlv7"] = sixMinRecordsBean.heartBeatBean[0].heartBig
+        root["xinlv8"] = sixMinRecordsBean.heartBeatBean[0].heartSmall
+        root["xinlv9"] = sixMinRecordsBean.heartBeatBean[0].heartAverage
+        //血氧
+        root["xueyang0"] = sixMinRecordsBean.bloodOxyBean[0].bloodStop
+        root["xueyang1"] = sixMinRecordsBean.bloodOxyBean[0].bloodOne
+        root["xueyang2"] = sixMinRecordsBean.bloodOxyBean[0].bloodTwo
+        root["xueyang3"] = sixMinRecordsBean.bloodOxyBean[0].bloodThree
+        root["xueyang4"] = sixMinRecordsBean.bloodOxyBean[0].bloodFour
+        root["xueyang5"] = sixMinRecordsBean.bloodOxyBean[0].bloodFive
+        root["xueyang6"] = sixMinRecordsBean.bloodOxyBean[0].bloodSix
+        root["xueyang7"] = sixMinRecordsBean.bloodOxyBean[0].bloodBig
+        root["xueyang8"] = sixMinRecordsBean.bloodOxyBean[0].bloodSmall
+        root["xueyang9"] = sixMinRecordsBean.bloodOxyBean[0].bloodAverage
+        //呼吸率/步数
+        if (sixMinRecordsBean.infoBean.bsHxl === "1") {
+            root["hxOrBs"] = "呼吸率"
+            root["hxOrBs0"] = sixMinRecordsBean.breathingBean[0].breathingStop
+            root["hxOrBs1"] = sixMinRecordsBean.breathingBean[0].breathingOne
+            root["hxOrBs2"] = sixMinRecordsBean.breathingBean[0].breathingTwo
+            root["hxOrBs3"] = sixMinRecordsBean.breathingBean[0].breathingThree
+            root["hxOrBs4"] = sixMinRecordsBean.breathingBean[0].breathingFour
+            root["hxOrBs5"] = sixMinRecordsBean.breathingBean[0].breathingFive
+            root["hxOrBs6"] = sixMinRecordsBean.breathingBean[0].breathingSix
+            root["hxOrBs7"] = sixMinRecordsBean.breathingBean[0].breathingBig
+            root["hxOrBs8"] = sixMinRecordsBean.breathingBean[0].breathingSmall
+            root["hxOrBs9"] = sixMinRecordsBean.breathingBean[0].breathingAverage
+        } else if (sixMinRecordsBean.infoBean.bsHxl === "0") {
+            root["hxOrBs"] = "步数"
+            root["hxOrBs0"] = sixMinRecordsBean.walkBean[0].walkStop
+            root["hxOrBs1"] = sixMinRecordsBean.walkBean[0].walkOne
+            root["hxOrBs2"] = sixMinRecordsBean.walkBean[0].walkTwo
+            root["hxOrBs3"] = sixMinRecordsBean.walkBean[0].walkThree
+            root["hxOrBs4"] = sixMinRecordsBean.walkBean[0].walkFour
+            root["hxOrBs5"] = sixMinRecordsBean.walkBean[0].walkFive
+            root["hxOrBs6"] = sixMinRecordsBean.walkBean[0].walkSix
+            root["hxOrBs7"] = sixMinRecordsBean.walkBean[0].walkBig
+            root["hxOrBs8"] = sixMinRecordsBean.walkBean[0].waklSmall
+            root["hxOrBs9"] = sixMinRecordsBean.walkBean[0].walkAverage
+        }
+        var startPressure = "/"
+        if (sixMinRecordsBean.otherBean[0].startHighPressure != "0") {
+            startPressure =
+                sixMinRecordsBean.otherBean[0].startHighPressure + "/" + sixMinRecordsBean.otherBean[0].startLowPressure
+        }
+        root["xueya1"] = startPressure
+        var stopPressure = "/"
+        if (sixMinRecordsBean.otherBean[0].stopHighPressure != "0") {
+            stopPressure =
+                sixMinRecordsBean.otherBean[0].stopHighPressure + "/" + sixMinRecordsBean.otherBean[0].stopLowPressure
+        }
+        root["xueya2"] = stopPressure
+    }
+
+    private fun dealPageTow(
+        root: MutableMap<String, Any>, bloodPng: File, heartPng: File, hsHxlPng: File
+    ) {
+        //血氧
+        val base64Blood: String = CommonUtil.imageTobase64(bloodPng.absolutePath)
+        root["imageBlood"] = base64Blood
+        //心率
+        val base64Hreat: String = CommonUtil.imageTobase64(heartPng.absolutePath)
+        root["imageHreat"] = base64Hreat
+        var qushiStr = "呼吸率趋势"
+        if (sixMinRecordsBean.infoBean.bsHxl == "0") {
+            qushiStr = "步数趋势"
+        }
+        root["qushi"] = qushiStr
+        val base64WalkAndHxl: String = CommonUtil.imageTobase64(hsHxlPng.absolutePath)
+        root["imageWalkAndHxl"] = base64WalkAndHxl
     }
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
@@ -145,17 +303,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         reportRowList.clear()
         reportRowList.add(
             SixMinReportItemBean(
-                "时间(min)",
-                "静止",
-                "1",
-                "2",
-                "3",
-                "4",
-                "5",
-                "6",
-                "最大值",
-                "最小值",
-                "平均值"
+                "时间(min)", "静止", "1", "2", "3", "4", "5", "6", "最大值", "最小值", "平均值"
             )
         )
         reportRowList.add(
@@ -379,8 +527,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 binding.sixminReportTvAccounted.text =
                     "${sixMinRecordsBean.evaluationBean[0].accounted}%"
                 binding.sixminReportTvStopHeartBeat.text =
-                    if (sixMinRecordsBean.heartBeatBean[0].heartStop.isNotEmpty())
-                        "${sixMinRecordsBean.heartBeatBean[0].heartStop}bmp" else "0bmp"
+                    if (sixMinRecordsBean.heartBeatBean[0].heartStop.isNotEmpty()) "${sixMinRecordsBean.heartBeatBean[0].heartStop}bmp" else "0bmp"
                 //心肺功能
                 var cardiopuLevel: String = ""
                 when (sixMinRecordsBean.evaluationBean[0].cardiopuLevel) {
@@ -539,6 +686,250 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 binding.sixminReportLineChartBloodOxygen.lineData.addDataSet(
                     bloodOxyDataSet
                 )
+                binding.sixminReportLineChartBloodOxygen.lineData.notifyDataChanged()
+                binding.sixminReportLineChartBloodOxygen.notifyDataSetChanged()
+                binding.sixminReportLineChartBloodOxygen.invalidate()
+
+                if (sixMinRecordsBean.otherBean[0].stopOr == "0") {
+                    stepsDataSet.addEntry(
+                        Entry(
+                            0f, sixMinRecordsBean.walkBean[0].walkStop.toFloat()
+                        )
+                    )
+                    stepsDataSet.addEntry(
+                        Entry(
+                            1f, sixMinRecordsBean.walkBean[0].walkOne.toFloat()
+                        )
+                    )
+                    stepsDataSet.addEntry(
+                        Entry(
+                            2f, sixMinRecordsBean.walkBean[0].walkTwo.toFloat()
+                        )
+                    )
+                    stepsDataSet.addEntry(
+                        Entry(
+                            3f, sixMinRecordsBean.walkBean[0].walkThree.toFloat()
+                        )
+                    )
+                    stepsDataSet.addEntry(
+                        Entry(
+                            4f, sixMinRecordsBean.walkBean[0].walkFour.toFloat()
+                        )
+                    )
+                    stepsDataSet.addEntry(
+                        Entry(
+                            5f, sixMinRecordsBean.walkBean[0].walkFive.toFloat()
+                        )
+                    )
+                    stepsDataSet.addEntry(
+                        Entry(
+                            6f, sixMinRecordsBean.walkBean[0].walkSix.toFloat()
+                        )
+                    )
+                } else {
+                    val stopTime = sixMinRecordsBean.otherBean[0].stopTime
+                    val times = stopTime.split("分")
+                    if (times.size > 1) {
+                        when (times[0]) {
+                            "1" -> {
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        0f, sixMinRecordsBean.walkBean[0].walkStop.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        1f, sixMinRecordsBean.walkBean[0].walkOne.toFloat()
+                                    )
+                                )
+                            }
+
+                            "2" -> {
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        0f, sixMinRecordsBean.walkBean[0].walkStop.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        1f, sixMinRecordsBean.walkBean[0].walkOne.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        2f, sixMinRecordsBean.walkBean[0].walkTwo.toFloat()
+                                    )
+                                )
+                            }
+
+                            "3" -> {
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        0f, sixMinRecordsBean.walkBean[0].walkStop.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        1f, sixMinRecordsBean.walkBean[0].walkOne.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        2f, sixMinRecordsBean.walkBean[0].walkTwo.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        3f, sixMinRecordsBean.walkBean[0].walkThree.toFloat()
+                                    )
+                                )
+                            }
+
+                            "4" -> {
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        0f, sixMinRecordsBean.walkBean[0].walkStop.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        1f, sixMinRecordsBean.walkBean[0].walkOne.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        2f, sixMinRecordsBean.walkBean[0].walkTwo.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        3f, sixMinRecordsBean.walkBean[0].walkThree.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        4f, sixMinRecordsBean.walkBean[0].walkFour.toFloat()
+                                    )
+                                )
+                            }
+
+                            "5" -> {
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        0f, sixMinRecordsBean.walkBean[0].walkStop.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        1f, sixMinRecordsBean.walkBean[0].walkOne.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        2f, sixMinRecordsBean.walkBean[0].walkTwo.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        3f, sixMinRecordsBean.walkBean[0].walkThree.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        4f, sixMinRecordsBean.walkBean[0].walkFour.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        5f, sixMinRecordsBean.walkBean[0].walkFive.toFloat()
+                                    )
+                                )
+                            }
+
+                            "6" -> {
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        0f, sixMinRecordsBean.walkBean[0].walkStop.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        1f, sixMinRecordsBean.walkBean[0].walkOne.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        2f, sixMinRecordsBean.walkBean[0].walkTwo.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        3f, sixMinRecordsBean.walkBean[0].walkThree.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        4f, sixMinRecordsBean.walkBean[0].walkFour.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        5f, sixMinRecordsBean.walkBean[0].walkFive.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        6f, sixMinRecordsBean.walkBean[0].walkSix.toFloat()
+                                    )
+                                )
+                            }
+
+                            else -> {
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        0f, sixMinRecordsBean.walkBean[0].walkStop.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        1f, sixMinRecordsBean.walkBean[0].walkOne.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        2f, sixMinRecordsBean.walkBean[0].walkTwo.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        3f, sixMinRecordsBean.walkBean[0].walkThree.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        4f, sixMinRecordsBean.walkBean[0].walkFour.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        5f, sixMinRecordsBean.walkBean[0].walkFive.toFloat()
+                                    )
+                                )
+                                stepsDataSet.addEntry(
+                                    Entry(
+                                        6f, sixMinRecordsBean.walkBean[0].walkSix.toFloat()
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
+                binding.sixminReportLineChartSteps.lineData.addDataSet(
+                    stepsDataSet
+                )
+                binding.sixminReportLineChartSteps.lineData.notifyDataChanged()
+                binding.sixminReportLineChartSteps.notifyDataSetChanged()
+                binding.sixminReportLineChartSteps.invalidate()
 
                 binding.sixminReportLineChartBloodOxygen.lineData.notifyDataChanged()
                 binding.sixminReportLineChartBloodOxygen.notifyDataSetChanged()
@@ -552,19 +943,13 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 }
 
                 binding.sixminReportLineChartBloodOxygen.saveToPath(
-                    mActivity,
-                    "imageBlood",
-                    pngSavePath
+                    mActivity, "imageBlood", pngSavePath
                 )
                 binding.sixminReportLineChartHeartBeat.saveToPath(
-                    mActivity,
-                    "imageHeart",
-                    pngSavePath
+                    mActivity, "imageHeart", pngSavePath
                 )
                 binding.sixminReportLineChartBreathing.saveToPath(
-                    mActivity,
-                    "imageBreathing",
-                    pngSavePath
+                    mActivity, "imageBreathing", pngSavePath
                 )
                 binding.sixminReportLineChartSteps.saveToPath(mActivity, "imageSteps", pngSavePath)
             }
@@ -640,8 +1025,10 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
             axisLeft?.apply {
                 textColor = ContextCompat.getColor(mActivity, R.color.text3)
                 //左侧Y轴的最大值和最小值
-                axisMaximum = if (type == 1) 100f else if (type == 2) 180f else 60f
-                axisMinimum = if (type == 1) 80f else if (type == 2) 30f else 10f
+                axisMaximum =
+                    if (type == 1) 100f else if (type == 2) 180f else if (type == 3) 60f else 200f
+                axisMinimum =
+                    if (type == 1) 80f else if (type == 2) 30f else if (type == 3) 10f else 0f
                 setLabelCount(6, true)
                 //绘制网格线(样式虚线)
                 enableGridDashedLine(2f, 2f, 0f)
@@ -661,8 +1048,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 1 -> {
                     bloodOxyDataSet = LineDataSet(null, "")
                     bloodOxyDataSet.lineWidth = 1.0f
-                    bloodOxyDataSet.color =
-                        ContextCompat.getColor(mActivity, R.color.text3)
+                    bloodOxyDataSet.color = ContextCompat.getColor(mActivity, R.color.text3)
                     bloodOxyDataSet.setDrawValues(false)
                     bloodOxyDataSet.setDrawCircles(false)
                     bloodOxyDataSet.setDrawCircleHole(false)
@@ -675,8 +1061,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 2 -> {
                     heartBeatDataSet = LineDataSet(null, "")
                     heartBeatDataSet.lineWidth = 1.0f
-                    heartBeatDataSet.color =
-                        ContextCompat.getColor(mActivity, R.color.text3)
+                    heartBeatDataSet.color = ContextCompat.getColor(mActivity, R.color.text3)
                     heartBeatDataSet.setDrawValues(false)
                     heartBeatDataSet.setDrawCircles(false)
                     heartBeatDataSet.setDrawCircleHole(false)
@@ -689,8 +1074,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 3 -> {
                     breathingDataSet = LineDataSet(null, "")
                     breathingDataSet.lineWidth = 1.0f
-                    breathingDataSet.color =
-                        ContextCompat.getColor(mActivity, R.color.text3)
+                    breathingDataSet.color = ContextCompat.getColor(mActivity, R.color.text3)
                     breathingDataSet.setDrawValues(false)
                     breathingDataSet.setDrawCircles(false)
                     breathingDataSet.setDrawCircleHole(false)
@@ -703,8 +1087,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 else -> {
                     stepsDataSet = LineDataSet(null, "")
                     stepsDataSet.lineWidth = 1.0f
-                    stepsDataSet.color =
-                        ContextCompat.getColor(mActivity, R.color.text3)
+                    stepsDataSet.color = ContextCompat.getColor(mActivity, R.color.text3)
                     stepsDataSet.setDrawValues(false)
                     stepsDataSet.setDrawCircles(false)
                     stepsDataSet.setDrawCircleHole(false)

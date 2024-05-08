@@ -518,6 +518,8 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                     viewModel.setSixMinReportHeartBeat(mActivity.sixMinReportBloodHeart)
                     viewModel.setSixMinReportStride(mActivity.sixMinReportStride)
 
+                    mActivity.sixMinPatientId = mActivity.sixMinReportInfo.patientId.toString()
+                    mActivity.sixMinReportNo = mActivity.sixMinReportInfo.reportNo
                     navigate(binding.sixminLlPreReport,R.id.sixMinReportFragment)
 
                 } else {
@@ -995,54 +997,64 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
         )
         reportRowList.add(
             SixMinReportItemBean(
-                "心率(bpm)", mActivity.sixMinReportBloodHeart.heartStop, mActivity.sixMinReportBloodHeart.heartOne, mActivity.sixMinReportBloodHeart.heartTwo, mActivity.sixMinReportBloodHeart.heartThree, mActivity.sixMinReportBloodHeart.heartFour, mActivity.sixMinReportBloodHeart.heartFive, mActivity.sixMinReportBloodHeart.heartSix, mActivity.sixMinReportBloodHeart.heartBig, mActivity.sixMinReportBloodHeart.heartSmall, mActivity.sixMinReportBloodHeart.heartAverage
+                "心率(bpm)",
+                if (mActivity.sixMinReportBloodHeart.heartStop == "") "0" else mActivity.sixMinReportBloodHeart.heartStop,
+                if (mActivity.sixMinReportBloodHeart.heartOne == "") "0" else mActivity.sixMinReportBloodHeart.heartOne,
+                if (mActivity.sixMinReportBloodHeart.heartTwo == "") "0" else mActivity.sixMinReportBloodHeart.heartTwo,
+                if (mActivity.sixMinReportBloodHeart.heartThree == "") "0" else mActivity.sixMinReportBloodHeart.heartThree,
+                if (mActivity.sixMinReportBloodHeart.heartFour == "") "0" else mActivity.sixMinReportBloodHeart.heartFour,
+                if (mActivity.sixMinReportBloodHeart.heartFive == "") "0" else mActivity.sixMinReportBloodHeart.heartFive,
+                if (mActivity.sixMinReportBloodHeart.heartSix == "") "0" else mActivity.sixMinReportBloodHeart.heartSix,
+                if (mActivity.sixMinReportBloodHeart.heartBig == "") "0" else mActivity.sixMinReportBloodHeart.heartBig,
+                if (mActivity.sixMinReportBloodHeart.heartSmall == "") "0" else mActivity.sixMinReportBloodHeart.heartSmall,
+                if (mActivity.sixMinReportBloodHeart.heartAverage == "") "0" else mActivity.sixMinReportBloodHeart.heartAverage
             )
         )
         reportRowList.add(
             SixMinReportItemBean(
                 "血氧(%)",
-                mActivity.sixMinReportBloodOxy.bloodStop,
-                mActivity.sixMinReportBloodOxy.bloodOne,
-                mActivity.sixMinReportBloodOxy.bloodTwo,
-                mActivity.sixMinReportBloodOxy.bloodThree,
-                mActivity.sixMinReportBloodOxy.bloodFour,
-                mActivity.sixMinReportBloodOxy.bloodFive,
-                mActivity.sixMinReportBloodOxy.bloodSix,
-                mActivity.sixMinReportBloodOxy.bloodBig,
-                mActivity.sixMinReportBloodOxy.bloodSmall,
-                mActivity.sixMinReportBloodOxy.bloodAverage
+                if (mActivity.sixMinReportBloodOxy.bloodStop == "") "0" else mActivity.sixMinReportBloodOxy.bloodStop,
+                if (mActivity.sixMinReportBloodOxy.bloodOne == "") "0" else mActivity.sixMinReportBloodOxy.bloodOne,
+                if (mActivity.sixMinReportBloodOxy.bloodTwo == "") "0" else mActivity.sixMinReportBloodOxy.bloodTwo,
+                if (mActivity.sixMinReportBloodOxy.bloodThree == "") "0" else mActivity.sixMinReportBloodOxy.bloodThree,
+                if (mActivity.sixMinReportBloodOxy.bloodFour == "") "0" else mActivity.sixMinReportBloodOxy.bloodFour,
+                if (mActivity.sixMinReportBloodOxy.bloodFive == "") "0" else mActivity.sixMinReportBloodOxy.bloodFive,
+                if (mActivity.sixMinReportBloodOxy.bloodSix == "") "0" else mActivity.sixMinReportBloodOxy.bloodSix,
+                if (mActivity.sixMinReportBloodOxy.bloodBig == "") "0" else mActivity.sixMinReportBloodOxy.bloodBig,
+                if (mActivity.sixMinReportBloodOxy.bloodSmall == "") "0" else mActivity.sixMinReportBloodOxy.bloodSmall,
+                if (mActivity.sixMinReportBloodOxy.bloodAverage == "") "0" else  mActivity.sixMinReportBloodOxy.bloodAverage
             )
         )
         if (mActivity.sixMinReportInfo.bsHxl == "0") {
             reportRowList.add(
                 SixMinReportItemBean(
                     "步数",
-                    mActivity.sixMinReportWalk.walkStop,
-                    mActivity.sixMinReportWalk.walkOne,
-                    mActivity.sixMinReportWalk.walkTwo,
-                    mActivity.sixMinReportWalk.walkThree,
-                    mActivity.sixMinReportWalk.walkFour,
-                    mActivity.sixMinReportWalk.walkFive,
-                    mActivity.sixMinReportWalk.walkSix,
-                    mActivity.sixMinReportWalk.walkBig,
-                    mActivity.sixMinReportWalk.waklSmall,
-                    mActivity.sixMinReportWalk.walkAverage
+                    if (mActivity.sixMinReportWalk.walkStop == "") "0" else mActivity.sixMinReportWalk.walkStop,
+                    if (mActivity.sixMinReportWalk.walkOne == "") "0" else mActivity.sixMinReportWalk.walkOne,
+                    if (mActivity.sixMinReportWalk.walkTwo == "") "0" else mActivity.sixMinReportWalk.walkTwo,
+                    if (mActivity.sixMinReportWalk.walkThree == "") "0" else mActivity.sixMinReportWalk.walkThree,
+                    if (mActivity.sixMinReportWalk.walkFour == "") "0" else mActivity.sixMinReportWalk.walkFour,
+                    if (mActivity.sixMinReportWalk.walkFive == "") "0" else mActivity.sixMinReportWalk.walkFive,
+                    if (mActivity.sixMinReportWalk.walkSix == "") "0" else mActivity.sixMinReportWalk.walkSix,
+                    if (mActivity.sixMinReportWalk.walkBig == "") "0" else mActivity.sixMinReportWalk.walkBig,
+                    if (mActivity.sixMinReportWalk.waklSmall == "") "0" else mActivity.sixMinReportWalk.waklSmall,
+                    if (mActivity.sixMinReportWalk.walkAverage == "") "0" else mActivity.sixMinReportWalk.walkAverage
                 )
             )
         } else {
             reportRowList.add(
                 SixMinReportItemBean(
                     "呼吸率",
-                    mActivity.sixMinReportBreathing.breathingStop,
-                    mActivity.sixMinReportBreathing.breathingOne,
-                    mActivity.sixMinReportBreathing.breathingTwo,
-                    mActivity.sixMinReportBreathing.breathingThree,
-                    mActivity.sixMinReportBreathing.breathingFour,
-                    mActivity.sixMinReportBreathing.breathingFive,
-                    mActivity.sixMinReportBreathing.breathingSix,
-                    mActivity.sixMinReportBreathing.breathingBig,
-                    mActivity.sixMinReportBreathing.breathingSmall,
-                    mActivity.sixMinReportBreathing.breathingAverage
+                    if (mActivity.sixMinReportBreathing.breathingStop == "") "0" else mActivity.sixMinReportBreathing.breathingStop,
+                    if (mActivity.sixMinReportBreathing.breathingOne == "") "0" else mActivity.sixMinReportBreathing.breathingOne,
+                    if (mActivity.sixMinReportBreathing.breathingTwo == "") "0" else mActivity.sixMinReportBreathing.breathingTwo,
+                    if (mActivity.sixMinReportBreathing.breathingThree == "") "0" else mActivity.sixMinReportBreathing.breathingThree,
+                    if (mActivity.sixMinReportBreathing.breathingFour == "") "0" else mActivity.sixMinReportBreathing.breathingFour,
+                    if (mActivity.sixMinReportBreathing.breathingFive == "") "0" else mActivity.sixMinReportBreathing.breathingFive,
+                    if (mActivity.sixMinReportBreathing.breathingSix == "") "0" else mActivity.sixMinReportBreathing.breathingSix,
+                    if (mActivity.sixMinReportBreathing.breathingBig == "") "0" else mActivity.sixMinReportBreathing.breathingBig,
+                    if (mActivity.sixMinReportBreathing.breathingSmall == "") "0" else mActivity.sixMinReportBreathing.breathingSmall,
+                    if (mActivity.sixMinReportBreathing.breathingAverage == "") "0" else mActivity.sixMinReportBreathing.breathingAverage
                 )
             )
         }
@@ -1271,7 +1283,7 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
         )
         patientTiredSelfItemList.add(
             SixMinReportPatientSelfItemBean(
-                "9-10级", "非常非常疲劳(几乎到极限)", if (fatigueLevel == "10") "1" else "0",
+                "9-10级", "非常非常疲劳(几乎到极限)", if (fatigueLevel == "9-10") "1" else "0",
                 if (mActivity.sixMinReportPrescription.movementWay == "") "1" else "0"
             )
         )
@@ -1291,7 +1303,7 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
      * 运动时长变化
      */
     private fun dealTimeSportTimeChange(value: Int) {
-        if (mActivity.sixMinReportPrescription.distanceState == "1") {
+        if (mActivity.sixMinReportPrescription.distanceState.isEmpty() || mActivity.sixMinReportPrescription.distanceState == "1") {
             var percentLow = ""
             var percentHigh = ""
             if (mActivity.sixMinReportPrescription.distanceFormula == "0") {

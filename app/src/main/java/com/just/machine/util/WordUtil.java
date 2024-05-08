@@ -60,27 +60,27 @@ public class WordUtil {
         return outputStream;
     }
 
-    private WordUtil() {
+    private WordUtil(Context context) {
         configuration = new Configuration();
         try {
             // 注册tmlplate的load路径
             // cfg.setClassForTemplateLoading(this.getClass(), "/template/");
-            configuration.setDirectoryForTemplateLoading(new File("e:/"));
+            configuration.setDirectoryForTemplateLoading(new File(context.getExternalFilesDir("").getAbsolutePath()));
         } catch (Exception e) {
 
         }
     }
 
-    private static Template getTemplate(String name) throws IOException {
+    private static Template getTemplate(Context context,String name) throws IOException {
         if (tplm == null) {
-            tplm = new WordUtil();
+            tplm = new WordUtil(context);
         }
         return tplm.configuration.getTemplate(name);
     }
 
-    public static void process(String templatefile, Map param, Writer out) throws IOException, TemplateException {
+    public static void process(Context context,String templatefile, Map param, Writer out) throws IOException, TemplateException {
         // 获取模板
-        Template template = WordUtil.getTemplate(templatefile);
+        Template template = WordUtil.getTemplate(context,templatefile);
         template.setOutputEncoding("UTF-8");
         // 合并数据
         template.process(param, out);

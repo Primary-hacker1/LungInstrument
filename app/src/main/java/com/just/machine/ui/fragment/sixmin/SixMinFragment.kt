@@ -567,7 +567,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
     }
 
     private fun initCountDownTimerExt() {
-        mCountDownTime = object : FixCountDownTime(60, 1000) {}
+        mCountDownTime = object : FixCountDownTime(360, 1000) {}
         mCountDownTimeThree = object : CountDownTimer(1080000, 3000) {
             override fun onTick(millisUntilFinished: Long) {
                 try {

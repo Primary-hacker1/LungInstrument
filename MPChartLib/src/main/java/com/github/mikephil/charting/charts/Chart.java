@@ -1543,7 +1543,11 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      */
     public boolean saveToPath(Context context,String title, String pathOnSD) {
 
-
+        String imagePath = context.getExternalFilesDir("").getAbsolutePath() + pathOnSD + "/" + title + ".png";
+        File imageFile = new File(imagePath);
+        if(imageFile.exists()){
+            return false;
+        }
 
         Bitmap b = getChartBitmap();
 

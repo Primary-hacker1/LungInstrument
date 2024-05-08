@@ -22,6 +22,7 @@ import com.just.machine.model.BloodOxyLineEntryBean;
 import com.just.machine.model.UsbSerialData;
 import com.just.machine.model.sixminreport.SixMinBloodOxygen;
 import com.just.machine.model.sixminreport.SixMinReportEvaluation;
+import com.just.machine.model.sixminreport.SixMinReportOther;
 import com.just.machine.model.sixminreport.SixMinReportStride;
 import com.just.machine.model.sixminreport.SixMinReportWalk;
 import com.just.machine.model.systemsetting.SixMinSysSettingBean;
@@ -625,6 +626,25 @@ public class USBTransferUtil {
                 byteStr = byteStr.substring(2, byteStr.length());
             }
         }
+    }
+
+    /**
+     * 处理步数
+     * @return
+     */
+    public List<Entry> dealStepsLineChartData(SixMinReportOther sixMinReportOther, SixMinReportWalk sixMinReportWalk){
+        List<Entry> entries = new ArrayList<>();
+        if(sixMinReportOther.getStopOr().equals("1")){
+            if(!sixMinReportOther.getStopTime().isEmpty()){
+                String[] times = sixMinReportOther.getStopTime().split("分");
+                if(times.length == 2){
+
+                }
+            }
+        }else{
+
+        }
+        return entries;
     }
 
     /**
