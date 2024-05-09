@@ -2,15 +2,22 @@ package com.just.machine.util;
 
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
+import android.widget.Toast;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import world.shanya.serialport.tools.LogUtil;
 
 public class CommonUtil {
 
@@ -157,5 +164,38 @@ public class CommonUtil {
             e.printStackTrace();
         }
         return Base64.encodeToString(data, Base64.DEFAULT);
+    }
+
+    /**
+     * 获取时间时间
+     *
+     * @return
+     */
+    public static String getCurrentTime() {
+        String time = null;
+        long round = System.currentTimeMillis() / 1000;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = sdf.format(round * 1000);
+        String[] split = date.split("\\s");
+        if (split.length > 1) {
+            time = split[1];
+        }
+        return time;
+    }
+
+    /**
+     * 图片转流
+     * @param filePath
+     * @return
+     */
+    public static InputStream convertFileToInputStream(String filePath) {
+        File imageFile = new File(filePath);
+        try {
+            return new FileInputStream(imageFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

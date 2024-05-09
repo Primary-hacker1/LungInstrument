@@ -27,7 +27,7 @@ public class WordUtil {
      * @param template 模板文件的地址
      * @return
      */
-    public static synchronized ByteArrayOutputStream process(Map<?, ?> root, String template) {
+    public static synchronized ByteArrayOutputStream process(Context context,Map<?, ?> root, String template) throws IOException {
 
         if (null == root) {
             throw new RuntimeException("数据不能为空");
@@ -42,11 +42,12 @@ public class WordUtil {
         String templateName = template.substring(template.lastIndexOf("/") + 1, template.length());
 
         if (null == configuration) {
-            configuration = new Configuration(Configuration.VERSION_2_3_23);  // 这里Configurantion对象不能有两个，否则多线程访问会报错
+            configuration = new Configuration(Configuration.VERSION_2_3_31);  // 这里Configurantion对象不能有两个，否则多线程访问会报错
             configuration.setDefaultEncoding("utf-8");
             configuration.setClassicCompatible(true);
         }
-        configuration.setClassForTemplateLoading(WordUtil.class, templatePath);
+//        configuration.setClassForTemplateLoading(WordUtil.class, templatePath);
+        configuration.setDirectoryForTemplateLoading(new File(context.getExternalFilesDir("").getAbsolutePath()+templatePath));
 
         Template t = null;
         try {

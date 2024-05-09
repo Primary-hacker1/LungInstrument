@@ -124,5 +124,15 @@ dependencies {
     implementation presentationDependencies.pdf_viewer
     implementation (group: 'com.aspose', name: 'aspose-words', version: '20.6', classifier: 'android.via.java')
 
-
+    implementation('com.deepoove:poi-tl:1.4.2') {
+        //在Android 中 poi-tl 所依赖的库会导致无法编译
+        //所以只使用 poi-tl 的填充功能
+        //然后使用其他作者提供的 poi
+        //下面是过滤掉 poi-tl 的依赖库
+        exclude group: 'org.apache.xmlbeans', module: 'xmlbeans'
+        exclude group: 'org.apache.poi', module: 'poi-ooxml'
+        exclude group: 'org.apache.poi', module: 'poi-ooxml-schemas'
+        exclude group: 'org.apache.poi', module: 'poi'
+    }
+    implementation files('libs/poishadow-all.jar')
 }

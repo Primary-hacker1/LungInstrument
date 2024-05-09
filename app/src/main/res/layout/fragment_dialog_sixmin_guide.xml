@@ -38,13 +38,22 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="30dp"
                 android:text="不再显示" />
+
+            <Button
+                android:id="@+id/sixmin_btn_cancel_test"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_marginHorizontal="30dp"
+                android:background="@drawable/sixmin_guide_btn_start_test_bg"
+                android:text="取消试验"
+                android:textColor="@color/white"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/sixmin_btn_start_test"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
                 android:background="@drawable/sixmin_guide_btn_start_test_bg"
                 android:text="开始试验"
                 android:textColor="@color/white"
