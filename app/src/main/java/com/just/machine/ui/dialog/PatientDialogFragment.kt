@@ -163,45 +163,45 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
 
         binding.btnYes.setNoRepeatListener {
 
-            if (Constants.isDebug) {
-
-                patient.name = "张三$index"
-
-                patient.age = (18 + index).toString()
-
-                patient.sex = "男"
-
-                patient.height = "18$index"
-
-                patient.weight = "130"
-
-                patient.addTime = "2024-3-6 13:00"
-
-                val testRecordsBeans: MutableList<CardiopulmonaryRecordsBean> = ArrayList()//心肺测试记录
-
-                val sixMinRecordsBeans: MutableList<SixMinRecordsBean> = ArrayList()//六分钟测试记录
-
-                val sixMinRecordsBean = SixMinRecordsBean()
-
-                val cardiopulmonaryRecordsBean = CardiopulmonaryRecordsBean(
-                    "测试1",
-                    "测试2", "测试3", "测试4", "测试5",
-                )
-
-                sixMinRecordsBeans.add(sixMinRecordsBean)
-
-                testRecordsBeans.add(cardiopulmonaryRecordsBean)
-
-                patient.testRecordsBean = testRecordsBeans
-
-                patient.sixMinRecordsBean = sixMinRecordsBeans
-
-                viewModel.setDates(patient)//新增患者
-
-                listener?.onClickConfirmBtn(patient.patientId.toString())
-
-                return@setNoRepeatListener
-            }
+//            if (Constants.isDebug) {
+//
+//                patient.name = "张三$index"
+//
+//                patient.age = (18 + index).toString()
+//
+//                patient.sex = "男"
+//
+//                patient.height = "18$index"
+//
+//                patient.weight = "130"
+//
+//                patient.addTime = "2024-3-6 13:00"
+//
+//                val testRecordsBeans: MutableList<CardiopulmonaryRecordsBean> = ArrayList()//心肺测试记录
+//
+//                val sixMinRecordsBeans: MutableList<SixMinRecordsBean> = ArrayList()//六分钟测试记录
+//
+//                val sixMinRecordsBean = SixMinRecordsBean()
+//
+//                val cardiopulmonaryRecordsBean = CardiopulmonaryRecordsBean(
+//                    "测试1",
+//                    "测试2", "测试3", "测试4", "测试5",
+//                )
+//
+//                sixMinRecordsBeans.add(sixMinRecordsBean)
+//
+//                testRecordsBeans.add(cardiopulmonaryRecordsBean)
+//
+//                patient.testRecordsBean = testRecordsBeans
+//
+//                patient.sixMinRecordsBean = sixMinRecordsBeans
+//
+//                viewModel.setDates(patient)//新增患者
+//
+//                listener?.onClickConfirmBtn(patient.patientId.toString())
+//
+//                return@setNoRepeatListener
+//            }
 
             if (binding.atvName.text?.isEmpty() == true) {
                 toast("姓名不能为空！")

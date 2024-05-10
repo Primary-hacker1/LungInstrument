@@ -5,6 +5,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.format.DateUtils;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -107,8 +108,8 @@ public class FileUtil {
      */
     public long getFolderSize(String folderPath) {
         File file = new File(folderPath);
-        if(!file.exists()){
-           file.mkdirs();
+        if (!file.exists()) {
+            file.mkdirs();
         }
 
         if (file.isDirectory()) { // 判断路径对应的是否为文件夹
@@ -132,10 +133,11 @@ public class FileUtil {
 
     /**
      * 获取指定路径下文件
+     *
      * @param pathStr
      * @return
      */
-    public List<File> getPathFiles(String pathStr){
+    public List<File> getPathFiles(String pathStr) {
         List<File> listFile = new ArrayList<>();
         File directory = new File(context.getExternalFilesDir("").getAbsolutePath(), pathStr);
         if (directory.exists() && directory.isDirectory()) {
@@ -207,5 +209,24 @@ public class FileUtil {
     public void showLineChart(LineChart lineChart, LineData entries) {
         lineChart.setData(entries);
         lineChart.invalidate();
+    }
+
+    /**
+     * 创建异常文件
+     */
+    public static File createErrorFile() {
+        File file = null;
+        try {
+            String DIR = Environment.getExternalStorageDirectory().getPath() + "/LungInstruments/log/";
+            String NAME = CommonUtil.getCurrentTime() + ".txt";
+            File dir = new File(DIR);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            file = new File(dir, NAME);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return file;
     }
 }

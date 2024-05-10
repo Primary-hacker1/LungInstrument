@@ -818,6 +818,10 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                             }
                             startTest()
                         }
+
+                        override fun onClickCancelTest() {
+                            mActivity.finish()
+                        }
                     })
                 } else {
                     startTest()

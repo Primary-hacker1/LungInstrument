@@ -48,6 +48,7 @@ class SixMinGuideDialogFragment : BaseDialogFragment<FragmentDialogSixminGuideBi
     interface SixMinGuideDialogListener {
         fun onSelectNotSeeAnyMore(checked:Boolean)
         fun onClickStartTest()
+        fun onClickCancelTest()
     }
 
     fun setDialogOnClickListener(listener: SixMinGuideDialogListener) {
@@ -67,6 +68,10 @@ class SixMinGuideDialogFragment : BaseDialogFragment<FragmentDialogSixminGuideBi
         binding.sixminBtnStartTest.setNoRepeatListener {
             dismiss()
             listener?.onClickStartTest()
+        }
+        binding.sixminBtnCancelTest.setNoRepeatListener {
+            dismiss()
+            listener?.onClickCancelTest()
         }
         binding.sixminCbNotSeeAnymore.setOnCheckedChangeListener { _, isChecked ->
             listener?.onSelectNotSeeAnyMore(isChecked)
@@ -100,6 +105,7 @@ class SixMinGuideDialogFragment : BaseDialogFragment<FragmentDialogSixminGuideBi
                     activity?.runOnUiThread {
                         Log.d(TAG, "onDone: $utteranceId")
                         binding.sixminBtnStartTest.visibility = View.VISIBLE
+                        binding.sixminBtnCancelTest.visibility = View.VISIBLE
                     }
                 }
 

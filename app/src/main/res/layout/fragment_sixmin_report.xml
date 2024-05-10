@@ -803,7 +803,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
-                                            android:text="跑步" />
+                                            android:text="步行" />
 
                                     </LinearLayout>
 
@@ -875,7 +875,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
-                                            android:text="步行"
+                                            android:text="跑步"
                                             android:textSize="12sp" />
 
                                     </LinearLayout>

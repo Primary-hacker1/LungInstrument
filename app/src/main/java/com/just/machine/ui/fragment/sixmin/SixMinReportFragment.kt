@@ -1,6 +1,9 @@
 package com.just.machine.ui.fragment.sixmin
 
+import android.R.attr.bitmap
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.util.Log
 import android.view.Gravity
@@ -15,6 +18,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.common.base.CommonBaseFragment
 import com.common.viewmodel.LiveDataEvent
+import com.deepoove.poi.XWPFTemplate
+import com.deepoove.poi.data.PictureRenderData
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -28,16 +33,15 @@ import com.just.machine.model.SixMinReportItemBean
 import com.just.machine.model.sixminreport.SixMinReportEvaluation
 import com.just.machine.ui.activity.SixMinDetectActivity
 import com.just.machine.ui.viewmodel.MainViewModel
-import com.just.machine.util.CommonUtil
 import com.just.machine.util.USBTransferUtil
-import com.just.machine.util.WordUtil
 import com.just.news.R
 import com.just.news.databinding.FragmentSixminReportBinding
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 import java.math.BigDecimal
@@ -123,35 +127,61 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                         )
 
                     }
+                val filePath = File(
+                    mActivity.getExternalFilesDir("")?.absolutePath,
+                    File.separator + "sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo
+                            + File.separator + "六分钟步行试验检测报告.doc"
+                )
 
-                val templatePath = File.separator+"templates" + File.separator + "报告模板3页-无截图.xml"
-                var pageNum = 0
+                if(filePath.parentFile?.exists() == false){
+                    filePath.parentFile?.mkdirs()
+                }
+
                 val root = mutableMapOf<String, Any>()
                 dealPageOne(root)
                 dealPageTow(root, bloodPng, heartPng, hsHxlPng)
-                pageNum = 2
-                root["pageNum"] = pageNum
-                val byteArrayOutputStream = WordUtil.process(root, templatePath)
-
-                var fileOutputStream: FileOutputStream? = null
-                val docPath =
-                    mActivity.getExternalFilesDir("")?.absolutePath + File.separator + "sixminreport" + File.separator + "六分钟步行试验检测报告.doc"
-                try {
-                    fileOutputStream = FileOutputStream(docPath)
-                    fileOutputStream.write(byteArrayOutputStream.toByteArray())
-                } catch (e: FileNotFoundException) {
-                    e.printStackTrace()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                } finally {
-                    try {
-                        fileOutputStream?.close()
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
-                }
+                generateWord(root,"templates/报告模板-无截图.docx",filePath.absolutePath)
             } catch (e: Exception) {
                 e.printStackTrace()
+            }
+        }
+    }
+
+    /**
+     * 生成word文档
+     */
+    private fun generateWord(
+        params: MutableMap<String, Any>,
+        templateName: String,
+        savePath: String
+    ) {
+        val open = mActivity.assets.open(templateName)
+        val template = XWPFTemplate.compile(open)
+        params.let {
+            template.render(params)
+        }
+        var outputStream: FileOutputStream? = null
+
+        try {
+            outputStream = FileOutputStream(savePath)
+            if (outputStream == null) {
+//                LogUtil.w(TAG, "world path:$path is null,check permiss")
+//                Toast.show(mActivity.getString(R.string.save_faild_cannot_writ))
+                return
+            }
+            template.write(outputStream)
+            outputStream.flush()
+//            Toast.show("save success,path:$path")
+        } catch (e: IOException) {
+//            LogUtil.e(TAG, "world write to output stream io exception:" +
+//                    LogUtil.objToString(e))
+//            Toast.show(mActivity.getString(R.string.save_faild_cannot_writ))
+        } finally {
+            try {
+                template.close()
+                outputStream?.close()
+            } finally {
+                Log.i(TAG, "write world to $savePath output stream over")
             }
         }
     }
@@ -188,27 +218,191 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         }
         root["fatigueLevel"] =
             befoFatigueLevel + "/" + sixMinRecordsBean.evaluationBean[0].fatigueLevel + "级"
-        root["totalDistanceBefore"] = getLastDistance()
-        root["totalWalk"] = sixMinRecordsBean.evaluationBean[0].totalWalk
+        root["disBefore"] = if(getLastDistance() != "/") "${getLastDistance()}米" else "/"
+        root["totalWalk"] = sixMinRecordsBean.evaluationBean[0].totalWalk+"步"
         var befoBreathingLevel: String = sixMinRecordsBean.evaluationBean[0].befoBreathingLevel
         if (befoBreathingLevel.isNotEmpty()) {
             befoBreathingLevel += "级"
         }
-        root["breathingLevel"] =
+        root["breathLevel"] =
             befoBreathingLevel + "/" + sixMinRecordsBean.evaluationBean[0].breathingLevel + "级";
+        root["toDistance"] = sixMinRecordsBean.evaluationBean[0].totalDistance+"米"
+
+        var strideAverageStr = "/"
+        var heartRestoreStr = "/"
+        if (sixMinRecordsBean.prescriptionBean[0].prescripState == "1") {
+            strideAverageStr = sixMinRecordsBean.strideBean[0].strideAverage + "米/分"
+            heartRestoreStr = sixMinRecordsBean.heartBeatBean[0].heartRestore
+        }
+        root["strideAvg"] = strideAverageStr
+        root["metabEqu"] = sixMinRecordsBean.evaluationBean[0].metabEquivalent+"METs"
+        root["accounted"] = sixMinRecordsBean.evaluationBean[0].accounted+"%"
+        root["stHeart"] = sixMinRecordsBean.heartBeatBean[0].heartStop
+
+        var gardLevel: String = sixMinRecordsBean.evaluationBean[0].cardiopuLevel
+        gardLevel = when (gardLevel) {
+            "一" -> {
+                "I"
+            }
+
+            "二" -> {
+                "II"
+            }
+
+            "三" -> {
+                "III"
+            }
+
+            else -> {
+                "IV"
+            }
+        }
+        root["gardLevel"] = gardLevel+"级"
+        var degreeStr = ""
+        if (sixMinRecordsBean.evaluationBean[0].cardiopuDegree == "0") {
+            degreeStr = mActivity.usbTransferUtil.dealCardiopuDegree(BigDecimal(sixMinRecordsBean.evaluationBean[0].totalDistance))
+            degreeStr = degreeStr.substring(0, degreeStr.length - 1)
+        } else {
+            when (sixMinRecordsBean.evaluationBean[0].cardiopuDegree) {
+                "1" -> {
+                    degreeStr = "重度"
+                }
+                "2" -> {
+                    degreeStr = "中度"
+                }
+                "3" -> {
+                    degreeStr = "轻度"
+                }
+            }
+        }
+        root["cDegreeStr"] = degreeStr
+        root["hRestore"] = heartRestoreStr
+        var check4 = ""
+        //提前完成了
+        if (sixMinRecordsBean.otherBean[0].stopOr == "1") {
+            var stopReason = ""
+            stopReason = if (sixMinRecordsBean.otherBean[0].stopReason.isEmpty()) {
+                "无"
+            }else{
+                sixMinRecordsBean.otherBean[0].stopReason
+            }
+            check4 =
+                "步行了" + sixMinRecordsBean.otherBean[0].stopTime + "，停止原因：" + stopReason + "。"
+        } else if (sixMinRecordsBean.otherBean[0].stopOr == "0") {
+            //自动完成了
+            check4 = if (sixMinRecordsBean.otherBean[0].badSymptoms.isEmpty()) {
+                "完成六分钟试验，未出现不良症状。"
+            } else {
+                "完成六分钟试验，不良症状：" + sixMinRecordsBean.otherBean[0].badSymptoms + "。"
+            }
+        }
+        if (sixMinRecordsBean.infoBean.restDuration != "-1") {
+            check4 += "中途停留了" + sixMinRecordsBean.infoBean.restDuration + "秒。"
+        }
+        root["badSymptoms"] = check4
+        if (sixMinRecordsBean.heartBeatBean[0].heartConclusion.isNotEmpty()) {
+            root["heartConclusionStr"] = "心电结论：" + sixMinRecordsBean.heartBeatBean[0].heartConclusion + "。"
+        }
+
+        //运动处方建议
+        var checkcf1 = ""
+        if (sixMinRecordsBean.prescriptionBean[0].movementWay == "0") {
+            checkcf1 = "步行"
+        } else if (sixMinRecordsBean.prescriptionBean[0].movementWay == "1") {
+            checkcf1 = "跑步"
+        }
+        root["checkcf1"] = checkcf1
+        var strideTitStrs = "/"
+        var strideStrs = "/"
+        var movDistanceTitStrs = "运动距离"
+        var movDistanceStrs: String = sixMinRecordsBean.prescriptionBean[0].movementDistance + "米"
+        var heartrateRateTitStr = "/"
+        var heartrateRateStr = "/"
+        var metabMetTitStr = "/"
+        var metabMetStr = "/"
+        var strTit45 = "自觉疲劳程度"
+        var str45: String = sixMinRecordsBean.prescriptionBean[0].pilaoControl
+        if (sixMinRecordsBean.prescriptionBean[0].pilaoControl.isEmpty()) {
+            str45 = "有点疲劳-疲劳(4-6级)"
+        }
+        //运动步速版本
+        if (sixMinRecordsBean.prescriptionBean[0].prescripState == "1") {
+            if (sixMinRecordsBean.prescriptionBean[0].distanceState.isEmpty() || sixMinRecordsBean.prescriptionBean[0].distanceState == "1") {
+                strideTitStrs = "运动步速";
+                strideStrs = sixMinRecordsBean.prescriptionBean[0].strideBefore + "-" + sixMinRecordsBean.prescriptionBean[0].strideAfter+ "米/分钟";
+                movDistanceTitStrs = "运动距离";
+                movDistanceStrs = sixMinRecordsBean.prescriptionBean[0].movementDistance + "-"+sixMinRecordsBean.prescriptionBean[0].movementDistanceAfter + "米";
+            } else {
+                movDistanceTitStrs = "/";
+                movDistanceStrs = "/";
+            }
+            if (sixMinRecordsBean.prescriptionBean[0].heartrateState.isEmpty() || sixMinRecordsBean.prescriptionBean[0].heartrateState == "1") {
+                heartrateRateTitStr = "运动心率";
+                heartrateRateStr = sixMinRecordsBean.prescriptionBean[0].heartrateRate + "bpm";
+            }
+            if (sixMinRecordsBean.prescriptionBean[0].metabState.isEmpty() || sixMinRecordsBean.prescriptionBean[0].metabState == "1") {
+                metabMetTitStr = "代谢当量";
+                metabMetStr = sixMinRecordsBean.prescriptionBean[0].metabMet + "METs";
+            }
+            if (sixMinRecordsBean.prescriptionBean[0].pllevState == "2") {
+                strTit45 = "/";
+                str45 = "/";
+            }
+            root["strideTitStrs"] = strideTitStrs;
+            root["strideStrs"] = strideStrs;
+            root["movDisTitStrs"] = movDistanceTitStrs;
+            root["movDisStrs"] = movDistanceStrs;
+            root["movTime"] = sixMinRecordsBean.prescriptionBean[0].movementTime+"分钟"
+            root["heartrateRateTitStr"] = heartrateRateTitStr;
+            root["rateStr"] = heartrateRateStr;
+            root["metabMetTitStr"] = metabMetTitStr;
+            root["metabStr"] = metabMetStr;
+            root["strTit45"] = strTit45;
+            root["str45"] = str45;
+
+            var movementStr: String =
+                sixMinRecordsBean.prescriptionBean[0].movementWeeklyNumber + "次/周，" + sixMinRecordsBean.prescriptionBean[0].movementCycle
+            var checkcf2 = ""
+            when (sixMinRecordsBean.prescriptionBean[0].cycleUnit) {
+                "0" -> {
+                    checkcf2 = "周"
+                }
+                "1" -> {
+                    checkcf2 = "月"
+                }
+                "2" -> {
+                    checkcf2 = "年"
+                }
+            }
+            movementStr += checkcf2;
+            root["moveStr"] = movementStr;
+            var remarke: String = sixMinRecordsBean.prescriptionBean[0].remarke
+            if (remarke.isNotEmpty()) {
+                remarke = remarke.replace("\n".toRegex(), "<w:br/>")
+            }
+            root["remarke"] = remarke
+            var jyysStr: String = sixMinRecordsBean.prescriptionBean[0].remarkeName
+            if (jyysStr.length > 9) {
+                jyysStr = jyysStr.substring(0, 7)
+                jyysStr += "..."
+            }
+            root["jyysStr"] = jyysStr
+            val jysjStr: String = sixMinRecordsBean.infoBean.addTime
+            root["jysjStr"] = jysjStr
+        }
     }
 
     private fun dealPageTable(root: MutableMap<String, Any>) {
-        root["xinlv0"] = sixMinRecordsBean.heartBeatBean[0].heartStop
-        root["xinlv1"] = sixMinRecordsBean.heartBeatBean[0].heartOne
-        root["xinlv2"] = sixMinRecordsBean.heartBeatBean[0].heartTwo
-        root["xinlv3"] = sixMinRecordsBean.heartBeatBean[0].heartThree
-        root["xinlv4"] = sixMinRecordsBean.heartBeatBean[0].heartFour
-        root["xinlv5"] = sixMinRecordsBean.heartBeatBean[0].heartFive
-        root["xinlv6"] = sixMinRecordsBean.heartBeatBean[0].heartSix
-        root["xinlv7"] = sixMinRecordsBean.heartBeatBean[0].heartBig
-        root["xinlv8"] = sixMinRecordsBean.heartBeatBean[0].heartSmall
-        root["xinlv9"] = sixMinRecordsBean.heartBeatBean[0].heartAverage
+        root["xin0"] = sixMinRecordsBean.heartBeatBean[0].heartStop.ifEmpty { "0" }
+        root["xin1"] = sixMinRecordsBean.heartBeatBean[0].heartOne.ifEmpty { "0" }
+        root["xin2"] = sixMinRecordsBean.heartBeatBean[0].heartTwo.ifEmpty { "0" }
+        root["xin3"] = sixMinRecordsBean.heartBeatBean[0].heartThree.ifEmpty { "0" }
+        root["xin4"] = sixMinRecordsBean.heartBeatBean[0].heartFour.ifEmpty { "0" }
+        root["xin5"] = sixMinRecordsBean.heartBeatBean[0].heartFive.ifEmpty { "0" }
+        root["xin6"] = sixMinRecordsBean.heartBeatBean[0].heartSix.ifEmpty { "0" }
+        root["xin7"] = sixMinRecordsBean.heartBeatBean[0].heartBig.ifEmpty { "0" }
+        root["xin8"] = sixMinRecordsBean.heartBeatBean[0].heartSmall.ifEmpty { "0" }
+        root["xin9"] = sixMinRecordsBean.heartBeatBean[0].heartAverage.ifEmpty { "0" }
         //血氧
         root["xueyang0"] = sixMinRecordsBean.bloodOxyBean[0].bloodStop
         root["xueyang1"] = sixMinRecordsBean.bloodOxyBean[0].bloodOne
@@ -221,7 +415,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         root["xueyang8"] = sixMinRecordsBean.bloodOxyBean[0].bloodSmall
         root["xueyang9"] = sixMinRecordsBean.bloodOxyBean[0].bloodAverage
         //呼吸率/步数
-        if (sixMinRecordsBean.infoBean.bsHxl === "1") {
+        if (sixMinRecordsBean.infoBean.bsHxl == "1") {
             root["hxOrBs"] = "呼吸率"
             root["hxOrBs0"] = sixMinRecordsBean.breathingBean[0].breathingStop
             root["hxOrBs1"] = sixMinRecordsBean.breathingBean[0].breathingOne
@@ -233,7 +427,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
             root["hxOrBs7"] = sixMinRecordsBean.breathingBean[0].breathingBig
             root["hxOrBs8"] = sixMinRecordsBean.breathingBean[0].breathingSmall
             root["hxOrBs9"] = sixMinRecordsBean.breathingBean[0].breathingAverage
-        } else if (sixMinRecordsBean.infoBean.bsHxl === "0") {
+        } else if (sixMinRecordsBean.infoBean.bsHxl == "0" ||sixMinRecordsBean.infoBean.bsHxl.isEmpty()) {
             root["hxOrBs"] = "步数"
             root["hxOrBs0"] = sixMinRecordsBean.walkBean[0].walkStop
             root["hxOrBs1"] = sixMinRecordsBean.walkBean[0].walkOne
@@ -263,19 +457,19 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
     private fun dealPageTow(
         root: MutableMap<String, Any>, bloodPng: File, heartPng: File, hsHxlPng: File
     ) {
-        //血氧
-        val base64Blood: String = CommonUtil.imageTobase64(bloodPng.absolutePath)
-        root["imageBlood"] = base64Blood
+//        val base64Blood: String = CommonUtil.imageTobase64(bloodPng.absolutePath)
+        root["imageBlood"] = PictureRenderData(750,200,bloodPng.absolutePath)
+
         //心率
-        val base64Hreat: String = CommonUtil.imageTobase64(heartPng.absolutePath)
-        root["imageHreat"] = base64Hreat
+//        val base64Hreat: String = CommonUtil.imageTobase64(heartPng.absolutePath)
+        root["imageHeart"] = PictureRenderData(750,200,heartPng.absolutePath)
         var qushiStr = "呼吸率趋势"
         if (sixMinRecordsBean.infoBean.bsHxl == "0") {
             qushiStr = "步数趋势"
         }
         root["qushi"] = qushiStr
-        val base64WalkAndHxl: String = CommonUtil.imageTobase64(hsHxlPng.absolutePath)
-        root["imageWalkAndHxl"] = base64WalkAndHxl
+//        val base64WalkAndHxl: String = CommonUtil.imageTobase64(hsHxlPng.absolutePath)
+        root["imageWalkAndHxl"] = PictureRenderData(750,200,hsHxlPng.absolutePath)
     }
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =

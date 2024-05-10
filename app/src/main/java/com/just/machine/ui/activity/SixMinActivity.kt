@@ -251,6 +251,10 @@ class SixMinActivity : CommonBaseActivity<ActivitySixMinBinding>(), TextToSpeech
                             }
                             startTest()
                         }
+
+                        override fun onClickCancelTest() {
+
+                        }
                     })
                 } else {
                     startTest()
