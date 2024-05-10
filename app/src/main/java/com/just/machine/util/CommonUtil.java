@@ -2,22 +2,15 @@ package com.just.machine.util;
 
 import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Log;
-import android.widget.Toast;
-
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.io.PrintStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import world.shanya.serialport.tools.LogUtil;
 
 public class CommonUtil {
 

@@ -119,11 +119,7 @@ dependencies {
     implementation presentationDependencies.datastore_preferences
     implementation presentationDependencies.datastore_core
 
-    //pdf
-    implementation presentationDependencies.freemarker
-    implementation presentationDependencies.pdf_viewer
-    implementation (group: 'com.aspose', name: 'aspose-words', version: '20.6', classifier: 'android.via.java')
-
+    //生成word
     implementation('com.deepoove:poi-tl:1.4.2') {
         //在Android 中 poi-tl 所依赖的库会导致无法编译
         //所以只使用 poi-tl 的填充功能
@@ -135,4 +131,8 @@ dependencies {
         exclude group: 'org.apache.poi', module: 'poi'
     }
     implementation files('libs/poishadow-all.jar')
+
+    implementation presentationDependencies.pdf_viewer
+    implementation (group: 'com.aspose', name: 'aspose-words', version: '20.6', classifier: 'android.via.java')
+    implementation 'com.github.ForgetAll:LoadingDialog:v1.1.2'
 }

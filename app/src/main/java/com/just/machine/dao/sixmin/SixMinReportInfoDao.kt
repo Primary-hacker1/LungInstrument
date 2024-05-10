@@ -35,4 +35,7 @@ interface SixMinReportInfoDao {
 
     @Query("UPDATE sixmin_report_info SET delFlag = '1' WHERE reportNo ==:reportNo")
     suspend fun deleteReportInfo(reportNo:String)
+
+    @Query("UPDATE sixmin_report_info SET delFlag = '1' WHERE patientId ==:patientId")
+    suspend fun deleteReportInfoById(patientId:String)
 }
