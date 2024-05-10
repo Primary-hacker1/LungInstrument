@@ -23,6 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class AllSettingFragment : CommonBaseFragment<FragmentAllSettingBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
+
     override fun loadData() {//懒加载
 
     }
