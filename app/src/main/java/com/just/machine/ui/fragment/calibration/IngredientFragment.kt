@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
+import com.common.viewmodel.LiveDataEvent.Companion.FLOWSUCCESS
+import com.common.viewmodel.LiveDataEvent.Companion.INGREDIENTSSUCCESS
+import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.dao.calibration.IngredientBean
 import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.calibration.IngredientAdapter
@@ -43,9 +46,9 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
         ingredientAdapter.setItemsBean(
             mutableListOf
                 (
-                IngredientBean(0,"" ,1,"容积1", "3", "3.003"),
-                IngredientBean(0,"" ,1,"容积1", "3", "3.003"),
-                IngredientBean(0,"" ,1,"容积1", "3", "3.003"),
+                IngredientBean(0, "", 1, "容积1", "3", "3.003"),
+                IngredientBean(0, "", 1, "容积1", "3", "3.003"),
+                IngredientBean(0, "", 1, "容积1", "3", "3.003"),
             )
         )
 
@@ -113,7 +116,24 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
                 val data = MudbusProtocol.parseControlBoardResponse(it)
                 if (data != null) {
                     val bean = data
-                    LogUtils.e(tag+data.toString())
+                    LogUtils.e(tag + data.toString())
+                }
+            }
+        }
+
+        viewModel.mEventHub.observe(this) {
+            when (it.action) {
+                INGREDIENTSSUCCESS -> {
+                    val flowsBean: MutableList<IngredientBean> = ArrayList()
+                    if (it.any is List<*>) {
+                        val list = it.any as List<*>
+                        for (index in list) {
+                            if (index is IngredientBean) {
+                                flowsBean.add(index)
+                            }
+                        }
+                    }
+                    ingredientAdapter.setItemsBean(flowsBean)
                 }
             }
         }
@@ -127,7 +147,7 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
      * 懒加载
      */
     override fun loadData() {
-
+        viewModel.getIngredients()
     }
 
 

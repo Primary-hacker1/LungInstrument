@@ -40,6 +40,11 @@ class LiveDataEvent {
 
         const val QuerySixMinReportBreathingSuccess: Int = 0x15//6分钟报告呼吸率
 
+        const val FLOWSUCCESS: Int = 0x017
+
+        const val INGREDIENTSSUCCESS: Int = 0x019
+
+
         const val MaxPatient: Int = 0x16//6分钟报告呼吸率
 
         /**
@@ -56,15 +61,15 @@ class LiveDataEvent {
 
 
     //有参次构造器
-    constructor(action:Int,any:Any){
-        this.action=action
-        this.any=any
+    constructor(action: Int, any: Any) {
+        this.action = action
+        this.any = any
     }
 
     //有双参次构造器
-    constructor(action:Int,any:Any,anyOne: Any?){
-        this.action=action
-        this.any=any
-        this.anyOne=anyOne
+    constructor(action: Int, any: Any, anyOne: Any?) {
+        this.action = action
+        this.any = any
+        this.anyOne = anyOne
     }
 }

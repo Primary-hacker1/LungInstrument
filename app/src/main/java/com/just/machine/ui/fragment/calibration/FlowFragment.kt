@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
+import com.common.viewmodel.LiveDataEvent.Companion.FLOWSUCCESS
 import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.calibration.FlowAdapter
@@ -44,7 +45,7 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
 
         flowAdapter.setItemsBean(
             mutableListOf
-                (FlowBean(0,"" ,1, "容积1", "3", "3.003"))
+                (FlowBean(0, "", 1, "容积1", "3", "3.003"))
         )
 
         binding.rvFlow.adapter = flowAdapter
@@ -111,6 +112,23 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
             }
         }
 
+        viewModel.mEventHub.observe(this) {
+            when (it.action) {
+                FLOWSUCCESS -> {
+                    val flowsBean: MutableList<FlowBean> = ArrayList()
+                    if (it.any is List<*>) {
+                        val list = it.any as List<*>
+                        for (index in list) {
+                            if (index is FlowBean) {
+                                flowsBean.add(index)
+                            }
+                        }
+                    }
+                    flowAdapter.setItemsBean(flowsBean)
+                }
+            }
+        }
+
     }
 
     override fun initListener() {
@@ -121,7 +139,7 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
      * 懒加载
      */
     override fun loadData() {
-
+        viewModel.getFlows()
     }
 
 

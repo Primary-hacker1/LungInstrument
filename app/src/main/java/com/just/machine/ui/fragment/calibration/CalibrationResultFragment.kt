@@ -11,7 +11,10 @@ import com.common.base.CommonBaseFragment
 import com.common.base.gone
 import com.common.base.setNoRepeatListener
 import com.common.base.visible
-import com.just.machine.dao.calibration.ResultBean
+import com.common.viewmodel.LiveDataEvent.Companion.FLOWSUCCESS
+import com.common.viewmodel.LiveDataEvent.Companion.INGREDIENTSSUCCESS
+import com.just.machine.dao.calibration.FlowBean
+import com.just.machine.dao.calibration.IngredientBean
 import com.just.machine.ui.adapter.calibration.ResultFlowAdapter
 import com.just.machine.ui.adapter.calibration.ResultIngredientAdapter
 import com.just.machine.ui.viewmodel.MainViewModel
@@ -37,23 +40,11 @@ class CalibrationResultFragment : CommonBaseFragment<FragmentCalibrationResultBi
 
         binding.rvResultFlow.layoutManager = LinearLayoutManager(requireContext())
 
-        adapterFlow.setItemsBean(
-            mutableListOf
-                (ResultBean("2021-8-13", "0.012", "0.013"))
-        )
-
         binding.rvResultFlow.adapter = adapterFlow
 
         binding.rvResultIngredient.layoutManager = LinearLayoutManager(requireContext())
 
-        adapterIngredient.setItemsBean(
-            mutableListOf
-                (ResultBean("2021-8-13", "0.012", "0.013"))
-        )
-
         binding.rvResultIngredient.adapter = adapterIngredient
-
-
 
         binding.btnFlow.setNoRepeatListener {
             setButtonStyle(
@@ -71,6 +62,39 @@ class CalibrationResultFragment : CommonBaseFragment<FragmentCalibrationResultBi
                 binding.rvResultFlow,
                 binding.rvResultIngredient
             )
+        }
+
+        viewModel.getIngredients()
+
+        viewModel.getFlows()
+
+        viewModel.mEventHub.observe(this) {
+            when (it.action) {
+                FLOWSUCCESS -> {
+                    val flowsBean: MutableList<FlowBean> = ArrayList()
+                    if (it.any is List<*>) {
+                        val list = it.any as List<*>
+                        for (index in list) {
+                            if (index is FlowBean) {
+                                flowsBean.add(index)
+                            }
+                        }
+                    }
+                    adapterFlow.setItemsBean(flowsBean)
+                }
+                INGREDIENTSSUCCESS -> {
+                    val flowsBean: MutableList<IngredientBean> = ArrayList()
+                    if (it.any is List<*>) {
+                        val list = it.any as List<*>
+                        for (index in list) {
+                            if (index is IngredientBean) {
+                                flowsBean.add(index)
+                            }
+                        }
+                    }
+                    adapterIngredient.setItemsBean(flowsBean)
+                }
+            }
         }
 
     }

@@ -3,16 +3,16 @@ package com.just.machine.ui.adapter.calibration
 import android.content.Context
 import androidx.core.content.ContextCompat
 import com.common.base.BaseRecyclerViewAdapter
-import com.just.machine.dao.calibration.ResultBean
+import com.just.machine.dao.calibration.FlowBean
 import com.just.news.R
 import com.just.news.databinding.ItemResultFlowBinding
 
 class ResultFlowAdapter(val context: Context) :
-    BaseRecyclerViewAdapter<ResultBean, ItemResultFlowBinding>() {
+    BaseRecyclerViewAdapter<FlowBean, ItemResultFlowBinding>() {
 
     private var selectedItem = -1
 
-    override fun bindData(item: ResultBean, position: Int) {
+    override fun bindData(item: FlowBean, position: Int) {
         binding.bean = item
 
         if (position == selectedItem) {

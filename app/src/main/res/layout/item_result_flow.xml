@@ -6,7 +6,7 @@
 
         <variable
             name="bean"
-            type="com.just.machine.dao.calibration.ResultBean" />
+            type="com.just.machine.dao.calibration.FlowBean" />
     </data>
 
     <LinearLayout
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="@dimen/space_19"
-            android:text="@{bean.calibrationTime}"
+            android:text="@{bean.createTime}"
             android:textColor="@color/text3"
             android:textSize="14sp" />
 
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="1"
-            android:text="@{bean.inspirationError}"
+            android:text="@{bean.inspiratoryIndicators}"
             android:textColor="@color/text3"
             android:textSize="14sp" />
 
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="1"
-            android:text="@{bean.inhalationError}"
+            android:text="@{bean.calibratedValue}"
             android:textColor="@color/text3"
             android:textSize="14sp" />
 
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="1"
-            android:text="@{bean.expiratoryAccuracyError}"
+            android:text="@{bean.actual}"
             android:textColor="@color/text3"
             android:textSize="14sp" />
 
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="1"
-            android:text="@{bean.expiratoryPrecisionError}"
+            android:text="@{bean.errorRate}"
             android:textColor="@color/text3"
             android:textSize="14sp" />
 

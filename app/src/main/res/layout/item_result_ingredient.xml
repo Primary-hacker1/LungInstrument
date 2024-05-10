@@ -5,70 +5,70 @@
         <import type="com.just.news.R" />
 
         <variable
-            name="bean"
-            type="com.just.machine.dao.calibration.ResultBean" />
+                name="bean"
+                type="com.just.machine.dao.calibration.IngredientBean" />
     </data>
 
     <LinearLayout
-        android:id="@+id/ll_item"
-        android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:layout_marginHorizontal="@dimen/space_6"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+            android:id="@+id/ll_item"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:layout_marginHorizontal="@dimen/space_6"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="@dimen/space_19"
-            android:text="@{bean.calibrationTime}"
-            android:textColor="@color/text3"
-            android:textSize="14sp" />
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/space_19"
+                android:text="@{bean.createTime}"
+                android:textColor="@color/text3"
+                android:textSize="14sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:maxLines="1"
-            android:text="@{bean.inspirationError}"
-            android:textColor="@color/text3"
-            android:textSize="14sp" />
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:text="@{bean.inspiratoryIndicators}"
+                android:textColor="@color/text3"
+                android:textSize="14sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:maxLines="1"
-            android:text="@{bean.inhalationError}"
-            android:textColor="@color/text3"
-            android:textSize="14sp" />
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:text="@{bean.calibratedValue}"
+                android:textColor="@color/text3"
+                android:textSize="14sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:maxLines="1"
-            android:text="@{bean.expiratoryAccuracyError}"
-            android:textColor="@color/text3"
-            android:textSize="14sp" />
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:text="@{bean.actual}"
+                android:textColor="@color/text3"
+                android:textSize="14sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:maxLines="1"
-            android:text="@{bean.expiratoryPrecisionError}"
-            android:textColor="@color/text3"
-            android:textSize="14sp" />
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:text="@{bean.errorRate}"
+                android:textColor="@color/text3"
+                android:textSize="14sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:maxLines="1"
-            android:text="@{bean.calibrationResults}"
-            android:textColor="@color/text3"
-            android:textSize="14sp" />
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:text="@{bean.calibrationResults}"
+                android:textColor="@color/text3"
+                android:textSize="14sp" />
     </LinearLayout>
 </layout>

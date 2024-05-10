@@ -10,6 +10,8 @@ import com.just.machine.dao.PatientBean
 import com.just.machine.dao.PlantRepository
 import com.just.machine.dao.calibration.EnvironmentalCalibrationBean
 import com.just.machine.dao.calibration.CalibrationRepository
+import com.just.machine.dao.calibration.FlowBean
+import com.just.machine.dao.calibration.IngredientBean
 import com.just.machine.dao.sixmin.SixMinReportBloodRepository
 import com.just.machine.dao.sixmin.SixMinReportBreathingRepository
 import com.just.machine.dao.sixmin.SixMinReportEvaluationRepository
@@ -88,6 +90,40 @@ class MainViewModel @Inject constructor(
             environmentalDao.getEnvironmentals().collect {
                 mEventHub.value = LiveDataEvent(
                     LiveDataEvent.EnvironmentalsSuccess, it
+                )
+            }
+        }
+    }
+
+    fun setFlowBean(bean: FlowBean) {//新增流量定标
+        viewModelScope.launch {
+            val patient = environmentalDao.insertFlows(bean)
+            getFlows()
+        }
+    }
+
+    fun getFlows() {//查询所有流量定标
+        viewModelScope.launch {
+            environmentalDao.getFlows().collect {
+                mEventHub.value = LiveDataEvent(
+                    LiveDataEvent.FLOWSUCCESS, it
+                )
+            }
+        }
+    }
+
+    fun setIngredientBean(bean: IngredientBean) {//新增成分定标
+        viewModelScope.launch {
+            val patient = environmentalDao.insertIngredient(bean)
+            getIngredients()
+        }
+    }
+
+    fun getIngredients() {//查询所有流量定标
+        viewModelScope.launch {
+            environmentalDao.getIngredients().collect {
+                mEventHub.value = LiveDataEvent(
+                    LiveDataEvent.INGREDIENTSSUCCESS, it
                 )
             }
         }
