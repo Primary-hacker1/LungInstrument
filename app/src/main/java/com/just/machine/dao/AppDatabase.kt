@@ -12,6 +12,9 @@ import com.just.machine.dao.calibration.EnvironmentalCalibrationBean
 import com.just.machine.dao.calibration.CalibrationDao
 import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.dao.calibration.IngredientBean
+import com.just.machine.dao.setting.DynamicSettingBean
+import com.just.machine.dao.setting.SettingDao
+import com.just.machine.dao.setting.StaticSettingBean
 import com.just.machine.dao.sixmin.SixMinReportBloodDao
 import com.just.machine.dao.sixmin.SixMinReportBreathingDao
 import com.just.machine.dao.sixmin.SixMinReportEvaluationDao
@@ -43,9 +46,11 @@ import com.just.machine.model.sixminreport.SixMinReportWalk
  * 此应用程序的房间数据库
  */
 @Database(
-    entities = [PatientBean::class,EnvironmentalCalibrationBean::class,
-        FlowBean::class,IngredientBean::class,
-        SixMinReportWalk::class, SixMinBloodOxygen::class, SixMinHeartEcg::class, SixMinReportBreathing::class, SixMinReportEvaluation::class, SixMinReportHeartBeat::class, SixMinReportInfo::class, SixMinReportOther::class, SixMinReportPrescription::class, SixMinReportStride::class],
+    entities = [PatientBean::class, EnvironmentalCalibrationBean::class, StaticSettingBean::class,
+        FlowBean::class, IngredientBean::class, DynamicSettingBean::class, SixMinReportWalk::class,
+        SixMinBloodOxygen::class, SixMinHeartEcg::class, SixMinReportBreathing::class,
+        SixMinReportEvaluation::class, SixMinReportHeartBeat::class, SixMinReportInfo::class,
+        SixMinReportOther::class, SixMinReportPrescription::class, SixMinReportStride::class],
     version = 2,
     exportSchema = false
 )
@@ -54,6 +59,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun plantDao(): PlantDao
     abstract fun environmentalCalibrationDao(): CalibrationDao
+    abstract fun settingDao(): SettingDao
     abstract fun sixMinReportWalkDao(): SixMinReportWalkDao
     abstract fun sixMinReportBloodDao(): SixMinReportBloodDao
     abstract fun sixMinReportHeartEcgDao(): SixMinReportHeartEcgDao
@@ -85,8 +91,8 @@ abstract class AppDatabase : RoomDatabase() {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
                         val request = OneTimeWorkRequestBuilder<SeedDatabaseWorker>().setInputData(
-                                workDataOf(KEY_FILENAME to PLANT_DATA_FILENAME)
-                            ).build()
+                            workDataOf(KEY_FILENAME to PLANT_DATA_FILENAME)
+                        ).build()
                         WorkManager.getInstance(context).enqueue(request)
                     }
                 }).build()

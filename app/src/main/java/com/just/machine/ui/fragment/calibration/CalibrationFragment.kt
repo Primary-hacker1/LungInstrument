@@ -14,7 +14,6 @@ import com.common.base.setNoRepeatListener
 import com.common.base.visible
 import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.FragmentChildAdapter
-import com.just.machine.ui.adapter.FragmentPagerAdapter
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.FragmentCalibrationBinding

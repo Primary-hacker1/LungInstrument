@@ -1,4 +1,4 @@
-package com.just.machine.dao
+package com.just.machine.model
 
 data class CPETParameter(
     var id: Int = 0,

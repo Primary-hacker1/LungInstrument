@@ -12,6 +12,10 @@ import com.just.machine.dao.calibration.EnvironmentalCalibrationBean
 import com.just.machine.dao.calibration.CalibrationRepository
 import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.dao.calibration.IngredientBean
+import com.just.machine.dao.setting.DynamicSettingBean
+import com.just.machine.dao.setting.SettingDao
+import com.just.machine.dao.setting.SettingRepository
+import com.just.machine.dao.setting.StaticSettingBean
 import com.just.machine.dao.sixmin.SixMinReportBloodRepository
 import com.just.machine.dao.sixmin.SixMinReportBreathingRepository
 import com.just.machine.dao.sixmin.SixMinReportEvaluationRepository
@@ -51,6 +55,7 @@ class MainViewModel @Inject constructor(
     private var plantDao: PlantRepository,
     private var sixMinReportWalkDao: SixMinReportWalkRepository,
     private var environmentalDao: CalibrationRepository,
+    private var settingDao: SettingRepository,
     private var sixMinReportBloodDao: SixMinReportBloodRepository,
     private var sixMinReportBreathingDao: SixMinReportBreathingRepository,
     private var sixMinReportEvaluationDao: SixMinReportEvaluationRepository,
@@ -126,6 +131,42 @@ class MainViewModel @Inject constructor(
                     LiveDataEvent.INGREDIENTSSUCCESS, it
                 )
             }
+        }
+    }
+
+    fun getStaticSettings() {
+        viewModelScope.launch {
+            settingDao.getStaticSettings().collect {
+                mEventHub.value = LiveDataEvent(
+                    LiveDataEvent.STATICSETTINGSSUCCESS, it
+                )
+            }
+        }
+    }
+
+    fun setStaticSettingBean(staticSettingBean: StaticSettingBean) {
+        staticSettingBean.settingId = 1 //每次都设置id为1覆盖数据库数据
+        val staticSettingBeans = mutableListOf(staticSettingBean)
+        viewModelScope.launch {
+            settingDao.insertStaticSettingBean(staticSettingBeans)
+        }
+    }
+
+    fun getDynamicSettings() {
+        viewModelScope.launch {
+            settingDao.getDynamicSettings().collect {
+                mEventHub.value = LiveDataEvent(
+                    LiveDataEvent.STATICSETTINGSSUCCESS, it
+                )
+            }
+        }
+    }
+
+    fun setDynamicSettingBean(staticSettingBean: DynamicSettingBean) {
+        staticSettingBean.dynamicId = 1 //每次都设置id为1覆盖数据库数据
+        val staticSettingBeans = mutableListOf(staticSettingBean)
+        viewModelScope.launch {
+            settingDao.insertDynamicSettingAll(staticSettingBeans)
         }
     }
 

@@ -1,6 +1,6 @@
 package com.just.machine.model.staticlung
 
-import com.just.machine.dao.CPETParameter
+import com.just.machine.model.CPETParameter
 
 object DynamicBean {
 

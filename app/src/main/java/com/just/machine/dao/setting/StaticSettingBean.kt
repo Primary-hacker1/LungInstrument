@@ -1,12 +1,22 @@
-package com.just.machine.model.setting
+package com.just.machine.dao.setting
+
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import com.just.machine.dao.ChatItemConverter
+import com.just.machine.model.CPETParameter
 
 
 /**
  *create by 2024/3/15
  *@author zt
  */
+@Entity(tableName = "static_setting")
+@TypeConverters(ChatItemConverter::class)
 data class StaticSettingBean(
-
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id")
+    var settingId: Long = 0,
     var xTimeSvc: String? = "",
     var yTimeUpSvc: String? = "",
     var yTimeDownSvc: String? = "",
@@ -27,27 +37,7 @@ data class StaticSettingBean(
     var radioVentilationCurve: Boolean? = true,//通气曲线是否显示
     var radioVideoAutoplayMvv: Boolean? = true,//是否自动播放
 
-
+    var settingSVC: MutableList<CPETParameter> = ArrayList(),
+    var settingFVC: MutableList<CPETParameter> = ArrayList(),
+    var settingMVV: MutableList<CPETParameter> = ArrayList()
 )
-
-data class SvcSettingBean(
-    val svc: String? = "",
-    val vitalCapacity: String? = "",//呼吸肺活量
-    val unit: String? = "",//单位
-    var isSelected: Boolean? = false,//是否显示
-)
-
-data class FvcSettingBean(
-    val svc: String? = "",
-    val vitalCapacity: String? = "",//呼吸肺活量
-    val unit: String? = "",//单位
-    var isSelected: Boolean? = false,//是否显示
-)
-
-data class MvvSettingBean(
-    val svc: String? = "",
-    val vitalCapacity: String? = "",//呼吸肺活量
-    val unit: String? = "",//单位
-    var isSelected: Boolean? = false,//是否显示
-)
-

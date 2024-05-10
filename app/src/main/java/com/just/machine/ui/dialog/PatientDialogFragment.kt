@@ -73,7 +73,7 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
     private var isUpdate: Boolean = false
 
     interface PatientDialogListener {
-        fun onClickConfirmBtn(patientId:String)
+        fun onClickConfirmBtn(patientId: String)
         fun onClickCleanBtn()
     }
 
@@ -163,45 +163,45 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
 
         binding.btnYes.setNoRepeatListener {
 
-//            if (Constants.isDebug) {
-//
-//                patient.name = "张三$index"
-//
-//                patient.age = (18 + index).toString()
-//
-//                patient.sex = "男"
-//
-//                patient.height = "18$index"
-//
-//                patient.weight = "130"
-//
-//                patient.addTime = "2024-3-6 13:00"
-//
-//                val testRecordsBeans: MutableList<CardiopulmonaryRecordsBean> = ArrayList()//心肺测试记录
-//
-//                val sixMinRecordsBeans: MutableList<SixMinRecordsBean> = ArrayList()//六分钟测试记录
-//
-//                val sixMinRecordsBean = SixMinRecordsBean()
-//
-//                val cardiopulmonaryRecordsBean = CardiopulmonaryRecordsBean(
-//                    "测试1",
-//                    "测试2", "测试3", "测试4", "测试5",
-//                )
-//
-//                sixMinRecordsBeans.add(sixMinRecordsBean)
-//
-//                testRecordsBeans.add(cardiopulmonaryRecordsBean)
-//
-//                patient.testRecordsBean = testRecordsBeans
-//
-//                patient.sixMinRecordsBean = sixMinRecordsBeans
-//
-//                viewModel.setDates(patient)//新增患者
-//
-//                listener?.onClickConfirmBtn(patient.patientId.toString())
-//
-//                return@setNoRepeatListener
-//            }
+            if (Constants.isDebug) {
+
+                patient.name = "张三$index"
+
+                patient.age = (18 + index).toString()
+
+                patient.sex = "男"
+
+                patient.height = "18$index"
+
+                patient.weight = "130"
+
+                patient.addTime = "2024-3-6 13:00"
+
+                val testRecordsBeans: MutableList<CardiopulmonaryRecordsBean> = ArrayList()//心肺测试记录
+
+                val sixMinRecordsBeans: MutableList<SixMinRecordsBean> = ArrayList()//六分钟测试记录
+
+                val sixMinRecordsBean = SixMinRecordsBean()
+
+                val cardiopulmonaryRecordsBean = CardiopulmonaryRecordsBean(
+                    "测试1",
+                    "测试2", "测试3", "测试4", "测试5",
+                )
+
+                sixMinRecordsBeans.add(sixMinRecordsBean)
+
+                testRecordsBeans.add(cardiopulmonaryRecordsBean)
+
+                patient.testRecordsBean = testRecordsBeans
+
+                patient.sixMinRecordsBean = sixMinRecordsBeans
+
+                viewModel.setDates(patient)//新增患者
+
+                listener?.onClickConfirmBtn(patient.patientId.toString())
+
+                return@setNoRepeatListener
+            }
 
             if (binding.atvName.text?.isEmpty() == true) {
                 toast("姓名不能为空！")
@@ -240,7 +240,7 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
 
             patient.age = binding.editAge.text.toString()
 
-            patient.sex = if(binding.rbMan.isChecked) "男" else "女"
+            patient.sex = if (binding.rbMan.isChecked) "男" else "女"
 
             patient.medicalRecordNumber = binding.atvPaientNumber.text.toString()
 
@@ -323,12 +323,18 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
 
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
         }
+
         override fun afterTextChanged(s: Editable) {
             // 这里处理两个EditText的文本变化
             val height = binding.atvHeight.text.toString()
             val weight = binding.atvWeight.text.toString()
-            if(height.isNotEmpty() && weight.isNotEmpty()){
-                binding.editBmi.setText( String.format("%.1f", CommonUtil.calculateBmi(height.toDouble()/100, weight.toDouble())))
+            if (height.isNotEmpty() && weight.isNotEmpty()) {
+                binding.editBmi.setText(
+                    String.format(
+                        "%.1f",
+                        CommonUtil.calculateBmi(height.toDouble() / 100, weight.toDouble())
+                    )
+                )
             }
         }
     }
@@ -339,13 +345,14 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
 
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
         }
+
         override fun afterTextChanged(s: Editable) {
             val idCard = binding.editIdentityCard.text.toString()
             val sex = CommonUtil.isSex(idCard)
-            if(sex == 1){
-               binding.rbMan.isChecked = true
-               binding.rbWoman.isChecked = false
-            }else{
+            if (sex == 1) {
+                binding.rbMan.isChecked = true
+                binding.rbWoman.isChecked = false
+            } else {
                 binding.rbMan.isChecked = false
                 binding.rbWoman.isChecked = true
             }

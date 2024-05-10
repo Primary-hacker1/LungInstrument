@@ -1,17 +1,20 @@
 package com.just.machine.ui.fragment.setting
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.common.base.CommonBaseFragment
 import com.common.base.gone
 import com.common.base.setNoRepeatListener
 import com.common.base.visible
+import com.common.network.LogUtils
 import com.just.machine.ui.adapter.FragmentChildAdapter
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
@@ -21,6 +24,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class CardiopulmonarySettingFragment : CommonBaseFragment<FragmentCardiopulmonarySettingBinding>() {
+
+    private var buttonClickListener: ButtonClickListener? = null
 
     private val viewModel by viewModels<MainViewModel>()
     override fun loadData() {
@@ -32,38 +37,29 @@ class CardiopulmonarySettingFragment : CommonBaseFragment<FragmentCardiopulmonar
 
         val adapter = FragmentChildAdapter(this)
 
-        adapter.addFragment(AllSettingFragment())
-        adapter.addFragment(StaticSettingFragment())
-        adapter.addFragment(DynamicSettingFragment())
+        adapter.addFragment(AllSettingFragment(), AllSettingFragment::class.simpleName)
+        adapter.addFragment(StaticSettingFragment(), StaticSettingFragment::class.simpleName)
+        adapter.addFragment(DynamicSettingFragment(), DynamicSettingFragment::class.simpleName)
 
 
         binding.vpTitle.setCurrentItem(0, true)
 
         binding.vpTitle.adapter = adapter
 
-
-    }
-
-    // 公开方法用于获取外层 Fragment 中的 TextView
-    fun onSaveCLick(): LinearLayout {
-        return binding.llSave
     }
 
     override fun initListener() {
 
         binding.btnGeneralSettings.setNoRepeatListener {
             binding.vpTitle.currentItem = 0
-            setButtonPosition(0)
         }
 
         binding.btnStaticSetting.setNoRepeatListener {
             binding.vpTitle.currentItem = 1
-            setButtonPosition(1)
         }
 
         binding.btnDynamicSettings.setNoRepeatListener {
             binding.vpTitle.currentItem = 2
-            setButtonPosition(2)
         }
 
         //这个必须写，不然会产生Fata
@@ -73,29 +69,35 @@ class CardiopulmonarySettingFragment : CommonBaseFragment<FragmentCardiopulmonar
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 // 当页面被选中时执行你的操作
-//                LogUtils.d(tag + "ViewPager2Selected page: $position")
+                LogUtils.d(tag + "ViewPager2Selected page: $position")
 
                 setButtonPosition(position)
 
             }
         })
+
+        binding.llSave.setNoRepeatListener {
+            buttonClickListener?.onButtonClick()
+        }
     }
 
     private fun setButtonPosition(position: Int) {
         when (position) {
-            0->{
+            0 -> {
                 setButtonStyle(
                     binding.btnGeneralSettings,
                     binding.btnStaticSetting, binding.btnDynamicSettings
                 )
             }
-            1->{
+
+            1 -> {
                 setButtonStyle(
                     binding.btnStaticSetting,
                     binding.btnGeneralSettings, binding.btnDynamicSettings
                 )
             }
-            2->{
+
+            2 -> {
                 setButtonStyle(
                     binding.btnDynamicSettings,
                     binding.btnStaticSetting, binding.btnGeneralSettings
@@ -132,10 +134,19 @@ class CardiopulmonarySettingFragment : CommonBaseFragment<FragmentCardiopulmonar
 
     }
 
-    private fun popBackStack(){
+    private fun popBackStack() {
         val navController = findNavController()//fragment返回数据处理
         navController.previousBackStackEntry?.savedStateHandle?.set("key", "返回")
         navController.popBackStack()
+    }
+
+    interface ButtonClickListener {
+        fun onButtonClick()
+    }
+
+    // 设置回调接口的方法，用于在 AllSettingFragment 中注册监听器
+    fun setButtonClickListener(listener: ButtonClickListener) {
+        this.buttonClickListener = listener
     }
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =

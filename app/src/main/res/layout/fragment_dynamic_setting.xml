@@ -1,197 +1,201 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
     </data>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="60dp"
             android:orientation="vertical">
 
-            <RelativeLayout
+        <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="60dp"
+                android:orientation="vertical">
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:id="@+id/ll_cpet"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
-                    android:background="@drawable/frame_with_color_d6d6d6"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
+                        android:id="@+id/ll_cpet"
                         android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:layout_marginStart="80dp"
-                        android:gravity="center_vertical"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:background="@drawable/frame_with_color_d6d6d6"
                         android:orientation="horizontal">
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:layout_marginStart="80dp"
+                            android:gravity="center_vertical"
                             android:orientation="horizontal">
 
-                            <RadioGroup
-                                android:layout_width="match_parent"
+                        <LinearLayout
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical">
+                                android:orientation="horizontal">
+
+                            <RadioGroup
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
 
                                 <RadioButton
-                                    style="@style/CustomRadioButton"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:checked="true"
-                                    android:text="呼吸次数平均"
-                                    android:textSize="14sp" />
+                                        style="@style/CustomRadioButton"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:checked="true"
+                                        android:text="呼吸次数平均"
+                                        android:textSize="14sp" />
 
                                 <RadioButton
-                                    style="@style/CustomRadioButton"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/space_10"
-                                    android:text="不平均"
-                                    android:textSize="14sp" />
+                                        style="@style/CustomRadioButton"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/space_10"
+                                        android:text="不平均"
+                                        android:textSize="14sp" />
                             </RadioGroup>
 
                             <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/space_28"
-                                android:orientation="horizontal">
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/space_28"
+                                    android:orientation="horizontal">
 
                                 <RadioButton
-                                    style="@style/CustomRadioButton"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:checked="true"
-                                    android:text="呼吸次数平均"
-                                    android:textSize="14sp" />
+                                        style="@style/CustomRadioButton"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:checked="true"
+                                        android:text="呼吸次数平均"
+                                        android:textSize="14sp" />
 
                                 <EditText
-                                    android:id="@+id/edit_times"
-                                    android:layout_width="92dp"
-                                    android:layout_height="23dp"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginStart="10dp"
-                                    android:background="@drawable/frame_with_color_d6d6d6"
-                                    android:maxLines="1"
-                                    android:textColor="@color/text3"
-                                    android:textSize="14sp"
-                                    tools:ignore="TextFields" />
+                                        android:id="@+id/edit_respiratoryOrderMean"
+                                        android:layout_width="92dp"
+                                        android:layout_height="23dp"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="10dp"
+                                        android:background="@drawable/frame_with_color_d6d6d6"
+                                        android:maxLines="1"
+                                        android:textColor="@color/text3"
+                                        android:textSize="14sp"
+                                        tools:ignore="TextFields" />
 
                                 <androidx.appcompat.widget.AppCompatTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="10dp"
+                                        android:maxLines="1"
+                                        android:text="（次）"
+                                        android:textColor="@color/text3"
+                                        android:textSize="14sp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                            <CheckBox
+                                    android:id="@+id/cb_singularity"
+                                    style="@style/CustomCheckBox"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="10dp"
-                                    android:maxLines="1"
-                                    android:text="（次）"
-                                    android:textColor="@color/text3"
-                                    android:textSize="14sp" />
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                                    android:text="奇异点消除" />
 
                             <CheckBox
-                                style="@style/CustomCheckBox"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="奇异点消除" />
-
-                            <CheckBox
-                                style="@style/CustomCheckBox"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/space_10"
-                                android:text="自动流速容量环" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/space_48"
-                            android:orientation="vertical">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="九图预计值显示"
-                                android:textColor="@color/text3" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/space_10"
-                                android:text="运动肺图形宽度"
-                                android:textColor="@color/text3" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <EditText
-                                    android:layout_width="@dimen/dimens_50dp"
-                                    android:layout_height="23dp"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginStart="10dp"
-                                    android:background="@drawable/frame_with_color_d6d6d6"
-                                    android:maxLines="1"
-                                    android:textColor="@color/text3"
-                                    android:textSize="14sp"
-                                    tools:ignore="TextFields" />
-
-                                <EditText
-                                    android:layout_width="@dimen/dimens_50dp"
-                                    android:layout_height="23dp"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginStart="10dp"
+                                    android:id="@+id/cb_automatic_flow"
+                                    style="@style/CustomCheckBox"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/space_10"
-                                    android:background="@drawable/frame_with_color_d6d6d6"
-                                    android:maxLines="1"
-                                    android:textColor="@color/text3"
-                                    android:textSize="14sp"
-                                    tools:ignore="TextFields" />
+                                    android:text="自动流速容量环" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/space_48"
+                                android:orientation="vertical">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="九图预计值显示"
+                                    android:textColor="@color/text3" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/space_10"
+                                    android:text="运动肺图形宽度"
+                                    android:textColor="@color/text3" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                            <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                <EditText
+                                        android:id="@+id/edit_nineDiagramEstimates"
+                                        android:layout_width="@dimen/dimens_50dp"
+                                        android:layout_height="23dp"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="10dp"
+                                        android:background="@drawable/frame_with_color_d6d6d6"
+                                        android:maxLines="1"
+                                        android:textColor="@color/text3"
+                                        android:textSize="14sp"
+                                        tools:ignore="TextFields" />
+
+                                <EditText
+                                        android:id="@+id/edit_lung_width"
+                                        android:layout_width="@dimen/dimens_50dp"
+                                        android:layout_height="23dp"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="10dp"
+                                        android:layout_marginTop="@dimen/space_10"
+                                        android:background="@drawable/frame_with_color_d6d6d6"
+                                        android:maxLines="1"
+                                        android:textColor="@color/text3"
+                                        android:textSize="14sp"
+                                        tools:ignore="TextFields" />
                             </LinearLayout>
 
 
                             <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/space_5"
-                                android:orientation="vertical">
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/space_5"
+                                    android:orientation="vertical">
 
                                 <androidx.appcompat.widget.AppCompatTextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="23dp"
-                                    android:maxLines="1"
-                                    android:text="%"
-                                    android:textColor="@color/text3"
-                                    android:textSize="14sp"
-                                    tools:ignore="TextFields" />
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="23dp"
+                                        android:maxLines="1"
+                                        android:text="%"
+                                        android:textColor="@color/text3"
+                                        android:textSize="14sp"
+                                        tools:ignore="TextFields" />
                             </LinearLayout>
 
                         </LinearLayout>
@@ -201,328 +205,308 @@
                 </LinearLayout>
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/ll_cpet"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="13dp"
-                    android:background="@color/white"
-                    android:text="@string/cpet"
-                    android:textColor="@color/text3"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignStart="@id/ll_cpet"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="13dp"
+                        android:background="@color/white"
+                        android:text="@string/cpet"
+                        android:textColor="@color/text3"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:id="@+id/ll_assessment_process"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
-                    android:background="@drawable/frame_with_color_d6d6d6"
-                    android:orientation="horizontal">
-
-
-                    <LinearLayout
+                        android:id="@+id/ll_assessment_process"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/space_100"
-                        android:layout_marginStart="32dp"
-                        android:gravity="center_vertical"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <CheckBox
-                                    android:id="@+id/checkbox_option1"
-                                    style="@style/CustomCheckBox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="运动极值分析" />
-
-                                <CheckBox
-                                    style="@style/CustomCheckBox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/space_10"
-                                    android:text="RPE量表分析" />
-
-                            </LinearLayout>
-
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <CheckBox
-                                    style="@style/CustomCheckBox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="无氧阈分析" />
-
-                                <CheckBox
-                                    style="@style/CustomCheckBox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/space_10"
-                                    android:text="营养代谢分析" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <CheckBox
-                                    style="@style/CustomCheckBox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="呼吸代偿点分析" />
-
-                                <CheckBox
-                                    style="@style/CustomCheckBox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/space_10"
-                                    android:text="运动处方选择" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <CheckBox
-                                    style="@style/CustomCheckBox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="频率分析" />
-
-                                <CheckBox
-                                    style="@style/CustomCheckBox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/space_10"
-                                    android:text="运动处方选择" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <CheckBox
-                                    style="@style/CustomCheckBox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="动态流量分析" />
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/ll_assessment_process"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="13dp"
-                    android:background="@color/white"
-                    android:text="@string/assessment_process"
-                    android:textColor="@color/text3"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:id="@+id/ll_report_shows"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
-                    android:background="@drawable/frame_with_color_d6d6d6"
-                    android:orientation="horizontal">
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/space_100"
-                        android:layout_marginStart="32dp"
-                        android:gravity="center_vertical"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <CheckBox
-                                    style="@style/CustomCheckBox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="评价" />
-
-                                <CheckBox
-                                    style="@style/CustomCheckBox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/space_10"
-                                    android:text="心电图结论" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <CheckBox
-                                    style="@style/CustomCheckBox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Borg结论" />
-
-                                <CheckBox
-                                    style="@style/CustomCheckBox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/space_10"
-                                    android:text="运动处方" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <CheckBox
-                                    style="@style/CustomCheckBox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="静态肺结论" />
-
-                                <CheckBox
-                                    style="@style/CustomCheckBox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/space_10"
-                                    android:text="血压" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <CheckBox
-                                    style="@style/CustomCheckBox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="运动肺结论" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <CheckBox
-                                    style="@style/CustomCheckBox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="心电图变化" />
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/ll_report_shows"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="13dp"
-                    android:background="@color/white"
-                    android:text="@string/report_shows"
-                    android:textColor="@color/text3"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:id="@+id/ll_exercise_prescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
-                    android:background="@drawable/frame_with_color_d6d6d6"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="70dp"
-                        android:layout_marginStart="80dp"
-                        android:gravity="center_vertical"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:background="@drawable/frame_with_color_d6d6d6"
                         android:orientation="horizontal">
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@null"
-                            android:drawableStart="@drawable/setting_manager"
-                            android:drawablePadding="@dimen/space_10"
-                            android:text="配置运动设备"
-                            android:textSize="14sp" />
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/space_100"
+                            android:layout_marginStart="32dp"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical">
+
+                        <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                            <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                <CheckBox
+                                        android:id="@+id/cb_extremum"
+                                        style="@style/CustomCheckBox"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="运动极值分析" />
+
+                                <CheckBox
+                                        android:id="@+id/cb_rpe"
+                                        style="@style/CustomCheckBox"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/space_10"
+                                        android:text="RPE量表分析" />
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                <CheckBox
+                                        android:id="@+id/cb_oxygen"
+                                        style="@style/CustomCheckBox"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="无氧阈分析" />
+
+                                <CheckBox
+                                        android:id="@+id/cb_dynamicTrafficAnalysis"
+                                        style="@style/CustomCheckBox"
+                                        android:layout_marginTop="@dimen/space_10"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="动态流量分析" />
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                <CheckBox
+                                        android:id="@+id/cb_compensatory"
+                                        style="@style/CustomCheckBox"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="呼吸代偿点分析" />
+
+                                <CheckBox
+                                        android:id="@+id/cb_exercisePrescriptionOptions"
+                                        style="@style/CustomCheckBox"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/space_10"
+                                        android:text="运动处方选择" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignStart="@id/ll_assessment_process"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="13dp"
+                        android:background="@color/white"
+                        android:text="@string/assessment_process"
+                        android:textColor="@color/text3"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <LinearLayout
+                        android:id="@+id/ll_report_shows"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:background="@drawable/frame_with_color_d6d6d6"
+                        android:orientation="horizontal">
+
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/space_100"
+                            android:layout_marginStart="32dp"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical">
+
+                        <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+
+                            <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                <CheckBox
+                                        style="@style/CustomCheckBox"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="评价" />
+
+                                <CheckBox
+                                        style="@style/CustomCheckBox"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/space_10"
+                                        android:text="心电图结论" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                <CheckBox
+                                        style="@style/CustomCheckBox"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Borg结论" />
+
+                                <CheckBox
+                                        style="@style/CustomCheckBox"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/space_10"
+                                        android:text="运动处方" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                <CheckBox
+                                        style="@style/CustomCheckBox"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="静态肺结论" />
+
+                                <CheckBox
+                                        style="@style/CustomCheckBox"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/space_10"
+                                        android:text="血压" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                <CheckBox
+                                        style="@style/CustomCheckBox"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="运动肺结论" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                <CheckBox
+                                        style="@style/CustomCheckBox"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="心电图变化" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignStart="@id/ll_report_shows"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="13dp"
+                        android:background="@color/white"
+                        android:text="@string/report_shows"
+                        android:textColor="@color/text3"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <LinearLayout
+                        android:id="@+id/ll_exercise_prescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:background="@drawable/frame_with_color_d6d6d6"
+                        android:orientation="horizontal">
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="70dp"
+                            android:layout_marginStart="80dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/space_40"
-                            android:background="@null"
-                            android:drawableStart="@drawable/setting_patient"
-                            android:drawablePadding="@dimen/space_10"
-                            android:text="配置疾病"
-                            android:textSize="14sp" />
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@null"
+                                android:drawableStart="@drawable/setting_manager"
+                                android:drawablePadding="@dimen/space_10"
+                                android:text="配置运动设备"
+                                android:textSize="14sp" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/space_40"
+                                android:background="@null"
+                                android:drawableStart="@drawable/setting_patient"
+                                android:drawablePadding="@dimen/space_10"
+                                android:text="配置疾病"
+                                android:textSize="14sp" />
 
 
                     </LinearLayout>
@@ -530,16 +514,16 @@
                 </LinearLayout>
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/ll_exercise_prescription"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="13dp"
-                    android:background="@color/white"
-                    android:text="@string/exercise_prescription"
-                    android:textColor="@color/text3"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignStart="@id/ll_exercise_prescription"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="13dp"
+                        android:background="@color/white"
+                        android:text="@string/exercise_prescription"
+                        android:textColor="@color/text3"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
             </RelativeLayout>
 

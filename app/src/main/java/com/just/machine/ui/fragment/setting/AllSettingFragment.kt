@@ -76,11 +76,14 @@ class AllSettingFragment : CommonBaseFragment<FragmentAllSettingBinding>() {
 
         val fragment = parentFragment
 
-        if (fragment is CardiopulmonarySettingFragment){//保存
-            fragment.onSaveCLick().setNoRepeatListener {
-                LogUtils.d(tag+"onClick")
-            }
+        if (fragment is CardiopulmonarySettingFragment) {
+            fragment.setButtonClickListener(object : CardiopulmonarySettingFragment.ButtonClickListener{
+                override fun onButtonClick() {
+                    LogUtils.d(tag+"onClick")
+                }
+            })
         }
+
 
     }
 

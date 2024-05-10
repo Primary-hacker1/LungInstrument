@@ -3,8 +3,7 @@ package com.just.machine.ui.adapter.setting
 import android.content.Context
 import androidx.core.content.ContextCompat
 import com.common.base.BaseRecyclerViewAdapter
-import com.common.network.LogUtils
-import com.just.machine.model.setting.SvcSettingBean
+import com.just.machine.model.CPETParameter
 import com.just.news.R
 import com.just.news.databinding.ItemSvcSettingBinding
 
@@ -14,9 +13,9 @@ import com.just.news.databinding.ItemSvcSettingBinding
  *@author zt
  */
 class SVCSettingAdapter(val context: Context) :
-    BaseRecyclerViewAdapter<SvcSettingBean, ItemSvcSettingBinding>() {
+    BaseRecyclerViewAdapter<CPETParameter, ItemSvcSettingBinding>() {
 
-    override fun bindData(item: SvcSettingBean, position: Int) {
+    override fun bindData(item: CPETParameter, position: Int) {
         binding.item = item
 
         if (position % 2 != 0) {
@@ -27,10 +26,10 @@ class SVCSettingAdapter(val context: Context) :
 
         binding.checkbox.setOnCheckedChangeListener(null) // 首先移除之前的监听器，以避免冲突
 
-        binding.checkbox.isChecked = item.isSelected!!
+        binding.checkbox.isChecked = item.isShow!!
 
         binding.checkbox.setOnCheckedChangeListener { _, isChecked ->
-            item.isSelected = isChecked
+            item.isShow = isChecked
         }
     }
 

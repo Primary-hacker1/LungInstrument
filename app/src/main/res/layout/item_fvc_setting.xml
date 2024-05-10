@@ -4,55 +4,55 @@
     <data>
 
         <variable
-            name="item"
-            type="com.just.machine.model.setting.FvcSettingBean" />
+                name="item"
+                type="com.just.machine.model.CPETParameter" />
     </data>
 
     <LinearLayout
-        android:id="@+id/ll_item"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:background="#f4f5fa"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:visibility="visible">
+            android:id="@+id/ll_item"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="#f4f5fa"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="visible">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="68dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_5"
-            android:text="@{item.svc}"
-            android:textColor="@color/text9"
-            android:textSize="12sp"
-            android:textStyle="bold" />
+                android:layout_width="68dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_5"
+                android:text="@{item.parameterName}"
+                android:textColor="@color/text9"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="68dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_5"
-            android:maxLines="1"
-            android:text="@{item.vitalCapacity}"
-            android:textColor="@color/text9"
-            android:textSize="12sp"
-            android:textStyle="bold" />
+                android:layout_width="68dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_5"
+                android:maxLines="1"
+                android:text="@{item.parameterNameCH}"
+                android:textColor="@color/text9"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="68dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_5"
-            android:text="@{item.unit}"
-            android:textColor="@color/text9"
-            android:textSize="12sp"
-            android:textStyle="bold" />
+                android:layout_width="68dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_5"
+                android:text="@{item.unit}"
+                android:textColor="@color/text9"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
 
         <CheckBox
-            android:id="@+id/checkbox"
-            style="@style/CustomCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_5"
-            android:clickable="@{item.selected}" />
+                android:id="@+id/checkbox"
+                style="@style/CustomCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_5"
+                android:clickable="@{item.isShow}" />
 
     </LinearLayout>
 </layout>

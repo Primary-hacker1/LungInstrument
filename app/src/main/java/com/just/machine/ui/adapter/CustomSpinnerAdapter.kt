@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import com.just.machine.dao.CPETParameter
+import com.just.machine.model.CPETParameter
 import com.just.news.R
 
 class CustomSpinnerAdapter(context: Context, private val dataList: MutableList<CPETParameter>? = ArrayList()) :
