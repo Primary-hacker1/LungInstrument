@@ -134,5 +134,4 @@ dependencies {
 
     implementation presentationDependencies.pdf_viewer
     implementation (group: 'com.aspose', name: 'aspose-words', version: '20.6', classifier: 'android.via.java')
-    implementation 'com.github.ForgetAll:LoadingDialog:v1.1.2'
 }

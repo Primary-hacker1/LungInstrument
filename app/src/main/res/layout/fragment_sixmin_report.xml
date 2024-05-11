@@ -759,7 +759,7 @@
                                         android:background="@drawable/tablelayout_cell_stroke_single"
                                         android:orientation="horizontal">
 
-                                        <RadioButton
+                                        <CheckBox
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
@@ -782,7 +782,7 @@
                                         android:layout_weight="1"
                                         android:orientation="horizontal">
 
-                                        <RadioButton
+                                        <CheckBox
                                             android:id="@+id/sixmin_report_rb_walk"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
@@ -805,7 +805,7 @@
                                         android:layout_weight="1"
                                         android:orientation="horizontal">
 
-                                        <RadioButton
+                                        <CheckBox
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
@@ -830,7 +830,7 @@
                                         android:background="@drawable/tablelayout_cell_stroke_single"
                                         android:orientation="horizontal">
 
-                                        <RadioButton
+                                        <CheckBox
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
@@ -854,7 +854,7 @@
                                         android:layout_weight="1"
                                         android:orientation="horizontal">
 
-                                        <RadioButton
+                                        <CheckBox
                                             android:id="@+id/sixmin_report_rb_run"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
@@ -878,7 +878,7 @@
                                         android:layout_weight="1"
                                         android:orientation="horizontal">
 
-                                        <RadioButton
+                                        <CheckBox
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"

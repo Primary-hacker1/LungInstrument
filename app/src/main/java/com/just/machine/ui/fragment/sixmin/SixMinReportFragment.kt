@@ -23,6 +23,8 @@ import com.common.base.setNoRepeatListener
 import com.common.viewmodel.LiveDataEvent
 import com.deepoove.poi.XWPFTemplate
 import com.deepoove.poi.data.PictureRenderData
+import com.deepoove.poi.data.TextRenderData
+import com.deepoove.poi.data.style.Style
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -42,7 +44,6 @@ import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.FragmentSixminReportBinding
-import com.xiasuhuei321.loadingdialog.view.LoadingDialog
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Observable
@@ -461,13 +462,21 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         }
 
         //运动处方建议
-        var checkcf1 = ""
+        val checkPng = File(
+            mActivity.getExternalFilesDir("")?.absolutePath,
+            "templates" + File.separator + "check.png"
+        )
+        val unCheckPng = File(
+            mActivity.getExternalFilesDir("")?.absolutePath,
+            "templates" + File.separator +"uncheck.png"
+        )
         if (sixMinRecordsBean.prescriptionBean[0].movementWay == "0") {
-            checkcf1 = "步行"
+            root["checkcf1"] = PictureRenderData(14,14,checkPng.absolutePath)
+            root["checkcf2"] = PictureRenderData(15,15,unCheckPng.absolutePath)
         } else if (sixMinRecordsBean.prescriptionBean[0].movementWay == "1") {
-            checkcf1 = "跑步"
+            root["checkcf2"] = PictureRenderData(14,14,checkPng.absolutePath)
+            root["checkcf1"] = PictureRenderData(15,15,unCheckPng.absolutePath)
         }
-        root["checkcf1"] = checkcf1
         var strideTitStrs = "/"
         var strideStrs = "/"
         var movDistanceTitStrs = "运动距离"
