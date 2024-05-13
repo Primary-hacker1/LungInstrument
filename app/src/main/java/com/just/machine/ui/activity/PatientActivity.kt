@@ -255,6 +255,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                     DeleteWarnDialogFragment.DeleteWarnDialogListener {
                     override fun onClickConfirm() {
                         viewModel.deletePatient(bean.patientId)
+                        viewModel.deleteSixMinReportInfoById(bean.patientId.toString())
                     }
                 })
             }

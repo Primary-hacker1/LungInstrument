@@ -59,7 +59,7 @@ class SixMinDetectActivity : CommonBaseActivity<ActivitySixMinDetectBinding>() {
         initNavigationView()
         initSystemInfo()
         initClickListener()
-//        copyAssetsFilesToSD()
+        copyAssetsFilesToSD()
     }
 
     private fun initSystemInfo() {
@@ -189,16 +189,16 @@ class SixMinDetectActivity : CommonBaseActivity<ActivitySixMinDetectBinding>() {
      */
     private fun copyAssetsFilesToSD() {
         try {
-            val stringNames = assets.list("templates")
+            val stringNames = assets.list("templates/png")
             var srcFolderSize: Long = 0
             stringNames?.forEach { name ->
-                val length = assets.open("templates/$name").available()
+                val length = assets.open("templates/png/$name").available()
                 srcFolderSize += length
             }
             val dstFolderSize = FileUtil.getInstance(this)
                 .getFolderSize(getExternalFilesDir("")?.absolutePath + File.separator + "templates")
             if (srcFolderSize != dstFolderSize) {
-                FileUtil.getInstance(this).copyAssetsToSD("templates", "templates")
+                FileUtil.getInstance(this).copyAssetsToSD("templates/png", "templates")
                     .setFileOperateCallback(object : FileUtil.FileOperateCallback {
                         override fun onSuccess() {
                             showMsg("复制成功")

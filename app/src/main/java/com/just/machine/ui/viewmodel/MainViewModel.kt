@@ -312,6 +312,15 @@ class MainViewModel @Inject constructor(
     }
 
     /**
+     * 删除6分钟报告信息根据患者id
+     */
+    fun deleteSixMinReportInfoById(reportId: String) {
+        viewModelScope.launch {
+            sixMinReportInfoDao.deleteReportInfoById(reportId)
+        }
+    }
+
+    /**
      * 获取6分钟报告信息
      */
     fun getSixMinReportInfoById(id: Long, reportNo: String) {
