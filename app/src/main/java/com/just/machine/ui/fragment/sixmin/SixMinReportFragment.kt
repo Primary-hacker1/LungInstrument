@@ -23,8 +23,6 @@ import com.common.base.setNoRepeatListener
 import com.common.viewmodel.LiveDataEvent
 import com.deepoove.poi.XWPFTemplate
 import com.deepoove.poi.data.PictureRenderData
-import com.deepoove.poi.data.TextRenderData
-import com.deepoove.poi.data.style.Style
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -472,10 +470,10 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         )
         if (sixMinRecordsBean.prescriptionBean[0].movementWay == "0") {
             root["checkcf1"] = PictureRenderData(14,14,checkPng.absolutePath)
-            root["checkcf2"] = PictureRenderData(15,15,unCheckPng.absolutePath)
+            root["checkcf2"] = PictureRenderData(16,16,unCheckPng.absolutePath)
         } else if (sixMinRecordsBean.prescriptionBean[0].movementWay == "1") {
             root["checkcf2"] = PictureRenderData(14,14,checkPng.absolutePath)
-            root["checkcf1"] = PictureRenderData(15,15,unCheckPng.absolutePath)
+            root["checkcf1"] = PictureRenderData(16,16,unCheckPng.absolutePath)
         }
         var strideTitStrs = "/"
         var strideStrs = "/"

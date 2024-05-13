@@ -201,11 +201,11 @@ class SixMinDetectActivity : CommonBaseActivity<ActivitySixMinDetectBinding>() {
                 FileUtil.getInstance(this).copyAssetsToSD("templates/png", "templates")
                     .setFileOperateCallback(object : FileUtil.FileOperateCallback {
                         override fun onSuccess() {
-                            showMsg("复制成功")
+//                            showMsg("复制成功")
                         }
 
                         override fun onFailed(error: String?) {
-                            showMsg("复制失败")
+//                            showMsg("复制失败")
                         }
                     })
             }

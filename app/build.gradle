@@ -131,7 +131,5 @@ dependencies {
         exclude group: 'org.apache.poi', module: 'poi'
     }
     implementation files('libs/poishadow-all.jar')
-
-    implementation presentationDependencies.pdf_viewer
-    implementation (group: 'com.aspose', name: 'aspose-words', version: '20.6', classifier: 'android.via.java')
+    implementation files('libs/aspose-words-android.jar')
 }
