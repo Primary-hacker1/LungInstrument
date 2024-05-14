@@ -1,10 +1,8 @@
-package com.just.machine.ui.fragment.cardiopulmonary
+package com.just.machine.ui.fragment.cardiopulmonary.staticfragment
 
-import CustomMarkerView
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.widget.Button
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat

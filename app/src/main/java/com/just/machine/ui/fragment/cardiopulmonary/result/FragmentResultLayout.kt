@@ -1,4 +1,4 @@
-package com.just.machine.ui.fragment.cardiopulmonary
+package com.just.machine.ui.fragment.cardiopulmonary.result
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -18,7 +18,6 @@ import com.github.mikephil.charting.data.ScatterData
 import com.github.mikephil.charting.data.ScatterDataSet
 import com.github.mikephil.charting.interfaces.datasets.IScatterDataSet
 import com.just.machine.model.DynamicResultBean
-import com.just.machine.model.staticlung.LungFormula
 import com.just.machine.ui.adapter.ResultAdapter
 import com.just.news.R
 import com.just.news.databinding.FragmentResultBinding
