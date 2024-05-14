@@ -20,11 +20,6 @@ import com.just.news.databinding.FragmentSixminReportBinding
 import com.just.news.databinding.FragmentSixminSystemSettingBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-
-/**
- *create by 2020/6/19
- *@author zt
- */
 @AndroidEntryPoint
 class SixMinSystemSettingFragment : CommonBaseFragment<FragmentSixminSystemSettingBinding>() {
 

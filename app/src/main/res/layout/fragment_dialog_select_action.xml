@@ -7,39 +7,162 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/dialog_bg"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:background="@drawable/sixmin_report_title_topradius_bg"
-            android:gravity="center"
-            android:text="选择训练类型"
-            android:textColor="@color/colorWhite"
-            android:textSize="16sp" />
-
         <LinearLayout
+            android:id="@+id/ll_test_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="50dp">
+            android:background="@drawable/dialog_bg"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/iv_btn_xf"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_weight="1"
-                android:src="@drawable/btn_cf" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/sixmin_report_title_topradius_bg"
+                android:gravity="center"
+                android:text="选择训练类型"
+                android:textColor="@color/colorWhite"
+                android:textSize="16sp" />
 
-            <ImageView
-                android:id="@+id/iv_btn_sixmin"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_weight="1"
-                android:src="@drawable/btn_six_min" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="50dp">
+
+                <ImageView
+                    android:id="@+id/iv_btn_xf"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/btn_cf" />
+
+                <ImageView
+                    android:id="@+id/iv_btn_sixmin"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/btn_six_min" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_report_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/dialog_bg"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/sixmin_report_title_topradius_bg"
+                android:gravity="center"
+                android:text="选择操作报告类型"
+                android:textColor="@color/colorWhite"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="50dp">
+
+                <LinearLayout
+                    android:id="@+id/sixmin_report_ll_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/icon_details" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="查看"
+                        android:textColor="#2f89de" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/sixmin_report_ll_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/update_blue" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="编辑"
+                        android:textColor="#2f89de" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/sixmin_report_ll_export"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/icon_file_open" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="导出"
+                        android:textColor="#2f89de" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/sixmin_report_ll_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/icon_del_blue" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="删除"
+                        android:textColor="#2f89de" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 

@@ -1,6 +1,10 @@
 package com.just.machine.ui.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.view.MotionEvent
+import android.view.View
+import android.widget.Button
 import androidx.core.content.ContextCompat
 import com.common.base.BaseRecyclerViewAdapter
 import com.common.base.setNoRepeatListener
@@ -25,6 +29,7 @@ class SixMinAdapter(var context: Context) : BaseRecyclerViewAdapter<SixMinReport
         binding.btnCheck.setNoRepeatListener {
             listener?.onCheckItem(item)
         }
+
         binding.btnUpdate.setNoRepeatListener {
             listener?.onUpdateItem(item)
         }
@@ -65,5 +70,23 @@ class SixMinAdapter(var context: Context) : BaseRecyclerViewAdapter<SixMinReport
 
     fun setItemOnClickListener(listener: SixMinReportListener) {
         this.listener = listener
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    fun btnHover(btn: Button, down:Int, up:Int){
+        btn.setOnTouchListener(View.OnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    // 按下时改变按钮状态，例如改变背景颜色
+                    btn.setBackgroundResource(down)
+                }
+
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    btn.setBackgroundResource(up)
+                }
+            }
+            // 返回true表示处理了触摸事件
+            true
+        })
     }
 }

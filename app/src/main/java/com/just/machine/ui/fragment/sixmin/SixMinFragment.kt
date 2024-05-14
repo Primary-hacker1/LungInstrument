@@ -51,11 +51,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-
-/**
- *create by 2020/6/19
- *@author zt
- */
 @AndroidEntryPoint
 class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech.OnInitListener {
 

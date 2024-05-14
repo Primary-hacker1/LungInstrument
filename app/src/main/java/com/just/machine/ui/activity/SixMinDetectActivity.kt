@@ -50,7 +50,7 @@ class SixMinDetectActivity : CommonBaseActivity<ActivitySixMinDetectBinding>() {
     var selfCheckSelection = "" //试验前疲劳和呼吸量级
     var sixMinPatientId = "" //试验的患者id
     var sixMinReportNo = "" //报告id
-    var sixMinReportType = "" //跳转类型 1新增 2编辑
+    var sixMinReportType = "" //跳转类型 1新增 2编辑 3查看
 
     override fun getViewBinding() = ActivitySixMinDetectBinding.inflate(layoutInflater)
 
@@ -170,8 +170,10 @@ class SixMinDetectActivity : CommonBaseActivity<ActivitySixMinDetectBinding>() {
         // 假设您有条件决定启动的目的地
         val startDestinationId = if (sixMinReportType == "1" || sixMinReportType.isEmpty()) {
             R.id.sixMinFragment
-        } else {
+        } else if(sixMinReportType == "2"){
             R.id.sixMinPreReportFragment
+        }else{
+            R.id.sixMinReportFragment
         }
         navGraph.setStartDestination(startDestinationId)
         navController.graph = navGraph

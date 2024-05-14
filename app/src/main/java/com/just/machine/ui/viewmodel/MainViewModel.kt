@@ -310,7 +310,7 @@ class MainViewModel @Inject constructor(
      */
     fun getSixMinReportEvaluationById(id: String) {
         viewModelScope.launch {
-            sixMinReportEvaluationDao.getReportEvaluationById(id).collect {
+            sixMinReportInfoDao.getReportEvaluationById(id).collect {
                 mEventHub.value = LiveDataEvent(
                     LiveDataEvent.QuerySixMinReportEvaluationSuccess, it
                 )

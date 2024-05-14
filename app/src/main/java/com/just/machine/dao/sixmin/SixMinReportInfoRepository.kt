@@ -2,6 +2,7 @@ package com.just.machine.dao.sixmin
 
 import com.just.machine.model.SixMinRecordsBean
 import com.just.machine.model.sixminreport.SixMinBloodOxygen
+import com.just.machine.model.sixminreport.SixMinReportEvaluation
 import com.just.machine.model.sixminreport.SixMinReportInfo
 import com.just.machine.model.sixminreport.SixMinReportWalk
 import kotlinx.coroutines.flow.Flow
@@ -25,4 +26,6 @@ class SixMinReportInfoRepository @Inject constructor(private val reportDao: SixM
 
     suspend fun deleteReportInfo(reportNo: String) = reportDao.deleteReportInfo(reportNo)
     suspend fun deleteReportInfoById(patientId: String) = reportDao.deleteReportInfoById(patientId)
+
+    fun getReportEvaluationById(id:String) = reportDao.getReportEvaluationById(id)
 }

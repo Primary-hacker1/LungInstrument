@@ -35,11 +35,6 @@ import com.just.news.databinding.FragmentSixminPreReportBinding
 import dagger.hilt.android.AndroidEntryPoint
 import java.math.BigDecimal
 
-
-/**
- *create by 2020/6/19
- *@author zt
- */
 @AndroidEntryPoint
 class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBinding>() {
 

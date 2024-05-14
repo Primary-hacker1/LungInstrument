@@ -40,23 +40,24 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_check"
-                android:layout_width="@dimen/space_19"
+                android:layout_width="@dimen/space_22"
                 android:layout_height="@dimen/space_19"
-                android:background="@drawable/icon_file_open"
+                android:background="@drawable/icon_details_gray"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_update"
-                android:layout_width="@dimen/space_19"
-                android:layout_height="@dimen/space_19"
+                android:layout_width="@dimen/space_25"
+                android:layout_height="@dimen/space_25"
                 android:layout_marginStart="@dimen/space_19"
-                android:background="@drawable/update"
+                android:background="@drawable/icon_heart"
                 android:padding="@dimen/space_5"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatButton
+                android:visibility="gone"
                 android:id="@+id/btn_delete"
                 android:layout_width="@dimen/space_20"
                 android:layout_height="@dimen/space_20"

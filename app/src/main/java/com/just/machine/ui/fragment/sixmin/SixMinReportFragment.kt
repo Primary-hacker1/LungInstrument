@@ -32,6 +32,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.just.machine.model.BloodOxyLineEntryBean
 import com.just.machine.model.SixMinRecordsBean
+import com.just.machine.model.SixMinReportInfoAndEvaluation
 import com.just.machine.model.SixMinReportItemBean
 import com.just.machine.model.sixminreport.SixMinReportEvaluation
 import com.just.machine.ui.activity.SixMinDetectActivity
@@ -54,11 +55,6 @@ import java.io.IOException
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 
-
-/**
- *create by 2020/6/19
- *@author zt
- */
 @AndroidEntryPoint
 class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
 
@@ -66,7 +62,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
     private val viewModel by viewModels<MainViewModel>()
     private lateinit var mActivity: SixMinDetectActivity
     private var reportRowList = mutableListOf<SixMinReportItemBean>()
-    private var reportEvaluationList = mutableListOf<SixMinReportEvaluation>()
+    private var reportEvaluationList = mutableListOf<SixMinReportInfoAndEvaluation>()
     private var pngSavePath = "" //报告图片保存路劲
     private lateinit var usbTransferUtil: USBTransferUtil
     private var sixMinRecordsBean: SixMinRecordsBean = SixMinRecordsBean()//6分钟报告信息
@@ -89,9 +85,9 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         initLineChart(binding.sixminReportLineChartHeartBeat, 2)
         initLineChart(binding.sixminReportLineChartBreathing, 3)
         initLineChart(binding.sixminReportLineChartSteps, 4)
-        viewModel.getSixMinReportEvaluation()
+        viewModel.getSixMinReportEvaluationById(mActivity.sixMinPatientId)
         lifecycleScope.launch {
-            kotlinx.coroutines.delay(200L)
+            kotlinx.coroutines.delay(100L)
             viewModel.getSixMinReportInfoById(
                 mActivity.sixMinPatientId.toLong(), mActivity.sixMinReportNo
             )
@@ -650,7 +646,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 val datas = any as MutableList<*>
                 if (datas.isNotEmpty()) {
                     for (num in 0 until datas.size) {
-                        val bean = datas[num] as SixMinReportEvaluation
+                        val bean = datas[num] as SixMinReportInfoAndEvaluation
                         reportEvaluationList.add(bean)
                     }
                 }

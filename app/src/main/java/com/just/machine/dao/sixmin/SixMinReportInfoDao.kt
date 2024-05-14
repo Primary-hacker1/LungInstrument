@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.just.machine.model.SixMinRecordsBean
+import com.just.machine.model.SixMinReportInfoAndEvaluation
 import com.just.machine.model.sixminreport.SixMinReportEvaluation
 import com.just.machine.model.sixminreport.SixMinReportInfo
 import kotlinx.coroutines.flow.Flow
@@ -38,4 +39,7 @@ interface SixMinReportInfoDao {
 
     @Query("UPDATE sixmin_report_info SET delFlag = '1' WHERE patientId ==:patientId")
     suspend fun deleteReportInfoById(patientId:String)
+
+    @Query("select ri.*,re.* from sixmin_report_info ri Inner join sixmin_report_evaluation re on ri.reportNo = re.reportId and re.delFlag = '0' where ri.patientId =:id and ri.delFlag = '0'")
+    fun getReportEvaluationById(id:String): Flow<List<SixMinReportInfoAndEvaluation>>
 }
