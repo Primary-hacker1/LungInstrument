@@ -9,6 +9,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
+import com.github.mikephil.charting.data.Entry
 import com.just.machine.model.CPETParameter
 import com.just.machine.model.Constants
 import com.just.machine.model.LungTestData
@@ -53,74 +54,8 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
         initViewPager()
 
-        // 更改 SVG 图形的颜色
-        val color = ContextCompat.getColor(requireContext(), R.color.colorPrimary) // 获取颜色资源
-
-        binding.imgTranquility.setColorFilter(color)
-        binding.imgWarm.setColorFilter(color)
-        binding.imgMotion.setColorFilter(color)
-        binding.imgRecover.setColorFilter(color)
-
-        val adapterTime = CustomSpinnerAdapter(requireContext())
-        val adapterVo = CustomSpinnerAdapter(requireContext())
-        val adapterHr = CustomSpinnerAdapter(requireContext())
-        val adapterRer = CustomSpinnerAdapter(requireContext())
-        val adapterO2Hr = CustomSpinnerAdapter(requireContext())
-        val adapterFio2 = CustomSpinnerAdapter(requireContext())
-        val adapterVdVt = CustomSpinnerAdapter(requireContext())
-        val adapterTex = CustomSpinnerAdapter(requireContext())
-        val adapterFeo2 = CustomSpinnerAdapter(requireContext())
-
-        val adapterTph = CustomSpinnerAdapter(requireContext())
-        val adapterVCO2 = CustomSpinnerAdapter(requireContext())
-        val adapterHrr = CustomSpinnerAdapter(requireContext())
-        val adapterVe = CustomSpinnerAdapter(requireContext())
-        val adapterSpo2 = CustomSpinnerAdapter(requireContext())
-        val adapterFico2 = CustomSpinnerAdapter(requireContext())
-        val adapterBf = CustomSpinnerAdapter(requireContext())
-        val adapterVtex = CustomSpinnerAdapter(requireContext())
-        val adapterFeco2 = CustomSpinnerAdapter(requireContext())
-
-        binding.timeSpinner.adapter = adapterTime
-        binding.voSpinner.adapter = adapterVo
-        binding.hrSpinner.adapter = adapterHr
-        binding.rerSpinner.adapter = adapterRer
-        binding.o2hrSpinner.adapter = adapterO2Hr
-        binding.fioSpinner.adapter = adapterFio2
-        binding.vdSpinner.adapter = adapterVdVt
-        binding.texSpinner.adapter = adapterTex
-        binding.feoSpinner.adapter = adapterFeo2
-
-        binding.phSpinner.adapter = adapterTph
-        binding.vcoSpinner.adapter = adapterVCO2
-        binding.hrrSpinner.adapter = adapterHrr
-        binding.veSpinner.adapter = adapterVe
-        binding.spoSpinner.adapter = adapterSpo2
-        binding.ficoSpinner.adapter = adapterFico2
-        binding.bfSpinner.adapter = adapterBf
-        binding.vtexSpinner.adapter = adapterVtex
-        binding.fecoSpinner.adapter = adapterFeco2
-
-        LiveDataBus.get().with("msg").observe(this) {//串口消息
-            if (it is ArrayList<*>) {
-                val dataList = it as ArrayList<CPETParameter>
-                // 在这里对数据进行解析和处理
-                for (pair in dataList) {
-                    val key = pair.parameterName
-                    val value = pair.lowRange
-                    // 对每个 Pair 中的数据进行相应的操作，例如更新 UI 或执行其他逻辑
-                    LogUtils.d(tag + value)
-                }
-                // 你可以在这里根据需要更新 Adapter 或其他 UI 元素
-                adapterTime.updateSpinnerText(dataList)
-            }
-        }
-
         binding.llStart.setNoRepeatListener {
             if (Constants.isDebug) {
-
-                LiveDataBus.get().with("msg").value = DynamicBean.spinnerItemDatas()
-
                 // 调用生成主控板返回数据方法并打印生成的数据
                 val controlBoardResponse = LungTestData(
                     temperature = Random.nextInt(0, 100), // 模拟温度数据
@@ -152,15 +87,12 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
         LiveDataBus.get().with("动态心肺测试").observe(this) {//解析串口消息
             if (it is ByteArray) {
-//                if (BaseUtil.isDoubleClick()) return@observe//有个粘性事件先不处理
                 LogUtils.e(tag + BaseUtil.bytes2HexStr(it) + "字节长度" + BaseUtil.bytes2HexStr(it).length)
-                val data = MudbusProtocol.parseLungTestData(it)
-                if (data != null) {
-                    val bean = data
-                    LogUtils.e(tag + data.toString())
-                }
+                val data = MudbusProtocol.parseLungTestData(it) ?: return@observe
+                LogUtils.e(tag + data.toString())
             }
         }
+
     }
 
 

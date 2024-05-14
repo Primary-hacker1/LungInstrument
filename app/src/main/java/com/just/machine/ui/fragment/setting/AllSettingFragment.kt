@@ -9,6 +9,7 @@ import androidx.core.content.pm.PackageInfoCompat
 import androidx.fragment.app.viewModels
 import com.common.base.*
 import com.common.network.LogUtils
+import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.SpinnerHelper
 import com.just.news.R
@@ -81,6 +82,13 @@ class AllSettingFragment : CommonBaseFragment<FragmentAllSettingBinding>() {
             fragment.setButtonClickListener(object : CardiopulmonarySettingFragment.ButtonClickListener{
                 override fun onButtonClick() {
                     LogUtils.d(tag+"onClick")
+
+                    if(binding.editUpdatePass.text.toString()!=binding.editLoginPass.text.toString()){
+                        toast("登陆两次密码输入不相同！")
+                        return//两次密码输入不正确
+                    }
+
+                    SharedPreferencesUtils.instance.pass = binding.editUpdatePass.text.toString()
                 }
             })
         }

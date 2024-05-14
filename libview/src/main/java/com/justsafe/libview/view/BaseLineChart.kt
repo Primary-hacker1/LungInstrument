@@ -8,17 +8,23 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.util.Log
+import android.view.MotionEvent
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.github.mikephil.charting.utils.MPPointD
 import com.justsafe.libview.R
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import kotlin.math.ceil
+
 
 /**
  * 自定义的基础折线图控件，继承自 LineChart。
@@ -137,15 +143,81 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
         invalidate()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    fun setDynamicDragLine(){
+        val xAxis = xAxis
+        val initialPosition = 10f // 初始位置
+        val limitLine = LimitLine(initialPosition, "拖拽线")
+        limitLine.lineColor = ContextCompat.getColor(context,R.color.colorPrimary)
+        limitLine.lineWidth = 2f
+        xAxis.addLimitLine(limitLine)
+        invalidate() // 刷新图表
 
-    // 自定义ValueFormatter
-    class CustomYAxisValueFormatter : ValueFormatter() {
-        @SuppressLint("DefaultLocale")
-        override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-            return String.format("%.1f", value)
+        // 创建 VerticalLineView 实例
+        val verticalLineView = VerticalLineView(context)
+
+        // 设置 VerticalLineView 的布局参数，例如宽度和高度
+        val layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT
+        )
+        verticalLineView.layoutParams = layoutParams
+
+        // 将 VerticalLineView 添加到你的布局中
+        addView(verticalLineView)
+
+        setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
+                    // 获取触摸点的 x 坐标
+                    val x = event.x
+
+                    // 更新 VerticalLineView 的位置
+                    verticalLineView.setXPosition(x)
+
+                    val outputPoint = MPPointD.getInstance(0.0, 0.0)
+                    getTransformer(YAxis.AxisDependency.LEFT).getValuesByTouchPoint(event.x, event.y, outputPoint)
+
+                    // 从转换后的结果中获取 x 轴的数据值
+                    val xValue = outputPoint.x.toFloat() // 将 double 转换为 float
+
+                    // 更新 LimitLine 的位置到新的 x 坐标值
+                    limitLine.limit = xValue
+
+                    // 获取与垂直线相交的数据点
+                    val entriesMap = mutableMapOf<ILineDataSet, MutableList<Entry>>()
+                    val dataSets = data.dataSets
+                    for (dataSet in dataSets) {
+                        val entries = mutableListOf<Entry>()
+                        val entryForXValue = dataSet.getEntryForXValue(xValue, Float.NaN)
+                        entryForXValue?.let { entries.add(it) }
+                        if (entries.isNotEmpty()) {
+                            entriesMap[dataSet] = entries
+                        }
+                    }
+
+                    // 这里的 entriesMap 包含了每个数据集与垂直线相交的数据点列表
+                    for ((dataSet, entries) in entriesMap) {
+                        for (entry in entries) {
+                            val yValue = entry.y
+                            // 这里处理 yValue，例如打印或存储
+                            println("DataSet: ${dataSet.label}, Y value: $yValue")
+                        }
+                    }
+
+                    invalidate() // 刷新图表以显示新位置的 LimitLine
+
+                    MPPointD.recycleInstance(outputPoint) // 回收 MPPointD 实例
+                    true
+                }
+                else -> false
+            }
         }
-    }
 
+
+
+
+    }
 
     /**
      * 设置折线图的数据。
@@ -275,7 +347,7 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
         val verticalText = titleCentent
         val verticalTextPaint = Paint().apply {
             textSize = 40f // 文本的大小
-            color = Color.BLACK // 文本的颜色
+            color = ContextCompat.getColor(context,R.color.c888888) // 文本的颜色
             textAlign = Paint.Align.CENTER
         }
 
@@ -288,6 +360,46 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
         ) / 2 // 文本的水平居中位置
         val centerY = verticalTextHeight // 文本的顶部位置
         canvas?.drawText(verticalText, centerX, centerY.toFloat(), verticalTextPaint)
+    }
+
+
+    // 自定义y轴左右坐标
+    class CustomYAxisValueFormatter : ValueFormatter() {
+        @SuppressLint("DefaultLocale")
+        override fun getAxisLabel(value: Float, axis: AxisBase?): String {
+            return String.format("%.1f", value)
+        }
+
+        override fun getFormattedValue(value: Float): String {
+            // 你可以根据 value 返回任何格式的字符串
+            return "$value"
+        }
+    }
+
+    // 自定义y轴左右坐标
+    class DynamicLeftValueFormatter : ValueFormatter() {
+        @SuppressLint("DefaultLocale")
+        override fun getAxisLabel(value: Float, axis: AxisBase?): String {
+            return String.format("%.2f", value)
+        }
+
+        override fun getFormattedValue(value: Float): String {
+            // 你可以根据 value 返回任何格式的字符串
+            return "$value"
+        }
+    }
+
+    // 自定义y轴左右坐标
+    class DynamicRightValueFormatter : ValueFormatter() {
+        @SuppressLint("DefaultLocale")
+        override fun getAxisLabel(value: Float, axis: AxisBase?): String {
+            return String.format("%.1f", value)
+        }
+
+        override fun getFormattedValue(value: Float): String {
+            // 你可以根据 value 返回任何格式的字符串
+            return "$value"
+        }
     }
 }
 

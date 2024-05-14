@@ -62,4 +62,10 @@ public abstract class ValueFormatter implements IAxisValueFormatter, IValueForma
     public String getCandleLabel(CandleEntry candleEntry) {
         return this.getFormattedValue(candleEntry.getHigh());
     }
+
+    public void setFormattedValue(String formattedValue) {
+        // 这里是你的自定义逻辑
+        // 你可以在这里处理格式化后的值
+
+    }
 }

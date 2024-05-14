@@ -31,6 +31,8 @@ class RoutineFragment : CommonBaseFragment<FragmentDynamicDataBinding>() {
 
 
     override fun initView() {
+
+
     }
 
     override fun initListener() {

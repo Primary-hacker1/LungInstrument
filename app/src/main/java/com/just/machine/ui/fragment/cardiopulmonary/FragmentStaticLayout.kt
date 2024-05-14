@@ -70,11 +70,18 @@ class FragmentStaticLayout @JvmOverloads constructor(
                 binding.previewChart.gone()
                 binding.chartFvc.visible()
             }
+            "MVV"->{
+                binding.llChat.visible()
+                binding.previewChart.visible()
+                binding.chartFvc.gone()
+                binding.previewChartFVC.gone()
+            }
 
             else -> {
                 binding.llChat.visible()
                 binding.previewChart.visible()
                 binding.chartFvc.gone()
+                binding.previewChartFVC.visible()
             }
 
         }

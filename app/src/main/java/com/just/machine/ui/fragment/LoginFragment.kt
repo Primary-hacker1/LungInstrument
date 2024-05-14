@@ -80,6 +80,15 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
 
         if (!SharedPreferencesUtils.instance.user.equals("")) {
             MainActivity.startMainActivity(context)
+            activity?.finish()
+        }
+
+        if (SharedPreferencesUtils.instance.user.equals("")) {
+            SharedPreferencesUtils.instance.user = "admin"
+        }
+
+        if (SharedPreferencesUtils.instance.pass.equals("")) {
+            SharedPreferencesUtils.instance.pass = "123456"
         }
 
         binding.btnLogin.setNoRepeatListener {
@@ -99,6 +108,16 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
 
             if (binding.atvPass.text?.isEmpty() == true) {
                 toast("密码不能为空！")
+                return@setNoRepeatListener
+            }
+
+            if (binding.atvUser.text.toString() !=  SharedPreferencesUtils.instance.user) {
+                toast("没有该用户！请检查用户名")
+                return@setNoRepeatListener
+            }
+
+            if (binding.atvPass.text.toString() !=  SharedPreferencesUtils.instance.pass) {
+                toast("请输入正确的密码！")
                 return@setNoRepeatListener
             }
 

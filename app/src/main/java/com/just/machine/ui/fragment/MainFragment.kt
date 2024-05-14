@@ -86,7 +86,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
         }
 
         binding.btnEcg.setNoRepeatListener {//心肺测试
-            var isClick = SharedPreferencesUtils.instance.isClickBtn
+            val isClick = SharedPreferencesUtils.instance.isClickBtn
 //            if (Constants.isDebug) {
 //                isClick = "1"
 //            }
@@ -121,6 +121,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
         }
 
         binding.btnClose.setNoRepeatListener {
+            SharedPreferencesUtils.instance.logout()
             activity?.finish()
         }
     }

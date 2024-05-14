@@ -108,7 +108,7 @@ class SharedPreferencesUtils private constructor() {
      */
     fun logout() {
         user = ""
-        pass = ""
+//        pass = ""
     }
 
 }

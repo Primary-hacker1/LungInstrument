@@ -6,9 +6,14 @@
     </data>
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <com.just.machine.ui.fragment.cardiopulmonary.dynamic.DynamicLayout
+                android:id="@+id/layout_dynamic"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
     </LinearLayout>
 </layout>

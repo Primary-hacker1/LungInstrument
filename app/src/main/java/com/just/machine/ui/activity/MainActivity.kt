@@ -8,6 +8,7 @@ import android.os.Handler
 import android.os.Message
 import android.text.format.Formatter
 import android.util.Log
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
@@ -88,7 +89,8 @@ class MainActivity : CommonBaseActivity<ActivityMainBinding>() {
     }
 
     override fun initView() {
-        LogUtils.d(MySystemParams.getInstance(this).toString())
+        // 设置 FLAG_KEEP_SCREEN_ON 标志以防止屏幕熄灭
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         initSocket()
         initNavigationView()
         requestStoragePermission()
