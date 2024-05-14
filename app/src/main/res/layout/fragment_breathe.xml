@@ -11,7 +11,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-        <com.just.machine.ui.fragment.cardiopulmonary.FragmentStaticLayout
+        <com.just.machine.ui.fragment.cardiopulmonary.staticfragment.FragmentStaticLayout
                 android:id="@+id/fragment_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
