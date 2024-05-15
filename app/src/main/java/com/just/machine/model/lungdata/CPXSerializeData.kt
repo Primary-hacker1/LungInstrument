@@ -1,5 +1,6 @@
-package com.just.machine.model.dynmicdata
+package com.just.machine.model.lungdata
 
+import com.just.machine.dao.lung.CPXBreathInOutData
 import java.io.Serializable
 
 data class CPXSerializeData(

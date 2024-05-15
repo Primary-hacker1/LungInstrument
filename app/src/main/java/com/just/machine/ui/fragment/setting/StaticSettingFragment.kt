@@ -1,7 +1,6 @@
 package com.just.machine.ui.fragment.setting
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,7 +9,7 @@ import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent.Companion.STATICSETTINGSSUCCESS
 import com.just.machine.dao.setting.StaticSettingBean
 import com.just.machine.model.CPETParameter
-import com.just.machine.model.staticlung.DynamicBean
+import com.just.machine.model.lungdata.DynamicBean
 import com.just.machine.ui.adapter.setting.FVCSettingAdapter
 import com.just.machine.ui.adapter.setting.MVVSettingAdapter
 import com.just.machine.ui.adapter.setting.SVCSettingAdapter

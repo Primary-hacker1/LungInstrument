@@ -12,6 +12,8 @@ import com.just.machine.dao.calibration.EnvironmentalCalibrationBean
 import com.just.machine.dao.calibration.CalibrationDao
 import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.dao.calibration.IngredientBean
+import com.just.machine.dao.lung.CPXBreathInOutData
+import com.just.machine.dao.lung.LungDao
 import com.just.machine.dao.setting.DynamicSettingBean
 import com.just.machine.dao.setting.SettingDao
 import com.just.machine.dao.setting.StaticSettingBean
@@ -47,7 +49,7 @@ import com.just.machine.model.sixminreport.SixMinReportWalk
  */
 @Database(
     entities = [PatientBean::class, EnvironmentalCalibrationBean::class, StaticSettingBean::class,
-        FlowBean::class, IngredientBean::class, DynamicSettingBean::class, SixMinReportWalk::class,
+        CPXBreathInOutData::class, FlowBean::class, IngredientBean::class, DynamicSettingBean::class, SixMinReportWalk::class,
         SixMinBloodOxygen::class, SixMinHeartEcg::class, SixMinReportBreathing::class,
         SixMinReportEvaluation::class, SixMinReportHeartBeat::class, SixMinReportInfo::class,
         SixMinReportOther::class, SixMinReportPrescription::class, SixMinReportStride::class],
@@ -60,6 +62,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun plantDao(): PlantDao
     abstract fun environmentalCalibrationDao(): CalibrationDao
     abstract fun settingDao(): SettingDao
+    abstract fun lungDao(): LungDao
     abstract fun sixMinReportWalkDao(): SixMinReportWalkDao
     abstract fun sixMinReportBloodDao(): SixMinReportBloodDao
     abstract fun sixMinReportHeartEcgDao(): SixMinReportHeartEcgDao

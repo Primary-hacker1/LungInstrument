@@ -1,4 +1,4 @@
-package com.just.machine.model.staticlung
+package com.just.machine.model.lungdata
 
 /*
 * 预计值计算

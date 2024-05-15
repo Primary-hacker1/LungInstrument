@@ -6,8 +6,7 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import com.github.mikephil.charting.data.Entry
-import com.just.machine.model.staticlung.DynamicBean
+import com.just.machine.model.lungdata.DynamicBean
 import com.just.machine.ui.adapter.CustomSpinnerAdapter
 import com.just.news.R
 import com.just.news.databinding.DynamicLayoutBinding
@@ -31,41 +30,7 @@ class DynamicLayout @JvmOverloads constructor(
     }
 
     private fun initView() {
-        // 创建折线图的样本数据
-        val entries = arrayListOf<Entry>()
-        for (index in 0..30) {
-            entries.add(Entry(index.toFloat(), index.toFloat() / 6 - 3))
-        }
 
-        binding.chart.setLineDataSetData(
-            binding.chart.flowDataSetList()
-        )//设置数据
-
-        binding.chart.setLineChartFlow(
-            yAxisMinimum = -5f,
-            yAxisMaximum = 5f,
-            countMaxX = 30f,
-            granularityY = 1f,
-            granularityX = 1f,
-            titleCentent = "动态肺常规"
-        )
-
-        binding.chart1.setLineDataSetData(
-            binding.chart.flowDataSetList()
-        )//设置数据
-
-        binding.chart1.setLineChartFlow(
-            yAxisMinimum = -5f,
-            yAxisMaximum = 5f,
-            countMaxX = 30f,
-            granularityY = 1f,
-            granularityX = 1f,
-            titleCentent = "动态肺常规"
-        )
-
-        binding.chart.setDynamicDragLine()
-
-        binding.chart1.setDynamicDragLine()
 
         val color = ContextCompat.getColor(context, R.color.colorPrimary) // 获取颜色资源
 
@@ -117,7 +82,7 @@ class DynamicLayout @JvmOverloads constructor(
 
         adapterTime.updateSpinnerText(DynamicBean.spinnerItemDatas())//测试一下
         adapterVo.updateSpinnerText(DynamicBean.spinnerItemDatas())//测试一下
-        adapterHr.updateSpinnerText(DynamicBean.spinnerItemDatas())//测试一下
+        adapterVo.updateSpinnerText(DynamicBean.spinnerItemDatas())//测试一下
     }
 
 }

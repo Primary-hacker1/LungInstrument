@@ -1,8 +1,9 @@
 package com.just.machine.util
 
-import com.just.machine.model.dynmicdata.CPXBreathInOutData
-import com.just.machine.model.dynmicdata.CPXBreathInOutDataBase
-import com.just.machine.model.dynmicdata.CPXSerializeData
+import com.just.machine.dao.lung.CPXBreathInOutData
+import com.just.machine.model.lungdata.CPXBreathInOutDataBase
+import com.just.machine.model.lungdata.CPXSerializeData
+import com.just.machine.model.lungdata.CPXCalBase
 import kotlin.math.abs
 import kotlin.math.log10
 
@@ -61,11 +62,11 @@ object CPXCalcule {
         breathData.VD_div_VT = breathData.VD / breathData.VTex - physicalVD
         breathData.VdO2 =
             if (beforeDyBreathInOutData == null) 0.0 else (breathData.VD + physicalVD) * abs(
-                dataBase.FeTO2 - (dataBase.FeTO2 ?: 0.0)
+                dataBase.FeTO2 - dataBase.FeTO2
             ) / 100 * breathData.BF
         breathData.VdCO2 =
             if (beforeDyBreathInOutData == null) 0.0 else (breathData.VD + physicalVD) * abs(
-                dataBase.FeTCO2 - (dataBase.FeTCO2 ?: 0.0)
+                dataBase.FeTCO2 - dataBase.FeTCO2
             ) / 100 * breathData.BF
         breathData.VI =
             breathData.VE * (100.0 - breathData.FeCO2 - breathData.FeO2) / (100.0 - breathData.FiO2 - breathData.FiCO2)
@@ -81,7 +82,7 @@ object CPXCalcule {
         }
         val v2 =
             breathData.VE * breathData.FeCO2 / 100 - breathData.VI * breathData.FiCO2 / 100 + breathData.VdCO2
-        breathData.VCO2 = CPXCalBase.stpd(v2, dataBase.P.toDouble()) * 1000
+        breathData.VCO2 = CPXCalBase.stpd(v2, dataBase.P) * 1000
         breathData.RER = if (breathData.VO2 == 0.0) 0.0 else breathData.VCO2 / breathData.VO2
 //        breathData.VO2_div_KG = breathData.VO2 / InstanceBase<Cashe>.instance.currentPatient.weight
 //        breathData.BR =

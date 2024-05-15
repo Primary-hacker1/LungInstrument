@@ -13,8 +13,8 @@ import com.common.base.setNoRepeatListener
 import com.common.base.visible
 import com.common.network.LogUtils
 import com.github.mikephil.charting.data.Entry
-import com.just.machine.model.staticlung.RoutineLungBean
-import com.just.machine.ui.adapter.RoutineLungAdapter
+import com.just.machine.model.lungdata.RoutineLungBean
+import com.just.machine.ui.adapter.lung.RoutineLungAdapter
 import com.just.news.R
 import com.just.news.databinding.FragmentLungBinding
 import lecho.lib.hellocharts.model.PointValue

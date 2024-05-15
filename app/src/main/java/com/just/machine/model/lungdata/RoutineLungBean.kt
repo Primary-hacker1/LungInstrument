@@ -1,4 +1,4 @@
-package com.just.machine.model.staticlung
+package com.just.machine.model.lungdata
 
 data class RoutineLungBean(
     var severalParticipants: String? = "",//参数名

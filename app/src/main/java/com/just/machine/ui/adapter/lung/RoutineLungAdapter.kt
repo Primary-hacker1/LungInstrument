@@ -1,9 +1,9 @@
-package com.just.machine.ui.adapter
+package com.just.machine.ui.adapter.lung
 
 import android.content.Context
 import androidx.core.content.ContextCompat
 import com.common.base.BaseRecyclerViewAdapter
-import com.just.machine.model.staticlung.RoutineLungBean
+import com.just.machine.model.lungdata.RoutineLungBean
 import com.just.news.R
 import com.just.news.databinding.ItemRoutineBinding
 

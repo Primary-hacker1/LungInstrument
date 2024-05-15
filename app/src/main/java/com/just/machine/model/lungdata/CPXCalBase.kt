@@ -1,5 +1,6 @@
+package com.just.machine.model.lungdata
+
 import kotlin.math.abs
-import kotlin.math.sqrt
 
 object CPXCalBase {
 

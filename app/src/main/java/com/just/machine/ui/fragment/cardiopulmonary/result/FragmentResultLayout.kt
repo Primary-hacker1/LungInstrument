@@ -254,11 +254,6 @@ class FragmentResultLayout @JvmOverloads constructor(
         // 请求重新布局
         binding.gridLayout.requestLayout()
     }
-
-
-    private fun getLayout(): Int {
-        return R.layout.fragment_result
-    }
 }
 
 data class ChartAxisSettings(

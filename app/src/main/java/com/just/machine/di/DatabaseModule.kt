@@ -6,6 +6,7 @@ import android.content.Context
 import com.just.machine.dao.AppDatabase
 import com.just.machine.dao.PlantDao
 import com.just.machine.dao.calibration.CalibrationDao
+import com.just.machine.dao.lung.LungDao
 import com.just.machine.dao.setting.SettingDao
 import com.just.machine.dao.sixmin.SixMinReportBloodDao
 import com.just.machine.dao.sixmin.SixMinReportBreathingDao
@@ -110,5 +111,11 @@ object DatabaseModule {
     @Provides
     fun provideSettingDao(appDatabase: AppDatabase): SettingDao {
         return appDatabase.settingDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideLungDao(appDatabase: AppDatabase): LungDao {
+        return appDatabase.lungDao()
     }
 }

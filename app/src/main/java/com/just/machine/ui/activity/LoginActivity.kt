@@ -4,11 +4,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.viewModels
 import com.common.base.CommonBaseActivity
-import com.common.network.LogUtils
-import com.just.machine.model.staticlung.LungFormula
 import com.just.news.databinding.ActivityLoginBinding
 import com.just.machine.ui.viewmodel.MainViewModel
-import com.justsafe.libview.util.MySystemParams
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

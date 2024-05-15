@@ -26,10 +26,10 @@ class FlowAdapter(val context: Context) :
      * @param position 点击 item 的 position
      * */
     fun toggleItemBackground(position: Int) {
-        if (selectedItem == position) {
-            selectedItem = -1
+        selectedItem = if (selectedItem == position) {
+            -1
         } else {
-            selectedItem = position
+            position
         }
         notifyDataSetChanged()
     }

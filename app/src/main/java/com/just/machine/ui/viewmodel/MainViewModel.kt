@@ -12,6 +12,8 @@ import com.just.machine.dao.calibration.EnvironmentalCalibrationBean
 import com.just.machine.dao.calibration.CalibrationRepository
 import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.dao.calibration.IngredientBean
+import com.just.machine.dao.lung.LungDao
+import com.just.machine.dao.lung.LungRepository
 import com.just.machine.dao.setting.DynamicSettingBean
 import com.just.machine.dao.setting.SettingDao
 import com.just.machine.dao.setting.SettingRepository
@@ -56,6 +58,7 @@ class MainViewModel @Inject constructor(
     private var sixMinReportWalkDao: SixMinReportWalkRepository,
     private var environmentalDao: CalibrationRepository,
     private var settingDao: SettingRepository,
+    private var lungDao: LungRepository,
     private var sixMinReportBloodDao: SixMinReportBloodRepository,
     private var sixMinReportBreathingDao: SixMinReportBreathingRepository,
     private var sixMinReportEvaluationDao: SixMinReportEvaluationRepository,

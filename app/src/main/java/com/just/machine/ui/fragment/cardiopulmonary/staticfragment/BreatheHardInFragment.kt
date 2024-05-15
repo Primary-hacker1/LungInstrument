@@ -6,10 +6,10 @@ import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
 import com.common.network.LogUtils
 import com.just.machine.model.SharedPreferencesUtils
-import com.just.machine.model.staticlung.LungFormula
-import com.just.machine.model.staticlung.RoutineLungBean
+import com.just.machine.model.lungdata.LungFormula
+import com.just.machine.model.lungdata.RoutineLungBean
 import com.just.machine.ui.viewmodel.MainViewModel
-import com.just.machine.model.staticlung.DynamicBean
+import com.just.machine.model.lungdata.DynamicBean
 import com.just.news.databinding.FragmentBreatheBinding
 import dagger.hilt.android.AndroidEntryPoint
 

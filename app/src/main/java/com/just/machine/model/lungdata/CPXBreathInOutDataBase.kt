@@ -1,7 +1,5 @@
-package com.just.machine.model.dynmicdata
+package com.just.machine.model.lungdata
 
-
-import java.io.Serializable
 
 data class CPXBreathInOutDataBase(
     var EndRealIndex: Int = 0,

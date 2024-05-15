@@ -9,11 +9,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
-import com.github.mikephil.charting.data.Entry
-import com.just.machine.model.CPETParameter
 import com.just.machine.model.Constants
 import com.just.machine.model.LungTestData
-import com.just.machine.ui.adapter.CustomSpinnerAdapter
 import com.just.machine.ui.adapter.FragmentPagerAdapter
 import com.just.machine.ui.fragment.cardiopulmonary.dynamic.DynamicDataFragment
 import com.just.machine.ui.fragment.cardiopulmonary.dynamic.RoutineFragment
@@ -22,7 +19,6 @@ import com.just.machine.ui.fragment.serial.MudbusProtocol
 import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.BaseUtil
-import com.just.machine.model.staticlung.DynamicBean
 import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FragmentDynamicBinding

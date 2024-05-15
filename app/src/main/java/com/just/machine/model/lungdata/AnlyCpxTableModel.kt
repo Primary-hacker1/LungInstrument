@@ -1,4 +1,4 @@
-package com.just.machine.model.dynmicdata
+package com.just.machine.model.lungdata
 
 
 data class AnlyCpxTableModel(

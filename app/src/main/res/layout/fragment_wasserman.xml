@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="8"
+                android:background="@drawable/spinner_dropdown_background"
+                android:orientation="vertical">
+
+            <GridLayout
+                    android:id="@+id/gridLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:columnCount="3"
+                    android:rowCount="3">
+
+                <com.justsafe.libview.view.DoubleTapFrameLayout
+                        android:id="@+id/chart1"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1"
+                        android:tag="1">
+
+                    <com.justsafe.libview.view.BaseLineChart
+                            android:id="@+id/sc_chart1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                </com.justsafe.libview.view.DoubleTapFrameLayout>
+
+                <com.justsafe.libview.view.DoubleTapFrameLayout
+                        android:id="@+id/chart2"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1"
+                        android:tag="2">
+
+                    <com.justsafe.libview.view.BaseLineChart
+                            android:id="@+id/sc_chart2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                </com.justsafe.libview.view.DoubleTapFrameLayout>
+
+                <com.justsafe.libview.view.DoubleTapFrameLayout
+                        android:id="@+id/chart3"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1"
+                        android:tag="3">
+
+                    <com.justsafe.libview.view.BaseLineChart
+                            android:id="@+id/sc_chart3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                </com.justsafe.libview.view.DoubleTapFrameLayout>
+
+                <com.justsafe.libview.view.DoubleTapFrameLayout
+                        android:id="@+id/chart4"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1"
+                        android:tag="4">
+
+                    <com.justsafe.libview.view.BaseLineChart
+                            android:id="@+id/sc_chart4"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                </com.justsafe.libview.view.DoubleTapFrameLayout>
+
+                <com.justsafe.libview.view.DoubleTapFrameLayout
+                        android:id="@+id/chart5"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1"
+                        android:tag="4">
+
+                    <com.justsafe.libview.view.BaseLineChart
+                            android:id="@+id/sc_chart5"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                </com.justsafe.libview.view.DoubleTapFrameLayout>
+
+                <com.justsafe.libview.view.DoubleTapFrameLayout
+                        android:id="@+id/chart6"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1"
+                        android:tag="4">
+
+                    <com.justsafe.libview.view.BaseLineChart
+                            android:id="@+id/sc_chart6"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                </com.justsafe.libview.view.DoubleTapFrameLayout>
+
+                <com.justsafe.libview.view.DoubleTapFrameLayout
+                        android:id="@+id/chart7"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1"
+                        android:tag="4">
+
+                    <com.justsafe.libview.view.BaseLineChart
+                            android:id="@+id/sc_chart7"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                </com.justsafe.libview.view.DoubleTapFrameLayout>
+
+                <com.justsafe.libview.view.DoubleTapFrameLayout
+                        android:id="@+id/chart8"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1"
+                        android:tag="4">
+
+                    <com.justsafe.libview.view.BaseLineChart
+                            android:id="@+id/sc_chart8"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                </com.justsafe.libview.view.DoubleTapFrameLayout>
+
+
+                <com.justsafe.libview.view.DoubleTapFrameLayout
+                        android:id="@+id/chart9"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1"
+                        android:tag="4">
+
+                    <com.justsafe.libview.view.BaseLineChart
+                            android:id="@+id/sc_chart9"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                </com.justsafe.libview.view.DoubleTapFrameLayout>
+
+            </GridLayout>
+
+
+        </LinearLayout>
+
+        <com.just.machine.ui.fragment.cardiopulmonary.dynamic.DynamicLayout
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="match_parent" />
+
+    </LinearLayout>
+</layout>

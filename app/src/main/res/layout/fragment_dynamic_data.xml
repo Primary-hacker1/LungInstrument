@@ -10,8 +10,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <com.just.machine.ui.fragment.cardiopulmonary.dynamic.DynamicLayout
-                android:id="@+id/layout_dynamic"
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_dynamic_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_dynamic_data"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 

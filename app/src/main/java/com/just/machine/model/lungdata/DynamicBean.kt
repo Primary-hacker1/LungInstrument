@@ -1,10 +1,10 @@
-package com.just.machine.model.staticlung
+package com.just.machine.model.lungdata
 
 import com.just.machine.model.CPETParameter
 
 object DynamicBean {
 
-    val cpetParameters = mutableListOf<CPETParameter>(
+    val cpetParameters = mutableListOf(
         CPETParameter(
             id = 84,
             parameterName = "SVC",
@@ -989,7 +989,13 @@ object DynamicBean {
 
     }
 
-    fun getParameterAndValue(parameterType: String, age: Double, height: Double, weight: Double, isMale: Boolean): Pair<String?, String?> {
+    fun getParameterAndValue(
+        parameterType: String,
+        age: Double,
+        height: Double,
+        weight: Double,
+        isMale: Boolean
+    ): Pair<String?, String?> {
         val parameter = spinnerItemData(parameterType)
         val value = LungFormula.main(
             parameter = parameterType,

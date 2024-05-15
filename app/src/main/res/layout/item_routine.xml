@@ -5,7 +5,7 @@
 
         <variable
             name="bean"
-            type="com.just.machine.model.staticlung.RoutineLungBean" />
+            type="com.just.machine.model.lungdata.RoutineLungBean" />
 
     </data>
 
