@@ -21,7 +21,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_18"
-            android:layout_weight="1"
+            android:layout_weight="1.3"
             android:text="@{item.medicalRecordNumber}"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -31,6 +31,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
             android:text="@{item.name}"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -40,6 +41,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
             android:text="@{item.sex}"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -49,6 +51,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
             android:text="@{item.age}"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -58,6 +61,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
             android:text="@{item.height}"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -67,6 +71,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
             android:text="@{item.weight}"
             android:textSize="16sp"
             android:textStyle="bold" />

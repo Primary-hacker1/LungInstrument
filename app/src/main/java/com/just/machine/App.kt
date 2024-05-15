@@ -66,7 +66,7 @@ open class App : Application() {
         Thread.setDefaultUncaughtExceptionHandler { _, ex ->
             Log.e("App", "uncaughtException crash")
             try {
-                ex.printStackTrace(PrintStream(FileUtil.createErrorFile()))
+                ex.printStackTrace(PrintStream(FileUtil.createErrorFile(this)))
             } catch (e: FileNotFoundException) {
                 Log.e("App", "创建异常文件失败")
                 e.printStackTrace()

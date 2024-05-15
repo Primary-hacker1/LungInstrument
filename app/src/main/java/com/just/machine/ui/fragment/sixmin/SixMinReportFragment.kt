@@ -871,7 +871,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                     "${sixMinRecordsBean.evaluationBean[0].befoFatigueLevel}级/${sixMinRecordsBean.evaluationBean[0].fatigueLevel}级"
                 binding.sixminReportTvBreathingLevel.text =
                     "${sixMinRecordsBean.evaluationBean[0].befoBreathingLevel}级/${sixMinRecordsBean.evaluationBean[0].breathingLevel}级"
-                val lastDistance = getLastDistance()
+                val lastDistance = "${getLastDistance()}米"
                 binding.sixminReportTvLastTestDistance.text = lastDistance
                 binding.sixminReportTvTotalSteps.text =
                     "${sixMinRecordsBean.evaluationBean[0].totalWalk}步"

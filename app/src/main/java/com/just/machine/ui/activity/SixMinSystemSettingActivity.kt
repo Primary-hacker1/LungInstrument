@@ -118,14 +118,20 @@ class SixMinSystemSettingActivity : CommonBaseActivity<ActivitySixminSystemSetti
                 showMsg("请检查血氧蓝牙长度")
                 return@setOnClickListener
             }
-            if (sysSettingBean.sysBlue.ecgBlue != binding.sixminEtBluetoothEcg.text.toString() || sysSettingBean.sysBlue.bloodBlue != binding.sixminEtBluetoothBlood.text.toString() || sysSettingBean.sysBlue.bloodOxyBlue != binding.sixminEtBluetoothBloodOxygen.text.toString()) {
-                //蓝牙配置有变动需要同步到设备
-                SixMinCmdUtils.dealBluetooth(
-                    binding.sixminEtBluetoothEcg.text.toString(),
-                    binding.sixminEtBluetoothBlood.text.toString(),
-                    binding.sixminEtBluetoothBloodOxygen.text.toString()
-                )
-            }
+//            if (sysSettingBean.sysBlue.ecgBlue != binding.sixminEtBluetoothEcg.text.toString() || sysSettingBean.sysBlue.bloodBlue != binding.sixminEtBluetoothBlood.text.toString() || sysSettingBean.sysBlue.bloodOxyBlue != binding.sixminEtBluetoothBloodOxygen.text.toString()) {
+//                //蓝牙配置有变动需要同步到设备
+//                SixMinCmdUtils.dealBluetooth(
+//                    binding.sixminEtBluetoothEcg.text.toString(),
+//                    binding.sixminEtBluetoothBlood.text.toString(),
+//                    binding.sixminEtBluetoothBloodOxygen.text.toString()
+//                )
+//            }
+            //蓝牙配置有变动需要同步到设备
+            SixMinCmdUtils.dealBluetooth(
+                binding.sixminEtBluetoothEcg.text.toString(),
+                binding.sixminEtBluetoothBlood.text.toString(),
+                binding.sixminEtBluetoothBloodOxygen.text.toString()
+            )
             sysSettingBean.sysBlue.ecgBlue = binding.sixminEtBluetoothEcg.text.toString()
             sysSettingBean.sysBlue.bloodBlue = binding.sixminEtBluetoothBlood.text.toString()
             sysSettingBean.sysBlue.bloodOxyBlue =

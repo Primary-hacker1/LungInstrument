@@ -155,6 +155,17 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                     }
 
                     "测量血压中" -> {
+                        binding.sixminTvBloodPressureHigh.setTextColor(
+                            ContextCompat.getColor(
+                                mActivity, R.color.white
+                            )
+                        )
+                        binding.sixminTvBloodPressureLow.setTextColor(
+                            ContextCompat.getColor(
+                                mActivity, R.color.white
+                            )
+                        )
+                        usbSerialData.bloodLow = "---"
                         binding.sixminTvMeasureBlood.text =
                             getString(R.string.sixmin_measuring_blood)
                         binding.sixminTvBloodPressureHigh.text = usbSerialData.bloodHigh ?: "---"
