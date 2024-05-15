@@ -8,17 +8,31 @@
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
+            android:padding="@dimen/space_6"
+            android:background="@drawable/spinner_dropdown_background"
             android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_dynamic_title"
+        <com.justsafe.libview.view.CustomHorizontalScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_dynamic_data"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_dynamic_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_dynamic_data"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+            </LinearLayout>
+
+        </com.justsafe.libview.view.CustomHorizontalScrollView>
 
     </LinearLayout>
 </layout>

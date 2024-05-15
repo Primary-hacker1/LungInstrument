@@ -56,7 +56,7 @@ open class App : Application() {
                 )
             }
         }
-        configUncaughtExceptionHandler()
+//        configUncaughtExceptionHandler()
     }
 
     /**

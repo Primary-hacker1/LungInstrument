@@ -13,7 +13,7 @@ class LungRepository @Inject constructor(private val dao: LungDao) {
 
     fun getCPXBreathInOutData(): Flow<List<CPXBreathInOutData>> = dao.getCPXBreathInOutDatas()
 
-    suspend fun insertCPXBreathInOutData(patients: CPXBreathInOutData) =
-        dao.insertCPXBreathInOutData(patients)
+    suspend fun insertCPXBreathInOutData(bean: CPXBreathInOutData): Long =
+        dao.insertCPXBreathInOutData(bean)
 
 }

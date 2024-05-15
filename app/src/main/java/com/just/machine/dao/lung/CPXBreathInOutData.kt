@@ -55,7 +55,7 @@ data class CPXBreathInOutData(
 
     fun toMutableList(): MutableList<Pair<String, Any?>> {
         return mutableListOf(
-            "dynmicId" to dynmicId,
+            "createTime" to createTime,
             "VTin" to VTin,
             "VCO2" to VCO2,
             "RER" to RER,

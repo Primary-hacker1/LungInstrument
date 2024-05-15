@@ -46,6 +46,8 @@ class LiveDataEvent {
 
         const val STATICSETTINGSSUCCESS: Int = 0x021
 
+        const val CPXDYNAMICBEAN: Int = 0x023
+
 
         const val MaxPatient: Int = 0x16//6分钟报告呼吸率
 

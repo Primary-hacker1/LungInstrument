@@ -2,6 +2,7 @@ package com.just.machine.dao.lung
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
@@ -16,6 +17,6 @@ interface LungDao {
     @Query("SELECT * FROM cpx_breath ORDER BY createTime DESC")
     fun getCPXBreathInOutDatas(): Flow<List<CPXBreathInOutData>>
 
-    @Insert
-    suspend fun insertCPXBreathInOutData(flow: CPXBreathInOutData)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCPXBreathInOutData(bean: CPXBreathInOutData): Long
 }

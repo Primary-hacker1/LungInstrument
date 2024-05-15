@@ -3,6 +3,7 @@ package com.just.machine.ui.viewmodel
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.viewModelScope
+import com.common.network.LogUtils
 import com.common.viewmodel.BaseViewModel
 import com.common.viewmodel.LiveDataEvent
 import com.just.machine.api.UserRepository
@@ -12,6 +13,7 @@ import com.just.machine.dao.calibration.EnvironmentalCalibrationBean
 import com.just.machine.dao.calibration.CalibrationRepository
 import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.dao.calibration.IngredientBean
+import com.just.machine.dao.lung.CPXBreathInOutData
 import com.just.machine.dao.lung.LungDao
 import com.just.machine.dao.lung.LungRepository
 import com.just.machine.dao.setting.DynamicSettingBean
@@ -132,6 +134,25 @@ class MainViewModel @Inject constructor(
             environmentalDao.getIngredients().collect {
                 mEventHub.value = LiveDataEvent(
                     LiveDataEvent.INGREDIENTSSUCCESS, it
+                )
+            }
+        }
+    }
+
+
+    fun insertCPXBreathInOutData(bean: CPXBreathInOutData) {//新增成分定标
+        viewModelScope.launch {
+            val patient = lungDao.insertCPXBreathInOutData(bean)
+            getCPXBreathInOutData()
+        }
+    }
+
+    fun getCPXBreathInOutData() {//查询所有动态肺数据
+        viewModelScope.launch {
+            lungDao.getCPXBreathInOutData().collect {
+                LogUtils.e(tag + it.toString())
+                mEventHub.value = LiveDataEvent(
+                    LiveDataEvent.CPXDYNAMICBEAN, it
                 )
             }
         }
