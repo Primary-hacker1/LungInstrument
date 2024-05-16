@@ -1,6 +1,5 @@
 package com.just.machine.ui.fragment.sixmin
 
-import android.content.Intent
 import android.graphics.Color
 import android.os.CountDownTimer
 import android.speech.tts.TextToSpeech
@@ -13,10 +12,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
-import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -30,7 +27,6 @@ import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.UsbSerialData
 import com.just.machine.model.systemsetting.SixMinSysSettingBean
 import com.just.machine.ui.activity.SixMinDetectActivity
-import com.just.machine.ui.activity.SixMinSystemSettingActivity
 import com.just.machine.ui.dialog.CommonDialogFragment
 import com.just.machine.ui.dialog.SixMinCollectRestoreEcgDialogFragment
 import com.just.machine.ui.dialog.SixMinGuideDialogFragment

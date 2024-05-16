@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
@@ -22,6 +21,7 @@ import com.common.base.visible
 import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
 import com.deepoove.poi.XWPFTemplate
+import com.deepoove.poi.config.Configure
 import com.deepoove.poi.data.PictureRenderData
 import com.just.machine.dao.PatientBean
 import com.just.machine.model.Constants
@@ -223,7 +223,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                     }
 
                     override fun onUpdateItem(bean: SixMinReportInfo) {
-
+                        showMsg("心电")
                     }
 
                     override fun onCheckItem(bean: SixMinReportInfo) {
@@ -374,7 +374,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         dealPageOne(root,sixMinRecordsBean)
         dealPageTow(root, bloodPng, heartPng, hsHxlPng,sixMinRecordsBean)
 
-//        lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.IO) {
             val generateWord =
                 generateWord(
                     root,
@@ -397,7 +397,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                     }
                 }
             }
-//        }
+        }
     }
 
     private fun dealPageOne(root: MutableMap<String, Any>,sixMinRecordsBean: SixMinRecordsBean) {
@@ -735,25 +735,18 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         try {
             outputStream = FileOutputStream(savePath)
             if (outputStream == null) {
-//                LogUtil.w(TAG, "world path:$path is null,check permiss")
-//                Toast.show(mActivity.getString(R.string.save_faild_cannot_writ))
                 return false
             }
             template.write(outputStream)
             outputStream.flush()
-//            Toast.show("save success,path:$path")
             return true
         } catch (e: IOException) {
-//            LogUtil.e(TAG, "world write to output stream io exception:" +
-//                    LogUtil.objToString(e))
-//            Toast.show(mActivity.getString(R.string.save_faild_cannot_writ))
             return false
         } finally {
             try {
                 template.close()
                 outputStream?.close()
             } finally {
-//                Log.i(TAG, "write world to $savePath output stream over")
             }
         }
     }

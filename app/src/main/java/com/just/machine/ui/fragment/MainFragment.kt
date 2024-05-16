@@ -7,16 +7,19 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import com.aspose.words.Document
+import com.aspose.words.SaveFormat
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.viewmodel.LiveDataEvent
+import com.deepoove.poi.XWPFTemplate
+import com.deepoove.poi.config.Configure
 import com.just.machine.model.Constants
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.ui.activity.CardiopulmonaryActivity
 import com.just.machine.ui.activity.PatientActivity
-import com.just.machine.ui.activity.SixMinActivity
 import com.just.machine.ui.activity.SixMinDetectActivity
-import com.just.machine.ui.activity.SixMinPreReportActivity
 import com.just.machine.ui.dialog.CommonDialogFragment
 import com.just.machine.ui.dialog.PatientDialogFragment
 import com.just.machine.ui.dialog.SixMinReportSelfCheckBeforeTestFragment
@@ -26,6 +29,10 @@ import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.FragmentMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.io.FileOutputStream
+import java.io.IOException
 
 
 /**

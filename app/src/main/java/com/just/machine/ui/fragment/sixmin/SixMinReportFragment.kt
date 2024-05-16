@@ -22,6 +22,7 @@ import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.viewmodel.LiveDataEvent
 import com.deepoove.poi.XWPFTemplate
+import com.deepoove.poi.config.Configure
 import com.deepoove.poi.data.PictureRenderData
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -34,7 +35,6 @@ import com.just.machine.model.BloodOxyLineEntryBean
 import com.just.machine.model.SixMinRecordsBean
 import com.just.machine.model.SixMinReportInfoAndEvaluation
 import com.just.machine.model.SixMinReportItemBean
-import com.just.machine.model.sixminreport.SixMinReportEvaluation
 import com.just.machine.ui.activity.SixMinDetectActivity
 import com.just.machine.ui.adapter.PdfDocumentAdapter
 import com.just.machine.ui.dialog.LoadingDialogFragment
@@ -54,6 +54,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
+
 
 @AndroidEntryPoint
 class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
@@ -871,7 +872,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                     "${sixMinRecordsBean.evaluationBean[0].befoFatigueLevel}级/${sixMinRecordsBean.evaluationBean[0].fatigueLevel}级"
                 binding.sixminReportTvBreathingLevel.text =
                     "${sixMinRecordsBean.evaluationBean[0].befoBreathingLevel}级/${sixMinRecordsBean.evaluationBean[0].breathingLevel}级"
-                val lastDistance = "${getLastDistance()}米"
+                val lastDistance = if (getLastDistance() != "/") "${getLastDistance()}米" else "/"
                 binding.sixminReportTvLastTestDistance.text = lastDistance
                 binding.sixminReportTvTotalSteps.text =
                     "${sixMinRecordsBean.evaluationBean[0].totalWalk}步"
