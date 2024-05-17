@@ -223,10 +223,12 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                     }
 
                     override fun onUpdateItem(bean: SixMinReportInfo) {
+                        //心电回放
                         showMsg("心电")
                     }
 
                     override fun onCheckItem(bean: SixMinReportInfo) {
+                        //操作记录类型
                         val startSelectActionDialogFragment =
                             SelectActionDialogFragment.startSelectActionDialogFragment(
                                 supportFragmentManager,
@@ -265,6 +267,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                             }
 
                             override fun onClickExport() {
+                                // 导出6分钟报告
                                 viewModel.getSixMinReportEvaluationById(bean.patientId.toString())
                                 lifecycleScope.launch {
                                     kotlinx.coroutines.delay(100L)

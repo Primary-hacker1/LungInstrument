@@ -191,4 +191,26 @@ public class CommonUtil {
             return null;
         }
     }
+
+    /**
+     * 是否是mac地址
+     * @param address
+     * @return
+     */
+    public static boolean isValidMacAddress(String address) {
+        String macAddress = addColonsToSerial(address);
+        String regex = "^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$";
+        return macAddress.matches(regex);
+    }
+
+    private static String addColonsToSerial(String serial) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < serial.length(); i++) {
+            sb.append(serial.charAt(i));
+            if (i % 2 == 1 && i != 11) {
+                sb.append(':');
+            }
+        }
+        return sb.toString();
+    }
 }

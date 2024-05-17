@@ -33,6 +33,7 @@ import com.just.machine.ui.dialog.SixMinGuideDialogFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.FixCountDownTime
 import com.just.machine.util.LiveDataBus
+import com.just.machine.util.MyLineChartRenderer
 import com.just.machine.util.ScreenUtils
 import com.just.machine.util.SixMinCmdUtils
 import com.just.news.R
@@ -47,6 +48,9 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+/**
+ * 6分钟试验界面
+ */
 @AndroidEntryPoint
 class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech.OnInitListener {
 
@@ -58,7 +62,9 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
     private lateinit var mStartTestCountDownTime: FixCountDownTime//6分钟试验倒计时
     private lateinit var mGetSportHeartEcgCountDownTime: FixCountDownTime//采集运动心率倒计时
     private lateinit var bloodOxyDataSet: LineDataSet
+    private lateinit var redBloodOxyDataSet: LineDataSet
     private lateinit var heartBeatDataSet: LineDataSet
+    private lateinit var bloodOxyLineData: LineData
 
     private lateinit var usbSerialData: UsbSerialData
     private var notShowAnymore = false
@@ -361,7 +367,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                 }
                 //血氧数据
                 if (usbSerialData.bloodOxygen != null && usbSerialData.bloodOxygen != "" && usbSerialData.bloodOxygen != "--" && usbSerialData.bloodOxygen != "---") {
-                    if (usbSerialData.bloodOxygen.toInt() > mActivity.sysSettingBean.sysAlarm.bloodOxy.toInt()) {
+                    if (usbSerialData.bloodOxygen.toInt() < mActivity.sysSettingBean.sysAlarm.bloodOxy.toInt()) {
                         binding.sixminTvBloodOxygen.setTextColor(
                             ContextCompat.getColor(
                                 mActivity, R.color.red
@@ -432,7 +438,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
         }
 
         binding.sixminRlMeasureBlood.setNoRepeatListener {
-            if (mActivity.usbTransferUtil.isConnectUSB) {
+            if (mActivity.usbTransferUtil.isConnectUSB && mActivity.usbTransferUtil.ecgConnection && mActivity.usbTransferUtil.bloodOxygenConnection) {
                 if (mActivity.usbTransferUtil.bloodPressureConnection) {
                     if (binding.sixminTvMeasureBlood.text == getString(R.string.sixmin_measure_blood)) {
                         SixMinCmdUtils.measureBloodPressure()
@@ -449,7 +455,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
         }
 
         binding.sixminRlStart.setNoRepeatListener {
-            if (mActivity.usbTransferUtil.isConnectUSB) {
+            if (mActivity.usbTransferUtil.isConnectUSB && mActivity.usbTransferUtil.ecgConnection && mActivity.usbTransferUtil.bloodOxygenConnection && mActivity.usbTransferUtil.bloodPressureConnection) {
                 if (!mActivity.usbTransferUtil.isBegin) {
                     startStepAndCircle()
                 } else {
@@ -524,6 +530,8 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
             if (mActivity.usbTransferUtil.isBegin) {
                 mActivity.usbTransferUtil.circleCount++
                 binding.sixminTvCircleCount.text = mActivity.usbTransferUtil.circleCount.toString()
+            }else{
+                mActivity.showMsg("试验未开始!")
             }
         }
         binding.sixminIvCircleCountMinus.setNoRepeatListener {
@@ -533,6 +541,8 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                 }
                 mActivity.usbTransferUtil.circleCount--
                 binding.sixminTvCircleCount.text = mActivity.usbTransferUtil.circleCount.toString()
+            }else{
+                mActivity.showMsg("试验未开始!")
             }
         }
         binding.sixminIvIgnoreBlood.setNoRepeatListener {
@@ -594,22 +604,24 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
     }
 
     private fun addEntryData(entryData: Float, times: Int) {
-
+        val bloodOxyAlarm = mActivity.sysSettingBean.sysAlarm.bloodOxy.toInt()
         val decimalFormat = DecimalFormat("#.00")
         val index: Float = (times.toFloat() / 60)
+
         bloodOxyDataSet.addEntry(
             Entry(
                 ((18.00 - decimalFormat.format(index).toFloat()).toFloat()), entryData
             )
         )
+        binding.sixminLineChartBloodOxygen.lineData.addDataSet(
+            bloodOxyDataSet
+        )
+
         mActivity.usbTransferUtil.bloodOxyLineData.add(
             BloodOxyLineEntryBean(
                 ((18.00 - decimalFormat.format(index).toFloat()).toFloat()),
                 entryData
             )
-        )
-        binding.sixminLineChartBloodOxygen.lineData.addDataSet(
-            bloodOxyDataSet
         )
 
         binding.sixminLineChartBloodOxygen.lineData.notifyDataChanged()
@@ -775,14 +787,23 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
             if (type == 1) {
                 bloodOxyDataSet = LineDataSet(null, "")
                 bloodOxyDataSet.lineWidth = 1.0f
-                bloodOxyDataSet.color = ContextCompat.getColor(mActivity, R.color.text3)
+                bloodOxyDataSet.color = ContextCompat.getColor(mActivity, R.color.red)
                 bloodOxyDataSet.setDrawValues(false)
                 bloodOxyDataSet.setDrawCircles(false)
                 bloodOxyDataSet.setDrawCircleHole(false)
                 bloodOxyDataSet.setDrawFilled(false)
                 bloodOxyDataSet.mode = LineDataSet.Mode.LINEAR
-                val lineData = LineData(bloodOxyDataSet)
-                data = lineData
+                val bloodOxyLineData = LineData(bloodOxyDataSet)
+                data = bloodOxyLineData
+
+                val mtRenderer = MyLineChartRenderer(this,animator,viewPortHandler)
+                val colors = IntArray(4)
+                colors[0] = Color.parseColor("#333333")
+                colors[1] = Color.parseColor("#333333")
+                colors[2] = Color.parseColor("#ff0000")
+                colors[3] = Color.parseColor("#ff0000")
+                mtRenderer.setHeartLine(90,100,mActivity.sysSettingBean.sysAlarm.bloodOxy.toInt(),colors)
+                renderer = mtRenderer
             } else {
                 heartBeatDataSet = LineDataSet(null, "")
                 heartBeatDataSet.lineWidth = 1.0f
@@ -802,7 +823,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
      * 显示引导弹窗
      */
     private fun showGuideDialog() {
-        if (mActivity.usbTransferUtil.isConnectUSB) {
+        if (mActivity.usbTransferUtil.isConnectUSB && mActivity.usbTransferUtil.ecgConnection && mActivity.usbTransferUtil.bloodOxygenConnection && mActivity.usbTransferUtil.bloodPressureConnection) {
             if (mActivity.sysSettingBean.sysOther.broadcastVoice == "1") {
                 val sixMinGuide = SharedPreferencesUtils.instance.sixMinGuide
                 if (sixMinGuide == null || sixMinGuide == "") {
@@ -831,6 +852,8 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
             } else {
                 startTest()
             }
+        }else{
+            mActivity.showMsg(getString(R.string.sixmin_test_device_without_connection))
         }
     }
 
@@ -1175,7 +1198,8 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                                             mActivity.usbTransferUtil.ignoreBlood = false
 
                                             mActivity.sixMinReportBloodOther.badOr = "1"
-                                            mActivity.sixMinReportBloodOther.badSymptoms = stopReason
+                                            mActivity.sixMinReportBloodOther.badSymptoms =
+                                                stopReason
                                             generateReportData(
                                                 mActivity.usbTransferUtil.min,
                                                 mActivity.usbTransferUtil.sec1 + mActivity.usbTransferUtil.sec2,
@@ -1266,7 +1290,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
     }
 
     private fun jumpToPreReport() {
-        navigate(binding.sixminIvSystemSetting,R.id.sixMinPreReportFragment)
+        navigate(binding.sixminIvSystemSetting, R.id.sixMinPreReportFragment)
     }
 
     private fun speechContent(

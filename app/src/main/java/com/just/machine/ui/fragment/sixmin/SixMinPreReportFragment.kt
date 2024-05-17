@@ -35,6 +35,9 @@ import com.just.news.databinding.FragmentSixminPreReportBinding
 import dagger.hilt.android.AndroidEntryPoint
 import java.math.BigDecimal
 
+/**
+ * 6分钟预生成报告界面
+ */
 @AndroidEntryPoint
 class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBinding>() {
 

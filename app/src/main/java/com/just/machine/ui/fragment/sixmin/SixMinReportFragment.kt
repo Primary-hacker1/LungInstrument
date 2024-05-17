@@ -55,7 +55,9 @@ import java.io.IOException
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 
-
+/**
+ * 6分钟报告界面
+ */
 @AndroidEntryPoint
 class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
 

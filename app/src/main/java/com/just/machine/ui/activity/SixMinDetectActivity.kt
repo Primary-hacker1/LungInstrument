@@ -62,7 +62,7 @@ class SixMinDetectActivity : CommonBaseActivity<ActivitySixMinDetectBinding>() {
         copyAssetsFilesToSD()
     }
 
-    private fun initSystemInfo() {
+    fun initSystemInfo() {
         val gson = Gson()
         sysSettingBean = SixMinSysSettingBean()
         val sixMinSysSetting = SharedPreferencesUtils.instance.sixMinSysSetting

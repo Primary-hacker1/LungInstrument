@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -271,10 +272,10 @@
                             <LinearLayout
                                 android:id="@+id/sixmin_ll_line_chart_blood_oxygen"
                                 android:layout_width="match_parent"
-                                android:layout_height="160dp"
+                                android:layout_height="180dp"
                                 android:orientation="vertical">
 
-                                <com.github.mikephil.charting.charts.LineChart
+                                <com.just.machine.util.MyLineChart
                                     android:id="@+id/sixmin_line_chart_blood_oxygen"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent" />
