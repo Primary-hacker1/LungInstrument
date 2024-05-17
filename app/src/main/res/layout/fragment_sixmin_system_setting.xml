@@ -117,10 +117,11 @@
 
                                             <EditText
                                                 android:id="@+id/sixmin_et_alarm_sys_pressure"
-                                                android:layout_width="wrap_content"
+                                                android:layout_width="50dp"
                                                 android:layout_height="wrap_content"
                                                 android:layout_marginHorizontal="5dp"
                                                 android:backgroundTint="@color/colorPrimary"
+                                                android:gravity="center"
                                                 android:inputType="number"
                                                 android:maxLength="3"
                                                 android:textColor="@color/colorPrimary"
@@ -167,10 +168,11 @@
 
                                             <EditText
                                                 android:id="@+id/sixmin_et_alarm_dias_pressure"
-                                                android:layout_width="wrap_content"
+                                                android:layout_width="50dp"
                                                 android:layout_height="wrap_content"
                                                 android:layout_marginHorizontal="5dp"
                                                 android:backgroundTint="@color/colorPrimary"
+                                                android:gravity="center"
                                                 android:inputType="number"
                                                 android:maxLength="3"
                                                 android:textColor="@color/colorPrimary"
@@ -226,10 +228,11 @@
 
                                             <EditText
                                                 android:id="@+id/sixmin_et_alarm_ecg"
-                                                android:layout_width="wrap_content"
+                                                android:layout_width="50dp"
                                                 android:layout_height="wrap_content"
                                                 android:layout_marginHorizontal="5dp"
                                                 android:backgroundTint="@color/colorPrimary"
+                                                android:gravity="center"
                                                 android:inputType="number"
                                                 android:maxLength="3"
                                                 android:textColor="@color/colorPrimary"
@@ -275,10 +278,11 @@
 
                                             <EditText
                                                 android:id="@+id/sixmin_et_alarm_blood_oxygen"
-                                                android:layout_width="wrap_content"
+                                                android:layout_width="50dp"
                                                 android:layout_height="wrap_content"
                                                 android:layout_marginHorizontal="5dp"
                                                 android:backgroundTint="@color/colorPrimary"
+                                                android:gravity="center"
                                                 android:inputType="number"
                                                 android:maxLength="2"
                                                 android:textColor="@color/colorPrimary"

@@ -387,7 +387,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         root["striAvg"] = strideAverageStr
         root["metabEqu"] = sixMinRecordsBean.evaluationBean[0].metabEquivalent + "METs"
         root["accounted"] = sixMinRecordsBean.evaluationBean[0].accounted + "%"
-        root["stHeart"] = sixMinRecordsBean.heartBeatBean[0].heartStop
+        root["stHeart"] = if(sixMinRecordsBean.heartBeatBean[0].heartStop.isEmpty()) "0bmp" else "${sixMinRecordsBean.heartBeatBean[0].heartStop}bmp"
 
         var gardLevel: String = sixMinRecordsBean.evaluationBean[0].cardiopuLevel
         gardLevel = when (gardLevel) {
@@ -488,7 +488,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
             str45 = "有点疲劳-疲劳(4-6级)"
         }
         //运动步速版本
-        if (sixMinRecordsBean.prescriptionBean[0].prescripState == "1") {
+        if (sixMinRecordsBean.prescriptionBean[0].prescripState == "1" || sixMinRecordsBean.prescriptionBean[0].prescripState.isEmpty()) {
             if (sixMinRecordsBean.prescriptionBean[0].distanceState.isEmpty() || sixMinRecordsBean.prescriptionBean[0].distanceState == "1") {
                 strideTitStrs = "运动步速";
                 strideStrs =
@@ -541,7 +541,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 }
             }
             movementStr += checkcf2;
-            root["moveStr"] = movementStr;
+            root["moveStr"] = movementStr
             var remarke: String = sixMinRecordsBean.prescriptionBean[0].remarke
             if (remarke.isNotEmpty()) {
                 remarke = remarke.replace("\n".toRegex(), "<w:br/>")
@@ -623,18 +623,15 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
     private fun dealPageTow(
         root: MutableMap<String, Any>, bloodPng: File, heartPng: File, hsHxlPng: File
     ) {
-//        val base64Blood: String = CommonUtil.imageTobase64(bloodPng.absolutePath)
         root["imageBlood"] = PictureRenderData(750, 200, bloodPng.absolutePath)
 
         //心率
-//        val base64Hreat: String = CommonUtil.imageTobase64(heartPng.absolutePath)
         root["imageHeart"] = PictureRenderData(750, 200, heartPng.absolutePath)
         var qushiStr = "呼吸率趋势"
         if (sixMinRecordsBean.infoBean.bsHxl == "0") {
             qushiStr = "步数趋势"
         }
         root["qushi"] = qushiStr
-//        val base64WalkAndHxl: String = CommonUtil.imageTobase64(hsHxlPng.absolutePath)
         root["imageWalkAndHxl"] = PictureRenderData(750, 200, hsHxlPng.absolutePath)
     }
 
