@@ -1,4 +1,4 @@
-package com.justsafe.libview.view
+package com.justsafe.libview.chart
 
 import android.content.Context
 import android.util.AttributeSet

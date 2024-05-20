@@ -245,7 +245,6 @@ class FragmentResultLayout @JvmOverloads constructor(
                     child.visibility = View.VISIBLE// 切换目标 FrameLayout 的可见性
                 } else {
                     child.visibility = View.GONE
-                    LogUtils.d(tag + child)
                 }
             }
             true

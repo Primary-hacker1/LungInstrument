@@ -32,7 +32,7 @@
                         android:layout_columnWeight="1"
                         android:tag="1">
 
-                    <com.justsafe.libview.view.BaseLineChart
+                    <com.justsafe.libview.chart.BaseLineChart
                             android:id="@+id/sc_chart1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
@@ -46,7 +46,7 @@
                         android:layout_columnWeight="1"
                         android:tag="2">
 
-                    <com.justsafe.libview.view.BaseLineChart
+                    <com.justsafe.libview.chart.BaseLineChart
                             android:id="@+id/sc_chart2"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
@@ -61,7 +61,7 @@
                         android:layout_columnWeight="1"
                         android:tag="3">
 
-                    <com.justsafe.libview.view.BaseLineChart
+                    <com.justsafe.libview.chart.BaseLineChart
                             android:id="@+id/sc_chart3"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
@@ -75,7 +75,7 @@
                         android:layout_columnWeight="1"
                         android:tag="4">
 
-                    <com.justsafe.libview.view.BaseLineChart
+                    <com.justsafe.libview.chart.BaseLineChart
                             android:id="@+id/sc_chart4"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
@@ -89,7 +89,7 @@
                         android:layout_columnWeight="1"
                         android:tag="4">
 
-                    <com.justsafe.libview.view.BaseLineChart
+                    <com.justsafe.libview.chart.BaseLineChart
                             android:id="@+id/sc_chart5"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
@@ -103,7 +103,7 @@
                         android:layout_columnWeight="1"
                         android:tag="4">
 
-                    <com.justsafe.libview.view.BaseLineChart
+                    <com.justsafe.libview.chart.BaseLineChart
                             android:id="@+id/sc_chart6"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
@@ -117,7 +117,7 @@
                         android:layout_columnWeight="1"
                         android:tag="4">
 
-                    <com.justsafe.libview.view.BaseLineChart
+                    <com.justsafe.libview.chart.BaseLineChart
                             android:id="@+id/sc_chart7"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
@@ -131,7 +131,7 @@
                         android:layout_columnWeight="1"
                         android:tag="4">
 
-                    <com.justsafe.libview.view.BaseLineChart
+                    <com.justsafe.libview.chart.BaseLineChart
                             android:id="@+id/sc_chart8"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
@@ -146,7 +146,7 @@
                         android:layout_columnWeight="1"
                         android:tag="4">
 
-                    <com.justsafe.libview.view.BaseLineChart
+                    <com.justsafe.libview.chart.BaseLineChart
                             android:id="@+id/sc_chart9"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />

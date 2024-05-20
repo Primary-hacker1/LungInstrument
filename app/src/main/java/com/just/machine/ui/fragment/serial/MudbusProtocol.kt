@@ -400,30 +400,87 @@ object MudbusProtocol {
      * 生成动态肺数据。
      * @return 生成的动态肺测试数据的字节数组。
      */
+//    fun generateLungTestData(lungTestData: LungTestData): ByteArray {
+//        val header = byteArrayOf(0xAA.toByte(), 0xAA.toByte()) // 包头
+//
+//        // 计算 CRC 校验码（假设有 calculateCRC16 函数）
+//        val dataBody = byteArrayOf(
+//            lungTestData.returnCommand,
+//            lungTestData.temperature.toByte(), // 温度
+//            lungTestData.humidity.toByte(), // 湿度
+//            (lungTestData.atmosphericPressure.toInt() shr 8).toByte(), // 大气压高字节
+//            lungTestData.atmosphericPressure.toInt().toByte(), // 大气压低字节
+//            lungTestData.highRangeFlowSensorData.toByte(), // 高范围流量传感器数据
+//            lungTestData.lowRangeFlowSensorData.toByte(), // 低范围流量传感器数据
+//            lungTestData.co2SensorData.toByte(), // 二氧化碳传感器数据
+//            lungTestData.o2SensorData.toByte(), // 氧气传感器数据
+//            lungTestData.gasFlowSpeedSensorData.toByte(), // 气体流速传感器数据
+//            lungTestData.gasPressureSensorData.toByte(), // 气体压力传感器数据
+//            (lungTestData.bloodOxygen shr 8).toByte(), // 血氧高字节
+//            (lungTestData.bloodOxygen and 0xFF).toByte(), // 血氧低字节
+//            (lungTestData.batteryLevel shr 8).toByte(), // 电池电量高字节
+//            (lungTestData.batteryLevel and 0xFF).toByte() // 电池电量低字节
+//        )
+//
+//        // 计算 CRC 校验码并转换为字节数组
+//        val crc = crc32ToByteArray(calculateCRC32(dataBody))
+//
+//        val dataLength = byteArrayOf((dataBody.size + crc.size + 1).toByte()) // 数据长度
+//
+//        // 拼接数据包
+//        val packet = header + dataLength + dataBody + crc + 0xED.toByte() // 包尾
+//
+//        return packet
+//    }
+
     fun generateLungTestData(lungTestData: LungTestData): ByteArray {
         val header = byteArrayOf(0xAA.toByte(), 0xAA.toByte()) // 包头
+//        val dataLength = byteArrayOf(0x1E) // 数据长度（固定为30字节）
+        val returnCommand = byteArrayOf(0x07) // 返回命令（固定为0x07）
 
-        // 计算 CRC 校验码（假设有 calculateCRC16 函数）
+        // 大气压数据转换为4字节
+        val atmosphericPressure = (lungTestData.atmosphericPressure * 100).toInt()
+        val atmosphericPressureBytes = byteArrayOf(
+            (atmosphericPressure shr 24).toByte(),
+            (atmosphericPressure shr 16).toByte(),
+            (atmosphericPressure shr 8).toByte(),
+            atmosphericPressure.toByte()
+        )
+
         val dataBody = byteArrayOf(
-            lungTestData.returnCommand,
-            lungTestData.temperature.toByte(), // 温度
-            lungTestData.humidity.toByte(), // 湿度
-            (lungTestData.atmosphericPressure.toInt() shr 8).toByte(), // 大气压高字节
-            lungTestData.atmosphericPressure.toInt().toByte(), // 大气压低字节
-            lungTestData.highRangeFlowSensorData.toByte(), // 高范围流量传感器数据
-            lungTestData.lowRangeFlowSensorData.toByte(), // 低范围流量传感器数据
-            lungTestData.co2SensorData.toByte(), // 二氧化碳传感器数据
-            lungTestData.o2SensorData.toByte(), // 氧气传感器数据
-            lungTestData.gasFlowSpeedSensorData.toByte(), // 气体流速传感器数据
-            lungTestData.gasPressureSensorData.toByte(), // 气体压力传感器数据
+            0x07,//功能码
+            lungTestData.temperature.toByte(), // 温度高字节
+            lungTestData.temperature.toByte(), // 温度低字节
+            lungTestData.humidity.toByte(), // 湿度高字节
+            lungTestData.humidity.toByte(), // 湿度低字节
+            atmosphericPressureBytes[0], // 大气压高字节
+            atmosphericPressureBytes[1],
+            atmosphericPressureBytes[2],
+            atmosphericPressureBytes[3], // 大气压低字节
+            (lungTestData.highRangeFlowSensorData shr 8).toByte(), // 高量程流量传感器高字节
+            lungTestData.highRangeFlowSensorData.toByte(), // 高量程流量传感器低字节
+            (lungTestData.lowRangeFlowSensorData shr 8).toByte(), // 低量程流量传感器高字节
+            lungTestData.lowRangeFlowSensorData.toByte(), // 低量程流量传感器低字节
+            (lungTestData.co2SensorData shr 8).toByte(), // CO2传感器数据高字节
+            lungTestData.co2SensorData.toByte(), // CO2传感器数据低字节
+            (lungTestData.o2SensorData shr 8).toByte(), // O2传感器数据高字节
+            lungTestData.o2SensorData.toByte(), // O2传感器数据低字节
+            (lungTestData.gasFlowSpeedSensorData shr 8).toByte(), // 分析气体流速高字节
+            lungTestData.gasFlowSpeedSensorData.toByte(), // 分析气体流速低字节
+            (lungTestData.gasPressureSensorData shr 8).toByte(), // 分析气体压力高字节
+            lungTestData.gasPressureSensorData.toByte(), // 分析气体压力低字节
             (lungTestData.bloodOxygen shr 8).toByte(), // 血氧高字节
-            (lungTestData.bloodOxygen and 0xFF).toByte(), // 血氧低字节
-            (lungTestData.batteryLevel shr 8).toByte(), // 电池电量高字节
-            (lungTestData.batteryLevel and 0xFF).toByte() // 电池电量低字节
+            lungTestData.bloodOxygen.toByte(), // 血氧低字节
+            (lungTestData.temperature shr 8).toByte(), // 温度数据高字节
+            lungTestData.temperature.toByte(), // 温度数据低字节
+            (lungTestData.batteryLevel shr 8).toByte(), // 电量数据高字节
+            lungTestData.batteryLevel.toByte() // 电量数据低字节
         )
 
         // 计算 CRC 校验码并转换为字节数组
         val crc = crc32ToByteArray(calculateCRC32(dataBody))
+//        val packet =
+//            header + dataLength + returnCommand + dataBody + crc + byteArrayOf(0xED.toByte()) // 包尾
 
         val dataLength = byteArrayOf((dataBody.size + crc.size + 1).toByte()) // 数据长度
 
@@ -472,12 +529,14 @@ object MudbusProtocol {
             (response[22].toInt() and 0xFF shl 8) or (response[23].toInt() and 0xFF)  // 分析气体压力传感器数据
         val bloodOxygen =
             (response[24].toInt() and 0xFF shl 8) or (response[25].toInt() and 0xFF)  // 血氧数据
+        val batteryTemperature =
+            (response[26].toInt() and 0xFF shl 8) or (response[27].toInt() and 0xFF)  // 温度数据
         val batteryLevel =
-            (response[26].toInt() and 0xFF shl 8) or (response[27].toInt() and 0xFF)  // 电量数据
+            (response[28].toInt() and 0xFF shl 8) or (response[29].toInt() and 0xFF)  // 电池数据
 
         // 解析 CRC 校验码
-        val crcValue = response.sliceArray(28 until 32)
-        val calculatedCRC = crc32ToByteArray(calculateCRC32(response.sliceArray(2 until 28)))
+        val crcValue = response.sliceArray(30 until 34)
+        val calculatedCRC = crc32ToByteArray(calculateCRC32(response.sliceArray(3 until 30)))
 
         // 验证 CRC 校验码
         if (!crcValue.contentEquals(calculatedCRC)) {

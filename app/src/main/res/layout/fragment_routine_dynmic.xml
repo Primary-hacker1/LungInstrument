@@ -17,14 +17,14 @@
                 android:layout_weight="8"
                 android:orientation="horizontal">
 
-            <com.justsafe.libview.view.BaseLineChart
+            <com.justsafe.libview.chart.BaseLineChart
                     android:id="@+id/chart"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="300dp"
                     tools:ignore="NestedWeights" />
 
-            <com.justsafe.libview.view.BaseLineChart
+            <com.justsafe.libview.chart.BaseLineChart
                     android:id="@+id/chart1"
                     android:layout_weight="1"
                     android:layout_width="0dp"

@@ -7,20 +7,23 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
 import com.common.network.LogUtils
-import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.LimitLine
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.github.mikephil.charting.utils.MPPointD
 import com.just.machine.ui.fragment.cardiopulmonary.result.FragmentResultLayout.ChartLayout
 import com.just.machine.ui.viewmodel.MainViewModel
-import com.just.news.databinding.FragmentBreatheBinding
-import com.just.news.databinding.FragmentDynamicDataBinding
 import com.just.news.databinding.FragmentWassermanBinding
+import com.justsafe.libview.R
+import com.justsafe.libview.chart.BaseLineChart
+import com.justsafe.libview.chart.VerticalLineView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.collections.MutableMap.MutableEntry
 
 
 /**
@@ -41,9 +44,7 @@ class WassermanFragment : CommonBaseFragment<FragmentWassermanBinding>() {
 
     }
 
-
     override fun initView() {
-
         // 创建折线图的样本数据
         val entries = arrayListOf<Entry>()
         for (index in 0..30) {
@@ -76,124 +77,101 @@ class WassermanFragment : CommonBaseFragment<FragmentWassermanBinding>() {
             titleCentent = "动态肺常规"
         )
 
-        binding.scChart1.setDynamicDragLine()
+        setDynamicDragLine(binding.scChart1,binding.chart1)
+        setDynamicDragLine(binding.scChart2,binding.chart2)
+        setDynamicDragLine(binding.scChart3,binding.chart3)
+        setDynamicDragLine(binding.scChart4,binding.chart4)
+        setDynamicDragLine(binding.scChart5,binding.chart5)
+        setDynamicDragLine(binding.scChart6,binding.chart6)
+        setDynamicDragLine(binding.scChart7,binding.chart7)
+        setDynamicDragLine(binding.scChart8,binding.chart8)
+        setDynamicDragLine(binding.scChart9,binding.chart9)
+    }
 
-        binding.scChart2.setDynamicDragLine()
-
-        val gestureDetector1 =
+    @SuppressLint("ClickableViewAccessibility")
+    fun setDynamicDragLine(chart: BaseLineChart, frameLayout: FrameLayout){
+        val gestureDetector =
             GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
                 override fun onDoubleTap(e: MotionEvent): Boolean {
                     // 在双击事件中执行你的逻辑
-                    onChartClick(binding.chart1)
+                    onChartClick(frameLayout)
                     return true
                 }
             })
 
+        setOnTouchListenerForChart(chart, gestureDetector) {
+        }
 
-        val gestureDetector2 =
-            GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-                override fun onDoubleTap(e: MotionEvent): Boolean {
-                    // 在双击事件中执行你的逻辑
-                    onChartClick(binding.chart2)
-                    return true
+
+        val xAxis = chart.xAxis
+        val initialPosition = 10f // 初始位置
+        val limitLine = LimitLine(initialPosition, "拖拽线")
+        limitLine.lineColor = ContextCompat.getColor(requireContext(), R.color.colorPrimary)
+        limitLine.lineWidth = 2f
+        xAxis.addLimitLine(limitLine)
+        chart.invalidate() // 刷新图表
+
+        // 创建 VerticalLineView 实例
+        val verticalLineView = VerticalLineView(requireContext())
+
+        // 设置 VerticalLineView 的布局参数，例如宽度和高度
+        val layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT
+        )
+        verticalLineView.layoutParams = layoutParams
+
+        // 将 VerticalLineView 添加到你的布局中
+        chart.addView(verticalLineView)
+
+        chart.setOnTouchListener { _, event ->
+            if (gestureDetector.onTouchEvent(event)) return@setOnTouchListener true
+            when (event.action) {
+                MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
+                    // 获取触摸点的 x 坐标
+                    val x = event.x
+
+                    // 更新 VerticalLineView 的位置
+                    verticalLineView.setXPosition(x)
+
+                    val outputPoint = MPPointD.getInstance(0.0, 0.0)
+                    chart.getTransformer(YAxis.AxisDependency.LEFT).getValuesByTouchPoint(event.x, event.y, outputPoint)
+
+                    // 从转换后的结果中获取 x 轴的数据值
+                    val xValue = outputPoint.x.toFloat() // 将 double 转换为 float
+
+                    // 更新 LimitLine 的位置到新的 x 坐标值
+                    limitLine.limit = xValue
+
+                    // 获取与垂直线相交的数据点
+                    val entriesMap = mutableMapOf<ILineDataSet, MutableList<Entry>>()
+                    val dataSets = chart.data?.dataSets ?: return@setOnTouchListener true
+                    for (dataSet in dataSets) {
+                        val entries = mutableListOf<Entry>()
+                        val entryForXValue = dataSet.getEntryForXValue(xValue, Float.NaN)
+                        entryForXValue?.let { entries.add(it) }
+                        if (entries.isNotEmpty()) {
+                            entriesMap[dataSet] = entries
+                        }
+                    }
+
+                    // 这里的 entriesMap 包含了每个数据集与垂直线相交的数据点列表
+                    for ((dataSet, entries) in entriesMap) {
+                        for (entry in entries) {
+                            val yValue = entry.y
+                            // 这里处理 yValue，例如打印或存储
+                            println("DataSet: ${dataSet.label}, Y value: $yValue")
+                        }
+                    }
+
+                    chart.invalidate() // 刷新图表以显示新位置的 LimitLine
+
+                    MPPointD.recycleInstance(outputPoint) // 回收 MPPointD 实例
+                    true
                 }
-            })
-
-
-        val gestureDetector3 =
-            GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-                override fun onDoubleTap(e: MotionEvent): Boolean {
-                    // 在双击事件中执行你的逻辑
-                    onChartClick(binding.chart3)
-                    return true
-                }
-            })
-
-        val gestureDetector4 =
-            GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-                override fun onDoubleTap(e: MotionEvent): Boolean {
-                    // 在双击事件中执行你的逻辑
-                    onChartClick(binding.chart4)
-                    return true
-                }
-            })
-
-        val gestureDetector5 =
-            GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-                override fun onDoubleTap(e: MotionEvent): Boolean {
-                    // 在双击事件中执行你的逻辑
-                    onChartClick(binding.chart5)
-                    return true
-                }
-            })
-
-        val gestureDetector6 =
-            GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-                override fun onDoubleTap(e: MotionEvent): Boolean {
-                    // 在双击事件中执行你的逻辑
-                    onChartClick(binding.chart6)
-                    return true
-                }
-            })
-
-        val gestureDetector7 =
-            GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-                override fun onDoubleTap(e: MotionEvent): Boolean {
-                    // 在双击事件中执行你的逻辑
-                    onChartClick(binding.chart7)
-                    return true
-                }
-            })
-
-        val gestureDetector8 =
-            GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-                override fun onDoubleTap(e: MotionEvent): Boolean {
-                    // 在双击事件中执行你的逻辑
-                    onChartClick(binding.chart8)
-                    return true
-                }
-            })
-
-        val gestureDetector9 =
-            GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-                override fun onDoubleTap(e: MotionEvent): Boolean {
-                    // 在双击事件中执行你的逻辑
-                    onChartClick(binding.chart9)
-                    return true
-                }
-            })
-
-        setOnTouchListenerForChart(binding.scChart1, gestureDetector1) {
+                else -> false
+            }
         }
-
-
-        setOnTouchListenerForChart(binding.scChart2, gestureDetector2) {
-        }
-
-
-        setOnTouchListenerForChart(binding.scChart3, gestureDetector3) {
-        }
-
-
-        setOnTouchListenerForChart(binding.scChart4, gestureDetector4) {
-        }
-
-        setOnTouchListenerForChart(binding.scChart5, gestureDetector5) {
-        }
-
-        setOnTouchListenerForChart(binding.scChart6, gestureDetector6) {
-        }
-
-        setOnTouchListenerForChart(binding.scChart7, gestureDetector7) {
-        }
-
-        setOnTouchListenerForChart(binding.scChart8, gestureDetector8) {
-        }
-
-        setOnTouchListenerForChart(binding.scChart9, gestureDetector9) {
-        }
-
-
     }
 
     override fun initListener() {
@@ -216,7 +194,7 @@ class WassermanFragment : CommonBaseFragment<FragmentWassermanBinding>() {
             gestureDetector.onTouchEvent(event)
 
             // 返回 true 表示已经消费了触摸事件
-            true
+            false
         }
     }
 
@@ -238,7 +216,6 @@ class WassermanFragment : CommonBaseFragment<FragmentWassermanBinding>() {
                     child.visibility = View.VISIBLE// 切换目标 FrameLayout 的可见性
                 } else {
                     child.visibility = View.GONE
-                    LogUtils.d(tag + child)
                 }
             }
             true

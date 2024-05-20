@@ -1,5 +1,7 @@
 package com.just.machine.model
 
+import com.just.machine.model.lungdata.CPXSerializeData
+
 /**
  * 表示从下位机接收到的肺活量测试数据。
  * @property temperature 温度数据。
@@ -28,6 +30,7 @@ data class LungTestData(
     val bloodOxygen: Int,
     val batteryLevel: Int
 ) {
+
     override fun toString(): String {
         return "LungTestData(" +
                 "temperature=$temperature, " +

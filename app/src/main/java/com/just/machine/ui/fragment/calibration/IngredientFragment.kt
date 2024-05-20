@@ -7,9 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
-import com.common.viewmodel.LiveDataEvent.Companion.FLOWSUCCESS
 import com.common.viewmodel.LiveDataEvent.Companion.INGREDIENTSSUCCESS
-import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.dao.calibration.IngredientBean
 import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.calibration.IngredientAdapter
@@ -31,7 +29,11 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
 
-    private val ingredientAdapter by lazy {
+    private val o2Adapter by lazy {
+        IngredientAdapter(requireContext())
+    }
+
+    private val co2Adapter by lazy {
         IngredientAdapter(requireContext())
     }
 
@@ -39,18 +41,9 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
 
         binding.rvIngredient.layoutManager = LinearLayoutManager(requireContext())
 
-        ingredientAdapter.setItemClickListener { _, position ->
-            ingredientAdapter.toggleItemBackground(position)
+        o2Adapter.setItemClickListener { _, position ->
+            o2Adapter.toggleItemBackground(position)
         }
-
-        ingredientAdapter.setItemsBean(
-            mutableListOf
-                (
-                IngredientBean(0, "", 1, "容积1", "3", "3.003"),
-                IngredientBean(0, "", 1, "容积1", "3", "3.003"),
-                IngredientBean(0, "", 1, "容积1", "3", "3.003"),
-            )
-        )
 
         binding.chartView.setLineDataSetData(binding.chartView.flowDataSetList())
 
@@ -63,23 +56,8 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
             titleCentent = "成分定标"
         )
 
-        binding.rvIngredient.adapter = ingredientAdapter
-
-        binding.materialSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                // SwitchMaterial 打开
-            } else {
-                // SwitchMaterial 关闭
-            }
-        }
-
-        binding.materialSwitch2.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                // SwitchMaterial 打开
-            } else {
-                // SwitchMaterial 关闭
-            }
-        }
+        binding.rvIngredient.adapter = o2Adapter
+        binding.rvIngredient2.adapter = co2Adapter
 
         binding.llStart.setNoRepeatListener {
             if (Constants.isDebug) {
@@ -115,8 +93,15 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
                 LogUtils.e(tag + BaseUtil.bytes2HexStr(it) + "字节长度" + BaseUtil.bytes2HexStr(it).length)
                 val data = MudbusProtocol.parseControlBoardResponse(it)
                 if (data != null) {
-                    val bean = data
                     LogUtils.e(tag + data.toString())
+                    val o2Bean = IngredientBean()
+                    o2Bean.actual = data.o2SensorData.toString()
+                    o2Bean.isO2 = true
+                    val co2Bean = IngredientBean()
+                    co2Bean.actual = data.co2SensorData.toString()
+                    co2Bean.isO2 = false
+                    viewModel.setIngredientBean(o2Bean)
+                    viewModel.setIngredientBean(co2Bean)
                 }
             }
         }
@@ -124,16 +109,25 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
         viewModel.mEventHub.observe(this) {
             when (it.action) {
                 INGREDIENTSSUCCESS -> {
-                    val flowsBean: MutableList<IngredientBean> = ArrayList()
-                    if (it.any is List<*>) {
-                        val list = it.any as List<*>
-                        for (index in list) {
-                            if (index is IngredientBean) {
-                                flowsBean.add(index)
-                            }
-                        }
+                    val flowsO2Bean: MutableList<IngredientBean> = ArrayList()
+                    val flowsCo2Bean: MutableList<IngredientBean> = ArrayList()
+                    if (it.any !is List<*>) {
+                        return@observe
                     }
-                    ingredientAdapter.setItemsBean(flowsBean)
+                    val list = it.any as List<*>
+                    for (index in list) {
+                        if (index !is IngredientBean) {
+                            return@observe
+                        }
+                        if (index.isO2 == true)
+                            flowsO2Bean.add(index) else
+                            flowsCo2Bean.add(index)
+                    }
+
+                    o2Adapter.setItemsBean(flowsO2Bean)
+                    co2Adapter.setItemsBean(flowsCo2Bean)
+                    LogUtils.e(tag + flowsO2Bean)
+                    LogUtils.e(tag + flowsCo2Bean)
                 }
             }
         }

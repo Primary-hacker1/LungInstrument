@@ -202,15 +202,6 @@
                                 android:textSize="13sp"
                                 android:textStyle="bold" />
 
-                        <com.google.android.material.switchmaterial.SwitchMaterial
-                                android:id="@+id/material_switch"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/space_16"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
                     </LinearLayout>
 
                     <LinearLayout
@@ -254,15 +245,6 @@
                                 android:textColor="@color/c3786db"
                                 android:textSize="13sp"
                                 android:textStyle="bold" />
-
-                        <com.google.android.material.switchmaterial.SwitchMaterial
-                                android:id="@+id/material_switch2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/space_16"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
 
                     </LinearLayout>
 
@@ -557,7 +539,7 @@
                         android:gravity="center_horizontal"
                         android:orientation="vertical">
 
-                    <com.justsafe.libview.view.BaseLineChart
+                    <com.justsafe.libview.chart.BaseLineChart
                             android:id="@+id/chart_view"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"

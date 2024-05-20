@@ -1,4 +1,4 @@
-package com.justsafe.libview.view
+package com.justsafe.libview.chart
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -213,10 +213,6 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
                 else -> false
             }
         }
-
-
-
-
     }
 
     /**
@@ -331,10 +327,14 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
+        // 转换 dp 为像素
+        val titleTextSizePx = dpToPx(10f, context) // 标题文本的大小
+        val contentTextSizePx = dpToPx(15f, context) // 文本的大小
+
         // 绘制标题文本
         val titlePaint = Paint().apply {
-            textSize = 20f // 标题文本的大小
-            color = Color.BLACK // 标题文本的颜色
+            textSize = titleTextSizePx
+            color = Color.BLACK
             textAlign = Paint.Align.CENTER
         }
         val totalTitleHeight = titlePaint.fontSpacing * 2 // 两行标题文本的总高度
@@ -346,8 +346,8 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
         // 绘制垂直居中的文本
         val verticalText = titleCentent
         val verticalTextPaint = Paint().apply {
-            textSize = 40f // 文本的大小
-            color = ContextCompat.getColor(context,R.color.c888888) // 文本的颜色
+            textSize = contentTextSizePx
+            color = ContextCompat.getColor(context, R.color.c888888)
             textAlign = Paint.Align.CENTER
         }
 
@@ -355,13 +355,10 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
         verticalTextPaint.getTextBounds(verticalText, 0, verticalText.length, verticalTextBounds)
         val verticalTextHeight = verticalTextBounds.height()
         val viewWidth = width
-        val centerX = (viewWidth - verticalTextBounds.width()) / 2 + verticalTextPaint.measureText(
-            verticalText
-        ) / 2 // 文本的水平居中位置
+        val centerX = (viewWidth - verticalTextBounds.width()) / 2 + verticalTextPaint.measureText(verticalText) / 2 // 文本的水平居中位置
         val centerY = verticalTextHeight // 文本的顶部位置
         canvas?.drawText(verticalText, centerX, centerY.toFloat(), verticalTextPaint)
     }
-
 
     // 自定义y轴左右坐标
     class CustomYAxisValueFormatter : ValueFormatter() {
@@ -401,5 +398,10 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
             return "$value"
         }
     }
+
+    fun dpToPx(dp: Float, context: Context): Float {
+        return dp * context.resources.displayMetrics.density
+    }
+
 }
 

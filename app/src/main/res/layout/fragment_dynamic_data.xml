@@ -12,7 +12,7 @@
             android:background="@drawable/spinner_dropdown_background"
             android:layout_height="match_parent">
 
-        <com.justsafe.libview.view.CustomHorizontalScrollView
+        <com.justsafe.libview.chart.CustomHorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -29,10 +29,10 @@
                 <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_dynamic_data"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="500dp" />
             </LinearLayout>
 
-        </com.justsafe.libview.view.CustomHorizontalScrollView>
+        </com.justsafe.libview.chart.CustomHorizontalScrollView>
 
     </LinearLayout>
 </layout>

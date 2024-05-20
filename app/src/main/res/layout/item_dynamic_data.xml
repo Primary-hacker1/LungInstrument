@@ -11,13 +11,12 @@
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
         <TextView
                 android:text="@{bean.createTime}"
                 android:layout_width="90dp"
                 android:gravity="center"
-                android:background="#f4f5fa"
                 android:maxLines="1"
                 android:layout_height="30dp" />
 
@@ -25,7 +24,6 @@
                 android:text="@{String.valueOf(bean.VTin)}"
                 android:layout_width="90dp"
                 android:gravity="center"
-                android:background="#f4f5fa"
                 android:maxLines="1"
                 android:layout_height="30dp" />
 
@@ -33,7 +31,6 @@
                 android:text="@{String.valueOf(bean.VCO2)}"
                 android:layout_width="90dp"
                 android:gravity="center"
-                android:background="#f4f5fa"
                 android:maxLines="1"
                 android:layout_height="30dp" />
 
@@ -41,7 +38,6 @@
                 android:text="@{String.valueOf(bean.RER)}"
                 android:layout_width="90dp"
                 android:gravity="center"
-                android:background="#f4f5fa"
                 android:maxLines="1"
                 android:layout_height="30dp" />
 
@@ -49,9 +45,245 @@
                 android:text="@{String.valueOf(bean.VO2_div_HR)}"
                 android:layout_width="90dp"
                 android:gravity="center"
-                android:background="#f4f5fa"
                 android:maxLines="1"
                 android:layout_height="30dp" />
 
+        <TextView
+                android:text="@{String.valueOf(bean.VO2_div_KG)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.BR)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.VE_div_VO2)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.VE_div_VCO2)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.VO2)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.Qtc)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.PROT)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.EE)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.CHO)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.FAT)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.METS)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.ND)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.NPRQ)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.SVc)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.VdCO2)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.VI)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.PiO2)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.FiO2)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.FiCO2)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.VTex)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.FeO2)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.FeCO2)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.PaO2)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.PaCO2)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.VdO2)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.PiCO2)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.PeTO2)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.PeTCO2)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.Ttot)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.Tin_div_Ttot)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.BF)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.VE)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.VD_div_VT)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
+
+        <TextView
+                android:text="@{String.valueOf(bean.VD)}"
+                android:layout_width="90dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_height="30dp" />
     </LinearLayout>
 </layout>

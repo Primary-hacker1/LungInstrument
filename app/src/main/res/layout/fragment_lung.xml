@@ -134,14 +134,14 @@
 
             </RelativeLayout>
 
-            <com.justsafe.libview.view.CustomPreviewLineChartView
+            <com.justsafe.libview.chart.CustomPreviewLineChartView
                     android:id="@+id/previewChart"
                     android:layout_width="match_parent"
                     android:paddingTop="@dimen/space_8"
                     android:layout_height="match_parent" />
 
 
-            <com.justsafe.libview.view.BaseLineChart
+            <com.justsafe.libview.chart.BaseLineChart
                     android:id="@+id/chart_fvc"
                     android:visibility="gone"
                     android:layout_width="match_parent"
@@ -164,7 +164,7 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                <com.justsafe.libview.view.CustomPreviewLineChartView
+                <com.justsafe.libview.chart.CustomPreviewLineChartView
                         android:id="@+id/previewChartFlow"
                         android:layout_width="match_parent"
                         android:background="@drawable/calibration_bg"
@@ -172,7 +172,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content" />
 
-                <com.justsafe.libview.view.CustomPreviewLineChartView
+                <com.justsafe.libview.chart.CustomPreviewLineChartView
                         android:id="@+id/previewChartFVC"
                         android:layout_width="match_parent"
                         android:background="@drawable/calibration_bg"
@@ -209,12 +209,34 @@
                     android:orientation="vertical"
                     android:padding="@dimen/space_10">
 
-
-                <androidx.appcompat.widget.AppCompatTextView
+                <LinearLayout
+                        android:orientation="horizontal"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="静态肺数据"
-                        android:textColor="@color/text3" />
+                        android:gravity="center_vertical"
+                        android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="静态肺数据"
+                            android:textColor="@color/text3" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchMaterial"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:layout_marginStart="@dimen/space_30" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_6"
+                            android:text="是否展开"
+                            android:textColor="@color/text3"
+                            android:textSize="12sp" />
+
+                </LinearLayout>
 
                 <LinearLayout
                         android:id="@+id/ll_Cardiopulmonary"

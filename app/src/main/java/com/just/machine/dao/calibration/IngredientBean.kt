@@ -9,12 +9,13 @@ data class IngredientBean(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id")
     val ingredientId: Long = 0,
     val createTime: String? = "",
-    val userId: Long,
+    val userId: Long? = 0,
     var inspiratoryIndicators: String? = "",//浓度
     var calibratedValue: String? = "",//标定值
     var actual: String? = "",//实际值
     var errorRate: String? = "",//误差率
     var calibrationResults: String? = "",//标定结果
     var o2t90: String? = "",//O2T90（ms）
-    var offset : String? = "",
+    var offset: String? = "",
+    var isO2: Boolean? = true,//true:o2,false:co2
 )

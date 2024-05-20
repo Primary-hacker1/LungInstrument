@@ -29,6 +29,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
+import com.common.base.CommonUtil.Task
+import com.common.network.LogUtils
 import com.common.network.RequestObserver
 import com.common.throwe.BaseResponseThrowable
 import com.uber.autodispose.SingleSubscribeProxy
@@ -91,7 +93,8 @@ fun Activity.navigateToActivity(c: Class<*>, bundle: Bundle) {
     startActivity(intent)
 }
 
-fun<T> Single<T>.async()=this.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+fun <T> Single<T>.async() =
+    this.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 
 @CheckReturnValue
 @SchedulerSupport(SchedulerSupport.NONE)
@@ -447,7 +450,7 @@ inline fun <reified T> T.delay(
  * 一个全局的打印Log的方法
  */
 inline fun <reified T : Any> T.log(vararg value: Any) {
-    Log.d(CommonUtil.logTag, "${this.javaClass.simpleName} -> ${CommonUtil.print(value)}")
+    LogUtils.d("${this.javaClass.simpleName} -> ${CommonUtil.print(value)}")
 }
 
 
@@ -599,10 +602,12 @@ fun String.parseColor(): Int {
             val v = (value + value).toInt(16)
             Color.rgb(v, v, v)
         }
+
         2 -> {
             val v = value.toInt(16)
             Color.rgb(v, v, v)
         }
+
         3 -> {
             val r = value.substring(0, 1)
             val g = value.substring(1, 2)
@@ -613,6 +618,7 @@ fun String.parseColor(): Int {
                 (b + b).toInt(16)
             )
         }
+
         4, 5 -> {
             val a = value.substring(0, 1)
             val r = value.substring(1, 2)
@@ -625,12 +631,14 @@ fun String.parseColor(): Int {
                 (b + b).toInt(16)
             )
         }
+
         6, 7 -> {
             val r = value.substring(0, 2).toInt(16)
             val g = value.substring(2, 4).toInt(16)
             val b = value.substring(4, 6).toInt(16)
             Color.rgb(r, g, b)
         }
+
         8 -> {
             val a = value.substring(0, 2).toInt(16)
             val r = value.substring(2, 4).toInt(16)
@@ -638,6 +646,7 @@ fun String.parseColor(): Int {
             val b = value.substring(6, 8).toInt(16)
             Color.argb(a, r, g, b)
         }
+
         else -> {
             Color.WHITE
         }

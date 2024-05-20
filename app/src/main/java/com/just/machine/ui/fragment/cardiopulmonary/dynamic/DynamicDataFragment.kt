@@ -6,14 +6,18 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.common.base.CommonBaseFragment
+import com.common.base.log
 import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
 import com.just.machine.dao.lung.CPXBreathInOutData
+import com.just.machine.model.lungdata.CPXSerializeData
 import com.just.machine.ui.adapter.lung.DynamicDataAdapter
 import com.just.machine.ui.adapter.lung.DynamicDataTitleAdapter
 import com.just.machine.ui.fragment.serial.MudbusProtocol
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.BaseUtil
+import com.just.machine.util.CPXCalcule
+import com.just.machine.util.CommonUtil
 import com.just.machine.util.LiveDataBus
 import com.just.news.databinding.FragmentDynamicDataBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,7 +53,6 @@ class DynamicDataFragment : CommonBaseFragment<FragmentDynamicDataBinding>() {
 
         cpxBreathInOutData.toMutableList().forEach { (key, value) ->
             titles.add(key)
-//            LogUtils.d(TAG + key + value)
         }
 
         adapterTitle = DynamicDataTitleAdapter(requireContext())
@@ -68,6 +71,8 @@ class DynamicDataFragment : CommonBaseFragment<FragmentDynamicDataBinding>() {
 
         binding.rvDynamicData.layoutManager = LinearLayoutManager(requireContext())
 
+        binding.rvDynamicData.adapter = adapterData
+
         viewModel.mEventHub.observe(this) {
             when (it.action) {
                 LiveDataEvent.CPXDYNAMICBEAN -> {
@@ -75,7 +80,7 @@ class DynamicDataFragment : CommonBaseFragment<FragmentDynamicDataBinding>() {
                         return@observe
                     }
                     LogUtils.e(TAG + it.any)
-                    mutableListCPX.clear()
+//                    mutableListCPX.clear()
                     val listBean = it.any as List<*>
                     for (bean in listBean) {
                         if (bean !is CPXBreathInOutData) {
@@ -85,27 +90,26 @@ class DynamicDataFragment : CommonBaseFragment<FragmentDynamicDataBinding>() {
                     }
                     LogUtils.e(TAG + "$mutableListCPX")
                     adapterData?.setItemsBean(mutableListCPX)
-                    binding.rvDynamicData.adapter = adapterData
                 }
             }
         }
 
-        viewModel.insertCPXBreathInOutData(
-            CPXBreathInOutData(
-                createTime = "2024:5:15",
-                VTin = 3.3
-            )
-        )
-
-//        LiveDataBus.get().with("动态心肺测试").observe(this) {//解析串口消息
-//            LogUtils.e("$tag======收到了动态肺数据")
-//            viewModel.insertCPXBreathInOutData(
-//                CPXBreathInOutData(
-//                    createTime = "2024:5:15",
-//                    VTin = 3.3
+        LiveDataBus.get().with("动态心肺测试").observe(this) {//解析串口消息
+            if (it is ByteArray) {
+                LogUtils.e(tag + BaseUtil.bytes2HexStr(it) + "字节长度" + BaseUtil.bytes2HexStr(it).length)
+                val data = MudbusProtocol.parseLungTestData(it) ?: return@observe //原始数据
+                val bean =
+                    CPXSerializeData().convertLungTestDataToCPXSerializeData(data)//原始数据转成cpx数据
+                val cpxData = CPXCalcule.calDyBreathInOutData(bean)
+                cpxData.createTime = CommonUtil.getCurrentTime()
+                mutableListCPX.add(cpxData)
+                adapterData?.setItemsBean(mutableListCPX)
+//                viewModel.insertCPXBreathInOutData(
+//                    cpxData
 //                )
-//            )
-//        }
+                log(tag + bean.toString())
+            }
+        }
     }
 
     override fun initListener() {

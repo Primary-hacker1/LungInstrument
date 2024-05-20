@@ -1,4 +1,4 @@
-package com.justsafe.libview.view
+package com.justsafe.libview.chart
 
 import android.graphics.Canvas
 import android.graphics.Color

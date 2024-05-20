@@ -1,4 +1,4 @@
-package com.justsafe.libview.view
+package com.justsafe.libview.chart
 
 import com.github.mikephil.charting.components.MarkerView
 import com.github.mikephil.charting.utils.MPPointF

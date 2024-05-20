@@ -34,6 +34,8 @@ class FragmentStaticLayout @JvmOverloads constructor(
 
     private val tag = FragmentStaticLayout::class.java.name
 
+    val isUnfold: Boolean? = false//是否展开数据
+
 
     private var test1 = listOf("value1", "value2", "value3", "value4", "value5", "value6")
 
@@ -68,7 +70,8 @@ class FragmentStaticLayout @JvmOverloads constructor(
                 binding.previewChart.gone()
                 binding.chartFvc.visible()
             }
-            "MVV"->{
+
+            "MVV" -> {
                 binding.llChat.visible()
                 binding.previewChart.visible()
                 binding.chartFvc.gone()
@@ -272,16 +275,38 @@ class FragmentStaticLayout @JvmOverloads constructor(
         clickType: Click,
         buttonText: String,
         otherList: List<String>,
-//        isStart: Boolean
     ) {
         onCLickbutton = clickType
-        binding.atvTest1.text = buttonText
 
-        routineLungList?.forEachIndexed { index, bean ->
-            if (index < otherList.size) {
-                bean.test1 = otherList[index]
+        if (isUnfold == true) {
+            binding.atvTest1.visible()
+            binding.atvTest2.gone()
+            binding.atvTest3.gone()
+            binding.atvTest4.gone()
+            binding.atvTest5.gone()
+            binding.atvTest1.text = buttonText
+            routineLungList?.forEachIndexed { index, bean ->
+                if (index < otherList.size) {
+                    bean.test1 = otherList[index]
+                }
+            }
+        } else {
+            binding.atvTest1.visible()
+            binding.atvTest2.visible()
+            binding.atvTest3.visible()
+            binding.atvTest4.visible()
+            binding.atvTest5.visible()
+            routineLungList?.forEachIndexed { index, bean ->
+                if (index < test1.size) {
+                    bean.test1 = test1[index]
+                    bean.test2 = test2[index]
+                    bean.test3 = test3[index]
+                    bean.test4 = test4[index]
+                    bean.test5 = test5[index]
+                }
             }
         }
+
 
         routineLungList?.let {
             LogUtils.e(tag + it.toString())

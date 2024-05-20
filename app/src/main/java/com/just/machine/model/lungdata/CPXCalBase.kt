@@ -1,6 +1,8 @@
 package com.just.machine.model.lungdata
 
 import kotlin.math.abs
+import kotlin.math.roundToInt
+import kotlin.math.sqrt
 
 object CPXCalBase {
 
@@ -17,42 +19,42 @@ object CPXCalBase {
         return obj1
     }
 
-//    fun calcFlowIn(F: Int, p: Double, T: Int, H: Double, K: Double): Double {
-//        val a = sqrt(F.toDouble()) * K
-//        return atpBtpsBreathIn(a, T, p, H)
-//    }
-//
-//    fun calcFlowOut(F: Int, p: Double, T: Int, K: Double): Double {
-//        val a = sqrt(F.toDouble()) * K
-//        return atpBtpsBreathOut(a, T, p)
-//    }
-//
-//    fun atpAtpd(F: Double, p: Double, T: Int, H: Double): Double {
-//        return F * (p / (p - InstanceBase<TestDataCashe>.Instance.getP0(T) * H / 100.0))
-//    }
-//
-//    fun atpAtpdBtps(F: Double, p: Double): Double {
-//        return F * (p - 47.08) / p
-//    }
-//
-//    fun atpAtpdBtpsIn(F: Double, p: Double, T: Int): Double {
-//        return F * (p - InstanceBase<TestDataCashe>.Instance.getP0(T)) / p
-//    }
-//
-//    fun atpBtpsBreathIn(F: Double, T: Int, P: Double, H: Double = 100.0): Double {
-//        val t = InstanceBase<TestDataCashe>.Instance.getP0(T)
-//        return F * 310.15 / (273.15 + T / 10.0) * (P - t * H / 100.0) / (P - 47.08)
-//    }
-//
-//    fun atpBtpsBreathCpxIn(F: Double, T: Int, P: Double, H: Double = 100.0): Double {
-//        val t = InstanceBase<TestDataCashe>.Instance.getP0(T)
-//        return F * 310.15 / (273.15 + T) * (P - InstanceBase<TestDataCashe>.Instance.getP0(T) * H) / (P - 47.08)
-//    }
-//
-//    fun atpBtpsBreathOut(F: Double, T: Int, P: Double): Double {
-//        val a = 370.0 - (370.0 - T) / 3.0
-//        return F * 310.15 / (273.15 + a / 10.0) * (P - InstanceBase<TestDataCashe>.Instance.getP0(a.roundToInt())) / (P - 47.08)
-//    }
+    fun calcFlowIn(F: Int, p: Double, T: Int, H: Double, K: Double): Double {
+        val a = sqrt(F.toDouble()) * K
+        return atpBtpsBreathIn(a, T, p, H)
+    }
+
+    fun calcFlowOut(F: Int, p: Double, T: Int, K: Double): Double {
+        val a = sqrt(F.toDouble()) * K
+        return atpBtpsBreathOut(a, T, p)
+    }
+
+    fun atpAtpd(F: Double, p: Double, T: Int, H: Double): Double {
+        return F * (p / (p - TestDataCashe.getP0(T) * H / 100.0))
+    }
+
+    fun atpAtpdBtps(F: Double, p: Double): Double {
+        return F * (p - 47.08) / p
+    }
+
+    fun atpAtpdBtpsIn(F: Double, p: Double, T: Int): Double {
+        return F * (p - TestDataCashe.getP0(T)) / p
+    }
+
+    fun atpBtpsBreathIn(F: Double, T: Int, P: Double, H: Double = 100.0): Double {
+        val t = TestDataCashe.getP0(T)
+        return F * 310.15 / (273.15 + T / 10.0) * (P - t * H / 100.0) / (P - 47.08)
+    }
+
+    fun atpBtpsBreathCpxIn(F: Double, T: Int, P: Double, H: Double = 100.0): Double {
+        val t = TestDataCashe.getP0(T)
+        return F * 310.15 / (273.15 + T) * (P - TestDataCashe.getP0(T) * H) / (P - 47.08)
+    }
+
+    fun atpBtpsBreathOut(F: Double, T: Int, P: Double): Double {
+        val a = 370.0 - (370.0 - T) / 3.0
+        return F * 310.15 / (273.15 + a / 10.0) * (P - TestDataCashe.getP0(a.roundToInt())) / (P - 47.08)
+    }
 
     fun stpd(V: Double, P: Double): Double {
         return V * 273.15 / 310.15 * P / 760.0

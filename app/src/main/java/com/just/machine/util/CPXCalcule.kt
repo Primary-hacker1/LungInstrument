@@ -4,6 +4,8 @@ import com.just.machine.dao.lung.CPXBreathInOutData
 import com.just.machine.model.lungdata.CPXBreathInOutDataBase
 import com.just.machine.model.lungdata.CPXSerializeData
 import com.just.machine.model.lungdata.CPXCalBase
+//import com.just.machine.model.lungdata.Cashe
+import com.just.machine.model.lungdata.SystemSetting
 import kotlin.math.abs
 import kotlin.math.log10
 
@@ -17,10 +19,13 @@ object CPXCalcule {
         beforeDyBreathInOutData = null
     }
 
-    fun calDyBreathInOutData(dys: CPXSerializeData) {
-        if (dys.breathData == null) return
+    /**
+    * @param dys 原始数据
+    * CPXBreathInOutData计算返回的动态肺数据
+    * */
+    fun calDyBreathInOutData(dys: CPXSerializeData) : CPXBreathInOutData{
 
-        val breathData = dys.breathData!!
+        val breathData = CPXBreathInOutData()
 
         val dataBase = CPXBreathInOutDataBase()
 
@@ -41,12 +46,12 @@ object CPXCalcule {
         breathData.Tin_div_Ttot = dataBase.Tin / breathData.Ttot * 100.0
         breathData.BF = 60.0 / breathData.Ttot
         breathData.VE = breathData.VTex * breathData.BF
-        val physicalVD = 0
-//        = CPXCalBase.atpBtpsBreathOut(
-//            (if (InstanceBase<SystemSetting>.instance.vd == 0) 10 else InstanceBase<SystemSetting>.instance.vd) * 0.001,
-//            dataBase.T.toInt(),
-//            dataBase.P
-//        )
+        val physicalVD
+        = CPXCalBase.atpBtpsBreathOut(
+            (if (SystemSetting.getInstance().vd == 0) 10 else SystemSetting.getInstance().vd) * 0.001,
+            dataBase.T.toInt(),
+            dataBase.P
+        )
         val paCO2 = 0.05 * (breathData.PiO2 - breathData.PaO2) + breathData.PeTCO2
         breathData.VD = breathData.VTex * (paCO2 - breathData.PaCO2) / paCO2 - physicalVD
         breathData.VD_div_VT = breathData.VD / breathData.VTex * 100.0
@@ -84,13 +89,16 @@ object CPXCalcule {
             breathData.VE * breathData.FeCO2 / 100 - breathData.VI * breathData.FiCO2 / 100 + breathData.VdCO2
         breathData.VCO2 = CPXCalBase.stpd(v2, dataBase.P) * 1000
         breathData.RER = if (breathData.VO2 == 0.0) 0.0 else breathData.VCO2 / breathData.VO2
-//        breathData.VO2_div_KG = breathData.VO2 / InstanceBase<Cashe>.instance.currentPatient.weight
+//        breathData.VO2_div_KG = breathData.VO2 / Cashe.currentPatient.weight
 //        breathData.BR =
-//            if (InstanceBase<Cashe>.instance.currentPatient.reportDataModel.curtestmvv <= 0) (InstanceBase<Cashe>.instance.currentPatient.patientPredictModel.mvv - breathData.vE) * 100.0 / InstanceBase<Cashe>.instance.currentPatient.patientPredictModel.mvv else (InstanceBase<Cashe>.instance.currentPatient.reportDataModel.curtestmvv - breathData.vE) * 100.0 / InstanceBase<Cashe>.instance.currentPatient.reportDataModel.curtestmvv
-//        breathData.VE_div_VO2 =
-//            if (breathData.VO2 < 50) 0.0 else breathData.VE / breathData.VO2 * 100.0
+//            if (Cashe.currentPatient.reportDataModel.curtestmvv <= 0) (Cashe.currentPatient.patientPredictModel.mvv - breathData.VE)
+//        * 100.0 / Cashe.currentPatient.patientPredictModel.mvv else (Cashe.currentPatient.reportDataModel.curtestmvv - breathData.VE)
+//            * 100.0 / Cashe.currentPatient.reportDataModel.curtestmvv
+        breathData.VE_div_VO2 =
+            if (breathData.VO2 < 50) 0.0 else breathData.VE / breathData.VO2 * 100.0
 //        breathData.VO2_div_VCO2 =
 //            if (breathData.VCO2 < 50) 0.0 else breathData.VO2 / breathData.VCO2 * 100.0
         beforeDyBreathInOutData = breathData
+        return breathData
     }
 }

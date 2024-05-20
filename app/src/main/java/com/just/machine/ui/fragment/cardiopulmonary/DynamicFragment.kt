@@ -82,13 +82,13 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
             SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)//发送流量定标
         }
 
-        LiveDataBus.get().with("动态心肺测试").observe(this) {//解析串口消息
-            if (it is ByteArray) {
-                LogUtils.e(tag + BaseUtil.bytes2HexStr(it) + "字节长度" + BaseUtil.bytes2HexStr(it).length)
-                val data = MudbusProtocol.parseLungTestData(it) ?: return@observe
-                LogUtils.e(tag + data.toString())
-            }
-        }
+//        LiveDataBus.get().with("动态心肺测试").observe(this) {//解析串口消息
+//            if (it is ByteArray) {
+//                LogUtils.e(tag + BaseUtil.bytes2HexStr(it) + "字节长度" + BaseUtil.bytes2HexStr(it).length)
+//                val data = MudbusProtocol.parseLungTestData(it) ?: return@observe
+//                LogUtils.e(tag + data.toString())
+//            }
+//        }
 
     }
 

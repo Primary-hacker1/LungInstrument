@@ -280,7 +280,7 @@
                         android:background="@drawable/calibration_bg"
                         android:orientation="vertical">
 
-                    <com.justsafe.libview.view.BaseLineChart
+                    <com.justsafe.libview.chart.BaseLineChart
                             android:id="@+id/chart_time"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -297,7 +297,7 @@
                         android:background="@drawable/calibration_bg"
                         android:orientation="vertical">
 
-                    <com.justsafe.libview.view.BaseLineChart
+                    <com.justsafe.libview.chart.BaseLineChart
                             android:id="@+id/chart_speed"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
