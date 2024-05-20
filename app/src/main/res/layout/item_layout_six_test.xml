@@ -62,7 +62,7 @@
                 android:layout_width="@dimen/space_20"
                 android:layout_height="@dimen/space_20"
                 android:layout_marginStart="@dimen/space_19"
-                android:background="@drawable/icon_del"
+                android:background="@drawable/icon_file_open_gray"
                 android:padding="@dimen/space_5"
                 android:textSize="18sp"
                 android:textStyle="bold" />

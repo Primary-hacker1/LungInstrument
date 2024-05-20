@@ -132,4 +132,5 @@ dependencies {
     }
     implementation files('libs/poishadow-all.jar')
     implementation files('libs/aspose-words-android.jar')
+    implementation files('libs/mlnxdevicelibrary_v2.7.aar')
 }

@@ -16,11 +16,6 @@
         android:background="@color/colorWhite"
         android:orientation="vertical">
 
-<!--        <include-->
-<!--            android:id="@+id/toolbar"-->
-<!--            layout="@layout/view_toolbar"-->
-<!--            setTitleImage="@{R.drawable.back}" />-->
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -122,10 +117,11 @@
 
                                             <EditText
                                                 android:id="@+id/sixmin_et_alarm_sys_pressure"
-                                                android:layout_width="wrap_content"
+                                                android:layout_width="50dp"
                                                 android:layout_height="wrap_content"
                                                 android:layout_marginHorizontal="5dp"
                                                 android:backgroundTint="@color/colorPrimary"
+                                                android:gravity="center"
                                                 android:inputType="number"
                                                 android:maxLength="3"
                                                 android:textColor="@color/colorPrimary"
@@ -172,10 +168,11 @@
 
                                             <EditText
                                                 android:id="@+id/sixmin_et_alarm_dias_pressure"
-                                                android:layout_width="wrap_content"
+                                                android:layout_width="50dp"
                                                 android:layout_height="wrap_content"
                                                 android:layout_marginHorizontal="5dp"
                                                 android:backgroundTint="@color/colorPrimary"
+                                                android:gravity="center"
                                                 android:inputType="number"
                                                 android:maxLength="3"
                                                 android:textColor="@color/colorPrimary"
@@ -231,10 +228,11 @@
 
                                             <EditText
                                                 android:id="@+id/sixmin_et_alarm_ecg"
-                                                android:layout_width="wrap_content"
+                                                android:layout_width="50dp"
                                                 android:layout_height="wrap_content"
                                                 android:layout_marginHorizontal="5dp"
                                                 android:backgroundTint="@color/colorPrimary"
+                                                android:gravity="center"
                                                 android:inputType="number"
                                                 android:maxLength="3"
                                                 android:textColor="@color/colorPrimary"
@@ -280,10 +278,11 @@
 
                                             <EditText
                                                 android:id="@+id/sixmin_et_alarm_blood_oxygen"
-                                                android:layout_width="wrap_content"
+                                                android:layout_width="50dp"
                                                 android:layout_height="wrap_content"
                                                 android:layout_marginHorizontal="5dp"
                                                 android:backgroundTint="@color/colorPrimary"
+                                                android:gravity="center"
                                                 android:inputType="number"
                                                 android:maxLength="2"
                                                 android:textColor="@color/colorPrimary"
@@ -510,17 +509,17 @@
                                                 android:orientation="horizontal">
 
                                                 <RadioButton
-                                                    android:buttonTint="@color/colorPrimary"
                                                     android:id="@+id/rb_broadcast_guidance_voice_yes"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
+                                                    android:buttonTint="@color/colorPrimary"
                                                     android:text="@string/sixmin_system_setting_check_yes" />
 
                                                 <RadioButton
-                                                    android:buttonTint="@color/colorPrimary"
                                                     android:id="@+id/rb_broadcast_guidance_voice_no"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
+                                                    android:buttonTint="@color/colorPrimary"
                                                     android:text="@string/sixmin_system_setting_check_no" />
                                             </RadioGroup>
                                         </LinearLayout>
@@ -592,23 +591,23 @@
                                             android:layout_gravity="center_vertical">
 
                                             <RadioGroup
-                                                android:buttonTint="@color/colorPrimary"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
+                                                android:buttonTint="@color/colorPrimary"
                                                 android:orientation="horizontal">
 
                                                 <RadioButton
-                                                    android:buttonTint="@color/colorPrimary"
                                                     android:id="@+id/rb_auto_mearsure_blood_yes"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
+                                                    android:buttonTint="@color/colorPrimary"
                                                     android:text="@string/sixmin_system_setting_check_yes" />
 
                                                 <RadioButton
-                                                    android:buttonTint="@color/colorPrimary"
                                                     android:id="@+id/rb_auto_mearsure_blood_no"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
+                                                    android:buttonTint="@color/colorPrimary"
                                                     android:text="@string/sixmin_system_setting_check_no" />
                                             </RadioGroup>
                                         </LinearLayout>
@@ -647,17 +646,17 @@
                                             android:orientation="horizontal">
 
                                             <RadioButton
-                                                android:buttonTint="@color/colorPrimary"
                                                 android:id="@+id/rb_steps_or_breath_steps"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
+                                                android:buttonTint="@color/colorPrimary"
                                                 android:text="@string/sixmin_system_setting_steps_or_breath_steps" />
 
                                             <RadioButton
-                                                android:buttonTint="@color/colorPrimary"
                                                 android:id="@+id/rb_steps_or_breath_breath"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
+                                                android:buttonTint="@color/colorPrimary"
                                                 android:text="@string/sixmin_system_setting_steps_or_breath_breath" />
                                         </RadioGroup>
                                     </LinearLayout>
@@ -686,17 +685,17 @@
                                                 android:orientation="horizontal">
 
                                                 <RadioButton
-                                                    android:buttonTint="@color/colorPrimary"
                                                     android:id="@+id/rb_auto_start_test_yes"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
+                                                    android:buttonTint="@color/colorPrimary"
                                                     android:text="@string/sixmin_system_setting_check_yes" />
 
                                                 <RadioButton
-                                                    android:buttonTint="@color/colorPrimary"
                                                     android:id="@+id/rb_auto_start_test_no"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
+                                                    android:buttonTint="@color/colorPrimary"
                                                     android:text="@string/sixmin_system_setting_check_no" />
                                             </RadioGroup>
                                         </LinearLayout>
@@ -736,17 +735,17 @@
                                             android:orientation="horizontal">
 
                                             <RadioButton
-                                                android:buttonTint="@color/colorPrimary"
                                                 android:id="@+id/rb_position_of_trolley_middle"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
+                                                android:buttonTint="@color/colorPrimary"
                                                 android:text="@string/sixmin_system_setting_position_of_trolley_middle" />
 
                                             <RadioButton
-                                                android:buttonTint="@color/colorPrimary"
                                                 android:id="@+id/rb_position_of_trolley_start"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
+                                                android:buttonTint="@color/colorPrimary"
                                                 android:text="@string/sixmin_system_setting_position_of_trolley_start" />
                                         </RadioGroup>
                                     </LinearLayout>
@@ -775,17 +774,17 @@
                                                 android:orientation="horizontal">
 
                                                 <RadioButton
-                                                    android:buttonTint="@color/colorPrimary"
                                                     android:id="@+id/rb_show_rest_time_yes"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
+                                                    android:buttonTint="@color/colorPrimary"
                                                     android:text="@string/sixmin_system_setting_check_yes" />
 
                                                 <RadioButton
-                                                    android:buttonTint="@color/colorPrimary"
                                                     android:id="@+id/rb_show_rest_time_no"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
+                                                    android:buttonTint="@color/colorPrimary"
                                                     android:text="@string/sixmin_system_setting_check_no" />
                                             </RadioGroup>
                                         </LinearLayout>
@@ -813,10 +812,38 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/sixmin_ll_save_pwd"
+                    android:layout_width="83dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="end"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="13dp"
+                    android:layout_marginEnd="60dp"
+                    android:background="@drawable/save_bg"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@mipmap/save" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="5dp"
+                        android:text="@string/save"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="90dp"
                     android:layout_marginHorizontal="60dp"
-                    android:layout_marginTop="14dp"
                     android:orientation="horizontal">
 
                     <RelativeLayout
@@ -847,12 +874,21 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
+                                        android:text="*"
+                                        android:textColor="@color/red"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:id="@+id/sixmin_tv_old_pwd"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
                                         android:text="@string/sixmin_system_setting_export_pwd"
                                         android:textColor="@color/text3"
                                         android:textSize="14sp" />
 
-                                    <TextView
-                                        android:id="@+id/sixmin_tv_export_pwd"
+                                    <EditText
+                                        android:id="@+id/sixmin_et_old_pwd"
                                         android:layout_width="169dp"
                                         android:layout_height="22dp"
                                         android:layout_gravity="center_vertical"
@@ -867,12 +903,20 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="10dp"
+                                        android:text="*"
+                                        android:textColor="@color/red"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
                                         android:text="@string/sixmin_system_setting_modify_pwd"
                                         android:textColor="@color/text3"
                                         android:textSize="14sp" />
 
                                     <EditText
-                                        android:id="@+id/sixmin_et_modify_pwd"
+                                        android:id="@+id/sixmin_et_new_pwd"
                                         android:layout_width="169dp"
                                         android:layout_height="22dp"
                                         android:layout_gravity="center_vertical"
@@ -888,6 +932,14 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="10dp"
+                                        android:text="*"
+                                        android:textColor="@color/red"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
                                         android:text="@string/sixmin_system_setting_confirm_pwd"
                                         android:textColor="@color/text3"
                                         android:textSize="14sp" />
@@ -903,7 +955,6 @@
                                         android:paddingStart="10dp"
                                         android:textColor="@color/text3"
                                         android:textSize="14sp" />
-
 
                                 </LinearLayout>
 
@@ -928,10 +979,38 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/sixmin_ll_save_blue"
+                    android:layout_width="83dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="end"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="13dp"
+                    android:layout_marginEnd="60dp"
+                    android:background="@drawable/save_bg"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@mipmap/save" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="5dp"
+                        android:text="@string/save"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="90dp"
                     android:layout_marginHorizontal="60dp"
-                    android:layout_marginTop="14dp"
                     android:orientation="horizontal">
 
                     <RelativeLayout
@@ -962,6 +1041,14 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
+                                        android:text="*"
+                                        android:textColor="@color/red"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
                                         android:text="@string/sixmin_system_setting_bluetooth_ecg"
                                         android:textColor="@color/text3"
                                         android:textSize="14sp" />
@@ -973,9 +1060,9 @@
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="10dp"
                                         android:background="@drawable/frame_with_color_d6d6d6"
-                                        android:paddingStart="10dp"
                                         android:maxLength="12"
                                         android:maxLines="1"
+                                        android:paddingStart="10dp"
                                         android:textColor="@color/text3"
                                         android:textSize="14sp" />
 
@@ -984,6 +1071,14 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="10dp"
+                                        android:text="*"
+                                        android:textColor="@color/red"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
                                         android:text="@string/sixmin_system_setting_bluetooth_blood"
                                         android:textColor="@color/text3"
                                         android:textSize="14sp" />
@@ -995,9 +1090,9 @@
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="10dp"
                                         android:background="@drawable/frame_with_color_d6d6d6"
-                                        android:paddingStart="10dp"
                                         android:maxLength="12"
                                         android:maxLines="1"
+                                        android:paddingStart="10dp"
                                         android:textColor="@color/text3"
                                         android:textSize="14sp" />
 
@@ -1006,6 +1101,14 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="10dp"
+                                        android:text="*"
+                                        android:textColor="@color/red"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
                                         android:text="@string/sixmin_system_setting_bluetooth_blood_oxygen"
                                         android:textColor="@color/text3"
                                         android:textSize="14sp" />
@@ -1017,12 +1120,11 @@
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="10dp"
                                         android:background="@drawable/frame_with_color_d6d6d6"
-                                        android:paddingStart="10dp"
-                                        android:maxLines="1"
                                         android:maxLength="12"
+                                        android:maxLines="1"
+                                        android:paddingStart="10dp"
                                         android:textColor="@color/text3"
                                         android:textSize="14sp" />
-
 
                                 </LinearLayout>
 

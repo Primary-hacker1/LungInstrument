@@ -111,7 +111,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_18"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:text="@string/record_number"
                     android:textColor="@color/c333333"
                     android:textSize="18sp"

@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
@@ -22,6 +21,7 @@ import com.common.base.visible
 import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
 import com.deepoove.poi.XWPFTemplate
+import com.deepoove.poi.config.Configure
 import com.deepoove.poi.data.PictureRenderData
 import com.just.machine.dao.PatientBean
 import com.just.machine.model.Constants
@@ -223,10 +223,12 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                     }
 
                     override fun onUpdateItem(bean: SixMinReportInfo) {
-
+                        //心电回放
+                        showMsg("心电")
                     }
 
                     override fun onCheckItem(bean: SixMinReportInfo) {
+                        //操作记录类型
                         val startSelectActionDialogFragment =
                             SelectActionDialogFragment.startSelectActionDialogFragment(
                                 supportFragmentManager,
@@ -265,6 +267,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                             }
 
                             override fun onClickExport() {
+                                // 导出6分钟报告
                                 viewModel.getSixMinReportEvaluationById(bean.patientId.toString())
                                 lifecycleScope.launch {
                                     kotlinx.coroutines.delay(100L)
@@ -374,7 +377,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         dealPageOne(root,sixMinRecordsBean)
         dealPageTow(root, bloodPng, heartPng, hsHxlPng,sixMinRecordsBean)
 
-//        lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.IO) {
             val generateWord =
                 generateWord(
                     root,
@@ -397,7 +400,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                     }
                 }
             }
-//        }
+        }
     }
 
     private fun dealPageOne(root: MutableMap<String, Any>,sixMinRecordsBean: SixMinRecordsBean) {
@@ -552,7 +555,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
             str45 = "有点疲劳-疲劳(4-6级)"
         }
         //运动步速版本
-        if (sixMinRecordsBean.prescriptionBean[0].prescripState == "1") {
+        if (sixMinRecordsBean.prescriptionBean[0].prescripState == "1" || sixMinRecordsBean.prescriptionBean[0].prescripState.isEmpty()) {
             if (sixMinRecordsBean.prescriptionBean[0].distanceState.isEmpty() || sixMinRecordsBean.prescriptionBean[0].distanceState == "1") {
                 strideTitStrs = "运动步速";
                 strideStrs =
@@ -735,25 +738,18 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         try {
             outputStream = FileOutputStream(savePath)
             if (outputStream == null) {
-//                LogUtil.w(TAG, "world path:$path is null,check permiss")
-//                Toast.show(mActivity.getString(R.string.save_faild_cannot_writ))
                 return false
             }
             template.write(outputStream)
             outputStream.flush()
-//            Toast.show("save success,path:$path")
             return true
         } catch (e: IOException) {
-//            LogUtil.e(TAG, "world write to output stream io exception:" +
-//                    LogUtil.objToString(e))
-//            Toast.show(mActivity.getString(R.string.save_faild_cannot_writ))
             return false
         } finally {
             try {
                 template.close()
                 outputStream?.close()
             } finally {
-//                Log.i(TAG, "write world to $savePath output stream over")
             }
         }
     }

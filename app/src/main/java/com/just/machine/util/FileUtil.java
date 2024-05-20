@@ -214,10 +214,10 @@ public class FileUtil {
     /**
      * 创建异常文件
      */
-    public static File createErrorFile() {
+    public static File createErrorFile(Context context) {
         File file = null;
         try {
-            String DIR = Environment.getExternalStorageDirectory().getPath() + "/LungInstruments/log/";
+            String DIR = context.getExternalFilesDir("").getAbsolutePath() + "/LungInstruments/log/";
             String NAME = CommonUtil.getCurrentTime() + ".txt";
             File dir = new File(DIR);
             if (!dir.exists()) {

@@ -16,7 +16,8 @@
         android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
-    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" /> <!-- 文字转语音适配Android11以上 -->
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <!-- 文字转语音适配Android11以上 -->
     <queries>
         <intent>
             <action android:name="android.intent.action.TTS_SERVICE" />
@@ -37,14 +38,6 @@
             android:name="com.just.machine.ui.activity.SixMinDetectActivity"
             android:screenOrientation="landscape"
             android:exported="false" />
-        <activity
-            android:name="com.just.machine.ui.activity.SixMinReportActivity"
-            android:exported="true"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name="com.just.machine.ui.activity.SixMinPreReportActivity"
-            android:exported="true"
-            android:screenOrientation="landscape" />
         <activity
             android:name="com.just.machine.ui.activity.LoginActivity"
             android:exported="true"
@@ -80,15 +73,6 @@
             android:name="com.just.machine.ui.fragment.setting.CardiopulmonarySettingFragment"
             android:exported="false"
             android:screenOrientation="landscape" />
-        <activity
-            android:name="com.just.machine.ui.activity.SixMinActivity"
-            android:exported="false"
-            android:launchMode="singleTop"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name="com.just.machine.ui.activity.SixMinSystemSettingActivity"
-            android:exported="false"
-            android:screenOrientation="landscape" />
-    </application>
+      </application>
 
 </manifest>

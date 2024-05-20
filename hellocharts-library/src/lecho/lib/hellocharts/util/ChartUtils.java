@@ -6,7 +6,7 @@ import android.util.TypedValue;
 
 public abstract class ChartUtils {
 
-    public static final int DEFAULT_COLOR = Color.parseColor("#DFDFDF");
+    public static final int DEFAULT_COLOR = Color.parseColor("#2f89de");
     public static final int DEFAULT_DARKEN_COLOR = Color.parseColor("#DDDDDD");
     public static final int COLOR_BLUE = Color.parseColor("#33B5E5");
     public static final int COLOR_VIOLET = Color.parseColor("#AA66CC");
