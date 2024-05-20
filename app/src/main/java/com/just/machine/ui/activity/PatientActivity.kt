@@ -555,7 +555,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
             str45 = "有点疲劳-疲劳(4-6级)"
         }
         //运动步速版本
-        if (sixMinRecordsBean.prescriptionBean[0].prescripState == "1") {
+        if (sixMinRecordsBean.prescriptionBean[0].prescripState == "1" || sixMinRecordsBean.prescriptionBean[0].prescripState.isEmpty()) {
             if (sixMinRecordsBean.prescriptionBean[0].distanceState.isEmpty() || sixMinRecordsBean.prescriptionBean[0].distanceState == "1") {
                 strideTitStrs = "运动步速";
                 strideStrs =

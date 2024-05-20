@@ -94,33 +94,15 @@ class MainActivity : CommonBaseActivity<ActivityMainBinding>() {
         initSocket()
         initNavigationView()
         requestStoragePermission()
+
+        System.setProperty("org.apache.poi.javax.xml.stream.XMLInputFactory", "com.fasterxml.aalto.stax.InputFactoryImpl");
+        System.setProperty("org.apache.poi.javax.xml.stream.XMLOutputFactory", "com.fasterxml.aalto.stax.OutputFactoryImpl");
+        System.setProperty("org.apache.poi.javax.xml.stream.XMLEventFactory", "com.fasterxml.aalto.stax.EventFactoryImpl");
     }
 
     private fun initSocket() {
         listenerThread = ListenerThread(12345, handler)
         listenerThread.start()
-
-//        Thread {
-//            try {
-//                val wifiManager =
-//                    this.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-//                val dhcpInfo = wifiManager.dhcpInfo
-//                //本地路由开启通信
-//                var routeIp = Formatter.formatIpAddress(dhcpInfo.gateway)
-//                val socket = Socket(routeIp, 12345)
-//                connectThread = ConnectThread(this@MainActivity, socket, handler)
-//                connectThread.start()
-//            } catch (e: IOException) {
-//                e.printStackTrace()
-//                runOnUiThread {
-//                    Toast.makeText(
-//                        this@MainActivity,
-//                        "创建通信失败",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }
-//            }
-//        }.start()
     }
 
     private fun initNavigationView() {
