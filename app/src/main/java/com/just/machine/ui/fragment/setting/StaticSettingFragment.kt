@@ -9,11 +9,11 @@ import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent.Companion.STATICSETTINGSSUCCESS
 import com.just.machine.dao.setting.StaticSettingBean
 import com.just.machine.model.CPETParameter
+import com.just.machine.model.Constants.Companion.settingsAreSaved
 import com.just.machine.model.lungdata.DynamicBean
-import com.just.machine.ui.adapter.setting.FVCSettingAdapter
-import com.just.machine.ui.adapter.setting.MVVSettingAdapter
 import com.just.machine.ui.adapter.setting.SVCSettingAdapter
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FrgamentStaticSettingBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,14 +32,17 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
 
     private val adapterSvc by lazy { SVCSettingAdapter(requireContext()) }
 
-    private val adapterFvc by lazy { FVCSettingAdapter(requireContext()) }
+    private val adapterFvc by lazy { SVCSettingAdapter(requireContext()) }
 
-    private val adapterMvv by lazy { MVVSettingAdapter(requireContext()) }
+    private val adapterMvv by lazy { SVCSettingAdapter(requireContext()) }
     override fun loadData() {//懒加载
 
     }
 
     override fun initView() {
+
+        viewModel.getStaticSettings()
+
         initData()
 
         viewModel.mEventHub.observe(this) {
@@ -64,8 +67,7 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
     }
 
     private fun initData() {
-
-        //这里获取本地缓存的设置sp
+        log(tag + staticSettingBean.toString())
 
         if (staticSettingBean.radioVt == true) {
             binding.radioVtVisible.isChecked = true
@@ -152,7 +154,7 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
 
             // 遍历 dynamicBeans 数组，将每个 DynamicBean 对象添加到 beans 列表中
             for (bean in dynamicBeans) {
-                bean?.let { beansSVC.add(it) }
+                bean.let { beansSVC.add(it) }
             }
 
             // 设置 adapterSvc 的数据
@@ -176,7 +178,7 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
 
             // 遍历 dynamicBeans 数组，将每个 DynamicBean 对象添加到 beans 列表中
             for (bean in fvcBeans) {
-                bean?.let { beansFVC.add(it) }
+                bean.let { beansFVC.add(it) }
             }
 
             adapterFvc.setItemsBean(beansFVC)
@@ -200,7 +202,7 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
 
             // 遍历 dynamicBeans 数组，将每个 DynamicBean 对象添加到 beans 列表中
             for (bean in mvvBeans) {
-                bean?.let { beansMVV.add(it) }
+                bean.let { beansMVV.add(it) }
             }
             adapterMvv.setItemsBean(beansMVV)
         } else {
@@ -301,36 +303,30 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
             }
         }
 
-        val fragment = parentFragment
+        LiveDataBus.get().with(settingsAreSaved).observe(this) {
+            staticSettingBean.settingSVC.clear()
+            staticSettingBean.settingFVC.clear()
+            staticSettingBean.settingMVV.clear()
 
-        if (fragment is CardiopulmonarySettingFragment) {
-            fragment.setButtonClickListener(object : CardiopulmonarySettingFragment.ButtonClickListener{
-                override fun onButtonClick() {
-                    LogUtils.d(tag+"onClick")
-                    staticSettingBean.settingSVC.clear()
-                    staticSettingBean.settingFVC.clear()
-                    staticSettingBean.settingMVV.clear()
+            staticSettingBean.xTimeSvc = binding.editXTimeSvc.text.toString()
+            staticSettingBean.yTimeUpSvc = binding.editYTimeUpSvc.text.toString()
+            staticSettingBean.yTimeDownSvc = binding.editYTimeDownSvc.text.toString()
 
-                    staticSettingBean.xTimeSvc = binding.editXTimeSvc.text.toString()
-                    staticSettingBean.yTimeUpSvc = binding.editYTimeUpSvc.text.toString()
-                    staticSettingBean.yTimeDownSvc = binding.editYTimeDownSvc.text.toString()
+            staticSettingBean.xTimeFvc = binding.editXTimeFvc.text.toString()
+            staticSettingBean.yTimeUpFvc = binding.editYTimeUpFvc.text.toString()
+            staticSettingBean.yTimeDownFvc = binding.editYTimeDownFvc.text.toString()
 
-                    staticSettingBean.xTimeFvc = binding.editXTimeFvc.text.toString()
-                    staticSettingBean.yTimeUpFvc = binding.editYTimeUpFvc.text.toString()
-                    staticSettingBean.yTimeDownFvc = binding.editYTimeDownFvc.text.toString()
+            staticSettingBean.xTimeMvv = binding.editXTimeMvv.text.toString()
+            staticSettingBean.yTimeUpMvv = binding.editYTimeUpMvv.text.toString()
+            staticSettingBean.yTimeDownMvv = binding.editYTimeDownMvv.text.toString()
 
-                    staticSettingBean.xTimeMvv = binding.editXTimeMvv.text.toString()
-                    staticSettingBean.yTimeUpMvv = binding.editYTimeUpMvv.text.toString()
-                    staticSettingBean.yTimeDownMvv = binding.editYTimeDownMvv.text.toString()
+            staticSettingBean.settingSVC.addAll(adapterSvc.items)
+            staticSettingBean.settingFVC.addAll(adapterFvc.items)
+            staticSettingBean.settingMVV.addAll(adapterMvv.items)
 
-                    staticSettingBean.settingSVC.addAll(adapterSvc.items)
-                    staticSettingBean.settingFVC.addAll(adapterFvc.items)
-                    staticSettingBean.settingMVV.addAll(adapterMvv.items)
-
-                    viewModel.setStaticSettingBean(staticSettingBean)
-                    toast("保存成功！")
-                }
-            })
+            viewModel.setStaticSettingBean(staticSettingBean)
+            log(tag + staticSettingBean.toString())
+            toast("保存成功！")
         }
     }
 

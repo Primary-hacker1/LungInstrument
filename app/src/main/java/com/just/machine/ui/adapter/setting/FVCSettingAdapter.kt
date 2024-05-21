@@ -12,6 +12,7 @@ import com.just.news.databinding.ItemFvcSettingBinding
  * 静态肺设置列表
  *@author zt
  */
+@Deprecated("功能一样")
 class FVCSettingAdapter(val context: Context) :
     BaseRecyclerViewAdapter<CPETParameter, ItemFvcSettingBinding>() {
 

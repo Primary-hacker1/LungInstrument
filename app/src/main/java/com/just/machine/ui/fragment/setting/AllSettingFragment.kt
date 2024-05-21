@@ -9,8 +9,10 @@ import androidx.core.content.pm.PackageInfoCompat
 import androidx.fragment.app.viewModels
 import com.common.base.*
 import com.common.network.LogUtils
+import com.just.machine.model.Constants.Companion.settingsAreSaved
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.machine.util.LiveDataBus
 import com.just.machine.util.SpinnerHelper
 import com.just.news.R
 import com.just.news.databinding.FragmentAllSettingBinding
@@ -75,24 +77,15 @@ class AllSettingFragment : CommonBaseFragment<FragmentAllSettingBinding>() {
             }
         })
 
+        LiveDataBus.get().with(settingsAreSaved).observe(this){
+            LogUtils.d(tag+"onClick")
 
-        val fragment = parentFragment
-
-        if (fragment is CardiopulmonarySettingFragment) {
-            fragment.setButtonClickListener(object : CardiopulmonarySettingFragment.ButtonClickListener{
-                override fun onButtonClick() {
-                    LogUtils.d(tag+"onClick")
-
-                    if(binding.editUpdatePass.text.toString()!=binding.editLoginPass.text.toString()){
-                        toast("登陆两次密码输入不相同！")
-                        return//两次密码输入不正确
-                    }
-
-                    SharedPreferencesUtils.instance.pass = binding.editUpdatePass.text.toString()
-                }
-            })
+            if(binding.editUpdatePass.text.toString()!=binding.editLoginPass.text.toString()){
+                toast("登陆两次密码输入不相同！")
+                return@observe//两次密码输入不正确
+            }
+            SharedPreferencesUtils.instance.pass = binding.editUpdatePass.text.toString()
         }
-
 
     }
 

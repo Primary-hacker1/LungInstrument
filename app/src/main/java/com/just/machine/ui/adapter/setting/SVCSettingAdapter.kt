@@ -1,6 +1,7 @@
 package com.just.machine.ui.adapter.setting
 
 import android.content.Context
+import android.view.View
 import androidx.core.content.ContextCompat
 import com.common.base.BaseRecyclerViewAdapter
 import com.just.machine.model.CPETParameter
@@ -26,7 +27,8 @@ class SVCSettingAdapter(val context: Context) :
 
         binding.checkbox.setOnCheckedChangeListener(null) // 首先移除之前的监听器，以避免冲突
 
-        binding.checkbox.isChecked = item.isShow!!
+        // 设置CheckBox当前状态，重要步骤！
+        binding.checkbox.isChecked = item.isShow == true
 
         binding.checkbox.setOnCheckedChangeListener { _, isChecked ->
             item.isShow = isChecked

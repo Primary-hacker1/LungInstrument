@@ -8,6 +8,7 @@ interface Constants {
         const val patientInformation = "患者管理"
         const val cardiopulmonary = "心肺测试"
         const val me = "我的"
+        const val settingsAreSaved = "设置保存"
         const val setting = "设置"
         const val time: String = "time"
         const val serialCallback = "环境定标"//串口返回消息

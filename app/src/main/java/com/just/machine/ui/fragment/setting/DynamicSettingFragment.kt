@@ -8,7 +8,9 @@ import com.common.base.*
 import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent.Companion.STATICSETTINGSSUCCESS
 import com.just.machine.dao.setting.DynamicSettingBean
+import com.just.machine.model.Constants.Companion.settingsAreSaved
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.machine.util.LiveDataBus
 import com.just.news.databinding.FragmentDynamicSettingBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,41 +36,33 @@ class DynamicSettingFragment : CommonBaseFragment<FragmentDynamicSettingBinding>
 
         initData()
 
-        val fragment = parentFragment
+        LiveDataBus.get().with(settingsAreSaved).observe(this) {
 
-        if (fragment is CardiopulmonarySettingFragment) {
-            fragment.setButtonClickListener(object :
-                CardiopulmonarySettingFragment.ButtonClickListener {
-                override fun onButtonClick() {
-                    LogUtils.d(tag + "onClick")
+            dynamicSettingBean.isSingularity = binding.cbSingularity.isChecked
 
-                    dynamicSettingBean.isSingularity = binding.cbSingularity.isChecked
+            dynamicSettingBean.isAutomatiFlow = binding.cbAutomaticFlow.isChecked
 
-                    dynamicSettingBean.isAutomatiFlow = binding.cbAutomaticFlow.isChecked
+            dynamicSettingBean.isExtremum = binding.cbExtremum.isChecked
 
-                    dynamicSettingBean.isExtremum = binding.cbExtremum.isChecked
+            dynamicSettingBean.isRpe = binding.cbRpe.isChecked
 
-                    dynamicSettingBean.isRpe = binding.cbRpe.isChecked
+            dynamicSettingBean.isOxygen = binding.cbOxygen.isChecked
 
-                    dynamicSettingBean.isOxygen = binding.cbOxygen.isChecked
+            dynamicSettingBean.isDynamicTrafficAnalysis =
+                binding.cbDynamicTrafficAnalysis.isChecked
 
-                    dynamicSettingBean.isDynamicTrafficAnalysis =
-                        binding.cbDynamicTrafficAnalysis.isChecked
+            dynamicSettingBean.isExercisePrescriptionOptions =
+                binding.cbExercisePrescriptionOptions.isChecked
 
-                    dynamicSettingBean.isExercisePrescriptionOptions =
-                        binding.cbExercisePrescriptionOptions.isChecked
+            dynamicSettingBean.respiratoryOrderMean =
+                binding.editRespiratoryOrderMean.text.toString()
 
-                    dynamicSettingBean.respiratoryOrderMean =
-                        binding.editRespiratoryOrderMean.text.toString()
+            dynamicSettingBean.nineDiagramEstimates =
+                binding.editNineDiagramEstimates.text.toString()
 
-                    dynamicSettingBean.nineDiagramEstimates =
-                        binding.editNineDiagramEstimates.text.toString()
+            dynamicSettingBean.lungWidth = binding.editLungWidth.text.toString()
 
-                    dynamicSettingBean.lungWidth = binding.editLungWidth.text.toString()
-
-                    viewModel.setDynamicSettingBean(dynamicSettingBean)
-                }
-            })
+            viewModel.setDynamicSettingBean(dynamicSettingBean)
         }
 
         viewModel.mEventHub.observe(this) {

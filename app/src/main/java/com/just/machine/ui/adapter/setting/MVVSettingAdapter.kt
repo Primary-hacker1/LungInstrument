@@ -12,6 +12,7 @@ import com.just.news.databinding.ItemMvvSettingBinding
  * 静态肺设置列表
  *@author zt
  */
+@Deprecated("功能一样")
 class MVVSettingAdapter(val context: Context) :
     BaseRecyclerViewAdapter<CPETParameter, ItemMvvSettingBinding>() {
 
