@@ -224,7 +224,13 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
                     override fun onUpdateItem(bean: SixMinReportInfo) {
                         //心电回放
-                        showMsg("心电")
+                        val intent = Intent(
+                            this@PatientActivity, SixMinDetectActivity::class.java
+                        )
+                        val bundle = Bundle()
+                        bundle.putString(Constants.sixMinReportType, "4")
+                        intent.putExtras(bundle)
+                        startActivity(intent)
                     }
 
                     override fun onCheckItem(bean: SixMinReportInfo) {

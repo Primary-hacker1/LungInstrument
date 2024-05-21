@@ -1,0 +1,28 @@
+apply plugin: 'com.android.library'
+
+android {
+    def globalConfiguration = rootProject.extensions.getByName("ext")
+    compileSdkVersion androidCompileSdkVersion
+    buildToolsVersion androidBuildToolsVersion
+
+    defaultConfig {
+        minSdkVersion globalConfiguration["androidMinSdkVersion"]
+        targetSdkVersion globalConfiguration["androidTargetSdkVersion"]
+        ndkVersion globalConfiguration["androidNdkVersion"]
+
+        multiDexEnabled globalConfiguration["androidMultiDexEnabled"]
+        testInstrumentationRunner globalConfiguration["testInstrumentationRunner"]
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    api gradleBase.appcompat
+    api "org.rajawali3d:rajawali:1.1.970"
+}

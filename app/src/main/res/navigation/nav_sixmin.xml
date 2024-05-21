@@ -46,4 +46,12 @@
 
     </fragment_navigator>
 
+    <fragment_navigator
+        android:id="@+id/sixMinHeartEcgFragment"
+        android:name="com.just.machine.ui.fragment.sixmin.SixMinHeartEcgFragment"
+        android:label="sixMinHeartEcgFragment"
+        tools:layout="@layout/fragment_sixmin_heart_ecg">
+
+    </fragment_navigator>
+
 </navigation>
