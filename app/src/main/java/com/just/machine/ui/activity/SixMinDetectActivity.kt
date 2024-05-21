@@ -1,6 +1,6 @@
 package com.just.machine.ui.activity
 
-import android.content.Intent
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import com.common.base.CommonBaseActivity
@@ -50,7 +50,7 @@ class SixMinDetectActivity : CommonBaseActivity<ActivitySixMinDetectBinding>() {
     var selfCheckSelection = "" //试验前疲劳和呼吸量级
     var sixMinPatientId = "" //试验的患者id
     var sixMinReportNo = "" //报告id
-    var sixMinReportType = "" //跳转类型 1新增 2编辑 3查看
+    var sixMinReportType = "" //跳转类型 1新增 2编辑 3查看 4心电
 
     override fun getViewBinding() = ActivitySixMinDetectBinding.inflate(layoutInflater)
 
@@ -162,14 +162,17 @@ class SixMinDetectActivity : CommonBaseActivity<ActivitySixMinDetectBinding>() {
             supportFragmentManager.findFragmentById(R.id.sixmin_detect_layout) as NavHostFragment
         val navController = navHostFragment.navController
         val navGraph = navController.navInflater.inflate(R.navigation.nav_sixmin)
-
+        binding.sixminLlDevicesStatus.visibility = View.VISIBLE
         // 假设您有条件决定启动的目的地
         val startDestinationId = if (sixMinReportType == "1" || sixMinReportType.isEmpty()) {
             R.id.sixMinFragment
         } else if(sixMinReportType == "2"){
             R.id.sixMinPreReportFragment
-        }else{
+        }else if(sixMinReportType == "3"){
             R.id.sixMinReportFragment
+        }else{
+            binding.sixminLlDevicesStatus.visibility = View.GONE
+            R.id.sixMinHeartEcgFragment
         }
         navGraph.setStartDestination(startDestinationId)
         navController.graph = navGraph

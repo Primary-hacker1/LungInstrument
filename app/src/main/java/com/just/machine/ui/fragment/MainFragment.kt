@@ -5,12 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.aspose.words.SaveFormat
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.viewmodel.LiveDataEvent
-import com.deepoove.poi.XWPFTemplate
-import com.deepoove.poi.config.Configure
 import com.just.machine.model.Constants
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.ui.activity.CardiopulmonaryActivity
@@ -20,15 +17,10 @@ import com.just.machine.ui.dialog.CommonDialogFragment
 import com.just.machine.ui.dialog.PatientDialogFragment
 import com.just.machine.ui.dialog.SixMinReportSelfCheckBeforeTestFragment
 import com.just.machine.ui.viewmodel.MainViewModel
-import com.just.machine.util.SixMinCmdUtils
 import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.FragmentMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.io.FileOutputStream
-import java.io.IOException
 
 
 /**
@@ -157,6 +149,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                     val bundle = Bundle()
                     bundle.putString(Constants.sixMinSelfCheckViewSelection,"$befoFatigueLevelStr&$befoBreathingLevelStr")
                     bundle.putString(Constants.sixMinPatientInfo, patientId)
+                    bundle.putString(Constants.sixMinReportType, "1")
                     intent.putExtras(bundle)
                     startActivity(intent)
                 }
@@ -190,6 +183,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                                     val bundle = Bundle()
                                     bundle.putString(Constants.sixMinSelfCheckViewSelection,"$befoFatigueLevelStr&$befoBreathingLevelStr")
                                     bundle.putString(Constants.sixMinPatientInfo,"")
+                                    bundle.putString(Constants.sixMinReportType, "1")
                                     intent.putExtras(bundle)
                                     startActivity(intent,bundle)
                                 }

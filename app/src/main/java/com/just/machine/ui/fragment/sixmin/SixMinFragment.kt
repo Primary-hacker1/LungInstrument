@@ -62,9 +62,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
     private lateinit var mStartTestCountDownTime: FixCountDownTime//6分钟试验倒计时
     private lateinit var mGetSportHeartEcgCountDownTime: FixCountDownTime//采集运动心率倒计时
     private lateinit var bloodOxyDataSet: LineDataSet
-    private lateinit var redBloodOxyDataSet: LineDataSet
     private lateinit var heartBeatDataSet: LineDataSet
-    private lateinit var bloodOxyLineData: LineData
 
     private lateinit var usbSerialData: UsbSerialData
     private var notShowAnymore = false
