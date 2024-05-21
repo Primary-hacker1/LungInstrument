@@ -1,5 +1,7 @@
 package com.just.machine.model.lungdata
 
+import android.view.View
+
 data class RoutineLungBean(
     var severalParticipants: String? = "",//参数名
     var unit: String? = "",//单位
@@ -11,6 +13,7 @@ data class RoutineLungBean(
     var test3: String? = "",//测试
     var test4: String? = "",//测试
     var test5: String? = "",//测试
+    var isVisible: Int? = View.GONE,
 ){
 
     override fun toString(): String {

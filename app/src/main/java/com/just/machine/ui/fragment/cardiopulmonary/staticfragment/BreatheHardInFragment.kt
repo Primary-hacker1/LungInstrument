@@ -72,90 +72,41 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
         val height = bean?.height?.toDoubleOrNull()
         val weight = bean?.weight?.toDoubleOrNull()
 
-        val beanSVC = DynamicBean.spinnerItemData("SVC")
-        val lungSVC = LungFormula.main(
-            parameter = "SVC", age = age, heightCm = height, weightKg = weight, isMale = isMale
-        )
+        // Helper function to create RoutineLungBean
+        fun createRoutineLungBean(parameter: String, lungValue: Double?): RoutineLungBean {
+            val dynamicBean = DynamicBean.spinnerItemData(parameter)
+            return RoutineLungBean(
+                dynamicBean?.parameterNameCH + "(${dynamicBean?.parameterName})",
+                dynamicBean?.unit,
+                lungValue?.toString() ?: "-",
+                "1",
+                "111",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5"
+            )
+        }
 
-        val beanVCEX = DynamicBean.spinnerItemData("VC_ex")
+        // Calculate lung values
+        val lungSVC = LungFormula.main("SVC", age, height, weight, isMale)
+        val lungERV = LungFormula.main("ERV", age, height, weight, isMale)
+        val lungIC = LungFormula.main("IC", age, height, weight, isMale)
 
-        val beanERV = DynamicBean.spinnerItemData("ERV")
-        val lungERV = LungFormula.main(
-            parameter = "ERV", age = age, heightCm = height, weightKg = weight, isMale = isMale
-        )
-
-        val beanVT = DynamicBean.spinnerItemData("VT")
-
-        val beanIC = DynamicBean.spinnerItemData("IC")
-        val lungIC = LungFormula.main(
-            parameter = "IC", age = age, heightCm = height, weightKg = weight, isMale = isMale
-        )
-
+        // Create list of RoutineLungBeans
         routineLungList = mutableListOf(
-            RoutineLungBean(
-                beanSVC?.parameterNameCH + "(" + beanSVC?.parameterName + ")",
-                beanSVC?.unit,
-                lungSVC.toString(),
-                "1",
-                "111",
-                "1",
-                "2",
-                "3",
-                "4",
-                "5"
-            ),
-            RoutineLungBean(
-                beanVCEX?.parameterNameCH + "(" + beanVCEX?.parameterName + ")",
-                beanVCEX?.unit,
-                "-",
-                "1",
-                "111",
-                "1",
-                "2",
-                "3",
-                "4",
-                "5"
-            ),
-            RoutineLungBean(
-                beanERV?.parameterNameCH + "(" + beanERV?.parameterName + ")",
-                beanERV?.unit,
-                lungERV.toString(),
-                "1",
-                "111",
-                "1",
-                "2",
-                "3",
-                "4",
-                "5"
-            ),
-            RoutineLungBean(
-                beanVT?.parameterNameCH + "(" + beanVT?.parameterName + ")",
-                beanVT?.unit,
-                "-",
-                "1",
-                "111",
-                "1",
-                "2",
-                "3",
-                "4",
-                "5"
-            ),
-            RoutineLungBean(
-                beanIC?.parameterNameCH + "(" + beanIC?.parameterName + ")",
-                beanIC?.unit,
-                lungIC.toString(),
-                "1",
-                "111",
-                "1",
-                "2",
-                "3",
-                "4",
-                "5"
-            ),
+            createRoutineLungBean("SVC", lungSVC),
+            createRoutineLungBean("VC_ex", null),
+            createRoutineLungBean("ERV", lungERV),
+            createRoutineLungBean("VT", null),
+            createRoutineLungBean("IC", lungIC)
         )
 
+        // Bind data to layout
         binding.fragmentLayout.setLungData(routineLungList)
     }
+
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentBreatheBinding.inflate(inflater, container, false)

@@ -34,8 +34,7 @@ class FragmentStaticLayout @JvmOverloads constructor(
 
     private val tag = FragmentStaticLayout::class.java.name
 
-    val isUnfold: Boolean? = false//是否展开数据
-
+    private var isUnfold: Boolean? = false//是否展开数据
 
     private var test1 = listOf("value1", "value2", "value3", "value4", "value5", "value6")
 
@@ -48,7 +47,7 @@ class FragmentStaticLayout @JvmOverloads constructor(
     private var test5 = listOf("num", "num2", "num3", "num4", "num5", "num6")
 
 
-    private var onCLickbutton: Click? = null
+    private var onCLickbutton: Click? = Click.TEST1
 
     private val adapter by lazy { RoutineLungAdapter(context) }
 
@@ -264,6 +263,17 @@ class FragmentStaticLayout @JvmOverloads constructor(
 
         }
 
+        binding.switchMaterial.setOnCheckedChangeListener { _, isChecked ->
+            isUnfold= isChecked
+            adapter.isTestUnfold(isChecked)
+            onCLickbutton?.let {
+                handleButtonClick(
+                    it,
+                    "测试1",
+                    test1
+                )
+            }
+        }
     }
 
     /**
@@ -278,20 +288,19 @@ class FragmentStaticLayout @JvmOverloads constructor(
     ) {
         onCLickbutton = clickType
 
-        if (isUnfold == true) {
-            binding.atvTest1.visible()
+        if (isUnfold == false) {
+            binding.atvTest1.text = buttonText
             binding.atvTest2.gone()
             binding.atvTest3.gone()
             binding.atvTest4.gone()
             binding.atvTest5.gone()
-            binding.atvTest1.text = buttonText
             routineLungList?.forEachIndexed { index, bean ->
                 if (index < otherList.size) {
                     bean.test1 = otherList[index]
                 }
             }
         } else {
-            binding.atvTest1.visible()
+            binding.atvTest1.text = "测试1"
             binding.atvTest2.visible()
             binding.atvTest3.visible()
             binding.atvTest4.visible()

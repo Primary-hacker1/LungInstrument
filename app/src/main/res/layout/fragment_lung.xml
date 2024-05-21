@@ -308,6 +308,7 @@
                             android:layout_weight="1"
                             android:maxLines="1"
                             android:text="测试2"
+                            android:visibility="gone"
                             android:textColor="@color/text3"
                             android:textSize="12sp" />
                     <androidx.appcompat.widget.AppCompatTextView
@@ -317,6 +318,7 @@
                             android:layout_weight="1"
                             android:maxLines="1"
                             android:text="测试3"
+                            android:visibility="gone"
                             android:textColor="@color/text3"
                             android:textSize="12sp" />
                     <androidx.appcompat.widget.AppCompatTextView
@@ -326,6 +328,7 @@
                             android:layout_weight="1"
                             android:maxLines="1"
                             android:text="测试4"
+                            android:visibility="gone"
                             android:textColor="@color/text3"
                             android:textSize="12sp" />
                     <androidx.appcompat.widget.AppCompatTextView
@@ -335,6 +338,7 @@
                             android:layout_weight="1"
                             android:maxLines="1"
                             android:text="测试5"
+                            android:visibility="gone"
                             android:textColor="@color/text3"
                             android:textSize="12sp" />
                 </LinearLayout>
@@ -344,8 +348,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:visibility="visible" />
-
-
             </LinearLayout>
 
 
