@@ -17,8 +17,10 @@ import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.utils.MPPointD
+import com.just.machine.dao.lung.CPXBreathInOutData
 import com.just.machine.ui.fragment.cardiopulmonary.result.FragmentResultLayout.ChartLayout
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.machine.util.LiveDataBus
 import com.just.news.databinding.FragmentWassermanBinding
 import com.justsafe.libview.R
 import com.justsafe.libview.chart.BaseLineChart
@@ -86,6 +88,12 @@ class WassermanFragment : CommonBaseFragment<FragmentWassermanBinding>() {
         setDynamicDragLine(binding.scChart7,binding.chart7)
         setDynamicDragLine(binding.scChart8,binding.chart8)
         setDynamicDragLine(binding.scChart9,binding.chart9)
+
+        LiveDataBus.get().with("动态心肺测试").observe(this) {//解析串口消息
+            if (it is CPXBreathInOutData) {
+                binding.layoutDynamicData.setDynamicData(it)
+            }
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")

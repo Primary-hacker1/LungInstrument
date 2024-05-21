@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import com.just.machine.dao.lung.CPXBreathInOutData
 import com.just.machine.model.lungdata.DynamicBean
 import com.just.machine.ui.adapter.CustomSpinnerAdapter
 import com.just.news.R
@@ -25,6 +26,26 @@ class DynamicLayout @JvmOverloads constructor(
         true
     )
 
+    val adapterTime = CustomSpinnerAdapter(context)
+    val adapterVo = CustomSpinnerAdapter(context)
+    val adapterHr = CustomSpinnerAdapter(context)
+    val adapterRer = CustomSpinnerAdapter(context)
+    val adapterO2Hr = CustomSpinnerAdapter(context)
+    val adapterFio2 = CustomSpinnerAdapter(context)
+    val adapterVdVt = CustomSpinnerAdapter(context)
+    val adapterTex = CustomSpinnerAdapter(context)
+    val adapterFeo2 = CustomSpinnerAdapter(context)
+
+    val adapterTph = CustomSpinnerAdapter(context)
+    val adapterVCO2 = CustomSpinnerAdapter(context)
+    val adapterHrr = CustomSpinnerAdapter(context)
+    val adapterVe = CustomSpinnerAdapter(context)
+    val adapterSpo2 = CustomSpinnerAdapter(context)
+    val adapterFico2 = CustomSpinnerAdapter(context)
+    val adapterBf = CustomSpinnerAdapter(context)
+    val adapterVtex = CustomSpinnerAdapter(context)
+    val adapterFeco2 = CustomSpinnerAdapter(context)
+
     init {
         initView()
     }
@@ -38,27 +59,6 @@ class DynamicLayout @JvmOverloads constructor(
         binding.imgWarm.setColorFilter(color)
         binding.imgMotion.setColorFilter(color)
         binding.imgRecover.setColorFilter(color)
-
-
-        val adapterTime = CustomSpinnerAdapter(context)
-        val adapterVo = CustomSpinnerAdapter(context)
-        val adapterHr = CustomSpinnerAdapter(context)
-        val adapterRer = CustomSpinnerAdapter(context)
-        val adapterO2Hr = CustomSpinnerAdapter(context)
-        val adapterFio2 = CustomSpinnerAdapter(context)
-        val adapterVdVt = CustomSpinnerAdapter(context)
-        val adapterTex = CustomSpinnerAdapter(context)
-        val adapterFeo2 = CustomSpinnerAdapter(context)
-
-        val adapterTph = CustomSpinnerAdapter(context)
-        val adapterVCO2 = CustomSpinnerAdapter(context)
-        val adapterHrr = CustomSpinnerAdapter(context)
-        val adapterVe = CustomSpinnerAdapter(context)
-        val adapterSpo2 = CustomSpinnerAdapter(context)
-        val adapterFico2 = CustomSpinnerAdapter(context)
-        val adapterBf = CustomSpinnerAdapter(context)
-        val adapterVtex = CustomSpinnerAdapter(context)
-        val adapterFeco2 = CustomSpinnerAdapter(context)
 
         binding.timeSpinner.adapter = adapterTime
         binding.voSpinner.adapter = adapterVo
@@ -80,9 +80,20 @@ class DynamicLayout @JvmOverloads constructor(
         binding.vtexSpinner.adapter = adapterVtex
         binding.fecoSpinner.adapter = adapterFeco2
 
-        adapterTime.updateSpinnerText(DynamicBean.spinnerItemDatas())//测试一下
+    }
+
+    fun setDynamicData(cpxData: CPXBreathInOutData) {
+
+        val svc= DynamicBean.spinnerItemData("SVC")
+        svc.lowRange = cpxData.SVc
+
+        val vTex= DynamicBean.spinnerItemData("VTex")
+        vTex.lowRange = cpxData.VTex
+
+        adapterTime.updateSpinnerText(mutableListOf(svc,vTex))
+
         adapterVo.updateSpinnerText(DynamicBean.spinnerItemDatas())//测试一下
-        adapterVo.updateSpinnerText(DynamicBean.spinnerItemDatas())//测试一下
+
     }
 
 }

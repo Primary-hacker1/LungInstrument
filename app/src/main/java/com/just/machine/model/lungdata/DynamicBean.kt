@@ -979,9 +979,9 @@ object DynamicBean {
     )
 
 
-    fun spinnerItemData(parameterType: String): CPETParameter? {
+    fun spinnerItemData(parameterType: String): CPETParameter {
         // 使用 find 函数查找第一个符合条件的元素
-        return cpetParameters.find { it.parameterName == parameterType }
+        return cpetParameters.find { it.parameterName == parameterType }!!
     }
 
     fun spinnerItemDatas(): MutableList<CPETParameter> {//全部

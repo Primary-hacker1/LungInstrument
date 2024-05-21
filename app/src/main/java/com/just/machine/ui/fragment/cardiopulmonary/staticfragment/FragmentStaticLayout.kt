@@ -264,7 +264,7 @@ class FragmentStaticLayout @JvmOverloads constructor(
         }
 
         binding.switchMaterial.setOnCheckedChangeListener { _, isChecked ->
-            isUnfold= isChecked
+            isUnfold = isChecked
             adapter.isTestUnfold(isChecked)
             onCLickbutton?.let {
                 handleButtonClick(
@@ -315,7 +315,6 @@ class FragmentStaticLayout @JvmOverloads constructor(
                 }
             }
         }
-
 
         routineLungList?.let {
             LogUtils.e(tag + it.toString())
@@ -481,9 +480,31 @@ class FragmentStaticLayout @JvmOverloads constructor(
                     setButtonStyle(binding.btnTest5, true)
                 }
             }
-            // 继续添加其他点击类型的处理...
-
         }
+
+//        when (clickType) {
+//            Click.TEST1 -> setButtonStyle(binding.btnTest1, true)
+//            Click.TEST2 -> setButtonStyle(binding.btnTest2, true)
+//            Click.TEST3 -> setButtonStyle(binding.btnTest3, true)
+//            Click.TEST4 -> setButtonStyle(binding.btnTest4, true)
+//            Click.TEST5 -> setButtonStyle(binding.btnTest5, true)
+//        }
+//
+//        val buttons = listOf(
+//            binding.btnTest1,
+//            binding.btnTest2,
+//            binding.btnTest3,
+//            binding.btnTest4,
+//            binding.btnTest5
+//        )
+//
+//        buttons.forEachIndexed { index, btn ->
+//            val isStart = button == btn
+//            if (!isStart) {
+//                setButtonStyle(btn, index == clickType.ordinal)
+//            }
+//        }
+
     }
 
     private fun setButtonStyle(button: Button, isActive: Boolean, isStart: Boolean? = false) {

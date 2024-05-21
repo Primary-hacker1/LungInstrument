@@ -95,19 +95,9 @@ class DynamicDataFragment : CommonBaseFragment<FragmentDynamicDataBinding>() {
         }
 
         LiveDataBus.get().with("动态心肺测试").observe(this) {//解析串口消息
-            if (it is ByteArray) {
-                LogUtils.e(tag + BaseUtil.bytes2HexStr(it) + "字节长度" + BaseUtil.bytes2HexStr(it).length)
-                val data = MudbusProtocol.parseLungTestData(it) ?: return@observe //原始数据
-                val bean =
-                    CPXSerializeData().convertLungTestDataToCPXSerializeData(data)//原始数据转成cpx数据
-                val cpxData = CPXCalcule.calDyBreathInOutData(bean)
-                cpxData.createTime = CommonUtil.getCurrentTime()
-                mutableListCPX.add(cpxData)
+            if (it is CPXBreathInOutData) {
+                mutableListCPX.add(it)
                 adapterData?.setItemsBean(mutableListCPX)
-//                viewModel.insertCPXBreathInOutData(
-//                    cpxData
-//                )
-                log(tag + bean.toString())
             }
         }
     }

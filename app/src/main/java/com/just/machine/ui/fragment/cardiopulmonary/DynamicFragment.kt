@@ -7,11 +7,13 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.common.base.CommonBaseFragment
+import com.common.base.log
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
 import com.just.machine.dao.lung.CPXBreathInOutData
 import com.just.machine.model.Constants
 import com.just.machine.model.LungTestData
+import com.just.machine.model.lungdata.CPXSerializeData
 import com.just.machine.ui.adapter.FragmentPagerAdapter
 import com.just.machine.ui.fragment.cardiopulmonary.dynamic.DynamicDataFragment
 import com.just.machine.ui.fragment.cardiopulmonary.dynamic.RoutineFragment
@@ -20,6 +22,8 @@ import com.just.machine.ui.fragment.serial.MudbusProtocol
 import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.BaseUtil
+import com.just.machine.util.CPXCalcule
+import com.just.machine.util.CommonUtil
 import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FragmentDynamicBinding
@@ -72,9 +76,20 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
                     controlBoardResponse
                 )
 
-                LogUtils.e(tag + BaseUtil.bytes2HexStr(data) + "发送的数据")
+//                --------------------假设收到数据开始解析-----------------------
 
-                LiveDataBus.get().with("动态心肺测试").value = data
+                LogUtils.e(tag + BaseUtil.bytes2HexStr(data) + "字节长度" + BaseUtil.bytes2HexStr(data).length)
+                val lungData = MudbusProtocol.parseLungTestData(data) ?: return@setNoRepeatListener //原始数据
+                val bean =
+                    CPXSerializeData().convertLungTestDataToCPXSerializeData(lungData)//原始数据转成cpx数据
+                val cpxData = CPXCalcule.calDyBreathInOutData(bean)
+                cpxData.createTime = CommonUtil.getCurrentTime()
+//                viewModel.insertCPXBreathInOutData(//插入数据库
+//                    cpxData
+//                )
+                log(tag + cpxData.toString())
+
+                LiveDataBus.get().with("动态心肺测试").value = cpxData
 
                 return@setNoRepeatListener
             }
