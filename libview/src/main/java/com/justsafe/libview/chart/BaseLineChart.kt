@@ -328,7 +328,7 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
         super.onDraw(canvas)
 
         // 转换 dp 为像素
-        val titleTextSizePx = dpToPx(10f, context) // 标题文本的大小
+        val titleTextSizePx = dpToPx(6f, context) // 标题文本的大小
         val contentTextSizePx = dpToPx(15f, context) // 文本的大小
 
         // 绘制标题文本
@@ -338,8 +338,8 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
             textAlign = Paint.Align.CENTER
         }
         val totalTitleHeight = titlePaint.fontSpacing * 2 // 两行标题文本的总高度
-        val titleStartX = 25f // 左边留出一定的空白
-        val titleStartY = totalTitleHeight - 36 // 留出与标题文本相同的高度
+        val titleStartX = 30f // 左边留出一定的空白
+        val titleStartY = totalTitleHeight - 26 // 留出与标题文本相同的高度
         canvas?.drawText(title1, titleStartX, titleStartY, titlePaint)
         canvas?.drawText(title2, titleStartX, titleStartY + titlePaint.fontSpacing, titlePaint)
 

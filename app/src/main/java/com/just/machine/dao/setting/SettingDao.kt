@@ -25,4 +25,11 @@ interface SettingDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDynamicSettingAll(beans: MutableList<DynamicSettingBean>)
+
+    @Transaction
+    @Query("SELECT * FROM all_setting")
+    fun getAllSettings(): Flow<MutableList<AllSettingBean>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllSettingBeans(beans: MutableList<AllSettingBean>)
 }

@@ -7,6 +7,8 @@ import com.common.throwe.BaseResponseThrowable
 import com.common.throwe.ThrowableHandler
 import com.common.viewmodel.LiveDataEvent.Companion.SUCCESS
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 
 /**
  *create by 2024/2/27
@@ -130,5 +132,19 @@ open class BaseViewModel() : BaseLifeViewModel() {
 
     var mEventHub: SingleLiveEvent<LiveDataEvent> =
         SingleLiveEvent<LiveDataEvent>()
+
+    fun <T> setBean(
+        bean: T,
+        insertFunction: suspend (T) -> Unit,
+        getFunction: suspend () -> Flow<List<T>>,
+        eventType: Int
+    ) {
+        viewModelScope.launch {
+            insertFunction(bean)
+            getFunction().collect {
+                mEventHub.value = LiveDataEvent(eventType, it)
+            }
+        }
+    }
 }
 

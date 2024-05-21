@@ -407,6 +407,7 @@
                                             android:textSize="14sp" />
 
                                     <EditText
+                                            android:id="@+id/edit_test_dead_space"
                                             android:layout_width="169dp"
                                             android:layout_height="22dp"
                                             android:layout_gravity="center_vertical"

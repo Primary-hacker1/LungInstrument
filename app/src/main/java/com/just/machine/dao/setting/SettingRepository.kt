@@ -18,4 +18,8 @@ class SettingRepository @Inject constructor(private val dao: SettingDao) {
     fun getDynamicSettings(): Flow<List<DynamicSettingBean>>  = dao.getDynamicSettings()
 
     suspend fun insertDynamicSettingAll(bean: MutableList<DynamicSettingBean>) = dao.insertDynamicSettingAll(bean)
+
+    fun getAllSettings(): Flow<List<AllSettingBean>>  = dao.getAllSettings()
+
+    suspend fun insertAllSettingBeans(bean: MutableList<AllSettingBean>) = dao.insertAllSettingBeans(bean)
 }

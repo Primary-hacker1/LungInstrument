@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
-import com.common.viewmodel.LiveDataEvent.Companion.FLOWSUCCESS
+import com.common.viewmodel.LiveDataEvent.Companion.FLOWS_SUCCESS
 import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.calibration.FlowAdapter
@@ -114,7 +114,7 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
 
         viewModel.mEventHub.observe(this) {
             when (it.action) {
-                FLOWSUCCESS -> {
+                FLOWS_SUCCESS -> {
                     val flowsBean: MutableList<FlowBean> = ArrayList()
                     if (it.any is List<*>) {
                         val list = it.any as List<*>

@@ -11,8 +11,8 @@ import com.common.base.CommonBaseFragment
 import com.common.base.gone
 import com.common.base.setNoRepeatListener
 import com.common.base.visible
-import com.common.viewmodel.LiveDataEvent.Companion.FLOWSUCCESS
-import com.common.viewmodel.LiveDataEvent.Companion.INGREDIENTSSUCCESS
+import com.common.viewmodel.LiveDataEvent.Companion.FLOWS_SUCCESS
+import com.common.viewmodel.LiveDataEvent.Companion.INGREDIENTS_SUCCESS
 import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.dao.calibration.IngredientBean
 import com.just.machine.ui.adapter.calibration.ResultFlowAdapter
@@ -70,7 +70,7 @@ class CalibrationResultFragment : CommonBaseFragment<FragmentCalibrationResultBi
 
         viewModel.mEventHub.observe(this) {
             when (it.action) {
-                FLOWSUCCESS -> {
+                FLOWS_SUCCESS -> {
                     val flowsBean: MutableList<FlowBean> = ArrayList()
                     if (it.any is List<*>) {
                         val list = it.any as List<*>
@@ -82,7 +82,7 @@ class CalibrationResultFragment : CommonBaseFragment<FragmentCalibrationResultBi
                     }
                     adapterFlow.setItemsBean(flowsBean)
                 }
-                INGREDIENTSSUCCESS -> {
+                INGREDIENTS_SUCCESS -> {
                     val flowsBean: MutableList<IngredientBean> = ArrayList()
                     if (it.any is List<*>) {
                         val list = it.any as List<*>

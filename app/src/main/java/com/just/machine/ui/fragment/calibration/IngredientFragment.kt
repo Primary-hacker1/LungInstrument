@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
-import com.common.viewmodel.LiveDataEvent.Companion.INGREDIENTSSUCCESS
+import com.common.viewmodel.LiveDataEvent.Companion.INGREDIENTS_SUCCESS
 import com.just.machine.dao.calibration.IngredientBean
 import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.calibration.IngredientAdapter
@@ -108,7 +108,7 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
 
         viewModel.mEventHub.observe(this) {
             when (it.action) {
-                INGREDIENTSSUCCESS -> {
+                INGREDIENTS_SUCCESS -> {
                     val flowsO2Bean: MutableList<IngredientBean> = ArrayList()
                     val flowsCo2Bean: MutableList<IngredientBean> = ArrayList()
                     if (it.any !is List<*>) {

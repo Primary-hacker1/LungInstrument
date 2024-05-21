@@ -16,6 +16,7 @@ import com.just.machine.dao.calibration.IngredientBean
 import com.just.machine.dao.lung.CPXBreathInOutData
 import com.just.machine.dao.lung.LungDao
 import com.just.machine.dao.lung.LungRepository
+import com.just.machine.dao.setting.AllSettingBean
 import com.just.machine.dao.setting.DynamicSettingBean
 import com.just.machine.dao.setting.SettingDao
 import com.just.machine.dao.setting.SettingRepository
@@ -88,11 +89,32 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun setEnvironmental(bean: EnvironmentalCalibrationBean) {//新增环境定标
-        viewModelScope.launch {
-            val patient = environmentalDao.insertEnvironmental(bean)
-            getEnvironmental()
-        }
+
+    fun setEnvironmental(bean: EnvironmentalCalibrationBean) {
+        setBean(
+            bean,
+            environmentalDao::insertEnvironmental,
+            environmentalDao::getEnvironmentals,
+            LiveDataEvent.EnvironmentalsSuccess
+        )
+    }
+
+    fun setFlowBean(bean: FlowBean) {
+        setBean(
+            bean,
+            environmentalDao::insertFlows,
+            environmentalDao::getFlows,
+            LiveDataEvent.FLOWS_SUCCESS
+        )
+    }
+
+    fun setIngredientBean(bean: IngredientBean) {
+        setBean(
+            bean,
+            environmentalDao::insertIngredient,
+            environmentalDao::getIngredients,
+            LiveDataEvent.INGREDIENTS_SUCCESS
+        )
     }
 
     fun getEnvironmental() {//查询所有环境定标
@@ -105,35 +127,23 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun setFlowBean(bean: FlowBean) {//新增流量定标
-        viewModelScope.launch {
-            val patient = environmentalDao.insertFlows(bean)
-            getFlows()
-        }
-    }
 
     fun getFlows() {//查询所有流量定标
         viewModelScope.launch {
             environmentalDao.getFlows().collect {
                 mEventHub.value = LiveDataEvent(
-                    LiveDataEvent.FLOWSUCCESS, it
+                    LiveDataEvent.FLOWS_SUCCESS, it
                 )
             }
         }
     }
 
-    fun setIngredientBean(bean: IngredientBean) {//新增成分定标
-        viewModelScope.launch {
-            val patient = environmentalDao.insertIngredient(bean)
-            getIngredients()
-        }
-    }
 
     fun getIngredients() {//查询所有流量定标
         viewModelScope.launch {
             environmentalDao.getIngredients().collect {
                 mEventHub.value = LiveDataEvent(
-                    LiveDataEvent.INGREDIENTSSUCCESS, it
+                    LiveDataEvent.INGREDIENTS_SUCCESS, it
                 )
             }
         }
@@ -153,6 +163,24 @@ class MainViewModel @Inject constructor(
                 LogUtils.e(tag + it.toString())
                 mEventHub.value = LiveDataEvent(
                     LiveDataEvent.CPXDYNAMICBEAN, it
+                )
+            }
+        }
+    }
+
+    fun setAllSettingBean(bean: AllSettingBean) {
+        bean.allSettingId = 1 //每次都设置id为1覆盖数据库数据
+        val allBeans = mutableListOf(bean)
+        viewModelScope.launch {
+            settingDao.insertAllSettingBeans(allBeans)
+        }
+    }
+
+    fun getAllSettingBeans() {
+        viewModelScope.launch {
+            settingDao.getAllSettings().collect {
+                mEventHub.value = LiveDataEvent(
+                    LiveDataEvent.ALL_SETTING_SUCCESS, it
                 )
             }
         }

@@ -14,6 +14,7 @@ import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.dao.calibration.IngredientBean
 import com.just.machine.dao.lung.CPXBreathInOutData
 import com.just.machine.dao.lung.LungDao
+import com.just.machine.dao.setting.AllSettingBean
 import com.just.machine.dao.setting.DynamicSettingBean
 import com.just.machine.dao.setting.SettingDao
 import com.just.machine.dao.setting.StaticSettingBean
@@ -48,7 +49,7 @@ import com.just.machine.model.sixminreport.SixMinReportWalk
  * 此应用程序的房间数据库
  */
 @Database(
-    entities = [PatientBean::class, EnvironmentalCalibrationBean::class, StaticSettingBean::class,
+    entities = [PatientBean::class, EnvironmentalCalibrationBean::class, AllSettingBean::class, StaticSettingBean::class,
         CPXBreathInOutData::class, FlowBean::class, IngredientBean::class, DynamicSettingBean::class, SixMinReportWalk::class,
         SixMinBloodOxygen::class, SixMinHeartEcg::class, SixMinReportBreathing::class,
         SixMinReportEvaluation::class, SixMinReportHeartBeat::class, SixMinReportInfo::class,

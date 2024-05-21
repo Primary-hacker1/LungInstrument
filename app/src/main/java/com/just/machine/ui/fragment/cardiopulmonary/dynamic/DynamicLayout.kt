@@ -85,9 +85,11 @@ class DynamicLayout @JvmOverloads constructor(
     fun setDynamicData(cpxData: CPXBreathInOutData) {
 
         val svc= DynamicBean.spinnerItemData("SVC")
+
         svc.lowRange = cpxData.SVc
 
         val vTex= DynamicBean.spinnerItemData("VTex")
+
         vTex.lowRange = cpxData.VTex
 
         adapterTime.updateSpinnerText(mutableListOf(svc,vTex))
