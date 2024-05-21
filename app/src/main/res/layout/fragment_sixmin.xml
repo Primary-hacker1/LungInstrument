@@ -272,7 +272,7 @@
                             <LinearLayout
                                 android:id="@+id/sixmin_ll_line_chart_blood_oxygen"
                                 android:layout_width="match_parent"
-                                android:layout_height="160dp"
+                                android:layout_height="155dp"
                                 android:orientation="vertical">
 
                                 <com.just.machine.util.MyLineChart
@@ -285,7 +285,7 @@
                             <LinearLayout
                                 android:id="@+id/sixmin_ll_line_chart_heart_beat"
                                 android:layout_width="match_parent"
-                                android:layout_height="160dp"
+                                android:layout_height="155dp"
                                 android:layout_marginTop="10dp"
                                 android:orientation="vertical">
 
@@ -307,7 +307,7 @@
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="105dp"
+                                android:layout_height="100dp"
                                 android:background="@drawable/sixmin_circle_bg"
                                 android:orientation="horizontal">
 
@@ -821,7 +821,7 @@
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="105dp"
+                                android:layout_height="100dp"
                                 android:layout_gravity="center_vertical"
                                 android:background="@drawable/sixmin_start_bg"
                                 android:gravity="center"
@@ -913,14 +913,15 @@
                     <com.seeker.luckychart.charts.ECGChartView
                         android:id="@+id/sixmin_ecg"
                         android:layout_width="match_parent"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginHorizontal="10dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
+                        android:layout_gravity="center"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginTop="5dp"
                         app:ecgLineCount="1"
                         app:markTextStyle="10,2"
                         app:renderMode="RENDER_CONTINUOUS"
-                        app:yOuterCellCounts="3" />
+                        app:canLineBound="false"
+                        app:yOuterCellCounts="5" />
 
                     <Button
                         android:id="@+id/btn_measure_blood"

@@ -13,9 +13,9 @@ public class ECGRenderStrategyImpl implements ECGRenderStrategy{
 
     private static final int DEFAULT_CELLPIXEL = 10;//每个小格固定10像素
 
-    public static final int DEFAULT_OUTER_CELLCOUNTS_Y = 8;//默认Y轴方向显示大格数
+    public static final int DEFAULT_OUTER_CELLCOUNTS_Y = 6;//默认Y轴方向显示大格数
 
-    private static final int DEFAULT_MAX_OUTERCELL_COUNT = 20;//默认最大有20个大格子
+    private static final int DEFAULT_MAX_OUTERCELL_COUNT = 30;//默认最大有20个大格子
 
     private int xCellCounts;//x轴方向小格总数
 

@@ -6,6 +6,7 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -13,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.common.base.CommonBaseFragment
+import com.common.base.delay
 import com.common.base.setNoRepeatListener
 import com.common.viewmodel.LiveDataEvent
 import com.github.mikephil.charting.charts.LineChart
@@ -31,6 +33,7 @@ import com.just.machine.ui.dialog.CommonDialogFragment
 import com.just.machine.ui.dialog.SixMinCollectRestoreEcgDialogFragment
 import com.just.machine.ui.dialog.SixMinGuideDialogFragment
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.machine.util.ECGDataParse
 import com.just.machine.util.FixCountDownTime
 import com.just.machine.util.LiveDataBus
 import com.just.machine.util.MyLineChartRenderer
@@ -38,9 +41,13 @@ import com.just.machine.util.ScreenUtils
 import com.just.machine.util.SixMinCmdUtils
 import com.just.news.R
 import com.just.news.databinding.FragmentSixminBinding
+import com.seeker.luckychart.annotation.UIMode
+import com.seeker.luckychart.model.ECGPointValue
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.rajawali3d.view.ISurface
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -76,6 +83,10 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
     private var bloodEndUtteranceId = "" //运动后血压语音播报标识
     private var defaultUtteranceId = ""//语音播报开始标识
 
+    private lateinit var mValues: Array<Array<ECGPointValue>?>
+    private var index = 0
+    private var ready = false
+
     override fun loadData() {//懒加载
 
     }
@@ -92,7 +103,43 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
         initLineChart(binding.sixminLineChartBloodOxygen, 1)
         initLineChart(binding.sixminLineChartHeartBeat, 2)
         initCountDownTimerExt()
+        initEcgChart()
         viewModel.getPatients()
+    }
+
+    private fun initEcgChart() {
+        try {
+            binding.sixminEcg.setMode(UIMode.ERASE)
+            binding.sixminEcg.initDefaultChartData(false,false)
+            binding.sixminEcg.setFrameRenderCallback {
+                if (!ready || binding.sixminEcg.chartData == null) {
+                    return@setFrameRenderCallback
+                }
+                val count = 4
+                if (index + count < mValues[0]!!.size) {
+                    val lineCount: Int = binding.sixminEcg.ecgRenderStrategy.ecgLineCount
+                    val values: Array<Array<ECGPointValue>?> = arrayOfNulls(lineCount)
+                    for (i in 0 until lineCount) {
+                        val value =
+                            mValues[i]!!.copyOfRange(index, index + count)
+                        values[i] = value
+                    }
+                    binding.sixminEcg.updatePointsToRender(*values)
+                    index += count
+                }
+            }
+            lifecycleScope.launch(Dispatchers.Default) {
+                val count: Int = binding.sixminEcg.ecgRenderStrategy.ecgLineCount
+                mValues = arrayOfNulls(count)
+                for (i in 0 until count) {
+                    val dataParse = ECGDataParse(mActivity)
+                    mValues[i] = dataParse.values
+                }
+                ready = true
+            }
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
     }
 
     override fun initListener() {
@@ -533,6 +580,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
             }
         }
         binding.sixminIvCircleCountMinus.setNoRepeatListener {
+            binding.sixminEcg.scaleDown()
             if (mActivity.usbTransferUtil.isBegin) {
                 if (mActivity.usbTransferUtil.circleCount == 0) {
                     return@setNoRepeatListener
@@ -1442,7 +1490,13 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
     override fun onResume() {
         initSysInfo()
         mActivity.setToolbarTitle(getString(R.string.sixmin_test_title))
+        binding.sixminEcg.onResume()
         super.onResume()
+    }
+
+    override fun onPause() {
+        binding.sixminEcg.onPause()
+        super.onPause()
     }
 
     override fun onDestroyView() {
