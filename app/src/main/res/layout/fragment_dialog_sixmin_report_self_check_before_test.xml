@@ -17,7 +17,7 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="36dp"
                 android:background="@drawable/sixmin_report_title_topradius_bg"
                 android:gravity="center"
                 android:text="@string/sixmin_test_report_before_test_status_level"

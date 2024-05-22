@@ -35,7 +35,7 @@ class SixMinGuideDialogFragment : BaseDialogFragment<FragmentDialogSixminGuideBi
 
             fragmentManager: FragmentManager,
 
-        ): SixMinGuideDialogFragment {
+            ): SixMinGuideDialogFragment {
 
             val dialogFragment = SixMinGuideDialogFragment()
 

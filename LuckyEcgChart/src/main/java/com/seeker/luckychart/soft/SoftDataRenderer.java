@@ -43,7 +43,7 @@ class SoftDataRenderer extends RealRenderer{
         transformer.setVisibleCoorport(0,mSoftStrategy.maxDataValueForMv(),mSoftStrategy.pointsPerRow(),-mSoftStrategy.maxDataValueForMv());
         for (int i = 0,rows = mSoftStrategy.totalRows();i < rows;i++){
             transformer.setDataContentRect(dataLeft,i*rowHeight,dataRight,(i+1)*rowHeight);
-            drawRowTime(canvas,dataLeft,(i+1)*rowHeight,i*mSoftStrategy.secondsPerRow()+"s");
+//            drawRowTime(canvas,dataLeft,(i+1)*rowHeight,i*mSoftStrategy.secondsPerRow()+"s");
             int start = i*mSoftStrategy.pointsPerRow();
             int end = Math.min((i+1)*mSoftStrategy.pointsPerRow(),mEcgData.length);
             for (int j = start;j < end-1;j++){
@@ -64,15 +64,15 @@ class SoftDataRenderer extends RealRenderer{
         linePaint.setAntiAlias(true);
         linePaint.setStyle(Paint.Style.STROKE);
         linePaint.setStrokeCap(Paint.Cap.ROUND);
-        linePaint.setStrokeWidth(ChartUtils.dp2px(mDensity, 2));
-        linePaint.setColor(Color.parseColor("#021F52"));
+        linePaint.setStrokeWidth(ChartUtils.dp2px(mDensity, 1));
+        linePaint.setColor(Color.parseColor("#333333"));
 
         timePaint = new Paint();
         timePaint.setAntiAlias(true);
         timePaint.setStyle(Paint.Style.FILL);
         timePaint.setStrokeCap(Paint.Cap.ROUND);
         timePaint.setTextSize(ChartUtils.sp2px(mScaleDensity,20));
-        timePaint.setColor(Color.parseColor("#021F52"));
+        timePaint.setColor(Color.parseColor("#333333"));
     }
 
     private void drawRowTime(Canvas canvas,float left,float bottom,String text){

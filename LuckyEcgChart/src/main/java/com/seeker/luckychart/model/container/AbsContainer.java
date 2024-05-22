@@ -18,9 +18,9 @@ public abstract class AbsContainer<Value>{
 
     private static final float DEFAULT_POINT_RADIUS = 3f;//默认原点半径
 
-    private static final int DEFAULT_LINE_COLOR = 0xFF021F52;//折线默认颜色
+    private static final int DEFAULT_LINE_COLOR = 0xFF333333;//折线默认颜色
 
-    private static final float DEFAULT_LINE_STROKEWIDTH = 3.5f;//折线默认宽度
+    private static final float DEFAULT_LINE_STROKEWIDTH = 2f;//折线默认宽度
 
     private Value[] values;
 

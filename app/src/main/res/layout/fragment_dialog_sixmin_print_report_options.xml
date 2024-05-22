@@ -14,7 +14,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="36dp"
             android:background="@drawable/sixmin_report_title_topradius_bg"
             android:orientation="vertical">
 

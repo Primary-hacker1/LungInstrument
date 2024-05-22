@@ -19,7 +19,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="36dp"
                 android:background="@drawable/sixmin_report_title_topradius_bg">
 
                 <TextView
@@ -81,7 +81,7 @@
                     android:background="@drawable/sixmin_report_btn_close_bg"
                     android:paddingHorizontal="50dp"
                     android:paddingVertical="10dp"
-                    android:text="@string/sixmin_system_setting_check_no"
+                    android:text="取消"
                     android:textColor="@color/colorWhite"
                     android:textSize="15sp" />
 
@@ -93,7 +93,7 @@
                     android:background="@drawable/sixmin_report_btn_confirm_bg"
                     android:paddingHorizontal="50dp"
                     android:paddingVertical="10dp"
-                    android:text="@string/sixmin_system_setting_check_yes"
+                    android:text="确认"
                     android:textColor="@color/colorWhite"
                     android:textSize="15sp" />
 

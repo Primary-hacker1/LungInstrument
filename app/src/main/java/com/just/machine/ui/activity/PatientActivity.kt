@@ -21,7 +21,6 @@ import com.common.base.visible
 import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
 import com.deepoove.poi.XWPFTemplate
-import com.deepoove.poi.config.Configure
 import com.deepoove.poi.data.PictureRenderData
 import com.just.machine.dao.PatientBean
 import com.just.machine.model.Constants
@@ -46,6 +45,7 @@ import com.just.news.databinding.ActivityPatientBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -229,6 +229,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                         )
                         val bundle = Bundle()
                         bundle.putString(Constants.sixMinReportType, "4")
+                        bundle.putString(Constants.sixMinReportNo, bean.reportNo)
                         intent.putExtras(bundle)
                         startActivity(intent)
                     }
@@ -391,7 +392,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                     filePath.absolutePath
                 )
             if (!generateWord) {
-                runOnUiThread {
+                withContext(Dispatchers.Main) {
                     showMsg("生成word文档失败")
                 }
             } else {
@@ -399,7 +400,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                 val doc = Document(filePath.absolutePath)
                 // 保存文档为PDF格式
                 doc.save(pdfFilePath.absolutePath, SaveFormat.PDF)
-                runOnUiThread {
+                withContext(Dispatchers.Main) {
                     showMsg("导出报告成功")
                     if(startLoadingDialogFragment.isVisible){
                         startLoadingDialogFragment.dismiss()

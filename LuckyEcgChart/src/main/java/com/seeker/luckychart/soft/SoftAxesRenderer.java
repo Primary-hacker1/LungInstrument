@@ -18,7 +18,7 @@ import com.seeker.luckychart.utils.ChartUtils;
  */
 class SoftAxesRenderer extends RealRenderer{
 
-    private static final int LINE_COLOR = Color.parseColor("#57C2FB");
+    private static final int LINE_COLOR = Color.parseColor("#FDE2F2");
 
     private Paint rowPaint;//行与行之间的画笔
 

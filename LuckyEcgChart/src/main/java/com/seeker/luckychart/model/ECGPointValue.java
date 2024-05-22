@@ -9,7 +9,7 @@ import android.graphics.Color;
  */
 public class ECGPointValue extends PointValue implements Cloneable{
 
-    private static final int DEFAULT_COLOR = Color.parseColor("#021F52");
+    private static final int DEFAULT_COLOR = Color.parseColor("#333333");
 
     private int drawColor = DEFAULT_COLOR;
 

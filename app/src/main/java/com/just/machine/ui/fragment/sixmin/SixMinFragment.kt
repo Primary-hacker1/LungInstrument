@@ -580,7 +580,6 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
             }
         }
         binding.sixminIvCircleCountMinus.setNoRepeatListener {
-            binding.sixminEcg.scaleDown()
             if (mActivity.usbTransferUtil.isBegin) {
                 if (mActivity.usbTransferUtil.circleCount == 0) {
                     return@setNoRepeatListener

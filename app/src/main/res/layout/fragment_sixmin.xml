@@ -910,18 +910,66 @@
 
                     </LinearLayout>
 
-                    <com.seeker.luckychart.charts.ECGChartView
-                        android:id="@+id/sixmin_ecg"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginHorizontal="10dp"
                         android:layout_marginTop="5dp"
-                        app:ecgLineCount="1"
-                        app:markTextStyle="10,2"
-                        app:renderMode="RENDER_CONTINUOUS"
-                        app:canLineBound="false"
-                        app:yOuterCellCounts="5" />
+                        android:background="@drawable/dialog_bg"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="5dp">
+
+                        <com.seeker.luckychart.charts.ECGChartView
+                            android:id="@+id/sixmin_ecg"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            app:canLineBound="false"
+                            app:ecgLineCount="1"
+                            app:markTextStyle="10,2"
+                            app:renderMode="RENDER_CONTINUOUS"
+                            app:yOuterCellCounts="6" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="50dp"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="速度 :"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:background="@drawable/frame_with_color_d6d6d6_white_solid"
+                            android:paddingHorizontal="10dp"
+                            android:text="25mm/s"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="30dp"
+                            android:text="增益 :"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:background="@drawable/frame_with_color_d6d6d6_white_solid"
+                            android:paddingHorizontal="10dp"
+                            android:text="10mm/mv"
+                            android:textSize="11sp" />
+
+                    </LinearLayout>
 
                     <Button
                         android:id="@+id/btn_measure_blood"

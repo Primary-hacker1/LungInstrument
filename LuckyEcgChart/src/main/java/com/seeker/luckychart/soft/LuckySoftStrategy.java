@@ -19,6 +19,7 @@ public class LuckySoftStrategy implements SoftStrategy {
     @Override
     public int pictureWidth() {
         return Math.round(pointsPerRow() * pixelPerPoint() + horizontalPadding() * 2);//左右边距
+//        return 1000;//左右边距
     }
 
     @Override
@@ -49,7 +50,7 @@ public class LuckySoftStrategy implements SoftStrategy {
 
     @Override
     public int secondsPerRow() {
-        return 10;
+        return 5;
     }
 
     @Override
@@ -69,12 +70,13 @@ public class LuckySoftStrategy implements SoftStrategy {
 
     @Override
     public int totalRows() {
-        return pointCount%pointsPerRow() == 0?pointCount/pointsPerRow():pointCount/pointsPerRow()+1;//总共12行，2分钟数据
+//        return pointCount%pointsPerRow() == 0?pointCount/pointsPerRow():pointCount/pointsPerRow()+1;//总共12行，2分钟数据
+        return 1;//总共12行，2分钟数据
     }
 
     @Override
     public int horizontalPadding() {
-        return 20;//水平方向，左右边距20个像素
+        return 40;//水平方向，左右边距20个像素
     }
 
     @Override
