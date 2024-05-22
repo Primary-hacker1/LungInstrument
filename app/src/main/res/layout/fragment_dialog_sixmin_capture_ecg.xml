@@ -182,7 +182,7 @@
                         android:background="@drawable/sixmin_report_close_report_bg"
                         android:paddingHorizontal="15dp"
                         android:paddingVertical="2dp"
-                        android:text="取消"
+                        android:text="@string/sixmin_system_setting_check_cancel"
                         android:layout_marginEnd="10dp"
                         android:textColor="@color/colorWhite"
                         android:textSize="14sp" />

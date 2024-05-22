@@ -84,7 +84,7 @@ public class USBTransferUtil {
     public int circleCount = 0;
     public int testType = 0;//0初始状态 1开始 2结束 3采集运动后心率
     public boolean ignoreBlood = false;//是否忽略测量血压
-    public int updateBluetooth = 0;//
+    public int updateBluetooth = 0;//验证蓝牙参数是否修改成功
     public boolean ecgConnection = false;//心电连接状态
     public boolean bloodPressureConnection = false;//血压连接状态
     public boolean bloodOxygenConnection = false;//血氧连接状态
@@ -475,33 +475,33 @@ public class USBTransferUtil {
                         //区分心电数据和数据包数据
                         String[] strs = dataStr.split(headDataStr);
                         //44=，52-8(分组时漏掉的包头长
-                        if (strs.length == 2 && strs[1].length() == 44) {
-                            byte[] bytes = CRC16Util.hexStringToBytes(strs[0]);
-                            realutbyte = CRC16Util.getByte(bytes);
-                            try {
-                                ByteBuffUtils.addBytes(byteBuffer, realutbyte);
-                                testMpDecode.decode(mapXinlv, byteBuffer);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
+//                        if (strs.length == 2 && strs[1].length() == 44) {
+//                            byte[] bytes = CRC16Util.hexStringToBytes(strs[0]);
+//                            realutbyte = CRC16Util.getByte(bytes);
+//                            try {
+//                                ByteBuffUtils.addBytes(byteBuffer, realutbyte);
+//                                testMpDecode.decode(mapXinlv, byteBuffer);
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
                         dataDaStr = headDataStr + strs[1];
                     } else if (headStr.equals(headEcgStr2) || headStr.equals(headEcgStr3)) {
                         //心电注册包
-                        String[] strs = dataStr.split(headDataStr);
-                        if (strs.length == 2 && strs[1].length() == 44) {
-                            if (testType == 0 || testType == 1 || testType == 2 || testType == 3) {
-                                byte[] bytes = CRC16Util.hexStringToBytes(strs[0]);
-                                realutbyte = CRC16Util.getByte(bytes);
-                                try {
-                                    ByteBuffUtils.addBytes(byteBuffer, realutbyte);
-                                    testMpDecode.decode(mapXinlv, byteBuffer);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            dataDaStr = headDataStr + strs[1];
-                        }
+//                        String[] strs = dataStr.split(headDataStr);
+//                        if (strs.length == 2 && strs[1].length() == 44) {
+//                            if (testType == 0 || testType == 1 || testType == 2 || testType == 3) {
+//                                byte[] bytes = CRC16Util.hexStringToBytes(strs[0]);
+//                                realutbyte = CRC16Util.getByte(bytes);
+//                                try {
+//                                    ByteBuffUtils.addBytes(byteBuffer, realutbyte);
+//                                    testMpDecode.decode(mapXinlv, byteBuffer);
+//                                } catch (Exception e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                            dataDaStr = headDataStr + strs[1];
+//                        }
                     } else if (headStr.equals(headDataStr) && dataStr.length() == 52) {
                         //单独数据包
                         dataDaStr = dataStr;
@@ -598,9 +598,9 @@ public class USBTransferUtil {
                                 Long time = System.currentTimeMillis();
                                 byte[] b = {bytes[12]};
                                 int oxygen = Integer.valueOf(CRC16Util.bytesToHexString(b), 16);
-                                if (oxygen > 99) {
-                                    oxygen = 99;
-                                }
+//                                if (oxygen > 99) {
+//                                    oxygen = 99;
+//                                }
                                 String str = Integer.toString(oxygen);
                                 mapBloodOxygen.put(time, str);
                                 usbSerialData.setBloodOxygen(String.valueOf(oxygen));

@@ -56,6 +56,7 @@ class DeleteWarnDialogFragment : BaseDialogFragment<FragmentDialogDeleteWarnBind
         }
         binding.tvDeleteWarnDialogNegative.setNoRepeatListener {
             dismiss()
+            listener?.onClickCancel()
         }
     }
 
@@ -70,6 +71,8 @@ class DeleteWarnDialogFragment : BaseDialogFragment<FragmentDialogDeleteWarnBind
 
     interface DeleteWarnDialogListener {
         fun onClickConfirm()
+
+        fun onClickCancel()
     }
 
     fun setDeleteWarnDialogListener(listener: DeleteWarnDialogListener) {

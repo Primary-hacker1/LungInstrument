@@ -84,6 +84,8 @@
     <string name="sixmin_system_setting_show_rest_time">是否显示休息时长:</string>
     <string name="sixmin_system_setting_check_yes">是</string>
     <string name="sixmin_system_setting_check_no">否</string>
+    <string name="sixmin_system_setting_check_confirm">确认</string>
+    <string name="sixmin_system_setting_check_cancel">取消</string>
     <string name="sixmin_system_setting_export_pwd">原密码:</string>
     <string name="sixmin_system_setting_modify_pwd">新密码:</string>
     <string name="sixmin_system_setting_confirm_pwd">确认密码:</string>

@@ -56,7 +56,7 @@
             android:layout_gravity="end"
             android:layout_marginTop="10dp"
             android:background="@drawable/sixmin_start_bg"
-            android:text="确认"
+            android:text="@string/sixmin_system_setting_check_confirm"
             android:textColor="@color/colorWhite" />
 
 

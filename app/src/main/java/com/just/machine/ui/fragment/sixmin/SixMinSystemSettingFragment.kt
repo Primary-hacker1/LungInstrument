@@ -172,7 +172,7 @@ class SixMinSystemSettingFragment : CommonBaseFragment<FragmentSixminSystemSetti
                         if (sysSettingBean.sysPwd.exportPwd == pwd) {
                             startPermissionDialogFragment.dismiss()
                             hasPassPermission = true
-                        }else{
+                        } else {
                             mActivity.showMsg("权限密码错误，请重新输入")
                             return
                         }
@@ -227,20 +227,29 @@ class SixMinSystemSettingFragment : CommonBaseFragment<FragmentSixminSystemSetti
                 return@setNoRepeatListener
             }
 
-            //蓝牙配置有变动需要同步到设备
-            SixMinCmdUtils.dealBluetooth(
-                binding.sixminEtBluetoothEcg.text.toString().trim(),
-                binding.sixminEtBluetoothBlood.text.toString().trim(),
-                binding.sixminEtBluetoothBloodOxygen.text.toString().trim()
-            )
-            sysSettingBean.sysBlue.ecgBlue = binding.sixminEtBluetoothEcg.text.toString().trim()
-            sysSettingBean.sysBlue.bloodBlue = binding.sixminEtBluetoothBlood.text.toString().trim()
-            sysSettingBean.sysBlue.bloodOxyBlue =
-                binding.sixminEtBluetoothBloodOxygen.text.toString().trim()
+            if (mActivity.usbTransferUtil.isConnectUSB && mActivity.usbTransferUtil.ecgConnection && mActivity.usbTransferUtil.bloodOxygenConnection && mActivity.usbTransferUtil.bloodPressureConnection) {
+                //蓝牙配置有变动需要同步到设备
+                SixMinCmdUtils.dealBluetooth(
+                    binding.sixminEtBluetoothEcg.text.toString().trim(),
+                    binding.sixminEtBluetoothBlood.text.toString().trim(),
+                    binding.sixminEtBluetoothBloodOxygen.text.toString().trim()
+                )
+                sysSettingBean.sysBlue.ecgBlue = binding.sixminEtBluetoothEcg.text.toString().trim()
+                sysSettingBean.sysBlue.bloodBlue =
+                    binding.sixminEtBluetoothBlood.text.toString().trim()
+                sysSettingBean.sysBlue.bloodOxyBlue =
+                    binding.sixminEtBluetoothBloodOxygen.text.toString().trim()
 
-            SharedPreferencesUtils.instance.sixMinSysSetting = gson.toJson(sysSettingBean)
-            mActivity.showMsg("蓝牙参数修改成功!")
-            hasPassPermission = false
+                SharedPreferencesUtils.instance.sixMinSysSetting = gson.toJson(sysSettingBean)
+                if (mActivity.usbTransferUtil.updateBluetooth == 1) {
+                    mActivity.showMsg("修改蓝牙参数成功!")
+                    mActivity.usbTransferUtil.updateBluetooth = 0
+                }
+                hasPassPermission = false
+            } else {
+                mActivity.showMsg("设备未接入，请检查后重试")
+                return@setNoRepeatListener
+            }
         }
 
         binding.sixminTvOldPwd.setOnClickListener {
