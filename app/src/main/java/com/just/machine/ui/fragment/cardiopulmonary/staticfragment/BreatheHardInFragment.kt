@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
-import com.common.base.log
 import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent.Companion.STATICSETTINGSSUCCESS
 import com.just.machine.dao.setting.StaticSettingBean
@@ -16,7 +15,6 @@ import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.model.lungdata.DynamicBean
 import com.just.news.databinding.FragmentBreatheBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.math.log
 
 
 /**
@@ -52,7 +50,6 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
         viewModel.mEventHub.observe(this) {
             when (it.action) {
                 STATICSETTINGSSUCCESS -> {
-                    LogUtils.e(tag + it.any)
                     if (it.any !is MutableList<*>) {
                         return@observe
                     }
@@ -63,6 +60,7 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
                         if (settingBean !is StaticSettingBean) {
                             return@observe
                         }
+                        LogUtils.e(tag + settingBean.settingSVC)
                         settingSVC = settingBean.settingSVC
                     }
                     initData()

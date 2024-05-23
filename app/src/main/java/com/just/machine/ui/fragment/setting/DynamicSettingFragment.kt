@@ -6,7 +6,7 @@ import android.widget.CheckBox
 import androidx.fragment.app.viewModels
 import com.common.base.*
 import com.common.network.LogUtils
-import com.common.viewmodel.LiveDataEvent.Companion.STATICSETTINGSSUCCESS
+import com.common.viewmodel.LiveDataEvent.Companion.DYNAMICSUCCESS
 import com.just.machine.dao.setting.DynamicSettingBean
 import com.just.machine.model.Constants.Companion.settingsAreSaved
 import com.just.machine.ui.viewmodel.MainViewModel
@@ -67,7 +67,7 @@ class DynamicSettingFragment : CommonBaseFragment<FragmentDynamicSettingBinding>
 
         viewModel.mEventHub.observe(this) {
             when (it.action) {
-                STATICSETTINGSSUCCESS -> {
+                DYNAMICSUCCESS -> {
                     if (it.any !is MutableList<*>) {
                         return@observe
                     }

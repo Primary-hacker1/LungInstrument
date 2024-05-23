@@ -11,15 +11,23 @@ import javax.inject.Inject
  */
 class SettingRepository @Inject constructor(private val dao: SettingDao) {
 
-    fun getStaticSettings(): Flow<List<StaticSettingBean>>  = dao.getStaticSettings()
+    fun getStaticSettings(): Flow<List<StaticSettingBean>> = dao.getStaticSettings()
 
-    suspend fun insertStaticSettingBean(bean: MutableList<StaticSettingBean>) = dao.insertStaticSettingAll(bean)
+    suspend fun getStaticSettingById(id: Long): StaticSettingBean? = dao.getStaticSettingById(id)
 
-    fun getDynamicSettings(): Flow<List<DynamicSettingBean>>  = dao.getDynamicSettings()
+    suspend fun updateStaticSettingBean(bean: StaticSettingBean) =
+        dao.updateStaticSettingBean(bean)
 
-    suspend fun insertDynamicSettingAll(bean: MutableList<DynamicSettingBean>) = dao.insertDynamicSettingAll(bean)
+    suspend fun insertStaticSettingBean(bean: MutableList<StaticSettingBean>) =
+        dao.insertStaticSettingAll(bean)
 
-    fun getAllSettings(): Flow<List<AllSettingBean>>  = dao.getAllSettings()
+    fun getDynamicSettings(): Flow<List<DynamicSettingBean>> = dao.getDynamicSettings()
 
-    suspend fun insertAllSettingBeans(bean: MutableList<AllSettingBean>) = dao.insertAllSettingBeans(bean)
+    suspend fun insertDynamicSettingAll(bean: MutableList<DynamicSettingBean>) =
+        dao.insertDynamicSettingAll(bean)
+
+    fun getAllSettings(): Flow<List<AllSettingBean>> = dao.getAllSettings()
+
+    suspend fun insertAllSettingBeans(bean: MutableList<AllSettingBean>) =
+        dao.insertAllSettingBeans(bean)
 }

@@ -261,7 +261,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="@dimen/space_10"
-                                        android:text="RPE量表分析" />
+                                        android:text="呼吸代偿点分析" />
 
                             </LinearLayout>
 

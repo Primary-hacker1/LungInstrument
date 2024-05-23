@@ -16,8 +16,8 @@ data class DynamicSettingBean(
     var nineDiagramEstimates: String? = "",//九图预计值显示
     var lungWidth: String? = "",//运动肺图形宽度
     var isExtremum: Boolean? = false,//运动极值分析
-    var isRpe: Boolean? = false,//RPE量表分析
     var isOxygen: Boolean? = false,//无氧阈分析
+    var isRpe: Boolean? = false,//呼吸代偿点分析
     var isDynamicTrafficAnalysis: Boolean? = false,//动态流量分析
 
     var isExercisePrescriptionOptions: Boolean? = false,//运动处方选择

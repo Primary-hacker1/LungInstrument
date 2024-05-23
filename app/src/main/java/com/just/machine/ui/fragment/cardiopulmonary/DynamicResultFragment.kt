@@ -7,6 +7,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
+import com.common.viewmodel.LiveDataEvent.Companion.DYNAMICSUCCESS
+import com.just.machine.dao.setting.DynamicSettingBean
 import com.just.machine.model.DynamicResultButtonBean
 import com.just.machine.ui.adapter.FragmentChildAdapter
 import com.just.machine.ui.adapter.ResultBtnAdapter
@@ -15,11 +17,11 @@ import com.just.machine.ui.fragment.cardiopulmonary.result.DynamicCleanFragment
 import com.just.machine.ui.fragment.cardiopulmonary.result.ExtremumAnalysisFragment
 import com.just.machine.ui.fragment.cardiopulmonary.result.FlowRateLoopsFragment
 import com.just.machine.ui.fragment.cardiopulmonary.result.OxygenDomainFragment
-import com.just.machine.ui.fragment.cardiopulmonary.result.SlopeFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.FragmentDynamicResultBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_static.viewpager
 
 
 /**
@@ -66,6 +68,30 @@ class DynamicResultFragment : CommonBaseFragment<FragmentDynamicResultBinding>()
         // 设置按钮点击监听器
         resultBtnAdapter.setItemClickListener { item, _ ->
             updateButtonList(item.resultBtnName)
+        }
+
+        viewModel.mEventHub.observe(this) {
+            when (it.action) {
+                DYNAMICSUCCESS -> {
+                    if (it.any !is MutableList<*>) {
+                        return@observe
+                    }
+
+                    val settings = it.any as MutableList<*>
+
+                    for (settingBean in settings) {
+                        if (settingBean !is DynamicSettingBean) {
+                            return@observe
+                        }
+                        if(settingBean.isExtremum == true){
+//                            binding.viewpager.adapter
+                        }else{
+//                            binding.viewpager.show(1)
+                        }
+                    }
+//                    initData()
+                }
+            }
         }
 
     }

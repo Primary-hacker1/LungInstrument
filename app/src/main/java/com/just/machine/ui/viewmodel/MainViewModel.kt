@@ -196,11 +196,20 @@ class MainViewModel @Inject constructor(
         }
     }
 
+
     fun setStaticSettingBean(staticSettingBean: StaticSettingBean) {
-        staticSettingBean.settingId = 1 //每次都设置id为1覆盖数据库数据
-        val staticSettingBeans = mutableListOf(staticSettingBean)
+//        staticSettingBean.settingId = 1
         viewModelScope.launch {
-            settingDao.insertStaticSettingBean(staticSettingBeans)
+            try {
+                val existingSetting = settingDao.getStaticSettingById(staticSettingBean.settingId)
+                if (existingSetting != null) {
+                    settingDao.updateStaticSettingBean(staticSettingBean)
+                } else {
+                    settingDao.insertStaticSettingBean(mutableListOf(staticSettingBean))
+                }
+            } catch (e: Exception) {
+                LogUtils.e(tag + e.message)
+            }
         }
     }
 
@@ -208,7 +217,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             settingDao.getDynamicSettings().collect {
                 mEventHub.value = LiveDataEvent(
-                    LiveDataEvent.STATICSETTINGSSUCCESS, it
+                    LiveDataEvent.DYNAMICSUCCESS, it
                 )
             }
         }

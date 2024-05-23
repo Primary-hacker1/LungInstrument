@@ -62,15 +62,13 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
                         staticSettingBean = settingBean
                         LogUtils.e(tag + settingBean)
                     }
-                    initData()
+                    initSetting()
                 }
             }
         }
     }
 
-    private fun initData() {
-        log(tag + staticSettingBean.toString())
-
+    private fun initSetting(){
         if (staticSettingBean.radioVt == true) {
             binding.radioVtVisible.isChecked = true
         } else {
@@ -130,7 +128,11 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
         binding.editYTimeUpMvv.setText(staticSettingBean.yTimeUpMvv)
 
         binding.editYTimeDownMvv.setText(staticSettingBean.yTimeDownMvv)
+    }
 
+    private fun initData() {
+
+        initSetting()
 
         binding.rvSvc.layoutManager = LinearLayoutManager(context)
         binding.rvFvc.layoutManager = LinearLayoutManager(context)
@@ -215,8 +217,6 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
             for (bean in fvcBeans) {
                 bean.let { beansFVC.add(it) }
             }
-
-            LogUtils.d(tag + beansFVC)
 
             adapterFvc.setItemsBean(beansFVC)
 
@@ -341,6 +341,7 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
         }
 
         LiveDataBus.get().with(settingsAreSaved).observe(this) {
+
             staticSettingBean.settingSVC.clear()
             staticSettingBean.settingFVC.clear()
             staticSettingBean.settingMVV.clear()
@@ -358,12 +359,12 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
             staticSettingBean.yTimeDownMvv = binding.editYTimeDownMvv.text.toString()
 
             val svcItems = adapterSvc.retrieveItems()
+            LogUtils.e(tag+adapterSvc.retrieveItems())
             staticSettingBean.settingSVC = svcItems.toMutableList()
             staticSettingBean.settingFVC.addAll(adapterFvc.items)
             staticSettingBean.settingMVV.addAll(adapterMvv.items)
 
             viewModel.setStaticSettingBean(staticSettingBean)
-            LogUtils.d(tag + staticSettingBean.settingSVC.toString())
             toast("保存成功！")
         }
     }
