@@ -139,6 +139,7 @@
                 android:orientation="horizontal">
 
                 <RadioButton
+                    android:buttonTint="@color/colorPrimary"
                     android:id="@+id/sixmin_print_report_prescription_yes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -149,6 +150,7 @@
                     android:text="@string/sixmin_system_setting_check_yes" />
 
                 <RadioButton
+                    android:buttonTint="@color/colorPrimary"
                     android:id="@+id/sixmin_print_report_prescription_no"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

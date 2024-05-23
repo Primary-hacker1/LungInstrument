@@ -90,6 +90,7 @@ class SixMinReportSelfCheckBeforeTestFragment :
             binding.sixminReportTvEditBloodPressureConfirm.text =
                 getString(R.string.sixmin_test_report_check_report_enter_test)
         }
+        binding.sixminRbFaceMaskNo.isChecked = true
     }
 
     override fun initListener() {

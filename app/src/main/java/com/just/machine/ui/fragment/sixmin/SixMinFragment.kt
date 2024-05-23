@@ -6,15 +6,14 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.common.base.CommonBaseFragment
-import com.common.base.delay
 import com.common.base.setNoRepeatListener
 import com.common.viewmodel.LiveDataEvent
 import com.github.mikephil.charting.charts.LineChart
@@ -24,6 +23,7 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.google.gson.Gson
 import com.just.machine.model.BloodOxyLineEntryBean
+import com.just.machine.model.Constants
 import com.just.machine.model.PatientInfoBean
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.UsbSerialData
@@ -47,13 +47,13 @@ import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.rajawali3d.view.ISurface
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
 
 /**
  * 6分钟试验界面
@@ -151,7 +151,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
             }
         }
 
-        LiveDataBus.get().with("simMinTest").observe(this, Observer {
+        LiveDataBus.get().with(Constants.sixMinLiveDataBusKey).observe(this, Observer {
             try {
                 usbSerialData = Gson().fromJson(it.toString(), UsbSerialData::class.java)
                 if (mActivity.usbTransferUtil.ecgConnection) {
@@ -601,6 +601,16 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
             } else {
                 binding.sixminIvIgnoreBlood.setBackgroundResource(R.drawable.sixmin_ignore_blood_pressure_disable)
                 mActivity.usbTransferUtil.ignoreBlood = true
+            }
+        }
+
+        binding.sixminTvToggleCardiopulmonary.setNoRepeatListener {
+            if(binding.sixminTvToggleCardiopulmonary.text == "隐藏心肺参数"){
+                binding.sixminTvToggleCardiopulmonary.text = "显示心肺参数"
+                binding.sixminLlCardiopulmonary.visibility = View.GONE
+            }else{
+                binding.sixminTvToggleCardiopulmonary.text = "隐藏心肺参数"
+                binding.sixminLlCardiopulmonary.visibility = View.VISIBLE
             }
         }
     }
