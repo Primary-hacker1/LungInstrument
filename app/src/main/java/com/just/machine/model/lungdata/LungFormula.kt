@@ -5,6 +5,7 @@ package com.just.machine.model.lungdata
 * zt 2024/4/29
 * */
 
+import com.common.base.log
 import com.common.network.LogUtils
 import net.objecthunter.exp4j.ExpressionBuilder
 
@@ -47,8 +48,6 @@ data class LungFormula(
         val substitutedExpression = expression.replace("HeightCm", heightCm.toString())
             .replace("AgeAdjust", ageAdjust.toString())
             .replace("WeightKg", weightKg.toString())
-
-        LogUtils.e(tag + "substitutedExpression===$substitutedExpression")
 
         return ExpressionBuilder(substitutedExpression).build().evaluate()
     }
@@ -275,7 +274,7 @@ data class LungFormula(
                     } else {
                         0.0 // 或者其他你认为合适的默认值
                     }
-                LogUtils.e("${formula.preName} ${formula.type}: $value")
+                LogUtils.d("${formula.preName} ${formula.type}: $value")
             }
 
             // 保证格式化发生在有效值更新之后

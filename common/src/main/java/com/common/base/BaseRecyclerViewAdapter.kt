@@ -23,6 +23,11 @@ abstract class BaseRecyclerViewAdapter<T, VB : ViewDataBinding> :
         return ViewHolder(binding)
     }
 
+    // 提供获取 items 的方法
+    fun retrieveItems(): List<T> {
+        return items
+    }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
         holder.bind(item)

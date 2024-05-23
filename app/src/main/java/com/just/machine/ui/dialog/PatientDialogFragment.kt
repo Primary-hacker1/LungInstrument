@@ -2,13 +2,14 @@ package com.just.machine.ui.dialog
 
 import android.app.Dialog
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.DisplayMetrics
 import android.view.Gravity
-import androidx.core.content.ContextCompat
+import android.view.View
+import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import com.common.base.BaseDialogFragment
@@ -20,7 +21,6 @@ import com.just.machine.dao.PatientBean
 import com.just.machine.model.CardiopulmonaryRecordsBean
 import com.just.machine.model.Constants
 import com.just.machine.model.SixMinRecordsBean
-import com.just.machine.model.sixminreport.SixMinReportInfo
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.CommonUtil
 import com.just.news.R
@@ -285,24 +285,23 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
             displayList.add(DateTimeConfig.MONTH)
             displayList.add(DateTimeConfig.DAY)
 
-//        val model = R.drawable.shape_bg_dialog_custom
+        val model = R.drawable.shape_bg_dialog_custom
 
             val pickerLayout = 0
 
             val dialog = CardDatePickerDialog.builder(requireContext())
-                .setTitle("DATE&TIME PICKER")
                 .setDisplayType(displayList)
-//            .setBackGroundModel(model)
-                .showBackNow(true)
+                .setBackGroundModel(model)
+                .showBackNow(false)
                 .setMaxTime(0)
                 .setPickerLayout(pickerLayout)
                 .setMinTime(0)
                 .setDefaultTime(System.currentTimeMillis())
                 .setTouchHideable(true)
                 .setWrapSelectorWheel(false)
-//            .setThemeColor(if (model == R.drawable.shape_bg_dialog_custom) Color.parseColor("#FF8000") else 0)
-                .showDateLabel(true)
-                .showFocusDateInfo(true)
+                .setThemeColor(if (model == R.drawable.shape_bg_dialog_custom) Color.parseColor("#2e8fd2") else 0)
+                .showDateLabel(true)//是否显示年月日
+                .showFocusDateInfo(false)
                 .setOnChoose("选择") {
 
                     val time = StringUtils.conversionTime(it)
@@ -314,6 +313,20 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
                 }.build()
             dialog.show()
             (dialog as BottomSheetDialog).behavior.isHideable = false
+            // 获取底部对话框并设置宽度
+            val bottomSheetDialog = dialog as BottomSheetDialog
+            val bottomSheet = bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout?
+
+            bottomSheet?.let {
+                val layoutParams = it.layoutParams
+                layoutParams.width = 1000 // 或者你想要的具体宽度
+                it.layoutParams = layoutParams
+            }
+
+            // 或者通过窗口属性设置宽度
+//            bottomSheetDialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+
         }
     }
 

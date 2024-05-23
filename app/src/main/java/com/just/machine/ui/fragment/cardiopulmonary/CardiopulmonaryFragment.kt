@@ -112,7 +112,6 @@ class CardiopulmonaryFragment : CommonBaseFragment<FragmentCardiopulmonaryBindin
         navController.currentBackStackEntry?.savedStateHandle?.getLiveData<String>("key")?.observe(
             this
         ) {
-            LogUtils.e(TAG + it.toString())
             onButtonClick(binding.btnStatic, 1)
         }
 

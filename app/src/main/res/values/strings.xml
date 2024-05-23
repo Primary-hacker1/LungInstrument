@@ -22,8 +22,8 @@
     <string name="gender">性别</string>
     <string name="select_name_number">请输入病历号或者姓名进行查询</string>
     <string name="record_number">病历号</string>
-    <string name="height">身高</string>
-    <string name="bodyWeight">体重</string>
+    <string name="height">身高(cm)</string>
+    <string name="bodyWeight">体重(kg)</string>
     <string name="identification_number">身份证号</string>
     <string name="birthday">生日</string>
     <string name="age">年龄</string>

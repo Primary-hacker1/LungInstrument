@@ -58,7 +58,9 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
                         if (settingBean !is StaticSettingBean) {
                             return@observe
                         }
+
                         staticSettingBean = settingBean
+                        LogUtils.e(tag + settingBean)
                     }
                     initData()
                 }
@@ -169,8 +171,41 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
 
             // 创建一个存储 DynamicBean 对象的数组
             val fvcBeans = arrayOf(
-                DynamicBean.spinnerItemData("SVC"),
-                DynamicBean.spinnerItemData("VC_ex"),
+                DynamicBean.spinnerItemData("FVC"),
+                DynamicBean.spinnerItemData("FEV1"),
+                DynamicBean.spinnerItemData("FEV2"),
+                DynamicBean.spinnerItemData("FEV3"),
+                DynamicBean.spinnerItemData("FEV6"),
+                DynamicBean.spinnerItemData("FEV1/FVC"),
+                DynamicBean.spinnerItemData("FEV2/FVC"),
+                DynamicBean.spinnerItemData("FEV3/FVC"),
+                DynamicBean.spinnerItemData("FEV6/FVC"),
+                DynamicBean.spinnerItemData("PEF"),
+                DynamicBean.spinnerItemData("MEF"),
+                DynamicBean.spinnerItemData("FEF25"),
+                DynamicBean.spinnerItemData("FEF75"),
+                DynamicBean.spinnerItemData("MMEF"),
+                DynamicBean.spinnerItemData("FET"),
+                DynamicBean.spinnerItemData("FEF200-1200"),
+                DynamicBean.spinnerItemData("PIF"),
+                DynamicBean.spinnerItemData("FIF50"),
+                DynamicBean.spinnerItemData("FIV1"),
+                DynamicBean.spinnerItemData("FIV1%FVC"),
+                DynamicBean.spinnerItemData("FEF50%FIF50"),
+                DynamicBean.spinnerItemData("FEV1%FIV1"),
+                DynamicBean.spinnerItemData("FEF75/85"),
+                DynamicBean.spinnerItemData("TIN/ TTOT"),
+                DynamicBean.spinnerItemData("TEX/ TTOT"),
+                DynamicBean.spinnerItemData("TIN/TEX"),
+                DynamicBean.spinnerItemData("T TOT"),
+                DynamicBean.spinnerItemData("MIF"),
+                DynamicBean.spinnerItemData("Vol extrap"),
+                DynamicBean.spinnerItemData("MMEF"),
+                DynamicBean.spinnerItemData("FVC IN"),
+                DynamicBean.spinnerItemData("Time(S)"),
+                DynamicBean.spinnerItemData("FVC IN"),
+//                DynamicBean.spinnerItemData("P0.1"),
+                DynamicBean.spinnerItemData("FVC IN"),
             )
 
             // 创建一个空的 beans 列表
@@ -180,6 +215,8 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
             for (bean in fvcBeans) {
                 bean.let { beansFVC.add(it) }
             }
+
+            LogUtils.d(tag + beansFVC)
 
             adapterFvc.setItemsBean(beansFVC)
 
@@ -320,12 +357,13 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
             staticSettingBean.yTimeUpMvv = binding.editYTimeUpMvv.text.toString()
             staticSettingBean.yTimeDownMvv = binding.editYTimeDownMvv.text.toString()
 
-            staticSettingBean.settingSVC.addAll(adapterSvc.items)
+            val svcItems = adapterSvc.retrieveItems()
+            staticSettingBean.settingSVC = svcItems.toMutableList()
             staticSettingBean.settingFVC.addAll(adapterFvc.items)
             staticSettingBean.settingMVV.addAll(adapterMvv.items)
 
             viewModel.setStaticSettingBean(staticSettingBean)
-            log(tag + staticSettingBean.toString())
+            LogUtils.d(tag + staticSettingBean.settingSVC.toString())
             toast("保存成功！")
         }
     }

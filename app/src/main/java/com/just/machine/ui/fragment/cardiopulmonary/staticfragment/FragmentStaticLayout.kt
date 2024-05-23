@@ -162,7 +162,6 @@ class FragmentStaticLayout @JvmOverloads constructor(
     fun setLungData(beans: MutableList<RoutineLungBean>) {
         routineLungList?.clear()
         routineLungList?.addAll(beans)
-        LogUtils.e(tag + beans.toString())
         routineLungList?.let {
             adapter.setItemsBean(
                 it
@@ -317,7 +316,6 @@ class FragmentStaticLayout @JvmOverloads constructor(
         }
 
         routineLungList?.let {
-            LogUtils.e(tag + it.toString())
             adapter.setItemsBean(it)
         }
 

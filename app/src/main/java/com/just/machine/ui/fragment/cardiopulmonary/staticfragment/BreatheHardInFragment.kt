@@ -4,7 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
+import com.common.base.log
 import com.common.network.LogUtils
+import com.common.viewmodel.LiveDataEvent.Companion.STATICSETTINGSSUCCESS
+import com.just.machine.dao.setting.StaticSettingBean
+import com.just.machine.model.CPETParameter
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.lungdata.LungFormula
 import com.just.machine.model.lungdata.RoutineLungBean
@@ -12,6 +16,7 @@ import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.model.lungdata.DynamicBean
 import com.just.news.databinding.FragmentBreatheBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.math.log
 
 
 /**
@@ -31,6 +36,8 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
 
     private var routineLungList: MutableList<RoutineLungBean> = ArrayList()
 
+    private var settingSVC: MutableList<CPETParameter> = ArrayList()
+
 
     override fun initView() {
 
@@ -38,25 +45,30 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
 
         layout.setInitView("常规")
 
-//        viewModel.getPatientsMax()
-//
-//        viewModel.mEventHub.observe(this) {
-//            when (it.action) {
-//                MaxPatient -> {//最新的患者
-//                    if(it.any is PatientBean){
-//                        val bean = it.any as PatientBean
-//                        bean.age
-//                        bean.sex
-//                        bean.height
-//                        bean.weight
-//                    }
-//                    LogUtils.e(tag + it.any)
-//                }
-//            }
-//        }
+        viewModel.getStaticSettings()
 
         initData()
 
+        viewModel.mEventHub.observe(this) {
+            when (it.action) {
+                STATICSETTINGSSUCCESS -> {
+                    LogUtils.e(tag + it.any)
+                    if (it.any !is MutableList<*>) {
+                        return@observe
+                    }
+
+                    val settings = it.any as MutableList<*>
+
+                    for (settingBean in settings) {
+                        if (settingBean !is StaticSettingBean) {
+                            return@observe
+                        }
+                        settingSVC = settingBean.settingSVC
+                    }
+                    initData()
+                }
+            }
+        }
     }
 
     override fun initListener() {
@@ -64,24 +76,24 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
     }
 
     private fun initData() {
+        routineLungList.clear()
         val bean = SharedPreferencesUtils.instance.patientBean
-        LogUtils.e(tag + bean.toString())
         val age = bean?.age?.toDoubleOrNull()
         val sex = bean?.sex
         val isMale = sex == "男"
         val height = bean?.height?.toDoubleOrNull()
         val weight = bean?.weight?.toDoubleOrNull()
 
-        // Helper function to create RoutineLungBean
         fun createRoutineLungBean(parameter: String, lungValue: Double?): RoutineLungBean {
+            if (parameter.isEmpty()) return RoutineLungBean()
             val dynamicBean = DynamicBean.spinnerItemData(parameter)
             return RoutineLungBean(
-                dynamicBean?.parameterNameCH + "(${dynamicBean?.parameterName})",
-                dynamicBean?.unit,
+                dynamicBean.parameterNameCH + "(${dynamicBean.parameterName})",
+                dynamicBean.unit,
                 lungValue?.toString() ?: "-",
-                "1",
-                "111",
-                "1",
+                "1",//最佳值
+                "111",//bp%
+                "1",//test1
                 "2",
                 "3",
                 "4",
@@ -89,21 +101,21 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
             )
         }
 
-        // Calculate lung values
-        val lungSVC = LungFormula.main("SVC", age, height, weight, isMale)
-        val lungERV = LungFormula.main("ERV", age, height, weight, isMale)
-        val lungIC = LungFormula.main("IC", age, height, weight, isMale)
 
-        // Create list of RoutineLungBeans
-        routineLungList = mutableListOf(
-            createRoutineLungBean("SVC", lungSVC),
-            createRoutineLungBean("VC_ex", null),
-            createRoutineLungBean("ERV", lungERV),
-            createRoutineLungBean("VT", null),
-            createRoutineLungBean("IC", lungIC)
-        )
+        for (index in settingSVC) {
+            if (index.isShow == true) {
+                LogUtils.e(tag + LungFormula.main(index.parameterName.toString()))
+                routineLungList.add(
+                    createRoutineLungBean(
+                        index.parameterName.toString(),
+                        LungFormula.main(index.parameterName.toString(), age, height, weight, isMale)
+                    )
+                )
+            }
+        }
 
-        // Bind data to layout
+        LogUtils.e(tag + routineLungList.toString())
+
         binding.fragmentLayout.setLungData(routineLungList)
     }
 

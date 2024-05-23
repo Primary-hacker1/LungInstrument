@@ -153,8 +153,6 @@ class AllSettingFragment : CommonBaseFragment<FragmentAllSettingBinding>() {
         })
 
         LiveDataBus.get().with(settingsAreSaved).observe(this) {
-            LogUtils.d(tag + "onClick")
-
             if (binding.editUpdatePass.text.toString() != binding.editConfirmPass.text.toString()) {
                 toast("登陆两次密码输入不相同！")
                 return@observe//两次密码输入不正确
