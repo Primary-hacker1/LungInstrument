@@ -7,6 +7,7 @@ import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.just.machine.dao.lung.CPXBreathInOutData
+import com.just.machine.model.CPETParameter
 import com.just.machine.model.lungdata.CPXSerializeData
 import com.just.machine.model.lungdata.DynamicBean
 import com.just.machine.ui.adapter.CustomSpinnerAdapter
@@ -37,12 +38,12 @@ class DynamicLayout @JvmOverloads constructor(
     val adapterTex = CustomSpinnerAdapter(context)
     val adapterFeo2 = CustomSpinnerAdapter(context)
 
-    val adapterTph = CustomSpinnerAdapter(context)
+    val adapterLoad = CustomSpinnerAdapter(context)
+    val adapterVO2HR = CustomSpinnerAdapter(context)
     val adapterVCO2 = CustomSpinnerAdapter(context)
-    val adapterHrr = CustomSpinnerAdapter(context)
-    val adapterVe = CustomSpinnerAdapter(context)
+    val adapterRER = CustomSpinnerAdapter(context)
+    val adapterPdia = CustomSpinnerAdapter(context)
     val adapterSpo2 = CustomSpinnerAdapter(context)
-    val adapterFico2 = CustomSpinnerAdapter(context)
     val adapterBf = CustomSpinnerAdapter(context)
     val adapterVtex = CustomSpinnerAdapter(context)
     val adapterFeco2 = CustomSpinnerAdapter(context)
@@ -62,22 +63,21 @@ class DynamicLayout @JvmOverloads constructor(
         binding.imgRecover.setColorFilter(color)
 
         binding.timeSpinner.adapter = adapterTime
-        binding.voSpinner.adapter = adapterVo
         binding.hrSpinner.adapter = adapterHr
-        binding.rerSpinner.adapter = adapterRer
-        binding.o2hrSpinner.adapter = adapterO2Hr
-        binding.fioSpinner.adapter = adapterFio2
-        binding.vdSpinner.adapter = adapterVdVt
+        binding.voSpinner.adapter = adapterRer
+        binding.vo2kgSpinner.adapter = adapterO2Hr
+        binding.psysSpinner.adapter = adapterFio2
+        binding.bfSpinner.adapter = adapterVdVt
         binding.texSpinner.adapter = adapterTex
         binding.feoSpinner.adapter = adapterFeo2
 
-        binding.phSpinner.adapter = adapterTph
-        binding.vcoSpinner.adapter = adapterVCO2
-        binding.hrrSpinner.adapter = adapterHrr
-        binding.veSpinner.adapter = adapterVe
-        binding.spoSpinner.adapter = adapterSpo2
-        binding.ficoSpinner.adapter = adapterFico2
-        binding.bfSpinner.adapter = adapterBf
+        binding.loadSpinner.adapter = adapterLoad
+        binding.vo2hrSpinner.adapter = adapterVO2HR
+        binding.vco2Spinner.adapter = adapterVCO2
+        binding.rerSpinner.adapter = adapterRER
+        binding.pdiaSpinner.adapter = adapterPdia
+        binding.spo2Spinner.adapter = adapterSpo2
+        binding.tinSpinner.adapter = adapterBf
         binding.vtexSpinner.adapter = adapterVtex
         binding.fecoSpinner.adapter = adapterFeco2
 
@@ -119,8 +119,9 @@ class DynamicLayout @JvmOverloads constructor(
 //            DynamicBean.spinnerItemData("RPE").apply { lowRange = cpxData?.cpxSerializeData.RPE },
 //            DynamicBean.spinnerItemData("RPM").apply { lowRange = cpxData?.RPM },
             DynamicBean.spinnerItemData("Speed").apply { lowRange = cpxSerializeData.Speed },
-            DynamicBean.spinnerItemData("SPO2").apply { lowRange =
-                cpxSerializeData.SPO2.toDouble()
+            DynamicBean.spinnerItemData("SPO2").apply {
+                lowRange =
+                    cpxSerializeData.SPO2.toDouble()
             },
             DynamicBean.spinnerItemData("SVc").apply { lowRange = cpxData?.SVc },
 //            DynamicBean.spinnerItemData("Tin").apply { lowRange = cpxData?.Tin },
@@ -144,14 +145,45 @@ class DynamicLayout @JvmOverloads constructor(
             it.lowRange != null
         }
 
-        // 确保 HR 是 adapterVo 的第一个数据
-        val hrItem = DynamicBean.spinnerItemData("HR").apply { lowRange = cpxSerializeData.HR }
-        val spinnerItemsForVo = listOfNotNull(hrItem) + spinnerItems.filter { it.parameterName != "HR" }
+        val spinnerItemsForHr = createSpinnerItems("HR", cpxSerializeData, spinnerItems)
+        val spinnerItemsForVo2 = createSpinnerItems("VO2", cpxSerializeData, spinnerItems)
+        val spinnerItemsForLoad = createSpinnerItems("Load", cpxSerializeData, spinnerItems)
+        val spinnerItemsForRer = createSpinnerItems("Rer", cpxSerializeData, spinnerItems)
+        val spinnerItemsForVO2Hr = createSpinnerItems("VO2/HR", cpxSerializeData, spinnerItems)
+        val spinnerItemsForFio2 = createSpinnerItems("Fio2", cpxSerializeData, spinnerItems)
+        val spinnerItemsForVDVT = createSpinnerItems("VD/VT", cpxSerializeData, spinnerItems)
 
-        adapterTime.updateSpinnerText(spinnerItems.toMutableList())
 
-        adapterVo.updateSpinnerText(spinnerItems.toMutableList())//测试一下
+        val spinnerItemsForVCo2 = createSpinnerItems("VCO2", cpxSerializeData, spinnerItems)
+        val spinnerItemsForRER = createSpinnerItems("RER", cpxSerializeData, spinnerItems)
+        val spinnerItemsForSPO2 = createSpinnerItems("SPO2", cpxSerializeData, spinnerItems)
+        val spinnerItemsForBF = createSpinnerItems("BF", cpxSerializeData, spinnerItems)
+        val spinnerItemsForVTex = createSpinnerItems("VTex", cpxSerializeData, spinnerItems)
 
+        adapterVo.updateSpinnerText(spinnerItemsForVo2.toMutableList())
+        adapterHr.updateSpinnerText(spinnerItemsForHr.toMutableList())
+        adapterRer.updateSpinnerText(spinnerItemsForRer.toMutableList())
+        adapterO2Hr.updateSpinnerText(spinnerItemsForVO2Hr.toMutableList())
+        adapterFio2.updateSpinnerText(spinnerItemsForFio2.toMutableList())
+        adapterVdVt.updateSpinnerText(spinnerItemsForVDVT.toMutableList())
+
+        adapterLoad.updateSpinnerText(spinnerItemsForLoad.toMutableList())
+        adapterVCO2.updateSpinnerText(spinnerItemsForVCo2.toMutableList())
+        adapterRER.updateSpinnerText(spinnerItemsForRER.toMutableList())
+        adapterSpo2.updateSpinnerText(spinnerItemsForSPO2.toMutableList())
+        adapterBf.updateSpinnerText(spinnerItemsForBF.toMutableList())
+        adapterVtex.updateSpinnerText(spinnerItemsForVTex.toMutableList())
+
+    }
+
+    // 创建一个用于生成 SpinnerItemData 的函数
+    private fun createSpinnerItems(
+        parameter: String,
+        cpxData: CPXSerializeData,
+        items: List<CPETParameter>
+    ): List<CPETParameter> {
+        val newItem = DynamicBean.spinnerItemData(parameter).apply { lowRange = cpxData.HR }
+        return listOfNotNull(newItem) + items.filter { it.parameterName != parameter }
     }
 
 }

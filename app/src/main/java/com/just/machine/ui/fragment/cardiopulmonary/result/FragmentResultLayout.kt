@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.network.LogUtils
@@ -48,7 +49,7 @@ class FragmentResultLayout @JvmOverloads constructor(
         EXTREMUM,//极值分析
         OXYGEN,//无氧域分析
         COMPENSATORY,//呼吸代偿点分析
-//        SLOP,//斜率分析
+        //        SLOP,//斜率分析
         FLOWRATE//动态流速环分析
     }
 
@@ -181,7 +182,7 @@ class FragmentResultLayout @JvmOverloads constructor(
         }
 
         val dataSet = ScatterDataSet(entries, "Scatter Data Set")
-        dataSet.color = Color.RED
+        dataSet.color = ContextCompat.getColor(context, R.color.colorPrimary)
         dataSet.setDrawValues(false)
 
         val dataSets = ArrayList<IScatterDataSet>()

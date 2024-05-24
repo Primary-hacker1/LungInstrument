@@ -143,13 +143,6 @@
                                 android:layout_height="53dp" />
 
                         <Spinner
-                                android:id="@+id/vo_spinner"
-                                style="@style/CustomSpinnerStyle"
-                                android:layout_width="match_parent"
-                                android:layout_height="53dp" />
-
-
-                        <Spinner
                                 android:id="@+id/hr_spinner"
                                 style="@style/CustomSpinnerStyle"
                                 android:layout_width="match_parent"
@@ -157,21 +150,28 @@
 
 
                         <Spinner
-                                android:id="@+id/rer_spinner"
+                                android:id="@+id/vo_spinner"
                                 style="@style/CustomSpinnerStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="53dp" />
 
 
                         <Spinner
-                                android:id="@+id/o2hr_spinner"
+                                android:id="@+id/vo2kg_spinner"
                                 style="@style/CustomSpinnerStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="53dp" />
 
 
                         <Spinner
-                                android:id="@+id/fio_spinner"
+                                android:id="@+id/psys_spinner"
+                                style="@style/CustomSpinnerStyle"
+                                android:layout_width="match_parent"
+                                android:layout_height="53dp" />
+
+
+                        <Spinner
+                                android:id="@+id/bf_spinner"
                                 style="@style/CustomSpinnerStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="53dp" />
@@ -206,43 +206,43 @@
                             android:orientation="vertical">
 
                         <Spinner
-                                android:id="@+id/ph_spinner"
+                                android:id="@+id/load_spinner"
                                 style="@style/CustomSpinnerStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="53dp" />
 
                         <Spinner
-                                android:id="@+id/vco_spinner"
+                                android:id="@+id/vo2hr_spinner"
                                 style="@style/CustomSpinnerStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="53dp" />
 
                         <Spinner
-                                android:id="@+id/hrr_spinner"
+                                android:id="@+id/vco2_spinner"
                                 style="@style/CustomSpinnerStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="53dp" />
 
                         <Spinner
-                                android:id="@+id/ve_spinner"
+                                android:id="@+id/rer_spinner"
                                 style="@style/CustomSpinnerStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="53dp" />
 
                         <Spinner
-                                android:id="@+id/spo_spinner"
+                                android:id="@+id/pdia_spinner"
                                 style="@style/CustomSpinnerStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="53dp" />
 
                         <Spinner
-                                android:id="@+id/fico_spinner"
+                                android:id="@+id/spo2_spinner"
                                 style="@style/CustomSpinnerStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="53dp" />
 
                         <Spinner
-                                android:id="@+id/bf_spinner"
+                                android:id="@+id/tin_spinner"
                                 style="@style/CustomSpinnerStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="53dp" />

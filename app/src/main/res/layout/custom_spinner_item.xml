@@ -12,10 +12,11 @@
             android:textSize="@dimen/space_10"
             android:layout_height="wrap_content" />
 
-    <TextView
+    <com.justsafe.libview.text.MarqueeTextView
             android:id="@+id/spinner_title_name"
             android:layout_width="wrap_content"
             android:textSize="@dimen/space_10"
+            android:maxLines="1"
             android:layout_height="wrap_content" />
 
 

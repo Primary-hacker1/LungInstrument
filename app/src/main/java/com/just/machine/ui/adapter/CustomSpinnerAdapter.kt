@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.just.machine.model.CPETParameter
 import com.just.news.R
+import com.justsafe.libview.text.MarqueeTextView
 
 class CustomSpinnerAdapter(context: Context, private val dataList: MutableList<CPETParameter>? = ArrayList()) :
     ArrayAdapter<CPETParameter>(context, R.layout.custom_spinner_item, dataList!!) {
@@ -32,7 +33,7 @@ class CustomSpinnerAdapter(context: Context, private val dataList: MutableList<C
 
     private fun createItemView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.custom_spinner_item, parent, false)
-        val spinnerTitleName = view.findViewById<TextView>(R.id.spinner_title_name)
+        val spinnerTitleName = view.findViewById<MarqueeTextView>(R.id.spinner_title_name)
         val spinnerTitle = view.findViewById<TextView>(R.id.spinner_title)
         val spinnerText = view.findViewById<TextView>(R.id.spinner_text)
         val pair = dataList?.get(position)
