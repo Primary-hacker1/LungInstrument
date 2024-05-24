@@ -87,7 +87,7 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 //                viewModel.insertCPXBreathInOutData(//插入数据库
 //                    cpxData
 //                )
-                log(tag + cpxData.toString())
+                LogUtils.e(tag + cpxData.toString())
 
                 LiveDataBus.get().with("动态心肺测试").value = cpxData
 

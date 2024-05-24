@@ -6,6 +6,8 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import androidx.core.content.ContextCompat
 import com.common.base.BaseRecyclerViewAdapter
+import com.common.base.gone
+import com.common.base.visible
 import com.common.network.LogUtils
 import com.just.machine.model.DynamicResultButtonBean
 import com.just.news.R
@@ -44,6 +46,13 @@ class ResultBtnAdapter(val context: Context) :
                 ContextCompat.getDrawable(context, R.drawable.spinner_dropdown_background)
             binding.rlItem.background = rlItemBg
         }
+
+        if(item.isVisible == true){
+            binding.rlItem.visible()
+        }else{
+            binding.rlItem.gone()
+        }
+
     }
 
     override fun getLayoutRes(): Int {

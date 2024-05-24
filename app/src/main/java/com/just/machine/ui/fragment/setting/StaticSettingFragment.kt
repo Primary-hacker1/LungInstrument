@@ -60,7 +60,6 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
                         }
 
                         staticSettingBean = settingBean
-                        LogUtils.e(tag + settingBean)
                     }
                     initSetting()
                 }

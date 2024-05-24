@@ -3,6 +3,7 @@ package com.just.machine.dao.lung
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.just.machine.model.lungdata.CPXSerializeData
 
 /**
  * 动态肺数据bean

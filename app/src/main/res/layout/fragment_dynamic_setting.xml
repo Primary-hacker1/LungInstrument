@@ -294,19 +294,13 @@
                                     android:layout_height="wrap_content"
                                     android:orientation="vertical">
 
-                                <CheckBox
-                                        android:id="@+id/cb_compensatory"
-                                        style="@style/CustomCheckBox"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="呼吸代偿点分析" />
+
 
                                 <CheckBox
                                         android:id="@+id/cb_exercisePrescriptionOptions"
                                         style="@style/CustomCheckBox"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/space_10"
                                         android:text="运动处方选择" />
 
                             </LinearLayout>

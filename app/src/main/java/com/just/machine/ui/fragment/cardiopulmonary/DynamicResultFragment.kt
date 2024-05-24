@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
+import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent.Companion.DYNAMICSUCCESS
 import com.just.machine.dao.setting.DynamicSettingBean
 import com.just.machine.model.DynamicResultButtonBean
@@ -21,7 +22,6 @@ import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.FragmentDynamicResultBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_static.viewpager
 
 
 /**
@@ -35,6 +35,9 @@ class DynamicResultFragment : CommonBaseFragment<FragmentDynamicResultBinding>()
     private val viewModel by viewModels<MainViewModel>()
 
     private val resultBtnAdapter by lazy { ResultBtnAdapter(requireContext()) }
+
+    private var bean: MutableList<DynamicResultButtonBean> = ArrayList()
+
     override fun loadData() {//懒加载
 
     }
@@ -70,29 +73,49 @@ class DynamicResultFragment : CommonBaseFragment<FragmentDynamicResultBinding>()
             updateButtonList(item.resultBtnName)
         }
 
-        viewModel.mEventHub.observe(this) {
-            when (it.action) {
+        viewModel.getDynamicSettings()
+
+        viewModel.mEventHub.observe(this) { event ->
+            when (event.action) {
                 DYNAMICSUCCESS -> {
-                    if (it.any !is MutableList<*>) {
+                    if (event.any !is MutableList<*>) {
                         return@observe
                     }
 
-                    val settings = it.any as MutableList<*>
+                    val settings = event.any as MutableList<*>
 
                     for (settingBean in settings) {
                         if (settingBean !is DynamicSettingBean) {
                             return@observe
                         }
-                        if(settingBean.isExtremum == true){
-//                            binding.viewpager.adapter
-                        }else{
-//                            binding.viewpager.show(1)
+
+                        LogUtils.e(tag + settingBean)
+
+                        // 根据条件决定是否添加或移除对应的片段
+                        for (index in bean) {
+                            if (index.resultBtnName.toString() == "运动极值分析") {
+                                index.isVisible = settingBean.isExtremum
+                            }
+
+                            if (index.resultBtnName.toString() == "无氧域分析") {
+                                index.isVisible = settingBean.isOxygen
+                            }
+
+                            if (index.resultBtnName.toString() == "呼吸代偿点分析") {
+                                index.isVisible = settingBean.isRpe
+                            }
+
+                            if (index.resultBtnName.toString() == "动态流速环分析") {
+                                index.isVisible = settingBean.isDynamicTrafficAnalysis
+                            }
                         }
+
+                        resultBtnAdapter.setItemsBean(bean)
                     }
-//                    initData()
                 }
             }
         }
+
 
     }
 
@@ -108,7 +131,14 @@ class DynamicResultFragment : CommonBaseFragment<FragmentDynamicResultBinding>()
 
         val buttons = buttonData.map { (name, drawableResId) ->
             val drawable = ContextCompat.getDrawable(requireContext(), drawableResId)
-            DynamicResultButtonBean(drawable, name, name == activeButtonName)
+            var isVis = true
+            for (index in bean) {
+                if (index.resultBtnName.toString() == name) {
+                    isVis = index.isVisible == true
+                }
+            }
+
+            DynamicResultButtonBean(drawable, name, name == activeButtonName, isVis)
         }.toMutableList()
 
         activeButtonName?.let { name ->
@@ -118,15 +148,15 @@ class DynamicResultFragment : CommonBaseFragment<FragmentDynamicResultBinding>()
             }
         }
 
-        return buttons
-    }
+    return buttons
+}
 
 
-    // 更新按钮列表的函数
-    private fun updateButtonList(activeButtonName: String?) {
-        val buttons = createButtonList(activeButtonName)
-        resultBtnAdapter.setItemsBean(buttons)
-    }
+// 更新按钮列表的函数
+private fun updateButtonList(activeButtonName: String?) {
+    bean = createButtonList(activeButtonName)
+    resultBtnAdapter.setItemsBean(bean)
+}
 
     override fun initListener() {
 

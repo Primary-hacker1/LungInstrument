@@ -72,6 +72,7 @@ class RoutineFragment : CommonBaseFragment<FragmentRoutineDynmicBinding>() {
 
         binding.chart1.setDynamicDragLine()
 
+        binding.layoutDynamicData.setDynamicData()
 
         LiveDataBus.get().with("动态心肺测试").observe(this) {//解析串口消息
             if (it is CPXBreathInOutData) {

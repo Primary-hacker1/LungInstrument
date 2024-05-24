@@ -1,5 +1,6 @@
 package com.just.machine.model.lungdata
 
+import com.common.base.notNull
 import com.just.machine.model.CPETParameter
 
 object DynamicBean {
@@ -981,7 +982,9 @@ object DynamicBean {
 
     fun spinnerItemData(parameterType: String): CPETParameter {
         // 使用 find 函数查找第一个符合条件的元素
-        return cpetParameters.find { it.parameterName == parameterType }!!
+        val cpxParameter = cpetParameters.find { it.parameterName.equals(parameterType, ignoreCase = true) }
+        if (cpxParameter == null) return CPETParameter()
+        return cpxParameter
     }
 
     fun spinnerItemDatas(): MutableList<CPETParameter> {//全部

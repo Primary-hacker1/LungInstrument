@@ -5,7 +5,7 @@ data class CPETParameter(
     var parameterName: String? = null,
     var parameterNameCH: String? = null,
     var parameterType: String? = null,
-    var lowRange: Double? = null,
+    var lowRange: Double? = 0.0,
     var highRange: Double? = null,
     var unit: String? = null,
     var isShow: Boolean? = null,
