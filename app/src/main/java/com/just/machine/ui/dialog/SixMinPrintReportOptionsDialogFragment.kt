@@ -7,7 +7,9 @@ import com.common.base.setNoRepeatListener
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogSixminPrintReportOptionsBinding
 import dagger.hilt.android.AndroidEntryPoint
-
+/**
+ * 6分钟打印dialog
+ */
 @AndroidEntryPoint
 class SixMinPrintReportOptionsDialogFragment :
     BaseDialogFragment<FragmentDialogSixminPrintReportOptionsBinding>() {

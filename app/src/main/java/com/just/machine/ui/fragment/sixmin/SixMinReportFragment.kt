@@ -469,10 +469,10 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         )
         if (sixMinRecordsBean.prescriptionBean[0].movementWay == "0") {
             root["checkcf1"] = PictureRenderData(14,14,checkPng.absolutePath)
-            root["checkcf2"] = PictureRenderData(16,16,unCheckPng.absolutePath)
+            root["checkcf2"] = PictureRenderData(14,14,unCheckPng.absolutePath)
         } else if (sixMinRecordsBean.prescriptionBean[0].movementWay == "1") {
             root["checkcf2"] = PictureRenderData(14,14,checkPng.absolutePath)
-            root["checkcf1"] = PictureRenderData(16,16,unCheckPng.absolutePath)
+            root["checkcf1"] = PictureRenderData(14,14,unCheckPng.absolutePath)
         }
         var strideTitStrs = "/"
         var strideStrs = "/"

@@ -17,6 +17,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ * 6分钟心电截图dialog
+ */
 class SixMinCaptureEcgDialogFragment : BaseDialogFragment<FragmentDialogSixminCaptureEcgBinding>() {
 
     private lateinit var listener: CaptureEcgDialogListener

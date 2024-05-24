@@ -7,7 +7,9 @@ import com.common.base.BaseDialogFragment
 import com.just.machine.model.Constants
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogLoadingBinding
-
+/**
+ * loading弹窗
+ */
 class LoadingDialogFragment:  BaseDialogFragment<FragmentDialogLoadingBinding>() {
 
     private var dialogContent = ""

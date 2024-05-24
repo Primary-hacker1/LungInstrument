@@ -34,7 +34,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/space_20"
                 android:layout_marginBottom="@dimen/space_10"
-                android:background="@mipmap/logo" />
+                android:background="@drawable/logo" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"

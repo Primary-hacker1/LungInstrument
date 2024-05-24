@@ -35,8 +35,6 @@ import com.just.machine.ui.adapter.CardiopulAdapter
 import com.just.machine.ui.adapter.PatientsAdapter
 import com.just.machine.ui.adapter.SixMinAdapter
 import com.just.machine.ui.dialog.CommonDialogFragment
-import com.just.machine.ui.dialog.DeleteWarnDialogFragment
-import com.just.machine.ui.dialog.DeleteWarnDialogFragment.Companion.startDeleteWarnDialogFragment
 import com.just.machine.ui.dialog.LoadingDialogFragment
 import com.just.machine.ui.dialog.PatientDialogFragment
 import com.just.machine.ui.dialog.SelectActionDialogFragment
@@ -320,19 +318,23 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                                     return
                                 }
 
-                                val startDeleteWarnDialogFragment = startDeleteWarnDialogFragment(
+                                val startCommonDialogFragment = CommonDialogFragment.startCommonDialogFragment(
                                     supportFragmentManager, "确认删除该试验记录吗?"
                                 )
-                                startDeleteWarnDialogFragment.setDeleteWarnDialogListener(object :
-                                    DeleteWarnDialogFragment.DeleteWarnDialogListener {
-                                    override fun onClickConfirm() {
+                                startCommonDialogFragment.setCommonDialogOnClickListener(object :
+                                    CommonDialogFragment.CommonDialogClickListener {
+                                    override fun onPositiveClick() {
                                         hasPassPermission = false
                                         viewModel.deleteSixMinReportInfo(bean.reportNo)
                                         viewModel.getPatients()//查询数据库
                                     }
 
-                                    override fun onClickCancel() {
+                                    override fun onNegativeClick() {
                                         hasPassPermission = false
+                                    }
+
+                                    override fun onStopNegativeClick(stopReason: String) {
+
                                     }
                                 })
                             }
@@ -824,16 +826,21 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
         adapter.setItemOnClickListener(object : PatientsAdapter.PatientListener {
             override fun onDeleteItem(bean: PatientBean) {
-                val startDeleteWarnDialogFragment =
-                    startDeleteWarnDialogFragment(supportFragmentManager, "确认删除该患者吗?")
-                startDeleteWarnDialogFragment.setDeleteWarnDialogListener(object :
-                    DeleteWarnDialogFragment.DeleteWarnDialogListener {
-                    override fun onClickConfirm() {
+                val startCommonDialogFragment = CommonDialogFragment.startCommonDialogFragment(
+                    supportFragmentManager, "确认删除该患者吗?"
+                )
+                startCommonDialogFragment.setCommonDialogOnClickListener(object :
+                    CommonDialogFragment.CommonDialogClickListener {
+                    override fun onPositiveClick() {
                         viewModel.deletePatient(bean.patientId)
                         viewModel.deleteSixMinReportInfoById(bean.patientId.toString())
                     }
 
-                    override fun onClickCancel() {
+                    override fun onNegativeClick() {
+
+                    }
+
+                    override fun onStopNegativeClick(stopReason: String) {
 
                     }
                 })
