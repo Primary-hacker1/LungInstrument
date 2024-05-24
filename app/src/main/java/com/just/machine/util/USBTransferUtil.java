@@ -11,23 +11,20 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
-
-import com.github.mikephil.charting.data.Entry;
 import com.google.gson.Gson;
 import com.hoho.android.usbserial.driver.UsbSerialDriver;
 import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
 import com.hoho.android.usbserial.util.SerialInputOutputManager;
 import com.just.machine.model.BloodOxyLineEntryBean;
+import com.just.machine.model.Constants;
 import com.just.machine.model.UsbSerialData;
 import com.just.machine.model.sixminreport.SixMinBloodOxygen;
 import com.just.machine.model.sixminreport.SixMinReportEvaluation;
-import com.just.machine.model.sixminreport.SixMinReportOther;
 import com.just.machine.model.sixminreport.SixMinReportStride;
 import com.just.machine.model.sixminreport.SixMinReportWalk;
 import com.just.machine.model.systemsetting.SixMinSysSettingBean;
 import com.just.news.BuildConfig;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -58,7 +55,7 @@ public class USBTransferUtil {
     private String headDataStr = "A88A3214";//设备信息包抬头
     private byte bytesnull = (byte) 0x00;
 
-    private String TAG = "USBTransferUtil";
+    private final String TAG = "USBTransferUtil";
     public boolean isConnectUSB = false;  // 连接标识
     private Context my_context;
     private UsbManager manager;  // usb管理器
@@ -84,7 +81,7 @@ public class USBTransferUtil {
     public int circleCount = 0;
     public int testType = 0;//0初始状态 1开始 2结束 3采集运动后心率
     public boolean ignoreBlood = false;//是否忽略测量血压
-    public int updateBluetooth = 0;//
+    public int updateBluetooth = 0;//验证蓝牙参数是否修改成功
     public boolean ecgConnection = false;//心电连接状态
     public boolean bloodPressureConnection = false;//血压连接状态
     public boolean bloodOxygenConnection = false;//血氧连接状态
@@ -135,14 +132,6 @@ public class USBTransferUtil {
 
     public void setOnUSBDateReceive(OnUSBDateReceive onUSBDateReceive) {
         this.onUSBDateReceive = onUSBDateReceive;
-    }
-
-    public int getCircleCount() {
-        return circleCount;
-    }
-
-    public void setCircleCount(int circleCount) {
-        this.circleCount = circleCount;
     }
 
     public void init(Context context) {
@@ -308,7 +297,7 @@ public class USBTransferUtil {
                 e.printStackTrace();
             }
         });
-        inputOutputManager.setReadBufferSize(6144);
+        inputOutputManager.setReadBufferSize(2048);
         inputOutputManager.start();
         isConnectUSB = true;  // 修改连接标识
         Toast.makeText(my_context, "连接成功", Toast.LENGTH_SHORT).show();
@@ -475,33 +464,33 @@ public class USBTransferUtil {
                         //区分心电数据和数据包数据
                         String[] strs = dataStr.split(headDataStr);
                         //44=，52-8(分组时漏掉的包头长
-                        if (strs.length == 2 && strs[1].length() == 44) {
-                            byte[] bytes = CRC16Util.hexStringToBytes(strs[0]);
-                            realutbyte = CRC16Util.getByte(bytes);
-                            try {
-                                ByteBuffUtils.addBytes(byteBuffer, realutbyte);
-                                testMpDecode.decode(mapXinlv, byteBuffer);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
+//                        if (strs.length == 2 && strs[1].length() == 44) {
+//                            byte[] bytes = CRC16Util.hexStringToBytes(strs[0]);
+//                            realutbyte = CRC16Util.getByte(bytes);
+//                            try {
+//                                ByteBuffUtils.addBytes(byteBuffer, realutbyte);
+//                                testMpDecode.decode(mapXinlv, byteBuffer);
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
                         dataDaStr = headDataStr + strs[1];
                     } else if (headStr.equals(headEcgStr2) || headStr.equals(headEcgStr3)) {
                         //心电注册包
-                        String[] strs = dataStr.split(headDataStr);
-                        if (strs.length == 2 && strs[1].length() == 44) {
-                            if (testType == 0 || testType == 1 || testType == 2 || testType == 3) {
-                                byte[] bytes = CRC16Util.hexStringToBytes(strs[0]);
-                                realutbyte = CRC16Util.getByte(bytes);
-                                try {
-                                    ByteBuffUtils.addBytes(byteBuffer, realutbyte);
-                                    testMpDecode.decode(mapXinlv, byteBuffer);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            dataDaStr = headDataStr + strs[1];
-                        }
+//                        String[] strs = dataStr.split(headDataStr);
+//                        if (strs.length == 2 && strs[1].length() == 44) {
+//                            if (testType == 0 || testType == 1 || testType == 2 || testType == 3) {
+//                                byte[] bytes = CRC16Util.hexStringToBytes(strs[0]);
+//                                realutbyte = CRC16Util.getByte(bytes);
+//                                try {
+//                                    ByteBuffUtils.addBytes(byteBuffer, realutbyte);
+//                                    testMpDecode.decode(mapXinlv, byteBuffer);
+//                                } catch (Exception e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                            dataDaStr = headDataStr + strs[1];
+//                        }
                     } else if (headStr.equals(headDataStr) && dataStr.length() == 52) {
                         //单独数据包
                         dataDaStr = dataStr;
@@ -598,9 +587,9 @@ public class USBTransferUtil {
                                 Long time = System.currentTimeMillis();
                                 byte[] b = {bytes[12]};
                                 int oxygen = Integer.valueOf(CRC16Util.bytesToHexString(b), 16);
-                                if (oxygen > 99) {
-                                    oxygen = 99;
-                                }
+//                                if (oxygen > 99) {
+//                                    oxygen = 99;
+//                                }
                                 String str = Integer.toString(oxygen);
                                 mapBloodOxygen.put(time, str);
                                 usbSerialData.setBloodOxygen(String.valueOf(oxygen));
@@ -644,32 +633,12 @@ public class USBTransferUtil {
                         }
                     }
                     byteStr = byteStr.substring(start);
-                    LiveDataBus.get().with("simMinTest").postValue(new Gson().toJson(usbSerialData));
+                    LiveDataBus.get().with(Constants.sixMinLiveDataBusKey).postValue(new Gson().toJson(usbSerialData));
                 }
             } else {
                 byteStr = byteStr.substring(2);
             }
         }
-    }
-
-    /**
-     * 处理步数
-     *
-     * @return
-     */
-    public List<Entry> dealStepsLineChartData(SixMinReportOther sixMinReportOther, SixMinReportWalk sixMinReportWalk) {
-        List<Entry> entries = new ArrayList<>();
-        if (sixMinReportOther.getStopOr().equals("1")) {
-            if (!sixMinReportOther.getStopTime().isEmpty()) {
-                String[] times = sixMinReportOther.getStopTime().split("分");
-                if (times.length == 2) {
-
-                }
-            }
-        } else {
-
-        }
-        return entries;
     }
 
     /**
@@ -886,21 +855,18 @@ public class USBTransferUtil {
      * @return
      */
     public String dealYdbsStrs(String percentStr, BigDecimal strideAverage) {
-        String ydbsStr = (strideAverage.multiply(new BigDecimal(percentStr)).setScale(1, BigDecimal.ROUND_HALF_UP)).toString();
-        return ydbsStr;
+        return (strideAverage.multiply(new BigDecimal(percentStr)).setScale(1, BigDecimal.ROUND_HALF_UP)).toString();
     }
 
     /**
      * 处理推荐距离
-     *
      * @param percentStr
      * @param strideAverage
      * @param shichang
      * @return
      */
     public String dealtjjlStrs(String percentStr, BigDecimal strideAverage, Integer shichang) {
-        String tjjlStr = (strideAverage.multiply(new BigDecimal(percentStr)).multiply(new BigDecimal(shichang)).setScale(1, BigDecimal.ROUND_HALF_UP)).toString();
-        return tjjlStr;
+        return (strideAverage.multiply(new BigDecimal(percentStr)).multiply(new BigDecimal(shichang)).setScale(1, BigDecimal.ROUND_HALF_UP)).toString();
     }
 
     /**
@@ -942,8 +908,8 @@ public class USBTransferUtil {
             } else {
                 reportStride.setStrideSix("0.00");
             }
-            BigDecimal min = new BigDecimal(0.00);
-            BigDecimal max = new BigDecimal(0.00);
+            BigDecimal min = new BigDecimal("0.00");
+            BigDecimal max = new BigDecimal("0.00");
             if (integers.size() > 0) {
                 min = Collections.min(integers);
                 max = Collections.max(integers);
@@ -1130,14 +1096,14 @@ public class USBTransferUtil {
             } else {
                 reportWalk.setWalkSix("0");
             }
-            Integer min = 0;
-            Integer max = 0;
+            int min = 0;
+            int max = 0;
             if (integers.size() > 0) {
                 min = Collections.min(integers);
                 max = Collections.max(integers);
             }
-            reportWalk.setWalkBig(max.toString());
-            reportWalk.setWaklSmall(min.toString());
+            reportWalk.setWalkBig(Integer.toString(max));
+            reportWalk.setWaklSmall(Integer.toString(min));
             BigDecimal avg = new BigDecimal("0");
             if (len != 0) {
                 avg = new BigDecimal(numAll).divide(new BigDecimal(len), 0, RoundingMode.HALF_UP);
@@ -1157,13 +1123,13 @@ public class USBTransferUtil {
      * @return
      */
     public SixMinReportEvaluation dealPreption(SixMinSysSettingBean systemDto, SixMinReportEvaluation etion, String min, String sec, Integer type, int min1, int sec1) {
-        Integer lenKu = 0;
-        Integer tcLocation = 1;
+        int lenKu = 0;
+        int tcLocation = 1;
         BigDecimal len = new BigDecimal(0);//步行圈数的距离
         if (null != systemDto) {
             //根据系统设置里的场地长度算出圈的长度
             etion.setFieldLength(systemDto.getSysOther().getAreaLength());
-            lenKu = Integer.valueOf(systemDto.getSysOther().getAreaLength());
+            lenKu = Integer.parseInt(systemDto.getSysOther().getAreaLength());
             //起始摆放
             len = new BigDecimal(lenKu * Integer.parseInt(etion.getTurnsNumber()) * 2);
         }
@@ -1179,7 +1145,7 @@ public class USBTransferUtil {
         }
         //圈数用的时间
         BigDecimal withTime = new BigDecimal("5.59").subtract(mainingTime);
-        Integer mainingIn = 0;
+        int mainingIn = 0;
         //主动停止的，总时长根据实际时长来
         if (type == 1) {
             //停止的时间
@@ -1190,16 +1156,16 @@ public class USBTransferUtil {
             BigDecimal syTime = new BigDecimal(time).subtract(withTime);
             String syTimeStr = syTime.toString();
             //把剩下的时间当作时间，上面的是速度，算出未走完那圈的走了的距离
-            mainingIn = Integer.valueOf(syTimeStr.substring(0, 1)) * 60 + Integer.valueOf(syTimeStr.substring(2, syTimeStr.length()));
+            mainingIn = Integer.parseInt(syTimeStr.substring(0, 1)) * 60 + Integer.parseInt(syTimeStr.substring(2, syTimeStr.length()));
         } else {
             //把剩下的时间当作时间，上面的是速度，算出未走完那圈的走了的距离
-            mainingIn = Integer.valueOf(min) * 60 + Integer.valueOf(sec);
+            mainingIn = Integer.parseInt(min) * 60 + Integer.parseInt(sec);
         }
         String minStr = withTime.toString().substring(0, 1);
         String secStr = withTime.toString().substring(2, withTime.toString().length());
         //将用了的时间换算成秒
-        Integer minRe = Integer.valueOf(minStr) * 60;
-        Integer timeRe = minRe + Integer.valueOf(secStr);
+        int minRe = Integer.parseInt(minStr) * 60;
+        int timeRe = minRe + Integer.parseInt(secStr);
         BigDecimal speed;
         BigDecimal distance;
         if (withTime.compareTo(BigDecimal.ZERO) == 0) {
@@ -1308,7 +1274,7 @@ public class USBTransferUtil {
         }
         //圈数用的时间
         BigDecimal withTime = new BigDecimal("5.59").subtract(mainingTime, new MathContext(3));
-        Integer mainingIn = 0;
+        int mainingIn = 0;
         //主动停止的，总时长根据实际时长来
         if (type == 1) {
             //停止的时间
@@ -1319,16 +1285,16 @@ public class USBTransferUtil {
             BigDecimal syTime = new BigDecimal(time).subtract(withTime, new MathContext(3));
             String syTimeStr = syTime.toString();
             //把剩下的时间当作时间，上面的是速度，算出未走完那圈的走了的距离
-            mainingIn = Integer.valueOf(syTimeStr.substring(0, 1)) * 60 + Integer.valueOf(syTimeStr.substring(2, syTimeStr.length()));
+            mainingIn = Integer.parseInt(syTimeStr.substring(0, 1)) * 60 + Integer.parseInt(syTimeStr.substring(2, syTimeStr.length()));
         } else {
             //把剩下的时间当作时间，上面的是速度，算出未走完那圈的走了的距离
-            mainingIn = Integer.valueOf(min) * 60 + Integer.valueOf(sec);
+            mainingIn = Integer.parseInt(min) * 60 + Integer.parseInt(sec);
         }
         String minStr = withTime.toString().substring(0, 1);
         String secStr = withTime.toString().substring(2, withTime.toString().length());
         //将用了的时间换算成秒
-        Integer minRe = Integer.valueOf(minStr) * 60;
-        Integer timeRe = minRe + Integer.valueOf(secStr);
+        int minRe = Integer.parseInt(minStr) * 60;
+        int timeRe = minRe + Integer.parseInt(secStr);
         BigDecimal speed;
         BigDecimal distance;
         if (withTime.compareTo(BigDecimal.ZERO) == 0) {
@@ -1341,7 +1307,7 @@ public class USBTransferUtil {
         //最后一圈还剩多少距离
         BigDecimal unfinished = (new BigDecimal(lenKu * 2)).subtract(distance);
         //如果剩下时间里走的距离超过了一圈的距离，为负数,往前加一圈，以此类推，剩下的再算
-        if (unfinished.compareTo(BigDecimal.ZERO) == -1) {
+        if (unfinished.compareTo(BigDecimal.ZERO) < 0) {
             unfinished = new BigDecimal(0);
         }
         etion.setUnfinishedDistance(unfinished.toString());
@@ -1365,8 +1331,7 @@ public class USBTransferUtil {
     public BigDecimal dealMetabEquivalent(BigDecimal total) {
         BigDecimal b1 = new BigDecimal("0.023").multiply(total);
         BigDecimal b2 = b1.add(new BigDecimal("4.928"));
-        BigDecimal b3 = b2.divide(new BigDecimal("3.5"), 1, RoundingMode.HALF_UP);
-        return b3;
+        return b2.divide(new BigDecimal("3.5"), 1, RoundingMode.HALF_UP);
     }
 
     /**
@@ -1433,15 +1398,15 @@ public class USBTransferUtil {
     public BigDecimal dealStrideAvg(BigDecimal totalDistance, Integer stopOr, String stopTime) {
         BigDecimal strideAvg = new BigDecimal("0.0");
         //自动完成了
-        Integer timeInt = 0;
+        int timeInt = 0;
         if (stopOr == 0) {
             timeInt = 360;
         } else if (stopOr == 1) {
             //截取试验时间
             String[] strings = stopTime.split("分");
             if (strings.length == 2) {
-                Integer minInt = Integer.parseInt(strings[0]);
-                Integer secInt = Integer.valueOf(strings[1].substring(0, strings[1].length() - 1));
+                int minInt = Integer.parseInt(strings[0]);
+                int secInt = Integer.parseInt(strings[1].substring(0, strings[1].length() - 1));
                 timeInt = minInt * 60 + secInt;
             }
         }
@@ -1462,7 +1427,6 @@ public class USBTransferUtil {
         String str = "^\\d*[02468]$";
         Pattern p = Pattern.compile(str);
         Matcher m = p.matcher(num);
-        boolean b = m.matches();
-        return b;
+        return m.matches();
     }
 }

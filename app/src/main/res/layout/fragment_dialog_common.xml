@@ -20,7 +20,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="36dp"
                 android:background="@drawable/sixmin_report_title_topradius_bg">
 
                 <TextView
@@ -35,14 +35,14 @@
                     android:textSize="16sp" />
 
                 <ImageView
-                    android:visibility="invisible"
                     android:id="@+id/iv_common_dialog_close"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="20dp"
-                    android:src="@mipmap/close" />
+                    android:src="@mipmap/close"
+                    android:visibility="invisible" />
 
             </RelativeLayout>
 
@@ -54,12 +54,18 @@
                 android:orientation="horizontal"
                 android:paddingHorizontal="50dp">
 
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/warn" />
+
                 <TextView
                     android:id="@+id/tv_common_dialog_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
                     android:textColor="@color/text3"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -79,9 +85,9 @@
                     android:background="@drawable/sixmin_report_btn_confirm_bg"
                     android:paddingHorizontal="50dp"
                     android:paddingVertical="10dp"
-                    android:text="@string/sixmin_system_setting_check_yes"
+                    android:text="@string/sixmin_system_setting_check_confirm"
                     android:textColor="@color/colorWhite"
-                    android:textSize="15sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/tv_common_dialog_negative"
@@ -91,9 +97,9 @@
                     android:background="@drawable/sixmin_report_btn_close_bg"
                     android:paddingHorizontal="50dp"
                     android:paddingVertical="10dp"
-                    android:text="@string/sixmin_system_setting_check_no"
+                    android:text="@string/sixmin_system_setting_check_cancel"
                     android:textColor="@color/colorWhite"
-                    android:textSize="15sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -315,7 +321,7 @@
                     android:paddingVertical="5dp"
                     android:text="@string/sixmin_test_report_confirm"
                     android:textColor="@color/colorWhite"
-                    android:textSize="15sp" />
+                    android:textSize="14sp" />
 
             </RelativeLayout>
 

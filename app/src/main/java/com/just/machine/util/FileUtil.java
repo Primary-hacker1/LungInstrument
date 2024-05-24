@@ -1,6 +1,7 @@
 package com.just.machine.util;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,6 +18,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -228,5 +230,37 @@ public class FileUtil {
             e.printStackTrace();
         }
         return file;
+    }
+
+    /**
+     * 保存图片到本地
+     * @param bitmap
+     * @param filePath
+     */
+    public Boolean saveBitmapToFile(Bitmap bitmap, String filePath) {
+        boolean save = false;
+        File file = new File(filePath);
+        if(!file.getParentFile().exists()){
+            file.getParentFile().mkdirs();
+        }
+        FileOutputStream fileOutputStream = null;
+        try {
+            fileOutputStream = new FileOutputStream(filePath);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+            save = false;
+        } finally {
+            try {
+                if (fileOutputStream != null) {
+                    fileOutputStream.close();
+                }
+                save = true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                save = false;
+            }
+        }
+        return save;
     }
 }

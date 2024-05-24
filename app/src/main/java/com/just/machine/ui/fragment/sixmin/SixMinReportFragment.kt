@@ -22,7 +22,6 @@ import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.viewmodel.LiveDataEvent
 import com.deepoove.poi.XWPFTemplate
-import com.deepoove.poi.config.Configure
 import com.deepoove.poi.data.PictureRenderData
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -49,6 +48,7 @@ import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -167,7 +167,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                         filePath.absolutePath
                     )
                 if (!generateWord) {
-                    mActivity.runOnUiThread {
+                    withContext(Dispatchers.Main) {
                         mActivity.showMsg("生成word文档失败")
                     }
                 } else {
@@ -175,7 +175,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                     val doc = Document(filePath.absolutePath)
                     // 保存文档为PDF格式
                     doc.save(pdfFilePath.absolutePath, SaveFormat.PDF)
-                    mActivity.runOnUiThread {
+                    withContext(Dispatchers.Main) {
                         mActivity.showMsg("导出报告成功")
                         if(startLoadingDialogFragment.isVisible){
                             startLoadingDialogFragment.dismiss()
@@ -265,7 +265,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                                     filePath.absolutePath
                                 )
                             if (!generateWord) {
-                                mActivity.runOnUiThread {
+                                withContext(Dispatchers.Main) {
                                     mActivity.showMsg("生成word文档失败")
                                 }
                             } else {
@@ -273,7 +273,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                                 val doc = Document(filePath.absolutePath)
                                 // 保存文档为PDF格式
                                 doc.save(pdfFilePath.absolutePath, SaveFormat.PDF)
-                                mActivity.runOnUiThread {
+                                withContext(Dispatchers.Main) {
                                     mActivity.showMsg("生成pdf文档成功")
                                     if(startLoadingDialogFragment.isVisible){
                                         startLoadingDialogFragment.dismiss()

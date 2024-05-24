@@ -163,6 +163,7 @@ class SixMinDetectActivity : CommonBaseActivity<ActivitySixMinDetectBinding>() {
         val navController = navHostFragment.navController
         val navGraph = navController.navInflater.inflate(R.navigation.nav_sixmin)
         binding.sixminLlDevicesStatus.visibility = View.VISIBLE
+        binding.sixminIvClose.visibility = View.VISIBLE
         // 假设您有条件决定启动的目的地
         val startDestinationId = if (sixMinReportType == "1" || sixMinReportType.isEmpty()) {
             R.id.sixMinFragment
@@ -171,6 +172,7 @@ class SixMinDetectActivity : CommonBaseActivity<ActivitySixMinDetectBinding>() {
         }else if(sixMinReportType == "3"){
             R.id.sixMinReportFragment
         }else{
+            binding.sixminIvClose.visibility = View.GONE
             binding.sixminLlDevicesStatus.visibility = View.GONE
             R.id.sixMinHeartEcgFragment
         }

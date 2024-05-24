@@ -5,23 +5,30 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
 import com.google.gson.Gson
+import com.just.machine.model.Constants
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.systemsetting.SixMinSysSettingBean
 import com.just.machine.ui.activity.SixMinDetectActivity
+import com.just.machine.ui.dialog.LoadingDialogFragment
 import com.just.machine.ui.dialog.SixMinPermissionDialogFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.CommonUtil
 import com.just.machine.util.KeyboardUtil
+import com.just.machine.util.LiveDataBus
 import com.just.machine.util.SixMinCmdUtils
 import com.just.news.R
 import com.just.news.databinding.FragmentSixminReportBinding
 import com.just.news.databinding.FragmentSixminSystemSettingBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * 6分钟系统设置界面
@@ -138,10 +145,15 @@ class SixMinSystemSettingFragment : CommonBaseFragment<FragmentSixminSystemSetti
                 return@setNoRepeatListener
             }
 
-            if (binding.sixminEtNewPwd.text.toString() != binding.sixminEtConfirmPwd.text.toString()
+            if (binding.sixminEtNewPwd.text.toString().trim() != binding.sixminEtConfirmPwd.text.toString()
                     .trim()
             ) {
                 mActivity.showMsg("新密码与确认密码不同，请重新输入")
+                return@setNoRepeatListener
+            }
+
+            if(sysSettingBean.sysPwd.exportPwd == binding.sixminEtNewPwd.text.toString().trim()){
+                mActivity.showMsg("新密码与原密码相同，请重新输入")
                 return@setNoRepeatListener
             }
 
@@ -172,7 +184,7 @@ class SixMinSystemSettingFragment : CommonBaseFragment<FragmentSixminSystemSetti
                         if (sysSettingBean.sysPwd.exportPwd == pwd) {
                             startPermissionDialogFragment.dismiss()
                             hasPassPermission = true
-                        }else{
+                        } else {
                             mActivity.showMsg("权限密码错误，请重新输入")
                             return
                         }
@@ -227,20 +239,40 @@ class SixMinSystemSettingFragment : CommonBaseFragment<FragmentSixminSystemSetti
                 return@setNoRepeatListener
             }
 
-            //蓝牙配置有变动需要同步到设备
-            SixMinCmdUtils.dealBluetooth(
-                binding.sixminEtBluetoothEcg.text.toString().trim(),
-                binding.sixminEtBluetoothBlood.text.toString().trim(),
-                binding.sixminEtBluetoothBloodOxygen.text.toString().trim()
-            )
-            sysSettingBean.sysBlue.ecgBlue = binding.sixminEtBluetoothEcg.text.toString().trim()
-            sysSettingBean.sysBlue.bloodBlue = binding.sixminEtBluetoothBlood.text.toString().trim()
-            sysSettingBean.sysBlue.bloodOxyBlue =
-                binding.sixminEtBluetoothBloodOxygen.text.toString().trim()
+            if (mActivity.usbTransferUtil.isConnectUSB && mActivity.usbTransferUtil.ecgConnection && mActivity.usbTransferUtil.bloodOxygenConnection && mActivity.usbTransferUtil.bloodPressureConnection) {
+                //蓝牙配置有变动需要同步到设备
+                SixMinCmdUtils.dealBluetooth(
+                    binding.sixminEtBluetoothEcg.text.toString().trim(),
+                    binding.sixminEtBluetoothBlood.text.toString().trim(),
+                    binding.sixminEtBluetoothBloodOxygen.text.toString().trim()
+                )
+                val dialogFragment = LoadingDialogFragment.startLoadingDialogFragment(
+                    mActivity.supportFragmentManager,
+                    "更新蓝牙参数中..."
+                )
 
-            SharedPreferencesUtils.instance.sixMinSysSetting = gson.toJson(sysSettingBean)
-            mActivity.showMsg("蓝牙参数修改成功!")
-            hasPassPermission = false
+                lifecycleScope.launch(Dispatchers.Main) {
+                    kotlinx.coroutines.delay(5000L)
+                    if(mActivity.usbTransferUtil.updateBluetooth == 0){
+                        mActivity.showMsg("更新蓝牙参数失败")
+                    }else{
+                        mActivity.showMsg("蓝牙参数更新成功")
+                        mActivity.usbTransferUtil.updateBluetooth = 0
+                        sysSettingBean.sysBlue.ecgBlue = binding.sixminEtBluetoothEcg.text.toString().trim()
+                        sysSettingBean.sysBlue.bloodBlue =
+                            binding.sixminEtBluetoothBlood.text.toString().trim()
+                        sysSettingBean.sysBlue.bloodOxyBlue =
+                            binding.sixminEtBluetoothBloodOxygen.text.toString().trim()
+
+                        SharedPreferencesUtils.instance.sixMinSysSetting = gson.toJson(sysSettingBean)
+                    }
+                    dialogFragment.dismiss()
+                    hasPassPermission = false
+                }
+            } else {
+                mActivity.showMsg("设备未接入，请检查后重试")
+                return@setNoRepeatListener
+            }
         }
 
         binding.sixminTvOldPwd.setOnClickListener {

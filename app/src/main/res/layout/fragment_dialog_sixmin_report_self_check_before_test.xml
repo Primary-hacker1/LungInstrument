@@ -17,19 +17,83 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="36dp"
                 android:background="@drawable/sixmin_report_title_topradius_bg"
                 android:gravity="center"
                 android:text="@string/sixmin_test_report_before_test_status_level"
                 android:textColor="@color/colorWhite"
                 android:textSize="16sp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/sixmin_rv_patient_self_check"
-                android:layout_width="450dp"
-                android:layout_marginHorizontal="50dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center" />
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:ems="1"
+                        android:text="是否佩戴面罩"
+                        android:textColor="@color/text3"
+                        android:textSize="13sp" />
+
+                    <RadioGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical">
+
+                        <RadioButton
+                            android:id="@+id/sixmin_rb_face_mask_yes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:buttonTint="@color/colorPrimary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:text="@string/sixmin_system_setting_check_yes"
+                            android:textColor="@color/text3"
+                            android:textSize="12sp" />
+
+                        <RadioButton
+                            android:id="@+id/sixmin_rb_face_mask_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:buttonTint="@color/colorPrimary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:text="@string/sixmin_system_setting_check_no"
+                            android:textColor="@color/text3"
+                            android:textSize="12sp" />
+                    </RadioGroup>
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/sixmin_rv_patient_self_check"
+                    android:layout_width="450dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="50dp" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

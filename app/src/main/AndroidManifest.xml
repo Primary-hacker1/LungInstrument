@@ -69,10 +69,10 @@
             android:name="com.just.machine.ui.activity.CardiopulmonaryActivity"
             android:exported="false"
             android:screenOrientation="landscape" />
-        <activity
-            android:name="com.just.machine.ui.fragment.setting.CardiopulmonarySettingFragment"
-            android:exported="false"
-            android:screenOrientation="landscape" />
+<!--        <activity-->
+<!--            android:name="com.just.machine.ui.fragment.setting.CardiopulmonarySettingFragment"-->
+<!--            android:exported="false"-->
+<!--            android:screenOrientation="landscape" />-->
       </application>
 
 </manifest>

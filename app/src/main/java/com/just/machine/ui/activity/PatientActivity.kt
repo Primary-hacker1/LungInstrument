@@ -21,14 +21,16 @@ import com.common.base.visible
 import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
 import com.deepoove.poi.XWPFTemplate
-import com.deepoove.poi.config.Configure
 import com.deepoove.poi.data.PictureRenderData
+import com.google.gson.Gson
 import com.just.machine.dao.PatientBean
 import com.just.machine.model.Constants
 import com.just.machine.model.PatientInfoBean
+import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.SixMinRecordsBean
 import com.just.machine.model.SixMinReportInfoAndEvaluation
 import com.just.machine.model.sixminreport.SixMinReportInfo
+import com.just.machine.model.systemsetting.SixMinSysSettingBean
 import com.just.machine.ui.adapter.CardiopulAdapter
 import com.just.machine.ui.adapter.PatientsAdapter
 import com.just.machine.ui.adapter.SixMinAdapter
@@ -38,6 +40,7 @@ import com.just.machine.ui.dialog.DeleteWarnDialogFragment.Companion.startDelete
 import com.just.machine.ui.dialog.LoadingDialogFragment
 import com.just.machine.ui.dialog.PatientDialogFragment
 import com.just.machine.ui.dialog.SelectActionDialogFragment
+import com.just.machine.ui.dialog.SixMinPermissionDialogFragment
 import com.just.machine.ui.dialog.SixMinReportSelfCheckBeforeTestFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.USBTransferUtil
@@ -46,6 +49,7 @@ import com.just.news.databinding.ActivityPatientBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -62,6 +66,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
     private lateinit var usbTransferUtil: USBTransferUtil
+    private var hasPassPermission = false //删除6分钟试验记录授权
 
     companion object {
         /**
@@ -229,6 +234,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                         )
                         val bundle = Bundle()
                         bundle.putString(Constants.sixMinReportType, "4")
+                        bundle.putString(Constants.sixMinReportNo, bean.reportNo)
                         intent.putExtras(bundle)
                         startActivity(intent)
                     }
@@ -284,14 +290,49 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                             }
 
                             override fun onClickDelete() {
+                                val gson = Gson()
+                                var sysSettingBean = SixMinSysSettingBean()
+                                val sixMinSysSetting = SharedPreferencesUtils.instance.sixMinSysSetting
+                                if (sixMinSysSetting != null && sixMinSysSetting != "") {
+                                    sysSettingBean = gson.fromJson(
+                                        sixMinSysSetting, SixMinSysSettingBean::class.java
+                                    )
+                                }
+                                if (!hasPassPermission) {
+                                    val startPermissionDialogFragment =
+                                        SixMinPermissionDialogFragment.startPermissionDialogFragment(supportFragmentManager)
+                                    startPermissionDialogFragment.setOnConfirmClickListener(object :
+                                        SixMinPermissionDialogFragment.SixMinPermissionDialogListener {
+                                        override fun onClickConfirm(pwd: String) {
+                                            if (pwd.isEmpty()) {
+                                                showMsg("权限密码不能为空")
+                                                return
+                                            }
+                                            if (sysSettingBean.sysPwd.exportPwd == pwd) {
+                                                startPermissionDialogFragment.dismiss()
+                                                hasPassPermission = true
+                                            } else {
+                                                showMsg("权限密码错误，请重新输入")
+                                                return
+                                            }
+                                        }
+                                    })
+                                    return
+                                }
+
                                 val startDeleteWarnDialogFragment = startDeleteWarnDialogFragment(
                                     supportFragmentManager, "确认删除该试验记录吗?"
                                 )
                                 startDeleteWarnDialogFragment.setDeleteWarnDialogListener(object :
                                     DeleteWarnDialogFragment.DeleteWarnDialogListener {
                                     override fun onClickConfirm() {
+                                        hasPassPermission = false
                                         viewModel.deleteSixMinReportInfo(bean.reportNo)
                                         viewModel.getPatients()//查询数据库
+                                    }
+
+                                    override fun onClickCancel() {
+                                        hasPassPermission = false
                                     }
                                 })
                             }
@@ -391,7 +432,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                     filePath.absolutePath
                 )
             if (!generateWord) {
-                runOnUiThread {
+                withContext(Dispatchers.Main) {
                     showMsg("生成word文档失败")
                 }
             } else {
@@ -399,7 +440,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                 val doc = Document(filePath.absolutePath)
                 // 保存文档为PDF格式
                 doc.save(pdfFilePath.absolutePath, SaveFormat.PDF)
-                runOnUiThread {
+                withContext(Dispatchers.Main) {
                     showMsg("导出报告成功")
                     if(startLoadingDialogFragment.isVisible){
                         startLoadingDialogFragment.dismiss()
@@ -790,6 +831,10 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                     override fun onClickConfirm() {
                         viewModel.deletePatient(bean.patientId)
                         viewModel.deleteSixMinReportInfoById(bean.patientId.toString())
+                    }
+
+                    override fun onClickCancel() {
+
                     }
                 })
             }

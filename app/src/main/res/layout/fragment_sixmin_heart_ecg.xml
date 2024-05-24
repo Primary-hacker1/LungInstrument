@@ -24,11 +24,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                app:isTouchable="true"
+                app:isTouchable="false"
                 app:ecgLineCount="1"
                 app:markTextStyle="10,2"
                 app:renderMode="RENDER_CONTINUOUS"
-                app:yOuterCellCounts="6" />
+                app:yOuterCellCounts="10" />
 
             <LinearLayout
                 android:layout_width="match_parent"

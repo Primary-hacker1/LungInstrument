@@ -13,7 +13,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="36dp"
             android:background="@drawable/sixmin_report_title_topradius_bg">
 
             <TextView
@@ -47,12 +47,18 @@
             android:orientation="horizontal"
             android:paddingHorizontal="50dp">
 
+            <ImageView
+                android:src="@drawable/warn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"/>
+
             <TextView
+                android:layout_marginStart="10dp"
                 android:id="@+id/tv_delete_warn_dialog_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text3"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -73,9 +79,9 @@
                 android:background="@drawable/sixmin_report_btn_confirm_bg"
                 android:paddingHorizontal="50dp"
                 android:paddingVertical="10dp"
-                android:text="@string/sixmin_system_setting_check_yes"
+                android:text="@string/sixmin_system_setting_check_confirm"
                 android:textColor="@color/colorWhite"
-                android:textSize="15sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_delete_warn_dialog_negative"
@@ -85,9 +91,9 @@
                 android:background="@drawable/sixmin_report_btn_close_bg"
                 android:paddingHorizontal="50dp"
                 android:paddingVertical="10dp"
-                android:text="@string/sixmin_system_setting_check_no"
+                android:text="@string/sixmin_system_setting_check_cancel"
                 android:textColor="@color/colorWhite"
-                android:textSize="15sp" />
+                android:textSize="14sp" />
 
         </LinearLayout>
 
