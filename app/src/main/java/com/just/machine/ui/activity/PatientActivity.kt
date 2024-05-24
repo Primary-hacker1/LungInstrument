@@ -280,8 +280,8 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
                             override fun onClickExport() {
                                 // 导出6分钟报告
-                                viewModel.getSixMinReportEvaluationById(bean.patientId.toString())
                                 lifecycleScope.launch {
+                                    viewModel.getSixMinReportEvaluationById(bean.patientId.toString())
                                     kotlinx.coroutines.delay(100L)
                                     viewModel.getSixMinReportInfoById(
                                         bean.patientId, bean.reportNo

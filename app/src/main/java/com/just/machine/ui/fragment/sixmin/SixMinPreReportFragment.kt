@@ -30,6 +30,7 @@ import com.just.machine.ui.dialog.SixMinReportPrescriptionFragment
 import com.just.machine.ui.dialog.SixMinReportSelfCheckBeforeTestFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.CommonUtil
+import com.just.machine.util.KeyboardUtil
 import com.just.news.R
 import com.just.news.databinding.FragmentSixminPreReportBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -59,6 +60,9 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
         if (activity is SixMinDetectActivity) {
             mActivity = activity as SixMinDetectActivity
         }
+        KeyboardUtil.setEditTextFilter(binding.sixminEtHeartBeatConclusion)
+        KeyboardUtil.setEditTextFilter(binding.sixminEtReportNote)
+        KeyboardUtil.setEditTextFilter(binding.sixminEtRecommendDoctor)
         if(mActivity.sixMinReportType.isEmpty() || mActivity.sixMinReportType == "1"){
             showData(null)
         }else{
@@ -283,7 +287,7 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                         return@setNoRepeatListener
                     }
 
-                    val circleNum = binding.sixminEtFinishCircle.text.toString()
+                    val circleNum = binding.sixminEtFinishCircle.text.toString().trim()
                     if (circleNum.isEmpty() || circleNum.length > 2) {
                         mActivity.showMsg("请检查圈数值")
                         return@setNoRepeatListener
@@ -293,13 +297,13 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                     var wqsBoolen = true
                     if (binding.sixminEtUnfinishCircle.text.toString().isNotEmpty()) {
                         val wqsDec: BigDecimal =
-                            BigDecimal(binding.sixminEtUnfinishCircle.text.toString())
+                            BigDecimal(binding.sixminEtUnfinishCircle.text.toString().trim())
                         val totoLength: Int = mActivity.sixMinReportEvaluation.fieldLength.toInt() * 2
                         if (wqsDec.compareTo(BigDecimal(totoLength)) == 1) {
                             wqsBoolen = false
                         }
                     }
-                    if (binding.sixminEtUnfinishCircle.text.toString().isEmpty() || !wqsBoolen) {
+                    if (binding.sixminEtUnfinishCircle.text.toString().trim().isEmpty() || !wqsBoolen) {
                         mActivity.showMsg("请检查未走完的距离值")
                         return@setNoRepeatListener
                     }
@@ -307,11 +311,11 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                         binding.sixminEtUnfinishCircle.text.toString()
 
                     if (mActivity.sixMinReportInfo.restDuration != "-1") {
-                        if (binding.sixminPreEtResetTime.text.toString().isEmpty()) {
+                        if (binding.sixminPreEtResetTime.text.toString().trim().isEmpty()) {
                             mActivity.showMsg("中途休息值不能为空")
                             return@setNoRepeatListener
                         }
-                        if (binding.sixminPreEtResetTime.text.toString().toInt() > 360) {
+                        if (binding.sixminPreEtResetTime.text.toString().trim().toInt() > 360) {
                             mActivity.showMsg("中途休息值不能大于360")
                             return@setNoRepeatListener
                         }
@@ -328,7 +332,7 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                                 val minInt = minStr.toInt()
                                 val secInt = secStr.toInt()
                                 val stopTimeInt = minInt * 60 + secInt
-                                if (binding.sixminPreEtResetTime.text.toString()
+                                if (binding.sixminPreEtResetTime.text.toString().trim()
                                         .toInt() > stopTimeInt
                                 ) {
                                     mActivity.showMsg("中途休息值不能大于步行时间")
@@ -337,9 +341,9 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                             }
                         }
                     }
-                    mActivity.sixMinReportInfo.restDuration = binding.sixminPreEtResetTime.text.toString()
+                    mActivity.sixMinReportInfo.restDuration = binding.sixminPreEtResetTime.text.toString().trim()
 
-                    val heartBeatConclusion = binding.sixminEtHeartBeatConclusion.text.toString()
+                    val heartBeatConclusion = binding.sixminEtHeartBeatConclusion.text.toString().trim()
                     if (heartBeatConclusion.isNotEmpty() && heartBeatConclusion.length > 44) {
                         mActivity.showMsg("请检查心电结论，最大长度为44")
                         return@setNoRepeatListener
@@ -356,20 +360,20 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                             return@setNoRepeatListener
                         }
                         if (!CommonUtil.checkNum(
-                                binding.sixminPreEtStrideLow.text.toString(),
+                                binding.sixminPreEtStrideLow.text.toString().trim(),
                                 "0+"
                             ) || !CommonUtil.checkNum(
-                                binding.sixminPreEtStrideHigh.text.toString(),
+                                binding.sixminPreEtStrideHigh.text.toString().trim(),
                                 "0+"
                             )
                         ) {
                             mActivity.showMsg("请检查运动步速值，最多精确到1位")
                             return@setNoRepeatListener
                         }
-                        if (BigDecimal(binding.sixminPreEtStrideLow.text.toString()).compareTo(
+                        if (BigDecimal(binding.sixminPreEtStrideLow.text.toString().trim()).compareTo(
                                 BigDecimal("1000")
                             ) != -1 ||
-                            BigDecimal(binding.sixminPreEtStrideHigh.text.toString()).compareTo(
+                            BigDecimal(binding.sixminPreEtStrideHigh.text.toString().trim()).compareTo(
                                 BigDecimal("1000")
                             ) != -1
                         ) {
@@ -377,36 +381,36 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                             return@setNoRepeatListener
                         }
                         //前者不可大于后者
-                        if (BigDecimal(binding.sixminPreEtStrideLow.text.toString()) > BigDecimal(
-                                binding.sixminPreEtStrideHigh.text.toString()
+                        if (BigDecimal(binding.sixminPreEtStrideLow.text.toString().trim()) > BigDecimal(
+                                binding.sixminPreEtStrideHigh.text.toString().trim()
                             )
                         ) {
                             mActivity.showMsg("请检查运动步速值,起始值不可大于终止值")
                             return@setNoRepeatListener
                         }
 
-                        if (binding.sixminPreEtDistanceLow.text.toString()
-                                .isEmpty() || binding.sixminPreEtDistanceHigh.text.toString()
+                        if (binding.sixminPreEtDistanceLow.text.toString().trim()
+                                .isEmpty() || binding.sixminPreEtDistanceHigh.text.toString().trim()
                                 .isEmpty()
                         ) {
                             mActivity.showMsg("请检查运动距离值")
                             return@setNoRepeatListener
                         }
                         if (!CommonUtil.checkNum(
-                                binding.sixminPreEtDistanceLow.text.toString(),
+                                binding.sixminPreEtDistanceLow.text.toString().trim(),
                                 "0+"
                             ) || !CommonUtil.checkNum(
-                                binding.sixminPreEtDistanceHigh.text.toString(),
+                                binding.sixminPreEtDistanceHigh.text.toString().trim(),
                                 "0+"
                             )
                         ) {
                             mActivity.showMsg("请检查运动距离值，最多精确到1位")
                             return@setNoRepeatListener
                         }
-                        if (BigDecimal(binding.sixminPreEtDistanceLow.text.toString()).compareTo(
+                        if (BigDecimal(binding.sixminPreEtDistanceLow.text.toString().trim()).compareTo(
                                 BigDecimal("10000")
                             ) != -1 ||
-                            BigDecimal(binding.sixminPreEtDistanceHigh.text.toString()).compareTo(
+                            BigDecimal(binding.sixminPreEtDistanceHigh.text.toString().trim()).compareTo(
                                 BigDecimal("10000")
                             ) != -1
                         ) {
@@ -414,21 +418,21 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                             return@setNoRepeatListener
                         }
                         //前者不可大于后者
-                        if (BigDecimal(binding.sixminPreEtDistanceLow.text.toString()) > BigDecimal(
-                                binding.sixminPreEtDistanceHigh.text.toString()
+                        if (BigDecimal(binding.sixminPreEtDistanceLow.text.toString().trim()) > BigDecimal(
+                                binding.sixminPreEtDistanceHigh.text.toString().trim()
                             )
                         ) {
                             mActivity.showMsg("请检查运动距离值,起始值不可大于终止值")
                             return@setNoRepeatListener
                         }
                         mActivity.sixMinReportPrescription.strideBefore =
-                            binding.sixminPreEtStrideLow.text.toString()
+                            binding.sixminPreEtStrideLow.text.toString().trim()
                         mActivity.sixMinReportPrescription.strideAfter =
-                            binding.sixminPreEtStrideHigh.text.toString()
+                            binding.sixminPreEtStrideHigh.text.toString().trim()
                         mActivity.sixMinReportPrescription.movementDistance =
-                            binding.sixminPreEtDistanceLow.text.toString()
+                            binding.sixminPreEtDistanceLow.text.toString().trim()
                         mActivity.sixMinReportPrescription.movementDistanceAfter =
-                            binding.sixminPreEtDistanceHigh.text.toString()
+                            binding.sixminPreEtDistanceHigh.text.toString().trim()
                     } else {
                         mActivity.sixMinReportPrescription.strideBefore = "0"
                         mActivity.sixMinReportPrescription.strideAfter = "0"
@@ -440,7 +444,7 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                     mActivity.sixMinReportPrescription.movementTime =
                         binding.sixminPreSpSportTime.value.toString()
                     if (mActivity.sixMinReportPrescription.heartrateState.isEmpty() || mActivity.sixMinReportPrescription.heartrateState == "1") {
-                        val heartEcg = binding.sixminPreEtSportEcg.text.toString()
+                        val heartEcg = binding.sixminPreEtSportEcg.text.toString().trim()
                         if (heartEcg.isEmpty() || heartEcg.length > 30) {
                             mActivity.showMsg("请检查运动心率值")
                             return@setNoRepeatListener
@@ -450,17 +454,17 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                     }
 
                     if (mActivity.sixMinReportPrescription.metabState.isEmpty() || mActivity.sixMinReportPrescription.metabState == "1") {
-                        val metab = binding.sixminPreEtMetab.text.toString()
+                        val metab = binding.sixminPreEtMetab.text.toString().trim()
                         if (metab.isEmpty() || metab.length > 30) {
                             mActivity.showMsg("请检查代谢当量值")
                             return@setNoRepeatListener
                         }
-                        mActivity.sixMinReportPrescription.metabMet = binding.sixminPreEtMetab.text.toString()
+                        mActivity.sixMinReportPrescription.metabMet = binding.sixminPreEtMetab.text.toString().trim()
                     }
 
                     if (mActivity.sixMinReportPrescription.pllevState.isEmpty() || mActivity.sixMinReportPrescription.pllevState == "1") {
-                        val tireLow = binding.sixminPreEtTiredControlLow.text.toString()
-                        val tireHigh = binding.sixminPreEtTiredControlHigh.text.toString()
+                        val tireLow = binding.sixminPreEtTiredControlLow.text.toString().trim()
+                        val tireHigh = binding.sixminPreEtTiredControlHigh.text.toString().trim()
                         if (tireLow.isEmpty() || tireHigh.isEmpty()) {
                             mActivity.showMsg("请检查疲劳程度控制")
                             return@setNoRepeatListener
@@ -485,7 +489,7 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                         )
                     }
 
-                    val doctorName = binding.sixminEtRecommendDoctor.text.toString()
+                    val doctorName = binding.sixminEtRecommendDoctor.text.toString().trim()
                     if (doctorName.isEmpty()) {
                         mActivity.showMsg("请检查建议医生")
                         return@setNoRepeatListener
@@ -494,14 +498,15 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                         mActivity.showMsg("建议医生，长度不能大于5")
                         return@setNoRepeatListener
                     }
+                    mActivity.sixMinReportPrescription.remarke = binding.sixminEtReportNote.text.toString().trim()
                     mActivity.sixMinReportPrescription.remarkeName =
-                        binding.sixminEtRecommendDoctor.text.toString()
+                        binding.sixminEtRecommendDoctor.text.toString().trim()
                     mActivity.sixMinReportPrescription.movementWay =
                         if (binding.sixminRbSportTypeWalk.isChecked) "0" else "1"
                     mActivity.sixMinReportPrescription.movementWeeklyNumber =
-                        binding.sixminPreSpWeeklyCount.value.toString()
+                        binding.sixminPreSpWeeklyCount.value.toString().trim()
                     mActivity.sixMinReportPrescription.movementCycle =
-                        binding.sixminPreSpPrescriptionPeriod.value.toString()
+                        binding.sixminPreSpPrescriptionPeriod.value.toString().trim()
                     mActivity.sixMinReportPrescription.cycleUnit =
                         if (binding.sixminRbPrescriptionCycleWeek.isChecked) "0" else if (binding.sixminRbPrescriptionCycleMonth.isChecked) "1" else "2"
 
@@ -516,14 +521,14 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                     viewModel.setSixMinReportHeartBeat(mActivity.sixMinReportBloodHeart)
                     viewModel.setSixMinReportStride(mActivity.sixMinReportStride)
 
-                    mActivity.sixMinPatientId = mActivity.sixMinReportInfo.patientId.toString()
+                    mActivity.sixMinPatientId = mActivity.sixMinReportInfo.patientId.toString().trim()
                     mActivity.sixMinReportNo = mActivity.sixMinReportInfo.reportNo
                     navigate(binding.sixminLlPreReport,R.id.sixMinReportFragment)
 
                 } else {
                     //保存报告
 
-                    val heartBeatConclusion = binding.sixminEtHeartBeatConclusion.text.toString()
+                    val heartBeatConclusion = binding.sixminEtHeartBeatConclusion.text.toString().trim()
                     if (heartBeatConclusion.isNotEmpty() && heartBeatConclusion.length > 44) {
                         mActivity.showMsg("请检查心电结论，最大长度为44")
                         return@setNoRepeatListener
@@ -532,28 +537,28 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
 
                     //运动处方
                     if (mActivity.sixMinReportPrescription.distanceState.isEmpty() || mActivity.sixMinReportPrescription.distanceState == "1") {
-                        if (binding.sixminPreEtStrideLow.text.toString()
-                                .isEmpty() || binding.sixminPreEtStrideHigh.text.toString()
+                        if (binding.sixminPreEtStrideLow.text.toString().trim()
+                                .isEmpty() || binding.sixminPreEtStrideHigh.text.toString().trim()
                                 .isEmpty()
                         ) {
                             mActivity.showMsg("请检查运动步速值")
                             return@setNoRepeatListener
                         }
                         if (!CommonUtil.checkNum(
-                                binding.sixminPreEtStrideLow.text.toString(),
+                                binding.sixminPreEtStrideLow.text.toString().trim(),
                                 "0+"
                             ) || !CommonUtil.checkNum(
-                                binding.sixminPreEtStrideHigh.text.toString(),
+                                binding.sixminPreEtStrideHigh.text.toString().trim(),
                                 "0+"
                             )
                         ) {
                             mActivity.showMsg("请检查运动步速值，最多精确到1位")
                             return@setNoRepeatListener
                         }
-                        if (BigDecimal(binding.sixminPreEtStrideLow.text.toString()).compareTo(
+                        if (BigDecimal(binding.sixminPreEtStrideLow.text.toString().trim()).compareTo(
                                 BigDecimal("1000")
                             ) != -1 ||
-                            BigDecimal(binding.sixminPreEtStrideHigh.text.toString()).compareTo(
+                            BigDecimal(binding.sixminPreEtStrideHigh.text.toString().trim()).compareTo(
                                 BigDecimal("1000")
                             ) != -1
                         ) {
@@ -561,8 +566,8 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                             return@setNoRepeatListener
                         }
                         //前者不可大于后者
-                        if (BigDecimal(binding.sixminPreEtStrideLow.text.toString()) > BigDecimal(
-                                binding.sixminPreEtStrideHigh.text.toString()
+                        if (BigDecimal(binding.sixminPreEtStrideLow.text.toString().trim()) > BigDecimal(
+                                binding.sixminPreEtStrideHigh.text.toString().trim()
                             )
                         ) {
                             mActivity.showMsg("请检查运动步速值,起始值不可大于终止值")
@@ -570,27 +575,27 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                         }
 
                         if (binding.sixminPreEtDistanceLow.text.toString()
-                                .isEmpty() || binding.sixminPreEtDistanceHigh.text.toString()
+                                .isEmpty() || binding.sixminPreEtDistanceHigh.text.toString().trim()
                                 .isEmpty()
                         ) {
                             mActivity.showMsg("请检查运动距离值")
                             return@setNoRepeatListener
                         }
                         if (!CommonUtil.checkNum(
-                                binding.sixminPreEtDistanceLow.text.toString(),
+                                binding.sixminPreEtDistanceLow.text.toString().trim(),
                                 "0+"
                             ) || !CommonUtil.checkNum(
-                                binding.sixminPreEtDistanceHigh.text.toString(),
+                                binding.sixminPreEtDistanceHigh.text.toString().trim(),
                                 "0+"
                             )
                         ) {
                             mActivity.showMsg("请检查运动距离值，最多精确到1位")
                             return@setNoRepeatListener
                         }
-                        if (BigDecimal(binding.sixminPreEtDistanceLow.text.toString()).compareTo(
+                        if (BigDecimal(binding.sixminPreEtDistanceLow.text.toString().trim()).compareTo(
                                 BigDecimal("10000")
                             ) != -1 ||
-                            BigDecimal(binding.sixminPreEtDistanceHigh.text.toString()).compareTo(
+                            BigDecimal(binding.sixminPreEtDistanceHigh.text.toString().trim()).compareTo(
                                 BigDecimal("10000")
                             ) != -1
                         ) {
@@ -606,13 +611,13 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                             return@setNoRepeatListener
                         }
                         mActivity.sixMinReportPrescription.strideBefore =
-                            binding.sixminPreEtStrideLow.text.toString()
+                            binding.sixminPreEtStrideLow.text.toString().trim()
                         mActivity.sixMinReportPrescription.strideAfter =
-                            binding.sixminPreEtStrideHigh.text.toString()
+                            binding.sixminPreEtStrideHigh.text.toString().trim()
                         mActivity.sixMinReportPrescription.movementDistance =
-                            binding.sixminPreEtDistanceLow.text.toString()
+                            binding.sixminPreEtDistanceLow.text.toString().trim()
                         mActivity.sixMinReportPrescription.movementDistanceAfter =
-                            binding.sixminPreEtDistanceHigh.text.toString()
+                            binding.sixminPreEtDistanceHigh.text.toString().trim()
                     } else {
                         mActivity.sixMinReportPrescription.strideBefore = "0"
                         mActivity.sixMinReportPrescription.strideAfter = "0"
@@ -622,7 +627,7 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
 
                     //运动时长
                     mActivity.sixMinReportPrescription.movementTime =
-                        binding.sixminPreSpSportTime.value.toString()
+                        binding.sixminPreSpSportTime.value.toString().trim()
                     if (mActivity.sixMinReportPrescription.heartrateState.isEmpty() || mActivity.sixMinReportPrescription.heartrateState == "1") {
                         val heartEcg = binding.sixminPreEtSportEcg.text.toString()
                         if (heartEcg.isEmpty() || heartEcg.length > 30) {
@@ -661,16 +666,16 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                         }
 
                         mActivity.sixMinReportPrescription.pllevBefore =
-                            binding.sixminPreEtTiredControlLow.text.toString()
+                            binding.sixminPreEtTiredControlLow.text.toString().trim()
                         mActivity.sixMinReportPrescription.pllevAfter =
-                            binding.sixminPreEtTiredControlHigh.text.toString()
+                            binding.sixminPreEtTiredControlHigh.text.toString().trim()
                         mActivity.sixMinReportPrescription.pilaoControl = mActivity.usbTransferUtil.dealPiLaoKZ(
-                            binding.sixminPreEtTiredControlLow.text.toString().toInt(),
-                            binding.sixminPreEtTiredControlHigh.text.toString().toInt()
+                            binding.sixminPreEtTiredControlLow.text.toString().trim().toInt(),
+                            binding.sixminPreEtTiredControlHigh.text.toString().trim().toInt()
                         )
                     }
 
-                    val doctorName = binding.sixminEtRecommendDoctor.text.toString()
+                    val doctorName = binding.sixminEtRecommendDoctor.text.toString().trim()
                     if (doctorName.isEmpty()) {
                         mActivity.showMsg("请检查建议医生")
                         return@setNoRepeatListener
@@ -679,14 +684,15 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                         mActivity.showMsg("建议医生，长度不能大于5")
                         return@setNoRepeatListener
                     }
+                    mActivity.sixMinReportPrescription.remarke = binding.sixminEtReportNote.text.toString().trim()
                     mActivity.sixMinReportPrescription.remarkeName =
-                        binding.sixminEtRecommendDoctor.text.toString()
+                        binding.sixminEtRecommendDoctor.text.toString().trim()
                     mActivity.sixMinReportPrescription.movementWay =
                         if (binding.sixminRbSportTypeWalk.isChecked) "0" else "1"
                     mActivity.sixMinReportPrescription.movementWeeklyNumber =
-                        binding.sixminPreSpWeeklyCount.value.toString()
+                        binding.sixminPreSpWeeklyCount.value.toString().trim()
                     mActivity.sixMinReportPrescription.movementCycle =
-                        binding.sixminPreSpPrescriptionPeriod.value.toString()
+                        binding.sixminPreSpPrescriptionPeriod.value.toString().trim()
                     mActivity.sixMinReportPrescription.cycleUnit =
                         if (binding.sixminRbPrescriptionCycleWeek.isChecked) "0" else if (binding.sixminRbPrescriptionCycleMonth.isChecked) "1" else "2"
 

@@ -47,6 +47,7 @@ import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -110,7 +111,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
     private fun initEcgChart() {
         try {
             binding.sixminEcg.setMode(UIMode.ERASE)
-            binding.sixminEcg.initDefaultChartData(false,false)
+            binding.sixminEcg.initDefaultChartData(false, false)
             binding.sixminEcg.setFrameRenderCallback {
                 if (!ready || binding.sixminEcg.chartData == null) {
                     return@setFrameRenderCallback
@@ -137,7 +138,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                 }
                 ready = true
             }
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
@@ -502,7 +503,37 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
         binding.sixminRlStart.setNoRepeatListener {
             if (mActivity.usbTransferUtil.isConnectUSB && mActivity.usbTransferUtil.ecgConnection && mActivity.usbTransferUtil.bloodOxygenConnection && mActivity.usbTransferUtil.bloodPressureConnection) {
                 if (!mActivity.usbTransferUtil.isBegin) {
-                    startStepAndCircle()
+                    if (mActivity.sysSettingBean.sysOther.autoMeasureBlood == "0") {
+                        if (binding.sixminTvMeasureBlood.text.toString()
+                                .trim() == getString(R.string.sixmin_measuring_blood)
+                        ) {
+                            mActivity.showMsg(getString(R.string.sixmin_test_measuring_blood))
+                        } else {
+                            if (mActivity.usbTransferUtil.bloodType == 1) {
+                                autoStartTest()
+                            } else {
+                                val startCommonDialogFragment =
+                                    CommonDialogFragment.startCommonDialogFragment(
+                                        mActivity.supportFragmentManager,
+                                        "还未测量运动前血压，是否开始试验？"
+                                    )
+                                startCommonDialogFragment.setCommonDialogOnClickListener(object :
+                                    CommonDialogFragment.CommonDialogClickListener {
+                                    override fun onPositiveClick() {
+                                        autoStartTest()
+                                    }
+
+                                    override fun onNegativeClick() {
+
+                                    }
+
+                                    override fun onStopNegativeClick(stopReason: String) {
+
+                                    }
+                                })
+                            }
+                        }
+                    }
                 } else {
                     val startCommonDialogFragment = CommonDialogFragment.startCommonDialogFragment(
                         mActivity.supportFragmentManager,
@@ -575,7 +606,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
             if (mActivity.usbTransferUtil.isBegin) {
                 mActivity.usbTransferUtil.circleCount++
                 binding.sixminTvCircleCount.text = mActivity.usbTransferUtil.circleCount.toString()
-            }else{
+            } else {
                 mActivity.showMsg("试验未开始!")
             }
         }
@@ -586,7 +617,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                 }
                 mActivity.usbTransferUtil.circleCount--
                 binding.sixminTvCircleCount.text = mActivity.usbTransferUtil.circleCount.toString()
-            }else{
+            } else {
                 mActivity.showMsg("试验未开始!")
             }
         }
@@ -605,10 +636,10 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
         }
 
         binding.sixminTvToggleCardiopulmonary.setNoRepeatListener {
-            if(binding.sixminTvToggleCardiopulmonary.text == "隐藏心肺参数"){
+            if (binding.sixminTvToggleCardiopulmonary.text == "隐藏心肺参数") {
                 binding.sixminTvToggleCardiopulmonary.text = "显示心肺参数"
                 binding.sixminLlCardiopulmonary.visibility = View.GONE
-            }else{
+            } else {
                 binding.sixminTvToggleCardiopulmonary.text = "隐藏心肺参数"
                 binding.sixminLlCardiopulmonary.visibility = View.VISIBLE
             }
@@ -851,13 +882,18 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                 val bloodOxyLineData = LineData(bloodOxyDataSet)
                 data = bloodOxyLineData
 
-                val mtRenderer = MyLineChartRenderer(this,animator,viewPortHandler)
+                val mtRenderer = MyLineChartRenderer(this, animator, viewPortHandler)
                 val colors = IntArray(4)
                 colors[0] = Color.parseColor("#333333")
                 colors[1] = Color.parseColor("#333333")
                 colors[2] = Color.parseColor("#ff0000")
                 colors[3] = Color.parseColor("#ff0000")
-                mtRenderer.setHeartLine(90,100,mActivity.sysSettingBean.sysAlarm.bloodOxy.toInt(),colors)
+                mtRenderer.setHeartLine(
+                    90,
+                    100,
+                    mActivity.sysSettingBean.sysAlarm.bloodOxy.toInt(),
+                    colors
+                )
                 renderer = mtRenderer
             } else {
                 heartBeatDataSet = LineDataSet(null, "")
@@ -907,7 +943,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
             } else {
                 startTest()
             }
-        }else{
+        } else {
             mActivity.showMsg(getString(R.string.sixmin_test_device_without_connection))
         }
     }
@@ -978,16 +1014,18 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                         imageId = R.mipmap.one
                     }
                 }
-                if (mActivity.sysSettingBean.sysOther.broadcastVoice == "1" || mActivity.sysSettingBean.sysOther.broadcastVoice == "0") {
-                    speechContent(times.toString())
-                }
-                lifecycleScope.launch {
-                    kotlinx.coroutines.delay(if (mActivity.sysSettingBean.sysOther.broadcastVoice == "1" || mActivity.sysSettingBean.sysOther.broadcastVoice == "0") 1200L else 500L)
+                lifecycleScope.launch(Dispatchers.Main) {
+                    Log.d("SixMinFragment","倒计时===$times")
+                    if (mActivity.sysSettingBean.sysOther.broadcastVoice == "1" || mActivity.sysSettingBean.sysOther.broadcastVoice == "0") {
+                        speechContent(times.toString())
+                    }
+                    kotlinx.coroutines.delay(1500L)
                     binding.sixminIvCountdownTime.setImageResource(imageId)
                 }
             }
 
             override fun onFinish() {
+                Log.d("SixMinFragment","倒计时结束")
                 lifecycleScope.launch {
                     kotlinx.coroutines.delay(1000L)
                     binding.sixminIvCountdownTime.visibility = View.GONE
@@ -1351,7 +1389,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
     private fun speechContent(
         content: String, utteranceId: String = System.currentTimeMillis().toString()
     ) {
-        textToSpeech.speak(content, TextToSpeech.QUEUE_ADD, null, utteranceId)
+        textToSpeech.speak(content, TextToSpeech.QUEUE_FLUSH, null, utteranceId)
     }
 
     override fun onInit(status: Int) {
@@ -1380,9 +1418,9 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                                 } else {
                                     mActivity.showMsg(getString(R.string.sixmin_test_measuring_blood))
                                 }
-                                binding.sixminRlStart.isEnabled = true
+//                                binding.sixminRlStart.isEnabled = true
                                 binding.sixminRlMeasureBlood.isEnabled = true
-                                binding.sixminIvIgnoreBlood.isEnabled = true
+//                                binding.sixminIvIgnoreBlood.isEnabled = true
                             } else {
                                 binding.sixminRlMeasureBlood.isEnabled = true
                                 mActivity.showMsg(getString(R.string.sixmin_test_blood_pressure_without_connection))

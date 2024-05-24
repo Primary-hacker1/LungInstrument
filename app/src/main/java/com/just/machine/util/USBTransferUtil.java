@@ -587,9 +587,9 @@ public class USBTransferUtil {
                                 Long time = System.currentTimeMillis();
                                 byte[] b = {bytes[12]};
                                 int oxygen = Integer.valueOf(CRC16Util.bytesToHexString(b), 16);
-//                                if (oxygen > 99) {
-//                                    oxygen = 99;
-//                                }
+                                if (oxygen > 99) {
+                                    oxygen = 99;
+                                }
                                 String str = Integer.toString(oxygen);
                                 mapBloodOxygen.put(time, str);
                                 usbSerialData.setBloodOxygen(String.valueOf(oxygen));

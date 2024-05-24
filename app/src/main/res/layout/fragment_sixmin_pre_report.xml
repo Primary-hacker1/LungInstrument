@@ -308,6 +308,7 @@
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginHorizontal="5dp"
                                 android:gravity="center"
+                                android:inputType="numberDecimal"
                                 android:textColor="@color/text3"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
@@ -617,7 +618,7 @@
                                         android:layout_width="50dp"
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
-                                        android:inputType="number"
+                                        android:inputType="numberDecimal"
                                         android:maxLength="3"
                                         android:textColor="@color/text3"
                                         android:textSize="16sp"

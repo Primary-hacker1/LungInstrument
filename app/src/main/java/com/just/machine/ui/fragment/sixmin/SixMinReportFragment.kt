@@ -380,7 +380,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
 
         var strideAverageStr = "/"
         var heartRestoreStr = "/"
-        if (sixMinRecordsBean.prescriptionBean[0].prescripState == "1") {
+        if (sixMinRecordsBean.prescriptionBean[0].prescripState == "1" ||sixMinRecordsBean.prescriptionBean[0].prescripState.isEmpty()) {
             strideAverageStr = sixMinRecordsBean.strideBean[0].strideAverage + "米/分"
             heartRestoreStr = sixMinRecordsBean.heartBeatBean[0].heartRestore
         }
@@ -961,6 +961,10 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
 
                 if (sixMinRecordsBean.infoBean.restDuration != "-1") {
                     sb.append("中途休息了" + sixMinRecordsBean.infoBean.restDuration + "秒。")
+                }
+
+                if(sixMinRecordsBean.heartBeatBean[0].heartConclusion.isNotEmpty()){
+                    sb.append("\n心电结论: ${sixMinRecordsBean.heartBeatBean[0].heartConclusion}")
                 }
 
                 binding.sixminReportTvConclusion.text = sb.toString()
