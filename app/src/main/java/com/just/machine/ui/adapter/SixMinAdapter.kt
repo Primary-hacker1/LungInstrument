@@ -33,8 +33,8 @@ class SixMinAdapter(var context: Context) : BaseRecyclerViewAdapter<SixMinReport
         binding.btnUpdate.setNoRepeatListener {
             listener?.onUpdateItem(item)
         }
-        binding.btnDelete.setNoRepeatListener {
-            listener?.onDeleteItem(item)
+        binding.btnExport.setNoRepeatListener {
+            listener?.onExportItem(item)
         }
 
         if (position == selectedItem) {
@@ -63,7 +63,7 @@ class SixMinAdapter(var context: Context) : BaseRecyclerViewAdapter<SixMinReport
     private var listener: SixMinReportListener? = null
 
     interface SixMinReportListener {
-        fun onDeleteItem(bean: SixMinReportInfo)
+        fun onExportItem(bean: SixMinReportInfo)
         fun onUpdateItem(bean: SixMinReportInfo)
         fun onCheckItem(bean: SixMinReportInfo)
     }

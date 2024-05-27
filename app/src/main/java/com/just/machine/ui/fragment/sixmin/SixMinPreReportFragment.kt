@@ -1,6 +1,9 @@
 package com.just.machine.ui.fragment.sixmin
 
+import android.annotation.SuppressLint
+import android.text.Editable
 import android.text.Html
+import android.text.TextWatcher
 import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
@@ -68,6 +71,20 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
         }else{
             viewModel.getSixMinReportInfoById(mActivity.sixMinPatientId.toLong(), mActivity.sixMinReportNo)
         }
+        binding.sixminEtReportNote.addTextChangedListener(object: TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            @SuppressLint("SetTextI18n")
+            override fun afterTextChanged(s: Editable?) {
+               binding.sixminPreTvNoteCount.text = "(${s.toString().trim().length}/208)"
+            }
+        })
     }
 
     override fun initListener() {
@@ -190,7 +207,8 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                     befoFatigueLevel: Int,
                     befoBreathingLevel: Int,
                     befoFatigueLevelStr: String,
-                    befoBreathingLevelStr: String
+                    befoBreathingLevelStr: String,
+                    faceMask:String
                 ) {
                     Log.d("tag", "$befoFatigueLevel$befoBreathingLevel")
                 }
@@ -498,6 +516,19 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                         mActivity.showMsg("建议医生，长度不能大于5")
                         return@setNoRepeatListener
                     }
+
+                    val reportNote = binding.sixminEtReportNote.text.toString().trim()
+                    if(reportNote.isNotEmpty()){
+                        if(reportNote.length > 208){
+                            mActivity.showMsg("运动注意事项，长度不能大于208")
+                            return@setNoRepeatListener
+                        }
+                        if(reportNote.lines().size > 5){
+                            mActivity.showMsg("运动注意事项，行数不能大于5")
+                            return@setNoRepeatListener
+                        }
+                    }
+
                     mActivity.sixMinReportPrescription.remarke = binding.sixminEtReportNote.text.toString().trim()
                     mActivity.sixMinReportPrescription.remarkeName =
                         binding.sixminEtRecommendDoctor.text.toString().trim()
@@ -1165,6 +1196,14 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                 dip2px(6.0f), dip2px(3.0f), dip2px(6.0f), dip2px(3.0f)
             )
             newRow.addView(linearLayout)
+//            val layoutParamsOne = binding.sixminPreIntervalOne.layoutParams as ViewGroup.MarginLayoutParams
+//            layoutParamsOne.leftMargin= dip2px(95f)
+//
+//            val layoutParamsTwo = binding.sixminPreIntervalTwo.layoutParams as ViewGroup.MarginLayoutParams
+//            layoutParamsTwo.leftMargin= dip2px(155f)
+//
+//            val layoutParamsThree = binding.sixminPreIntervalThree.layoutParams as ViewGroup.MarginLayoutParams
+//            layoutParamsThree.rightMargin = dip2px(175f)
             binding.sixminReportTlPreTable.addView(newRow)
         }
     }

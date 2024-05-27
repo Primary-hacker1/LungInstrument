@@ -1,5 +1,6 @@
 package com.just.machine.util;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.util.Base64;
 import java.io.File;
@@ -212,5 +213,10 @@ public class CommonUtil {
             }
         }
         return sb.toString();
+    }
+
+    public static int dip2px(Context context,int dpValue){
+        float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
 }

@@ -39,6 +39,7 @@ import com.just.machine.ui.adapter.PdfDocumentAdapter
 import com.just.machine.ui.dialog.LoadingDialogFragment
 import com.just.machine.ui.dialog.SixMinPrintReportOptionsDialogFragment
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.machine.util.CommonUtil
 import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.FragmentSixminReportBinding
@@ -349,7 +350,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         root["patientWeight"] = sixMinRecordsBean.infoBean.patientWeight
         root["patientBmi"] = sixMinRecordsBean.infoBean.patientBmi
         root["medicalNo"] = sixMinRecordsBean.infoBean.medicalNo
-        root["predictionDistance"] = sixMinRecordsBean.infoBean.predictionDistance
+        root["pDistance"] = sixMinRecordsBean.infoBean.predictionDistance
         root["medicalHistory"] = sixMinRecordsBean.infoBean.medicalHistory
         root["clinicalDiagnosis"] = sixMinRecordsBean.infoBean.clinicalDiagnosis
         root["medicineUse"] = sixMinRecordsBean.infoBean.medicineUse
@@ -742,7 +743,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 "/"
             )
         )
-        val padding = dip2px(mActivity.applicationContext, 1)
+        val padding = CommonUtil.dip2px(mActivity.applicationContext, 1)
         for (i in 0 until reportRowList.size) {
             val sixMinReportItemBean = reportRowList[i]
             val newRow = TableRow(mActivity.applicationContext)
@@ -756,7 +757,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
 
             for (j in 0..10) {
                 val tvNo = TextView(mActivity.applicationContext)
-                tvNo.textSize = dip2px(mActivity.applicationContext, 7).toFloat()
+                tvNo.textSize = CommonUtil.dip2px(mActivity.applicationContext, 7).toFloat()
                 // 设置文字居中
                 tvNo.gravity = if (j == 0) Gravity.START else Gravity.CENTER
                 tvNo.setTextColor(ContextCompat.getColor(mActivity, R.color.text3))
@@ -769,7 +770,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                     if (j == 0) 4.2f else if (j == 1 || j == 7 || j == 8 || j == 9 || j == 10) 3f else 2f
                 )
                 lpNo.setMargins(
-                    0, 0, dip2px(mActivity.applicationContext, 2), 0
+                    0, 0, CommonUtil.dip2px(mActivity.applicationContext, 2), 0
                 )
                 tvNo.layoutParams = lpNo
                 // 设置padding和背景颜色
@@ -823,10 +824,10 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 linearLayout.addView(tvNo)
             }
             newRow.setPadding(
-                dip2px(mActivity, 6),
-                dip2px(mActivity, 3),
-                dip2px(mActivity, 6),
-                dip2px(mActivity, 3)
+                CommonUtil.dip2px(mActivity, 6),
+                CommonUtil.dip2px(mActivity, 3),
+                CommonUtil.dip2px(mActivity, 6),
+                CommonUtil.dip2px(mActivity, 3)
             )
             newRow.addView(linearLayout)
             binding.sixminReportTable.addView(newRow)
@@ -1459,11 +1460,6 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 }
             }
         }
-    }
-
-    private fun dip2px(context: Context, dpValue: Int): Int {
-        val scale: Float = context.resources.displayMetrics.density
-        return (dpValue * scale + 0.5f).toInt()
     }
 
     @SuppressLint("AutoDispose")

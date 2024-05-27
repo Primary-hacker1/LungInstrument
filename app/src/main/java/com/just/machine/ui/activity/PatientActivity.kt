@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aspose.words.Document
+import com.aspose.words.ImportFormatMode
 import com.aspose.words.SaveFormat
 import com.common.base.CommonBaseActivity
 import com.common.base.gone
@@ -221,8 +222,15 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                 binding.rvSixTest.adapter = sixMinAdapter
 
                 sixMinAdapter.setItemOnClickListener(object : SixMinAdapter.SixMinReportListener {
-                    override fun onDeleteItem(bean: SixMinReportInfo) {
-
+                    override fun onExportItem(bean: SixMinReportInfo) {
+                        // 导出6分钟报告
+                        lifecycleScope.launch {
+                            viewModel.getSixMinReportEvaluationById(bean.patientId.toString())
+                            kotlinx.coroutines.delay(100L)
+                            viewModel.getSixMinReportInfoById(
+                                bean.patientId, bean.reportNo
+                            )
+                        }
                     }
 
                     override fun onUpdateItem(bean: SixMinReportInfo) {
@@ -277,14 +285,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                             }
 
                             override fun onClickExport() {
-                                // 导出6分钟报告
-                                lifecycleScope.launch {
-                                    viewModel.getSixMinReportEvaluationById(bean.patientId.toString())
-                                    kotlinx.coroutines.delay(100L)
-                                    viewModel.getSixMinReportInfoById(
-                                        bean.patientId, bean.reportNo
-                                    )
-                                }
+
                             }
 
                             override fun onClickDelete() {
@@ -440,8 +441,13 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
             } else {
                 // 加载Word文档
                 val doc = Document(filePath.absolutePath)
+                val document = Document()
+                document.removeAllChildren()
+                document.appendDocument(doc, ImportFormatMode.USE_DESTINATION_STYLES)
+                val format = doc.styles.defaultParagraphFormat
+                format.clearFormatting()
                 // 保存文档为PDF格式
-                doc.save(pdfFilePath.absolutePath, SaveFormat.PDF)
+                document.save(pdfFilePath.absolutePath, SaveFormat.PDF)
                 withContext(Dispatchers.Main) {
                     showMsg("导出报告成功")
                     if(startLoadingDialogFragment.isVisible){
@@ -465,7 +471,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         root["patientWeight"] = sixMinRecordsBean.infoBean.patientWeight
         root["patientBmi"] = sixMinRecordsBean.infoBean.patientBmi
         root["medicalNo"] = sixMinRecordsBean.infoBean.medicalNo
-        root["predictionDistance"] = sixMinRecordsBean.infoBean.predictionDistance
+        root["pDistance"] = sixMinRecordsBean.infoBean.predictionDistance
         root["medicalHistory"] = sixMinRecordsBean.infoBean.medicalHistory
         root["clinicalDiagnosis"] = sixMinRecordsBean.infoBean.clinicalDiagnosis
         root["medicineUse"] = sixMinRecordsBean.infoBean.medicineUse
@@ -496,7 +502,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
         var strideAverageStr = "/"
         var heartRestoreStr = "/"
-        if (sixMinRecordsBean.prescriptionBean[0].prescripState == "1") {
+        if (sixMinRecordsBean.prescriptionBean[0].prescripState == "1" || sixMinRecordsBean.prescriptionBean[0].prescripState.isEmpty()) {
             strideAverageStr = sixMinRecordsBean.strideBean[0].strideAverage + "米/分"
             heartRestoreStr = sixMinRecordsBean.heartBeatBean[0].heartRestore
         }
@@ -876,7 +882,8 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                                             befoFatigueLevel: Int,
                                             befoBreathingLevel: Int,
                                             befoFatigueLevelStr: String,
-                                            befoBreathingLevelStr: String
+                                            befoBreathingLevelStr: String,
+                                            faceMaskStr:String
                                         ) {
                                             val intent = Intent(
                                                 this@PatientActivity,
@@ -919,7 +926,8 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                                                     befoFatigueLevel: Int,
                                                     befoBreathingLevel: Int,
                                                     befoFatigueLevelStr: String,
-                                                    befoBreathingLevelStr: String
+                                                    befoBreathingLevelStr: String,
+                                                    faceMaskStr:String
                                                 ) {
                                                     val intent = Intent(
                                                         this@PatientActivity,

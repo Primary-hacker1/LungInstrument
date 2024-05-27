@@ -2,6 +2,7 @@ package com.just.machine.ui.dialog
 
 import android.app.Dialog
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -63,7 +64,8 @@ class SixMinReportSelfCheckBeforeTestFragment :
             befoFatigueLevel: Int,
             befoBreathingLevel: Int,
             befoFatigueLevelStr: String,
-            befoBreathingLevelStr: String
+            befoBreathingLevelStr: String,
+            faceMaskStr:String
         )
 
         fun onClickClose()
@@ -86,9 +88,11 @@ class SixMinReportSelfCheckBeforeTestFragment :
         if (selfCheck == "") {
             binding.sixminReportTvEditBloodPressureConfirm.text =
                 getString(R.string.sixmin_test_report_confirm)
+            binding.sixminLlFaceMask.visibility = View.GONE
         } else {
             binding.sixminReportTvEditBloodPressureConfirm.text =
                 getString(R.string.sixmin_test_report_check_report_enter_test)
+            binding.sixminLlFaceMask.visibility = View.VISIBLE
         }
         binding.sixminRbFaceMaskNo.isChecked = true
     }
@@ -111,7 +115,7 @@ class SixMinReportSelfCheckBeforeTestFragment :
                 if (selectStrList.size > 1) {
                     dismiss()
                     listener?.onClickConfirm(
-                        selectList[0], selectList[1], selectStrList[0].split("&")[1], selectStrList[1].split("&")[1]
+                        selectList[0], selectList[1], selectStrList[0].split("&")[1], selectStrList[1].split("&")[1],if(binding.sixminRbFaceMaskYes.isChecked) "1" else "0"
                     )
                 } else {
                     val split = selectStrList[0].split("&")

@@ -143,13 +143,15 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                     befoFatigueLevel: Int,
                     befoBreathingLevel: Int,
                     befoFatigueLevelStr: String,
-                    befoBreathingLevelStr: String
+                    befoBreathingLevelStr: String,
+                    faceMaskStr:String
                 ) {
                     val intent = Intent(activity, SixMinDetectActivity::class.java)
                     val bundle = Bundle()
                     bundle.putString(Constants.sixMinSelfCheckViewSelection,"$befoFatigueLevelStr&$befoBreathingLevelStr")
                     bundle.putString(Constants.sixMinPatientInfo, patientId)
                     bundle.putString(Constants.sixMinReportType, "1")
+                    bundle.putString(Constants.sixMinFaceMask,faceMaskStr)
                     intent.putExtras(bundle)
                     startActivity(intent)
                 }
@@ -177,13 +179,15 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                                     befoFatigueLevel: Int,
                                     befoBreathingLevel: Int,
                                     befoFatigueLevelStr: String,
-                                    befoBreathingLevelStr: String
+                                    befoBreathingLevelStr: String,
+                                    faceMaskStr:String
                                 ) {
                                     val intent = Intent(activity, SixMinDetectActivity::class.java)
                                     val bundle = Bundle()
                                     bundle.putString(Constants.sixMinSelfCheckViewSelection,"$befoFatigueLevelStr&$befoBreathingLevelStr")
                                     bundle.putString(Constants.sixMinPatientInfo,"")
                                     bundle.putString(Constants.sixMinReportType, "1")
+                                    bundle.putString(Constants.sixMinFaceMask,faceMaskStr)
                                     intent.putExtras(bundle)
                                     startActivity(intent,bundle)
                                 }
