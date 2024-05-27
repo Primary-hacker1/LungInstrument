@@ -380,7 +380,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
 
         var strideAverageStr = "/"
         var heartRestoreStr = "/"
-        if (sixMinRecordsBean.prescriptionBean[0].prescripState == "1") {
+        if (sixMinRecordsBean.prescriptionBean[0].prescripState == "1" ||sixMinRecordsBean.prescriptionBean[0].prescripState.isEmpty()) {
             strideAverageStr = sixMinRecordsBean.strideBean[0].strideAverage + "米/分"
             heartRestoreStr = sixMinRecordsBean.heartBeatBean[0].heartRestore
         }
@@ -469,10 +469,10 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         )
         if (sixMinRecordsBean.prescriptionBean[0].movementWay == "0") {
             root["checkcf1"] = PictureRenderData(14,14,checkPng.absolutePath)
-            root["checkcf2"] = PictureRenderData(16,16,unCheckPng.absolutePath)
+            root["checkcf2"] = PictureRenderData(14,14,unCheckPng.absolutePath)
         } else if (sixMinRecordsBean.prescriptionBean[0].movementWay == "1") {
             root["checkcf2"] = PictureRenderData(14,14,checkPng.absolutePath)
-            root["checkcf1"] = PictureRenderData(16,16,unCheckPng.absolutePath)
+            root["checkcf1"] = PictureRenderData(14,14,unCheckPng.absolutePath)
         }
         var strideTitStrs = "/"
         var strideStrs = "/"
@@ -961,6 +961,10 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
 
                 if (sixMinRecordsBean.infoBean.restDuration != "-1") {
                     sb.append("中途休息了" + sixMinRecordsBean.infoBean.restDuration + "秒。")
+                }
+
+                if(sixMinRecordsBean.heartBeatBean[0].heartConclusion.isNotEmpty()){
+                    sb.append("\n心电结论: ${sixMinRecordsBean.heartBeatBean[0].heartConclusion}")
                 }
 
                 binding.sixminReportTvConclusion.text = sb.toString()
