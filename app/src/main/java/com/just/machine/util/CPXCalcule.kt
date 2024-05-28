@@ -1,11 +1,11 @@
 package com.just.machine.util
 
-import com.just.machine.dao.lung.CPXBreathInOutData
-import com.just.machine.model.lungdata.CPXBreathInOutDataBase
-import com.just.machine.model.lungdata.CPXSerializeData
-import com.just.machine.model.lungdata.CPXCalBase
 //import com.just.machine.model.lungdata.Cashe
-import com.just.machine.model.lungdata.SystemSetting
+import com.just.machine.dao.lung.CPXBreathInOutData
+import com.just.machine.dao.setting.AllSettingBean
+import com.just.machine.model.lungdata.CPXBreathInOutDataBase
+import com.just.machine.model.lungdata.CPXCalBase
+import com.just.machine.model.lungdata.CPXSerializeData
 import kotlin.math.abs
 import kotlin.math.log10
 
@@ -20,10 +20,10 @@ object CPXCalcule {
     }
 
     /**
-    * @param dys 原始数据
-    * CPXBreathInOutData计算返回的动态肺数据
-    * */
-    fun calDyBreathInOutData(dys: CPXSerializeData) : CPXBreathInOutData{
+     * @param dys 原始数据
+     * CPXBreathInOutData计算返回的动态肺数据
+     * */
+    fun calDyBreathInOutData(dys: CPXSerializeData): CPXBreathInOutData {
 
         val breathData = CPXBreathInOutData()
 
@@ -46,9 +46,11 @@ object CPXCalcule {
         breathData.Tin_div_Ttot = dataBase.Tin / breathData.Ttot * 100.0
         breathData.BF = 60.0 / breathData.Ttot
         breathData.VE = breathData.VTex * breathData.BF
-        val physicalVD
-        = CPXCalBase.atpBtpsBreathOut(
-            (if (SystemSetting.getInstance().vd == 0) 10 else SystemSetting.getInstance().vd) * 0.001,
+
+        val allSettingBean = AllSettingBean()//这里要获取到设置数据
+
+        val physicalVD = CPXCalBase.atpBtpsBreathOut(
+            (if (allSettingBean.testDeadSpace == 0) 10 else allSettingBean.testDeadSpace) * 0.001,
             dataBase.T.toInt(),
             dataBase.P
         )
@@ -89,15 +91,14 @@ object CPXCalcule {
             breathData.VE * breathData.FeCO2 / 100 - breathData.VI * breathData.FiCO2 / 100 + breathData.VdCO2
         breathData.VCO2 = CPXCalBase.stpd(v2, dataBase.P) * 1000
         breathData.RER = if (breathData.VO2 == 0.0) 0.0 else breathData.VCO2 / breathData.VO2
-//        breathData.VO2_div_KG = breathData.VO2 / Cashe.currentPatient.weight
-//        breathData.BR =
-//            if (Cashe.currentPatient.reportDataModel.curtestmvv <= 0) (Cashe.currentPatient.patientPredictModel.mvv - breathData.VE)
-//        * 100.0 / Cashe.currentPatient.patientPredictModel.mvv else (Cashe.currentPatient.reportDataModel.curtestmvv - breathData.VE)
-//            * 100.0 / Cashe.currentPatient.reportDataModel.curtestmvv
+        breathData.VO2_div_KG = breathData.VO2 / 60
+
+        breathData.BR = 60.0 / breathData.Ttot
         breathData.VE_div_VO2 =
             if (breathData.VO2 < 50) 0.0 else breathData.VE / breathData.VO2 * 100.0
-//        breathData.VO2_div_VCO2 =
-//            if (breathData.VCO2 < 50) 0.0 else breathData.VO2 / breathData.VCO2 * 100.0
+
+        breathData.VE_div_VCO2 =
+            if (breathData.VCO2 < 50) 0.0 else (breathData.VE - 0.5 * breathData.BF) / breathData.VCO2 * 1000.0
         beforeDyBreathInOutData = breathData
         return breathData
     }

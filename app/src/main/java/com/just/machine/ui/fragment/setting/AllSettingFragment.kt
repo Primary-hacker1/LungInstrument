@@ -115,7 +115,7 @@ class AllSettingFragment : CommonBaseFragment<FragmentAllSettingBinding>() {
             }
         }
 
-        binding.editTestDeadSpace.setText(allSettingBean.testDeadSpace)
+        binding.editTestDeadSpace.setText(allSettingBean.testDeadSpace.toString())
 
 
     }
@@ -171,7 +171,7 @@ class AllSettingFragment : CommonBaseFragment<FragmentAllSettingBinding>() {
 
             allSettingBean.hospitalName = binding.editHospitalName.text.toString()
 
-            allSettingBean.testDeadSpace = binding.editTestDeadSpace.text.toString()
+            allSettingBean.testDeadSpace = binding.editTestDeadSpace.text.toString().toInt()
 
             viewModel.setAllSettingBean(allSettingBean)
         }

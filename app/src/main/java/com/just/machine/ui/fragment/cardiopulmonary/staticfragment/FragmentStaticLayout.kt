@@ -353,7 +353,6 @@ class FragmentStaticLayout @JvmOverloads constructor(
 
             Click.TEST2 -> {
                 val isStart1 = button == binding.btnTest1
-                LogUtils.e(tag + isStart1)
                 if (!isStart1) {
                     setButtonStyle(binding.btnTest1, false)
                 }
@@ -385,7 +384,6 @@ class FragmentStaticLayout @JvmOverloads constructor(
 
             Click.TEST3 -> {
                 val isStart1 = button == binding.btnTest1
-                LogUtils.e(tag + isStart1)
                 if (!isStart1) {
                     setButtonStyle(binding.btnTest1, false)
                 }
@@ -417,7 +415,6 @@ class FragmentStaticLayout @JvmOverloads constructor(
 
             Click.TEST4 -> {
                 val isStart1 = button == binding.btnTest1
-                LogUtils.e(tag + isStart1)
                 if (!isStart1) {
                     setButtonStyle(binding.btnTest1, false)
                 }
@@ -449,7 +446,6 @@ class FragmentStaticLayout @JvmOverloads constructor(
 
             Click.TEST5 -> {
                 val isStart1 = button == binding.btnTest1
-                LogUtils.e(tag + isStart1)
                 if (!isStart1) {
                     setButtonStyle(binding.btnTest1, false)
                 }

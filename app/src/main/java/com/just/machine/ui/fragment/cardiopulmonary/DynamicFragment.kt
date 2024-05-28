@@ -7,10 +7,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.common.base.CommonBaseFragment
-import com.common.base.log
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
-import com.just.machine.dao.lung.CPXBreathInOutData
 import com.just.machine.model.Constants
 import com.just.machine.model.LungTestData
 import com.just.machine.model.lungdata.CPXSerializeData

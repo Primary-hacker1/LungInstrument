@@ -21,6 +21,6 @@ data class AllSettingBean(
     var projectedValueScenarios: String? = "Zapletal",//预计值方案
     var breathingItem: String? = "硅胶面罩(特大)",//呼吸面罩
 
-    var testDeadSpace: String? = "",//测试死腔
+    var testDeadSpace: Int = 0,//测试死腔
     var ecg: String? = "",//心电仪
 )
