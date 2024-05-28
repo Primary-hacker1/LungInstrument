@@ -1,5 +1,6 @@
 package com.just.machine.ui.fragment.sixmin
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.CountDownTimer
 import android.speech.tts.TextToSpeech
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -51,6 +53,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.w3c.dom.Text
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -91,6 +94,13 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
     private var index = 0
     private var ready = false
 
+    private lateinit var vo2PerHr:TextView
+    private lateinit var vo2:TextView
+    private lateinit var rer:TextView
+    private lateinit var vo2PerKg:TextView
+    private lateinit var vco2:TextView
+    private lateinit var bf:TextView
+
     override fun loadData() {//懒加载
 
     }
@@ -111,19 +121,38 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
         viewModel.getPatients()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initFloatingCardiopulmonary() {
         if(mActivity.sixMinFaceMask.isNotEmpty() && mActivity.sixMinFaceMask == "1"){
-            EasyWindow.with(mActivity).apply {
+            val easyWindow = EasyWindow.with(mActivity).apply {
                 setContentView(R.layout.sixmin_floating_cardiopulmonary_element)
-                setXOffset(ScreenUtils.getScreenWidth(mActivity)/2-CommonUtil.dip2px(mActivity,210))
-                setYOffset(ScreenUtils.getScreenHeight(mActivity)/2-CommonUtil.dip2px(mActivity,115))
+                setXOffset(
+                    ScreenUtils.getScreenWidth(mActivity) / 2 - CommonUtil.dip2px(
+                        mActivity,
+                        210
+                    )
+                )
+                setYOffset(
+                    ScreenUtils.getScreenHeight(mActivity) / 2 - CommonUtil.dip2px(
+                        mActivity,
+                        115
+                    )
+                )
                 // 设置成可拖拽的
                 setDraggable()
                 // 设置显示时长
                 setDuration(0)
                 // 设置动画样式
                 setAnimStyle(android.R.style.Animation_Translucent)
-            }.show()
+            }
+            vo2PerHr =
+                easyWindow.findViewById<TextView>(R.id.sixmin_tv_floating_cardiopulmonary_vo2_per_hr) as TextView
+            vo2 = easyWindow.findViewById<TextView>(R.id.sixmin_tv_floating_cardiopulmonary_vo2) as TextView
+            rer = easyWindow.findViewById<TextView>(R.id.sixmin_tv_floating_cardiopulmonary_rer) as TextView
+            vo2PerKg = easyWindow.findViewById<TextView>(R.id.sixmin_tv_floating_cardiopulmonary_vo2_per_kg) as TextView
+            vco2 = easyWindow.findViewById<TextView>(R.id.sixmin_tv_floating_cardiopulmonary_vco2) as TextView
+            bf = easyWindow.findViewById<TextView>(R.id.sixmin_tv_floating_cardiopulmonary_bf) as TextView
+            easyWindow.show()
         }
     }
 
@@ -1327,16 +1356,12 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
      */
     private fun generateReportData(min: String, sec: String, type: Int, min1: Int, sec1: Int) {
         try {
-            if (mActivity.sysSettingBean.sysOther.showResetTime == "1") {
-                if (type == 1) {
-                    mActivity.sixMinReportInfo.restDuration =
-                        (mActivity.usbTransferUtil.restTime - 1).toString()
-                } else if (type == 0) {
-                    mActivity.sixMinReportInfo.restDuration =
-                        mActivity.usbTransferUtil.restTime.toString()
-                }
-            } else if (mActivity.sysSettingBean.sysOther.showResetTime == "0") {
-                mActivity.sixMinReportInfo.restDuration = "-1"
+            if (type == 1) {
+                mActivity.sixMinReportInfo.restDuration =
+                    (mActivity.usbTransferUtil.restTime - 1).toString()
+            } else if (type == 0) {
+                mActivity.sixMinReportInfo.restDuration =
+                    mActivity.usbTransferUtil.restTime.toString()
             }
             mActivity.sixMinReportEvaluation.turnsNumber =
                 mActivity.usbTransferUtil.circleCount.toString()
@@ -1551,6 +1576,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
         mActivity.setToolbarTitle(getString(R.string.sixmin_test_title))
         binding.sixminEcg.onResume()
         initFloatingCardiopulmonary()
+        mActivity.sixMinReportInfo.bsHxl = mActivity.sysSettingBean.sysOther.stepsOrBreath
         super.onResume()
     }
 

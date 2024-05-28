@@ -76,9 +76,9 @@ class SixMinHeartEcgFragment : CommonBaseFragment<FragmentSixminHeartEcgBinding>
                 SixMinCaptureEcgDialogFragment.startSixMinCaptureEcgDialogFragment(mActivity.supportFragmentManager)
             captureEcgDialogFragment.setCaptureEcgDialogListener(object :
                 SixMinCaptureEcgDialogFragment.CaptureEcgDialogListener {
-                override fun onClickSaveEcg(imagePreview: Bitmap) {
+                override fun onClickSaveEcg(imagePreview: Bitmap,type:Int) {
                     val ecgSavePath =
-                        File.separator + "sixminecgpng" + File.separator + mActivity.sixMinReportNo
+                        File.separator + "sixminreportpng" + File.separator + mActivity.sixMinReportNo
                     val file = File(
                         mActivity.getExternalFilesDir("")?.absolutePath,
                         ecgSavePath + File.separator + "imageEcg.png"

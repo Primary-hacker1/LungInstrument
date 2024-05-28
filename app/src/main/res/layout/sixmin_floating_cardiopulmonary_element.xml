@@ -43,6 +43,7 @@
                             android:text="VO2/HR" />
 
                         <TextView
+                            android:id="@+id/sixmin_tv_floating_cardiopulmonary_vo2_per_hr"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/oswald"
@@ -79,10 +80,11 @@
                             android:text="VO2" />
 
                         <TextView
+                            android:id="@+id/sixmin_tv_floating_cardiopulmonary_vo2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/oswald"
-                            android:text="1091.52"
+                            android:text="0.00"
                             android:textColor="@color/text3"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -115,10 +117,11 @@
                             android:text="RER" />
 
                         <TextView
+                            android:id="@+id/sixmin_tv_floating_cardiopulmonary_rer"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/oswald"
-                            android:text="1.0"
+                            android:text="0.0"
                             android:textColor="@color/text3"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -159,6 +162,7 @@
                             android:text="VO2/KG" />
 
                         <TextView
+                            android:id="@+id/sixmin_tv_floating_cardiopulmonary_vo2_per_kg"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/oswald"
@@ -195,10 +199,11 @@
                             android:text="VCO2" />
 
                         <TextView
+                            android:id="@+id/sixmin_tv_floating_cardiopulmonary_vco2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/oswald"
-                            android:text="1087.19"
+                            android:text="0.00"
                             android:textColor="@color/text3"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -231,10 +236,11 @@
                             android:text="BF" />
 
                         <TextView
+                            android:id="@+id/sixmin_tv_floating_cardiopulmonary_bf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/oswald"
-                            android:text="15.11"
+                            android:text="0.00"
                             android:textColor="@color/text3"
                             android:textSize="20sp"
                             android:textStyle="bold" />

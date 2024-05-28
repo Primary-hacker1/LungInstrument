@@ -24,6 +24,7 @@ ext {
     pdf_viewer = "2.8.2"
     android_chart = "v3.1.0"
     hellocharts = "1.5.8@aar"
+    floatWindow = "10.6"
 
     gradleBase = [
             junit    : "junit:junit:${junit}",
@@ -56,6 +57,7 @@ ext {
             freemarker                    : "org.freemarker:freemarker:$freemarker",
             pdf_viewer                    : "com.github.barteksc:android-pdf-viewer:$pdf_viewer",
             android_chart                 : "com.github.PhilJay:MPAndroidChart:$android_chart",
+            float_window                  : "com.github.getActivity:EasyWindow:$floatWindow",
 
     ]
 

@@ -383,7 +383,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         var heartRestoreStr = "/"
         if (sixMinRecordsBean.prescriptionBean[0].prescripState == "1" ||sixMinRecordsBean.prescriptionBean[0].prescripState.isEmpty()) {
             strideAverageStr = sixMinRecordsBean.strideBean[0].strideAverage + "米/分"
-            heartRestoreStr = sixMinRecordsBean.heartBeatBean[0].heartRestore
+            heartRestoreStr = sixMinRecordsBean.heartBeatBean[0].heartRestore.ifEmpty { "0" }
         }
         root["striAvg"] = strideAverageStr
         root["metabEqu"] = sixMinRecordsBean.evaluationBean[0].metabEquivalent + "METs"
@@ -450,7 +450,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 "完成六分钟试验，不良症状：" + sixMinRecordsBean.otherBean[0].badSymptoms + "。"
             }
         }
-        if (sixMinRecordsBean.infoBean.restDuration != "-1") {
+        if (mActivity.sysSettingBean.sysOther.showResetTime == "1") {
             check4 += "中途停留了" + sixMinRecordsBean.infoBean.restDuration + "秒。"
         }
         root["badSymptoms"] = check4
@@ -960,7 +960,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                     }
                 }
 
-                if (sixMinRecordsBean.infoBean.restDuration != "-1") {
+                if (mActivity.sysSettingBean.sysOther.showResetTime == "1") {
                     sb.append("中途休息了" + sixMinRecordsBean.infoBean.restDuration + "秒。")
                 }
 

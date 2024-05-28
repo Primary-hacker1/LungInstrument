@@ -66,6 +66,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
     private val viewModel by viewModels<MainViewModel>()
     private lateinit var usbTransferUtil: USBTransferUtil
     private var hasPassPermission = false //删除6分钟试验记录授权
+    private lateinit var sysSettingBean: SixMinSysSettingBean//6分钟系统设置
 
     companion object {
         /**
@@ -140,6 +141,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         }
 
         initOnClick()
+        initSystemInfo()
         jumpFlag = intent.getStringExtra(Constants.finishSixMinTest)
         if (jumpFlag != null && jumpFlag == "finishSixMinTest") {
             setButtonStyle(
@@ -504,12 +506,12 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         var heartRestoreStr = "/"
         if (sixMinRecordsBean.prescriptionBean[0].prescripState == "1" || sixMinRecordsBean.prescriptionBean[0].prescripState.isEmpty()) {
             strideAverageStr = sixMinRecordsBean.strideBean[0].strideAverage + "米/分"
-            heartRestoreStr = sixMinRecordsBean.heartBeatBean[0].heartRestore
+            heartRestoreStr = sixMinRecordsBean.heartBeatBean[0].heartRestore.ifEmpty { "0" }
         }
         root["striAvg"] = strideAverageStr
         root["metabEqu"] = sixMinRecordsBean.evaluationBean[0].metabEquivalent + "METs"
         root["accounted"] = sixMinRecordsBean.evaluationBean[0].accounted + "%"
-        root["stHeart"] = sixMinRecordsBean.heartBeatBean[0].heartStop
+        root["stHeart"] = if(sixMinRecordsBean.heartBeatBean[0].heartStop.isEmpty()) "0bmp" else "${sixMinRecordsBean.heartBeatBean[0].heartStop}bmp"
 
         var gardLevel: String = sixMinRecordsBean.evaluationBean[0].cardiopuLevel
         gardLevel = when (gardLevel) {
@@ -571,7 +573,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                 "完成六分钟试验，不良症状：" + sixMinRecordsBean.otherBean[0].badSymptoms + "。"
             }
         }
-        if (sixMinRecordsBean.infoBean.restDuration != "-1") {
+        if (sysSettingBean.sysOther.showResetTime == "1") {
             check4 += "中途停留了" + sixMinRecordsBean.infoBean.restDuration + "秒。"
         }
         root["badSymptoms"] = check4
@@ -1032,6 +1034,17 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         textView2.background = ContextCompat.getDrawable(this, R.drawable.super_edittext_bg)
         showRecyclerView.gone()
         hideRecyclerView.visible()
+    }
+
+    fun initSystemInfo() {
+        val gson = Gson()
+        sysSettingBean = SixMinSysSettingBean()
+        val sixMinSysSetting = SharedPreferencesUtils.instance.sixMinSysSetting
+        if (sixMinSysSetting != null && sixMinSysSetting != "") {
+            sysSettingBean = gson.fromJson(
+                sixMinSysSetting, SixMinSysSettingBean::class.java
+            )
+        }
     }
 
     override fun getViewBinding() = ActivityPatientBinding.inflate(layoutInflater)

@@ -3,6 +3,7 @@ package com.just.machine.ui.fragment.sixmin
 import android.annotation.SuppressLint
 import android.text.Editable
 import android.text.Html
+import android.text.InputFilter
 import android.text.TextWatcher
 import android.util.Log
 import android.util.TypedValue
@@ -66,6 +67,7 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
         KeyboardUtil.setEditTextFilter(binding.sixminEtHeartBeatConclusion)
         KeyboardUtil.setEditTextFilter(binding.sixminEtReportNote)
         KeyboardUtil.setEditTextFilter(binding.sixminEtRecommendDoctor)
+        binding.sixminEtReportNote.filters = arrayOf(InputFilter.LengthFilter(208))
         if(mActivity.sixMinReportType.isEmpty() || mActivity.sixMinReportType == "1"){
             showData(null)
         }else{
@@ -328,7 +330,7 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                     mActivity.sixMinReportEvaluation.unfinishedDistance =
                         binding.sixminEtUnfinishCircle.text.toString()
 
-                    if (mActivity.sixMinReportInfo.restDuration != "-1") {
+                    if (mActivity.sysSettingBean.sysOther.showResetTime == "1") {
                         if (binding.sixminPreEtResetTime.text.toString().trim().isEmpty()) {
                             mActivity.showMsg("中途休息值不能为空")
                             return@setNoRepeatListener
@@ -773,10 +775,12 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
             mActivity.sixMinReportWalk = this.sixMinRecordsBean.walkBean[0]
         }
 
+        Log.d("sixMinRecordsBean", Gson().toJson(this.sixMinRecordsBean))
+
+        mActivity.sixMinReportInfo.bsHxl = mActivity.sysSettingBean.sysOther.stepsOrBreath
+
         initTable()
         initSelfCheck()
-
-        Log.d("sixMinRecordsBean", Gson().toJson(this.sixMinRecordsBean))
 
         binding.sixminEtFinishCircle.setText(mActivity.sixMinReportEvaluation.turnsNumber)
         binding.sixminEtFinishCircle.isEnabled =
@@ -787,6 +791,13 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
             mActivity.sixMinReportPrescription.movementWay.isEmpty()
 
         binding.sixminTvTotalDistance.text = mActivity.sixMinReportEvaluation.totalDistance
+
+        if(mActivity.sixMinReportInfo.bsHxl == "0"){
+            binding.sixminPreLlTotalSteps.visibility = View.VISIBLE
+            binding.sixminTvTotalSteps.text = mActivity.sixMinReportEvaluation.totalWalk
+        }else{
+            binding.sixminPreLlTotalSteps.visibility = View.GONE
+        }
 
         val stopTime = mActivity.sixMinReportBloodOther.stopTime
         val type = mActivity.sixMinReportBloodOther.stopOr
@@ -811,8 +822,8 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
             )
         )
         binding.sixminPreEtResetTime.isEnabled =
-            mActivity.sixMinReportPrescription.movementWay.isEmpty() || mActivity.sixMinReportPrescription.movementWay == "0"
-        if (mActivity.sixMinReportInfo.restDuration != "-1") {
+            mActivity.sixMinReportPrescription.movementWay.isEmpty()
+        if (mActivity.sysSettingBean.sysOther.showResetTime == "1") {
             binding.sixminPreLlResetTime.visibility = View.VISIBLE
             binding.sixminPreEtResetTime.setText(mActivity.sixMinReportInfo.restDuration)
         } else {
