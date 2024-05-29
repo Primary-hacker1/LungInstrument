@@ -4,7 +4,6 @@ package com.just.machine
 import android.app.Activity
 import android.app.Application
 import android.util.Log
-import android.widget.Toast
 import com.common.log.ThinkerLogger
 import com.just.machine.helper.UriConfig
 import com.just.machine.util.FileUtil

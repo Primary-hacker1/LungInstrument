@@ -22,10 +22,10 @@ class VerticalLineView(context: Context) : View(context) {
         circlePaint.strokeWidth = 4f // 设置圆圈线条的宽度
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas?.drawLine(circleCenterX, 0f, circleCenterX, height.toFloat(), paint)
-        canvas?.drawCircle(circleCenterX, height / 2.toFloat(), circleRadius, circlePaint) // 绘制空心圆
+        canvas.drawLine(circleCenterX, 0f, circleCenterX, height.toFloat(), paint)
+        canvas.drawCircle(circleCenterX, height / 2.toFloat(), circleRadius, circlePaint) // 绘制空心圆
     }
 
     fun setXPosition(x: Float) {

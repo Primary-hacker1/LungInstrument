@@ -324,7 +324,7 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
     }
 
     @SuppressLint("DrawAllocation")
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
         // 转换 dp 为像素
@@ -340,8 +340,8 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
         val totalTitleHeight = titlePaint.fontSpacing * 2 // 两行标题文本的总高度
         val titleStartX = 30f // 左边留出一定的空白
         val titleStartY = totalTitleHeight - 26 // 留出与标题文本相同的高度
-        canvas?.drawText(title1, titleStartX, titleStartY, titlePaint)
-        canvas?.drawText(title2, titleStartX, titleStartY + titlePaint.fontSpacing, titlePaint)
+        canvas.drawText(title1, titleStartX, titleStartY, titlePaint)
+        canvas.drawText(title2, titleStartX, titleStartY + titlePaint.fontSpacing, titlePaint)
 
         // 绘制垂直居中的文本
         val verticalText = titleCentent

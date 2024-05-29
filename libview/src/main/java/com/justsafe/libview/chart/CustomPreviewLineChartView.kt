@@ -150,7 +150,7 @@ class CustomPreviewLineChartView(context: Context, attrs: AttributeSet?) :
     }
 
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
         // 绘制 Y 轴标题

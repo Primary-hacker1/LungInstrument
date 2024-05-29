@@ -93,6 +93,7 @@ dependencies {
     implementation project(path: ':usbSerialForAndroid')
     implementation project(path: ':MPChartExample')
     implementation project(path: ':MPChartLib')
+    implementation project(path: ':charts')//备用折线图
     implementation project(path: ':LuckyEcgChart')
 
     implementation gradleBase.core
