@@ -24,6 +24,7 @@ class SixMinCaptureEcgDialogFragment : BaseDialogFragment<FragmentDialogSixminCa
 
     private lateinit var listener: CaptureEcgDialogListener
     private lateinit var imagePreview:Bitmap
+    private var type:Int = 0
 
     companion object {
         /**
@@ -75,7 +76,7 @@ class SixMinCaptureEcgDialogFragment : BaseDialogFragment<FragmentDialogSixminCa
             computerEcg(3)
         }
         binding.tvCaptureSave.setNoRepeatListener {
-            listener.onClickSaveEcg(imagePreview)
+            listener.onClickSaveEcg(imagePreview,type)
             dismiss()
         }
         binding.tvCaptureCancel.setNoRepeatListener {
@@ -84,6 +85,7 @@ class SixMinCaptureEcgDialogFragment : BaseDialogFragment<FragmentDialogSixminCa
     }
 
     private fun computerEcg(type: Int) {
+        this.type = type
         lifecycleScope.launch(Dispatchers.IO) {
             val dataParse = ECGDataParse(activity)
             imagePreview = LuckySoftRenderer.instantiate(
@@ -124,7 +126,7 @@ class SixMinCaptureEcgDialogFragment : BaseDialogFragment<FragmentDialogSixminCa
     }
 
     interface CaptureEcgDialogListener {
-        fun onClickSaveEcg(imagePreview: Bitmap)
+        fun onClickSaveEcg(imagePreview: Bitmap,type: Int)
     }
 
     fun setCaptureEcgDialogListener(listener: CaptureEcgDialogListener) {

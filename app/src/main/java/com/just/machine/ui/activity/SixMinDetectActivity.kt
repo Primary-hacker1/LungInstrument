@@ -30,7 +30,9 @@ import com.justsafe.libview.util.SystemUtil
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
-
+/**
+ * 6分钟试验
+ */
 @AndroidEntryPoint
 class SixMinDetectActivity : CommonBaseActivity<ActivitySixMinDetectBinding>() {
 
@@ -51,6 +53,7 @@ class SixMinDetectActivity : CommonBaseActivity<ActivitySixMinDetectBinding>() {
     var sixMinPatientId = "" //试验的患者id
     var sixMinReportNo = "" //报告id
     var sixMinReportType = "" //跳转类型 1新增 2编辑 3查看 4心电
+    var sixMinFaceMask = "" //是否配置面罩，显示心肺参数
 
     override fun getViewBinding() = ActivitySixMinDetectBinding.inflate(layoutInflater)
 
@@ -79,6 +82,7 @@ class SixMinDetectActivity : CommonBaseActivity<ActivitySixMinDetectBinding>() {
         sixMinPatientId = intent.extras?.getString(Constants.sixMinPatientInfo, "").toString()
         sixMinReportNo = intent.extras?.getString(Constants.sixMinReportNo, "").toString()
         sixMinReportType = intent.extras?.getString(Constants.sixMinReportType, "").toString()
+        sixMinFaceMask = intent.extras?.getString(Constants.sixMinFaceMask, "").toString()
 
         usbTransferUtil = USBTransferUtil.getInstance()
         usbTransferUtil.init(this)

@@ -11,6 +11,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:visibility="gone"
             android:id="@+id/ll_test_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,11 +58,11 @@
             android:layout_height="wrap_content"
             android:background="@drawable/dialog_bg"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="36dp"
                 android:background="@drawable/sixmin_report_title_topradius_bg"
                 android:gravity="center"
                 android:text="选择操作记录类型"
@@ -73,7 +74,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:padding="50dp">
+                android:paddingHorizontal="100dp"
+                android:paddingVertical="50dp">
 
                 <LinearLayout
                     android:id="@+id/sixmin_report_ll_view"
@@ -82,8 +84,8 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center_horizontal"
                         android:src="@drawable/icon_details" />
 
@@ -100,12 +102,12 @@
                     android:id="@+id/sixmin_report_ll_edit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="50dp"
+                    android:layout_marginStart="100dp"
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center_horizontal"
                         android:src="@drawable/update_blue" />
 
@@ -119,15 +121,16 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/sixmin_report_ll_export"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="50dp"
+                    android:layout_marginStart="100dp"
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center_horizontal"
                         android:src="@drawable/icon_file_open" />
 
@@ -144,12 +147,12 @@
                     android:id="@+id/sixmin_report_ll_delete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="50dp"
+                    android:layout_marginStart="100dp"
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center_horizontal"
                         android:src="@drawable/icon_del_blue" />
 

@@ -27,7 +27,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="5"
+                    android:layout_weight="6"
                     android:orientation="vertical">
 
                     <RelativeLayout
@@ -104,22 +104,25 @@
                                 android:background="#231815" />
 
                             <View
+                                android:id="@+id/sixmin_pre_interval_one"
                                 android:layout_width="0.75dp"
                                 android:layout_height="115dp"
                                 android:layout_marginStart="150dp"
                                 android:background="#231815" />
 
                             <View
+                                android:id="@+id/sixmin_pre_interval_two"
                                 android:layout_width="0.75dp"
                                 android:layout_height="115dp"
                                 android:layout_marginStart="90dp"
                                 android:background="#231815" />
 
                             <View
+                                android:id="@+id/sixmin_pre_interval_three"
                                 android:layout_width="0.75dp"
                                 android:layout_height="115dp"
                                 android:layout_gravity="end"
-                                android:layout_marginEnd="170dp"
+                                android:layout_marginEnd="180dp"
                                 android:background="#231815" />
 
                         </FrameLayout>
@@ -127,7 +130,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
+                            android:layout_marginStart="5dp"
                             android:orientation="horizontal">
 
                             <LinearLayout
@@ -199,7 +202,7 @@
 
                                 <EditText
                                     android:id="@+id/sixmin_et_unfinish_circle"
-                                    android:layout_width="80dp"
+                                    android:layout_width="60dp"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginHorizontal="5dp"
@@ -214,6 +217,50 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:text="米"
+                                    android:textColor="@color/text3"
+                                    android:textSize="12sp" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/sixmin_pre_ll_total_steps"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="10dp"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="18dp"
+                                    android:layout_height="18dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:scaleType="centerInside"
+                                    android:src="@drawable/walk" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginStart="5dp"
+                                    android:text="总步数:"
+                                    android:textColor="@color/text3"
+                                    android:textSize="12sp" />
+
+                                <TextView
+                                    android:id="@+id/sixmin_tv_total_steps"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginHorizontal="5dp"
+                                    android:textColor="@color/text3"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:text="步"
                                     android:textColor="@color/text3"
                                     android:textSize="12sp" />
 
@@ -266,7 +313,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="10dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_marginVertical="10dp"
                             android:orientation="horizontal">
 
                             <ImageView
@@ -289,8 +337,9 @@
                             android:id="@+id/sixmin_pre_ll_reset_time"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="30dp"
-                            android:orientation="horizontal">
+                            android:layout_marginStart="25dp"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -838,19 +887,37 @@
                             android:paddingHorizontal="20dp"
                             android:paddingVertical="10dp">
 
-                            <TextView
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="注意事项:"
-                                android:textColor="@color/text3"
-                                android:textSize="12sp" />
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="注意事项:"
+                                    android:textColor="@color/text3"
+                                    android:textSize="12sp" />
+
+                                <TextView
+                                    android:id="@+id/sixmin_pre_tv_note_count"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="5dp"
+                                    android:text="(0/208)" />
+
+                            </LinearLayout>
 
                             <EditText
                                 android:id="@+id/sixmin_et_report_note"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:maxLength="208"
+                                android:maxLines="5"
                                 android:textColor="@color/text3"
-                                android:textSize="13sp" />
+                                android:textSize="13sp"
+                                android:autofillHints="" />
 
                             <RelativeLayout
                                 android:layout_width="match_parent"

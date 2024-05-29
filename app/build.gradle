@@ -143,5 +143,10 @@ dependencies {
     }
     implementation files('libs/poishadow-all.jar')
     implementation files('libs/aspose-words-android.jar')
+
+    //美灵思心电
     implementation files('libs/mlnxdevicelibrary_v2.7.aar')
+
+    //悬浮框
+    implementation presentationDependencies.float_window
 }

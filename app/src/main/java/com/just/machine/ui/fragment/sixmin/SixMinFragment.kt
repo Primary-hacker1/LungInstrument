@@ -1,5 +1,6 @@
 package com.just.machine.ui.fragment.sixmin
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.CountDownTimer
 import android.speech.tts.TextToSpeech
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -22,6 +24,8 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.google.gson.Gson
+import com.hjq.window.EasyWindow
+import com.hjq.window.draggable.MovingDraggable
 import com.just.machine.model.BloodOxyLineEntryBean
 import com.just.machine.model.Constants
 import com.just.machine.model.PatientInfoBean
@@ -33,6 +37,7 @@ import com.just.machine.ui.dialog.CommonDialogFragment
 import com.just.machine.ui.dialog.SixMinCollectRestoreEcgDialogFragment
 import com.just.machine.ui.dialog.SixMinGuideDialogFragment
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.machine.util.CommonUtil
 import com.just.machine.util.ECGDataParse
 import com.just.machine.util.FixCountDownTime
 import com.just.machine.util.LiveDataBus
@@ -48,6 +53,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.w3c.dom.Text
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -67,7 +73,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
     private lateinit var mActivity: SixMinDetectActivity
     private lateinit var mCountDownTime: FixCountDownTime //试验6分钟倒计时
     private lateinit var mCountDownTimeThree: CountDownTimer//每3秒一个值获取心率，血氧
-    private lateinit var mStartTestCountDownTime: FixCountDownTime//6分钟试验倒计时
+    private lateinit var mStartTestCountDownTime: FixCountDownTime//6分钟试验5秒倒计时
     private lateinit var mGetSportHeartEcgCountDownTime: FixCountDownTime//采集运动心率倒计时
     private lateinit var bloodOxyDataSet: LineDataSet
     private lateinit var heartBeatDataSet: LineDataSet
@@ -88,6 +94,13 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
     private var index = 0
     private var ready = false
 
+    private lateinit var vo2PerHr:TextView
+    private lateinit var vo2:TextView
+    private lateinit var rer:TextView
+    private lateinit var vo2PerKg:TextView
+    private lateinit var vco2:TextView
+    private lateinit var bf:TextView
+
     override fun loadData() {//懒加载
 
     }
@@ -106,6 +119,41 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
         initCountDownTimerExt()
         initEcgChart()
         viewModel.getPatients()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun initFloatingCardiopulmonary() {
+        if(mActivity.sixMinFaceMask.isNotEmpty() && mActivity.sixMinFaceMask == "1"){
+            val easyWindow = EasyWindow.with(mActivity).apply {
+                setContentView(R.layout.sixmin_floating_cardiopulmonary_element)
+                setXOffset(
+                    ScreenUtils.getScreenWidth(mActivity) / 2 - CommonUtil.dip2px(
+                        mActivity,
+                        210
+                    )
+                )
+                setYOffset(
+                    ScreenUtils.getScreenHeight(mActivity) / 2 - CommonUtil.dip2px(
+                        mActivity,
+                        115
+                    )
+                )
+                // 设置成可拖拽的
+                setDraggable()
+                // 设置显示时长
+                setDuration(0)
+                // 设置动画样式
+                setAnimStyle(android.R.style.Animation_Translucent)
+            }
+            vo2PerHr =
+                easyWindow.findViewById<TextView>(R.id.sixmin_tv_floating_cardiopulmonary_vo2_per_hr) as TextView
+            vo2 = easyWindow.findViewById<TextView>(R.id.sixmin_tv_floating_cardiopulmonary_vo2) as TextView
+            rer = easyWindow.findViewById<TextView>(R.id.sixmin_tv_floating_cardiopulmonary_rer) as TextView
+            vo2PerKg = easyWindow.findViewById<TextView>(R.id.sixmin_tv_floating_cardiopulmonary_vo2_per_kg) as TextView
+            vco2 = easyWindow.findViewById<TextView>(R.id.sixmin_tv_floating_cardiopulmonary_vco2) as TextView
+            bf = easyWindow.findViewById<TextView>(R.id.sixmin_tv_floating_cardiopulmonary_bf) as TextView
+            easyWindow.show()
+        }
     }
 
     private fun initEcgChart() {
@@ -459,6 +507,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
 
         binding.sixminIvSystemSetting.setOnClickListener {
             if (!mActivity.usbTransferUtil.isBegin) {
+                EasyWindow.cancelAll()
                 navigate(it, R.id.sixMinSystemSettingFragment)//fragment跳转
             } else {
                 val startCommonDialogFragment = CommonDialogFragment.startCommonDialogFragment(
@@ -468,6 +517,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                 startCommonDialogFragment.setCommonDialogOnClickListener(object :
                     CommonDialogFragment.CommonDialogClickListener {
                     override fun onPositiveClick() {
+                        EasyWindow.cancelAll()
                         mActivity.usbTransferUtil.release()
                         navigate(it, R.id.sixMinSystemSettingFragment)//fragment跳转
                     }
@@ -503,15 +553,13 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
         binding.sixminRlStart.setNoRepeatListener {
             if (mActivity.usbTransferUtil.isConnectUSB && mActivity.usbTransferUtil.ecgConnection && mActivity.usbTransferUtil.bloodOxygenConnection && mActivity.usbTransferUtil.bloodPressureConnection) {
                 if (!mActivity.usbTransferUtil.isBegin) {
-                    if (mActivity.sysSettingBean.sysOther.autoMeasureBlood == "0") {
+                    if (mActivity.sysSettingBean.sysOther.autoMeasureBlood == "0" ||mActivity.sysSettingBean.sysOther.autoMeasureBlood == "1") {
                         if (binding.sixminTvMeasureBlood.text.toString()
                                 .trim() == getString(R.string.sixmin_measuring_blood)
                         ) {
                             mActivity.showMsg(getString(R.string.sixmin_test_measuring_blood))
                         } else {
-                            if (mActivity.usbTransferUtil.bloodType == 1) {
-                                autoStartTest()
-                            } else {
+                            if (mActivity.usbTransferUtil.bloodType == 0) {
                                 val startCommonDialogFragment =
                                     CommonDialogFragment.startCommonDialogFragment(
                                         mActivity.supportFragmentManager,
@@ -531,6 +579,8 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
 
                                     }
                                 })
+                            } else if(mActivity.usbTransferUtil.bloodType == 1){
+                                autoStartTest()
                             }
                         }
                     }
@@ -632,16 +682,6 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
             } else {
                 binding.sixminIvIgnoreBlood.setBackgroundResource(R.drawable.sixmin_ignore_blood_pressure_disable)
                 mActivity.usbTransferUtil.ignoreBlood = true
-            }
-        }
-
-        binding.sixminTvToggleCardiopulmonary.setNoRepeatListener {
-            if (binding.sixminTvToggleCardiopulmonary.text == "隐藏心肺参数") {
-                binding.sixminTvToggleCardiopulmonary.text = "显示心肺参数"
-                binding.sixminLlCardiopulmonary.visibility = View.GONE
-            } else {
-                binding.sixminTvToggleCardiopulmonary.text = "隐藏心肺参数"
-                binding.sixminLlCardiopulmonary.visibility = View.VISIBLE
             }
         }
     }
@@ -1316,16 +1356,12 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
      */
     private fun generateReportData(min: String, sec: String, type: Int, min1: Int, sec1: Int) {
         try {
-            if (mActivity.sysSettingBean.sysOther.showResetTime == "1") {
-                if (type == 1) {
-                    mActivity.sixMinReportInfo.restDuration =
-                        (mActivity.usbTransferUtil.restTime - 1).toString()
-                } else if (type == 0) {
-                    mActivity.sixMinReportInfo.restDuration =
-                        mActivity.usbTransferUtil.restTime.toString()
-                }
-            } else if (mActivity.sysSettingBean.sysOther.showResetTime == "0") {
-                mActivity.sixMinReportInfo.restDuration = "-1"
+            if (type == 1) {
+                mActivity.sixMinReportInfo.restDuration =
+                    (mActivity.usbTransferUtil.restTime - 1).toString()
+            } else if (type == 0) {
+                mActivity.sixMinReportInfo.restDuration =
+                    mActivity.usbTransferUtil.restTime.toString()
             }
             mActivity.sixMinReportEvaluation.turnsNumber =
                 mActivity.usbTransferUtil.circleCount.toString()
@@ -1383,6 +1419,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
     }
 
     private fun jumpToPreReport() {
+        EasyWindow.cancelAll()
         navigate(binding.sixminIvSystemSetting, R.id.sixMinPreReportFragment)
     }
 
@@ -1538,6 +1575,8 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
         initSysInfo()
         mActivity.setToolbarTitle(getString(R.string.sixmin_test_title))
         binding.sixminEcg.onResume()
+        initFloatingCardiopulmonary()
+        mActivity.sixMinReportInfo.bsHxl = mActivity.sysSettingBean.sysOther.stepsOrBreath
         super.onResume()
     }
 

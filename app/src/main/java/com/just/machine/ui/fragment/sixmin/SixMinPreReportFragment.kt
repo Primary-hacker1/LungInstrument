@@ -1,6 +1,10 @@
 package com.just.machine.ui.fragment.sixmin
 
+import android.annotation.SuppressLint
+import android.text.Editable
 import android.text.Html
+import android.text.InputFilter
+import android.text.TextWatcher
 import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
@@ -63,11 +67,26 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
         KeyboardUtil.setEditTextFilter(binding.sixminEtHeartBeatConclusion)
         KeyboardUtil.setEditTextFilter(binding.sixminEtReportNote)
         KeyboardUtil.setEditTextFilter(binding.sixminEtRecommendDoctor)
+        binding.sixminEtReportNote.filters = arrayOf(InputFilter.LengthFilter(208))
         if(mActivity.sixMinReportType.isEmpty() || mActivity.sixMinReportType == "1"){
             showData(null)
         }else{
             viewModel.getSixMinReportInfoById(mActivity.sixMinPatientId.toLong(), mActivity.sixMinReportNo)
         }
+        binding.sixminEtReportNote.addTextChangedListener(object: TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            @SuppressLint("SetTextI18n")
+            override fun afterTextChanged(s: Editable?) {
+               binding.sixminPreTvNoteCount.text = "(${s.toString().trim().length}/208)"
+            }
+        })
     }
 
     override fun initListener() {
@@ -190,7 +209,8 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                     befoFatigueLevel: Int,
                     befoBreathingLevel: Int,
                     befoFatigueLevelStr: String,
-                    befoBreathingLevelStr: String
+                    befoBreathingLevelStr: String,
+                    faceMask:String
                 ) {
                     Log.d("tag", "$befoFatigueLevel$befoBreathingLevel")
                 }
@@ -310,7 +330,7 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                     mActivity.sixMinReportEvaluation.unfinishedDistance =
                         binding.sixminEtUnfinishCircle.text.toString()
 
-                    if (mActivity.sixMinReportInfo.restDuration != "-1") {
+                    if (mActivity.sysSettingBean.sysOther.showResetTime == "1") {
                         if (binding.sixminPreEtResetTime.text.toString().trim().isEmpty()) {
                             mActivity.showMsg("中途休息值不能为空")
                             return@setNoRepeatListener
@@ -498,6 +518,19 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                         mActivity.showMsg("建议医生，长度不能大于5")
                         return@setNoRepeatListener
                     }
+
+                    val reportNote = binding.sixminEtReportNote.text.toString().trim()
+                    if(reportNote.isNotEmpty()){
+                        if(reportNote.length > 208){
+                            mActivity.showMsg("运动注意事项，长度不能大于208")
+                            return@setNoRepeatListener
+                        }
+                        if(reportNote.lines().size > 5){
+                            mActivity.showMsg("运动注意事项，行数不能大于5")
+                            return@setNoRepeatListener
+                        }
+                    }
+
                     mActivity.sixMinReportPrescription.remarke = binding.sixminEtReportNote.text.toString().trim()
                     mActivity.sixMinReportPrescription.remarkeName =
                         binding.sixminEtRecommendDoctor.text.toString().trim()
@@ -742,10 +775,12 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
             mActivity.sixMinReportWalk = this.sixMinRecordsBean.walkBean[0]
         }
 
+        Log.d("sixMinRecordsBean", Gson().toJson(this.sixMinRecordsBean))
+
+        mActivity.sixMinReportInfo.bsHxl = mActivity.sysSettingBean.sysOther.stepsOrBreath
+
         initTable()
         initSelfCheck()
-
-        Log.d("sixMinRecordsBean", Gson().toJson(this.sixMinRecordsBean))
 
         binding.sixminEtFinishCircle.setText(mActivity.sixMinReportEvaluation.turnsNumber)
         binding.sixminEtFinishCircle.isEnabled =
@@ -756,6 +791,13 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
             mActivity.sixMinReportPrescription.movementWay.isEmpty()
 
         binding.sixminTvTotalDistance.text = mActivity.sixMinReportEvaluation.totalDistance
+
+        if(mActivity.sixMinReportInfo.bsHxl == "0"){
+            binding.sixminPreLlTotalSteps.visibility = View.VISIBLE
+            binding.sixminTvTotalSteps.text = mActivity.sixMinReportEvaluation.totalWalk
+        }else{
+            binding.sixminPreLlTotalSteps.visibility = View.GONE
+        }
 
         val stopTime = mActivity.sixMinReportBloodOther.stopTime
         val type = mActivity.sixMinReportBloodOther.stopOr
@@ -780,8 +822,8 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
             )
         )
         binding.sixminPreEtResetTime.isEnabled =
-            mActivity.sixMinReportPrescription.movementWay.isEmpty() || mActivity.sixMinReportPrescription.movementWay == "0"
-        if (mActivity.sixMinReportInfo.restDuration != "-1") {
+            mActivity.sixMinReportPrescription.movementWay.isEmpty()
+        if (mActivity.sysSettingBean.sysOther.showResetTime == "1") {
             binding.sixminPreLlResetTime.visibility = View.VISIBLE
             binding.sixminPreEtResetTime.setText(mActivity.sixMinReportInfo.restDuration)
         } else {
@@ -1165,6 +1207,14 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                 dip2px(6.0f), dip2px(3.0f), dip2px(6.0f), dip2px(3.0f)
             )
             newRow.addView(linearLayout)
+//            val layoutParamsOne = binding.sixminPreIntervalOne.layoutParams as ViewGroup.MarginLayoutParams
+//            layoutParamsOne.leftMargin= dip2px(95f)
+//
+//            val layoutParamsTwo = binding.sixminPreIntervalTwo.layoutParams as ViewGroup.MarginLayoutParams
+//            layoutParamsTwo.leftMargin= dip2px(155f)
+//
+//            val layoutParamsThree = binding.sixminPreIntervalThree.layoutParams as ViewGroup.MarginLayoutParams
+//            layoutParamsThree.rightMargin = dip2px(175f)
             binding.sixminReportTlPreTable.addView(newRow)
         }
     }

@@ -1,23 +1,9 @@
 package com.just.machine.ui.adapter
 
 import android.content.Context
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.RadioButton
-import android.widget.RelativeLayout
-import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.common.base.BaseRecyclerViewAdapter
-import com.just.machine.dao.PatientBean
-import com.just.machine.model.CardiopulmonaryRecordsBean
 import com.just.machine.model.SixMinReportPatientSelfItemBean
 import com.just.news.R
-import com.just.news.databinding.ItemLayoutCardiopulTestBinding
-import com.just.news.databinding.ItemSixminReportPatientSelfBinding
 import com.just.news.databinding.ItemSixminReportPatientSelfItemBinding
 
 
