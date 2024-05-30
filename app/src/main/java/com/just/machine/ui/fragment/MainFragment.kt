@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
+import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
 import com.just.machine.model.Constants
 import com.just.machine.model.SharedPreferencesUtils

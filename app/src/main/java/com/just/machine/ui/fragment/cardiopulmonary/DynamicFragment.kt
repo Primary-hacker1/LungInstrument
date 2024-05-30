@@ -11,6 +11,7 @@ import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
 import com.just.machine.model.Constants
 import com.just.machine.model.LungTestData
+import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.lungdata.CPXSerializeData
 import com.just.machine.ui.adapter.FragmentPagerAdapter
 import com.just.machine.ui.fragment.cardiopulmonary.dynamic.DynamicDataFragment
@@ -76,16 +77,29 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
 //                --------------------假设收到数据开始解析-----------------------
 
-                LogUtils.e(tag + BaseUtil.bytes2HexStr(data) + "字节长度" + BaseUtil.bytes2HexStr(data).length)
-                val lungData = MudbusProtocol.parseLungTestData(data) ?: return@setNoRepeatListener //原始数据
+                LogUtils.e(
+                    tag + BaseUtil.bytes2HexStr(data) + "字节长度" + BaseUtil.bytes2HexStr(
+                        data
+                    ).length
+                )
+                val lungData =
+                    MudbusProtocol.parseLungTestData(data) ?: return@setNoRepeatListener //原始数据
                 val bean =
                     CPXSerializeData().convertLungTestDataToCPXSerializeData(lungData)//原始数据转成cpx数据
                 val cpxData = CPXCalcule.calDyBreathInOutData(bean)
                 cpxData.createTime = CommonUtil.getCurrentTime()
-//                viewModel.insertCPXBreathInOutData(//插入数据库
-//                    cpxData
-//                )
-                LogUtils.e(tag + cpxData.toString())
+
+                val patientBean = SharedPreferencesUtils.instance.patientBean
+                val id = patientBean?.patientId
+                if (id != null) {
+                    cpxData.patientId = id
+                }
+
+                LogUtils.e(tag + id.toString())
+
+                viewModel.insertCPXBreathInOutData(//插入数据库
+                    cpxData
+                )
 
                 LiveDataBus.get().with("动态心肺测试").value = cpxData
 

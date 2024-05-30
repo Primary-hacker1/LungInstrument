@@ -80,7 +80,7 @@ class DynamicDataFragment : CommonBaseFragment<FragmentDynamicDataBinding>() {
                         return@observe
                     }
                     LogUtils.e(TAG + it.any)
-//                    mutableListCPX.clear()
+                    mutableListCPX.clear()
                     val listBean = it.any as List<*>
                     for (bean in listBean) {
                         if (bean !is CPXBreathInOutData) {

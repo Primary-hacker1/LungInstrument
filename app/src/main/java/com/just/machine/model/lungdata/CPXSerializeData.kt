@@ -67,7 +67,7 @@ data class CPXSerializeData(
             VO2_div_kg = "%.2f".format(breathData!!.VO2_div_KG),
             VE = "%.2f".format(breathData!!.VE),
             RER = "%.2f".format(breathData!!.RER),
-            BF = breathData!!.BF,
+            BF = breathData!!.BF!!,
             psys = Psys.toInt(),
             pdia = Pdia.toInt(),
             EE = "%.2f".format(breathData!!.EE),

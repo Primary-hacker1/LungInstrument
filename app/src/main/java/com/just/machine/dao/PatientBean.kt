@@ -63,7 +63,7 @@ import com.just.machine.model.SixMinRecordsBean
 @TypeConverters(ChatItemConverter::class)
 data class PatientBean(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id")
-    val patientId: Long = 0,
+    var patientId: Long = 0,
     var name: String? = "",//姓名
     var sex: String? = "",//性别
     var height: String? = "",//身高

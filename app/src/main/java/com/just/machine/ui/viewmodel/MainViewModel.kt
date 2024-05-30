@@ -80,8 +80,10 @@ class MainViewModel @Inject constructor(
      */
     fun setDates(patient: PatientBean) {
         viewModelScope.launch {
+            val patientId = plantDao.insertPatient(patient)
+            patient.patientId = patientId
             SharedPreferencesUtils.instance.patientBean = patient//存到本地
-            val patient = plantDao.insertPatient(patient)
+            LogUtils.e(tag + patient.toString())
             getPatients()
 //            mEventHub.value = LiveDataEvent(
 //                LiveDataEvent.addPatient, patient
@@ -157,13 +159,16 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun getCPXBreathInOutData() {//查询所有动态肺数据
+    fun getCPXBreathInOutData() {//查询当前患者动态肺数据
         viewModelScope.launch {
-            lungDao.getCPXBreathInOutData().collect {
-                LogUtils.e(tag + it.toString())
-                mEventHub.value = LiveDataEvent(
-                    LiveDataEvent.CPXDYNAMICBEAN, it
-                )
+            val spBena = SharedPreferencesUtils.instance.patientBean
+            spBena?.patientId?.let {
+                lungDao.getCPXBreathInOutData(it).collect {
+                    LogUtils.e(tag + it.toString())
+                    mEventHub.value = LiveDataEvent(
+                        LiveDataEvent.CPXDYNAMICBEAN, it
+                    )
+                }
             }
         }
     }
