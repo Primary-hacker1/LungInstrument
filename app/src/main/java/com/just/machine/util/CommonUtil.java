@@ -15,6 +15,8 @@ import java.util.regex.Pattern;
 
 public class CommonUtil {
 
+    private static String reg = "^\\+?[1-9][0-9]*$";
+
     /**
      * 根据出生日期计算年龄
      * @param birthDateString
@@ -218,5 +220,55 @@ public class CommonUtil {
     public static int dip2px(Context context,int dpValue){
         float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
+    }
+
+    /**
+     * 秒转成分秒格式
+     * @param seconds
+     * @return
+     */
+    public static String secondsToMMSS(int seconds) {
+        int minutes = seconds / 60;
+        int secs = seconds % 60;
+
+        String result = String.format("%02d:%02d", minutes, secs);
+        return result;
+    }
+
+    /**
+     * 验证系统设置参数
+     *
+     * @param parameter
+     * @param messageLog
+     * @return
+     */
+    public static String checkSystem(String parameter, String messageLog) {
+        String reault = "";
+        if (TextUtils.isEmpty(parameter)) {
+            reault = messageLog + "不可为空";
+            return reault;
+        }
+        if (!Pattern.matches(reg, parameter)) {
+            reault = messageLog + "只能填写非0的正整数";
+            return reault;
+        }
+        if (messageLog.equals("血氧报警值")) {
+            if (parameter.length() >= 3) {
+                reault = messageLog + "超出长度";
+                return reault;
+            }
+        } else if (messageLog.equals("场地长度")) {
+            Integer changdu = Integer.valueOf(parameter);
+            if (changdu > 30) {
+                reault = messageLog + "不可大于30";
+                return reault;
+            }
+        } else {
+            if (parameter.length() >= 4) {
+                reault = messageLog + "超出长度";
+                return reault;
+            }
+        }
+        return reault;
     }
 }

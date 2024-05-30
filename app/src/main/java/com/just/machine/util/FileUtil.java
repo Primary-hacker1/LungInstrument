@@ -247,6 +247,7 @@ public class FileUtil {
         try {
             fileOutputStream = new FileOutputStream(filePath);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+            save = true;
         } catch (Exception e) {
             e.printStackTrace();
             save = false;
@@ -255,10 +256,8 @@ public class FileUtil {
                 if (fileOutputStream != null) {
                     fileOutputStream.close();
                 }
-                save = true;
             } catch (IOException e) {
                 e.printStackTrace();
-                save = false;
             }
         }
         return save;

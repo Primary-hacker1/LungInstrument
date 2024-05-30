@@ -1,30 +1,24 @@
 package com.just.machine.ui.fragment.sixmin
 
+import android.text.InputFilter
+import android.view.KeyEvent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
-import com.common.network.LogUtils
 import com.google.gson.Gson
-import com.just.machine.model.Constants
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.systemsetting.SixMinSysSettingBean
 import com.just.machine.ui.activity.SixMinDetectActivity
 import com.just.machine.ui.dialog.LoadingDialogFragment
 import com.just.machine.ui.dialog.SixMinPermissionDialogFragment
-import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.CommonUtil
 import com.just.machine.util.KeyboardUtil
-import com.just.machine.util.LiveDataBus
 import com.just.machine.util.SixMinCmdUtils
 import com.just.news.R
-import com.just.news.databinding.FragmentSixminReportBinding
 import com.just.news.databinding.FragmentSixminSystemSettingBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -94,6 +88,56 @@ class SixMinSystemSettingFragment : CommonBaseFragment<FragmentSixminSystemSetti
             val gson = Gson()
             val sysSettingBean = mActivity.sysSettingBean
 
+            val alarmSysPressure = CommonUtil.checkSystem(
+                binding.sixminEtAlarmSysPressure.text.toString().trim(),
+                "高压报警值"
+            )
+            val alarmDiasPressure = CommonUtil.checkSystem(
+                binding.sixminEtAlarmDiasPressure.text.toString().trim(),
+                "低压报警值"
+            )
+            val alarmEcg = CommonUtil.checkSystem(
+                binding.sixminEtAlarmEcg.text.toString().trim(),
+                "心率报警值"
+            )
+            val alarmBloodOxy = CommonUtil.checkSystem(
+                binding.sixminEtAlarmBloodOxygen.text.toString().trim(),
+                "血氧报警值"
+            )
+            val otherUseOrg = CommonUtil.checkSystem(
+                binding.sixminEtOtherAreaLength.text.toString().trim(),
+                "场地长度"
+            )
+
+            if (alarmSysPressure.isNotEmpty()) {
+                mActivity.showMsg(alarmSysPressure)
+                return@setNoRepeatListener
+            }
+            if (alarmDiasPressure.isNotEmpty()) {
+                mActivity.showMsg(alarmDiasPressure)
+                return@setNoRepeatListener
+            }
+            if (alarmEcg.isNotEmpty()) {
+                mActivity.showMsg(alarmEcg)
+                return@setNoRepeatListener
+            }
+            if (alarmBloodOxy.isNotEmpty()) {
+                mActivity.showMsg(alarmBloodOxy)
+                return@setNoRepeatListener
+            }
+            if (otherUseOrg.isNotEmpty()) {
+                mActivity.showMsg(otherUseOrg)
+                return@setNoRepeatListener
+            }
+
+            if (binding.sixminEtOtherAreaLength.text.toString().trim()
+                    .isNotEmpty() && binding.sixminEtOtherUseOrg.text.toString()
+                    .trim().length > 21
+            ) {
+                mActivity.showMsg("使用单位超出长度")
+                return@setNoRepeatListener
+            }
+
             //报警设置
             sysSettingBean.sysAlarm.highPressure =
                 binding.sixminEtAlarmSysPressure.text.toString().trim()
@@ -145,14 +189,15 @@ class SixMinSystemSettingFragment : CommonBaseFragment<FragmentSixminSystemSetti
                 return@setNoRepeatListener
             }
 
-            if (binding.sixminEtNewPwd.text.toString().trim() != binding.sixminEtConfirmPwd.text.toString()
+            if (binding.sixminEtNewPwd.text.toString()
+                    .trim() != binding.sixminEtConfirmPwd.text.toString()
                     .trim()
             ) {
                 mActivity.showMsg("新密码与确认密码不同，请重新输入")
                 return@setNoRepeatListener
             }
 
-            if(sysSettingBean.sysPwd.exportPwd == binding.sixminEtNewPwd.text.toString().trim()){
+            if (sysSettingBean.sysPwd.exportPwd == binding.sixminEtNewPwd.text.toString().trim()) {
                 mActivity.showMsg("新密码与原密码相同，请重新输入")
                 return@setNoRepeatListener
             }
@@ -168,8 +213,6 @@ class SixMinSystemSettingFragment : CommonBaseFragment<FragmentSixminSystemSetti
 
         binding.sixminLlSaveBlue.setNoRepeatListener {
             mActivity.initSystemInfo()
-            val gson = Gson()
-            val sysSettingBean = mActivity.sysSettingBean
 
             if (!hasPassPermission) {
                 val startPermissionDialogFragment =
@@ -181,96 +224,104 @@ class SixMinSystemSettingFragment : CommonBaseFragment<FragmentSixminSystemSetti
                             mActivity.showMsg("权限密码不能为空")
                             return
                         }
-                        if (sysSettingBean.sysPwd.exportPwd == pwd) {
+                        if (mActivity.sysSettingBean.sysPwd.exportPwd == pwd) {
                             startPermissionDialogFragment.dismiss()
-                            hasPassPermission = true
+                            if (binding.sixminEtBluetoothEcg.text.toString().trim().isEmpty()) {
+                                mActivity.showMsg("心电蓝牙不可为空")
+                                return
+                            }
+                            if (binding.sixminEtBluetoothBlood.text.toString().trim().isEmpty()) {
+                                mActivity.showMsg("血压蓝牙不可为空")
+                                return
+                            }
+                            if (binding.sixminEtBluetoothBloodOxygen.text.toString().trim()
+                                    .isEmpty()
+                            ) {
+                                mActivity.showMsg("血氧蓝牙不可为空")
+                                return
+                            }
+                            if (binding.sixminEtBluetoothEcg.text.toString().trim().length != 12) {
+                                mActivity.showMsg("请检查心电蓝牙长度")
+                                return
+                            }
+                            if (binding.sixminEtBluetoothBlood.text.toString()
+                                    .trim().length != 12
+                            ) {
+                                mActivity.showMsg("请检查血压蓝牙长度")
+                                return
+                            }
+                            if (binding.sixminEtBluetoothBloodOxygen.text.toString()
+                                    .trim().length != 12
+                            ) {
+                                mActivity.showMsg("请检查血氧蓝牙长度")
+                                return
+                            }
+                            if (!CommonUtil.isValidMacAddress(
+                                    binding.sixminEtBluetoothEcg.text.toString().trim()
+                                )
+                            ) {
+                                mActivity.showMsg("心电蓝牙地址不是有效的MAC地址，请检查后重新输入！")
+                                return
+                            }
+                            if (!CommonUtil.isValidMacAddress(
+                                    binding.sixminEtBluetoothBlood.text.toString().trim()
+                                )
+                            ) {
+                                mActivity.showMsg("心血压蓝牙地址不是有效的MAC地址，请检查后重新输入！")
+                                return
+                            }
+                            if (!CommonUtil.isValidMacAddress(
+                                    binding.sixminEtBluetoothBloodOxygen.text.toString().trim()
+                                )
+                            ) {
+                                mActivity.showMsg("血氧蓝牙地址不是有效的MAC地址，请检查后重新输入！")
+                                return
+                            }
+
+                            if (mActivity.usbTransferUtil.isConnectUSB) {
+                                //蓝牙配置有变动需要同步到设备
+                                SixMinCmdUtils.dealBluetooth(
+                                    binding.sixminEtBluetoothEcg.text.toString().trim(),
+                                    binding.sixminEtBluetoothBlood.text.toString().trim(),
+                                    binding.sixminEtBluetoothBloodOxygen.text.toString().trim()
+                                )
+                                val dialogFragment =
+                                    LoadingDialogFragment.startLoadingDialogFragment(
+                                        mActivity.supportFragmentManager,
+                                        "更新蓝牙参数中..."
+                                    )
+
+                                lifecycleScope.launch(Dispatchers.Main) {
+                                    kotlinx.coroutines.delay(5000L)
+                                    if (mActivity.usbTransferUtil.updateBluetooth == 0) {
+                                        mActivity.showMsg("更新蓝牙参数失败")
+                                    } else {
+                                        mActivity.showMsg("蓝牙参数更新成功")
+                                        val gson = Gson()
+                                        mActivity.usbTransferUtil.updateBluetooth = 0
+                                        mActivity.sysSettingBean.sysBlue.ecgBlue =
+                                            binding.sixminEtBluetoothEcg.text.toString().trim()
+                                        mActivity.sysSettingBean.sysBlue.bloodBlue =
+                                            binding.sixminEtBluetoothBlood.text.toString().trim()
+                                        mActivity.sysSettingBean.sysBlue.bloodOxyBlue =
+                                            binding.sixminEtBluetoothBloodOxygen.text.toString()
+                                                .trim()
+
+                                        SharedPreferencesUtils.instance.sixMinSysSetting =
+                                            gson.toJson(mActivity.sysSettingBean)
+                                    }
+                                    dialogFragment.dismiss()
+                                }
+                            } else {
+                                mActivity.showMsg("设备未接入，请检查后重试")
+                                return
+                            }
                         } else {
                             mActivity.showMsg("权限密码错误，请重新输入")
                             return
                         }
                     }
                 })
-                return@setNoRepeatListener
-            }
-
-            if (binding.sixminEtBluetoothEcg.text.toString().trim().isEmpty()) {
-                mActivity.showMsg("心电蓝牙不可为空")
-                return@setNoRepeatListener
-            }
-            if (binding.sixminEtBluetoothBlood.text.toString().trim().isEmpty()) {
-                mActivity.showMsg("血压蓝牙不可为空")
-                return@setNoRepeatListener
-            }
-            if (binding.sixminEtBluetoothBloodOxygen.text.toString().trim().isEmpty()) {
-                mActivity.showMsg("血氧蓝牙不可为空")
-                return@setNoRepeatListener
-            }
-            if (binding.sixminEtBluetoothEcg.text.toString().trim().length != 12) {
-                mActivity.showMsg("请检查心电蓝牙长度")
-                return@setNoRepeatListener
-            }
-            if (binding.sixminEtBluetoothBlood.text.toString().trim().length != 12) {
-                mActivity.showMsg("请检查血压蓝牙长度")
-                return@setNoRepeatListener
-            }
-            if (binding.sixminEtBluetoothBloodOxygen.text.toString().trim().length != 12) {
-                mActivity.showMsg("请检查血氧蓝牙长度")
-                return@setNoRepeatListener
-            }
-            if (!CommonUtil.isValidMacAddress(
-                    binding.sixminEtBluetoothEcg.text.toString().trim()
-                )
-            ) {
-                mActivity.showMsg("心电蓝牙地址不是有效的MAC地址，请检查后重新输入！")
-                return@setNoRepeatListener
-            }
-            if (!CommonUtil.isValidMacAddress(
-                    binding.sixminEtBluetoothBlood.text.toString().trim()
-                )
-            ) {
-                mActivity.showMsg("心血压蓝牙地址不是有效的MAC地址，请检查后重新输入！")
-                return@setNoRepeatListener
-            }
-            if (!CommonUtil.isValidMacAddress(
-                    binding.sixminEtBluetoothBloodOxygen.text.toString().trim()
-                )
-            ) {
-                mActivity.showMsg("血氧蓝牙地址不是有效的MAC地址，请检查后重新输入！")
-                return@setNoRepeatListener
-            }
-
-            if (mActivity.usbTransferUtil.isConnectUSB && mActivity.usbTransferUtil.ecgConnection && mActivity.usbTransferUtil.bloodOxygenConnection && mActivity.usbTransferUtil.bloodPressureConnection) {
-                //蓝牙配置有变动需要同步到设备
-                SixMinCmdUtils.dealBluetooth(
-                    binding.sixminEtBluetoothEcg.text.toString().trim(),
-                    binding.sixminEtBluetoothBlood.text.toString().trim(),
-                    binding.sixminEtBluetoothBloodOxygen.text.toString().trim()
-                )
-                val dialogFragment = LoadingDialogFragment.startLoadingDialogFragment(
-                    mActivity.supportFragmentManager,
-                    "更新蓝牙参数中..."
-                )
-
-                lifecycleScope.launch(Dispatchers.Main) {
-                    kotlinx.coroutines.delay(5000L)
-                    if(mActivity.usbTransferUtil.updateBluetooth == 0){
-                        mActivity.showMsg("更新蓝牙参数失败")
-                    }else{
-                        mActivity.showMsg("蓝牙参数更新成功")
-                        mActivity.usbTransferUtil.updateBluetooth = 0
-                        sysSettingBean.sysBlue.ecgBlue = binding.sixminEtBluetoothEcg.text.toString().trim()
-                        sysSettingBean.sysBlue.bloodBlue =
-                            binding.sixminEtBluetoothBlood.text.toString().trim()
-                        sysSettingBean.sysBlue.bloodOxyBlue =
-                            binding.sixminEtBluetoothBloodOxygen.text.toString().trim()
-
-                        SharedPreferencesUtils.instance.sixMinSysSetting = gson.toJson(sysSettingBean)
-                    }
-                    dialogFragment.dismiss()
-                    hasPassPermission = false
-                }
-            } else {
-                mActivity.showMsg("设备未接入，请检查后重试")
                 return@setNoRepeatListener
             }
         }
@@ -291,12 +342,20 @@ class SixMinSystemSettingFragment : CommonBaseFragment<FragmentSixminSystemSetti
 
     private fun initToolbar() {
         mActivity.setToolbarTitle(getString(R.string.system_setting))
-        KeyboardUtil.setEditTextFilter(binding.sixminEtOtherUseOrg)
         KeyboardUtil.setEditTextFilter(binding.sixminEtNewPwd)
         KeyboardUtil.setEditTextFilter(binding.sixminEtConfirmPwd)
         KeyboardUtil.setEditTextFilter(binding.sixminEtBluetoothEcg)
         KeyboardUtil.setEditTextFilter(binding.sixminEtBluetoothBlood)
         KeyboardUtil.setEditTextFilter(binding.sixminEtBluetoothBloodOxygen)
+        binding.sixminEtOtherUseOrg.filters = arrayOf(InputFilter.LengthFilter(21))
+        binding.sixminEtOtherUseOrg.setOnEditorActionListener { _, _, event -> (event.keyCode == KeyEvent.KEYCODE_ENTER); }
+
+        binding.sixminEtBluetoothEcg.filters = arrayOf(InputFilter.LengthFilter(12))
+        binding.sixminEtBluetoothEcg.setOnEditorActionListener { _, _, event -> (event.keyCode == KeyEvent.KEYCODE_ENTER); }
+        binding.sixminEtBluetoothBlood.filters = arrayOf(InputFilter.LengthFilter(12))
+        binding.sixminEtBluetoothBlood.setOnEditorActionListener { _, _, event -> (event.keyCode == KeyEvent.KEYCODE_ENTER); }
+        binding.sixminEtBluetoothBloodOxygen.filters = arrayOf(InputFilter.LengthFilter(12))
+        binding.sixminEtBluetoothBloodOxygen.setOnEditorActionListener { _, _, event -> (event.keyCode == KeyEvent.KEYCODE_ENTER); }
     }
 
 

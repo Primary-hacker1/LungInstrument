@@ -1,6 +1,5 @@
 package com.just.machine.ui.fragment.sixmin
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.print.PrintAttributes
@@ -35,7 +34,7 @@ import com.just.machine.model.SixMinRecordsBean
 import com.just.machine.model.SixMinReportInfoAndEvaluation
 import com.just.machine.model.SixMinReportItemBean
 import com.just.machine.ui.activity.SixMinDetectActivity
-import com.just.machine.ui.adapter.PdfDocumentAdapter
+import com.just.machine.ui.adapter.MyPrintAdapter
 import com.just.machine.ui.dialog.LoadingDialogFragment
 import com.just.machine.ui.dialog.SixMinPrintReportOptionsDialogFragment
 import com.just.machine.ui.viewmodel.MainViewModel
@@ -45,8 +44,6 @@ import com.just.news.R
 import com.just.news.databinding.FragmentSixminReportBinding
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -54,7 +51,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.math.BigDecimal
-import java.util.concurrent.TimeUnit
 
 /**
  * 6分钟报告界面
@@ -62,7 +58,6 @@ import java.util.concurrent.TimeUnit
 @AndroidEntryPoint
 class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
 
-    private var mDisposable3s: Disposable? = null
     private val viewModel by viewModels<MainViewModel>()
     private lateinit var mActivity: SixMinDetectActivity
     private var reportRowList = mutableListOf<SixMinReportItemBean>()
@@ -142,13 +137,13 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
 
             val filePath = File(
                 mActivity.getExternalFilesDir("")?.absolutePath,
-                File.separator + "sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo
+                File.separator + "sixmin/sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo
                         + File.separator + "六分钟步行试验检测报告.doc"
             )
 
             val pdfFilePath = File(
                 mActivity.getExternalFilesDir("")?.absolutePath,
-                File.separator + "sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo
+                File.separator + "sixmin/sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo
                         + File.separator + "六分钟步行试验检测报告.pdf"
             )
 
@@ -240,13 +235,13 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
 
                         val filePath = File(
                             mActivity.getExternalFilesDir("")?.absolutePath,
-                            File.separator + "sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo
+                            File.separator + "sixmin/sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo
                                     + File.separator + "六分钟步行试验检测报告.doc"
                         )
 
                         val pdfFilePath = File(
                             mActivity.getExternalFilesDir("")?.absolutePath,
-                            File.separator + "sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo
+                            File.separator + "sixmin/sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo
                                     + File.separator + "六分钟步行试验检测报告.pdf"
                         )
 
@@ -1298,7 +1293,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 binding.sixminReportLineChartBloodOxygen.invalidate()
 
                 pngSavePath =
-                    File.separator + "sixminreportpng" + File.separator + sixMinRecordsBean.infoBean.reportNo
+                    File.separator + "sixmin/sixminreportpng" + File.separator + sixMinRecordsBean.infoBean.reportNo
                 val file = File(mActivity.getExternalFilesDir("")?.absolutePath, pngSavePath)
                 if (!file.exists()) {
                     file.mkdirs()
@@ -1462,69 +1457,19 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         }
     }
 
-    @SuppressLint("AutoDispose")
+    /**
+     * 打印pdf
+     */
     private fun onPrintPdf(path: String) {
         val printManager = mActivity.getSystemService(Context.PRINT_SERVICE) as PrintManager
         val builder = PrintAttributes.Builder()
-        builder.setColorMode(PrintAttributes.COLOR_MODE_MONOCHROME)
-        val mPdfDocumentAdapter = PdfDocumentAdapter(mActivity, path)
-        val printReport = printManager.print("PrintReport", mPdfDocumentAdapter, builder.build())
-        mPdfDocumentAdapter.setOnPrintStatue {
-            if (printReport.isCancelled) {
-                mActivity.runOnUiThread {
-                    Log.e("打印报告回调======", "====打印被取消了")
-                    mActivity.showMsg("打印被取消了")
-                }
+        builder.setMediaSize(PrintAttributes.MediaSize.ISO_A4.asPortrait());
+        val mPdfDocumentAdapter = MyPrintAdapter(mActivity, path)
+        val printReport = printManager.print("sixMinReport", mPdfDocumentAdapter, builder.build())
+        if(printReport.isStarted){
+            mActivity.runOnUiThread {
+                mActivity.showMsg("开始打印")
             }
-            if (printReport.isBlocked) {
-                mActivity.runOnUiThread {
-                    Log.e("打印报告回调======", "====打印机器被锁定了(卡了或者没有纸张了)")
-                    mActivity.showMsg("打印机器被锁定了(卡了或者没有纸张了)")
-                }
-            }
-            binding.sixminReportLlPrintReport.postDelayed(Runnable {
-                if (printReport.isStarted) {
-                    mActivity.showMsg("开始打印")
-                    mDisposable3s = Observable
-                        .interval(3, TimeUnit.SECONDS) //定时器操作符，这里三秒打印一个log
-                        //取消任务时取消定时唤醒
-                        .doOnDispose {}
-                        .subscribe { count ->
-                            val completed = printReport.isCompleted //完成的回调
-                            val failed = printReport.isFailed //失败的回调
-                            if (completed) {
-                                mActivity.runOnUiThread {
-                                    Log.e("打印报告回调======", "====打印完成")
-                                    mActivity.showMsg("打印完成")
-                                }
-                                if (null != mDisposable3s) {
-                                    mDisposable3s?.dispose()
-                                    mDisposable3s = null
-                                }
-                            }
-                            if (failed) {
-                                mActivity.runOnUiThread {
-                                    Log.e("打印报告回调======", "====打印失败")
-                                    mActivity.showMsg("打印失败")
-                                }
-                                if (null != mDisposable3s) {
-                                    mDisposable3s?.dispose()
-                                    mDisposable3s = null
-                                }
-                            }
-                            if (!completed && count.toInt() == 40) {  //2分钟还未打印成功,默认打印失败
-                                mActivity.runOnUiThread {
-                                    Log.e("打印报告回调======", "====打印失败")
-                                    mActivity.showMsg("打印失败")
-                                }
-                                if (null != mDisposable3s) {
-                                    mDisposable3s?.dispose()
-                                    mDisposable3s = null
-                                }
-                            }
-                        }
-                }
-            }, 1000)
         }
     }
 }

@@ -9,8 +9,10 @@ import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.just.machine.ui.activity.SixMinDetectActivity
 import com.just.machine.ui.dialog.SixMinCaptureEcgDialogFragment
+import com.just.machine.util.CommonUtil
 import com.just.machine.util.ECGDataParse
 import com.just.machine.util.FileUtil
+import com.just.machine.util.SeekBarPopUtils
 import com.just.news.databinding.FragmentSixminHeartEcgBinding
 import com.seeker.luckychart.charts.ECGChartView.OnVisibleCoorPortChangedListener
 import com.seeker.luckychart.model.chartdata.ECGChartData
@@ -54,11 +56,16 @@ class SixMinHeartEcgFragment : CommonBaseFragment<FragmentSixminHeartEcgBinding>
                 if (fromUser) {
                     val percent = 1f * progress / seekBar.max
                     binding.sixminStaticHeartEcg.setProgress(percent)
+                    SeekBarPopUtils.move(mActivity,progress,CommonUtil.secondsToMMSS((percent*360).toInt()),seekBar)
                 }
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                SeekBarPopUtils.showPop(mActivity,seekBar)
+            }
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                SeekBarPopUtils.dismiss()
+            }
         })
 
         binding.sixminStaticHeartEcg.setOnVisibleCoorPortChangedListener(
@@ -78,10 +85,10 @@ class SixMinHeartEcgFragment : CommonBaseFragment<FragmentSixminHeartEcgBinding>
                 SixMinCaptureEcgDialogFragment.CaptureEcgDialogListener {
                 override fun onClickSaveEcg(imagePreview: Bitmap,type:Int) {
                     val ecgSavePath =
-                        File.separator + "sixminreportpng" + File.separator + mActivity.sixMinReportNo
+                        File.separator + "sixmin/sixminreportpng" + File.separator + mActivity.sixMinReportNo
                     val file = File(
                         mActivity.getExternalFilesDir("")?.absolutePath,
-                        ecgSavePath + File.separator + "imageEcg.png"
+                        ecgSavePath + File.separator + "imageEcg${type}.png"
                     )
                     val saveBitmapToFile = FileUtil.getInstance(mActivity)
                         .saveBitmapToFile(imagePreview, file.absolutePath)
