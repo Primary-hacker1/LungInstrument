@@ -340,6 +340,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                         val bundle = Bundle()
                         bundle.putString(Constants.sixMinReportType, "4")
                         bundle.putString(Constants.sixMinReportNo, bean.reportNo)
+                        bundle.putString(Constants.sixMinPatientInfo, bean.patientId.toString())
                         intent.putExtras(bundle)
                         startActivity(intent)
                     }

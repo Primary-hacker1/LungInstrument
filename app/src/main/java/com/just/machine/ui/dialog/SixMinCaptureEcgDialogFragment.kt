@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import com.common.base.BaseDialogFragment
 import com.common.base.setNoRepeatListener
 import com.just.machine.model.Constants
+import com.just.machine.util.CommonUtil
 import com.just.machine.util.ECGDataParse
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogSixminCaptureEcgBinding
@@ -85,6 +86,7 @@ class SixMinCaptureEcgDialogFragment : BaseDialogFragment<FragmentDialogSixminCa
     }
 
     private fun computerEcg(type: Int) {
+        //一条完整的心电波形至少包含1960个点的数据，所有截图的时候，根据起始和结束的index来截取点的数据，然后将数据转换成bitmap
         this.type = type
         lifecycleScope.launch(Dispatchers.IO) {
             val dataParse = ECGDataParse(activity)

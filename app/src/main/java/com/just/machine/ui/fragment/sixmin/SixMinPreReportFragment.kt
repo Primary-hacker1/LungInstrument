@@ -35,10 +35,12 @@ import com.just.machine.ui.dialog.SixMinReportPrescriptionFragment
 import com.just.machine.ui.dialog.SixMinReportSelfCheckBeforeTestFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.CommonUtil
+import com.just.machine.util.FileUtil
 import com.just.machine.util.KeyboardUtil
 import com.just.news.R
 import com.just.news.databinding.FragmentSixminPreReportBinding
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
 import java.math.BigDecimal
 
 /**
@@ -606,6 +608,19 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                     mActivity.sixMinPatientId =
                         mActivity.sixMinReportInfo.patientId.toString().trim()
                     mActivity.sixMinReportNo = mActivity.sixMinReportInfo.reportNo
+
+                    //保存心电数据到本地
+//                    val ecgPath =
+//                        File.separator + "sixmin/sixminreportecgdata" + File.separator + mActivity.sixMinReportInfo.reportNo
+//                    val file = File(
+//                        mActivity.getExternalFilesDir("")?.absolutePath,
+//                        ecgPath + File.separator + "ecgData.json"
+//                    )
+//                    if (!file.exists()) {
+//                        file.mkdirs()
+//                    }
+//                    val data = mutableMapOf<Long,ByteArray>()
+//                    FileUtil.writeEcg(data,file.absolutePath)
                     navigate(binding.sixminLlPreReport, R.id.sixMinReportFragment)
 
                 } else {

@@ -4,11 +4,15 @@ import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.SeekBar
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
+import com.common.viewmodel.LiveDataEvent
+import com.just.machine.model.SixMinRecordsBean
 import com.just.machine.ui.activity.SixMinDetectActivity
 import com.just.machine.ui.dialog.SixMinCaptureEcgDialogFragment
+import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.CommonUtil
 import com.just.machine.util.ECGDataParse
 import com.just.machine.util.FileUtil
@@ -17,12 +21,15 @@ import com.just.news.databinding.FragmentSixminHeartEcgBinding
 import com.seeker.luckychart.charts.ECGChartView.OnVisibleCoorPortChangedListener
 import com.seeker.luckychart.model.chartdata.ECGChartData
 import com.seeker.luckychart.model.container.ECGPointContainer
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 
+@AndroidEntryPoint
 class SixMinHeartEcgFragment : CommonBaseFragment<FragmentSixminHeartEcgBinding>() {
 
+    private val viewModel by viewModels<MainViewModel>()
     private lateinit var mActivity: SixMinDetectActivity
 
     override fun loadData() {
@@ -47,9 +54,20 @@ class SixMinHeartEcgFragment : CommonBaseFragment<FragmentSixminHeartEcgBinding>
         if (activity is SixMinDetectActivity) {
             mActivity = activity as SixMinDetectActivity
         }
+        viewModel.getSixMinReportInfoById(
+            mActivity.sixMinPatientId.toLong(),
+            mActivity.sixMinReportNo
+        )
     }
 
     override fun initListener() {
+        viewModel.mEventHub.observe(this) {
+            when (it.action) {
+                LiveDataEvent.QuerySixMinReportInfoSuccess -> {
+                    it.any?.let { it1 -> beanQuery(it1) }
+                }
+            }
+        }
         binding.sixminStaticEcgSeekbar.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -94,11 +112,27 @@ class SixMinHeartEcgFragment : CommonBaseFragment<FragmentSixminHeartEcgBinding>
                         .saveBitmapToFile(imagePreview, file.absolutePath)
                     if(saveBitmapToFile){
                         mActivity.showMsg("心电截图保存成功")
+                        if(type == 3){
+                            mActivity.sixMinReportBloodHeartEcg.jietuOr = "1"
+                            viewModel.setSixMinReportHeartEcg(mActivity.sixMinReportBloodHeartEcg)
+                        }
                     }else{
                         mActivity.showMsg("心电截图保存失败")
                     }
                 }
             })
+        }
+    }
+
+    private fun beanQuery(any: Any) {
+        try {
+            if (any is List<*>) {
+                val datas = any as MutableList<*>
+                val sixMinRecordsBean = datas[0] as SixMinRecordsBean
+                mActivity.sixMinReportBloodHeartEcg = sixMinRecordsBean.heartEcgBean[0]
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

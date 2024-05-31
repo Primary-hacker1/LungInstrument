@@ -134,6 +134,14 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                     )
 
                 }
+            val imageEcg1 =   File(
+                mActivity.getExternalFilesDir("")?.absolutePath,
+                pngSavePath + File.separator + "imageEcg1.png"
+            )
+            val imageEcg2 =   File(
+                mActivity.getExternalFilesDir("")?.absolutePath,
+                pngSavePath + File.separator + "imageEcg2.png"
+            )
 
             val filePath = File(
                 mActivity.getExternalFilesDir("")?.absolutePath,
@@ -154,6 +162,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
             val root = mutableMapOf<String, Any>()
             dealPageOne(root)
             dealPageTow(root, bloodPng, heartPng, hsHxlPng)
+            dealPageThree(root,imageEcg1,imageEcg2)
 
             lifecycleScope.launch(Dispatchers.IO) {
                 val generateWord =
@@ -232,6 +241,14 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                                 )
 
                             }
+                        val imageEcg1 =   File(
+                            mActivity.getExternalFilesDir("")?.absolutePath,
+                            pngSavePath + File.separator + "imageEcg1.png"
+                        )
+                        val imageEcg2 =   File(
+                            mActivity.getExternalFilesDir("")?.absolutePath,
+                            pngSavePath + File.separator + "imageEcg2.png"
+                        )
 
                         val filePath = File(
                             mActivity.getExternalFilesDir("")?.absolutePath,
@@ -252,6 +269,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                         val root = mutableMapOf<String, Any>()
                         dealPageOne(root)
                         dealPageTow(root, bloodPng, heartPng, hsHxlPng)
+                        dealPageThree(root,imageEcg1,imageEcg2)
 
                         lifecycleScope.launch(Dispatchers.IO) {
                             val generateWord =
@@ -631,9 +649,20 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         root["imageWalkAndHxl"] = PictureRenderData(750, 200, hsHxlPng.absolutePath)
     }
 
+    private fun dealPageThree(
+        root: MutableMap<String, Any>,
+        imageEcg1: File,
+        imageEcg2: File,
+        imageEcg3: File? =null) {
+        root["imageEcg1"] = PictureRenderData(750, 200, imageEcg1.absolutePath)
+        root["imageEcg2"] = PictureRenderData(750, 200, imageEcg2.absolutePath)
+        if(sixMinRecordsBean.heartEcgBean[0].jietuOr == "1" && imageEcg3 != null){
+            root["imageEcg3"] = PictureRenderData(750, 200, imageEcg3.absolutePath)
+        }
+    }
+
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentSixminReportBinding.inflate(inflater, container, false)
-
 
     private fun beanQueryEvaluation(any: Any) {
         try {
@@ -1328,7 +1357,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                     "编号:${sixMinRecordsBean.infoBean.reportNo}"
                 binding.sixminReportTvMostQuickHeart.text = String.format(getString(R.string.sixmin_test_report_heart_beart_capture_title),"最快","92","25","10")
                 binding.sixminReportTvMostSlowHeart.text = String.format(getString(R.string.sixmin_test_report_heart_beart_capture_title),"最慢","61","25","10")
-                if(mActivity.sixMinReportBloodHeartEcg.jietuOr == "0"){
+                if(sixMinRecordsBean.heartEcgBean[0].jietuOr.isEmpty() || sixMinRecordsBean.heartEcgBean[0].jietuOr == "0"){
                     binding.sixminReportLlCaptureHeart.visibility = View.GONE
                 }else{
                     binding.sixminReportLlCaptureHeart.visibility = View.VISIBLE
