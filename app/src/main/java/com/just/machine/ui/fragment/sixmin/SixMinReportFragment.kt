@@ -341,7 +341,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         root["patientName"] = patientName
         root["xingbieStr"] = sixMinRecordsBean.infoBean.patientSix
         root["patientAge"] = sixMinRecordsBean.infoBean.patientAge
-        root["patientHeight"] = sixMinRecordsBean.infoBean.patientHeight
+        root["patientHeigh"] = sixMinRecordsBean.infoBean.patientHeight
         root["patientWeight"] = sixMinRecordsBean.infoBean.patientWeight
         root["patientBmi"] = sixMinRecordsBean.infoBean.patientBmi
         root["medicalNo"] = sixMinRecordsBean.infoBean.medicalNo
@@ -457,11 +457,11 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         //运动处方建议
         val checkPng = File(
             mActivity.getExternalFilesDir("")?.absolutePath,
-            "templates" + File.separator + "check.png"
+            "sixmin/templates" + File.separator + "check.png"
         )
         val unCheckPng = File(
             mActivity.getExternalFilesDir("")?.absolutePath,
-            "templates" + File.separator +"uncheck.png"
+            "sixmin/templates" + File.separator +"uncheck.png"
         )
         if (sixMinRecordsBean.prescriptionBean[0].movementWay == "0") {
             root["checkcf1"] = PictureRenderData(14,14,checkPng.absolutePath)
@@ -486,15 +486,15 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         //运动步速版本
         if (sixMinRecordsBean.prescriptionBean[0].prescripState == "1" || sixMinRecordsBean.prescriptionBean[0].prescripState.isEmpty()) {
             if (sixMinRecordsBean.prescriptionBean[0].distanceState.isEmpty() || sixMinRecordsBean.prescriptionBean[0].distanceState == "1") {
-                strideTitStrs = "运动步速";
+                strideTitStrs = "运动步速"
                 strideStrs =
                     sixMinRecordsBean.prescriptionBean[0].strideBefore + "-" + sixMinRecordsBean.prescriptionBean[0].strideAfter + "米/分钟";
-                movDistanceTitStrs = "运动距离";
+                movDistanceTitStrs = "运动距离"
                 movDistanceStrs =
                     sixMinRecordsBean.prescriptionBean[0].movementDistance + "-" + sixMinRecordsBean.prescriptionBean[0].movementDistanceAfter + "米";
             } else {
-                movDistanceTitStrs = "/";
-                movDistanceStrs = "/";
+                movDistanceTitStrs = "/"
+                movDistanceStrs = "/"
             }
             if (sixMinRecordsBean.prescriptionBean[0].heartrateState.isEmpty() || sixMinRecordsBean.prescriptionBean[0].heartrateState == "1") {
                 heartrateRateTitStr = "运动心率";
@@ -508,17 +508,17 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 strTit45 = "/";
                 str45 = "/";
             }
-            root["strideTitStrs"] = strideTitStrs;
-            root["strideStrs"] = strideStrs;
-            root["movDisTitStrs"] = movDistanceTitStrs;
-            root["movDisStrs"] = movDistanceStrs;
+            root["strideTl"] = strideTitStrs
+            root["strideStrs"] = strideStrs
+            root["movDisTl"] = movDistanceTitStrs
+            root["movDisStrs"] = movDistanceStrs
             root["movTime"] = sixMinRecordsBean.prescriptionBean[0].movementTime + "分钟"
-            root["heartrateRateTitStr"] = heartrateRateTitStr;
-            root["rateStr"] = heartrateRateStr;
-            root["metabMetTitStr"] = metabMetTitStr;
-            root["metabStr"] = metabMetStr;
-            root["strTit45"] = strTit45;
-            root["str45"] = str45;
+            root["rateTl"] = heartrateRateTitStr
+            root["rateStr"] = heartrateRateStr
+            root["metabTl"] = metabMetTitStr
+            root["metabStr"] = metabMetStr
+            root["str45Tl"] = strTit45
+            root["str45"] = str45
 
             var movementStr: String =
                 sixMinRecordsBean.prescriptionBean[0].movementWeeklyNumber + "次/周，" + sixMinRecordsBean.prescriptionBean[0].movementCycle
@@ -835,6 +835,8 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 val datas = any as MutableList<*>
                 sixMinRecordsBean = datas[0] as SixMinRecordsBean
 
+                sixMinRecordsBean.otherBean[0].useName = mActivity.sysSettingBean.sysOther.useOrg
+
                 binding.sixminReportTvUseName.text = sixMinRecordsBean.otherBean[0].useName
                 binding.sixminReportTvReportNo.text = "编号:${sixMinRecordsBean.infoBean.reportNo}"
                 binding.sixminReportTvPatientName.text =
@@ -970,16 +972,22 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                         "${sixMinRecordsBean.prescriptionBean[0].strideBefore}~${sixMinRecordsBean.prescriptionBean[0].strideAfter}米/分钟"
                     binding.sixminReportTvSportDistance.text =
                         "${sixMinRecordsBean.prescriptionBean[0].movementDistance}~${sixMinRecordsBean.prescriptionBean[0].movementDistanceAfter}米"
+                    binding.sixminReportTvSportStrideTitle.text = "运动步速"
+                    binding.sixminReportTvSportDistanceTitle.text = "运动距离"
                 } else {
                     binding.sixminReportTvSportStride.text = "/"
                     binding.sixminReportTvSportDistance.text = "/"
+                    binding.sixminReportTvSportStrideTitle.text = "/"
+                    binding.sixminReportTvSportDistanceTitle.text = "/"
                 }
 
                 if (sixMinRecordsBean.prescriptionBean[0].heartrateState.isEmpty() || sixMinRecordsBean.prescriptionBean[0].heartrateState == "1") {
                     binding.sixminReportTvPrescriptionHeartBeat.text =
                         "${sixMinRecordsBean.prescriptionBean[0].heartrateRate}bmp"
+                    binding.sixminReportTvPrescriptionHeartBeatTitle.text = "运动心率"
                 } else {
                     binding.sixminReportTvPrescriptionHeartBeat.text = "/"
+                    binding.sixminReportTvPrescriptionHeartBeatTitle.text = "/"
                 }
                 binding.sixminReportTvSportTime.text =
                     "${sixMinRecordsBean.prescriptionBean[0].movementTime}分钟"
@@ -1003,15 +1011,19 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 if (sixMinRecordsBean.prescriptionBean[0].pllevState.isEmpty() || sixMinRecordsBean.prescriptionBean[0].pllevState == "1") {
                     binding.sixminReportTvPrescriptionTiredLevel.text =
                         sixMinRecordsBean.prescriptionBean[0].pilaoControl
+                    binding.sixminReportTvPrescriptionTiredTitle.text = "自觉疲劳程度"
                 } else {
                     binding.sixminReportTvPrescriptionTiredLevel.text = "/"
+                    binding.sixminReportTvPrescriptionTiredTitle.text = "/"
                 }
 
                 if (sixMinRecordsBean.prescriptionBean[0].metabState.isEmpty() || sixMinRecordsBean.prescriptionBean[0].metabState == "1") {
                     binding.sixminReportTvPrescriptionMetab.text =
                         "${sixMinRecordsBean.prescriptionBean[0].metabMet}METs"
+                    binding.sixminReportTvPrescriptionMetabTitle.text = "代谢当量"
                 } else {
                     binding.sixminReportTvPrescriptionMetab.text = "/"
+                    binding.sixminReportTvPrescriptionMetabTitle.text = "/"
                 }
 
                 binding.sixminReportTvNote.text = sixMinRecordsBean.prescriptionBean[0].remarke
@@ -1309,6 +1321,19 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                     mActivity, "imageBreathing", pngSavePath
                 )
                 binding.sixminReportLineChartSteps.saveToPath(mActivity, "imageSteps", pngSavePath)
+
+                //第三页
+                binding.sixminReportTvUseNameThree.text = sixMinRecordsBean.otherBean[0].useName
+                binding.sixminReportTvReportNoThree.text =
+                    "编号:${sixMinRecordsBean.infoBean.reportNo}"
+                binding.sixminReportTvMostQuickHeart.text = String.format(getString(R.string.sixmin_test_report_heart_beart_capture_title),"最快","92","25","10")
+                binding.sixminReportTvMostSlowHeart.text = String.format(getString(R.string.sixmin_test_report_heart_beart_capture_title),"最慢","61","25","10")
+                if(mActivity.sixMinReportBloodHeartEcg.jietuOr == "0"){
+                    binding.sixminReportLlCaptureHeart.visibility = View.GONE
+                }else{
+                    binding.sixminReportLlCaptureHeart.visibility = View.VISIBLE
+                    binding.sixminReportTvCaptureHeart.text = String.format(getString(R.string.sixmin_test_report_heart_beart_capture_title),"截取","75","25","10")
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()

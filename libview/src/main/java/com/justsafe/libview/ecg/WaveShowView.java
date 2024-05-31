@@ -33,8 +33,10 @@ public class WaveShowView extends View {
     private final int GRID_SMALL_WIDTH = 8;//每一个网格的宽度和高度,包括线
     private final int GRID_BIG_WIDTH = 40;//每一个大网格的宽度和高度,包括线
     private int xSmallNum, ySmallNum, xBigNum, yBigNum;//小网格的横格，竖格，大网格的横格，竖格数量
-    private final int mWaveSmallLineColor = Color.parseColor("#a9a9a9");//小网格颜色
-    private final int mWaveBigLineColor = Color.parseColor("#000000");//小网格颜色
+//    private final int mWaveSmallLineColor = Color.parseColor("#a9a9a9");//小网格颜色
+//    private final int mWaveBigLineColor = Color.parseColor("#000000");//小网格颜色
+    private final int mWaveSmallLineColor = Color.parseColor("#EFE4F1");//小网格颜色
+    private final int mWaveBigLineColor = Color.parseColor("#3FEDA5B5");//小网格颜色
 
     public WaveShowView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);

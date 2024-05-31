@@ -286,4 +286,5 @@
         <item>6分钟平均步行速度×(50%~60%)×建议单次运动时长</item>
         <item>6分钟平均步行速度×(70%~80%)×建议单次运动时长</item>
     </string-array>
+    <string name="sixmin_test_report_heart_beart_capture_title"><![CDATA[%s心率心电图: 心率: %s bmp，速度: %s mm/s，增益: %s mm/mv]]></string>
 </resources>

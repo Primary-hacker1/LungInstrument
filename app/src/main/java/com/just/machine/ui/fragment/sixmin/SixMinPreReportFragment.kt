@@ -828,20 +828,21 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
 
     private fun showData(sixMinRecordsBean: SixMinRecordsBean?) {
         if (sixMinRecordsBean != null) {
-            mActivity.sixMinReportPrescription = this.sixMinRecordsBean.prescriptionBean[0]
+            mActivity.sixMinReportPrescription = sixMinRecordsBean.prescriptionBean[0]
             mActivity.sixMinReportPrescription.prescripState = "1"
-            mActivity.sixMinReportBloodOther = this.sixMinRecordsBean.otherBean[0]
-            mActivity.sixMinReportStride = this.sixMinRecordsBean.strideBean[0]
-            mActivity.sixMinReportEvaluation = this.sixMinRecordsBean.evaluationBean[0]
-            mActivity.sixMinReportBloodHeart = this.sixMinRecordsBean.heartBeatBean[0]
-            mActivity.sixMinReportInfo = this.sixMinRecordsBean.infoBean
-            mActivity.sixMinReportBloodHeart = this.sixMinRecordsBean.heartBeatBean[0]
-            mActivity.sixMinReportBloodHeartEcg = this.sixMinRecordsBean.heartEcgBean[0]
-            mActivity.sixMinReportWalk = this.sixMinRecordsBean.walkBean[0]
+            mActivity.sixMinReportBloodOther = sixMinRecordsBean.otherBean[0]
+            mActivity.sixMinReportStride = sixMinRecordsBean.strideBean[0]
+            mActivity.sixMinReportEvaluation = sixMinRecordsBean.evaluationBean[0]
+            mActivity.sixMinReportBloodHeart = sixMinRecordsBean.heartBeatBean[0]
+            mActivity.sixMinReportInfo = sixMinRecordsBean.infoBean
+            mActivity.sixMinReportBloodHeart = sixMinRecordsBean.heartBeatBean[0]
+            mActivity.sixMinReportBloodHeartEcg = sixMinRecordsBean.heartEcgBean[0]
+            mActivity.sixMinReportWalk = sixMinRecordsBean.walkBean[0]
         }
 
         Log.d("sixMinRecordsBean", Gson().toJson(this.sixMinRecordsBean))
 
+        mActivity.sixMinReportBloodOther.useName = mActivity.sysSettingBean.sysOther.useOrg
         mActivity.sixMinReportInfo.bsHxl = mActivity.sysSettingBean.sysOther.stepsOrBreath
 
         initTable()

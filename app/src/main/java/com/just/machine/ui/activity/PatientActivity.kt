@@ -223,6 +223,103 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
                 binding.rvSixTest.adapter = sixMinAdapter
 
+                sixMinAdapter.setItemClickListener { item, position ->
+                    sixMinAdapter.toggleItemBackground(position)
+                    val startSelectActionDialogFragment =
+                        SelectActionDialogFragment.startSelectActionDialogFragment(
+                            supportFragmentManager,
+                            "report"
+                        )
+                    startSelectActionDialogFragment.setSelectReportActionDialogListener(object :
+                        SelectActionDialogFragment.SelectReportActionDialogListener {
+                        override fun onClickView() {
+                            val intent = Intent(
+                                this@PatientActivity, SixMinDetectActivity::class.java
+                            )
+                            val bundle = Bundle()
+                            bundle.putString(
+                                Constants.sixMinPatientInfo,
+                                item.patientId.toString()
+                            )
+                            bundle.putString(Constants.sixMinReportNo, item.reportNo)
+                            bundle.putString(Constants.sixMinReportType, "3")
+                            intent.putExtras(bundle)
+                            startActivity(intent)
+                        }
+
+                        override fun onClickEdit() {
+                            val intent = Intent(
+                                this@PatientActivity, SixMinDetectActivity::class.java
+                            )
+                            val bundle = Bundle()
+                            bundle.putString(
+                                Constants.sixMinPatientInfo,
+                                item.patientId.toString()
+                            )
+                            bundle.putString(Constants.sixMinReportNo, item.reportNo)
+                            bundle.putString(Constants.sixMinReportType, "2")
+                            intent.putExtras(bundle)
+                            startActivity(intent)
+                        }
+
+                        override fun onClickExport() {
+
+                        }
+
+                        override fun onClickDelete() {
+                            val gson = Gson()
+                            var sysSettingBean = SixMinSysSettingBean()
+                            val sixMinSysSetting = SharedPreferencesUtils.instance.sixMinSysSetting
+                            if (sixMinSysSetting != null && sixMinSysSetting != "") {
+                                sysSettingBean = gson.fromJson(
+                                    sixMinSysSetting, SixMinSysSettingBean::class.java
+                                )
+                            }
+                            if (!hasPassPermission) {
+                                val startPermissionDialogFragment =
+                                    SixMinPermissionDialogFragment.startPermissionDialogFragment(supportFragmentManager)
+                                startPermissionDialogFragment.setOnConfirmClickListener(object :
+                                    SixMinPermissionDialogFragment.SixMinPermissionDialogListener {
+                                    override fun onClickConfirm(pwd: String) {
+                                        if (pwd.isEmpty()) {
+                                            showMsg("权限密码不能为空")
+                                            return
+                                        }
+                                        if (sysSettingBean.sysPwd.exportPwd == pwd) {
+                                            startPermissionDialogFragment.dismiss()
+                                            hasPassPermission = true
+                                        } else {
+                                            showMsg("权限密码错误，请重新输入")
+                                            return
+                                        }
+                                    }
+                                })
+                                return
+                            }
+
+                            val startCommonDialogFragment = CommonDialogFragment.startCommonDialogFragment(
+                                supportFragmentManager, "确认删除该试验记录吗?"
+                            )
+                            startCommonDialogFragment.setCommonDialogOnClickListener(object :
+                                CommonDialogFragment.CommonDialogClickListener {
+                                override fun onPositiveClick() {
+                                    hasPassPermission = false
+                                    viewModel.deleteSixMinReportInfo(item.reportNo)
+                                    viewModel.getPatients()//查询数据库
+                                }
+
+                                override fun onNegativeClick() {
+                                    hasPassPermission = false
+                                }
+
+                                override fun onStopNegativeClick(stopReason: String) {
+
+                                }
+                            })
+                        }
+                    })
+                }
+
                 sixMinAdapter.setItemOnClickListener(object : SixMinAdapter.SixMinReportListener {
                     override fun onExportItem(bean: SixMinReportInfo) {
                         // 导出6分钟报告
@@ -249,99 +346,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
                     override fun onCheckItem(bean: SixMinReportInfo) {
                         //操作记录类型
-                        val startSelectActionDialogFragment =
-                            SelectActionDialogFragment.startSelectActionDialogFragment(
-                                supportFragmentManager,
-                                "report"
-                            )
-                        startSelectActionDialogFragment.setSelectReportActionDialogListener(object :
-                            SelectActionDialogFragment.SelectReportActionDialogListener {
-                            override fun onClickView() {
-                                val intent = Intent(
-                                    this@PatientActivity, SixMinDetectActivity::class.java
-                                )
-                                val bundle = Bundle()
-                                bundle.putString(
-                                    Constants.sixMinPatientInfo,
-                                    bean.patientId.toString()
-                                )
-                                bundle.putString(Constants.sixMinReportNo, bean.reportNo)
-                                bundle.putString(Constants.sixMinReportType, "3")
-                                intent.putExtras(bundle)
-                                startActivity(intent)
-                            }
 
-                            override fun onClickEdit() {
-                                val intent = Intent(
-                                    this@PatientActivity, SixMinDetectActivity::class.java
-                                )
-                                val bundle = Bundle()
-                                bundle.putString(
-                                    Constants.sixMinPatientInfo,
-                                    bean.patientId.toString()
-                                )
-                                bundle.putString(Constants.sixMinReportNo, bean.reportNo)
-                                bundle.putString(Constants.sixMinReportType, "2")
-                                intent.putExtras(bundle)
-                                startActivity(intent)
-                            }
-
-                            override fun onClickExport() {
-
-                            }
-
-                            override fun onClickDelete() {
-                                val gson = Gson()
-                                var sysSettingBean = SixMinSysSettingBean()
-                                val sixMinSysSetting = SharedPreferencesUtils.instance.sixMinSysSetting
-                                if (sixMinSysSetting != null && sixMinSysSetting != "") {
-                                    sysSettingBean = gson.fromJson(
-                                        sixMinSysSetting, SixMinSysSettingBean::class.java
-                                    )
-                                }
-                                if (!hasPassPermission) {
-                                    val startPermissionDialogFragment =
-                                        SixMinPermissionDialogFragment.startPermissionDialogFragment(supportFragmentManager)
-                                    startPermissionDialogFragment.setOnConfirmClickListener(object :
-                                        SixMinPermissionDialogFragment.SixMinPermissionDialogListener {
-                                        override fun onClickConfirm(pwd: String) {
-                                            if (pwd.isEmpty()) {
-                                                showMsg("权限密码不能为空")
-                                                return
-                                            }
-                                            if (sysSettingBean.sysPwd.exportPwd == pwd) {
-                                                startPermissionDialogFragment.dismiss()
-                                                hasPassPermission = true
-                                            } else {
-                                                showMsg("权限密码错误，请重新输入")
-                                                return
-                                            }
-                                        }
-                                    })
-                                    return
-                                }
-
-                                val startCommonDialogFragment = CommonDialogFragment.startCommonDialogFragment(
-                                    supportFragmentManager, "确认删除该试验记录吗?"
-                                )
-                                startCommonDialogFragment.setCommonDialogOnClickListener(object :
-                                    CommonDialogFragment.CommonDialogClickListener {
-                                    override fun onPositiveClick() {
-                                        hasPassPermission = false
-                                        viewModel.deleteSixMinReportInfo(bean.reportNo)
-                                        viewModel.getPatients()//查询数据库
-                                    }
-
-                                    override fun onNegativeClick() {
-                                        hasPassPermission = false
-                                    }
-
-                                    override fun onStopNegativeClick(stopReason: String) {
-
-                                    }
-                                })
-                            }
-                        })
                     }
                 })
             }
@@ -378,7 +383,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
      */
     private fun exportReport(sixMinRecordsBean: SixMinRecordsBean) {
         val pngSavePath =
-            File.separator + "sixminreportpng" + File.separator + sixMinRecordsBean.infoBean.reportNo
+            File.separator + "sixmin/sixminreportpng" + File.separator + sixMinRecordsBean.infoBean.reportNo
 
         startLoadingDialogFragment =
             LoadingDialogFragment.startLoadingDialogFragment(
@@ -411,13 +416,13 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
         val filePath = File(
             getExternalFilesDir("")?.absolutePath,
-            File.separator + "sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo
+            File.separator + "sixmin/sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo
                     + File.separator + "六分钟步行试验检测报告.doc"
         )
 
         val pdfFilePath = File(
             getExternalFilesDir("")?.absolutePath,
-            File.separator + "sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo
+            File.separator + "sixmin/sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo
                     + File.separator + "六分钟步行试验检测报告.pdf"
         )
 
@@ -469,7 +474,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         root["patientName"] = patientName
         root["xingbieStr"] = sixMinRecordsBean.infoBean.patientSix
         root["patientAge"] = sixMinRecordsBean.infoBean.patientAge
-        root["patientHeight"] = sixMinRecordsBean.infoBean.patientHeight
+        root["patientHeigh"] = sixMinRecordsBean.infoBean.patientHeight
         root["patientWeight"] = sixMinRecordsBean.infoBean.patientWeight
         root["patientBmi"] = sixMinRecordsBean.infoBean.patientBmi
         root["medicalNo"] = sixMinRecordsBean.infoBean.medicalNo
@@ -977,10 +982,6 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         cardiopulmonaryAdapter.setItemClickListener { item, position ->
             cardiopulmonaryAdapter.toggleItemBackground(position)
             LogUtils.d(tag + item.toString())
-        }
-
-        sixMinAdapter.setItemClickListener { item, position ->
-            sixMinAdapter.toggleItemBackground(position)
         }
 
         binding.btnAdd.setNoRepeatListener {
