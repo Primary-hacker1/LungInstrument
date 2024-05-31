@@ -13,6 +13,7 @@ import com.just.machine.model.Constants
 import com.just.machine.model.LungTestData
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.lungdata.CPXSerializeData
+import com.just.machine.model.lungdata.DyCalculeSerializeCore
 import com.just.machine.ui.adapter.FragmentPagerAdapter
 import com.just.machine.ui.fragment.cardiopulmonary.dynamic.DynamicDataFragment
 import com.just.machine.ui.fragment.cardiopulmonary.dynamic.RoutineFragment
@@ -84,40 +85,54 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
                 )
                 val lungData =
                     MudbusProtocol.parseLungTestData(data) ?: return@setNoRepeatListener //原始数据
-                val bean =
-                    CPXSerializeData().convertLungTestDataToCPXSerializeData(lungData)//原始数据转成cpx数据
-                val cpxData = CPXCalcule.calDyBreathInOutData(bean)
-                cpxData.createTime = CommonUtil.getCurrentTime()
+
+                val cpxSerializeData =
+                    CPXSerializeData().convertLungTestDataToCPXSerializeData(lungData)
+
+                LogUtils.e(tag + cpxSerializeData.toString())
+
+                val core = DyCalculeSerializeCore()//计算出CPXSerializeData数据
+
+                val serializeData = core.enqueDyDataModel(cpxSerializeData)//计算一口气参数
+
+                core.setBegin()//假设呼气
+
+                LogUtils.e(tag + serializeData.toString())
+
+                val cpxBreathInOutData = CPXCalcule.calDyBreathInOutData(
+                    serializeData,
+                    core.cpxBreathInOutDataBase
+                )//计算出动态肺参数
+
+                LogUtils.e(tag + core.cpxBreathInOutDataBase.toString())
 
                 val patientBean = SharedPreferencesUtils.instance.patientBean
+
                 val id = patientBean?.patientId
                 if (id != null) {
-                    cpxData.patientId = id
+                    cpxBreathInOutData.patientId = id
                 }
 
-                LogUtils.e(tag + id.toString())
+                LogUtils.e(tag + cpxBreathInOutData.toString())
 
                 viewModel.insertCPXBreathInOutData(//插入数据库
-                    cpxData
+                    cpxBreathInOutData
                 )
 
-                LiveDataBus.get().with("动态心肺测试").value = cpxData
+                LiveDataBus.get().with("动态心肺测试").value = cpxBreathInOutData
+
+//                val anlyCpxTableModel =
+//                    CPXSerializeData().createAnlyCpxTableModel(cpxSerializeData)//运动评估数据
 
                 return@setNoRepeatListener
             }
 
-            SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)//发送流量定标
+            SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)//发送流量定标a
         }
 
-//        LiveDataBus.get().with("动态心肺测试").observe(this) {//解析串口消息
-//            if (it is ByteArray) {
-//                LogUtils.e(tag + BaseUtil.bytes2HexStr(it) + "字节长度" + BaseUtil.bytes2HexStr(it).length)
-//                val data = MudbusProtocol.parseLungTestData(it) ?: return@observe
-//                LogUtils.e(tag + data.toString())
-//            }
-//        }
-
     }
+
+
 
 
     private fun initViewPager() {

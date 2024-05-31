@@ -52,12 +52,16 @@ data class CPXSerializeData(
         return this.copy(breathData = breathData)
     }
 
-    fun createAnlyCpxTableModel(): List<AnlyCpxTableModel>? {//运动评估数据
+    fun createAnlyCpxTableModels(): List<AnlyCpxTableModel>? {//运动评估数据
         val cpxTableModelList = mutableListOf<AnlyCpxTableModel>()
         breathData ?: return null
 
         val cpxTableModel = AnlyCpxTableModel(
-            time = String.format("%02d:%02d", (index * 0.005f / 60).toInt(), (index * 0.005f % 60).toInt()),
+            time = String.format(
+                "%02d:%02d",
+                (index * 0.005f / 60).toInt(),
+                (index * 0.005f % 60).toInt()
+            ),
             load = Load.toInt(),
             speed = Speed.toInt(),
             grade = Grade.toInt(),
@@ -80,6 +84,36 @@ data class CPXSerializeData(
         )
         cpxTableModelList.add(cpxTableModel)
         return cpxTableModelList
+    }
+
+    fun createAnlyCpxTableModel(data: CPXSerializeData): AnlyCpxTableModel {//运动评估数据
+        val cpxTableModel = AnlyCpxTableModel(
+            time = String.format(
+                "%02d:%02d",
+                (index * 0.005f / 60).toInt(),
+                (index * 0.005f % 60).toInt()
+            ),
+            load = Load.toInt(),
+            speed = Speed.toInt(),
+            grade = Grade.toInt(),
+            HR = HR.toInt(),
+            VO2 = "%.2f".format(data.breathData!!.VO2),
+            VCO2 = "%.2f".format(data.breathData!!.VCO2),
+            VO2_div_kg = "%.2f".format(data.breathData!!.VO2_div_KG),
+            VE = "%.2f".format(data.breathData!!.VE),
+            RER = "%.2f".format(data.breathData!!.RER),
+            BF = data.breathData!!.BF!!,
+            psys = data.Psys.toInt(),
+            pdia = data.Pdia.toInt(),
+            EE = "%.2f".format(data.breathData!!.EE),
+            fat_g = "%.2f".format(data.breathData!!.FAT),
+            fat_kal = "%.2f".format(data.breathData!!.FAT),
+            cho_g = "%.2f".format(data.breathData!!.CHO),
+            cho_kal = "%.2f".format(data.breathData!!.CHO),
+            prot = "%.2f".format(data.breathData!!.PROT),
+            mets = "%.2f".format(data.breathData!!.METS)
+        )
+        return cpxTableModel
     }
 
 }

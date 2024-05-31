@@ -42,22 +42,7 @@ class CompensatoryPointFragment : CommonBaseFragment<FragmentCompensatoryBinding
 
         binding.layoutResult.setChartLayout(FragmentResultLayout.ChartLayout.COMPENSATORY)
 
-        binding.layoutResult.setDynamicResultBeans(
-            mutableListOf(
-                DynamicResultBean("Time", "2024-4-16"),
-                DynamicResultBean("Load", "80"),
-                DynamicResultBean("HR(1/min)", "2024-4-16"),
-                DynamicResultBean("HR(1/min)", "2024-4-16"),
-                DynamicResultBean("HR(1/min)", "2024-4-16"),
-                DynamicResultBean("HR(1/min)", "2024-4-16"),
-                DynamicResultBean("HR(1/min)", "2024-4-16"),
-                DynamicResultBean("HR(1/min)", "2024-4-16"),
-                DynamicResultBean("HR(1/min)", "2024-4-16"),
-                DynamicResultBean("HR(1/min)", "2024-4-16"),
-                DynamicResultBean("HR(1/min)", "2024-4-16"),
-                DynamicResultBean("HR(1/min)", "2024-4-16"),
-            )
-        )
+        binding.layoutResult.setDynamicResultBeans()
 
     }
 

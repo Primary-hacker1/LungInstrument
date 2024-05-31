@@ -19,6 +19,7 @@ import com.github.mikephil.charting.data.ScatterData
 import com.github.mikephil.charting.data.ScatterDataSet
 import com.github.mikephil.charting.interfaces.datasets.IScatterDataSet
 import com.just.machine.model.DynamicResultBean
+import com.just.machine.model.lungdata.AnlyCpxTableModel
 import com.just.machine.ui.adapter.ResultAdapter
 import com.just.news.R
 import com.just.news.databinding.FragmentResultBinding
@@ -43,12 +44,15 @@ class FragmentResultLayout @JvmOverloads constructor(
 
     private var chartLayout: ChartLayout? = null
 
+    var model = AnlyCpxTableModel()
+
     private var dynamicResultBeans: MutableList<DynamicResultBean> = ArrayList()
 
     enum class ChartLayout {
         EXTREMUM,//极值分析
         OXYGEN,//无氧域分析
         COMPENSATORY,//呼吸代偿点分析
+
         //        SLOP,//斜率分析
         FLOWRATE//动态流速环分析
     }
@@ -139,9 +143,16 @@ class FragmentResultLayout @JvmOverloads constructor(
     }
 
 
-    fun setDynamicResultBeans(beans: MutableList<DynamicResultBean>) {
+    fun setDynamicResultBeans() {
         dynamicResultBeans.clear()
-        dynamicResultBeans.addAll(beans)
+        val bean: MutableList<Pair<String, Any?>> = model.toMutableList()
+        for ((key, value) in bean) {
+            val dynamicResultBean = DynamicResultBean()
+            dynamicResultBean.resultName = key
+            dynamicResultBean.resultData = value.toString()
+            dynamicResultBeans.add(dynamicResultBean)
+        }
+
     }
 
     fun setChartLayout(resultLayout: ChartLayout) {

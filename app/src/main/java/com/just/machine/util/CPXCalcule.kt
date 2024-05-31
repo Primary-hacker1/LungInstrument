@@ -23,11 +23,11 @@ object CPXCalcule {
      * @param dys 原始数据
      * CPXBreathInOutData计算返回的动态肺数据
      * */
-    fun calDyBreathInOutData(dys: CPXSerializeData): CPXBreathInOutData {
-
+    fun calDyBreathInOutData(
+        dys: CPXSerializeData,
+        dataBase: CPXBreathInOutDataBase
+    ): CPXBreathInOutData {
         val breathData = CPXBreathInOutData()
-
-        val dataBase = CPXBreathInOutDataBase()
 
         breathData.VTin = abs(dataBase.TempiTotal / 1000.0)
         breathData.FiO2 = dataBase.TempiO2 / dataBase.TempiTotal * 100.0

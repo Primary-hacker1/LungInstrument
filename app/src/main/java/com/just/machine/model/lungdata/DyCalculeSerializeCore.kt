@@ -52,7 +52,12 @@ class DyCalculeSerializeCore {
 //        ReOpenTimer(false)
     }
 
-    fun EnqueDyDataModel(model: CPXSerializeData): CPXSerializeData {//处理原始数据
+    fun setBegin() {
+        HasFindBegin = true
+        state = BreathState.breathOut
+    }
+
+    fun enqueDyDataModel(model: CPXSerializeData): CPXSerializeData {//处理原始数据
 //        Definition.Noise_AD = 5//燥点消除
         val dySerializeData1 = model
         if (state == BreathState.None) {
@@ -124,7 +129,7 @@ class DyCalculeSerializeCore {
                         hasfindoutbegin = false
                         findoutbeginindex = 0
                         state = BreathState.breathIn
-                        dySerializeData1.breathData = CaluculeData(ObserveBreathModel!!)
+                        dySerializeData1.breathData = caluculeData(ObserveBreathModel!!)
                         ObserveBreathModel = FullBreathInOutModel()
                         ObserveBreathModel!!.BreathIn_start_index = 0
                         dylist.removeAll { it -> dylist.indexOf(it) < findinbeginindex }
@@ -140,13 +145,15 @@ class DyCalculeSerializeCore {
         return dySerializeData1
     }
 
-    fun CaluculeData(model: FullBreathInOutModel): CPXBreathInOutData {
+    val cpxBreathInOutDataBase = CPXBreathInOutDataBase()
+
+    private fun caluculeData(model: FullBreathInOutModel): CPXBreathInOutData {
         val breathInStartIndex = model.BreathIn_start_index
         val breathInEndIndex = model.BreathIn_End_index
         val breathOutStartIndex = model.BreathOut_start_index
         val breathOutEndIndex = model.BreathOut_End_index
         val dyBreathInOutData = CPXBreathInOutData()
-        val cpxBreathInOutDataBase = CPXBreathInOutDataBase()
+//        val cpxBreathInOutDataBase = CPXBreathInOutDataBase()
 
         cpxBreathInOutDataBase.EndRealIndex = dylist[model.BreathOut_End_index].index
         cpxBreathInOutDataBase.Tin =

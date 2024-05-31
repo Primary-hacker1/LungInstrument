@@ -10,8 +10,8 @@ data class AnlyCpxTableModel(
     var VO2: String = "",        // 摄氧量 (VO2)
     var VCO2: String = "",       // 排出二氧化碳量 (VCO2)
     var VO2_div_kg: String = "", // 每公斤体重的摄氧量 (VO2/kg)
-    var RER: String  = "",       // 呼吸交换率 (Respiratory Exchange Ratio)
-    var VE: String  = "",        // 通气量 (Ventilation)
+    var RER: String = "",       // 呼吸交换率 (Respiratory Exchange Ratio)
+    var VE: String = "",        // 通气量 (Ventilation)
     var BF: Double = 0.0,        // 呼吸频率 (Breathing Frequency)
     var psys: Int = 0,           // 收缩压 (Systolic Blood Pressure)
     var pdia: Int = 0,           // 舒张压 (Diastolic Blood Pressure)
@@ -23,7 +23,34 @@ data class AnlyCpxTableModel(
     var cho_g: String = "",      // 碳水化合物克数 (Carbohydrates in grams)
     var fat_g: String = "",      // 脂肪克数 (Fat in grams)
     var mets: String = ""        // 代谢当量 (Metabolic Equivalent of Task)
-)
+) {
+    fun toMutableList(): MutableList<Pair<String, Any?>> {
+        return mutableListOf(
+            "time" to time,
+            "load" to load,
+            "speed" to speed,
+            "grade" to grade,
+            "HR" to HR,
+            "VO2" to VO2,
+            "VCO2" to VCO2,
+            "VO2_div_kg" to VO2_div_kg,
+            "RER" to RER,
+            "VE" to VE,
+            "BF" to BF,
+            "psys" to psys,
+            "pdia" to pdia,
+            "RPE" to RPE,
+            "EE" to EE,
+            "prot" to prot,
+            "cho_kal" to cho_kal,
+            "fat_kal" to fat_kal,
+            "cho_g" to cho_g,
+            "fat_g" to fat_g,
+            "mets" to mets
+        )
+    }
+}
+
 
 class AnlyCpxTableModelNew {
     var colname: String = ""
