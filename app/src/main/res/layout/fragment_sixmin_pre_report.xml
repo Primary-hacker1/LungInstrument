@@ -103,27 +103,27 @@
                                 android:layout_marginBottom="30dp"
                                 android:background="#231815" />
 
-                            <View
-                                android:id="@+id/sixmin_pre_interval_one"
-                                android:layout_width="0.75dp"
-                                android:layout_height="115dp"
-                                android:layout_marginStart="150dp"
-                                android:background="#231815" />
+<!--                            <View-->
+<!--                                android:id="@+id/sixmin_pre_interval_one"-->
+<!--                                android:layout_width="0.75dp"-->
+<!--                                android:layout_height="115dp"-->
+<!--                                android:layout_marginStart="150dp"-->
+<!--                                android:background="#231815" />-->
 
-                            <View
-                                android:id="@+id/sixmin_pre_interval_two"
-                                android:layout_width="0.75dp"
-                                android:layout_height="115dp"
-                                android:layout_marginStart="90dp"
-                                android:background="#231815" />
+<!--                            <View-->
+<!--                                android:id="@+id/sixmin_pre_interval_two"-->
+<!--                                android:layout_width="0.75dp"-->
+<!--                                android:layout_height="115dp"-->
+<!--                                android:layout_marginStart="90dp"-->
+<!--                                android:background="#231815" />-->
 
-                            <View
-                                android:id="@+id/sixmin_pre_interval_three"
-                                android:layout_width="0.75dp"
-                                android:layout_height="115dp"
-                                android:layout_gravity="end"
-                                android:layout_marginEnd="180dp"
-                                android:background="#231815" />
+<!--                            <View-->
+<!--                                android:id="@+id/sixmin_pre_interval_three"-->
+<!--                                android:layout_width="0.75dp"-->
+<!--                                android:layout_height="115dp"-->
+<!--                                android:layout_gravity="end"-->
+<!--                                android:layout_marginEnd="180dp"-->
+<!--                                android:background="#231815" />-->
 
                         </FrameLayout>
 

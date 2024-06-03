@@ -342,20 +342,24 @@ class SixMinSystemSettingFragment : CommonBaseFragment<FragmentSixminSystemSetti
 
     private fun initToolbar() {
         mActivity.setToolbarTitle(getString(R.string.system_setting))
-        KeyboardUtil.setEditTextFilter(binding.sixminEtNewPwd)
-        KeyboardUtil.setEditTextFilter(binding.sixminEtConfirmPwd)
-        KeyboardUtil.setEditTextFilter(binding.sixminEtBluetoothEcg)
-        KeyboardUtil.setEditTextFilter(binding.sixminEtBluetoothBlood)
-        KeyboardUtil.setEditTextFilter(binding.sixminEtBluetoothBloodOxygen)
-        binding.sixminEtOtherUseOrg.filters = arrayOf(InputFilter.LengthFilter(21))
-        binding.sixminEtOtherUseOrg.setOnEditorActionListener { _, _, event -> (event.keyCode == KeyEvent.KEYCODE_ENTER); }
+        try {
+            KeyboardUtil.setEditTextFilter(binding.sixminEtNewPwd)
+            KeyboardUtil.setEditTextFilter(binding.sixminEtConfirmPwd)
+            KeyboardUtil.setEditTextFilter(binding.sixminEtBluetoothEcg)
+            KeyboardUtil.setEditTextFilter(binding.sixminEtBluetoothBlood)
+            KeyboardUtil.setEditTextFilter(binding.sixminEtBluetoothBloodOxygen)
+            binding.sixminEtOtherUseOrg.filters = arrayOf(InputFilter.LengthFilter(21))
+            binding.sixminEtOtherUseOrg.setOnEditorActionListener { _, _, event -> (event.keyCode == KeyEvent.KEYCODE_ENTER); }
 
-        binding.sixminEtBluetoothEcg.filters = arrayOf(InputFilter.LengthFilter(12))
-        binding.sixminEtBluetoothEcg.setOnEditorActionListener { _, _, event -> (event.keyCode == KeyEvent.KEYCODE_ENTER); }
-        binding.sixminEtBluetoothBlood.filters = arrayOf(InputFilter.LengthFilter(12))
-        binding.sixminEtBluetoothBlood.setOnEditorActionListener { _, _, event -> (event.keyCode == KeyEvent.KEYCODE_ENTER); }
-        binding.sixminEtBluetoothBloodOxygen.filters = arrayOf(InputFilter.LengthFilter(12))
-        binding.sixminEtBluetoothBloodOxygen.setOnEditorActionListener { _, _, event -> (event.keyCode == KeyEvent.KEYCODE_ENTER); }
+            binding.sixminEtBluetoothEcg.filters = arrayOf(InputFilter.LengthFilter(12))
+            binding.sixminEtBluetoothEcg.setOnEditorActionListener { _, _, event -> (event.keyCode == KeyEvent.KEYCODE_ENTER); }
+            binding.sixminEtBluetoothBlood.filters = arrayOf(InputFilter.LengthFilter(12))
+            binding.sixminEtBluetoothBlood.setOnEditorActionListener { _, _, event -> (event.keyCode == KeyEvent.KEYCODE_ENTER); }
+            binding.sixminEtBluetoothBloodOxygen.filters = arrayOf(InputFilter.LengthFilter(12))
+            binding.sixminEtBluetoothBloodOxygen.setOnEditorActionListener { _, _, event -> (event.keyCode == KeyEvent.KEYCODE_ENTER); }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
 

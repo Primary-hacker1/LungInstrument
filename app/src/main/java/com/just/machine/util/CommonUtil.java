@@ -1,11 +1,13 @@
 package com.just.machine.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.view.View;
 
 import java.io.File;
@@ -294,5 +296,48 @@ public class CommonUtil {
         c.drawColor(Color.WHITE);
         view.draw(c);
         return bmp;
+    }
+
+    /**
+     * 将dp值转换为px值，保证尺寸大小不变
+     *
+     * @return
+     */
+    public static int dpAdapt(Activity activity, float dp, float widthDpBase) {
+        DisplayMetrics dm = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int heightPixels = dm.heightPixels;//高的像素
+        int widthPixels = dm.widthPixels;//宽的像素
+//        int densityDpi = dm.densityDpi;//dpi
+//        float xdpi = dm.xdpi;//xdpi
+//        float ydpi = dm.ydpi;//ydpi
+        float density = dm.density;//density=dpi/160,密度比
+//        float scaledDensity = dm.scaledDensity;//scaledDensity=dpi/160 字体缩放密度比
+        float heightDP = heightPixels / density;//高度的dp
+        float widthDP = widthPixels / density;//宽度的dp
+        float w=widthDP>heightDP?heightDP:widthDP;
+//        final float scale = activity.getResources().getDisplayMetrics().density;
+        return (int) (dp *w/widthDpBase* density + 0.5f);
+    }
+    /**
+     * 将sp值转换为px值，保证尺寸大小不变
+     *
+     * @return
+     */
+    public static int spAdapt(Activity activity, float sp,float widthDpBase) {
+        DisplayMetrics dm = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int heightPixels = dm.heightPixels;//高的像素
+        int widthPixels = dm.widthPixels;//宽的像素
+//        int densityDpi = dm.densityDpi;//dpi
+//        float xdpi = dm.xdpi;//xdpi
+//        float ydpi = dm.ydpi;//ydpi
+        float density = dm.density;//density=dpi/160,密度比
+//        float scaledDensity = dm.scaledDensity;//scaledDensity=dpi/160 字体缩放密度比
+        float heightDP = heightPixels / density;//高度的dp
+        float widthDP = widthPixels / density;//宽度的dp
+        float w=widthDP>heightDP?heightDP:widthDP;
+//        final float scale = activity.getResources().getDisplayMetrics().density;
+        return (int) (sp *w/widthDpBase + 0.5f);
     }
 }

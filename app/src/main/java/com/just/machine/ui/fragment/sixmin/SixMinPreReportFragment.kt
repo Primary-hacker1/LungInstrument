@@ -1,6 +1,7 @@
 package com.just.machine.ui.fragment.sixmin
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.text.Editable
 import android.text.Html
 import android.text.InputFilter
@@ -35,12 +36,9 @@ import com.just.machine.ui.dialog.SixMinReportPrescriptionFragment
 import com.just.machine.ui.dialog.SixMinReportSelfCheckBeforeTestFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.CommonUtil
-import com.just.machine.util.FileUtil
-import com.just.machine.util.KeyboardUtil
 import com.just.news.R
 import com.just.news.databinding.FragmentSixminPreReportBinding
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.File
 import java.math.BigDecimal
 
 /**
@@ -1285,19 +1283,27 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                     }
                 }
                 linearLayout.addView(tvNo)
+
+                if(j == 0 || j == 1 || j == 7){
+                    // 创建一个新的View，作为竖线
+                    val view = View(mActivity)
+                    // 设置竖线的宽度（如果需要）
+                    val heightInPixels = 50 // 2像素的高度
+                    val widthInPixels = 1 // 想要的横向宽度，可以是屏幕宽度
+                    // 设置竖线的参数
+                    val params = LinearLayout.LayoutParams(
+                        widthInPixels,  // 宽度
+                        heightInPixels // 高度
+                    )
+                    // 设置竖线的背景色，这里使用黑色
+                    view.setBackgroundColor(Color.BLACK)
+                    linearLayout.addView(view,params)
+                }
             }
             newRow.setPadding(
-                dip2px(6.0f), dip2px(3.0f), dip2px(6.0f), dip2px(3.0f)
+                dip2px(6.0f), dip2px(0f), dip2px(6.0f), dip2px(0f)
             )
             newRow.addView(linearLayout)
-//            val layoutParamsOne = binding.sixminPreIntervalOne.layoutParams as ViewGroup.MarginLayoutParams
-//            layoutParamsOne.leftMargin= dip2px(95f)
-//
-//            val layoutParamsTwo = binding.sixminPreIntervalTwo.layoutParams as ViewGroup.MarginLayoutParams
-//            layoutParamsTwo.leftMargin= dip2px(155f)
-//
-//            val layoutParamsThree = binding.sixminPreIntervalThree.layoutParams as ViewGroup.MarginLayoutParams
-//            layoutParamsThree.rightMargin = dip2px(175f)
             binding.sixminReportTlPreTable.addView(newRow)
         }
     }
