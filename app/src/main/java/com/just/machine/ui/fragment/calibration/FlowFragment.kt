@@ -3,6 +3,8 @@ package com.just.machine.ui.fragment.calibration
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
@@ -11,12 +13,17 @@ import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent.Companion.FLOWS_SUCCESS
 import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.model.Constants
+import com.just.machine.ui.adapter.FragmentChildAdapter
 import com.just.machine.ui.adapter.calibration.FlowAdapter
+import com.just.machine.ui.fragment.cardiopulmonary.staticfragment.BreatheHardInFragment
+import com.just.machine.ui.fragment.cardiopulmonary.staticfragment.MaxVentilationFragment
+import com.just.machine.ui.fragment.cardiopulmonary.staticfragment.RoutineLungFragment
 import com.just.machine.ui.fragment.serial.MudbusProtocol
 import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.BaseUtil
 import com.just.machine.util.LiveDataBus
+import com.just.news.R
 import com.just.news.databinding.FragmentFlowBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,52 +36,18 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
 
-    private val viewModel by viewModels<MainViewModel>()
-
-    private val flowAdapter by lazy {
-        FlowAdapter(requireContext())
-    }
-
     override fun initView() {
 
-        binding.rvFlow.layoutManager = LinearLayoutManager(requireContext())
+        val adapter = FragmentChildAdapter(this)
 
-        flowAdapter.setItemClickListener { item, position ->
-            flowAdapter.toggleItemBackground(position)
-        }
+        adapter.addFragment(FlowHandleFragment())
+        adapter.addFragment(FlowAutoFragment())
 
-        flowAdapter.setItemsBean(
-            mutableListOf
-                (FlowBean(0, "", 1, "容积1", "3", "3.003"))
-        )
+        binding.vpFlowTitle.setCurrentItem(1, true)
 
-        binding.rvFlow.adapter = flowAdapter
+        binding.vpFlowTitle.adapter = adapter
 
-        binding.chartTime.setLineDataSetData(
-            binding.chartTime.flowDataSetList()
-        )//设置数据
-
-        binding.chartTime.setLineChartFlow(
-            yAxisMinimum = -5f,
-            yAxisMaximum = 5f,
-            countMaxX = 30f,
-            granularityY = 1f,
-            granularityX = 1f,
-            titleCentent = "容量-时间"
-        )
-
-        binding.chartSpeed.setLineDataSetData(
-            binding.chartSpeed.flowDataSetList()
-        )//设置数据
-
-        binding.chartSpeed.setLineChartFlow(
-            yAxisMinimum = -15f,
-            yAxisMaximum = 15f,
-            countMaxX = 4f,
-            granularityY = 3f,
-            granularityX = 0.2f,
-            titleCentent = "流速-容量"
-        )
+        binding.vpFlowTitle.isUserInputEnabled = false
 
         binding.llStart.setNoRepeatListener {
             if (Constants.isDebug) {
@@ -112,37 +85,58 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
             }
         }
 
-        viewModel.mEventHub.observe(this) {
-            when (it.action) {
-                FLOWS_SUCCESS -> {
-                    val flowsBean: MutableList<FlowBean> = ArrayList()
-                    if (it.any is List<*>) {
-                        val list = it.any as List<*>
-                        for (index in list) {
-                            if (index is FlowBean) {
-                                flowsBean.add(index)
-                            }
-                        }
-                    }
-                    flowAdapter.setItemsBean(flowsBean)
-                }
-            }
-        }
-
     }
 
     override fun initListener() {
-
+        binding.btnHandle.setNoRepeatListener {
+            binding.vpFlowTitle.currentItem = 0
+            setButtonPosition(0)
+        }
+        binding.btnAuto.setNoRepeatListener {
+            binding.vpFlowTitle.currentItem = 1
+            setButtonPosition(1)
+        }
     }
 
     /**
      * 懒加载
      */
     override fun loadData() {
-        viewModel.getFlows()
+
     }
 
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentFlowBinding.inflate(inflater, container, false)
+
+    private fun setButtonPosition(position: Int) {
+        when (position) {
+            0 -> {
+                setButtonStyle(
+                    binding.btnHandle,
+                    binding.btnAuto
+                )
+            }
+
+            1 -> {
+                setButtonStyle(
+                    binding.btnAuto,
+                    binding.btnHandle
+                )
+            }
+        }
+    }
+
+    private fun setButtonStyle(
+        textView1: TextView,
+        textView2: TextView,
+    ) {// 设置按钮的样式
+
+        textView1.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+        textView1.background =
+            ContextCompat.getDrawable(requireContext(), R.drawable.super_edittext_bg)
+
+        textView2.setTextColor(ContextCompat.getColor(requireContext(), R.color.cD9D9D9))
+        textView2.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+    }
 }

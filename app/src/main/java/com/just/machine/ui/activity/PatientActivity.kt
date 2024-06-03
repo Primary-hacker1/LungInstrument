@@ -175,13 +175,6 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
             }
         }
 
-//        sixMinAdapter = SixMinAdapter(this)
-
-//        bean?.sixMinRecordsBean?.let { it1 -> sixMinAdapter.setItemsBean(it1) }
-
-//        binding.rvSixTest.adapter = sixMinAdapter
-
-
         cardiopulmonaryAdapter = CardiopulAdapter(this)
 
         bean?.testRecordsBean?.let { it1 -> cardiopulmonaryAdapter.setItemsBean(it1) }
@@ -350,6 +343,10 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
 
                     }
                 })
+            }else{
+                sixMinAdapter = SixMinAdapter(this)
+                sixMinAdapter.setItemsBean(mutableListOf())
+                binding.rvSixTest.adapter = sixMinAdapter
             }
         }
     }
