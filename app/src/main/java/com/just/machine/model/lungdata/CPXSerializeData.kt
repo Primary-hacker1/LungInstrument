@@ -29,17 +29,17 @@ data class CPXSerializeData(
         return CPXSerializeData(
             index = 0,  // 假设索引是 0，可以根据需要设置
             breathData = null,  // 假设没有呼吸数据
-            rpe = 0.0,  // 假设 RPE 默认是 0.0，可以根据需要设置
+            rpe = 5.0,  // 设定 RPE 默认值为 5.0，可以根据需要调整
             SPO2 = lungTestData.bloodOxygen,  // 映射血氧数据
-            Pdia = 0.0,  // 假设舒张压默认是 0.0，可以根据需要设置
-            Psys = 0.0,  // 假设收缩压默认是 0.0，可以根据需要设置
-            Grade = 0.0,  // 假设坡度默认是 0.0，可以根据需要设置
-            Speed = 0.0,  // 假设速度默认是 0.0，可以根据需要设置
-            Load = 0.0,  // 假设负载默认是 0.0，可以根据需要设置
+            Pdia = 80.0,  // 设定舒张压默认值为 80.0，可以根据需要调整
+            Psys = 120.0,  // 设定收缩压默认值为 120.0，可以根据需要调整
+            Grade = 1.0,  // 设定坡度默认值为 1.0，可以根据需要调整
+            Speed = 5.0,  // 设定速度默认值为 5.0，可以根据需要调整
+            Load = 50.0,  // 设定负载默认值为 50.0，可以根据需要调整
             rpm = lungTestData.gasFlowSpeedSensorData.toDouble(),  // 映射气体流速传感器数据
             vol = lungTestData.lowRangeFlowSensorData.toDouble(),  // 映射低量程流量传感器数据
-            hrr = 0.0,  // 假设 HRR 默认是 0.0，可以根据需要设置
-            HR = 0.0,  // 假设心率默认是 0.0，可以根据需要设置
+            hrr = 10.0,  // 设定 HRR 默认值为 10.0，可以根据需要调整
+            HR = 75.0,  // 设定心率默认值为 75.0，可以根据需要调整
             flow = lungTestData.highRangeFlowSensorData.toDouble(),  // 映射高量程流量传感器数据
             o2 = lungTestData.o2SensorData.toDouble(),  // 映射 O2 传感器数据
             co2 = lungTestData.co2SensorData.toDouble(),  // 映射 CO2 传感器数据

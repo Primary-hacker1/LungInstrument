@@ -21,9 +21,7 @@ import com.just.machine.ui.fragment.cardiopulmonary.dynamic.WassermanFragment
 import com.just.machine.ui.fragment.serial.MudbusProtocol
 import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
-import com.just.machine.util.BaseUtil
 import com.just.machine.util.CPXCalcule
-import com.just.machine.util.CommonUtil
 import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FragmentDynamicBinding
@@ -62,7 +60,8 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
                     temperature = Random.nextInt(0, 100), // 模拟温度数据
                     humidity = Random.nextInt(0, 100), // 模拟湿度数据
                     atmosphericPressure = Random.nextInt(800, 1200).toFloat(), // 模拟大气压力数据
-                    highRangeFlowSensorData = Random.nextInt(0, 100), // 模拟高量程流量传感器数据
+
+                    highRangeFlowSensorData = -300100, // 模拟高量程流量传感器数据
                     lowRangeFlowSensorData = Random.nextInt(0, 100), // 模拟低量程流量传感器数据
                     co2SensorData = Random.nextInt(0, 100), // 模拟CO2传感器数据
                     o2SensorData = Random.nextInt(0, 100), // 模拟O2传感器数据
@@ -78,30 +77,27 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
 //                --------------------假设收到数据开始解析-----------------------
 
-                LogUtils.e(
-                    tag + BaseUtil.bytes2HexStr(data) + "字节长度" + BaseUtil.bytes2HexStr(
-                        data
-                    ).length
-                )
-                val lungData =
-                    MudbusProtocol.parseLungTestData(data) ?: return@setNoRepeatListener //原始数据
+
+//                val lungData =
+//                    MudbusProtocol.parseLungTestData(data) ?: return@setNoRepeatListener //原始数据
+
+                LogUtils.e(tag + controlBoardResponse.highRangeFlowSensorData)
 
                 val cpxSerializeData =
-                    CPXSerializeData().convertLungTestDataToCPXSerializeData(lungData)
+                    CPXSerializeData().convertLungTestDataToCPXSerializeData(controlBoardResponse)
 
                 LogUtils.e(tag + cpxSerializeData.toString())
 
                 val core = DyCalculeSerializeCore()//计算出CPXSerializeData数据
 
-                val serializeData = core.enqueDyDataModel(cpxSerializeData)//计算一口气参数
-
                 core.setBegin()//假设呼气
+
+                val serializeData = core.enqueDyDataModel(cpxSerializeData)//计算一口气参数
 
                 LogUtils.e(tag + serializeData.toString())
 
                 val cpxBreathInOutData = CPXCalcule.calDyBreathInOutData(
-                    serializeData,
-                    core.cpxBreathInOutDataBase
+                    serializeData, core.cpxBreathInOutDataBase
                 )//计算出动态肺参数
 
                 LogUtils.e(tag + core.cpxBreathInOutDataBase.toString())
@@ -131,8 +127,6 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
         }
 
     }
-
-
 
 
     private fun initViewPager() {
@@ -179,8 +173,7 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
         //这个必须写，不然会产生Fata
         binding.vpTitle.isSaveEnabled = false
 
-        binding.vpTitle.registerOnPageChangeCallback(object :
-            ViewPager2.OnPageChangeCallback() {
+        binding.vpTitle.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 // 当页面被选中时执行你的操作
@@ -196,22 +189,19 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
         when (position) {
             0 -> {
                 setButtonStyle(
-                    binding.btnRoutine,
-                    binding.btnWasserman, binding.btnData
+                    binding.btnRoutine, binding.btnWasserman, binding.btnData
                 )
             }
 
             1 -> {
                 setButtonStyle(
-                    binding.btnWasserman,
-                    binding.btnRoutine, binding.btnData
+                    binding.btnWasserman, binding.btnRoutine, binding.btnData
                 )
             }
 
             2 -> {
                 setButtonStyle(
-                    binding.btnData,
-                    binding.btnWasserman, binding.btnRoutine
+                    binding.btnData, binding.btnWasserman, binding.btnRoutine
                 )
             }
 

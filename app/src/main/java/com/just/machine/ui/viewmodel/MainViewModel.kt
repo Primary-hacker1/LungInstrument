@@ -1,11 +1,13 @@
 package com.just.machine.ui.viewmodel
 
+import android.os.Build
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.viewModelScope
 import com.common.network.LogUtils
 import com.common.viewmodel.BaseViewModel
 import com.common.viewmodel.LiveDataEvent
+import com.fasterxml.aalto.util.DataUtil
 import com.just.machine.api.UserRepository
 import com.just.machine.dao.PatientBean
 import com.just.machine.dao.PlantRepository
@@ -43,6 +45,7 @@ import com.just.machine.model.sixminreport.SixMinReportOther
 import com.just.machine.model.sixminreport.SixMinReportPrescription
 import com.just.machine.model.sixminreport.SixMinReportStride
 import com.just.machine.model.sixminreport.SixMinReportWalk
+import com.justsafe.libview.view.DateManagementTool
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -152,7 +155,10 @@ class MainViewModel @Inject constructor(
     }
 
 
-    fun insertCPXBreathInOutData(bean: CPXBreathInOutData) {//新增成分定标
+    fun insertCPXBreathInOutData(bean: CPXBreathInOutData) {//新增运动参数
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            bean.createTime = DateManagementTool.getCurrentDateTime()
+        }
         viewModelScope.launch {
             val patient = lungDao.insertCPXBreathInOutData(bean)
             getCPXBreathInOutData()

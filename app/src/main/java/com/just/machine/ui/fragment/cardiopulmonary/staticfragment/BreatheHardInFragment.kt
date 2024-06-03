@@ -112,7 +112,7 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
             }
         }
 
-        LogUtils.e(tag + routineLungList.toString())
+//        LogUtils.e(tag + routineLungList.toString())
 
         binding.fragmentLayout.setLungData(routineLungList)
     }

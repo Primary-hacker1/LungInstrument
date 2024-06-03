@@ -1,19 +1,26 @@
 package com.just.machine.model.lungdata
 
+import com.common.network.LogUtils
 import com.just.machine.dao.lung.CPXBreathInOutData
+import com.just.machine.model.Constants
 import kotlin.math.abs
 
 class DyCalculeSerializeCore {
+
+    private val tag = DyCalculeSerializeCore::class.java.name
+
     @Volatile
     var dylist: MutableList<CPXSerializeData> = mutableListOf()
     var fullBreathInOutList: MutableList<FullBreathInOutModel> = mutableListOf()
     var Noise = 30
-//    private val timer: DispatcherTimer = DispatcherTimer()
+
+    //    private val timer: DispatcherTimer = DispatcherTimer()
     private var state: BreathState? = null
     var FlowAccumulation = 0.0
+
     @Volatile
     var HasFindBegin = false
-    var ObserveBreathModel: FullBreathInOutModel? = null
+    var ObserveBreathModel: FullBreathInOutModel? = FullBreathInOutModel()
     private var hasfindoutbegin = false
     private var findoutbeginindex = 0
     private var hasfindinbegin = false
@@ -116,6 +123,8 @@ class DyCalculeSerializeCore {
             dylist.add(model)
             val index = dylist.size - 1
             val dySerializeData2 = dylist[index]
+//            LogUtils.e(tag + state + hasfindoutbegin + model.flow)
+
             if (!hasfindinbegin && model.flow < 0.0) {
                 hasfindinbegin = true
                 findinbeginindex = index
@@ -123,6 +132,7 @@ class DyCalculeSerializeCore {
             if (hasfindinbegin) {
                 if (model.flow <= 0.0) {
                     FlowAccumulation += model.flow * 0.005
+                    LogUtils.e(tag + FlowAccumulation)
                     if (FlowAccumulation < -150) {
                         ObserveBreathModel!!.BreathOut_End_index = findinbeginindex - 1
                         FlowAccumulation = 0.0
@@ -155,7 +165,10 @@ class DyCalculeSerializeCore {
         val dyBreathInOutData = CPXBreathInOutData()
 //        val cpxBreathInOutDataBase = CPXBreathInOutDataBase()
 
-        cpxBreathInOutDataBase.EndRealIndex = dylist[model.BreathOut_End_index].index
+        val dy = dylist[0]
+//        val dy = dylist[model.BreathOut_End_index]
+
+        cpxBreathInOutDataBase.EndRealIndex = dy.index
         cpxBreathInOutDataBase.Tin =
             (dylist[breathInEndIndex].index - dylist[breathInStartIndex].index).toDouble() * 0.005
         var num1 = 0.0
@@ -175,7 +188,8 @@ class DyCalculeSerializeCore {
         cpxBreathInOutDataBase.TempiCO2 = num3
 
         cpxBreathInOutDataBase.Tex =
-            (dylist[breathOutEndIndex].index - dylist[breathOutStartIndex].index).toDouble() * 0.005
+            (dylist[0].index - dylist[0].index).toDouble() * 0.005
+//            (dylist[breathOutEndIndex].index - dylist[breathOutStartIndex].index).toDouble() * 0.005
         var num9 = 0.0
         var num10 = 0.0
         var num11 = 0.0
@@ -200,11 +214,13 @@ class DyCalculeSerializeCore {
         cpxBreathInOutDataBase.T = TestDataCashe.T
         cpxBreathInOutDataBase.H = TestDataCashe.H
         cpxBreathInOutDataBase.P = TestDataCashe.P
+
+        LogUtils.e(tag + cpxBreathInOutDataBase)
         return dyBreathInOutData
     }
 }
 
-
+//个是呼吸时候辅助计算的，主要用来记录呼跟吸开始结束的位置
 class FullBreathInOutModel {
     var BreathIn_start_index: Int = 0
     var BreathIn_End_index: Int = 0
@@ -213,7 +229,8 @@ class FullBreathInOutModel {
 }
 
 
-enum class BreathState{//呼吸状态
-    breathOut,breathIn,None
+enum class BreathState {
+    //呼吸状态
+    breathOut, breathIn, None
 
 }
