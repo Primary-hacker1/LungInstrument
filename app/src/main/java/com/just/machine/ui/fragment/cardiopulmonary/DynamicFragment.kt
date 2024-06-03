@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.common.base.CommonBaseFragment
+import com.common.base.onUI
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
 import com.just.machine.model.Constants
@@ -77,7 +78,6 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
 //                --------------------假设收到数据开始解析-----------------------
 
-
 //                val lungData =
 //                    MudbusProtocol.parseLungTestData(data) ?: return@setNoRepeatListener //原始数据
 
@@ -93,8 +93,6 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
                 core.setBegin()//假设呼气
 
                 val serializeData = core.enqueDyDataModel(cpxSerializeData)//计算一口气参数
-
-                LogUtils.e(tag + serializeData.toString())
 
                 val cpxBreathInOutData = CPXCalcule.calDyBreathInOutData(
                     serializeData, core.cpxBreathInOutDataBase

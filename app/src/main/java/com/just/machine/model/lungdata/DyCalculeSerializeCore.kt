@@ -132,7 +132,6 @@ class DyCalculeSerializeCore {
             if (hasfindinbegin) {
                 if (model.flow <= 0.0) {
                     FlowAccumulation += model.flow * 0.005
-                    LogUtils.e(tag + FlowAccumulation)
                     if (FlowAccumulation < -150) {
                         ObserveBreathModel!!.BreathOut_End_index = findinbeginindex - 1
                         FlowAccumulation = 0.0

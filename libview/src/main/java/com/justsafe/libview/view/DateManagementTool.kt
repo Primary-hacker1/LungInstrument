@@ -11,9 +11,17 @@ object DateManagementTool {
 
     // 获取当前日期和时间
     @RequiresApi(Build.VERSION_CODES.O)
-    fun getCurrentDateTime(): String {
+    fun getCurrentDateTimes(): String {
         val currentDateTime = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        return currentDateTime.format(formatter)
+    }
+
+    // 获取当前日期和时间
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getCurrentDateTime(): String {
+        val currentDateTime = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
         return currentDateTime.format(formatter)
     }
 
