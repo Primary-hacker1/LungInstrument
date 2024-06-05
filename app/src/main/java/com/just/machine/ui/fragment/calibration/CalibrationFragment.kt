@@ -55,7 +55,7 @@ class CalibrationFragment : CommonBaseFragment<FragmentCalibrationBinding>() {
     }
 
     private fun onButtonClick(button: AppCompatButton, position: Int) {
-        binding.vpCalibration.currentItem = position// 切换ViewPager页面
+        binding.vpCalibration.setCurrentItem(position,true)// 切换ViewPager页面，如果设置成true会出现直接点击一键定标，但是显示的是定标结果Fragment
         resetButtonColors()// 切换按钮颜色
         button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.cF5FCFF))
     }

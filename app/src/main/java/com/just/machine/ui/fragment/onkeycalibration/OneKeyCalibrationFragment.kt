@@ -25,13 +25,13 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
     }
 
     override fun initView() {
-        mCountDownTime = object : FixCountDownTime(60, 1000) {}
+        mCountDownTime = object : FixCountDownTime(30, 1000) {}
         val adapter = FragmentChildAdapter(this)
 
+        adapter.addFragment(OneKeyIngredientFragment())
+        adapter.addFragment(OneKeyFlowFragment())
         adapter.addFragment(OneKeyGuideFragment())
         adapter.addFragment(OneKeyEnvironmentFragment())
-        adapter.addFragment(OneKeyFlowFragment())
-        adapter.addFragment(OneKeyIngredientFragment())
 
         binding.vpOnekey.setCurrentItem(0, true)
 
@@ -45,16 +45,13 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
             mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack {
                 override fun onStart() {
                     disEnableStartBtn()
+                    binding.vpOnekey.setCurrentItem(1, true)
                 }
 
                 override fun onTick(times: Int) {
                     Log.d("oneky", "倒计时======$times")
                     when (times) {
-                        55 -> {
-                            binding.vpOnekey.setCurrentItem(1, true)
-                        }
-
-                        45 -> {
+                        20 -> {
                             binding.vpOnekey.setCurrentItem(2, true)
                             binding.tvOnekeyCalibrationEnvironment.setTextColor(
                                 ContextCompat.getColor(
@@ -65,7 +62,7 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
                             binding.ivOnekeyCalibrationEnvironment.setImageResource(R.drawable.environment_highlight)
                         }
 
-                        20 -> {
+                        10 -> {
                             binding.vpOnekey.setCurrentItem(3, true)
                             binding.tvOnekeyCalibrationLineOne.setBackgroundColor(
                                 ContextCompat.getColor(
