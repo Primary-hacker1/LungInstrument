@@ -39,7 +39,7 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
 
     var title1 = ""
     var title2 = ""
-    var titleCentent = "居中标题"
+    var titleCentent = ""
 
     // 记录原始的 X 轴最大值
     private var originalXAxisMaximum: Float = 30f
@@ -323,6 +323,79 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
         return list
     }
 
+    /**
+     * 设置折线图的数据。
+     * @param dataSetColors 折线颜色
+     * @param valueTextColor 折线点颜色
+     */
+    fun flowAutoDataSetList(
+        valueTextColor: Int? = R.color.Indigo_colorPrimary,
+        dataSetColors: List<Int>? = listOf(
+            R.color.blue,
+            R.color.wheel_title_bar_ok_color,
+        ),
+    ): MutableList<LineDataSet> {
+
+        val dataSetEntriesMap = mutableMapOf<String, MutableList<Entry>>()
+
+        val entries1 = mutableListOf<Entry>()
+        val entries2 = mutableListOf<Entry>()
+
+        // 模拟十个数据点
+        for (i in 0 until 3) {
+            // 在 x 轴上以递增的方式设置数据点的 x 值，y 值可以根据需要设置
+            val entry1 = Entry(i.toFloat(), i.toFloat() * 2)
+            entries1.add(entry1)
+
+        }
+
+        // 模拟二十个数据点
+        for (i in 0 until 3) {
+            // 在 x 轴上以递增的方式设置数据点的 x 值，y 值可以根据需要设置
+            val entry2 = Entry(i.toFloat(), i.toFloat() / 1)
+            entries2.add(entry2)
+        }
+
+        dataSetEntriesMap["1"] = entries1
+        dataSetEntriesMap["2"] = entries2
+
+        // 创建多个 LineDataSet 对象
+        val dataSet1 = LineDataSet(dataSetEntriesMap["1"], "1")
+        val dataSet2 = LineDataSet(dataSetEntriesMap["2"], "2")
+
+        // 将 LineDataSet 对象添加到一个列表中
+        val list = mutableListOf(dataSet1, dataSet2)
+
+        for ((index, dataSet) in list.withIndex()) {
+
+            // 确保颜色列表不为空，且颜色足够多以覆盖所有的 LineDataSet
+            val color = dataSetColors?.get(index) ?: R.color.colorPrimary
+
+            dataSet.color = ContextCompat.getColor(context, color)
+
+            dataSet.setCircleColor(Color.BLUE)
+
+            dataSet.lineWidth = 2f
+
+            dataSet.circleRadius = 2f
+
+            dataSet.valueTextSize = 10f
+
+            if (valueTextColor != null) {
+                dataSet.setCircleColor(valueTextColor)
+            }
+            dataSet.setDrawValues(false)
+
+            dataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
+        }
+
+        // 4. 创建自定义渲染器的实例，并将其应用到 LineChart 中
+        val customRenderer = CustomLineChartRenderer(this, animator, viewPortHandler)
+        renderer = customRenderer
+
+        return list
+    }
+
     @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -369,7 +442,7 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
 
         override fun getFormattedValue(value: Float): String {
             // 你可以根据 value 返回任何格式的字符串
-            return "$value"
+            return String.format("%.1f", value)
         }
     }
 
