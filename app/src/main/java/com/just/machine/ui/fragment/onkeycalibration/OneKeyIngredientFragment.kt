@@ -112,32 +112,42 @@ class OneKeyIngredientFragment : CommonBaseFragment<FragmentOnekeyIngredientBind
             }
             axisLeft?.apply {
                 textColor = ContextCompat.getColor(requireContext(), R.color.colorTextOrange)
+                textSize = 8f
+                isGranularityEnabled = true
                 //左侧Y轴的最大值和最小值
                 axisMaximum = 30f
                 axisMinimum = 0f
-                setLabelCount(21, true)
-                //绘制网格线(样式虚线)
-                enableGridDashedLine(1.5f, 2f, 0f)
+                granularity = 1.5f
+                setLabelCount(((axisMaximum - axisMinimum) / granularity + 1).toInt(), true)
                 gridColor = ContextCompat.getColor(requireContext(), R.color.text3)
                 setDrawGridLines(false)
                 setDrawAxisLine(false) //绘制左边Y轴是否显示
                 setDrawZeroLine(false) //是否开启0线
-                isGranularityEnabled = true
+                valueFormatter = object : ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        return String.format("%.1f", value)
+                    }
+                }
             }
 
             axisRight?.apply {
                 textColor = ContextCompat.getColor(requireContext(), R.color.green)
+                textSize = 8f
+                isGranularityEnabled = true
                 //左侧Y轴的最大值和最小值
                 axisMaximum = 30f
                 axisMinimum = 0f
-                setLabelCount(21, true)
-                //绘制网格线(样式虚线)
-                enableGridDashedLine(1.5f, 2f, 0f)
+                granularity = 1.5f
+                setLabelCount(((axisMaximum - axisMinimum) / granularity + 1).toInt(), true)
                 gridColor = ContextCompat.getColor(requireContext(), R.color.text3)
                 setDrawGridLines(false)
                 setDrawAxisLine(false) //绘制左边Y轴是否显示
                 setDrawZeroLine(false) //是否开启0线
-                isGranularityEnabled = true
+                valueFormatter = object : ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        return String.format("%.1f", value)
+                    }
+                }
             }
 
             legend?.apply {
