@@ -384,6 +384,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="O2浓度"
+                            android:textColor="@color/colorTextOrange"
                             android:textSize="9sp" />
 
                         <TextView
@@ -391,6 +392,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
                             android:text="[%]"
+                            android:textColor="@color/colorTextOrange"
                             android:textSize="9sp" />
 
                     </LinearLayout>
@@ -414,12 +416,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="CO2浓度"
+                            android:textColor="@color/green"
                             android:textSize="9sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="[%]"
+                            android:textColor="@color/green"
                             android:textSize="9sp" />
 
                     </LinearLayout>

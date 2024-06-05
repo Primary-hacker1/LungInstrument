@@ -25,7 +25,7 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
     }
 
     override fun initView() {
-        mCountDownTime = object : FixCountDownTime(30, 1000) {}
+        mCountDownTime = object : FixCountDownTime(95, 1000) {}
         val adapter = FragmentChildAdapter(this)
 
         adapter.addFragment(OneKeyGuideFragment())
@@ -51,7 +51,7 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
                 override fun onTick(times: Int) {
                     Log.d("oneky", "倒计时======$times")
                     when (times) {
-                        20 -> {
+                        85 -> {
                             binding.vpOnekey.setCurrentItem(2, true)
                             binding.tvOnekeyCalibrationEnvironment.setTextColor(
                                 ContextCompat.getColor(
@@ -62,7 +62,7 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
                             binding.ivOnekeyCalibrationEnvironment.setImageResource(R.drawable.environment_highlight)
                         }
 
-                        10 -> {
+                        50 -> {
                             binding.vpOnekey.setCurrentItem(3, true)
                             binding.tvOnekeyCalibrationLineOne.setBackgroundColor(
                                 ContextCompat.getColor(
