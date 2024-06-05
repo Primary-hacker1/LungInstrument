@@ -28,10 +28,10 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
         mCountDownTime = object : FixCountDownTime(30, 1000) {}
         val adapter = FragmentChildAdapter(this)
 
-        adapter.addFragment(OneKeyIngredientFragment())
-        adapter.addFragment(OneKeyFlowFragment())
         adapter.addFragment(OneKeyGuideFragment())
         adapter.addFragment(OneKeyEnvironmentFragment())
+        adapter.addFragment(OneKeyFlowFragment())
+        adapter.addFragment(OneKeyIngredientFragment())
 
         binding.vpOnekey.setCurrentItem(0, true)
 
