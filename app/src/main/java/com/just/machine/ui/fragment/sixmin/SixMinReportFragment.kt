@@ -220,6 +220,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                         if (prescriptionOptions == "0") {
                             templateName = "templates/报告模板-无截图-无处方.docx"
                         }
+
                         val bloodPng = File(
                             mActivity.getExternalFilesDir("")?.absolutePath,
                             pngSavePath + File.separator + "imageBlood.png"

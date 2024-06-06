@@ -28,12 +28,12 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="MissingConstraints">
 
-                <View
-                    android:layout_width="2dp"
-                    android:layout_height="10dp"
-                    android:background="#2f89de">
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/onekey">
 
-                </View>
+                </ImageView>
 
                 <TextView
                     android:layout_width="wrap_content"

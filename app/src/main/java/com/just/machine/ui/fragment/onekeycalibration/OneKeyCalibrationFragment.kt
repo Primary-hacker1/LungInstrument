@@ -1,4 +1,4 @@
-package com.just.machine.ui.fragment.onkeycalibration
+package com.just.machine.ui.fragment.onekeycalibration
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -38,8 +38,6 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
         binding.vpOnekey.adapter = adapter
 
         binding.vpOnekey.isUserInputEnabled = false
-
-        binding.vpOnekey.offscreenPageLimit = 1
     }
 
     override fun initListener() {

@@ -1,39 +1,59 @@
-package com.just.machine.ui.fragment.onkeycalibration
+package com.just.machine.ui.fragment.onekeycalibration
 
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.just.machine.dao.calibration.IngredientBean
+import com.just.machine.ui.adapter.calibration.IngredientAdapter
 import com.just.machine.util.FixCountDownTime
 import com.just.news.R
-import com.just.news.databinding.FragmentOnekeyFlowBinding
+import com.just.news.databinding.FragmentOnekeyIngredientBinding
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Random
 
 /**
- * 一键定标-流量
+ * 一键定标-成分
  */
 @AndroidEntryPoint
-class OneKeyFlowFragment : CommonBaseFragment<FragmentOnekeyFlowBinding>() {
+class OneKeyIngredientFragment : CommonBaseFragment<FragmentOnekeyIngredientBinding>() {
 
     private lateinit var mCountDownTime: FixCountDownTime
     private lateinit var tempDataSet: LineDataSet
     private lateinit var actualDataSet: LineDataSet
+
+    private val o2Adapter by lazy {
+        IngredientAdapter(requireContext())
+    }
+
+    private val co2Adapter by lazy {
+        IngredientAdapter(requireContext())
+    }
 
     override fun loadData() {
 
     }
 
     override fun initView() {
-        mCountDownTime = object : FixCountDownTime(35, 1000) {}
+        binding.rvIngredientO2.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvIngredientCo2.layoutManager = LinearLayoutManager(requireContext())
+
+        binding.rvIngredientO2.adapter = o2Adapter
+        binding.rvIngredientCo2.adapter = co2Adapter
+
+        mCountDownTime = object : FixCountDownTime(50, 1000) {}
         initLineChart()
+
+        o2Adapter.setItemsBean(mutableListOf(IngredientBean(0,"",0,"3.00","1.2","0.5","0.8","3.3","5.5","1.0")))
+        co2Adapter.setItemsBean(mutableListOf(IngredientBean(0,"",0,"3.00","1.2","0.5","0.8","3.3","5.5","1.0")))
     }
 
     override fun initListener() {
@@ -41,12 +61,11 @@ class OneKeyFlowFragment : CommonBaseFragment<FragmentOnekeyFlowBinding>() {
     }
 
     override fun getViewBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ) = FragmentOnekeyFlowBinding.inflate(inflater, container, false)
+        inflater: LayoutInflater, container: ViewGroup?
+    ) = FragmentOnekeyIngredientBinding.inflate(inflater, container, false)
 
     private fun initLineChart() {
-        binding.chartFlowOnekey.apply {
+        binding.chartIngredientOnekey.apply {
             dragDecelerationFrictionCoef = 0.9f
             isDragEnabled = false
             //开启缩放功能
@@ -60,19 +79,20 @@ class OneKeyFlowFragment : CommonBaseFragment<FragmentOnekeyFlowBinding>() {
             setNoDataText("")
             setTouchEnabled(false)
             isDragEnabled = false
+            axisRight.isEnabled = true
             description.textSize = 9f
             description?.apply {
                 text = ""
             }
             xAxis?.apply {
                 textSize = 10f
-                textColor = ContextCompat.getColor(activity!!, R.color.text3)
+                textColor = ContextCompat.getColor(requireContext(), R.color.text3)
                 //X轴最大值和最小值
-                axisMaximum = 34.5F
+                axisMaximum = 50F
                 axisMinimum = 0F
                 offsetLeftAndRight(10)
                 //X轴每个值的差值(缩放时可以体现出来)
-                granularity = 1.5f
+                granularity = 2f
                 //X轴的位置
                 position = XAxis.XAxisPosition.BOTTOM
                 //是否绘制X轴的网格线(垂直于X轴)
@@ -88,23 +108,48 @@ class OneKeyFlowFragment : CommonBaseFragment<FragmentOnekeyFlowBinding>() {
                 //X轴每个刻度对应的值(展示的值和设置的值不同)
                 valueFormatter = object : ValueFormatter() {
                     override fun getFormattedValue(value: Float): String {
-                        return String.format("%.1f", value)
+                        return String.format("%.0f", value)
                     }
                 }
             }
             axisLeft?.apply {
-                textColor = ContextCompat.getColor(requireContext(), R.color.text3)
+                textColor = ContextCompat.getColor(requireContext(), R.color.colorTextOrange)
+                textSize = 8f
+                isGranularityEnabled = true
                 //左侧Y轴的最大值和最小值
-                axisMaximum = 3.8f
+                axisMaximum = 30f
                 axisMinimum = 0f
-                setLabelCount(20, true)
-                //绘制网格线(样式虚线)
-                enableGridDashedLine(0.2f, 2f, 0f)
+                granularity = 1.5f
+                setLabelCount(((axisMaximum - axisMinimum) / granularity + 1).toInt(), true)
                 gridColor = ContextCompat.getColor(requireContext(), R.color.text3)
                 setDrawGridLines(false)
                 setDrawAxisLine(false) //绘制左边Y轴是否显示
                 setDrawZeroLine(false) //是否开启0线
+                valueFormatter = object : ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        return String.format("%.1f", value)
+                    }
+                }
+            }
+
+            axisRight?.apply {
+                textColor = ContextCompat.getColor(requireContext(), R.color.green)
+                textSize = 8f
                 isGranularityEnabled = true
+                //左侧Y轴的最大值和最小值
+                axisMaximum = 30f
+                axisMinimum = 0f
+                granularity = 1.5f
+                setLabelCount(((axisMaximum - axisMinimum) / granularity + 1).toInt(), true)
+                gridColor = ContextCompat.getColor(requireContext(), R.color.text3)
+                setDrawGridLines(false)
+                setDrawAxisLine(false) //绘制左边Y轴是否显示
+                setDrawZeroLine(false) //是否开启0线
+                valueFormatter = object : ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        return String.format("%.1f", value)
+                    }
+                }
             }
 
             legend?.apply {
@@ -114,7 +159,7 @@ class OneKeyFlowFragment : CommonBaseFragment<FragmentOnekeyFlowBinding>() {
 
             tempDataSet = LineDataSet(null, "")
             tempDataSet.lineWidth = 1.0f
-            tempDataSet.color = ContextCompat.getColor(requireContext(), R.color.blue)
+            tempDataSet.color = ContextCompat.getColor(requireContext(), R.color.green)
             tempDataSet.setDrawValues(false)
             tempDataSet.setDrawCircles(false)
             tempDataSet.setDrawCircleHole(false)
@@ -123,7 +168,7 @@ class OneKeyFlowFragment : CommonBaseFragment<FragmentOnekeyFlowBinding>() {
 
             actualDataSet = LineDataSet(null, "")
             actualDataSet.lineWidth = 1.0f
-            actualDataSet.color = ContextCompat.getColor(requireContext(), R.color.wheel_title_bar_ok_color)
+            actualDataSet.color = ContextCompat.getColor(requireContext(), R.color.colorTextOrange)
             actualDataSet.setDrawValues(false)
             actualDataSet.setDrawCircles(false)
             actualDataSet.setDrawCircleHole(false)
@@ -145,16 +190,15 @@ class OneKeyFlowFragment : CommonBaseFragment<FragmentOnekeyFlowBinding>() {
             }
 
             override fun onTick(times: Int) {
-                binding.tvFlowOnekeyTemp.text = (Random().nextInt(3)+1).toFloat().toString()
-                binding.tvFlowOnekeyActual.text = (Random().nextInt(3)+1).toFloat().toString()
+                binding.tvOnekeyActualO2.text = "O2(%): ${Random().nextInt(30).toFloat()}"
+                binding.tvOnekeyActualCo2.text = "CO2(%): ${Random().nextInt(30).toFloat()}"
+                val index = 50 - times
+                tempDataSet.addEntry(Entry(index.toFloat(),Random().nextInt(30).toFloat()))
+                actualDataSet.addEntry(Entry(index.toFloat(),Random().nextInt(30).toFloat()))
 
-                val index = 35 - times
-                tempDataSet.addEntry(Entry(index.toFloat(),(Random().nextInt(3)+1).toFloat()))
-                actualDataSet.addEntry(Entry(index.toFloat(),(Random().nextInt(3)+1).toFloat()))
-
-                binding.chartFlowOnekey.lineData.notifyDataChanged()
-                binding.chartFlowOnekey.notifyDataSetChanged()
-                binding.chartFlowOnekey.invalidate()
+                binding.chartIngredientOnekey.lineData.notifyDataChanged()
+                binding.chartIngredientOnekey.notifyDataSetChanged()
+                binding.chartIngredientOnekey.invalidate()
             }
 
             override fun onFinish() {

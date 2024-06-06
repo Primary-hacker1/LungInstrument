@@ -36,25 +36,7 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
     }
 
     override fun loadData() {
-        mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack{
-            override fun onStart() {
 
-            }
-
-            override fun onTick(times: Int) {
-                val index = 35 - times
-                tempDataSet.addEntry(Entry(index.toFloat(),(Random().nextInt(3)+1).toFloat()))
-                actualDataSet.addEntry(Entry(index.toFloat(),(Random().nextInt(3)+1).toFloat()))
-
-                binding.chartFlowAuto.lineData.notifyDataChanged()
-                binding.chartFlowAuto.notifyDataSetChanged()
-                binding.chartFlowAuto.invalidate()
-            }
-
-            override fun onFinish() {
-
-            }
-        })
     }
 
     override fun initView() {
@@ -175,4 +157,28 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
         }
     }
 
+    override fun onResume() {
+        mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack{
+            override fun onStart() {
+
+            }
+
+            override fun onTick(times: Int) {
+                binding.tvFlowAutoTemp.text = (Random().nextInt(3)+1).toFloat().toString()
+                binding.tvFlowAutoActual.text = (Random().nextInt(3)+1).toFloat().toString()
+                val index = 35 - times
+                tempDataSet.addEntry(Entry(index.toFloat(),(Random().nextInt(3)+1).toFloat()))
+                actualDataSet.addEntry(Entry(index.toFloat(),(Random().nextInt(3)+1).toFloat()))
+
+                binding.chartFlowAuto.lineData.notifyDataChanged()
+                binding.chartFlowAuto.notifyDataSetChanged()
+                binding.chartFlowAuto.invalidate()
+            }
+
+            override fun onFinish() {
+
+            }
+        })
+        super.onResume()
+    }
 }

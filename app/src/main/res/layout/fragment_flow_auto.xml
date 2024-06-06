@@ -48,6 +48,7 @@
                             android:id="@+id/tv_flow_auto_temp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
                             android:textColor="@color/text3"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -84,10 +85,10 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="25dp"
-                    android:paddingStart="5dp"
                     android:background="@color/cf4f5fa"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingStart="5dp">
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="0dp"
