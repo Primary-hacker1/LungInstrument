@@ -221,7 +221,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                                     } else {
                                         "templates/报告模板-有截图-无处方.docx"
                                     }
-                                }else{
+                                } else {
                                     if (ecgOptions == "0") {
                                         "templates/报告模板-无截图-无心电波形.docx"
                                     } else {
@@ -245,7 +245,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                                     } else {
                                         "templates/报告模板-无截图-无处方.docx"
                                     }
-                                }else{
+                                } else {
                                     if (ecgOptions == "0") {
                                         "templates/报告模板-无截图-无心电波形.docx"
                                     } else {
@@ -303,7 +303,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                         dealPageOne(root)
                         dealPageTow(root, bloodPng, heartPng, hsHxlPng)
                         dealPageThree(root, imageEcg1, imageEcg2)
-                        Log.d("SixMinReportFragment","模版名称===$templateName")
+                        Log.d("SixMinReportFragment", "模版名称===$templateName")
 
                         lifecycleScope.launch(Dispatchers.IO) {
                             val generateWord = generateWord(
@@ -682,9 +682,19 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
     private fun dealPageThree(
         root: MutableMap<String, Any>, imageEcg1: File, imageEcg2: File, imageEcg3: File? = null
     ) {
+        root["imageEcg1Str"] = "最快心率心电图: 心率92 bmp，速度: 25mm/s，增益: 10mm/mv"
+        root["imageEcg1Time"] = "第4分22秒"
         root["imageEcg1"] = PictureRenderData(750, 200, imageEcg1.absolutePath)
+        root["imageEcg2Str"] = "最慢心率心电图: 心率61 bmp，速度: 25mm/s，增益: 10mm/mv"
+        root["imageEcg2Time"] = "第1分35秒"
         root["imageEcg2"] = PictureRenderData(750, 200, imageEcg2.absolutePath)
-        if (sixMinRecordsBean.heartEcgBean[0].jietuOr == "1" && imageEcg3 != null) {
+        val imageEcg3 = File(
+            mActivity.getExternalFilesDir("")?.absolutePath,
+            pngSavePath + File.separator + "imageEcg3.png"
+        )
+        if (sixMinRecordsBean.heartEcgBean[0].jietuOr == "1" && imageEcg3.exists()) {
+            root["imageEcg3Str"] = "截取心率心电图: 心率75 bmp，速度: 25mm/s，增益: 10mm/mv"
+            root["imageEcg3Time"] = "第3分33秒"
             root["imageEcg3"] = PictureRenderData(750, 200, imageEcg3.absolutePath)
         }
     }
