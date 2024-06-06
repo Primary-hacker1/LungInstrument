@@ -144,19 +144,20 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                     // 设置动画样式
                     setAnimStyle(android.R.style.Animation_Translucent)
                 }
+                easyWindow?.setWidth(CommonUtil.dip2px(mActivity,420))
+                easyWindow?.setHeight(CommonUtil.dip2px(mActivity,180))
                 vo2PerHr =
-                    easyWindow?.findViewById<TextView>(R.id.sixmin_tv_floating_cardiopulmonary_vo2_per_hr) as TextView
+                    easyWindow?.findViewById(R.id.sixmin_tv_floating_cardiopulmonary_vo2_per_hr) as TextView
                 vo2 =
-                    easyWindow?.findViewById<TextView>(R.id.sixmin_tv_floating_cardiopulmonary_vo2) as TextView
+                    easyWindow?.findViewById(R.id.sixmin_tv_floating_cardiopulmonary_vo2) as TextView
                 rer =
-                    easyWindow?.findViewById<TextView>(R.id.sixmin_tv_floating_cardiopulmonary_rer) as TextView
+                    easyWindow?.findViewById(R.id.sixmin_tv_floating_cardiopulmonary_rer) as TextView
                 vo2PerKg =
-                    easyWindow?.findViewById<TextView>(R.id.sixmin_tv_floating_cardiopulmonary_vo2_per_kg) as TextView
+                    easyWindow?.findViewById(R.id.sixmin_tv_floating_cardiopulmonary_vo2_per_kg) as TextView
                 vco2 =
-                    easyWindow?.findViewById<TextView>(R.id.sixmin_tv_floating_cardiopulmonary_vco2) as TextView
+                    easyWindow?.findViewById(R.id.sixmin_tv_floating_cardiopulmonary_vco2) as TextView
                 bf =
-                    easyWindow?.findViewById<TextView>(R.id.sixmin_tv_floating_cardiopulmonary_bf) as TextView
-                vo2PerKg.text = "1.75"
+                    easyWindow?.findViewById(R.id.sixmin_tv_floating_cardiopulmonary_bf) as TextView
             }
             easyWindow?.show()
         }else{

@@ -4,12 +4,15 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.just.machine.dao.calibration.FlowBean
+import com.just.machine.ui.adapter.calibration.FlowAdapter
 import com.just.machine.util.FixCountDownTime
 import com.just.news.R
 import com.just.news.databinding.FragmentFlowAutoBinding
@@ -27,6 +30,10 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
     private lateinit var mCountDownTime: FixCountDownTime
     private lateinit var tempDataSet: LineDataSet
     private lateinit var actualDataSet: LineDataSet
+
+    private val flowAdapter by lazy {
+        FlowAdapter(requireContext())
+    }
 
     override fun loadData() {
         mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack{
@@ -51,11 +58,22 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
     }
 
     override fun initView() {
+        binding.rvFlowAuto.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvFlowAuto.adapter = flowAdapter
+
         mCountDownTime = object : FixCountDownTime(35, 1000) {}
         initLineChart()
     }
 
     override fun initListener() {
+        flowAdapter.setItemClickListener { item, position ->
+            flowAdapter.toggleItemBackground(position)
+        }
+
+        flowAdapter.setItemsBean(
+            mutableListOf
+                (FlowBean(0, "", 1, "容积1", "3", "3.003","%1","通过"))
+        )
 
     }
 

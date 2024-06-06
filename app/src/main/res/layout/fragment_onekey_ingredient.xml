@@ -51,14 +51,15 @@
                             android:textColor="@color/blue" />
 
                         <TextView
-                            android:layout_width="65dp"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="2dp"
+                            android:layout_weight="1"
                             android:background="@drawable/blue_stroke"
                             android:gravity="end"
                             android:paddingVertical="2dp"
                             android:paddingEnd="2dp"
-                            android:text="20.83"
+                            android:text="0.00"
                             android:textColor="@color/text3" />
 
                         <TextView
@@ -69,9 +70,11 @@
                             android:textColor="@color/blue" />
 
                         <TextView
-                            android:layout_width="65dp"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="2dp"
+                            android:layout_marginEnd="40dp"
+                            android:layout_weight="1"
                             android:background="@drawable/blue_stroke"
                             android:gravity="end"
                             android:paddingVertical="2dp"
@@ -103,14 +106,15 @@
                             android:textColor="@color/blue" />
 
                         <TextView
-                            android:layout_width="65dp"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="2dp"
+                            android:layout_weight="1"
                             android:background="@drawable/blue_stroke"
                             android:gravity="end"
                             android:paddingVertical="2dp"
                             android:paddingEnd="2dp"
-                            android:text="15.01"
+                            android:text="0.00"
                             android:textColor="@color/text3" />
 
                         <TextView
@@ -121,14 +125,16 @@
                             android:textColor="@color/blue" />
 
                         <TextView
-                            android:layout_width="65dp"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="2dp"
+                            android:layout_marginEnd="40dp"
+                            android:layout_weight="1"
                             android:background="@drawable/blue_stroke"
                             android:gravity="end"
                             android:paddingVertical="2dp"
                             android:paddingEnd="2dp"
-                            android:text="6.02"
+                            android:text="0.00"
                             android:textColor="@color/text3" />
 
                     </LinearLayout>
@@ -150,9 +156,10 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:id="@+id/tv_onekey_actual_o2"
+                            android:layout_width="100dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="50dp"
+                            android:layout_marginStart="40dp"
                             android:layout_weight="1"
                             android:text="O2(%): --"
                             android:textColor="@color/green"
@@ -160,10 +167,11 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/tv_onekey_actual_co2"
+                            android:layout_width="100dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:layout_marginEnd="40dp"
+                            android:layout_marginEnd="30dp"
                             android:text="CO2(%): --"
                             android:textColor="@color/blue"
                             android:textSize="16sp"
@@ -181,10 +189,9 @@
                     android:orientation="horizontal">
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
+                        android:layout_width="88dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_19"
-                        android:layout_weight="1"
+                        android:paddingStart="@dimen/space_5"
                         android:text="浓度指标"
                         android:textColor="@color/text3"
                         android:textSize="11sp" />
@@ -192,7 +199,6 @@
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="5dp"
                         android:layout_weight="1"
                         android:maxLines="1"
                         android:text="定标值"
@@ -202,7 +208,6 @@
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="5dp"
                         android:layout_weight="1"
                         android:maxLines="1"
                         android:text="实际值"
@@ -212,8 +217,7 @@
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="5dp"
-                        android:layout_weight="0.5"
+                        android:layout_weight="1"
                         android:maxLines="1"
                         android:text="误差"
                         android:textColor="@color/text3"
@@ -222,8 +226,7 @@
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="5dp"
-                        android:layout_weight="0.8"
+                        android:layout_weight="1"
                         android:maxLines="1"
                         android:text="标定结果"
                         android:textColor="@color/text3"
@@ -232,8 +235,7 @@
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="5dp"
-                        android:layout_weight="0.8"
+                        android:layout_weight="1"
                         android:maxLines="1"
                         android:text="T90(ms)"
                         android:textColor="@color/text3"
@@ -242,8 +244,7 @@
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="5dp"
-                        android:layout_weight="0.8"
+                        android:layout_weight="1"
                         android:maxLines="1"
                         android:text="Offset"
                         android:textColor="@color/text3"
@@ -251,7 +252,7 @@
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_ingredient_one"
+                    android:id="@+id/rv_ingredient_o2"
                     android:layout_width="match_parent"
                     android:layout_height="80dp" />
 
@@ -263,10 +264,9 @@
                     android:orientation="horizontal">
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
+                        android:layout_width="88dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_19"
-                        android:layout_weight="1"
+                        android:paddingStart="@dimen/space_5"
                         android:text="浓度指标"
                         android:textColor="@color/text3"
                         android:textSize="11sp" />
@@ -274,7 +274,6 @@
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="5dp"
                         android:layout_weight="1"
                         android:maxLines="1"
                         android:text="定标值"
@@ -284,7 +283,6 @@
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="5dp"
                         android:layout_weight="1"
                         android:maxLines="1"
                         android:text="实际值"
@@ -294,8 +292,7 @@
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="5dp"
-                        android:layout_weight="0.5"
+                        android:layout_weight="1"
                         android:maxLines="1"
                         android:text="误差"
                         android:textColor="@color/text3"
@@ -304,8 +301,7 @@
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="5dp"
-                        android:layout_weight="0.8"
+                        android:layout_weight="1"
                         android:maxLines="1"
                         android:text="标定结果"
                         android:textColor="@color/text3"
@@ -314,8 +310,7 @@
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="5dp"
-                        android:layout_weight="0.8"
+                        android:layout_weight="1"
                         android:maxLines="1"
                         android:text="T90(ms)"
                         android:textColor="@color/text3"
@@ -324,8 +319,7 @@
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="5dp"
-                        android:layout_weight="0.8"
+                        android:layout_weight="1"
                         android:maxLines="1"
                         android:text="Offset"
                         android:textColor="@color/text3"
@@ -333,7 +327,7 @@
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_ingredient_two"
+                    android:id="@+id/rv_ingredient_co2"
                     android:layout_width="match_parent"
                     android:layout_height="80dp" />
 
@@ -343,7 +337,7 @@
                 android:id="@+id/tv_flow_onekey_result"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/space_8"
                 android:layout_weight="1"
                 android:background="@drawable/calibration_bg"
                 android:gravity="center"

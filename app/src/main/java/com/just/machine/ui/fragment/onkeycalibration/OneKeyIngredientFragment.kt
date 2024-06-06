@@ -4,12 +4,15 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.just.machine.dao.calibration.IngredientBean
+import com.just.machine.ui.adapter.calibration.IngredientAdapter
 import com.just.machine.util.FixCountDownTime
 import com.just.news.R
 import com.just.news.databinding.FragmentOnekeyIngredientBinding
@@ -27,31 +30,30 @@ class OneKeyIngredientFragment : CommonBaseFragment<FragmentOnekeyIngredientBind
     private lateinit var tempDataSet: LineDataSet
     private lateinit var actualDataSet: LineDataSet
 
+    private val o2Adapter by lazy {
+        IngredientAdapter(requireContext())
+    }
+
+    private val co2Adapter by lazy {
+        IngredientAdapter(requireContext())
+    }
+
     override fun loadData() {
-        mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack{
-            override fun onStart() {
 
-            }
-
-            override fun onTick(times: Int) {
-                val index = 50 - times
-                tempDataSet.addEntry(Entry(index.toFloat(),(Random().nextInt(30)).toFloat()))
-                actualDataSet.addEntry(Entry(index.toFloat(),(Random().nextInt(30)).toFloat()))
-
-                binding.chartIngredientOnekey.lineData.notifyDataChanged()
-                binding.chartIngredientOnekey.notifyDataSetChanged()
-                binding.chartIngredientOnekey.invalidate()
-            }
-
-            override fun onFinish() {
-
-            }
-        })
     }
 
     override fun initView() {
+        binding.rvIngredientO2.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvIngredientCo2.layoutManager = LinearLayoutManager(requireContext())
+
+        binding.rvIngredientO2.adapter = o2Adapter
+        binding.rvIngredientCo2.adapter = co2Adapter
+
         mCountDownTime = object : FixCountDownTime(50, 1000) {}
         initLineChart()
+
+        o2Adapter.setItemsBean(mutableListOf(IngredientBean(0,"",0,"3.00","1.2","0.5","0.8","3.3","5.5","1.0")))
+        co2Adapter.setItemsBean(mutableListOf(IngredientBean(0,"",0,"3.00","1.2","0.5","0.8","3.3","5.5","1.0")))
     }
 
     override fun initListener() {
@@ -179,5 +181,30 @@ class OneKeyIngredientFragment : CommonBaseFragment<FragmentOnekeyIngredientBind
             val lineData = LineData(lineDataSets)
             data = lineData
         }
+    }
+
+    override fun onResume() {
+        mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack{
+            override fun onStart() {
+
+            }
+
+            override fun onTick(times: Int) {
+                binding.tvOnekeyActualO2.text = "O2(%): ${Random().nextInt(30).toFloat()}"
+                binding.tvOnekeyActualCo2.text = "CO2(%): ${Random().nextInt(30).toFloat()}"
+                val index = 50 - times
+                tempDataSet.addEntry(Entry(index.toFloat(),Random().nextInt(30).toFloat()))
+                actualDataSet.addEntry(Entry(index.toFloat(),Random().nextInt(30).toFloat()))
+
+                binding.chartIngredientOnekey.lineData.notifyDataChanged()
+                binding.chartIngredientOnekey.notifyDataSetChanged()
+                binding.chartIngredientOnekey.invalidate()
+            }
+
+            override fun onFinish() {
+
+            }
+        })
+        super.onResume()
     }
 }

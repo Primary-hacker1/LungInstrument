@@ -38,6 +38,8 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
         binding.vpOnekey.adapter = adapter
 
         binding.vpOnekey.isUserInputEnabled = false
+
+        binding.vpOnekey.offscreenPageLimit = 1
     }
 
     override fun initListener() {
@@ -51,7 +53,7 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
                 override fun onTick(times: Int) {
                     Log.d("oneky", "倒计时======$times")
                     when (times) {
-                        85 -> {
+                        90 -> {
                             binding.vpOnekey.setCurrentItem(2, true)
                             binding.tvOnekeyCalibrationEnvironment.setTextColor(
                                 ContextCompat.getColor(

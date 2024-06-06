@@ -903,6 +903,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                                                 Constants.sixMinPatientInfo,
                                                 bean.patientId.toString()
                                             )
+                                            bundle.putString(Constants.sixMinFaceMask,faceMaskStr)
                                             intent.putExtras(bundle)
                                             startActivity(intent)
                                         }
@@ -947,6 +948,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                                                         Constants.sixMinPatientInfo,
                                                         bean.patientId.toString()
                                                     )
+                                                    bundle.putString(Constants.sixMinFaceMask,faceMaskStr)
                                                     intent.putExtras(bundle)
                                                     startActivity(intent, bundle)
                                                 }

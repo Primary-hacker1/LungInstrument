@@ -28,25 +28,7 @@ class OneKeyFlowFragment : CommonBaseFragment<FragmentOnekeyFlowBinding>() {
     private lateinit var actualDataSet: LineDataSet
 
     override fun loadData() {
-        mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack{
-            override fun onStart() {
 
-            }
-
-            override fun onTick(times: Int) {
-                val index = 35 - times
-                tempDataSet.addEntry(Entry(index.toFloat(),(Random().nextInt(3)+1).toFloat()))
-                actualDataSet.addEntry(Entry(index.toFloat(),(Random().nextInt(3)+1).toFloat()))
-
-                binding.chartFlowOnekey.lineData.notifyDataChanged()
-                binding.chartFlowOnekey.notifyDataSetChanged()
-                binding.chartFlowOnekey.invalidate()
-            }
-
-            override fun onFinish() {
-
-            }
-        })
     }
 
     override fun initView() {
@@ -156,4 +138,29 @@ class OneKeyFlowFragment : CommonBaseFragment<FragmentOnekeyFlowBinding>() {
         }
     }
 
+    override fun onResume() {
+        mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack{
+            override fun onStart() {
+
+            }
+
+            override fun onTick(times: Int) {
+                binding.tvFlowOnekeyTemp.text = (Random().nextInt(3)+1).toFloat().toString()
+                binding.tvFlowOnekeyActual.text = (Random().nextInt(3)+1).toFloat().toString()
+
+                val index = 35 - times
+                tempDataSet.addEntry(Entry(index.toFloat(),(Random().nextInt(3)+1).toFloat()))
+                actualDataSet.addEntry(Entry(index.toFloat(),(Random().nextInt(3)+1).toFloat()))
+
+                binding.chartFlowOnekey.lineData.notifyDataChanged()
+                binding.chartFlowOnekey.notifyDataSetChanged()
+                binding.chartFlowOnekey.invalidate()
+            }
+
+            override fun onFinish() {
+
+            }
+        })
+        super.onResume()
+    }
 }
