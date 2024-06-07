@@ -1616,6 +1616,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
         mCountDownTime.cancel()
         mCountDownTimeThree.cancel()
         mStartTestCountDownTime.cancel()
+        EasyWindow.recycleAll()
         super.onDestroyView()
     }
 }
