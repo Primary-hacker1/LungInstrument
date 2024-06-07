@@ -16,13 +16,16 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class FileUtil {
 
@@ -247,6 +250,7 @@ public class FileUtil {
         try {
             fileOutputStream = new FileOutputStream(filePath);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+            save = true;
         } catch (Exception e) {
             e.printStackTrace();
             save = false;
@@ -255,12 +259,61 @@ public class FileUtil {
                 if (fileOutputStream != null) {
                     fileOutputStream.close();
                 }
-                save = true;
             } catch (IOException e) {
                 e.printStackTrace();
-                save = false;
             }
         }
         return save;
+    }
+
+    /**
+     * 写入心电数据
+     *
+     * @param map
+     * @param path
+     * @throws IOException
+     */
+    public static void writeEcg(Map<Long, byte[]> map, String path) {
+        //建立一个File对象
+        File file = new File(path);
+        FileOutputStream fos = null;
+        BufferedWriter bw = null;
+        //判断该文件的所属文件夹存不存在，不存在则创建文件夹
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
+        }
+        //判断file是否存在
+        if (!file.exists()) {
+            //如果不存在file文件，则创建
+            try {
+                file.createNewFile();
+                fos = new FileOutputStream(file, true);
+                bw = new BufferedWriter(new OutputStreamWriter(fos));
+                if (!map.isEmpty()) {
+                    for (Long time : map.keySet()) {
+                        String byteStr = CRC16Util.bytesToHexString(map.get(time));
+                        bw.write("[" + time + ":" + byteStr + "]");
+                        //这里要说明一下，write方法是写入缓存区，并没有写进file文件里面，要使用flush方法才写进去
+                        bw.flush();
+                        bw.newLine();
+                    }
+                    bw.close();
+                    fos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (null != bw) {
+                        bw.close();
+                    }
+                    if (null != fos) {
+                        fos.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

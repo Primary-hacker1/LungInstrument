@@ -103,27 +103,27 @@
                                 android:layout_marginBottom="30dp"
                                 android:background="#231815" />
 
-                            <View
-                                android:id="@+id/sixmin_pre_interval_one"
-                                android:layout_width="0.75dp"
-                                android:layout_height="115dp"
-                                android:layout_marginStart="150dp"
-                                android:background="#231815" />
+<!--                            <View-->
+<!--                                android:id="@+id/sixmin_pre_interval_one"-->
+<!--                                android:layout_width="0.75dp"-->
+<!--                                android:layout_height="115dp"-->
+<!--                                android:layout_marginStart="150dp"-->
+<!--                                android:background="#231815" />-->
 
-                            <View
-                                android:id="@+id/sixmin_pre_interval_two"
-                                android:layout_width="0.75dp"
-                                android:layout_height="115dp"
-                                android:layout_marginStart="90dp"
-                                android:background="#231815" />
+<!--                            <View-->
+<!--                                android:id="@+id/sixmin_pre_interval_two"-->
+<!--                                android:layout_width="0.75dp"-->
+<!--                                android:layout_height="115dp"-->
+<!--                                android:layout_marginStart="90dp"-->
+<!--                                android:background="#231815" />-->
 
-                            <View
-                                android:id="@+id/sixmin_pre_interval_three"
-                                android:layout_width="0.75dp"
-                                android:layout_height="115dp"
-                                android:layout_gravity="end"
-                                android:layout_marginEnd="180dp"
-                                android:background="#231815" />
+<!--                            <View-->
+<!--                                android:id="@+id/sixmin_pre_interval_three"-->
+<!--                                android:layout_width="0.75dp"-->
+<!--                                android:layout_height="115dp"-->
+<!--                                android:layout_gravity="end"-->
+<!--                                android:layout_marginEnd="180dp"-->
+<!--                                android:background="#231815" />-->
 
                         </FrameLayout>
 
@@ -376,12 +376,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="10dp"
+                            android:gravity="center_vertical"
                             android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
                                 android:layout_marginStart="10dp"
                                 android:text="心电结论:"
                                 android:textColor="@color/text3"
@@ -391,10 +391,16 @@
                                 android:id="@+id/sixmin_et_heart_beat_conclusion"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
                                 android:layout_marginStart="5dp"
                                 android:layout_weight="1"
                                 android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/sixmin_pre_tv_conclusion_count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:text="(0/44)" />
 
                         </LinearLayout>
 
@@ -403,8 +409,7 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:orientation="horizontal">
+                        android:layout_marginTop="10dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -1011,7 +1016,7 @@
 
                     <TextView
                         android:id="@+id/sixmin_report_tv_generate_report"
-                        android:layout_width="120dp"
+                        android:layout_width="150dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="10dp"

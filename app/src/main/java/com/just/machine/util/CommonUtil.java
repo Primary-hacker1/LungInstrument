@@ -1,8 +1,15 @@
 package com.just.machine.util;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.DisplayMetrics;
+import android.view.View;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -14,6 +21,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CommonUtil {
+
+    private static String reg = "^\\+?[1-9][0-9]*$";
 
     /**
      * 根据出生日期计算年龄
@@ -218,5 +227,117 @@ public class CommonUtil {
     public static int dip2px(Context context,int dpValue){
         float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
+    }
+
+    /**
+     * 秒转成分秒格式
+     * @param seconds
+     * @return
+     */
+    public static String secondsToMMSS(int seconds) {
+        int minutes = seconds / 60;
+        int secs = seconds % 60;
+
+        String result = String.format("%02d:%02d", minutes, secs);
+        return result;
+    }
+
+    /**
+     * 验证系统设置参数
+     *
+     * @param parameter
+     * @param messageLog
+     * @return
+     */
+    public static String checkSystem(String parameter, String messageLog) {
+        String reault = "";
+        if (TextUtils.isEmpty(parameter)) {
+            reault = messageLog + "不可为空";
+            return reault;
+        }
+        if (!Pattern.matches(reg, parameter)) {
+            reault = messageLog + "只能填写非0的正整数";
+            return reault;
+        }
+        if (messageLog.equals("血氧报警值")) {
+            if (parameter.length() >= 3) {
+                reault = messageLog + "超出长度";
+                return reault;
+            }
+        } else if (messageLog.equals("场地长度")) {
+            Integer changdu = Integer.valueOf(parameter);
+            if (changdu > 30) {
+                reault = messageLog + "不可大于30";
+                return reault;
+            }
+        } else {
+            if (parameter.length() >= 4) {
+                reault = messageLog + "超出长度";
+                return reault;
+            }
+        }
+        return reault;
+    }
+
+    /**
+     * 获取一个 View 的缓存视图
+     *  (前提是这个View已经渲染完成显示在页面上)
+     * @param view
+     * @return
+     */
+    public static Bitmap getCacheBitmapFromView(View view,int width,int height) {
+        int measuredWidth = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY);
+        int measuredHeight = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY);
+        view.measure(measuredWidth, measuredHeight);
+        //调用layout方法布局后，可以得到viewiew的尺寸大小
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        Bitmap bmp = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(bmp);
+        c.drawColor(Color.WHITE);
+        view.draw(c);
+        return bmp;
+    }
+
+    /**
+     * 将dp值转换为px值，保证尺寸大小不变
+     *
+     * @return
+     */
+    public static int dpAdapt(Activity activity, float dp, float widthDpBase) {
+        DisplayMetrics dm = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int heightPixels = dm.heightPixels;//高的像素
+        int widthPixels = dm.widthPixels;//宽的像素
+//        int densityDpi = dm.densityDpi;//dpi
+//        float xdpi = dm.xdpi;//xdpi
+//        float ydpi = dm.ydpi;//ydpi
+        float density = dm.density;//density=dpi/160,密度比
+//        float scaledDensity = dm.scaledDensity;//scaledDensity=dpi/160 字体缩放密度比
+        float heightDP = heightPixels / density;//高度的dp
+        float widthDP = widthPixels / density;//宽度的dp
+        float w=widthDP>heightDP?heightDP:widthDP;
+//        final float scale = activity.getResources().getDisplayMetrics().density;
+        return (int) (dp *w/widthDpBase* density + 0.5f);
+    }
+    /**
+     * 将sp值转换为px值，保证尺寸大小不变
+     *
+     * @return
+     */
+    public static int spAdapt(Activity activity, float sp,float widthDpBase) {
+        DisplayMetrics dm = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int heightPixels = dm.heightPixels;//高的像素
+        int widthPixels = dm.widthPixels;//宽的像素
+//        int densityDpi = dm.densityDpi;//dpi
+//        float xdpi = dm.xdpi;//xdpi
+//        float ydpi = dm.ydpi;//ydpi
+        float density = dm.density;//density=dpi/160,密度比
+//        float scaledDensity = dm.scaledDensity;//scaledDensity=dpi/160 字体缩放密度比
+        float heightDP = heightPixels / density;//高度的dp
+        float widthDP = widthPixels / density;//宽度的dp
+        float w=widthDP>heightDP?heightDP:widthDP;
+//        final float scale = activity.getResources().getDisplayMetrics().density;
+        return (int) (sp *w/widthDpBase + 0.5f);
     }
 }

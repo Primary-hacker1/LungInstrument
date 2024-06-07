@@ -3,30 +3,19 @@ package com.just.machine.ui.activity
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.net.wifi.WifiManager
 import android.os.Handler
 import android.os.Message
-import android.text.format.Formatter
-import android.util.Log
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import com.common.base.CommonBaseActivity
-import com.common.network.LogUtils
 import com.just.machine.util.ConnectThread
 import com.just.machine.util.ListenerThread
-import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.ActivityMainBinding
 import com.justsafe.libview.nav.FragmentNavigatorHideShow
-import com.justsafe.libview.util.MySystemParams
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.IOException
-import java.net.InetAddress
-import java.net.NetworkInterface
-import java.net.Socket
-import java.net.SocketException
 
 
 @AndroidEntryPoint
@@ -95,6 +84,7 @@ class MainActivity : CommonBaseActivity<ActivityMainBinding>() {
         initNavigationView()
         requestStoragePermission()
 
+        //生成word所必须的设置
         System.setProperty("org.apache.poi.javax.xml.stream.XMLInputFactory", "com.fasterxml.aalto.stax.InputFactoryImpl");
         System.setProperty("org.apache.poi.javax.xml.stream.XMLOutputFactory", "com.fasterxml.aalto.stax.OutputFactoryImpl");
         System.setProperty("org.apache.poi.javax.xml.stream.XMLEventFactory", "com.fasterxml.aalto.stax.EventFactoryImpl");

@@ -1,6 +1,7 @@
 package com.just.machine.ui.fragment.sixmin
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.text.Editable
 import android.text.Html
 import android.text.InputFilter
@@ -8,6 +9,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +36,6 @@ import com.just.machine.ui.dialog.SixMinReportPrescriptionFragment
 import com.just.machine.ui.dialog.SixMinReportSelfCheckBeforeTestFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.CommonUtil
-import com.just.machine.util.KeyboardUtil
 import com.just.news.R
 import com.just.news.databinding.FragmentSixminPreReportBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,16 +65,18 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
         if (activity is SixMinDetectActivity) {
             mActivity = activity as SixMinDetectActivity
         }
-        KeyboardUtil.setEditTextFilter(binding.sixminEtHeartBeatConclusion)
-        KeyboardUtil.setEditTextFilter(binding.sixminEtReportNote)
-        KeyboardUtil.setEditTextFilter(binding.sixminEtRecommendDoctor)
         binding.sixminEtReportNote.filters = arrayOf(InputFilter.LengthFilter(208))
-        if(mActivity.sixMinReportType.isEmpty() || mActivity.sixMinReportType == "1"){
+        binding.sixminEtHeartBeatConclusion.filters = arrayOf(InputFilter.LengthFilter(44))
+        binding.sixminEtRecommendDoctor.filters = arrayOf(InputFilter.LengthFilter(5))
+        if (mActivity.sixMinReportType.isEmpty() || mActivity.sixMinReportType == "1") {
             showData(null)
-        }else{
-            viewModel.getSixMinReportInfoById(mActivity.sixMinPatientId.toLong(), mActivity.sixMinReportNo)
+        } else {
+            viewModel.getSixMinReportInfoById(
+                mActivity.sixMinPatientId.toLong(),
+                mActivity.sixMinReportNo
+            )
         }
-        binding.sixminEtReportNote.addTextChangedListener(object: TextWatcher{
+        binding.sixminEtReportNote.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
             }
@@ -84,9 +87,26 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
 
             @SuppressLint("SetTextI18n")
             override fun afterTextChanged(s: Editable?) {
-               binding.sixminPreTvNoteCount.text = "(${s.toString().trim().length}/208)"
+                binding.sixminPreTvNoteCount.text = "(${s.toString().trim().length}/208)"
             }
         })
+        binding.sixminEtReportNote.setOnEditorActionListener { _, _, event -> (event.keyCode == KeyEvent.KEYCODE_ENTER); }
+        binding.sixminEtHeartBeatConclusion.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            @SuppressLint("SetTextI18n")
+            override fun afterTextChanged(s: Editable?) {
+                binding.sixminPreTvConclusionCount.text = "(${s.toString().trim().length}/44)"
+            }
+        })
+        binding.sixminEtHeartBeatConclusion.setOnEditorActionListener { _, _, event -> (event.keyCode == KeyEvent.KEYCODE_ENTER); }
+        binding.sixminEtRecommendDoctor.setOnEditorActionListener { _, _, event -> (event.keyCode == KeyEvent.KEYCODE_ENTER); }
     }
 
     override fun initListener() {
@@ -171,13 +191,17 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                             }
                         }
                         startEditBloodDialogFragment.dismiss()
-                        if(mActivity.sixMinReportType.isEmpty() || mActivity.sixMinReportType == "1"){
-                            mActivity.sixMinReportBloodOther.startHighPressure = bean.highBloodPressureBefore.toString()
-                            mActivity.sixMinReportBloodOther.startLowPressure = bean.lowBloodPressureBefore.toString()
-                            mActivity.sixMinReportBloodOther.stopHighPressure = bean.highBloodPressureAfter.toString()
-                            mActivity.sixMinReportBloodOther.stopLowPressure = bean.lowBloodPressureAfter.toString()
+                        if (mActivity.sixMinReportType.isEmpty() || mActivity.sixMinReportType == "1") {
+                            mActivity.sixMinReportBloodOther.startHighPressure =
+                                bean.highBloodPressureBefore.toString()
+                            mActivity.sixMinReportBloodOther.startLowPressure =
+                                bean.lowBloodPressureBefore.toString()
+                            mActivity.sixMinReportBloodOther.stopHighPressure =
+                                bean.highBloodPressureAfter.toString()
+                            mActivity.sixMinReportBloodOther.stopLowPressure =
+                                bean.lowBloodPressureAfter.toString()
                             initTable()
-                        }else{
+                        } else {
                             viewModel.updateSixMinReportOther(
                                 sixMinRecordsBean.infoBean.reportNo,
                                 bean.highBloodPressureBefore.toString(),
@@ -186,7 +210,10 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                                 bean.lowBloodPressureAfter.toString()
                             )
                             isFirst = true
-                            viewModel.getSixMinReportInfoById(mActivity.sixMinPatientId.toLong(), mActivity.sixMinReportNo)
+                            viewModel.getSixMinReportInfoById(
+                                mActivity.sixMinPatientId.toLong(),
+                                mActivity.sixMinReportNo
+                            )
                         }
                         binding.sixminReportTlPreTable.removeAllViews()
                     }
@@ -210,7 +237,7 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                     befoBreathingLevel: Int,
                     befoFatigueLevelStr: String,
                     befoBreathingLevelStr: String,
-                    faceMask:String
+                    faceMask: String
                 ) {
                     Log.d("tag", "$befoFatigueLevel$befoBreathingLevel")
                 }
@@ -291,8 +318,10 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                     }
                     if (selectStrList.isNotEmpty()) {
                         if (selectStrList.size > 1) {
-                            mActivity.sixMinReportEvaluation.breathingLevel = selectStrList[0].split("&")[1]
-                            mActivity.sixMinReportEvaluation.fatigueLevel = selectStrList[1].split("&")[1]
+                            mActivity.sixMinReportEvaluation.breathingLevel =
+                                selectStrList[0].split("&")[1]
+                            mActivity.sixMinReportEvaluation.fatigueLevel =
+                                selectStrList[1].split("&")[1]
                         } else {
                             val split = selectStrList[0].split("&")
                             if (split[0] == "呼吸状况等级") {
@@ -318,12 +347,15 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                     if (binding.sixminEtUnfinishCircle.text.toString().isNotEmpty()) {
                         val wqsDec: BigDecimal =
                             BigDecimal(binding.sixminEtUnfinishCircle.text.toString().trim())
-                        val totoLength: Int = mActivity.sixMinReportEvaluation.fieldLength.toInt() * 2
+                        val totoLength: Int =
+                            mActivity.sixMinReportEvaluation.fieldLength.toInt() * 2
                         if (wqsDec.compareTo(BigDecimal(totoLength)) == 1) {
                             wqsBoolen = false
                         }
                     }
-                    if (binding.sixminEtUnfinishCircle.text.toString().trim().isEmpty() || !wqsBoolen) {
+                    if (binding.sixminEtUnfinishCircle.text.toString().trim()
+                            .isEmpty() || !wqsBoolen
+                    ) {
                         mActivity.showMsg("请检查未走完的距离值")
                         return@setNoRepeatListener
                     }
@@ -361,9 +393,11 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                             }
                         }
                     }
-                    mActivity.sixMinReportInfo.restDuration = binding.sixminPreEtResetTime.text.toString().trim()
+                    mActivity.sixMinReportInfo.restDuration =
+                        binding.sixminPreEtResetTime.text.toString().trim()
 
-                    val heartBeatConclusion = binding.sixminEtHeartBeatConclusion.text.toString().trim()
+                    val heartBeatConclusion =
+                        binding.sixminEtHeartBeatConclusion.text.toString().trim()
                     if (heartBeatConclusion.isNotEmpty() && heartBeatConclusion.length > 44) {
                         mActivity.showMsg("请检查心电结论，最大长度为44")
                         return@setNoRepeatListener
@@ -390,10 +424,14 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                             mActivity.showMsg("请检查运动步速值，最多精确到1位")
                             return@setNoRepeatListener
                         }
-                        if (BigDecimal(binding.sixminPreEtStrideLow.text.toString().trim()).compareTo(
+                        if (BigDecimal(
+                                binding.sixminPreEtStrideLow.text.toString().trim()
+                            ).compareTo(
                                 BigDecimal("1000")
                             ) != -1 ||
-                            BigDecimal(binding.sixminPreEtStrideHigh.text.toString().trim()).compareTo(
+                            BigDecimal(
+                                binding.sixminPreEtStrideHigh.text.toString().trim()
+                            ).compareTo(
                                 BigDecimal("1000")
                             ) != -1
                         ) {
@@ -401,7 +439,9 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                             return@setNoRepeatListener
                         }
                         //前者不可大于后者
-                        if (BigDecimal(binding.sixminPreEtStrideLow.text.toString().trim()) > BigDecimal(
+                        if (BigDecimal(
+                                binding.sixminPreEtStrideLow.text.toString().trim()
+                            ) > BigDecimal(
                                 binding.sixminPreEtStrideHigh.text.toString().trim()
                             )
                         ) {
@@ -427,10 +467,14 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                             mActivity.showMsg("请检查运动距离值，最多精确到1位")
                             return@setNoRepeatListener
                         }
-                        if (BigDecimal(binding.sixminPreEtDistanceLow.text.toString().trim()).compareTo(
+                        if (BigDecimal(
+                                binding.sixminPreEtDistanceLow.text.toString().trim()
+                            ).compareTo(
                                 BigDecimal("10000")
                             ) != -1 ||
-                            BigDecimal(binding.sixminPreEtDistanceHigh.text.toString().trim()).compareTo(
+                            BigDecimal(
+                                binding.sixminPreEtDistanceHigh.text.toString().trim()
+                            ).compareTo(
                                 BigDecimal("10000")
                             ) != -1
                         ) {
@@ -438,7 +482,9 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                             return@setNoRepeatListener
                         }
                         //前者不可大于后者
-                        if (BigDecimal(binding.sixminPreEtDistanceLow.text.toString().trim()) > BigDecimal(
+                        if (BigDecimal(
+                                binding.sixminPreEtDistanceLow.text.toString().trim()
+                            ) > BigDecimal(
                                 binding.sixminPreEtDistanceHigh.text.toString().trim()
                             )
                         ) {
@@ -479,7 +525,8 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                             mActivity.showMsg("请检查代谢当量值")
                             return@setNoRepeatListener
                         }
-                        mActivity.sixMinReportPrescription.metabMet = binding.sixminPreEtMetab.text.toString().trim()
+                        mActivity.sixMinReportPrescription.metabMet =
+                            binding.sixminPreEtMetab.text.toString().trim()
                     }
 
                     if (mActivity.sixMinReportPrescription.pllevState.isEmpty() || mActivity.sixMinReportPrescription.pllevState == "1") {
@@ -503,10 +550,11 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                             tireLow
                         mActivity.sixMinReportPrescription.pllevAfter =
                             tireHigh
-                        mActivity.sixMinReportPrescription.pilaoControl = mActivity.usbTransferUtil.dealPiLaoKZ(
-                            tireLow.toInt(),
-                            tireHigh.toInt()
-                        )
+                        mActivity.sixMinReportPrescription.pilaoControl =
+                            mActivity.usbTransferUtil.dealPiLaoKZ(
+                                tireLow.toInt(),
+                                tireHigh.toInt()
+                            )
                     }
 
                     val doctorName = binding.sixminEtRecommendDoctor.text.toString().trim()
@@ -520,18 +568,19 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                     }
 
                     val reportNote = binding.sixminEtReportNote.text.toString().trim()
-                    if(reportNote.isNotEmpty()){
-                        if(reportNote.length > 208){
+                    if (reportNote.isNotEmpty()) {
+                        if (reportNote.length > 208) {
                             mActivity.showMsg("运动注意事项，长度不能大于208")
                             return@setNoRepeatListener
                         }
-                        if(reportNote.lines().size > 5){
+                        if (reportNote.lines().size > 5) {
                             mActivity.showMsg("运动注意事项，行数不能大于5")
                             return@setNoRepeatListener
                         }
                     }
 
-                    mActivity.sixMinReportPrescription.remarke = binding.sixminEtReportNote.text.toString().trim()
+                    mActivity.sixMinReportPrescription.remarke =
+                        binding.sixminEtReportNote.text.toString().trim()
                     mActivity.sixMinReportPrescription.remarkeName =
                         binding.sixminEtRecommendDoctor.text.toString().trim()
                     mActivity.sixMinReportPrescription.movementWay =
@@ -554,14 +603,29 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                     viewModel.setSixMinReportHeartBeat(mActivity.sixMinReportBloodHeart)
                     viewModel.setSixMinReportStride(mActivity.sixMinReportStride)
 
-                    mActivity.sixMinPatientId = mActivity.sixMinReportInfo.patientId.toString().trim()
+                    mActivity.sixMinPatientId =
+                        mActivity.sixMinReportInfo.patientId.toString().trim()
                     mActivity.sixMinReportNo = mActivity.sixMinReportInfo.reportNo
-                    navigate(binding.sixminLlPreReport,R.id.sixMinReportFragment)
+
+                    //保存心电数据到本地
+//                    val ecgPath =
+//                        File.separator + "sixmin/sixminreportecgdata" + File.separator + mActivity.sixMinReportInfo.reportNo
+//                    val file = File(
+//                        mActivity.getExternalFilesDir("")?.absolutePath,
+//                        ecgPath + File.separator + "ecgData.json"
+//                    )
+//                    if (!file.exists()) {
+//                        file.mkdirs()
+//                    }
+//                    val data = mutableMapOf<Long,ByteArray>()
+//                    FileUtil.writeEcg(data,file.absolutePath)
+                    navigate(binding.sixminLlPreReport, R.id.sixMinReportFragment)
 
                 } else {
                     //保存报告
 
-                    val heartBeatConclusion = binding.sixminEtHeartBeatConclusion.text.toString().trim()
+                    val heartBeatConclusion =
+                        binding.sixminEtHeartBeatConclusion.text.toString().trim()
                     if (heartBeatConclusion.isNotEmpty() && heartBeatConclusion.length > 44) {
                         mActivity.showMsg("请检查心电结论，最大长度为44")
                         return@setNoRepeatListener
@@ -588,10 +652,14 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                             mActivity.showMsg("请检查运动步速值，最多精确到1位")
                             return@setNoRepeatListener
                         }
-                        if (BigDecimal(binding.sixminPreEtStrideLow.text.toString().trim()).compareTo(
+                        if (BigDecimal(
+                                binding.sixminPreEtStrideLow.text.toString().trim()
+                            ).compareTo(
                                 BigDecimal("1000")
                             ) != -1 ||
-                            BigDecimal(binding.sixminPreEtStrideHigh.text.toString().trim()).compareTo(
+                            BigDecimal(
+                                binding.sixminPreEtStrideHigh.text.toString().trim()
+                            ).compareTo(
                                 BigDecimal("1000")
                             ) != -1
                         ) {
@@ -599,7 +667,9 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                             return@setNoRepeatListener
                         }
                         //前者不可大于后者
-                        if (BigDecimal(binding.sixminPreEtStrideLow.text.toString().trim()) > BigDecimal(
+                        if (BigDecimal(
+                                binding.sixminPreEtStrideLow.text.toString().trim()
+                            ) > BigDecimal(
                                 binding.sixminPreEtStrideHigh.text.toString().trim()
                             )
                         ) {
@@ -625,10 +695,14 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                             mActivity.showMsg("请检查运动距离值，最多精确到1位")
                             return@setNoRepeatListener
                         }
-                        if (BigDecimal(binding.sixminPreEtDistanceLow.text.toString().trim()).compareTo(
+                        if (BigDecimal(
+                                binding.sixminPreEtDistanceLow.text.toString().trim()
+                            ).compareTo(
                                 BigDecimal("10000")
                             ) != -1 ||
-                            BigDecimal(binding.sixminPreEtDistanceHigh.text.toString().trim()).compareTo(
+                            BigDecimal(
+                                binding.sixminPreEtDistanceHigh.text.toString().trim()
+                            ).compareTo(
                                 BigDecimal("10000")
                             ) != -1
                         ) {
@@ -678,7 +752,8 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                             return@setNoRepeatListener
                         }
 
-                        mActivity.sixMinReportPrescription.metabMet = binding.sixminPreEtMetab.text.toString()
+                        mActivity.sixMinReportPrescription.metabMet =
+                            binding.sixminPreEtMetab.text.toString()
                     }
 
                     if (mActivity.sixMinReportPrescription.pllevState.isEmpty() || mActivity.sixMinReportPrescription.pllevState == "1") {
@@ -702,10 +777,11 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                             binding.sixminPreEtTiredControlLow.text.toString().trim()
                         mActivity.sixMinReportPrescription.pllevAfter =
                             binding.sixminPreEtTiredControlHigh.text.toString().trim()
-                        mActivity.sixMinReportPrescription.pilaoControl = mActivity.usbTransferUtil.dealPiLaoKZ(
-                            binding.sixminPreEtTiredControlLow.text.toString().trim().toInt(),
-                            binding.sixminPreEtTiredControlHigh.text.toString().trim().toInt()
-                        )
+                        mActivity.sixMinReportPrescription.pilaoControl =
+                            mActivity.usbTransferUtil.dealPiLaoKZ(
+                                binding.sixminPreEtTiredControlLow.text.toString().trim().toInt(),
+                                binding.sixminPreEtTiredControlHigh.text.toString().trim().toInt()
+                            )
                     }
 
                     val doctorName = binding.sixminEtRecommendDoctor.text.toString().trim()
@@ -717,7 +793,8 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                         mActivity.showMsg("建议医生，长度不能大于5")
                         return@setNoRepeatListener
                     }
-                    mActivity.sixMinReportPrescription.remarke = binding.sixminEtReportNote.text.toString().trim()
+                    mActivity.sixMinReportPrescription.remarke =
+                        binding.sixminEtReportNote.text.toString().trim()
                     mActivity.sixMinReportPrescription.remarkeName =
                         binding.sixminEtRecommendDoctor.text.toString().trim()
                     mActivity.sixMinReportPrescription.movementWay =
@@ -732,8 +809,9 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                     viewModel.updateSixMinReportPrescription(mActivity.sixMinReportPrescription)
                     viewModel.updateSixMinReportEvaluation(mActivity.sixMinReportEvaluation)
                     viewModel.updateSixMinReportInfo(mActivity.sixMinReportInfo)
+                    viewModel.setSixMinReportHeartBeat(mActivity.sixMinReportBloodHeart)
 
-                    navigate(binding.sixminLlPreReport,R.id.sixMinReportFragment)
+                    navigate(binding.sixminLlPreReport, R.id.sixMinReportFragment)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -762,21 +840,22 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
     }
 
     private fun showData(sixMinRecordsBean: SixMinRecordsBean?) {
-        if(sixMinRecordsBean != null){
-            mActivity.sixMinReportPrescription = this.sixMinRecordsBean.prescriptionBean[0]
+        if (sixMinRecordsBean != null) {
+            mActivity.sixMinReportPrescription = sixMinRecordsBean.prescriptionBean[0]
             mActivity.sixMinReportPrescription.prescripState = "1"
-            mActivity.sixMinReportBloodOther = this.sixMinRecordsBean.otherBean[0]
-            mActivity.sixMinReportStride = this.sixMinRecordsBean.strideBean[0]
-            mActivity.sixMinReportEvaluation = this.sixMinRecordsBean.evaluationBean[0]
-            mActivity.sixMinReportBloodHeart = this.sixMinRecordsBean.heartBeatBean[0]
-            mActivity.sixMinReportInfo = this.sixMinRecordsBean.infoBean
-            mActivity.sixMinReportBloodHeart = this.sixMinRecordsBean.heartBeatBean[0]
-            mActivity.sixMinReportBloodHeartEcg = this.sixMinRecordsBean.heartEcgBean[0]
-            mActivity.sixMinReportWalk = this.sixMinRecordsBean.walkBean[0]
+            mActivity.sixMinReportBloodOther = sixMinRecordsBean.otherBean[0]
+            mActivity.sixMinReportStride = sixMinRecordsBean.strideBean[0]
+            mActivity.sixMinReportEvaluation = sixMinRecordsBean.evaluationBean[0]
+            mActivity.sixMinReportBloodHeart = sixMinRecordsBean.heartBeatBean[0]
+            mActivity.sixMinReportInfo = sixMinRecordsBean.infoBean
+            mActivity.sixMinReportBloodHeart = sixMinRecordsBean.heartBeatBean[0]
+            mActivity.sixMinReportBloodHeartEcg = sixMinRecordsBean.heartEcgBean[0]
+            mActivity.sixMinReportWalk = sixMinRecordsBean.walkBean[0]
         }
 
         Log.d("sixMinRecordsBean", Gson().toJson(this.sixMinRecordsBean))
 
+        mActivity.sixMinReportBloodOther.useName = mActivity.sysSettingBean.sysOther.useOrg
         mActivity.sixMinReportInfo.bsHxl = mActivity.sysSettingBean.sysOther.stepsOrBreath
 
         initTable()
@@ -792,10 +871,10 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
 
         binding.sixminTvTotalDistance.text = mActivity.sixMinReportEvaluation.totalDistance
 
-        if(mActivity.sixMinReportInfo.bsHxl == "0"){
+        if (mActivity.sixMinReportInfo.bsHxl == "0") {
             binding.sixminPreLlTotalSteps.visibility = View.VISIBLE
             binding.sixminTvTotalSteps.text = mActivity.sixMinReportEvaluation.totalWalk
-        }else{
+        } else {
             binding.sixminPreLlTotalSteps.visibility = View.GONE
         }
 
@@ -839,6 +918,8 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
             binding.sixminPreSpSportTime.value =
                 mActivity.sixMinReportPrescription.movementTime.toInt()
         }
+
+        binding.sixminEtHeartBeatConclusion.setText(mActivity.sixMinReportBloodHeart.heartConclusion)
 
         if (mActivity.sixMinReportPrescription.movementWay.isEmpty()) {
             binding.sixminReportTvGenerateReport.text = "生成报告"
@@ -1068,7 +1149,7 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                 if (mActivity.sixMinReportBloodOxy.bloodSix == "") "0" else mActivity.sixMinReportBloodOxy.bloodSix,
                 if (mActivity.sixMinReportBloodOxy.bloodBig == "") "0" else mActivity.sixMinReportBloodOxy.bloodBig,
                 if (mActivity.sixMinReportBloodOxy.bloodSmall == "") "0" else mActivity.sixMinReportBloodOxy.bloodSmall,
-                if (mActivity.sixMinReportBloodOxy.bloodAverage == "") "0" else  mActivity.sixMinReportBloodOxy.bloodAverage
+                if (mActivity.sixMinReportBloodOxy.bloodAverage == "") "0" else mActivity.sixMinReportBloodOxy.bloodAverage
             )
         )
         if (mActivity.sixMinReportInfo.bsHxl == "0") {
@@ -1202,19 +1283,27 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                     }
                 }
                 linearLayout.addView(tvNo)
+
+                if(j == 0 || j == 1 || j == 7){
+                    // 创建一个新的View，作为竖线
+                    val view = View(mActivity)
+                    // 设置竖线的宽度（如果需要）
+                    val heightInPixels = 50 // 2像素的高度
+                    val widthInPixels = 1 // 想要的横向宽度，可以是屏幕宽度
+                    // 设置竖线的参数
+                    val params = LinearLayout.LayoutParams(
+                        widthInPixels,  // 宽度
+                        heightInPixels // 高度
+                    )
+                    // 设置竖线的背景色，这里使用黑色
+                    view.setBackgroundColor(Color.BLACK)
+                    linearLayout.addView(view,params)
+                }
             }
             newRow.setPadding(
-                dip2px(6.0f), dip2px(3.0f), dip2px(6.0f), dip2px(3.0f)
+                dip2px(6.0f), dip2px(0f), dip2px(6.0f), dip2px(0f)
             )
             newRow.addView(linearLayout)
-//            val layoutParamsOne = binding.sixminPreIntervalOne.layoutParams as ViewGroup.MarginLayoutParams
-//            layoutParamsOne.leftMargin= dip2px(95f)
-//
-//            val layoutParamsTwo = binding.sixminPreIntervalTwo.layoutParams as ViewGroup.MarginLayoutParams
-//            layoutParamsTwo.leftMargin= dip2px(155f)
-//
-//            val layoutParamsThree = binding.sixminPreIntervalThree.layoutParams as ViewGroup.MarginLayoutParams
-//            layoutParamsThree.rightMargin = dip2px(175f)
             binding.sixminReportTlPreTable.addView(newRow)
         }
     }
@@ -1390,14 +1479,24 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
     private fun dealSelectPrescriptionElement() {
         if (mActivity.sixMinReportPrescription.distanceState == "1" || mActivity.sixMinReportPrescription.distanceState == "") {
             if (mActivity.sixMinReportPrescription.strideFormula == "0" || mActivity.sixMinReportPrescription.strideFormula == "") {
-                binding.sixminPreEtStrideLow.setText(mActivity.usbTransferUtil.dealYdbsStrs("0.5", strideAvg))
+                binding.sixminPreEtStrideLow.setText(
+                    mActivity.usbTransferUtil.dealYdbsStrs(
+                        "0.5",
+                        strideAvg
+                    )
+                )
                 binding.sixminPreEtStrideHigh.setText(
                     mActivity.usbTransferUtil.dealYdbsStrs(
                         "0.6", strideAvg
                     )
                 )
             } else {
-                binding.sixminPreEtStrideLow.setText(mActivity.usbTransferUtil.dealYdbsStrs("0.7", strideAvg))
+                binding.sixminPreEtStrideLow.setText(
+                    mActivity.usbTransferUtil.dealYdbsStrs(
+                        "0.7",
+                        strideAvg
+                    )
+                )
                 binding.sixminPreEtStrideHigh.setText(
                     mActivity.usbTransferUtil.dealYdbsStrs(
                         "0.8", strideAvg

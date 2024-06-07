@@ -203,9 +203,9 @@ class SixMinDetectActivity : CommonBaseActivity<ActivitySixMinDetectBinding>() {
                 srcFolderSize += length
             }
             val dstFolderSize = FileUtil.getInstance(this)
-                .getFolderSize(getExternalFilesDir("")?.absolutePath + File.separator + "templates")
+                .getFolderSize(getExternalFilesDir("")?.absolutePath + File.separator + "sixmin/templates")
             if (srcFolderSize != dstFolderSize) {
-                FileUtil.getInstance(this).copyAssetsToSD("templates/png", "templates")
+                FileUtil.getInstance(this).copyAssetsToSD("templates/png", "sixmin/templates")
                     .setFileOperateCallback(object : FileUtil.FileOperateCallback {
                         override fun onSuccess() {
 //                            showMsg("复制成功")

@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -25,7 +24,6 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.google.gson.Gson
 import com.hjq.window.EasyWindow
-import com.hjq.window.draggable.MovingDraggable
 import com.just.machine.model.BloodOxyLineEntryBean
 import com.just.machine.model.Constants
 import com.just.machine.model.PatientInfoBean
@@ -52,8 +50,6 @@ import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.w3c.dom.Text
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -94,12 +90,13 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
     private var index = 0
     private var ready = false
 
-    private lateinit var vo2PerHr:TextView
-    private lateinit var vo2:TextView
-    private lateinit var rer:TextView
-    private lateinit var vo2PerKg:TextView
-    private lateinit var vco2:TextView
-    private lateinit var bf:TextView
+    private var easyWindow: EasyWindow<EasyWindow<*>>? = null
+    private lateinit var vo2PerHr: TextView
+    private lateinit var vo2: TextView
+    private lateinit var rer: TextView
+    private lateinit var vo2PerKg: TextView
+    private lateinit var vco2: TextView
+    private lateinit var bf: TextView
 
     override fun loadData() {//懒加载
 
@@ -123,36 +120,48 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
 
     @SuppressLint("SetTextI18n")
     private fun initFloatingCardiopulmonary() {
-        if(mActivity.sixMinFaceMask.isNotEmpty() && mActivity.sixMinFaceMask == "1"){
-            val easyWindow = EasyWindow.with(mActivity).apply {
-                setContentView(R.layout.sixmin_floating_cardiopulmonary_element)
-                setXOffset(
-                    ScreenUtils.getScreenWidth(mActivity) / 2 - CommonUtil.dip2px(
-                        mActivity,
-                        210
+        if (mActivity.sixMinFaceMask.isNotEmpty() && mActivity.sixMinFaceMask == "1") {
+            binding.sixminTvToggleCardiopulmonary.visibility = View.VISIBLE
+            if (easyWindow == null) {
+                easyWindow = EasyWindow.with(mActivity).apply {
+                    setContentView(R.layout.sixmin_floating_cardiopulmonary_element)
+                    setXOffset(
+                        ScreenUtils.getScreenWidth(mActivity) / 2 - CommonUtil.dip2px(
+                            mActivity,
+                            210
+                        )
                     )
-                )
-                setYOffset(
-                    ScreenUtils.getScreenHeight(mActivity) / 2 - CommonUtil.dip2px(
-                        mActivity,
-                        115
+                    setYOffset(
+                        ScreenUtils.getScreenHeight(mActivity) / 2 - CommonUtil.dip2px(
+                            mActivity,
+                            115
+                        )
                     )
-                )
-                // 设置成可拖拽的
-                setDraggable()
-                // 设置显示时长
-                setDuration(0)
-                // 设置动画样式
-                setAnimStyle(android.R.style.Animation_Translucent)
+                    // 设置成可拖拽的
+                    setDraggable()
+                    // 设置显示时长
+                    setDuration(0)
+                    // 设置动画样式
+                    setAnimStyle(android.R.style.Animation_Translucent)
+                }
+                easyWindow?.setWidth(CommonUtil.dip2px(mActivity,420))
+                easyWindow?.setHeight(CommonUtil.dip2px(mActivity,180))
+                vo2PerHr =
+                    easyWindow?.findViewById(R.id.sixmin_tv_floating_cardiopulmonary_vo2_per_hr) as TextView
+                vo2 =
+                    easyWindow?.findViewById(R.id.sixmin_tv_floating_cardiopulmonary_vo2) as TextView
+                rer =
+                    easyWindow?.findViewById(R.id.sixmin_tv_floating_cardiopulmonary_rer) as TextView
+                vo2PerKg =
+                    easyWindow?.findViewById(R.id.sixmin_tv_floating_cardiopulmonary_vo2_per_kg) as TextView
+                vco2 =
+                    easyWindow?.findViewById(R.id.sixmin_tv_floating_cardiopulmonary_vco2) as TextView
+                bf =
+                    easyWindow?.findViewById(R.id.sixmin_tv_floating_cardiopulmonary_bf) as TextView
             }
-            vo2PerHr =
-                easyWindow.findViewById<TextView>(R.id.sixmin_tv_floating_cardiopulmonary_vo2_per_hr) as TextView
-            vo2 = easyWindow.findViewById<TextView>(R.id.sixmin_tv_floating_cardiopulmonary_vo2) as TextView
-            rer = easyWindow.findViewById<TextView>(R.id.sixmin_tv_floating_cardiopulmonary_rer) as TextView
-            vo2PerKg = easyWindow.findViewById<TextView>(R.id.sixmin_tv_floating_cardiopulmonary_vo2_per_kg) as TextView
-            vco2 = easyWindow.findViewById<TextView>(R.id.sixmin_tv_floating_cardiopulmonary_vco2) as TextView
-            bf = easyWindow.findViewById<TextView>(R.id.sixmin_tv_floating_cardiopulmonary_bf) as TextView
-            easyWindow.show()
+            easyWindow?.show()
+        }else{
+            binding.sixminTvToggleCardiopulmonary.visibility = View.GONE
         }
     }
 
@@ -553,7 +562,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
         binding.sixminRlStart.setNoRepeatListener {
             if (mActivity.usbTransferUtil.isConnectUSB && mActivity.usbTransferUtil.ecgConnection && mActivity.usbTransferUtil.bloodOxygenConnection && mActivity.usbTransferUtil.bloodPressureConnection) {
                 if (!mActivity.usbTransferUtil.isBegin) {
-                    if (mActivity.sysSettingBean.sysOther.autoMeasureBlood == "0" ||mActivity.sysSettingBean.sysOther.autoMeasureBlood == "1") {
+                    if (mActivity.sysSettingBean.sysOther.autoMeasureBlood == "0" || mActivity.sysSettingBean.sysOther.autoMeasureBlood == "1") {
                         if (binding.sixminTvMeasureBlood.text.toString()
                                 .trim() == getString(R.string.sixmin_measuring_blood)
                         ) {
@@ -579,7 +588,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
 
                                     }
                                 })
-                            } else if(mActivity.usbTransferUtil.bloodType == 1){
+                            } else if (mActivity.usbTransferUtil.bloodType == 1) {
                                 autoStartTest()
                             }
                         }
@@ -682,6 +691,15 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
             } else {
                 binding.sixminIvIgnoreBlood.setBackgroundResource(R.drawable.sixmin_ignore_blood_pressure_disable)
                 mActivity.usbTransferUtil.ignoreBlood = true
+            }
+        }
+        binding.sixminTvToggleCardiopulmonary.setNoRepeatListener {
+            if(easyWindow?.isShowing == true){
+                easyWindow?.cancel()
+                binding.sixminTvToggleCardiopulmonary.text = "显示心肺参数"
+            }else{
+                easyWindow?.show()
+                binding.sixminTvToggleCardiopulmonary.text = "隐藏心肺参数"
             }
         }
     }
@@ -1055,7 +1073,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                     }
                 }
                 lifecycleScope.launch(Dispatchers.Main) {
-                    Log.d("SixMinFragment","倒计时===$times")
+                    Log.d("SixMinFragment", "倒计时===$times")
                     if (mActivity.sysSettingBean.sysOther.broadcastVoice == "1" || mActivity.sysSettingBean.sysOther.broadcastVoice == "0") {
                         speechContent(times.toString())
                     }
@@ -1065,7 +1083,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
             }
 
             override fun onFinish() {
-                Log.d("SixMinFragment","倒计时结束")
+                Log.d("SixMinFragment", "倒计时结束")
                 lifecycleScope.launch {
                     kotlinx.coroutines.delay(1000L)
                     binding.sixminIvCountdownTime.visibility = View.GONE

@@ -14,6 +14,7 @@ import com.common.base.setNoRepeatListener
 import com.common.base.visible
 import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.FragmentChildAdapter
+import com.just.machine.ui.fragment.onekeycalibration.OneKeyCalibrationFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.FragmentCalibrationBinding
@@ -39,6 +40,7 @@ class CalibrationFragment : CommonBaseFragment<FragmentCalibrationBinding>() {
         adapter.addFragment(EnvironmentalFragment())
         adapter.addFragment(FlowFragment())
         adapter.addFragment(IngredientFragment())
+        adapter.addFragment(OneKeyCalibrationFragment())
         adapter.addFragment(CalibrationResultFragment())
 
 
@@ -53,7 +55,7 @@ class CalibrationFragment : CommonBaseFragment<FragmentCalibrationBinding>() {
     }
 
     private fun onButtonClick(button: AppCompatButton, position: Int) {
-        binding.vpCalibration.currentItem = position// 切换ViewPager页面
+        binding.vpCalibration.setCurrentItem(position,true)// 切换ViewPager页面，如果设置成true会出现直接点击一键定标，但是显示的是定标结果Fragment
         resetButtonColors()// 切换按钮颜色
         button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.cF5FCFF))
     }
@@ -62,6 +64,7 @@ class CalibrationFragment : CommonBaseFragment<FragmentCalibrationBinding>() {
         binding.btnEnvironment.setBackgroundColor(Color.WHITE)
         binding.btnFlow.setBackgroundColor(Color.WHITE)
         binding.btnIngredient.setBackgroundColor(Color.WHITE)
+        binding.btnOneKey.setBackgroundColor(Color.WHITE)
         binding.btnResult.setBackgroundColor(Color.WHITE)
         binding.btnCalibrationClose.setBackgroundColor(Color.WHITE)
     }
@@ -83,8 +86,12 @@ class CalibrationFragment : CommonBaseFragment<FragmentCalibrationBinding>() {
             onButtonClick(binding.btnIngredient, 2)
         }
 
+        binding.btnOneKey.setNoRepeatListener {
+            onButtonClick(binding.btnOneKey, 3)
+        }
+
         binding.btnResult.setNoRepeatListener {
-            onButtonClick(binding.btnResult, 3)
+            onButtonClick(binding.btnResult, 4)
         }
 
         binding.btnCalibrationClose.setOnClickListener {

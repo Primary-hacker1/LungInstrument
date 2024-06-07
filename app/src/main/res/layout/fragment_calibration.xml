@@ -60,6 +60,15 @@
                     android:text="成分定标" />
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_one_key"
+                    android:layout_width="96dp"
+                    android:layout_height="73dp"
+                    android:background="@color/white"
+                    android:drawableTop="@drawable/onekey"
+                    android:padding="@dimen/space_10"
+                    android:text="一键定标" />
+
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_result"
                     android:layout_width="96dp"
                     android:layout_height="73dp"

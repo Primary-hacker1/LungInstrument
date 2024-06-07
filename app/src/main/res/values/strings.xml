@@ -286,4 +286,6 @@
         <item>6分钟平均步行速度×(50%~60%)×建议单次运动时长</item>
         <item>6分钟平均步行速度×(70%~80%)×建议单次运动时长</item>
     </string-array>
+    <string name="sixmin_test_report_heart_beart_capture_title"><![CDATA[%s心率心电图: 心率: %s bmp，速度: %s mm/s，增益: %s mm/mv]]></string>
+    <string name="onekey_calibration_guide_content"><![CDATA[<font color="#000000"><Big><b>开始前请确认设备已连接:</b></Big></font> <br><br>1.请确认流量传感器已正确连接到流量定标口。<br>2.请确认气瓶管路已正确连接到后方的输入口，并且气阀已打开。<br>3.请确认采样管已连接到桌面上方的成分定标接口。]]></string>
 </resources>

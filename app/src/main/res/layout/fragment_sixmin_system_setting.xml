@@ -396,7 +396,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="57dp"
-                                    android:layout_marginTop="13dp"
+                                    android:layout_marginTop="8dp"
                                     android:layout_marginEnd="44dp"
                                     android:orientation="horizontal">
 
@@ -435,14 +435,15 @@
                                     android:layout_marginStart="57dp"
                                     android:layout_marginTop="8dp"
                                     android:layout_marginEnd="44dp"
+                                    android:gravity="center_vertical"
                                     android:orientation="horizontal">
 
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
                                         android:layout_weight="1"
-                                        android:orientation="horizontal">
+                                        android:orientation="horizontal"
+                                        android:visibility="invisible">
 
                                         <TextView
                                             android:layout_width="wrap_content"
@@ -460,7 +461,6 @@
                                             android:background="@drawable/frame_with_color_d6d6d6">
 
                                             <EditText
-                                                android:id="@+id/sixmin_et_other_area_length"
                                                 android:layout_width="0dp"
                                                 android:layout_height="wrap_content"
                                                 android:layout_gravity="center_vertical"
@@ -531,15 +531,15 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="30dp"
+                                    android:layout_marginStart="57dp"
                                     android:layout_marginTop="8dp"
                                     android:layout_marginEnd="44dp"
+                                    android:gravity="center_vertical"
                                     android:orientation="horizontal">
 
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
                                         android:layout_weight="1"
                                         android:orientation="horizontal">
 
@@ -547,7 +547,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
-                                            android:text="@string/sixmin_system_setting_ecg_lead_type"
+                                            android:text="@string/sixmin_system_setting_area_length"
                                             android:textColor="@color/text3"
                                             android:textSize="14sp" />
 
@@ -559,13 +559,25 @@
                                             android:background="@drawable/frame_with_color_d6d6d6">
 
                                             <EditText
-                                                android:id="@+id/sixmin_et_other_ect_type"
-                                                android:layout_width="wrap_content"
+                                                android:id="@+id/sixmin_et_other_area_length"
+                                                android:layout_width="0dp"
                                                 android:layout_height="wrap_content"
                                                 android:layout_gravity="center_vertical"
                                                 android:layout_marginStart="20dp"
+                                                android:layout_weight="1"
                                                 android:background="@null"
                                                 android:backgroundTint="@null"
+                                                android:inputType="number"
+                                                android:maxLength="5"
+                                                android:textColor="@color/text3"
+                                                android:textSize="12sp" />
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center_vertical"
+                                                android:layout_marginEnd="10dp"
+                                                android:text="@string/sixmin_system_setting_area_length_unit"
                                                 android:textColor="@color/text3"
                                                 android:textSize="12sp" />
                                         </LinearLayout>
@@ -619,15 +631,15 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="38dp"
+                                    android:layout_marginStart="30dp"
                                     android:layout_marginTop="8dp"
                                     android:layout_marginEnd="44dp"
+                                    android:gravity="center_vertical"
                                     android:orientation="horizontal">
 
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
                                         android:layout_weight="1"
                                         android:orientation="horizontal">
 
@@ -635,30 +647,29 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center_vertical"
-                                            android:text="@string/sixmin_system_setting_steps_or_breath"
+                                            android:text="@string/sixmin_system_setting_ecg_lead_type"
                                             android:textColor="@color/text3"
                                             android:textSize="14sp" />
 
-                                        <RadioGroup
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginStart="5dp"
-                                            android:orientation="horizontal">
+                                        <LinearLayout
+                                            android:layout_width="115dp"
+                                            android:layout_height="23dp"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginStart="10dp"
+                                            android:background="@drawable/frame_with_color_d6d6d6">
 
-                                            <RadioButton
-                                                android:id="@+id/rb_steps_or_breath_steps"
+                                            <EditText
+                                                android:id="@+id/sixmin_et_other_ect_type"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:buttonTint="@color/colorPrimary"
-                                                android:text="@string/sixmin_system_setting_steps_or_breath_steps" />
+                                                android:layout_gravity="center_vertical"
+                                                android:layout_marginStart="20dp"
+                                                android:background="@null"
+                                                android:backgroundTint="@null"
+                                                android:textColor="@color/text3"
+                                                android:textSize="12sp" />
+                                        </LinearLayout>
 
-                                            <RadioButton
-                                                android:id="@+id/rb_steps_or_breath_breath"
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:buttonTint="@color/colorPrimary"
-                                                android:text="@string/sixmin_system_setting_steps_or_breath_breath" />
-                                        </RadioGroup>
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -710,15 +721,15 @@
                                     android:layout_marginStart="38dp"
                                     android:layout_marginTop="8dp"
                                     android:layout_marginEnd="44dp"
+                                    android:gravity="center_vertical"
                                     android:orientation="horizontal">
 
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
                                         android:layout_weight="1"
                                         android:orientation="horizontal"
-                                        android:visibility="invisible">
+                                        android:visibility="gone">
 
                                         <TextView
                                             android:layout_width="wrap_content"
@@ -747,6 +758,43 @@
                                                 android:layout_height="wrap_content"
                                                 android:buttonTint="@color/colorPrimary"
                                                 android:text="@string/sixmin_system_setting_position_of_trolley_start" />
+                                        </RadioGroup>
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:text="@string/sixmin_system_setting_steps_or_breath"
+                                            android:textColor="@color/text3"
+                                            android:textSize="14sp" />
+
+                                        <RadioGroup
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="5dp"
+                                            android:orientation="horizontal">
+
+                                            <RadioButton
+                                                android:id="@+id/rb_steps_or_breath_steps"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:buttonTint="@color/colorPrimary"
+                                                android:text="@string/sixmin_system_setting_steps_or_breath_steps" />
+
+                                            <RadioButton
+                                                android:id="@+id/rb_steps_or_breath_breath"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:buttonTint="@color/colorPrimary"
+                                                android:text="@string/sixmin_system_setting_steps_or_breath_breath" />
                                         </RadioGroup>
                                     </LinearLayout>
 
@@ -890,7 +938,8 @@
                                     <EditText
                                         android:id="@+id/sixmin_et_old_pwd"
                                         android:layout_width="169dp"
-                                        android:layout_height="22dp"
+                                        android:layout_height="wrap_content"
+                                        android:maxHeight="60dp"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="10dp"
                                         android:background="@drawable/frame_with_color_d6d6d6"
@@ -918,11 +967,11 @@
                                     <EditText
                                         android:id="@+id/sixmin_et_new_pwd"
                                         android:layout_width="169dp"
-                                        android:layout_height="22dp"
+                                        android:layout_height="wrap_content"
+                                        android:maxHeight="60dp"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="10dp"
                                         android:background="@drawable/frame_with_color_d6d6d6"
-                                        android:maxLines="1"
                                         android:paddingStart="10dp"
                                         android:textColor="@color/text3"
                                         android:textSize="14sp" />
@@ -947,11 +996,11 @@
                                     <EditText
                                         android:id="@+id/sixmin_et_confirm_pwd"
                                         android:layout_width="169dp"
-                                        android:layout_height="22dp"
+                                        android:layout_height="wrap_content"
+                                        android:maxHeight="60dp"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="10dp"
                                         android:background="@drawable/frame_with_color_d6d6d6"
-                                        android:maxLines="1"
                                         android:paddingStart="10dp"
                                         android:textColor="@color/text3"
                                         android:textSize="14sp" />

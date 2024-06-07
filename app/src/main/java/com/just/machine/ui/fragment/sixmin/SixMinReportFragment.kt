@@ -1,6 +1,5 @@
 package com.just.machine.ui.fragment.sixmin
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.print.PrintAttributes
@@ -35,7 +34,7 @@ import com.just.machine.model.SixMinRecordsBean
 import com.just.machine.model.SixMinReportInfoAndEvaluation
 import com.just.machine.model.SixMinReportItemBean
 import com.just.machine.ui.activity.SixMinDetectActivity
-import com.just.machine.ui.adapter.PdfDocumentAdapter
+import com.just.machine.ui.adapter.MyPrintAdapter
 import com.just.machine.ui.dialog.LoadingDialogFragment
 import com.just.machine.ui.dialog.SixMinPrintReportOptionsDialogFragment
 import com.just.machine.ui.viewmodel.MainViewModel
@@ -45,8 +44,6 @@ import com.just.news.R
 import com.just.news.databinding.FragmentSixminReportBinding
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -54,7 +51,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.math.BigDecimal
-import java.util.concurrent.TimeUnit
 
 /**
  * 6分钟报告界面
@@ -62,7 +58,6 @@ import java.util.concurrent.TimeUnit
 @AndroidEntryPoint
 class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
 
-    private var mDisposable3s: Disposable? = null
     private val viewModel by viewModels<MainViewModel>()
     private lateinit var mActivity: SixMinDetectActivity
     private var reportRowList = mutableListOf<SixMinReportItemBean>()
@@ -74,7 +69,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
     private lateinit var heartBeatDataSet: LineDataSet
     private lateinit var breathingDataSet: LineDataSet
     private lateinit var stepsDataSet: LineDataSet
-    private lateinit var startLoadingDialogFragment:LoadingDialogFragment
+    private lateinit var startLoadingDialogFragment: LoadingDialogFragment
 
     override fun loadData() {//懒加载
 
@@ -111,11 +106,9 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
             }
         }
         binding.sixminReportLlExportReport.setNoRepeatListener {
-            startLoadingDialogFragment =
-                LoadingDialogFragment.startLoadingDialogFragment(
-                    mActivity.supportFragmentManager,
-                    "导出报告中..."
-                )
+            startLoadingDialogFragment = LoadingDialogFragment.startLoadingDialogFragment(
+                mActivity.supportFragmentManager, "导出报告中..."
+            )
             val templateName = "templates/报告模板-无截图.docx"
 
             val bloodPng = File(
@@ -139,17 +132,23 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                     )
 
                 }
+            val imageEcg1 = File(
+                mActivity.getExternalFilesDir("")?.absolutePath,
+                pngSavePath + File.separator + "imageEcg1.png"
+            )
+            val imageEcg2 = File(
+                mActivity.getExternalFilesDir("")?.absolutePath,
+                pngSavePath + File.separator + "imageEcg2.png"
+            )
 
             val filePath = File(
                 mActivity.getExternalFilesDir("")?.absolutePath,
-                File.separator + "sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo
-                        + File.separator + "六分钟步行试验检测报告.doc"
+                File.separator + "sixmin/sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo + File.separator + "六分钟步行试验检测报告.doc"
             )
 
             val pdfFilePath = File(
                 mActivity.getExternalFilesDir("")?.absolutePath,
-                File.separator + "sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo
-                        + File.separator + "六分钟步行试验检测报告.pdf"
+                File.separator + "sixmin/sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo + File.separator + "六分钟步行试验检测报告.pdf"
             )
 
             if (filePath.parentFile?.exists() == false) {
@@ -159,14 +158,12 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
             val root = mutableMapOf<String, Any>()
             dealPageOne(root)
             dealPageTow(root, bloodPng, heartPng, hsHxlPng)
+            dealPageThree(root, imageEcg1, imageEcg2)
 
             lifecycleScope.launch(Dispatchers.IO) {
-                val generateWord =
-                    generateWord(
-                        root,
-                        templateName,
-                        filePath.absolutePath
-                    )
+                val generateWord = generateWord(
+                    root, templateName, filePath.absolutePath
+                )
                 if (!generateWord) {
                     withContext(Dispatchers.Main) {
                         mActivity.showMsg("生成word文档失败")
@@ -178,7 +175,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                     doc.save(pdfFilePath.absolutePath, SaveFormat.PDF)
                     withContext(Dispatchers.Main) {
                         mActivity.showMsg("导出报告成功")
-                        if(startLoadingDialogFragment.isVisible){
+                        if (startLoadingDialogFragment.isVisible) {
                             startLoadingDialogFragment.dismiss()
                         }
                     }
@@ -194,9 +191,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
             dialogFragment.setPrintReportOptionsClickListener(object :
                 SixMinPrintReportOptionsDialogFragment.PrintReportOptionsClickListener {
                 override fun onConfirmClick(
-                    ecgOptions: String,
-                    evaluationOptions: String,
-                    prescriptionOptions: String
+                    ecgOptions: String, evaluationOptions: String, prescriptionOptions: String
                 ) {
                     try {
                         if (evaluationOptions == "0" && prescriptionOptions == "0") {
@@ -206,16 +201,60 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                         dialogFragment.dismiss()
                         startLoadingDialogFragment =
                             LoadingDialogFragment.startLoadingDialogFragment(
-                                mActivity.supportFragmentManager,
-                                "加载报告中..."
+                                mActivity.supportFragmentManager, "加载报告中..."
                             )
                         var templateName = "templates/报告模板-无截图.docx"
-                        if (evaluationOptions == "0") {
-                            templateName = "templates/报告模板-无截图-无评估.docx"
+                        val captureOr = sixMinRecordsBean.heartEcgBean[0].jietuOr
+                        if (captureOr == "1") {
+                            if (evaluationOptions == "0") {
+                                if (prescriptionOptions == "1") {
+                                    templateName = if (ecgOptions == "0") {
+                                        "templates/报告模板-无截图-无评估-无心电波形.docx"
+                                    } else {
+                                        "templates/报告模板-有截图-无评估.docx"
+                                    }
+                                }
+                            } else {
+                                templateName = if (prescriptionOptions == "0") {
+                                    if (ecgOptions == "0") {
+                                        "templates/报告模板-无截图-无处方-无心电波形.docx"
+                                    } else {
+                                        "templates/报告模板-有截图-无处方.docx"
+                                    }
+                                } else {
+                                    if (ecgOptions == "0") {
+                                        "templates/报告模板-无截图-无心电波形.docx"
+                                    } else {
+                                        "templates/报告模板-有截图.docx"
+                                    }
+                                }
+                            }
+                        } else {
+                            if (evaluationOptions == "0") {
+                                if (prescriptionOptions == "1") {
+                                    templateName = if (ecgOptions == "0") {
+                                        "templates/报告模板-无截图-无评估-无心电波形.docx"
+                                    } else {
+                                        "templates/报告模板-无截图-无评估.docx"
+                                    }
+                                }
+                            } else {
+                                templateName = if (prescriptionOptions == "0") {
+                                    if (ecgOptions == "0") {
+                                        "templates/报告模板-无截图-无处方-无心电波形.docx"
+                                    } else {
+                                        "templates/报告模板-无截图-无处方.docx"
+                                    }
+                                } else {
+                                    if (ecgOptions == "0") {
+                                        "templates/报告模板-无截图-无心电波形.docx"
+                                    } else {
+                                        "templates/报告模板-无截图.docx"
+                                    }
+                                }
+                            }
                         }
-                        if (prescriptionOptions == "0") {
-                            templateName = "templates/报告模板-无截图-无处方.docx"
-                        }
+
                         val bloodPng = File(
                             mActivity.getExternalFilesDir("")?.absolutePath,
                             pngSavePath + File.separator + "imageBlood.png"
@@ -237,17 +276,23 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                                 )
 
                             }
+                        val imageEcg1 = File(
+                            mActivity.getExternalFilesDir("")?.absolutePath,
+                            pngSavePath + File.separator + "imageEcg1.png"
+                        )
+                        val imageEcg2 = File(
+                            mActivity.getExternalFilesDir("")?.absolutePath,
+                            pngSavePath + File.separator + "imageEcg2.png"
+                        )
 
                         val filePath = File(
                             mActivity.getExternalFilesDir("")?.absolutePath,
-                            File.separator + "sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo
-                                    + File.separator + "六分钟步行试验检测报告.doc"
+                            File.separator + "sixmin/sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo + File.separator + "六分钟步行试验检测报告.doc"
                         )
 
                         val pdfFilePath = File(
                             mActivity.getExternalFilesDir("")?.absolutePath,
-                            File.separator + "sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo
-                                    + File.separator + "六分钟步行试验检测报告.pdf"
+                            File.separator + "sixmin/sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo + File.separator + "六分钟步行试验检测报告.pdf"
                         )
 
                         if (filePath.parentFile?.exists() == false) {
@@ -257,14 +302,13 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                         val root = mutableMapOf<String, Any>()
                         dealPageOne(root)
                         dealPageTow(root, bloodPng, heartPng, hsHxlPng)
+                        dealPageThree(root, imageEcg1, imageEcg2)
+                        Log.d("SixMinReportFragment", "模版名称===$templateName")
 
                         lifecycleScope.launch(Dispatchers.IO) {
-                            val generateWord =
-                                generateWord(
-                                    root,
-                                    templateName,
-                                    filePath.absolutePath
-                                )
+                            val generateWord = generateWord(
+                                root, templateName, filePath.absolutePath
+                            )
                             if (!generateWord) {
                                 withContext(Dispatchers.Main) {
                                     mActivity.showMsg("生成word文档失败")
@@ -276,7 +320,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                                 doc.save(pdfFilePath.absolutePath, SaveFormat.PDF)
                                 withContext(Dispatchers.Main) {
                                     mActivity.showMsg("生成pdf文档成功")
-                                    if(startLoadingDialogFragment.isVisible){
+                                    if (startLoadingDialogFragment.isVisible) {
                                         startLoadingDialogFragment.dismiss()
                                     }
                                 }
@@ -300,9 +344,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
      * 生成word文档
      */
     private fun generateWord(
-        params: MutableMap<String, Any>,
-        templateName: String,
-        savePath: String
+        params: MutableMap<String, Any>, templateName: String, savePath: String
     ): Boolean {
         val open = mActivity.assets.open(templateName)
         val template = XWPFTemplate.compile(open)
@@ -346,7 +388,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         root["patientName"] = patientName
         root["xingbieStr"] = sixMinRecordsBean.infoBean.patientSix
         root["patientAge"] = sixMinRecordsBean.infoBean.patientAge
-        root["patientHeight"] = sixMinRecordsBean.infoBean.patientHeight
+        root["patientHeigh"] = sixMinRecordsBean.infoBean.patientHeight
         root["patientWeight"] = sixMinRecordsBean.infoBean.patientWeight
         root["patientBmi"] = sixMinRecordsBean.infoBean.patientBmi
         root["medicalNo"] = sixMinRecordsBean.infoBean.medicalNo
@@ -381,14 +423,15 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
 
         var strideAverageStr = "/"
         var heartRestoreStr = "/"
-        if (sixMinRecordsBean.prescriptionBean[0].prescripState == "1" ||sixMinRecordsBean.prescriptionBean[0].prescripState.isEmpty()) {
+        if (sixMinRecordsBean.prescriptionBean[0].prescripState == "1" || sixMinRecordsBean.prescriptionBean[0].prescripState.isEmpty()) {
             strideAverageStr = sixMinRecordsBean.strideBean[0].strideAverage + "米/分"
             heartRestoreStr = sixMinRecordsBean.heartBeatBean[0].heartRestore.ifEmpty { "0" }
         }
         root["striAvg"] = strideAverageStr
         root["metabEqu"] = sixMinRecordsBean.evaluationBean[0].metabEquivalent + "METs"
         root["accounted"] = sixMinRecordsBean.evaluationBean[0].accounted + "%"
-        root["stHeart"] = if(sixMinRecordsBean.heartBeatBean[0].heartStop.isEmpty()) "0bmp" else "${sixMinRecordsBean.heartBeatBean[0].heartStop}bmp"
+        root["stHeart"] =
+            if (sixMinRecordsBean.heartBeatBean[0].heartStop.isEmpty()) "0bmp" else "${sixMinRecordsBean.heartBeatBean[0].heartStop}bmp"
 
         var gardLevel: String = sixMinRecordsBean.evaluationBean[0].cardiopuLevel
         gardLevel = when (gardLevel) {
@@ -462,18 +505,18 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         //运动处方建议
         val checkPng = File(
             mActivity.getExternalFilesDir("")?.absolutePath,
-            "templates" + File.separator + "check.png"
+            "sixmin/templates" + File.separator + "check.png"
         )
         val unCheckPng = File(
             mActivity.getExternalFilesDir("")?.absolutePath,
-            "templates" + File.separator +"uncheck.png"
+            "sixmin/templates" + File.separator + "uncheck.png"
         )
         if (sixMinRecordsBean.prescriptionBean[0].movementWay == "0") {
-            root["checkcf1"] = PictureRenderData(14,14,checkPng.absolutePath)
-            root["checkcf2"] = PictureRenderData(14,14,unCheckPng.absolutePath)
+            root["checkcf1"] = PictureRenderData(14, 14, checkPng.absolutePath)
+            root["checkcf2"] = PictureRenderData(14, 14, unCheckPng.absolutePath)
         } else if (sixMinRecordsBean.prescriptionBean[0].movementWay == "1") {
-            root["checkcf2"] = PictureRenderData(14,14,checkPng.absolutePath)
-            root["checkcf1"] = PictureRenderData(14,14,unCheckPng.absolutePath)
+            root["checkcf2"] = PictureRenderData(14, 14, checkPng.absolutePath)
+            root["checkcf1"] = PictureRenderData(14, 14, unCheckPng.absolutePath)
         }
         var strideTitStrs = "/"
         var strideStrs = "/"
@@ -491,15 +534,15 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         //运动步速版本
         if (sixMinRecordsBean.prescriptionBean[0].prescripState == "1" || sixMinRecordsBean.prescriptionBean[0].prescripState.isEmpty()) {
             if (sixMinRecordsBean.prescriptionBean[0].distanceState.isEmpty() || sixMinRecordsBean.prescriptionBean[0].distanceState == "1") {
-                strideTitStrs = "运动步速";
+                strideTitStrs = "运动步速"
                 strideStrs =
                     sixMinRecordsBean.prescriptionBean[0].strideBefore + "-" + sixMinRecordsBean.prescriptionBean[0].strideAfter + "米/分钟";
-                movDistanceTitStrs = "运动距离";
+                movDistanceTitStrs = "运动距离"
                 movDistanceStrs =
                     sixMinRecordsBean.prescriptionBean[0].movementDistance + "-" + sixMinRecordsBean.prescriptionBean[0].movementDistanceAfter + "米";
             } else {
-                movDistanceTitStrs = "/";
-                movDistanceStrs = "/";
+                movDistanceTitStrs = "/"
+                movDistanceStrs = "/"
             }
             if (sixMinRecordsBean.prescriptionBean[0].heartrateState.isEmpty() || sixMinRecordsBean.prescriptionBean[0].heartrateState == "1") {
                 heartrateRateTitStr = "运动心率";
@@ -513,17 +556,17 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 strTit45 = "/";
                 str45 = "/";
             }
-            root["strideTitStrs"] = strideTitStrs;
-            root["strideStrs"] = strideStrs;
-            root["movDisTitStrs"] = movDistanceTitStrs;
-            root["movDisStrs"] = movDistanceStrs;
+            root["strideTl"] = strideTitStrs
+            root["strideStrs"] = strideStrs
+            root["movDisTl"] = movDistanceTitStrs
+            root["movDisStrs"] = movDistanceStrs
             root["movTime"] = sixMinRecordsBean.prescriptionBean[0].movementTime + "分钟"
-            root["heartrateRateTitStr"] = heartrateRateTitStr;
-            root["rateStr"] = heartrateRateStr;
-            root["metabMetTitStr"] = metabMetTitStr;
-            root["metabStr"] = metabMetStr;
-            root["strTit45"] = strTit45;
-            root["str45"] = str45;
+            root["rateTl"] = heartrateRateTitStr
+            root["rateStr"] = heartrateRateStr
+            root["metabTl"] = metabMetTitStr
+            root["metabStr"] = metabMetStr
+            root["str45Tl"] = strTit45
+            root["str45"] = str45
 
             var movementStr: String =
                 sixMinRecordsBean.prescriptionBean[0].movementWeeklyNumber + "次/周，" + sixMinRecordsBean.prescriptionBean[0].movementCycle
@@ -636,9 +679,28 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         root["imageWalkAndHxl"] = PictureRenderData(750, 200, hsHxlPng.absolutePath)
     }
 
+    private fun dealPageThree(
+        root: MutableMap<String, Any>, imageEcg1: File, imageEcg2: File, imageEcg3: File? = null
+    ) {
+        root["imageEcg1Str"] = "最快心率心电图: 心率92 bmp，速度: 25mm/s，增益: 10mm/mv"
+        root["imageEcg1Time"] = "第4分22秒"
+        root["imageEcg1"] = PictureRenderData(750, 200, imageEcg1.absolutePath)
+        root["imageEcg2Str"] = "最慢心率心电图: 心率61 bmp，速度: 25mm/s，增益: 10mm/mv"
+        root["imageEcg2Time"] = "第1分35秒"
+        root["imageEcg2"] = PictureRenderData(750, 200, imageEcg2.absolutePath)
+        val imageEcg3 = File(
+            mActivity.getExternalFilesDir("")?.absolutePath,
+            pngSavePath + File.separator + "imageEcg3.png"
+        )
+        if (sixMinRecordsBean.heartEcgBean[0].jietuOr == "1" && imageEcg3.exists()) {
+            root["imageEcg3Str"] = "截取心率心电图: 心率75 bmp，速度: 25mm/s，增益: 10mm/mv"
+            root["imageEcg3Time"] = "第3分33秒"
+            root["imageEcg3"] = PictureRenderData(750, 200, imageEcg3.absolutePath)
+        }
+    }
+
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentSixminReportBinding.inflate(inflater, container, false)
-
 
     private fun beanQueryEvaluation(any: Any) {
         try {
@@ -840,6 +902,8 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 val datas = any as MutableList<*>
                 sixMinRecordsBean = datas[0] as SixMinRecordsBean
 
+                sixMinRecordsBean.otherBean[0].useName = mActivity.sysSettingBean.sysOther.useOrg
+
                 binding.sixminReportTvUseName.text = sixMinRecordsBean.otherBean[0].useName
                 binding.sixminReportTvReportNo.text = "编号:${sixMinRecordsBean.infoBean.reportNo}"
                 binding.sixminReportTvPatientName.text =
@@ -964,7 +1028,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                     sb.append("中途休息了" + sixMinRecordsBean.infoBean.restDuration + "秒。")
                 }
 
-                if(sixMinRecordsBean.heartBeatBean[0].heartConclusion.isNotEmpty()){
+                if (sixMinRecordsBean.heartBeatBean[0].heartConclusion.isNotEmpty()) {
                     sb.append("\n心电结论: ${sixMinRecordsBean.heartBeatBean[0].heartConclusion}")
                 }
 
@@ -975,16 +1039,22 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                         "${sixMinRecordsBean.prescriptionBean[0].strideBefore}~${sixMinRecordsBean.prescriptionBean[0].strideAfter}米/分钟"
                     binding.sixminReportTvSportDistance.text =
                         "${sixMinRecordsBean.prescriptionBean[0].movementDistance}~${sixMinRecordsBean.prescriptionBean[0].movementDistanceAfter}米"
+                    binding.sixminReportTvSportStrideTitle.text = "运动步速"
+                    binding.sixminReportTvSportDistanceTitle.text = "运动距离"
                 } else {
                     binding.sixminReportTvSportStride.text = "/"
                     binding.sixminReportTvSportDistance.text = "/"
+                    binding.sixminReportTvSportStrideTitle.text = "/"
+                    binding.sixminReportTvSportDistanceTitle.text = "/"
                 }
 
                 if (sixMinRecordsBean.prescriptionBean[0].heartrateState.isEmpty() || sixMinRecordsBean.prescriptionBean[0].heartrateState == "1") {
                     binding.sixminReportTvPrescriptionHeartBeat.text =
                         "${sixMinRecordsBean.prescriptionBean[0].heartrateRate}bmp"
+                    binding.sixminReportTvPrescriptionHeartBeatTitle.text = "运动心率"
                 } else {
                     binding.sixminReportTvPrescriptionHeartBeat.text = "/"
+                    binding.sixminReportTvPrescriptionHeartBeatTitle.text = "/"
                 }
                 binding.sixminReportTvSportTime.text =
                     "${sixMinRecordsBean.prescriptionBean[0].movementTime}分钟"
@@ -1008,15 +1078,19 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 if (sixMinRecordsBean.prescriptionBean[0].pllevState.isEmpty() || sixMinRecordsBean.prescriptionBean[0].pllevState == "1") {
                     binding.sixminReportTvPrescriptionTiredLevel.text =
                         sixMinRecordsBean.prescriptionBean[0].pilaoControl
+                    binding.sixminReportTvPrescriptionTiredTitle.text = "自觉疲劳程度"
                 } else {
                     binding.sixminReportTvPrescriptionTiredLevel.text = "/"
+                    binding.sixminReportTvPrescriptionTiredTitle.text = "/"
                 }
 
                 if (sixMinRecordsBean.prescriptionBean[0].metabState.isEmpty() || sixMinRecordsBean.prescriptionBean[0].metabState == "1") {
                     binding.sixminReportTvPrescriptionMetab.text =
                         "${sixMinRecordsBean.prescriptionBean[0].metabMet}METs"
+                    binding.sixminReportTvPrescriptionMetabTitle.text = "代谢当量"
                 } else {
                     binding.sixminReportTvPrescriptionMetab.text = "/"
+                    binding.sixminReportTvPrescriptionMetabTitle.text = "/"
                 }
 
                 binding.sixminReportTvNote.text = sixMinRecordsBean.prescriptionBean[0].remarke
@@ -1298,7 +1372,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 binding.sixminReportLineChartBloodOxygen.invalidate()
 
                 pngSavePath =
-                    File.separator + "sixminreportpng" + File.separator + sixMinRecordsBean.infoBean.reportNo
+                    File.separator + "sixmin/sixminreportpng" + File.separator + sixMinRecordsBean.infoBean.reportNo
                 val file = File(mActivity.getExternalFilesDir("")?.absolutePath, pngSavePath)
                 if (!file.exists()) {
                     file.mkdirs()
@@ -1314,6 +1388,37 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                     mActivity, "imageBreathing", pngSavePath
                 )
                 binding.sixminReportLineChartSteps.saveToPath(mActivity, "imageSteps", pngSavePath)
+
+                //第三页
+                binding.sixminReportTvUseNameThree.text = sixMinRecordsBean.otherBean[0].useName
+                binding.sixminReportTvReportNoThree.text =
+                    "编号:${sixMinRecordsBean.infoBean.reportNo}"
+                binding.sixminReportTvMostQuickHeart.text = String.format(
+                    getString(R.string.sixmin_test_report_heart_beart_capture_title),
+                    "最快",
+                    "92",
+                    "25",
+                    "10"
+                )
+                binding.sixminReportTvMostSlowHeart.text = String.format(
+                    getString(R.string.sixmin_test_report_heart_beart_capture_title),
+                    "最慢",
+                    "61",
+                    "25",
+                    "10"
+                )
+                if (sixMinRecordsBean.heartEcgBean[0].jietuOr.isEmpty() || sixMinRecordsBean.heartEcgBean[0].jietuOr == "0") {
+                    binding.sixminReportLlCaptureHeart.visibility = View.GONE
+                } else {
+                    binding.sixminReportLlCaptureHeart.visibility = View.VISIBLE
+                    binding.sixminReportTvCaptureHeart.text = String.format(
+                        getString(R.string.sixmin_test_report_heart_beart_capture_title),
+                        "截取",
+                        "75",
+                        "25",
+                        "10"
+                    )
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -1462,69 +1567,19 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         }
     }
 
-    @SuppressLint("AutoDispose")
+    /**
+     * 打印pdf
+     */
     private fun onPrintPdf(path: String) {
         val printManager = mActivity.getSystemService(Context.PRINT_SERVICE) as PrintManager
         val builder = PrintAttributes.Builder()
-        builder.setColorMode(PrintAttributes.COLOR_MODE_MONOCHROME)
-        val mPdfDocumentAdapter = PdfDocumentAdapter(mActivity, path)
-        val printReport = printManager.print("PrintReport", mPdfDocumentAdapter, builder.build())
-        mPdfDocumentAdapter.setOnPrintStatue {
-            if (printReport.isCancelled) {
-                mActivity.runOnUiThread {
-                    Log.e("打印报告回调======", "====打印被取消了")
-                    mActivity.showMsg("打印被取消了")
-                }
+        builder.setMediaSize(PrintAttributes.MediaSize.ISO_A4.asPortrait());
+        val mPdfDocumentAdapter = MyPrintAdapter(mActivity, path)
+        val printReport = printManager.print("sixMinReport", mPdfDocumentAdapter, builder.build())
+        if (printReport.isStarted) {
+            mActivity.runOnUiThread {
+                mActivity.showMsg("开始打印")
             }
-            if (printReport.isBlocked) {
-                mActivity.runOnUiThread {
-                    Log.e("打印报告回调======", "====打印机器被锁定了(卡了或者没有纸张了)")
-                    mActivity.showMsg("打印机器被锁定了(卡了或者没有纸张了)")
-                }
-            }
-            binding.sixminReportLlPrintReport.postDelayed(Runnable {
-                if (printReport.isStarted) {
-                    mActivity.showMsg("开始打印")
-                    mDisposable3s = Observable
-                        .interval(3, TimeUnit.SECONDS) //定时器操作符，这里三秒打印一个log
-                        //取消任务时取消定时唤醒
-                        .doOnDispose {}
-                        .subscribe { count ->
-                            val completed = printReport.isCompleted //完成的回调
-                            val failed = printReport.isFailed //失败的回调
-                            if (completed) {
-                                mActivity.runOnUiThread {
-                                    Log.e("打印报告回调======", "====打印完成")
-                                    mActivity.showMsg("打印完成")
-                                }
-                                if (null != mDisposable3s) {
-                                    mDisposable3s?.dispose()
-                                    mDisposable3s = null
-                                }
-                            }
-                            if (failed) {
-                                mActivity.runOnUiThread {
-                                    Log.e("打印报告回调======", "====打印失败")
-                                    mActivity.showMsg("打印失败")
-                                }
-                                if (null != mDisposable3s) {
-                                    mDisposable3s?.dispose()
-                                    mDisposable3s = null
-                                }
-                            }
-                            if (!completed && count.toInt() == 40) {  //2分钟还未打印成功,默认打印失败
-                                mActivity.runOnUiThread {
-                                    Log.e("打印报告回调======", "====打印失败")
-                                    mActivity.showMsg("打印失败")
-                                }
-                                if (null != mDisposable3s) {
-                                    mDisposable3s?.dispose()
-                                    mDisposable3s = null
-                                }
-                            }
-                        }
-                }
-            }, 1000)
         }
     }
 }
