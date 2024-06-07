@@ -1,11 +1,9 @@
-package com.just.machine.util
+package com.just.machine.model.lungdata
 
 //import com.just.machine.model.lungdata.Cashe
+import com.common.network.LogUtils
 import com.just.machine.dao.lung.CPXBreathInOutData
 import com.just.machine.dao.setting.AllSettingBean
-import com.just.machine.model.lungdata.CPXBreathInOutDataBase
-import com.just.machine.model.lungdata.CPXCalBase
-import com.just.machine.model.lungdata.CPXSerializeData
 import kotlin.math.abs
 import kotlin.math.log10
 
@@ -42,7 +40,11 @@ object CPXCalcule {
         breathData.PiCO2 = p2Kpa * breathData.FiCO2!! / 100.0
         breathData.PeTO2 = p2Kpa * dataBase.FeTO2 / 100.0
         breathData.PeTCO2 = p2Kpa * dataBase.FeTCO2 / 100.0
-        breathData.Ttot = dataBase.Tin + dataBase.Tex
+
+//        dataBase.Tin = 2.0
+//        dataBase.Tex = 2.0
+
+        breathData.Ttot = dataBase.Tin + dataBase.Tex //总时间
         breathData.Tin_div_Ttot = dataBase.Tin / breathData.Ttot!! * 100.0
         breathData.BF = 60.0 / breathData.Ttot!!
         breathData.VE = breathData.VTex!! * breathData.BF!!
@@ -55,22 +57,47 @@ object CPXCalcule {
             dataBase.P
         )
         val paCO2 = 0.05 * (breathData.PiO2!! - breathData.PaO2!!) + breathData.PeTCO2!!
-        breathData.VD = breathData.VTex!! * (paCO2 - breathData.PaCO2!!) / paCO2 - physicalVD
+        breathData.VD =
+            breathData.VTex!! * (paCO2 - breathData.PaCO2!!) / paCO2 - physicalVD //不用物理死腔
         breathData.VD_div_VT = breathData.VD!! / breathData.VTex!! * 100.0
+
+//        LogUtils.d("BreathData" + "VTex: ${breathData.VTex}")
+//        LogUtils.d("BreathData" + "paCO2: ${paCO2}")
+//        LogUtils.d("BreathData" + "breathData.PaCO2: ${breathData.PaCO2}")
+//
+//        LogUtils.d("BreathData" + "physicalVD: ${physicalVD}")
+//        LogUtils.d("BreathData" + "VdO2: ${breathData.VdO2}")
+//        LogUtils.d("BreathData" + "VD: ${breathData.VD}")
+
         if (beforeDyBreathInOutData != null) {
             breathData.VD =
-                breathData.VTex!! * (dataBase.FeTCO2 - breathData.FeCO2!!) / (dataBase.FeTCO2 - (if (breathData.FiCO2!! < 0.0) 0.0 else breathData.FiCO2)!!)
+                breathData.VTex!! * (dataBase.FeTCO2 - breathData.FeCO2!!) / (dataBase.FeTCO2
+                        - (if (breathData.FiCO2!! < 0.0) 0.0 else breathData.FiCO2)!!)
+            LogUtils.d("BreathData" + "VTex: ${breathData.VTex}")
+            LogUtils.d("BreathData" + "FeTCO2: ${dataBase.FeTCO2}")
+            LogUtils.d("BreathData" + "FeCO2: ${breathData.FeCO2}")
+            LogUtils.d("BreathData" + "FiCO2: ${breathData.FiCO2}")
+            LogUtils.d("BreathData" + "vd1: ${breathData.VD}")
         } else {
             breathData.VD = 0.33 * breathData.VTex!!
         }
         if (breathData.VD!! < 0.2 || breathData.VD!! >= 1) {
             breathData.VD = 0.33 * breathData.VTex!!
         }
+        LogUtils.d("BreathData" + "VD: ${breathData.VD}")
         breathData.VD_div_VT = breathData.VD!! / breathData.VTex!! - physicalVD
+
         breathData.VdO2 =
             if (beforeDyBreathInOutData == null) 0.0 else (breathData.VD!! + physicalVD) * abs(
                 dataBase.FeTO2 - dataBase.FeTO2
             ) / 100 * breathData.BF!!
+
+//        LogUtils.d("BreathData" + "physicalVD: ${physicalVD}")
+//        LogUtils.d("BreathData" + "FeTO2: ${dataBase.FeTO2}")
+//        LogUtils.d("BreathData" + "FeTO2: ${dataBase.FeTO2}")
+//        LogUtils.d("BreathData" + "BF: ${breathData.BF}")
+//        LogUtils.d("BreathData" + "VdO2: ${breathData.VdO2}")
+
         breathData.VdCO2 =
             if (beforeDyBreathInOutData == null) 0.0 else (breathData.VD!! + physicalVD) * abs(
                 dataBase.FeTCO2 - dataBase.FeTCO2
@@ -79,6 +106,7 @@ object CPXCalcule {
             breathData.VE!! * (100.0 - breathData.FeCO2!! - breathData.FeO2!!) / (100.0 - breathData.FiO2!! - breathData.FiCO2!!)
         val v1 =
             breathData.VI!! * breathData.FiO2!! / 100 - breathData.VE!! * breathData.FeO2!! / 100 + breathData.VdO2!!
+
         val aa = log10(breathData.BF!! / 12) * 100
         breathData.VO2 = CPXCalBase.stpd(
             if (v1 + 0.02 - aa * v1 / 1000 < 0.03) 0.0 else v1 + 0.02 - aa * v1 / 1000,

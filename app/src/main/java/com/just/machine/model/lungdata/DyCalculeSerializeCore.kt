@@ -15,7 +15,7 @@ class DyCalculeSerializeCore {
     var Noise = 30
 
     //    private val timer: DispatcherTimer = DispatcherTimer()
-    private var state: BreathState? = null
+    var state: BreathState? = null
     var FlowAccumulation = 0.0
 
     @Volatile
@@ -59,9 +59,9 @@ class DyCalculeSerializeCore {
 //        ReOpenTimer(false)
     }
 
-    fun setBegin() {
+    fun setBegin(breathState: BreathState) {
         HasFindBegin = true
-        state = BreathState.breathOut
+        state = breathState
     }
 
     fun enqueDyDataModel(model: CPXSerializeData): CPXSerializeData {//处理原始数据
@@ -164,8 +164,8 @@ class DyCalculeSerializeCore {
         val dyBreathInOutData = CPXBreathInOutData()
 //        val cpxBreathInOutDataBase = CPXBreathInOutDataBase()
 
-        val dy = dylist[0]
-//        val dy = dylist[model.BreathOut_End_index]
+//        val dy = dylist[0]
+        val dy = dylist[model.BreathOut_End_index]
 
         cpxBreathInOutDataBase.EndRealIndex = dy.index
         cpxBreathInOutDataBase.Tin =
@@ -187,8 +187,8 @@ class DyCalculeSerializeCore {
         cpxBreathInOutDataBase.TempiCO2 = num3
 
         cpxBreathInOutDataBase.Tex =
-            (dylist[0].index - dylist[0].index).toDouble() * 0.005
-//            (dylist[breathOutEndIndex].index - dylist[breathOutStartIndex].index).toDouble() * 0.005
+//            (dylist[0].index - dylist[0].index).toDouble() * 0.005
+            (dylist[breathOutEndIndex].index - dylist[breathOutStartIndex].index).toDouble() * 0.005
         var num9 = 0.0
         var num10 = 0.0
         var num11 = 0.0

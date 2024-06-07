@@ -73,7 +73,6 @@ class DynamicDataFragment : CommonBaseFragment<FragmentDynamicDataBinding>() {
                     if (it.any !is List<*>) {
                         return@observe
                     }
-                    LogUtils.e(TAG + it.any)
                     mutableListCPX.clear()
                     val listBean = it.any as List<*>
                     for (bean in listBean) {
@@ -82,7 +81,6 @@ class DynamicDataFragment : CommonBaseFragment<FragmentDynamicDataBinding>() {
                         }
                         mutableListCPX.add(bean)
                     }
-                    LogUtils.e(TAG + "$mutableListCPX")
                     adapterData?.setItemsBean(mutableListCPX)
                 }
             }

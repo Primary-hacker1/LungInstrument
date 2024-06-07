@@ -4,16 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
-import com.common.base.log
-import com.common.network.LogUtils
 import com.github.mikephil.charting.data.Entry
 import com.just.machine.dao.lung.CPXBreathInOutData
-import com.just.machine.model.lungdata.CPXSerializeData
-import com.just.machine.ui.fragment.serial.MudbusProtocol
 import com.just.machine.ui.viewmodel.MainViewModel
-import com.just.machine.util.BaseUtil
-import com.just.machine.util.CPXCalcule
-import com.just.machine.util.CommonUtil
 import com.just.machine.util.LiveDataBus
 import com.just.news.databinding.FragmentRoutineDynmicBinding
 import dagger.hilt.android.AndroidEntryPoint

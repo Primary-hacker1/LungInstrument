@@ -1,6 +1,7 @@
 //package com.just.machine.model.lungdata
 //
 //import androidx.databinding.ObservableList
+//import com.mlnx.pms.core.Patient
 //import java.util.*
 //
 //object Cashe {
