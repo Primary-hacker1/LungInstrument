@@ -29,5 +29,6 @@ interface Constants {
         const val loadingDialogContent = "loadingDialogContent"//loading弹窗文案
         const val sixMinLiveDataBusKey = "simMinTest"//6分钟USB数据key
         const val sixMinFaceMask= "sixMinFaceMask"//6分钟是否佩戴面罩
+        const val sixMinEcgVisibleLeft = "sixMinEcgVisibleLeft"//6分钟心电回放位置
     }
 }

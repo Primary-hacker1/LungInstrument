@@ -1,6 +1,7 @@
 package com.just.machine.ui.fragment.sixmin
 
 import android.graphics.Bitmap
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.SeekBar
@@ -31,6 +32,7 @@ class SixMinHeartEcgFragment : CommonBaseFragment<FragmentSixminHeartEcgBinding>
 
     private val viewModel by viewModels<MainViewModel>()
     private lateinit var mActivity: SixMinDetectActivity
+    private var visibleLeft: Int = 0 //可见试图的左坐标，也是数据的起始位置，随着seekbar的滑动，起始位置也会随着变化
 
     override fun loadData() {
         lifecycleScope.launch(Dispatchers.Default) {
@@ -88,6 +90,7 @@ class SixMinHeartEcgFragment : CommonBaseFragment<FragmentSixminHeartEcgBinding>
 
         binding.sixminStaticHeartEcg.setOnVisibleCoorPortChangedListener(
             OnVisibleCoorPortChangedListener { visiblePort, maxPort ->
+                visibleLeft = visiblePort.left.toInt()
                 val progress = visiblePort.left / (maxPort.width() - visiblePort.width())
                 binding.sixminStaticEcgSeekbar.progress =
                     (binding.sixminStaticEcgSeekbar.max * progress).toInt()
