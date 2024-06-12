@@ -22,20 +22,16 @@ import com.just.machine.ui.fragment.serial.MudbusProtocol
 import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.model.lungdata.CPXCalcule
-import com.just.machine.model.lungdata.CPXDataModel
-import com.just.machine.model.lungdata.CPXDataModelSerializeCashe
+import com.just.machine.model.lungdata.TestModel
 import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FragmentDynamicBinding
+import com.justsafe.libview.util.DateUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kotlin.math.PI
-import kotlin.math.sin
-import kotlin.random.Random
 
 
 /**
@@ -63,101 +59,144 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
         initViewPager()
 
         binding.llStart.setNoRepeatListener {
-            test1()
             return@setNoRepeatListener
             SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)//发送流量定标a
         }
 
         binding.llClean.setNoRepeatListener {
 
+            val dataList = TestModel().dataList
+
+            val byteArrayList = dataList.map { TestModel().hexStringToByteArray(it) }
+
+            val lungTestDatas: MutableList<LungTestData> = mutableListOf()
+
+            byteArrayList.forEach { data ->
+                MudbusProtocol.parseLungTestData(data)?.let { it1 -> lungTestDatas.add(it1) }
+            }
+
+            // 生成吸气和呼气数据
+            val lungTestDataList = generateBreathCycleData()
+
+//            test1(lungTestDatas)
+            test1(lungTestDataList)
         }
 
     }
 
-    // 假设这是第i个数据点，totalPoints表示总的数据点数
-    private fun generateBreathCycleData(i: Int, totalPoints: Int): Int {
-        val cycleLength = totalPoints / 2  // 一半吸气，一半呼气
-        val angle = (i % cycleLength) * 2 * PI / cycleLength
-        return (sin(angle) * 100).toInt()  // 生成的流量在-100到100之间变化
+    fun generateLungTestData(
+        flowValue: Int,
+        index: Int,
+        bloodOxygen: Int = 95,
+        co2: Int = 40,
+        o2: Int = 21,
+        temperature: Int = 37,
+        humidity: Int = 50,
+        atmosphericPressure: Float = 1013.25f,
+        gasFlowSpeedSensorData: Int = 200,
+        gasPressureSensorData: Int = 100,
+        batteryLevel: Int = 100
+    ): LungTestData {
+        return LungTestData(
+            returnCommand = 0x07,
+            temperature = temperature,
+            humidity = humidity,
+            atmosphericPressure = atmosphericPressure,
+            highRangeFlowSensorData = flowValue,
+            lowRangeFlowSensorData = 0,
+            co2SensorData = co2,
+            o2SensorData = o2,
+            gasFlowSpeedSensorData = gasFlowSpeedSensorData,
+            gasPressureSensorData = gasPressureSensorData,
+            bloodOxygen = bloodOxygen,
+            batteryLevel = batteryLevel
+        )
     }
 
-    private fun computeTheDataModel(lungTestData: LungTestData) {
+    fun generateBreathCycleData(): MutableList<LungTestData> {
+        val dataList = mutableListOf<LungTestData>()
+        var flowValue = -1
 
-        val cpxSerializeData =
-            CPXSerializeData().convertLungTestDataToCPXSerializeData(lungTestData)
-
-        val core = DyCalculeSerializeCore() // 计算出CPXSerializeData数据
-
-//        core.setBegin(BreathState.None) // 假设吸气
-//
-//        val serializeData = core.enqueDyDataModel(cpxSerializeData) // 计算一口气参数
-//
-//        val cpxBreathInOutData = CPXCalcule.calDyBreathInOutData(
-//            serializeData,
-//            core.cpxBreathInOutDataBase
-//        ) // 计算出动态肺参数
-//
-//        core.setBegin(BreathState.breathOut) // 假设吸气
-
-        val serializeData1 = core.enqueDyDataModel(cpxSerializeData) // 计算一口气参数
-
-        val cpxBreathInOutData1 = CPXCalcule.calDyBreathInOutData(
-            serializeData1,
-            core.cpxBreathInOutDataBase
-        ) // 计算出动态肺参数
-
-        val patientBean = SharedPreferencesUtils.instance.patientBean
-        val id = patientBean?.patientId
-
-        if (id != null) {
-            cpxBreathInOutData1.patientId = id
+        // 生成几十组吸气数据 (Flow < 0)
+        for (i in 1..30) {
+            dataList.add(generateLungTestData(flowValue, i))
+            flowValue -= 1
         }
 
-        LogUtils.e(tag + cpxBreathInOutData1.toString())
+        // 重置 flowValue
+        flowValue = 1
 
-//        viewModel.insertCPXBreathInOutData(cpxBreathInOutData) // 插入数据库
+        // 生成几十组呼气数据 (Flow > 0)
+        for (i in 1..30) {
+            dataList.add(generateLungTestData(flowValue, i + 30))
+            flowValue += 1
+        }
 
-        LiveDataBus.get().with("动态心肺测试").postValue(cpxBreathInOutData1)
+        return dataList
     }
-
-    private var currentIndex = 0  // 全局变量，跟踪数据点的索引
-
-    private val totalPoints = 200  // 假设每个完整呼吸周期有200个数据点
 
 
     // 使用GlobalScope启动一个新的协程
-    fun test1() = GlobalScope.launch(Dispatchers.IO) { // 使用IO调度器启动协程
-        val totalCycles = 5  // 假设模拟5个呼吸周期
+    fun test1(lungTestDatas: MutableList<LungTestData>) =
+        GlobalScope.launch(Dispatchers.IO) { // 使用IO调度器启动协程
+            lungTestDatas.forEach { data ->
+                breathTest(lungTestDatas)
+                delay(10) // 休息10毫秒
+            }
+        }
 
-        for (i in 1..totalCycles * totalPoints) {
-            val controlBoardResponse = LungTestData(
-                temperature = Random.nextInt(0, 100),
-                humidity = Random.nextInt(0, 100),
-                atmosphericPressure = Random.nextInt(800, 1200).toFloat(),
-                highRangeFlowSensorData = -300100,
-                lowRangeFlowSensorData = generateBreathCycleData(currentIndex, totalPoints),
-                co2SensorData = Random.nextInt(0, 100),
-                o2SensorData = Random.nextInt(0, 100),
-                gasFlowSpeedSensorData = Random.nextInt(0, 100),
-                gasPressureSensorData = Random.nextInt(0, 100),
-                bloodOxygen = Random.nextInt(0, 100),
-                batteryLevel = Random.nextInt(0, 100)
+    fun breathTest(lungTestDatas: MutableList<LungTestData>) {
+
+        val breathInData = mutableListOf<CPXSerializeData>()
+
+        for (i in 0 until lungTestDatas.size) {
+            breathInData.add(
+                CPXSerializeData().convertLungTestDataToCPXSerializeData(lungTestDatas[i])
             )
+        }
 
-            currentIndex++  // 每次生成数据后增加索引
+        var cpxSerializeData: CPXSerializeData
 
-            // 在协程中处理耗时操作
-            computeTheDataModel(controlBoardResponse).let {
-                // 可以在这里处理结果，比如更新UI（注意：更新UI需要切换到主线程）
-                withContext(Dispatchers.Main) {
-                    // 更新UI操作
-                }
+        for (index in breathInData) {
+            // 处理每组呼吸数据
+            val dyCalculeSerializeCore = DyCalculeSerializeCore()
+
+            dyCalculeSerializeCore.setBegin(BreathState.None)
+
+            cpxSerializeData = dyCalculeSerializeCore.enqueDyDataModel(index)
+
+            // 处理结果
+//            val processedData: CPXBreathInOutData =
+            dyCalculeSerializeCore.caluculeData(dyCalculeSerializeCore.observeBreathModel!!)
+
+//            LogUtils.e(tag + processedData)
+
+//            LogUtils.e(tag + cpxSerializeData)
+
+//            LogUtils.e(tag + dyCalculeSerializeCore.cpxBreathInOutDataBase)
+
+            val cpxBreathInOutData = CPXCalcule.calDyBreathInOutData(
+                cpxSerializeData,
+                dyCalculeSerializeCore.cpxBreathInOutDataBase
+            ) // 计算出动态肺参数
+
+            val patientBean = SharedPreferencesUtils.instance.patientBean
+
+            val id = patientBean?.patientId
+
+            if (id != null) {
+                cpxBreathInOutData.patientId = id
             }
 
-            delay(10) // 休息10毫秒
+            cpxBreathInOutData.createTime = DateUtils.nowMinutesDataString
+
+            LogUtils.e(tag + cpxBreathInOutData.toString())
+
+//        viewModel.insertCPXBreathInOutData(cpxBreathInOutData) // 插入数据库
+
+            LiveDataBus.get().with("动态心肺测试").postValue(cpxBreathInOutData)
         }
     }
-
 
 
     private fun initViewPager() {

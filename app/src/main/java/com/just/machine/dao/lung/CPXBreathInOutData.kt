@@ -66,6 +66,7 @@ data class CPXBreathInOutData(
     var VE: Double? = 0.0,
     var VD_div_VT: Double? = 0.0,
     var VD: Double? = 0.0,
+    var REE: Double? = 0.0,
 ) {
 
     fun toMutableList(): MutableList<Pair<String, Any?>> {
@@ -108,7 +109,8 @@ data class CPXBreathInOutData(
             "BF" to BF,
             "VE" to VE,
             "VD_div_VT" to VD_div_VT,
-            "VD" to VD
+            "VD" to VD,
+            "REE" to REE
         )
     }
 

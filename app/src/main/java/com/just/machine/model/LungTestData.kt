@@ -51,32 +51,18 @@ data class LungTestData(
     }
 
     // 示例代码：接收串口数据并进行处理
-    fun processLungTestData() {
-        // 模拟接收串口数据
-        val controlBoardResponse = LungTestData(
-            temperature = Random.nextInt(0, 100), // 模拟温度数据
-            humidity = Random.nextInt(0, 100), // 模拟湿度数据
-            atmosphericPressure = Random.nextInt(800, 1200).toFloat(), // 模拟大气压力数据
-            highRangeFlowSensorData = Random.nextInt(0, 100), // 模拟高量程流量传感器数据
-            lowRangeFlowSensorData = Random.nextInt(0, 100), // 模拟低量程流量传感器数据
-            co2SensorData = Random.nextInt(0, 100), // 模拟CO2传感器数据
-            o2SensorData = Random.nextInt(0, 100), // 模拟O2传感器数据
-            gasFlowSpeedSensorData = Random.nextInt(0, 100), // 模拟气体流速传感器数据
-            gasPressureSensorData = Random.nextInt(0, 100), // 模拟气体压力传感器数据
-            bloodOxygen = Random.nextInt(0, 100), // 模拟血氧数据
-            batteryLevel = Random.nextInt(0, 100) // 模拟电池电量数据
-        )
+    fun processLungTestData(lungTestData: LungTestData) {
 
         // 将接收的数据传递给相应的方法进行处理
-        val temperature = controlBoardResponse.temperature
-        val humidity = controlBoardResponse.humidity
-        val atmosphericPressure = controlBoardResponse.atmosphericPressure
-        val highRangeFlow = controlBoardResponse.highRangeFlowSensorData
-        val lowRangeFlow = controlBoardResponse.lowRangeFlowSensorData
-        val co2 = controlBoardResponse.co2SensorData
-        val o2 = controlBoardResponse.o2SensorData
-        val gasFlowSpeed = controlBoardResponse.gasFlowSpeedSensorData
-        val gasPressure = controlBoardResponse.gasPressureSensorData
+        val temperature = lungTestData.temperature
+        val humidity = lungTestData.humidity
+        val atmosphericPressure = lungTestData.atmosphericPressure
+        val highRangeFlow = lungTestData.highRangeFlowSensorData
+        val lowRangeFlow = lungTestData.lowRangeFlowSensorData
+        val co2 = lungTestData.co2SensorData
+        val o2 = lungTestData.o2SensorData
+        val gasFlowSpeed = lungTestData.gasFlowSpeedSensorData
+        val gasPressure = lungTestData.gasPressureSensorData
 
         // 计算流量
         val flowIn = CPXCalBase.calcFlowIn(

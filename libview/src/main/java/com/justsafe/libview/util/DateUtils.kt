@@ -21,6 +21,9 @@ object DateUtils {
     @SuppressLint("SimpleDateFormat")
     val DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd")
 
+    @SuppressLint("SimpleDateFormat")
+    val MINUTES_FORMAT = SimpleDateFormat("HH:mm:ss")
+
     private var dataWeek: Date? = null
 
     /**
@@ -79,6 +82,17 @@ object DateUtils {
         get() {
             val nowDate = Date()
             return TIME_FORMAT.format(nowDate)
+        }
+
+    /**
+     * 取得现在时间的年月日字符串
+     *
+     * @return 时间的年月日字符串
+     */
+    val nowMinutesDataString: String
+        get() {
+            val nowDate = Date()
+            return MINUTES_FORMAT.format(nowDate)
         }
 
     /**
