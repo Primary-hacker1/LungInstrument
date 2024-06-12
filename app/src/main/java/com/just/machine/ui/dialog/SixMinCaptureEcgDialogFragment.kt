@@ -9,7 +9,6 @@ import androidx.lifecycle.lifecycleScope
 import com.common.base.BaseDialogFragment
 import com.common.base.setNoRepeatListener
 import com.just.machine.model.Constants
-import com.just.machine.util.CommonUtil
 import com.just.machine.util.ECGDataParse
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogSixminCaptureEcgBinding
@@ -25,7 +24,8 @@ class SixMinCaptureEcgDialogFragment : BaseDialogFragment<FragmentDialogSixminCa
 
     private lateinit var listener: CaptureEcgDialogListener
     private lateinit var imagePreview:Bitmap
-    private var type:Int = 0
+    private var type:Int = 0 //心电回放截图类型 1 最快心电 2最慢心电 3截取心电
+    private var ecgVisibleLeft = 0 //心电回放位置
 
     companion object {
         /**
@@ -35,6 +35,7 @@ class SixMinCaptureEcgDialogFragment : BaseDialogFragment<FragmentDialogSixminCa
         fun startSixMinCaptureEcgDialogFragment(
 
             fragmentManager: FragmentManager,
+            visibleLeft:String=""
 
             ): SixMinCaptureEcgDialogFragment {
 
@@ -44,6 +45,12 @@ class SixMinCaptureEcgDialogFragment : BaseDialogFragment<FragmentDialogSixminCa
                 fragmentManager,
                 SixMinCaptureEcgDialogFragment::javaClass.toString()
             )
+
+            val bundle = Bundle()
+
+            bundle.putString(Constants.sixMinEcgVisibleLeft, visibleLeft)
+
+            dialogFragment.arguments = bundle
             return dialogFragment
         }
     }
@@ -89,9 +96,9 @@ class SixMinCaptureEcgDialogFragment : BaseDialogFragment<FragmentDialogSixminCa
         //一条完整的心电波形至少包含1960个点的数据，所有截图的时候，根据起始和结束的index来截取点的数据，然后将数据转换成bitmap
         this.type = type
         lifecycleScope.launch(Dispatchers.IO) {
-            val dataParse = ECGDataParse(activity)
+            val dataParse = ECGDataParse(requireContext())
             imagePreview = LuckySoftRenderer.instantiate(
-                activity!!,
+                requireContext(),
                 dataParse.values
             ).startRender()
             withContext(Dispatchers.Main){
@@ -112,7 +119,7 @@ class SixMinCaptureEcgDialogFragment : BaseDialogFragment<FragmentDialogSixminCa
             }
 
             else -> {
-                //平均心率
+                //当前截取的心率
                 binding.tvCaptureTitle.text = "截取心电图预览"
                 binding.tvCaptureEcgHeart.text = "心率: 68bmp"
             }
@@ -120,7 +127,7 @@ class SixMinCaptureEcgDialogFragment : BaseDialogFragment<FragmentDialogSixminCa
     }
 
     override fun initData() {
-
+        ecgVisibleLeft = if(arguments?.getString(Constants.sixMinEcgVisibleLeft, "").toString().isEmpty()) 0 else arguments?.getString(Constants.sixMinEcgVisibleLeft, "").toString().toInt()
     }
 
     override fun getLayout(): Int {
