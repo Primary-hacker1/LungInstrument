@@ -41,6 +41,8 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
     var title2 = ""
     var titleCentent = ""
 
+    private val yTitles = 2
+
     // 记录原始的 X 轴最大值
     private var originalXAxisMaximum: Float = 30f
 
@@ -71,7 +73,7 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
         this.title2 = title2.toString()
         this.titleCentent = titleCentent.toString()
         // 创建自定义格式化器实例
-        val customYAxisFormatter = CustomYAxisValueFormatter()
+        val customYAxisFormatter = CustomYAxisValueFormatter(yTitles)
 
         // 设置 X 轴属性
 //        xAxis.valueFormatter = CustomYAxisValueFormatter()
@@ -79,7 +81,10 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
         xAxis.axisMinimum = 0f  // X轴最小值设置为0（如果需要）
         xAxis.axisMaximum = countMaxX!!  // 你已经有这一步
         axisLeft.valueFormatter = customYAxisFormatter
-        xAxis.setLabelCount(((xAxis.axisMaximum - xAxis.axisMinimum) / granularityX + 1).toInt(), true)
+        xAxis.setLabelCount(
+            ((xAxis.axisMaximum - xAxis.axisMinimum) / granularityX + 1).toInt(),
+            true
+        )
         xAxis.setDrawGridLines(false)
 
         xAxis.position = XAxis.XAxisPosition.BOTTOM
@@ -104,8 +109,8 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
             val numY = ceil((range / granularityY!!).toDouble()).toInt()  // 使用Math.ceil确保覆盖全部范围
 
             // 应用自定义的ValueFormatter
-            axisLeft.valueFormatter = CustomYAxisValueFormatter()
-            axisRight.valueFormatter = CustomYAxisValueFormatter()
+            axisLeft.valueFormatter = CustomYAxisValueFormatter(yTitles)
+            axisRight.valueFormatter = CustomYAxisValueFormatter(yTitles)
 
             axisLeft.granularity = granularityY
             axisRight.granularity = granularityY
@@ -144,11 +149,11 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    fun setDynamicDragLine(){
+    fun setDynamicDragLine() {
         val xAxis = xAxis
         val initialPosition = 10f // 初始位置
         val limitLine = LimitLine(initialPosition, "拖拽线")
-        limitLine.lineColor = ContextCompat.getColor(context,R.color.colorPrimary)
+        limitLine.lineColor = ContextCompat.getColor(context, R.color.colorPrimary)
         limitLine.lineWidth = 2f
         xAxis.addLimitLine(limitLine)
         invalidate() // 刷新图表
@@ -176,7 +181,11 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
                     verticalLineView.setXPosition(x)
 
                     val outputPoint = MPPointD.getInstance(0.0, 0.0)
-                    getTransformer(YAxis.AxisDependency.LEFT).getValuesByTouchPoint(event.x, event.y, outputPoint)
+                    getTransformer(YAxis.AxisDependency.LEFT).getValuesByTouchPoint(
+                        event.x,
+                        event.y,
+                        outputPoint
+                    )
 
                     // 从转换后的结果中获取 x 轴的数据值
                     val xValue = outputPoint.x.toFloat() // 将 double 转换为 float
@@ -210,6 +219,7 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
                     MPPointD.recycleInstance(outputPoint) // 回收 MPPointD 实例
                     true
                 }
+
                 else -> false
             }
         }
@@ -428,21 +438,23 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
         verticalTextPaint.getTextBounds(verticalText, 0, verticalText.length, verticalTextBounds)
         val verticalTextHeight = verticalTextBounds.height()
         val viewWidth = width
-        val centerX = (viewWidth - verticalTextBounds.width()) / 2 + verticalTextPaint.measureText(verticalText) / 2 // 文本的水平居中位置
+        val centerX = (viewWidth - verticalTextBounds.width()) / 2 + verticalTextPaint.measureText(
+            verticalText
+        ) / 2 // 文本的水平居中位置
         val centerY = verticalTextHeight // 文本的顶部位置
-        canvas?.drawText(verticalText, centerX, centerY.toFloat(), verticalTextPaint)
+        canvas.drawText(verticalText, centerX, centerY.toFloat(), verticalTextPaint)
     }
 
-    // 自定义y轴左右坐标
-    class CustomYAxisValueFormatter : ValueFormatter() {
+    // 定义自定义 Y 轴格式化器
+    class CustomYAxisValueFormatter(private val divisor: Int) : ValueFormatter() {
         @SuppressLint("DefaultLocale")
         override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-            return String.format("%.1f", value)
+            return String.format("%.1f", value) + "｜" + String.format("%.1f", value / divisor)
         }
 
         override fun getFormattedValue(value: Float): String {
             // 你可以根据 value 返回任何格式的字符串
-            return String.format("%.1f", value)
+            return String.format("%.1f", value) + "｜" + String.format("%.1f", value / divisor)
         }
     }
 

@@ -1471,6 +1471,11 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
         return mAxisRight;
     }
 
+
+    public void setAxisRight(YAxis yAxis) {
+        this.mAxisRight = yAxis;
+    }
+
     /**
      * Returns the y-axis object to the corresponding AxisDependency. In the
      * horizontal bar-chart, LEFT == top, RIGHT == BOTTOM

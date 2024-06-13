@@ -65,6 +65,8 @@ dependencies {
 
     api project(path: ':hellocharts-library')
 
+    api project(path: ':charts')//备用折线图
+
     api 'net.objecthunter:exp4j:0.4.8'
 
     //chart

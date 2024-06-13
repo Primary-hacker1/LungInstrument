@@ -46,8 +46,8 @@ object CPXCalcule {
         breathData.PeTO2 = p2Kpa * dataBase.FeTO2 / 100.0
         breathData.PeTCO2 = p2Kpa * dataBase.FeTCO2 / 100.0
 
-        dataBase.Tin = 2.0
-        dataBase.Tex = 2.0
+//        dataBase.Tin = 2.0
+//        dataBase.Tex = 2.0
 
         breathData.Ttot = dataBase.Tin + dataBase.Tex //总时间
         breathData.Tin_div_Ttot = dataBase.Tin / breathData.Ttot!! * 100.0
