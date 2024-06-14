@@ -939,13 +939,14 @@
                                         android:id="@+id/sixmin_et_old_pwd"
                                         android:layout_width="169dp"
                                         android:layout_height="wrap_content"
-                                        android:maxHeight="60dp"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="10dp"
                                         android:background="@drawable/frame_with_color_d6d6d6"
+                                        android:maxHeight="60dp"
+                                        android:paddingVertical="2dp"
                                         android:paddingStart="10dp"
                                         android:textColor="@color/text3"
-                                        android:textSize="14sp" />
+                                        android:textSize="13sp" />
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -968,13 +969,14 @@
                                         android:id="@+id/sixmin_et_new_pwd"
                                         android:layout_width="169dp"
                                         android:layout_height="wrap_content"
-                                        android:maxHeight="60dp"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="10dp"
                                         android:background="@drawable/frame_with_color_d6d6d6"
+                                        android:maxHeight="60dp"
+                                        android:paddingVertical="2dp"
                                         android:paddingStart="10dp"
                                         android:textColor="@color/text3"
-                                        android:textSize="14sp" />
+                                        android:textSize="13sp" />
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -997,13 +999,14 @@
                                         android:id="@+id/sixmin_et_confirm_pwd"
                                         android:layout_width="169dp"
                                         android:layout_height="wrap_content"
-                                        android:maxHeight="60dp"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="10dp"
                                         android:background="@drawable/frame_with_color_d6d6d6"
+                                        android:maxHeight="60dp"
+                                        android:paddingVertical="2dp"
                                         android:paddingStart="10dp"
                                         android:textColor="@color/text3"
-                                        android:textSize="14sp" />
+                                        android:textSize="13sp" />
 
                                 </LinearLayout>
 

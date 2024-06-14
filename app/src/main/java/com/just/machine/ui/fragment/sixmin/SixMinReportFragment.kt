@@ -39,9 +39,12 @@ import com.just.machine.ui.dialog.LoadingDialogFragment
 import com.just.machine.ui.dialog.SixMinPrintReportOptionsDialogFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.CommonUtil
+import com.just.machine.util.ECGDataParse
+import com.just.machine.util.FileUtil
 import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.FragmentSixminReportBinding
+import com.seeker.luckychart.soft.LuckySoftRenderer
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -109,8 +112,14 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
             startLoadingDialogFragment = LoadingDialogFragment.startLoadingDialogFragment(
                 mActivity.supportFragmentManager, "导出报告中..."
             )
-            val templateName = "templates/报告模板-无截图.docx"
-
+            var templateName = ""
+            val captureOr = sixMinRecordsBean.heartEcgBean[0].jietuOr
+            templateName = if (captureOr == "1") {
+                "templates/报告模板-有截图.docx"
+            } else {
+                "templates/报告模板-无截图.docx"
+            }
+            generateEcgPng()
             val bloodPng = File(
                 mActivity.getExternalFilesDir("")?.absolutePath,
                 pngSavePath + File.separator + "imageBlood.png"
@@ -254,7 +263,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                                 }
                             }
                         }
-
+                        generateEcgPng()
                         val bloodPng = File(
                             mActivity.getExternalFilesDir("")?.absolutePath,
                             pngSavePath + File.separator + "imageBlood.png"
@@ -337,6 +346,39 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 }
             })
 
+        }
+    }
+
+    /**
+     * 生成心电截图
+     */
+    private fun generateEcgPng() {
+        //最快心电截图
+        val imageEcg1 = File(
+            mActivity.getExternalFilesDir("")?.absolutePath,
+            pngSavePath + File.separator + "imageEcg1.png"
+        )
+        lifecycleScope.launch(Dispatchers.IO) {
+            val dataParse = ECGDataParse(requireContext())
+            val imagePreview = LuckySoftRenderer.instantiate(
+                requireContext(),
+                dataParse.values
+            ).startRender()
+            FileUtil.getInstance(requireContext()).saveBitmapToFile(imagePreview,imageEcg1.absolutePath)
+        }
+
+        //最慢心电截图
+        val imageEcg2 = File(
+            mActivity.getExternalFilesDir("")?.absolutePath,
+            pngSavePath + File.separator + "imageEcg2.png"
+        )
+        lifecycleScope.launch(Dispatchers.IO) {
+            val dataParse = ECGDataParse(requireContext())
+            val imagePreview = LuckySoftRenderer.instantiate(
+                requireContext(),
+                dataParse.values
+            ).startRender()
+            FileUtil.getInstance(requireContext()).saveBitmapToFile(imagePreview,imageEcg2.absolutePath)
         }
     }
 

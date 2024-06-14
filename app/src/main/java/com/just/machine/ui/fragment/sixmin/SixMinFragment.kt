@@ -748,7 +748,6 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
     }
 
     private fun addEntryData(entryData: Float, times: Int) {
-        val bloodOxyAlarm = mActivity.sysSettingBean.sysAlarm.bloodOxy.toInt()
         val decimalFormat = DecimalFormat("#.00")
         val index: Float = (times.toFloat() / 60)
 
