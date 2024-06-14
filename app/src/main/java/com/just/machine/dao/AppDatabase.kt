@@ -8,8 +8,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
-import com.just.machine.dao.calibration.EnvironmentalCalibrationBean
 import com.just.machine.dao.calibration.CalibrationDao
+import com.just.machine.dao.calibration.EnvironmentalCalibrationBean
 import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.dao.calibration.IngredientBean
 import com.just.machine.dao.lung.CPXBreathInOutData
@@ -18,18 +18,7 @@ import com.just.machine.dao.setting.AllSettingBean
 import com.just.machine.dao.setting.DynamicSettingBean
 import com.just.machine.dao.setting.SettingDao
 import com.just.machine.dao.setting.StaticSettingBean
-import com.just.machine.dao.sixmin.SixMinReportBloodDao
-import com.just.machine.dao.sixmin.SixMinReportBreathingDao
-import com.just.machine.dao.sixmin.SixMinReportEvaluationDao
-import com.just.machine.dao.sixmin.SixMinReportHeartDao
-import com.just.machine.dao.sixmin.SixMinReportHeartEcgDao
 import com.just.machine.dao.sixmin.SixMinReportInfoDao
-import com.just.machine.dao.sixmin.SixMinReportOtherDao
-import com.just.machine.dao.sixmin.SixMinReportPrescriptionDao
-import com.just.machine.dao.sixmin.SixMinReportStrideDao
-import com.just.machine.dao.sixmin.SixMinReportWalkDao
-import com.just.machine.workers.SeedDatabaseWorker
-import com.just.machine.workers.SeedDatabaseWorker.Companion.KEY_FILENAME
 import com.just.machine.helper.UriConfig.DATABASE_NAME
 import com.just.machine.helper.UriConfig.PLANT_DATA_FILENAME
 import com.just.machine.model.sixminreport.SixMinBloodOxygen
@@ -42,6 +31,8 @@ import com.just.machine.model.sixminreport.SixMinReportOther
 import com.just.machine.model.sixminreport.SixMinReportPrescription
 import com.just.machine.model.sixminreport.SixMinReportStride
 import com.just.machine.model.sixminreport.SixMinReportWalk
+import com.just.machine.workers.SeedDatabaseWorker
+import com.just.machine.workers.SeedDatabaseWorker.Companion.KEY_FILENAME
 
 /**
  *create by 2021/9/18
@@ -64,16 +55,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun environmentalCalibrationDao(): CalibrationDao
     abstract fun settingDao(): SettingDao
     abstract fun lungDao(): LungDao
-    abstract fun sixMinReportWalkDao(): SixMinReportWalkDao
-    abstract fun sixMinReportBloodDao(): SixMinReportBloodDao
-    abstract fun sixMinReportHeartEcgDao(): SixMinReportHeartEcgDao
-    abstract fun sixMinReportBreathingDao(): SixMinReportBreathingDao
-    abstract fun sixMinReportEvaluationDao(): SixMinReportEvaluationDao
-    abstract fun sixMinReportHeartDao(): SixMinReportHeartDao
     abstract fun sixMinReportInfoDao(): SixMinReportInfoDao
-    abstract fun sixMinReportOtherDao(): SixMinReportOtherDao
-    abstract fun sixMinReportPrescriptionDao(): SixMinReportPrescriptionDao
-    abstract fun sixMinReportStrideDao(): SixMinReportStrideDao
 
     companion object {
 
