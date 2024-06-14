@@ -1,29 +1,18 @@
 package com.just.machine.ui.fragment.cardiopulmonary.dynamic
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
-import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
-import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
-import com.github.aachartmodel.aainfographics.aachartcreator.AAOptionsConstructor
-import com.github.aachartmodel.aainfographics.aachartcreator.aa_toAAOptions
-import com.github.aachartmodel.aainfographics.aaoptionsmodel.AALabels
-import com.github.aachartmodel.aainfographics.aaoptionsmodel.AATitle
-import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAYAxis
-import com.github.mikephil.charting.components.YAxis
+import com.common.viewmodel.LiveDataEvent
 import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.data.ScatterData
-import com.github.mikephil.charting.data.ScatterDataSet
 import com.just.machine.dao.lung.CPXBreathInOutData
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.LiveDataBus
 import com.just.news.databinding.FragmentRoutineDynmicBinding
-import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 
 /**
@@ -36,10 +25,14 @@ class RoutineFragment : CommonBaseFragment<FragmentRoutineDynmicBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
 
+    var cpxBreathInOutData: CPXBreathInOutData = CPXBreathInOutData()
+
     override fun loadData() {//懒加载
 
     }
 
+    // 声明一个协程作用域
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     override fun initView() {
 
@@ -79,7 +72,24 @@ class RoutineFragment : CommonBaseFragment<FragmentRoutineDynmicBinding>() {
 
         binding.chart1.setDynamicDragLine()
 
-        binding.layoutDynamicData.setDynamicData()
+        viewModel.mEventHub.observe(this) {
+            when (it.action) {
+                LiveDataEvent.CPXDYNAMICBEAN -> {
+                    if (it.any !is List<*>) {
+                        return@observe
+                    }
+                    val listBean = it.any as List<*>
+                    for (bean in listBean) {
+                        if (bean !is CPXBreathInOutData) {
+                            return@observe
+                        }
+                        cpxBreathInOutData = bean
+                    }
+                    binding.layoutDynamicData.setDynamicData(cpxBreathInOutData)
+                }
+            }
+        }
+
 
         LiveDataBus.get().with("动态心肺测试").observe(this) {//解析串口消息
             if (it is CPXBreathInOutData) {
@@ -87,38 +97,6 @@ class RoutineFragment : CommonBaseFragment<FragmentRoutineDynmicBinding>() {
             }
         }
 
-        setupScatterChart()
-
-    }
-
-    private fun setupScatterChart() {
-        // 设置数据
-        val values1 = listOf(200f, 300f, 400f, 380f, 560f)
-        val values2 = listOf(0f, 0.3f, 0.6f, 0.9f, 0.8f)
-
-        val entries1 = values1.mapIndexed { index, value -> Entry(index.toFloat(), value) }
-        val dataSet1 = ScatterDataSet(entries1, "数据集1").apply {
-            // 设置散点的样式和轴依赖性
-            color = Color.RED
-            scatterShapeSize = 12f
-            axisDependency = YAxis.AxisDependency.LEFT
-        }
-
-        val entries2 = values2.mapIndexed { index, value -> Entry(index.toFloat(), value) }
-        val dataSet2 = ScatterDataSet(entries2, "数据集2").apply {
-            // 设置散点的样式和轴依赖性
-            color = Color.BLUE
-            scatterShapeSize = 12f
-            axisDependency = YAxis.AxisDependency.RIGHT
-        }
-
-        val scatterData = ScatterData(dataSet1, dataSet2)
-
-        // 设置散点图的数据
-        binding.chart2.data = scatterData
-
-        // 刷新图表
-        binding.chart2.invalidate()
     }
 
 

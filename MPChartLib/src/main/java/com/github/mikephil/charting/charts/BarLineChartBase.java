@@ -1235,8 +1235,8 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
 
     /**
      * When disabled, the data and/or highlights will not be clipped to contentRect. Disabling this option can
-     *   be useful, when the data lies fully within the content rect, but is drawn in such a way (such as thick lines)
-     *   that there is unwanted clipping.
+     * be useful, when the data lies fully within the content rect, but is drawn in such a way (such as thick lines)
+     * that there is unwanted clipping.
      *
      * @param enabled
      */
@@ -1256,8 +1256,8 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
 
     /**
      * When disabled, the data and/or highlights will not be clipped to contentRect. Disabling this option can
-     *   be useful, when the data lies fully within the content rect, but is drawn in such a way (such as thick lines)
-     *   that there is unwanted clipping.
+     * be useful, when the data lies fully within the content rect, but is drawn in such a way (such as thick lines)
+     * that there is unwanted clipping.
      *
      * @return
      */
@@ -1459,6 +1459,16 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
      */
     public YAxis getAxisLeft() {
         return mAxisLeft;
+    }
+
+    /**
+     * Returns the left y-axis object. In the horizontal bar-chart, this is the
+     * top axis.
+     *
+     * @return
+     */
+    public void setAxisLeft(YAxis yAxis) {
+        this.mAxisLeft = yAxis;
     }
 
     /**

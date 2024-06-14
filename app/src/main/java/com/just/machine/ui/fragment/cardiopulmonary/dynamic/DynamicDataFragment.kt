@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.common.base.CommonBaseFragment
+import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
 import com.just.machine.dao.lung.CPXBreathInOutData

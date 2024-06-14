@@ -141,7 +141,7 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
         GlobalScope.launch(Dispatchers.IO) { // 使用IO调度器启动协程
             lungTestDatas.forEach { data ->
                 breathTest(lungTestDatas)
-                delay(10) // 休息10毫秒
+                delay(1000) // 休息10毫秒
             }
         }
 
@@ -167,7 +167,7 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
             // 处理结果
 //            val processedData: CPXBreathInOutData =
-            dyCalculeSerializeCore.caluculeData(dyCalculeSerializeCore.observeBreathModel!!)
+            dyCalculeSerializeCore.caluculeData(dyCalculeSerializeCore.observeBreathModel)
 
 //            LogUtils.e(tag + processedData)
 
