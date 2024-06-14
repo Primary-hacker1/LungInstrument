@@ -28,8 +28,8 @@ import com.just.news.R
 import com.just.news.databinding.FragmentDynamicBinding
 import com.justsafe.libview.util.DateUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -135,67 +135,43 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
         return dataList
     }
 
-
-    // 使用GlobalScope启动一个新的协程
     fun test1(lungTestDatas: MutableList<LungTestData>) =
-        GlobalScope.launch(Dispatchers.IO) { // 使用IO调度器启动协程
-            lungTestDatas.forEach { data ->
-                breathTest(lungTestDatas)
-                delay(1000) // 休息10毫秒
+        CoroutineScope(Dispatchers.Main).launch {
+            for (data in lungTestDatas) {
+                delay(1000) // 每秒处理一次数据
+                breathTest(data)
             }
         }
 
-    fun breathTest(lungTestDatas: MutableList<LungTestData>) {
-
+    suspend fun breathTest(lungTestData: LungTestData) {
         val breathInData = mutableListOf<CPXSerializeData>()
 
-        for (i in 0 until lungTestDatas.size) {
-            breathInData.add(
-                CPXSerializeData().convertLungTestDataToCPXSerializeData(lungTestDatas[i])
-            )
+        breathInData.add(CPXSerializeData().convertLungTestDataToCPXSerializeData(lungTestData))
+
+        val dyCalculeSerializeCore = DyCalculeSerializeCore()
+        dyCalculeSerializeCore.setBegin(BreathState.None)
+
+        val cpxSerializeData = dyCalculeSerializeCore.enqueDyDataModel(breathInData[0])
+        dyCalculeSerializeCore.caluculeData(dyCalculeSerializeCore.observeBreathModel)
+
+        val cpxBreathInOutData = CPXCalcule.calDyBreathInOutData(
+            cpxSerializeData,
+            dyCalculeSerializeCore.cpxBreathInOutDataBase
+        )
+
+        val patientBean = SharedPreferencesUtils.instance.patientBean
+        val id = patientBean?.patientId
+
+        if (id != null) {
+            cpxBreathInOutData.patientId = id
         }
 
-        var cpxSerializeData: CPXSerializeData
+        cpxBreathInOutData.createTime = DateUtils.nowMinutesDataString
 
-        for (index in breathInData) {
-            // 处理每组呼吸数据
-            val dyCalculeSerializeCore = DyCalculeSerializeCore()
+        //        viewModel.insertCPXBreathInOutData(cpxBreathInOutData) // 插入数据库
 
-            dyCalculeSerializeCore.setBegin(BreathState.None)
-
-            cpxSerializeData = dyCalculeSerializeCore.enqueDyDataModel(index)
-
-            // 处理结果
-//            val processedData: CPXBreathInOutData =
-            dyCalculeSerializeCore.caluculeData(dyCalculeSerializeCore.observeBreathModel)
-
-//            LogUtils.e(tag + processedData)
-
-//            LogUtils.e(tag + cpxSerializeData)
-
-//            LogUtils.e(tag + dyCalculeSerializeCore.cpxBreathInOutDataBase)
-
-            val cpxBreathInOutData = CPXCalcule.calDyBreathInOutData(
-                cpxSerializeData,
-                dyCalculeSerializeCore.cpxBreathInOutDataBase
-            ) // 计算出动态肺参数
-
-            val patientBean = SharedPreferencesUtils.instance.patientBean
-
-            val id = patientBean?.patientId
-
-            if (id != null) {
-                cpxBreathInOutData.patientId = id
-            }
-
-            cpxBreathInOutData.createTime = DateUtils.nowMinutesDataString
-
-            LogUtils.e(tag + cpxBreathInOutData.toString())
-
-//        viewModel.insertCPXBreathInOutData(cpxBreathInOutData) // 插入数据库
-
-            LiveDataBus.get().with("动态心肺测试").postValue(cpxBreathInOutData)
-        }
+        LogUtils.e(tag + cpxBreathInOutData.toString())
+        LiveDataBus.get().with("动态心肺测试").postValue(cpxBreathInOutData)
     }
 
 

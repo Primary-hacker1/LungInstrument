@@ -1,5 +1,6 @@
 package com.justsafe.libview.chart
 
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
@@ -12,6 +13,7 @@ import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.ScatterChart
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.LimitLine
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.ScatterData
@@ -20,7 +22,12 @@ import com.github.mikephil.charting.interfaces.datasets.IScatterDataSet
 import com.github.mikephil.charting.utils.MPPointD
 import com.justsafe.libview.R
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
-
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 class CustomScatterChart @JvmOverloads constructor(
     context: Context,
@@ -29,11 +36,14 @@ class CustomScatterChart @JvmOverloads constructor(
 ) : ScatterChart(context, attrs, defStyleAttr) {
 
     private val yAxis2: YAxis = YAxis(YAxis.AxisDependency.RIGHT)
+    private val entries1: MutableList<Entry> = mutableListOf()
+    private val entries2: MutableList<Entry> = mutableListOf()
+    private lateinit var dataSet1: ScatterDataSet
+    private lateinit var dataSet2: ScatterDataSet
 
     init {
         setupChart()
-        setExtraOffsets(20f, 0f, 60f, 0f) // 设置左、顶部、右、底部的偏移量
-        setDynamicDragLine()
+        setExtraOffsets(20f, 0f, 20f, 2f) // 设置左、顶部、右、底部的偏移量
     }
 
     private fun setupChart() {
@@ -45,6 +55,12 @@ class CustomScatterChart @JvmOverloads constructor(
         isDragEnabled = true
         setPinchZoom(true)
 
+        // 设置 X 轴在底部显示
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.setDrawAxisLine(false) // 禁用 X 轴的轴线
+        xAxis.setDrawGridLines(false) // 禁用 X 轴的网格线
+        xAxis.setDrawLabels(true) // 启用 X 轴的标签
+
         // 设置左侧 Y 轴
         axisLeft.apply {
             textColor = Color.RED
@@ -54,8 +70,8 @@ class CustomScatterChart @JvmOverloads constructor(
         axisRight.isEnabled = true // 启用右侧 Y 轴
         axisRight.textColor = Color.BLUE // 设置轴标签颜色
         axisRight.setDrawLabels(true) // 绘制轴标签
-        axisRight.setDrawAxisLine(true) // 绘制轴线
-        axisRight.setDrawGridLines(true) // 绘制网格线
+        axisRight.setDrawAxisLine(false) // 绘制轴线
+        axisRight.setDrawGridLines(false) // 绘制网格线
 
         // 自定义右侧 Y 轴标签格式化器
         axisRight.valueFormatter = object : ValueFormatter() {
@@ -68,21 +84,16 @@ class CustomScatterChart @JvmOverloads constructor(
             }
         }
 
-        // 设置数据
-        val values1 = listOf(30f, 40f, 25f, 50f, 45f)
-        val values2 = listOf(0.5f, 0.8f, 0.6f, 0.9f, 0.7f)
-
-        val entries1 = values1.mapIndexed { index, value -> Entry(index.toFloat(), value) }
-        val dataSet1 = ScatterDataSet(entries1, "数据集1").apply {
+        // 初始化数据集
+        dataSet1 = ScatterDataSet(entries1, "数据集1").apply {
             color = Color.RED
-            scatterShapeSize = 12f
+            scatterShapeSize = 8f
             axisDependency = YAxis.AxisDependency.LEFT
         }
 
-        val entries2 = values2.mapIndexed { index, value -> Entry(index.toFloat(), value) }
-        val dataSet2 = ScatterDataSet(entries2, "数据集2").apply {
+        dataSet2 = ScatterDataSet(entries2, "数据集2").apply {
             color = Color.BLUE
-            scatterShapeSize = 12f
+            scatterShapeSize = 8f
             axisDependency = YAxis.AxisDependency.RIGHT
         }
 
@@ -91,6 +102,41 @@ class CustomScatterChart @JvmOverloads constructor(
 
         // 刷新图表
         invalidate()
+    }
+
+    // 实时更新数据集的方法
+    fun updateData(newValue1: Float, newValue2: Float) {
+        val xValue1 = entries1.size.toFloat()
+        val xValue2 = entries2.size.toFloat()
+        entries1.add(Entry(xValue1, newValue1))
+        entries2.add(Entry(xValue2, newValue2))
+
+        dataSet1.notifyDataSetChanged()
+        dataSet2.notifyDataSetChanged()
+        data.notifyDataChanged()
+        notifyDataSetChanged()
+        invalidate()
+    }
+
+    fun startUpdatingData() {
+        var job: Job? = null
+        var currentValue1 = 0f
+        var currentValue2 = 0.5f
+
+        job = CoroutineScope(Dispatchers.Main).launch {
+            while (true) {
+                delay(1000) // 每秒钟执行一次
+
+                currentValue1 += Random.nextFloat() * 10 - 5 // 生成一个随机数用于数据点变化
+                currentValue2 += Random.nextFloat() * 0.1f - 0.05f // 生成一个随机数用于数据点变化
+
+                // 添加新数据点
+                updateData(currentValue1, currentValue2)
+
+                // 刷新图表
+                invalidate()
+            }
+        }
     }
 
     private val mGridPaint: Paint = Paint().apply {
@@ -132,7 +178,13 @@ class CustomScatterChart @JvmOverloads constructor(
 
             // 检查 Y 值位置是否在绘制区域内
             if (positions[1] >= clipRect.top && positions[1] <= clipRect.bottom) {
-                canvas?.drawLine(clipRect.left, positions[1], clipRect.right, positions[1], mGridPaint)
+                canvas?.drawLine(
+                    clipRect.left,
+                    positions[1],
+                    clipRect.right,
+                    positions[1],
+                    mGridPaint
+                )
             }
         }
     }

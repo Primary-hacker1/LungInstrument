@@ -15,7 +15,9 @@ import com.common.network.LogUtils
 import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.ScatterDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.github.mikephil.charting.interfaces.datasets.IScatterDataSet
 import com.github.mikephil.charting.utils.MPPointD
 import com.just.machine.dao.lung.CPXBreathInOutData
 import com.just.machine.ui.fragment.cardiopulmonary.result.FragmentResultLayout.ChartLayout
@@ -24,6 +26,7 @@ import com.just.machine.util.LiveDataBus
 import com.just.news.databinding.FragmentWassermanBinding
 import com.justsafe.libview.R
 import com.justsafe.libview.chart.BaseLineChart
+import com.justsafe.libview.chart.CustomScatterChart
 import com.justsafe.libview.chart.VerticalLineView
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -53,31 +56,15 @@ class WassermanFragment : CommonBaseFragment<FragmentWassermanBinding>() {
             entries.add(Entry(index.toFloat(), index.toFloat() / 6 - 3))
         }
 
-        binding.scChart1.setLineDataSetData(
-            binding.scChart1.flowDataSetList()
-        )//设置数据
-
-        binding.scChart1.setLineChartFlow(
-            yAxisMinimum = -5f,
-            yAxisMaximum = 5f,
-            countMaxX = 30f,
-            granularityY = 1f,
-            granularityX = 1f,
-            titleCentent = "动态肺常规"
-        )
-
-        binding.scChart2.setLineDataSetData(
-            binding.scChart2.flowDataSetList()
-        )//设置数据
-
-        binding.scChart2.setLineChartFlow(
-            yAxisMinimum = -5f,
-            yAxisMaximum = 5f,
-            countMaxX = 30f,
-            granularityY = 1f,
-            granularityX = 1f,
-            titleCentent = "动态肺常规"
-        )
+        binding.scChart1.startUpdatingData() // 添加新的数据点
+        binding.scChart2.startUpdatingData() // 添加新的数据点
+        binding.scChart3.startUpdatingData() // 添加新的数据点
+        binding.scChart4.startUpdatingData() // 添加新的数据点
+        binding.scChart5.startUpdatingData() // 添加新的数据点
+        binding.scChart6.startUpdatingData() // 添加新的数据点
+        binding.scChart7.startUpdatingData() // 添加新的数据点
+        binding.scChart8.startUpdatingData() // 添加新的数据点
+        binding.scChart9.startUpdatingData() // 添加新的数据点
 
         setDynamicDragLine(binding.scChart1,binding.chart1)
         setDynamicDragLine(binding.scChart2,binding.chart2)
@@ -97,7 +84,7 @@ class WassermanFragment : CommonBaseFragment<FragmentWassermanBinding>() {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    fun setDynamicDragLine(chart: BaseLineChart, frameLayout: FrameLayout){
+    fun setDynamicDragLine(chart: CustomScatterChart, frameLayout: FrameLayout){
         val gestureDetector =
             GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
                 override fun onDoubleTap(e: MotionEvent): Boolean {
@@ -152,7 +139,7 @@ class WassermanFragment : CommonBaseFragment<FragmentWassermanBinding>() {
                     limitLine.limit = xValue
 
                     // 获取与垂直线相交的数据点
-                    val entriesMap = mutableMapOf<ILineDataSet, MutableList<Entry>>()
+                    val entriesMap = mutableMapOf<IScatterDataSet, MutableList<Entry>>()
                     val dataSets = chart.data?.dataSets ?: return@setOnTouchListener true
                     for (dataSet in dataSets) {
                         val entries = mutableListOf<Entry>()
