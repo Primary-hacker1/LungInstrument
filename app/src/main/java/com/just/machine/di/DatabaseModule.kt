@@ -8,16 +8,7 @@ import com.just.machine.dao.PlantDao
 import com.just.machine.dao.calibration.CalibrationDao
 import com.just.machine.dao.lung.LungDao
 import com.just.machine.dao.setting.SettingDao
-import com.just.machine.dao.sixmin.SixMinReportBloodDao
-import com.just.machine.dao.sixmin.SixMinReportBreathingDao
-import com.just.machine.dao.sixmin.SixMinReportEvaluationDao
-import com.just.machine.dao.sixmin.SixMinReportHeartDao
-import com.just.machine.dao.sixmin.SixMinReportHeartEcgDao
 import com.just.machine.dao.sixmin.SixMinReportInfoDao
-import com.just.machine.dao.sixmin.SixMinReportOtherDao
-import com.just.machine.dao.sixmin.SixMinReportPrescriptionDao
-import com.just.machine.dao.sixmin.SixMinReportStrideDao
-import com.just.machine.dao.sixmin.SixMinReportWalkDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -49,62 +40,8 @@ object DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideSixMinReportWalkDao(appDatabase: AppDatabase): SixMinReportWalkDao {
-        return appDatabase.sixMinReportWalkDao()
-    }
-
-    @Singleton
-    @Provides
-    fun provideSixMinReportBloodDao(appDatabase: AppDatabase): SixMinReportBloodDao {
-        return appDatabase.sixMinReportBloodDao()
-    }
-
-    @Singleton
-    @Provides
-    fun provideSixMinReportHeartEcgDao(appDatabase: AppDatabase): SixMinReportHeartEcgDao {
-        return appDatabase.sixMinReportHeartEcgDao()
-    }
-
-    @Singleton
-    @Provides
-    fun provideSixMinReportBreathingDao(appDatabase: AppDatabase): SixMinReportBreathingDao {
-        return appDatabase.sixMinReportBreathingDao()
-    }
-
-    @Singleton
-    @Provides
-    fun provideSixMinReportEvaluationDao(appDatabase: AppDatabase): SixMinReportEvaluationDao {
-        return appDatabase.sixMinReportEvaluationDao()
-    }
-
-    @Singleton
-    @Provides
-    fun provideSixMinReportHeartDao(appDatabase: AppDatabase): SixMinReportHeartDao {
-        return appDatabase.sixMinReportHeartDao()
-    }
-
-    @Singleton
-    @Provides
     fun provideSixMinReportInfoDao(appDatabase: AppDatabase): SixMinReportInfoDao {
         return appDatabase.sixMinReportInfoDao()
-    }
-
-    @Singleton
-    @Provides
-    fun provideSixMinReportOtherDao(appDatabase: AppDatabase): SixMinReportOtherDao {
-        return appDatabase.sixMinReportOtherDao()
-    }
-
-    @Singleton
-    @Provides
-    fun provideSixMinReportPrescriptionDao(appDatabase: AppDatabase): SixMinReportPrescriptionDao {
-        return appDatabase.sixMinReportPrescriptionDao()
-    }
-
-    @Singleton
-    @Provides
-    fun provideSixMinReportStrideDao(appDatabase: AppDatabase): SixMinReportStrideDao {
-        return appDatabase.sixMinReportStrideDao()
     }
 
     @Singleton

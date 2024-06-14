@@ -280,7 +280,25 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                                         }
                                         if (sysSettingBean.sysPwd.exportPwd == pwd) {
                                             startPermissionDialogFragment.dismiss()
-                                            hasPassPermission = true
+                                            val startCommonDialogFragment = CommonDialogFragment.startCommonDialogFragment(
+                                                supportFragmentManager, "确认删除该试验记录吗?"
+                                            )
+                                            startCommonDialogFragment.setCommonDialogOnClickListener(object :
+                                                CommonDialogFragment.CommonDialogClickListener {
+                                                override fun onPositiveClick() {
+                                                    hasPassPermission = false
+                                                    viewModel.deleteSixMinReportInfo(item.reportNo)
+                                                    viewModel.getPatients()//查询数据库
+                                                }
+
+                                                override fun onNegativeClick() {
+                                                    hasPassPermission = false
+                                                }
+
+                                                override fun onStopNegativeClick(stopReason: String) {
+
+                                                }
+                                            })
                                         } else {
                                             showMsg("权限密码错误，请重新输入")
                                             return
@@ -289,26 +307,6 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                                 })
                                 return
                             }
-
-                            val startCommonDialogFragment = CommonDialogFragment.startCommonDialogFragment(
-                                supportFragmentManager, "确认删除该试验记录吗?"
-                            )
-                            startCommonDialogFragment.setCommonDialogOnClickListener(object :
-                                CommonDialogFragment.CommonDialogClickListener {
-                                override fun onPositiveClick() {
-                                    hasPassPermission = false
-                                    viewModel.deleteSixMinReportInfo(item.reportNo)
-                                    viewModel.getPatients()//查询数据库
-                                }
-
-                                override fun onNegativeClick() {
-                                    hasPassPermission = false
-                                }
-
-                                override fun onStopNegativeClick(stopReason: String) {
-
-                                }
-                            })
                         }
                     })
                 }
@@ -1037,7 +1035,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         hideRecyclerView.visible()
     }
 
-    fun initSystemInfo() {
+    private fun initSystemInfo() {
         val gson = Gson()
         sysSettingBean = SixMinSysSettingBean()
         val sixMinSysSetting = SharedPreferencesUtils.instance.sixMinSysSetting

@@ -7,32 +7,20 @@ import androidx.lifecycle.viewModelScope
 import com.common.network.LogUtils
 import com.common.viewmodel.BaseViewModel
 import com.common.viewmodel.LiveDataEvent
-import com.fasterxml.aalto.util.DataUtil
 import com.just.machine.api.UserRepository
 import com.just.machine.dao.PatientBean
 import com.just.machine.dao.PlantRepository
-import com.just.machine.dao.calibration.EnvironmentalCalibrationBean
 import com.just.machine.dao.calibration.CalibrationRepository
+import com.just.machine.dao.calibration.EnvironmentalCalibrationBean
 import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.dao.calibration.IngredientBean
 import com.just.machine.dao.lung.CPXBreathInOutData
-import com.just.machine.dao.lung.LungDao
 import com.just.machine.dao.lung.LungRepository
 import com.just.machine.dao.setting.AllSettingBean
 import com.just.machine.dao.setting.DynamicSettingBean
-import com.just.machine.dao.setting.SettingDao
 import com.just.machine.dao.setting.SettingRepository
 import com.just.machine.dao.setting.StaticSettingBean
-import com.just.machine.dao.sixmin.SixMinReportBloodRepository
-import com.just.machine.dao.sixmin.SixMinReportBreathingRepository
-import com.just.machine.dao.sixmin.SixMinReportEvaluationRepository
-import com.just.machine.dao.sixmin.SixMinReportHeartEcgRepository
-import com.just.machine.dao.sixmin.SixMinReportHeartRepository
 import com.just.machine.dao.sixmin.SixMinReportInfoRepository
-import com.just.machine.dao.sixmin.SixMinReportOtherRepository
-import com.just.machine.dao.sixmin.SixMinReportPrescriptionRepository
-import com.just.machine.dao.sixmin.SixMinReportStrideRepository
-import com.just.machine.dao.sixmin.SixMinReportWalkRepository
 import com.just.machine.model.Data
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.sixminreport.SixMinBloodOxygen
@@ -61,19 +49,10 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private var repository: UserRepository,
     private var plantDao: PlantRepository,
-    private var sixMinReportWalkDao: SixMinReportWalkRepository,
     private var environmentalDao: CalibrationRepository,
     private var settingDao: SettingRepository,
     private var lungDao: LungRepository,
-    private var sixMinReportBloodDao: SixMinReportBloodRepository,
-    private var sixMinReportBreathingDao: SixMinReportBreathingRepository,
-    private var sixMinReportEvaluationDao: SixMinReportEvaluationRepository,
-    private var sixMinReportHeartDao: SixMinReportHeartRepository,
-    private var sixMinReportHeartEcgDao: SixMinReportHeartEcgRepository,
     private var sixMinReportInfoDao: SixMinReportInfoRepository,
-    private var sixMinReportOtherDao: SixMinReportOtherRepository,
-    private var sixMinReportPrescriptionDao: SixMinReportPrescriptionRepository,
-    private var sixMinReportStrideDao: SixMinReportStrideRepository,
 ) : BaseViewModel() {
 
     var itemNews: ObservableList<Data> = ObservableArrayList()
@@ -317,7 +296,7 @@ class MainViewModel @Inject constructor(
      */
     fun setSixMinReportWalkData(bean: SixMinReportWalk) {
         viewModelScope.launch {
-            sixMinReportWalkDao.insertReportWalk(bean)
+            sixMinReportInfoDao.insertReportWalk(bean)
         }
     }
 
@@ -326,7 +305,7 @@ class MainViewModel @Inject constructor(
      */
     fun getSixReportWalk(id: String) {
         viewModelScope.launch {
-            sixMinReportWalkDao.getReportWalk(id).collect {
+            sixMinReportInfoDao.getReportWalk(id).collect {
                 mEventHub.value = LiveDataEvent(
                     LiveDataEvent.QuerySixMinReportWalkSuccess, it
                 )
@@ -339,7 +318,7 @@ class MainViewModel @Inject constructor(
      */
     fun setSixMinReportEvaluationData(bean: SixMinReportEvaluation) {
         viewModelScope.launch {
-            sixMinReportEvaluationDao.insertReportEvaluation(bean)
+            sixMinReportInfoDao.insertReportEvaluation(bean)
         }
     }
 
@@ -348,7 +327,7 @@ class MainViewModel @Inject constructor(
      */
     fun setSixMinReportBloodOxyData(bean: SixMinBloodOxygen) {
         viewModelScope.launch {
-            sixMinReportBloodDao.insertReportBloodOxy(bean)
+            sixMinReportInfoDao.insertReportBloodOxy(bean)
         }
     }
 
@@ -357,7 +336,7 @@ class MainViewModel @Inject constructor(
      */
     fun getSixMinReportBloodOxyDat(id: String) {
         viewModelScope.launch {
-            sixMinReportBloodDao.getReportBloodOxy(id).collect {
+            sixMinReportInfoDao.getReportBloodOxy(id).collect {
                 mEventHub.value = LiveDataEvent(
                     LiveDataEvent.QuerySixMinReportBloodOxySuccess, it
                 )
@@ -436,7 +415,7 @@ class MainViewModel @Inject constructor(
      */
     fun getSixMinReportEvaluation() {
         viewModelScope.launch {
-            sixMinReportEvaluationDao.getReportEvaluation().collect {
+            sixMinReportInfoDao.getReportEvaluation().collect {
                 mEventHub.value = LiveDataEvent(
                     LiveDataEvent.QuerySixMinReportEvaluationSuccess, it
                 )
@@ -449,7 +428,7 @@ class MainViewModel @Inject constructor(
      */
     fun setSixMinReportEvaluation(bean: SixMinReportEvaluation) {
         viewModelScope.launch {
-            sixMinReportEvaluationDao.insertReportEvaluation(bean)
+            sixMinReportInfoDao.insertReportEvaluation(bean)
         }
     }
 
@@ -458,7 +437,7 @@ class MainViewModel @Inject constructor(
      */
     fun updateSixMinReportEvaluation(reportNo: String, fatigueLevel: String, breathLevel: String) {
         viewModelScope.launch {
-            sixMinReportEvaluationDao.updateReportEvaluation(reportNo, fatigueLevel, breathLevel)
+            sixMinReportInfoDao.updateReportEvaluation(reportNo, fatigueLevel, breathLevel)
         }
     }
 
@@ -467,7 +446,7 @@ class MainViewModel @Inject constructor(
      */
     fun getSixMinReportOther(id: String) {
         viewModelScope.launch {
-            sixMinReportOtherDao.getReportOther(id).collect {
+            sixMinReportInfoDao.getReportOther(id).collect {
                 mEventHub.value = LiveDataEvent(
                     LiveDataEvent.QuerySixMinReportOtherSuccess, it
                 )
@@ -480,7 +459,7 @@ class MainViewModel @Inject constructor(
      */
     fun setSixMinReportOther(bean: SixMinReportOther) {
         viewModelScope.launch {
-            sixMinReportOtherDao.insertReportOther(bean)
+            sixMinReportInfoDao.insertReportOther(bean)
         }
     }
 
@@ -495,7 +474,7 @@ class MainViewModel @Inject constructor(
         afterLow: String
     ) {
         viewModelScope.launch {
-            sixMinReportOtherDao.updateReportOther(
+            sixMinReportInfoDao.updateReportOther(
                 reportNo,
                 beforeHigh,
                 beforeLow,
@@ -510,7 +489,7 @@ class MainViewModel @Inject constructor(
      */
     fun setSixMinReportPrescription(bean: SixMinReportPrescription) {
         viewModelScope.launch {
-            sixMinReportPrescriptionDao.insertReportPrescription(bean)
+            sixMinReportInfoDao.insertReportPrescription(bean)
         }
     }
 
@@ -519,7 +498,7 @@ class MainViewModel @Inject constructor(
      */
     fun setSixMinReportStride(bean: SixMinReportStride) {
         viewModelScope.launch {
-            sixMinReportStrideDao.insertReportStride(bean)
+            sixMinReportInfoDao.insertReportStride(bean)
         }
     }
 
@@ -528,7 +507,7 @@ class MainViewModel @Inject constructor(
      */
     fun setSixMinReportBreathing(bean: SixMinReportBreathing) {
         viewModelScope.launch {
-            sixMinReportBreathingDao.insertReportBreathing(bean)
+            sixMinReportInfoDao.insertReportBreathing(bean)
         }
     }
 
@@ -537,7 +516,7 @@ class MainViewModel @Inject constructor(
      */
     fun setSixMinReportHeartEcg(bean: SixMinHeartEcg) {
         viewModelScope.launch {
-            sixMinReportHeartEcgDao.insertReportHeartEcg(bean)
+            sixMinReportInfoDao.insertReportHeartEcg(bean)
         }
     }
 
@@ -546,7 +525,7 @@ class MainViewModel @Inject constructor(
      */
     fun setSixMinReportHeartBeat(bean: SixMinReportHeartBeat) {
         viewModelScope.launch {
-            sixMinReportHeartDao.insertReportHeart(bean)
+            sixMinReportInfoDao.insertReportHeart(bean)
         }
     }
 
@@ -555,7 +534,7 @@ class MainViewModel @Inject constructor(
      */
     fun updateSixMinReportPrescription(bean: SixMinReportPrescription) {
         viewModelScope.launch {
-            sixMinReportPrescriptionDao.updateReportPrescription(bean)
+            sixMinReportInfoDao.updateReportPrescription(bean)
         }
     }
 
@@ -564,7 +543,7 @@ class MainViewModel @Inject constructor(
      */
     fun updateSixMinReportEvaluation(bean: SixMinReportEvaluation) {
         viewModelScope.launch {
-            sixMinReportEvaluationDao.updateReportEvaluationAll(bean)
+            sixMinReportInfoDao.updateReportEvaluationAll(bean)
         }
     }
 
@@ -583,15 +562,15 @@ class MainViewModel @Inject constructor(
     fun deleteSixMinReportInfoReal(reportId: String) {
         viewModelScope.launch {
             sixMinReportInfoDao.deleteReportInfoReal(reportId)
-            sixMinReportBloodDao.deleteReportBloodOxyReal(reportId)
-            sixMinReportBreathingDao.deleteReportBreathing(reportId)
-            sixMinReportEvaluationDao.deleteReportEvaluation(reportId)
-            sixMinReportHeartDao.deleteReportHeart(reportId)
-            sixMinReportHeartEcgDao.deleteReportHeartEcg(reportId)
-            sixMinReportOtherDao.deleteReportOther(reportId)
-            sixMinReportPrescriptionDao.deleteReportPrescription(reportId)
-            sixMinReportStrideDao.deleteReportStride(reportId)
-            sixMinReportWalkDao.deleteReportWalk(reportId)
+            sixMinReportInfoDao.deleteReportBloodOxyReal(reportId)
+            sixMinReportInfoDao.deleteReportBreathing(reportId)
+            sixMinReportInfoDao.deleteReportEvaluation(reportId)
+            sixMinReportInfoDao.deleteReportHeart(reportId)
+            sixMinReportInfoDao.deleteReportHeartEcg(reportId)
+            sixMinReportInfoDao.deleteReportOther(reportId)
+            sixMinReportInfoDao.deleteReportPrescription(reportId)
+            sixMinReportInfoDao.deleteReportStride(reportId)
+            sixMinReportInfoDao.deleteReportWalk(reportId)
         }
     }
 }
