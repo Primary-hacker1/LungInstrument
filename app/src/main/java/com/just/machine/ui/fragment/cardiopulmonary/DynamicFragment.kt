@@ -77,11 +77,6 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
         binding.llStart.setNoRepeatListener {
             tts.speak("准备开始正常呼吸3次，然后开始深呼吸", TextToSpeech.QUEUE_FLUSH, null, "")
-            return@setNoRepeatListener
-            SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)//发送流量定标a
-        }
-
-        binding.llClean.setNoRepeatListener {
             val dataList = TestModel().dataList
 
             val byteArrayList = dataList.map { TestModel().hexStringToByteArray(it) }
@@ -96,6 +91,12 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
             val lungTestDataList = generateBreathCycleData()
 
             test1(lungTestDataList)
+            return@setNoRepeatListener
+            SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)//发送流量定标a
+        }
+
+        binding.llClean.setNoRepeatListener {
+
         }
 
     }
@@ -129,7 +130,7 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
         )
     }
 
-    fun generateBreathCycleData(): MutableList<LungTestData> {
+    private fun generateBreathCycleData(): MutableList<LungTestData> {
         val dataList = mutableListOf<LungTestData>()
         var flowValue = -1
 

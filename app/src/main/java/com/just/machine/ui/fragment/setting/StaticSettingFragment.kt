@@ -10,8 +10,7 @@ import com.common.viewmodel.LiveDataEvent.Companion.STATICSETTINGSSUCCESS
 import com.just.machine.dao.setting.StaticSettingBean
 import com.just.machine.model.CPETParameter
 import com.just.machine.model.Constants.Companion.settingsAreSaved
-import com.just.machine.model.lungdata.DynamicBean
-import com.just.machine.ui.adapter.setting.SVCSettingAdapter
+import com.just.machine.ui.adapter.setting.StaticSettingAdapter
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.LiveDataBus
 import com.just.news.R
@@ -30,11 +29,11 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
 
     private var staticSettingBean: StaticSettingBean = StaticSettingBean()
 
-    private val adapterSvc by lazy { SVCSettingAdapter(requireContext()) }
+    private val adapterSvc by lazy { StaticSettingAdapter(requireContext()) }
 
-    private val adapterFvc by lazy { SVCSettingAdapter(requireContext()) }
+    private val adapterFvc by lazy { StaticSettingAdapter(requireContext()) }
 
-    private val adapterMvv by lazy { SVCSettingAdapter(requireContext()) }
+    private val adapterMvv by lazy { StaticSettingAdapter(requireContext()) }
     override fun loadData() {//懒加载
 
     }

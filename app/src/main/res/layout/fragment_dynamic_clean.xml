@@ -20,6 +20,7 @@
 
         <LinearLayout
                 android:layout_width="0dp"
+                android:background="@drawable/calibration_bg"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:layout_marginHorizontal="@dimen/space_6"
@@ -29,13 +30,15 @@
                     android:text="选择运动终止原因（可手动输入）"
                     android:layout_width="wrap_content"
                     android:layout_marginStart="@dimen/space_6"
+                    android:layout_marginTop="@dimen/space_6"
                     android:textSize="@dimen/space_13"
                     android:textStyle="bold"
                     android:layout_height="wrap_content" />
 
             <EditText
+                    android:id="@+id/edit_input"
                     android:hint="请输入"
-                    android:textSize="@dimen/space_11"
+                    android:textSize="@dimen/space_15"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
@@ -46,6 +49,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="@dimen/space_6"
+                android:background="@drawable/calibration_bg"
                 android:layout_weight="2"
                 android:orientation="vertical">
 
@@ -85,16 +89,28 @@
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:orientation="vertical">
 
 
+                <androidx.appcompat.widget.AppCompatTextView
+                        android:text="原因模版(单击使用模版)"
+                        android:layout_width="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_marginStart="@dimen/space_6"
+                        android:textSize="@dimen/space_13"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toStartOf="@id/switchMaterial" />
 
+                <androidx.recyclerview.widget.RecyclerView
+                        android:padding="@dimen/space_6"
+                        android:id="@+id/rv_record"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
 
             </LinearLayout>
 
 
-            </LinearLayout>
+        </LinearLayout>
 
 
     </LinearLayout>

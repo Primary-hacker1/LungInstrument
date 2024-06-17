@@ -90,12 +90,12 @@ class RoutineFragment : CommonBaseFragment<FragmentRoutineDynmicBinding>() {
             }
         }
 
-        binding.chart2.startUpdatingData() // 添加新的数据点
         binding.chart2.setDynamicDragLine()
 
         LiveDataBus.get().with("动态心肺测试").observe(this) {//解析串口消息
             if (it is CPXBreathInOutData) {
                 binding.layoutDynamicData.setDynamicData(it)
+                binding.chart2.startUpdatingData() // 模拟数据散点图
             }
         }
 
