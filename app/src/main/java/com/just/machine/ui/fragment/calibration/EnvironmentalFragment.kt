@@ -1,10 +1,13 @@
 package com.just.machine.ui.fragment.calibration
 
+import android.speech.tts.TextToSpeech
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
+import com.common.base.CommonUtil
+import com.common.base.delay
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
@@ -19,6 +22,8 @@ import com.just.machine.util.LiveDataBus
 import com.just.news.databinding.FragmentEnvironmentalBinding
 import com.justsafe.libview.util.DateUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import java.util.Locale
 
 /**
  *create by 2020/6/19
@@ -29,6 +34,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
+
+    private lateinit var tts: TextToSpeech
 
     private val adapter by lazy { EnvironmentalAdapter(requireContext()) }
 
@@ -42,6 +49,7 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
         binding.rvEnvironmental.adapter = adapter
 
         binding.llStart.setNoRepeatListener {
+            tts.speak("开始环境定标", TextToSpeech.QUEUE_ADD, null, "")
             if (Constants.isDebug) {
                 val temperature: Short = 250 // 温度，单位为摄氏度
                 val humidity: Short = 60 // 湿度，单位为百分比
@@ -54,8 +62,14 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
                 )
                 LiveDataBus.get().with(Constants.serialCallback).value = environmentData
 
+                // 延迟任务部分
+                tts.delay(10000L, {}, {
+                    speak("环境定标完成，是否保存", TextToSpeech.QUEUE_ADD, null, "")
+                })
+
                 return@setNoRepeatListener
             }
+
 
             SerialPortManager.sendMessage(MudbusProtocol.ENVIRONMENT_CALIBRATION_COMMAND)//发送环境定标
         }
@@ -91,6 +105,19 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
                 LiveDataEvent.EnvironmentalsSuccess -> {
                     it.any?.let { it1 -> beanQuery(it1) }
                 }
+            }
+        }
+
+        tts = TextToSpeech(requireContext()) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                val result = tts.setLanguage(Locale.CHINESE)
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    println("语言数据丢失或不支持")
+                } else {
+                    binding.llStart.isEnabled = true
+                }
+            } else {
+                println("初始化失败!")
             }
         }
     }
@@ -144,6 +171,13 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
         super.onDestroyView()
         // 对于 Fragment，推荐在 onDestroyView 中移除观察者
         LiveDataBus.get().with(Constants.serialCallback).removeObservers(viewLifecycleOwner)
+    }
+
+    override fun onDestroy() {
+        // 释放 TextToSpeech 资源
+        tts.stop()
+        tts.shutdown()
+        super.onDestroy()
     }
 
 

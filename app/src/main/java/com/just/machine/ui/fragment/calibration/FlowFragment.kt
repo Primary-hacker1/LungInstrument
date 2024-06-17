@@ -1,31 +1,24 @@
 package com.just.machine.ui.fragment.calibration
 
 
+import android.speech.tts.TextToSpeech
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
-import com.common.viewmodel.LiveDataEvent.Companion.FLOWS_SUCCESS
-import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.FragmentChildAdapter
-import com.just.machine.ui.adapter.calibration.FlowAdapter
-import com.just.machine.ui.fragment.cardiopulmonary.staticfragment.BreatheHardInFragment
-import com.just.machine.ui.fragment.cardiopulmonary.staticfragment.MaxVentilationFragment
-import com.just.machine.ui.fragment.cardiopulmonary.staticfragment.RoutineLungFragment
 import com.just.machine.ui.fragment.serial.MudbusProtocol
 import com.just.machine.ui.fragment.serial.SerialPortManager
-import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.BaseUtil
 import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FragmentFlowBinding
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 
 
 /**
@@ -35,6 +28,8 @@ import dagger.hilt.android.AndroidEntryPoint
  */
 @AndroidEntryPoint
 class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
+
+    private lateinit var tts: TextToSpeech
 
     override fun initView() {
 
@@ -49,7 +44,21 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
 
         binding.vpFlowTitle.isUserInputEnabled = false
 
+        tts = TextToSpeech(requireContext()) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                val result = tts.setLanguage(Locale.CHINESE)
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    println("语言数据丢失或不支持")
+                } else {
+                    binding.llStart.isEnabled = true
+                }
+            } else {
+                println("初始化失败!")
+            }
+        }
+
         binding.llStart.setNoRepeatListener {
+            tts.speak("开始流量定标", TextToSpeech.QUEUE_FLUSH, null, "")
             if (Constants.isDebug) {
                 val smallRangeFlow = 0 // 例如，120 L/min
                 val largeRangeFlow = 30 // 例如，3000 L/min
@@ -59,7 +68,7 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
                     largeRangeFlow,
                 )
 
-                LogUtils.e(tag + BaseUtil.bytes2HexStr(data) + "发送的数据")
+                LogUtils.d(tag + BaseUtil.bytes2HexStr(data) + "发送的数据")
 
                 LiveDataBus.get().with("测试").value = data
 
@@ -71,14 +80,14 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
 
         LiveDataBus.get().with("测试").observe(this) {//解析串口消息
             if (it is ByteArray) {
-                LogUtils.e(tag + BaseUtil.bytes2HexStr(it) + "字节长度" + BaseUtil.bytes2HexStr(it).length)
+                LogUtils.d(tag + BaseUtil.bytes2HexStr(it) + "字节长度" + BaseUtil.bytes2HexStr(it).length)
                 val data = MudbusProtocol.parseFlowCalibrationData(it)
                 if (data != null) {
                     val (smallRangeFlow, largeRangeFlow) = data
 
-                    LogUtils.e(tag + smallRangeFlow)
+                    LogUtils.d(tag + smallRangeFlow)
 
-                    LogUtils.e(tag + largeRangeFlow)
+                    LogUtils.d(tag + largeRangeFlow)
 
                 }
 
@@ -125,6 +134,13 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
                 )
             }
         }
+    }
+
+    override fun onDestroy() {
+        // 释放 TextToSpeech 资源
+        tts.stop()
+        tts.shutdown()
+        super.onDestroy()
     }
 
     private fun setButtonStyle(

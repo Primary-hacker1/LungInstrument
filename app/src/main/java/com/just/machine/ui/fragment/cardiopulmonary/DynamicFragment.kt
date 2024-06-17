@@ -1,5 +1,6 @@
 package com.just.machine.ui.fragment.cardiopulmonary
 
+import android.speech.tts.TextToSpeech
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -32,6 +33,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 
 /**
@@ -43,6 +45,8 @@ import kotlinx.coroutines.launch
 class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
+
+    private lateinit var tts: TextToSpeech
 
     override fun loadData() {//懒加载
 
@@ -58,13 +62,26 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
         initViewPager()
 
+        tts = TextToSpeech(requireContext()) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                val result = tts.setLanguage(Locale.CHINESE)
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    println("语言数据丢失或不支持")
+                } else {
+                    binding.llStart.isEnabled = true
+                }
+            } else {
+                println("初始化失败!")
+            }
+        }
+
         binding.llStart.setNoRepeatListener {
+            tts.speak("准备开始正常呼吸3次，然后开始深呼吸", TextToSpeech.QUEUE_FLUSH, null, "")
             return@setNoRepeatListener
             SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)//发送流量定标a
         }
 
         binding.llClean.setNoRepeatListener {
-
             val dataList = TestModel().dataList
 
             val byteArrayList = dataList.map { TestModel().hexStringToByteArray(it) }
@@ -271,8 +288,12 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
     }
 
     override fun onDestroy() {
+        // 释放 TextToSpeech 资源
+        if (tts != null) {
+            tts.stop()
+            tts.shutdown()
+        }
         super.onDestroy()
-
     }
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =

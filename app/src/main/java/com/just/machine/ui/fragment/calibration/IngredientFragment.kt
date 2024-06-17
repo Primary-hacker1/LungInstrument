@@ -1,10 +1,12 @@
 package com.just.machine.ui.fragment.calibration
 
+import android.speech.tts.TextToSpeech
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
+import com.common.base.notNull
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent.Companion.INGREDIENTS_SUCCESS
@@ -18,9 +20,10 @@ import com.just.machine.util.BaseUtil
 import com.just.machine.util.LiveDataBus
 import com.just.news.databinding.FragmentIngredientBinding
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 
 /**
- *create by 2020/6/19
+ *create by 2024/6/1
  * 成分定标
  *@author zt
  */
@@ -28,6 +31,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
+
+    private lateinit var tts: TextToSpeech
 
     private val o2Adapter by lazy {
         IngredientAdapter(requireContext())
@@ -60,6 +65,7 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
         binding.rvIngredient2.adapter = co2Adapter
 
         binding.llStart.setNoRepeatListener {
+            tts.speak("开始成分定标", TextToSpeech.QUEUE_FLUSH, null, "")
             if (Constants.isDebug) {
                 // 调用生成主控板返回数据方法并打印生成的数据
                 val controlBoardResponse = MudbusProtocol.ControlBoardData(
@@ -126,9 +132,21 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
 
                     o2Adapter.setItemsBean(flowsO2Bean)
                     co2Adapter.setItemsBean(flowsCo2Bean)
-                    LogUtils.e(tag + flowsO2Bean)
-                    LogUtils.e(tag + flowsCo2Bean)
+                    LogUtils.d(tag + flowsO2Bean + flowsCo2Bean)
                 }
+            }
+        }
+
+        tts = TextToSpeech(requireContext()) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                val result = tts.setLanguage(Locale.CHINESE)
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    println("语言数据丢失或不支持")
+                } else {
+                    binding.llStart.isEnabled = true
+                }
+            } else {
+                println("初始化失败!")
             }
         }
     }
@@ -142,6 +160,13 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
      */
     override fun loadData() {
         viewModel.getIngredients()
+    }
+
+    override fun onDestroy() {
+        // 释放 TextToSpeech 资源
+        tts.stop()
+        tts.shutdown()
+        super.onDestroy()
     }
 
 
