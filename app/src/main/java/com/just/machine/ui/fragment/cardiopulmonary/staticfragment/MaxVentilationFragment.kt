@@ -39,6 +39,7 @@ class MaxVentilationFragment : CommonBaseFragment<FragmentMaxVentilationBinding>
         val layout = binding.fragmentLayout
         layout.setInitView("MVV")
 
+        settingMVV = viewModel.mvvBeans.toMutableList()
 
         viewModel.getStaticSettings()
 
@@ -52,6 +53,12 @@ class MaxVentilationFragment : CommonBaseFragment<FragmentMaxVentilationBinding>
                     }
 
                     val settings = it.any as MutableList<*>
+
+                    if (settings.isEmpty()){
+                        return@observe
+                    }
+
+                    settingMVV.clear()
 
                     for (settingBean in settings) {
                         if (settingBean !is StaticSettingBean) {
@@ -95,11 +102,17 @@ class MaxVentilationFragment : CommonBaseFragment<FragmentMaxVentilationBinding>
 
         for (index in settingMVV) {
             if (index.isShow == true) {
-                LogUtils.e(tag + LungFormula.main(index.parameterName.toString()))
+//                LogUtils.e(tag + LungFormula.main(index.parameterName.toString()))
                 routineLungList.add(
                     createRoutineLungBean(
                         index.parameterName.toString(),
-                        LungFormula.main(index.parameterName.toString(), age, height, weight, isMale)
+                        LungFormula.main(
+                            index.parameterName.toString(),
+                            age,
+                            height,
+                            weight,
+                            isMale
+                        )
                     )
                 )
             }

@@ -51,7 +51,7 @@ class FragmentStaticLayout @JvmOverloads constructor(
 
     private val adapter by lazy { RoutineLungAdapter(context) }
 
-    private var routineLungList: MutableList<RoutineLungBean>? = ArrayList()
+    private var routineLungList: MutableList<RoutineLungBean> = ArrayList()
 
     enum class Click {
         TEST1, TEST2, TEST3, TEST4, TEST5
@@ -149,24 +149,21 @@ class FragmentStaticLayout @JvmOverloads constructor(
 
         binding.rvFvc.layoutManager = LinearLayoutManager(context)
 
-        routineLungList?.let {
-            adapter.setItemsBean(
-                it
-            )
-        }
+        adapter.setItemsBean(
+            routineLungList
+        )
 
         binding.rvFvc.adapter = adapter
     }
 
 
     fun setLungData(beans: MutableList<RoutineLungBean>) {
-        routineLungList?.clear()
-        routineLungList?.addAll(beans)
-        routineLungList?.let {
-            adapter.setItemsBean(
-                it
-            )
-        }
+        routineLungList.clear()
+        routineLungList.addAll(beans)
+        adapter.setItemsBean(
+            routineLungList
+        )
+//        LogUtils.e(tag + routineLungList.toString())
     }
 
     // 用于保存按钮样式的映射
@@ -293,7 +290,7 @@ class FragmentStaticLayout @JvmOverloads constructor(
             binding.atvTest3.gone()
             binding.atvTest4.gone()
             binding.atvTest5.gone()
-            routineLungList?.forEachIndexed { index, bean ->
+            routineLungList.forEachIndexed { index, bean ->
                 if (index < otherList.size) {
                     bean.test1 = otherList[index]
                 }
@@ -304,7 +301,7 @@ class FragmentStaticLayout @JvmOverloads constructor(
             binding.atvTest3.visible()
             binding.atvTest4.visible()
             binding.atvTest5.visible()
-            routineLungList?.forEachIndexed { index, bean ->
+            routineLungList.forEachIndexed { index, bean ->
                 if (index < test1.size) {
                     bean.test1 = test1[index]
                     bean.test2 = test2[index]
@@ -315,9 +312,7 @@ class FragmentStaticLayout @JvmOverloads constructor(
             }
         }
 
-        routineLungList?.let {
-            adapter.setItemsBean(it)
-        }
+        adapter.setItemsBean(routineLungList)
 
         when (clickType) {
             Click.TEST1 -> {

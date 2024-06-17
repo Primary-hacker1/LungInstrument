@@ -39,6 +39,8 @@ class RoutineLungFragment : CommonBaseFragment<FragmentRoutineBinding>() {
         val layout = binding.fragmentLayout
         layout.setInitView("FVC")
 
+        settingFVC = viewModel.fvcBeans.toMutableList()
+
         viewModel.getStaticSettings()
 
         initData()
@@ -51,6 +53,12 @@ class RoutineLungFragment : CommonBaseFragment<FragmentRoutineBinding>() {
                     }
 
                     val settings = it.any as MutableList<*>
+
+                    if (settings.isEmpty()){
+                        return@observe
+                    }
+
+                    settingFVC.clear()
 
                     for (settingBean in settings) {
                         if (settingBean !is StaticSettingBean) {
@@ -98,13 +106,19 @@ class RoutineLungFragment : CommonBaseFragment<FragmentRoutineBinding>() {
                 routineLungList.add(
                     createRoutineLungBean(
                         index.parameterName.toString(),
-                        LungFormula.main(index.parameterName.toString(), age, height, weight, isMale)
+                        LungFormula.main(
+                            index.parameterName.toString(),
+                            age,
+                            height,
+                            weight,
+                            isMale
+                        )
                     )
                 )
             }
         }
 
-        LogUtils.e(tag + routineLungList.toString())
+//        LogUtils.e(tag + routineLungList.toString())
 
         binding.fragmentLayout.setLungData(routineLungList)
     }

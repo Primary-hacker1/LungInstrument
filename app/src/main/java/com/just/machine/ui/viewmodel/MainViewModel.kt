@@ -23,6 +23,7 @@ import com.just.machine.dao.setting.StaticSettingBean
 import com.just.machine.dao.sixmin.SixMinReportInfoRepository
 import com.just.machine.model.Data
 import com.just.machine.model.SharedPreferencesUtils
+import com.just.machine.model.lungdata.DynamicBean
 import com.just.machine.model.sixminreport.SixMinBloodOxygen
 import com.just.machine.model.sixminreport.SixMinHeartEcg
 import com.just.machine.model.sixminreport.SixMinReportBreathing
@@ -44,7 +45,6 @@ import javax.inject.Inject
  *
  * @author zt
  */
-@Suppress("CAST_NEVER_SUCCEEDS")
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private var repository: UserRepository,
@@ -67,9 +67,6 @@ class MainViewModel @Inject constructor(
             SharedPreferencesUtils.instance.patientBean = patient//存到本地
             LogUtils.e(tag + patient.toString())
             getPatients()
-//            mEventHub.value = LiveDataEvent(
-//                LiveDataEvent.addPatient, patient
-//            )
         }
     }
 
@@ -147,7 +144,7 @@ class MainViewModel @Inject constructor(
     fun getCPXBreathInOutData() {//查询当前患者动态肺数据
         viewModelScope.launch {
             val spBena = SharedPreferencesUtils.instance.patientBean
-            spBena?.patientId?.let {
+            spBena?.patientId?.let { it ->
                 lungDao.getCPXBreathInOutData(it).collect {
                     LogUtils.e(tag + it.toString())
                     mEventHub.value = LiveDataEvent(
@@ -237,11 +234,9 @@ class MainViewModel @Inject constructor(
             val patient = plantDao.getMaxPatient()
             patient?.let {
                 it.collect { patientData ->
-                    if (patientData != null) {
-                        mEventHub.value = LiveDataEvent(
-                            LiveDataEvent.MaxPatient, patientData
-                        )
-                    }
+                    mEventHub.value = LiveDataEvent(
+                        LiveDataEvent.MaxPatient, patientData
+                    )
                 }
             }
         }
@@ -573,6 +568,60 @@ class MainViewModel @Inject constructor(
             sixMinReportInfoDao.deleteReportWalk(reportId)
         }
     }
+
+    val fvcBeans = arrayOf(
+        DynamicBean.spinnerItemData("FVC"),
+        DynamicBean.spinnerItemData("FEV1"),
+        DynamicBean.spinnerItemData("FEV2"),
+        DynamicBean.spinnerItemData("FEV3"),
+        DynamicBean.spinnerItemData("FEV6"),
+        DynamicBean.spinnerItemData("FEV1/FVC"),
+        DynamicBean.spinnerItemData("FEV2/FVC"),
+        DynamicBean.spinnerItemData("FEV3/FVC"),
+        DynamicBean.spinnerItemData("FEV6/FVC"),
+        DynamicBean.spinnerItemData("PEF"),
+        DynamicBean.spinnerItemData("MEF"),
+        DynamicBean.spinnerItemData("FEF25"),
+        DynamicBean.spinnerItemData("FEF75"),
+        DynamicBean.spinnerItemData("MMEF"),
+        DynamicBean.spinnerItemData("FET"),
+        DynamicBean.spinnerItemData("FEF200-1200"),
+        DynamicBean.spinnerItemData("PIF"),
+        DynamicBean.spinnerItemData("FIF50"),
+        DynamicBean.spinnerItemData("FIV1"),
+        DynamicBean.spinnerItemData("FIV1%FVC"),
+        DynamicBean.spinnerItemData("FEF50%FIF50"),
+        DynamicBean.spinnerItemData("FEV1%FIV1"),
+        DynamicBean.spinnerItemData("FEF75/85"),
+        DynamicBean.spinnerItemData("TIN/ TTOT"),
+        DynamicBean.spinnerItemData("TEX/ TTOT"),
+        DynamicBean.spinnerItemData("TIN/TEX"),
+        DynamicBean.spinnerItemData("T TOT"),
+        DynamicBean.spinnerItemData("MIF"),
+        DynamicBean.spinnerItemData("Vol extrap"),
+        DynamicBean.spinnerItemData("MMEF"),
+        DynamicBean.spinnerItemData("FVC IN"),
+        DynamicBean.spinnerItemData("Time(S)"),
+        DynamicBean.spinnerItemData("FVC IN"),
+//                DynamicBean.spinnerItemData("P0.1"),
+        DynamicBean.spinnerItemData("FVC IN"),
+    )
+
+    val dynamicBeans = arrayOf(
+        DynamicBean.spinnerItemData("SVC"),
+        DynamicBean.spinnerItemData("VC_ex"),
+        DynamicBean.spinnerItemData("ERV"),
+        DynamicBean.spinnerItemData("IRV"),
+        DynamicBean.spinnerItemData("VT"),
+        DynamicBean.spinnerItemData("IC")
+    )
+
+    val mvvBeans = arrayOf(
+        DynamicBean.spinnerItemData("MVV"),
+        DynamicBean.spinnerItemData("TIME_MVV"),
+        DynamicBean.spinnerItemData("BF"),
+        DynamicBean.spinnerItemData("Time"),
+    )
 }
 
 

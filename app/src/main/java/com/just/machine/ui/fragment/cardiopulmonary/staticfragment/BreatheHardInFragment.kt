@@ -43,6 +43,8 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
 
         layout.setInitView("常规")
 
+        settingSVC = viewModel.dynamicBeans.toMutableList()
+
         viewModel.getStaticSettings()
 
         initData()
@@ -56,6 +58,11 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
 
                     val settings = it.any as MutableList<*>
 
+                    if (settings.isEmpty()){
+                        return@observe
+                    }
+
+                    settingSVC.clear()
                     for (settingBean in settings) {
                         if (settingBean !is StaticSettingBean) {
                             return@observe
@@ -64,6 +71,7 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
                         settingSVC = settingBean.settingSVC
                     }
                     initData()
+                    LogUtils.e(tag + settingSVC.toString())
                 }
             }
         }
@@ -112,7 +120,8 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
             }
         }
 
-//        LogUtils.e(tag + routineLungList.toString())
+
+        LogUtils.e(tag + routineLungList.toString())
 
         binding.fragmentLayout.setLungData(routineLungList)
     }

@@ -78,7 +78,6 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
             // 生成吸气和呼气数据
             val lungTestDataList = generateBreathCycleData()
 
-//            test1(lungTestDatas)
             test1(lungTestDataList)
         }
 

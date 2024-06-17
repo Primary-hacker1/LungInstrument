@@ -142,21 +142,12 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
         val isMvvBean = staticSettingBean.settingMVV.isEmpty()
 
         if (isSvcBean) {
-            // 创建一个存储 DynamicBean 对象的数组
-            val dynamicBeans = arrayOf(
-                DynamicBean.spinnerItemData("SVC"),
-                DynamicBean.spinnerItemData("VC_ex"),
-                DynamicBean.spinnerItemData("ERV"),
-                DynamicBean.spinnerItemData("IRV"),
-                DynamicBean.spinnerItemData("VT"),
-                DynamicBean.spinnerItemData("IC")
-            )
 
             // 创建一个空的 beans 列表
             val beansSVC: MutableList<CPETParameter> = mutableListOf()
 
             // 遍历 dynamicBeans 数组，将每个 DynamicBean 对象添加到 beans 列表中
-            for (bean in dynamicBeans) {
+            for (bean in viewModel.dynamicBeans) {
                 bean.let { beansSVC.add(it) }
             }
 
@@ -170,50 +161,11 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
 
         if (isFvcBean) {
 
-            // 创建一个存储 DynamicBean 对象的数组
-            val fvcBeans = arrayOf(
-                DynamicBean.spinnerItemData("FVC"),
-                DynamicBean.spinnerItemData("FEV1"),
-                DynamicBean.spinnerItemData("FEV2"),
-                DynamicBean.spinnerItemData("FEV3"),
-                DynamicBean.spinnerItemData("FEV6"),
-                DynamicBean.spinnerItemData("FEV1/FVC"),
-                DynamicBean.spinnerItemData("FEV2/FVC"),
-                DynamicBean.spinnerItemData("FEV3/FVC"),
-                DynamicBean.spinnerItemData("FEV6/FVC"),
-                DynamicBean.spinnerItemData("PEF"),
-                DynamicBean.spinnerItemData("MEF"),
-                DynamicBean.spinnerItemData("FEF25"),
-                DynamicBean.spinnerItemData("FEF75"),
-                DynamicBean.spinnerItemData("MMEF"),
-                DynamicBean.spinnerItemData("FET"),
-                DynamicBean.spinnerItemData("FEF200-1200"),
-                DynamicBean.spinnerItemData("PIF"),
-                DynamicBean.spinnerItemData("FIF50"),
-                DynamicBean.spinnerItemData("FIV1"),
-                DynamicBean.spinnerItemData("FIV1%FVC"),
-                DynamicBean.spinnerItemData("FEF50%FIF50"),
-                DynamicBean.spinnerItemData("FEV1%FIV1"),
-                DynamicBean.spinnerItemData("FEF75/85"),
-                DynamicBean.spinnerItemData("TIN/ TTOT"),
-                DynamicBean.spinnerItemData("TEX/ TTOT"),
-                DynamicBean.spinnerItemData("TIN/TEX"),
-                DynamicBean.spinnerItemData("T TOT"),
-                DynamicBean.spinnerItemData("MIF"),
-                DynamicBean.spinnerItemData("Vol extrap"),
-                DynamicBean.spinnerItemData("MMEF"),
-                DynamicBean.spinnerItemData("FVC IN"),
-                DynamicBean.spinnerItemData("Time(S)"),
-                DynamicBean.spinnerItemData("FVC IN"),
-//                DynamicBean.spinnerItemData("P0.1"),
-                DynamicBean.spinnerItemData("FVC IN"),
-            )
-
             // 创建一个空的 beans 列表
             val beansFVC: MutableList<CPETParameter> = mutableListOf()
 
             // 遍历 dynamicBeans 数组，将每个 DynamicBean 对象添加到 beans 列表中
-            for (bean in fvcBeans) {
+            for (bean in viewModel.fvcBeans) {
                 bean.let { beansFVC.add(it) }
             }
 
@@ -225,19 +177,12 @@ class StaticSettingFragment : CommonBaseFragment<FrgamentStaticSettingBinding>()
         binding.rvFvc.adapter = adapterFvc
 
         if (isMvvBean) {
-            // 创建一个存储 DynamicBean 对象的数组
-            val mvvBeans = arrayOf(
-                DynamicBean.spinnerItemData("MVV"),
-                DynamicBean.spinnerItemData("TIME_MVV"),
-                DynamicBean.spinnerItemData("BF"),
-                DynamicBean.spinnerItemData("Time"),
-            )
 
             // 创建一个空的 beans 列表
             val beansMVV: MutableList<CPETParameter> = mutableListOf()
 
             // 遍历 dynamicBeans 数组，将每个 DynamicBean 对象添加到 beans 列表中
-            for (bean in mvvBeans) {
+            for (bean in viewModel.mvvBeans) {
                 bean.let { beansMVV.add(it) }
             }
             adapterMvv.setItemsBean(beansMVV)
