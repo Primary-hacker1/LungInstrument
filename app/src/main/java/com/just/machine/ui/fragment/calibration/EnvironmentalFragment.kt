@@ -1,13 +1,12 @@
 package com.just.machine.ui.fragment.calibration
 
-import android.speech.tts.TextToSpeech
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
-import com.common.base.CommonUtil
-import com.common.base.delay
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
@@ -19,11 +18,17 @@ import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.BaseUtil
 import com.just.machine.util.LiveDataBus
+import com.just.news.R
 import com.just.news.databinding.FragmentEnvironmentalBinding
 import com.justsafe.libview.util.DateUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
-import java.util.Locale
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  *create by 2020/6/19
@@ -35,47 +40,97 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
 
     private val viewModel by viewModels<MainViewModel>()
 
-    private lateinit var tts: TextToSpeech
-
     private val adapter by lazy { EnvironmentalAdapter(requireContext()) }
+
+    private lateinit var scope: Job
+
+    private var isLocked = true
 
     override fun initView() {
         binding.rvEnvironmental.layoutManager = LinearLayoutManager(requireContext())
-
         adapter.setItemClickListener { _, position ->
             adapter.toggleItemBackground(position)
         }
-
         binding.rvEnvironmental.adapter = adapter
+    }
 
-        binding.llStart.setNoRepeatListener {
-            tts.speak("开始环境定标", TextToSpeech.QUEUE_ADD, null, "")
-            if (Constants.isDebug) {
-                val temperature: Short = 250 // 温度，单位为摄氏度
-                val humidity: Short = 60 // 湿度，单位为百分比
-                val pressure = 101325 // 气压，单位为帕斯卡
+    private var environmentalBeans: MutableList<EnvironmentalCalibrationBean> = ArrayList()
 
-                val environmentData = MudbusProtocol.generateSerialCommand(
-                    temperature,
-                    humidity,
-                    pressure
-                )
-                LiveDataBus.get().with(Constants.serialCallback).value = environmentData
+    private fun beanQuery(any: Any) {
+        if (any is List<*>) {
 
-                // 延迟任务部分
-                tts.delay(10000L, {}, {
-                    speak("环境定标完成，是否保存", TextToSpeech.QUEUE_ADD, null, "")
-                })
+            environmentalBeans.clear()
 
-                return@setNoRepeatListener
+            val datas = any as MutableList<*>
+
+            var fistBean: EnvironmentalCalibrationBean? = null
+
+            for (num in 0 until datas.size) {
+                val bean = datas[num] as EnvironmentalCalibrationBean
+                environmentalBeans.add(bean)
             }
 
+            if (environmentalBeans.size > 0) {
+                fistBean = datas[0] as EnvironmentalCalibrationBean
+            }
 
-            SerialPortManager.sendMessage(MudbusProtocol.ENVIRONMENT_CALIBRATION_COMMAND)//发送环境定标
+            binding.atvCreateTime.text = fistBean?.createTime
+            binding.etTemperature.setText(fistBean?.temperature)
+            binding.etHumidity.setText(fistBean?.humidity)
+            binding.etPressure.setText(fistBean?.pressure)
+
+            adapter.setItemsBean(environmentalBeans)
+
+            LogUtils.d(tag + environmentalBeans.toString())
+
+            binding.rvEnvironmental.adapter = adapter
+        }
+    }
+
+
+    override fun initListener() {
+        binding.llStart.setNoRepeatListener {
+            val start = binding.tvCalibrationStart.text
+            if (start == getString(R.string.begin)) {
+//                    if (Constants.isDebug) {
+//                        val temperature: Short = 250 // 温度，单位为摄氏度
+//                        val humidity: Short = 60 // 湿度，单位为百分比
+//                        val pressure = 101325 // 气压，单位为帕斯卡
+//
+//                        val environmentData = MudbusProtocol.generateSerialCommand(
+//                            temperature,
+//                            humidity,
+//                            pressure
+//                        )
+//
+//                        withContext(Dispatchers.Main) {
+//                            LiveDataBus.get().with(Constants.serialCallback).value = environmentData
+//                        }
+//                        return@launch
+//                    }
+
+                val startTime = System.currentTimeMillis()
+                scope = lifecycleScope.launch(Dispatchers.IO) {
+                    var nextPrintTime = startTime
+                    var i = 0
+                    while (isActive) {
+                        if (System.currentTimeMillis() >= nextPrintTime) {
+                            println("job: I'm sleeping ${i++} ...")
+                            nextPrintTime += 1000L
+                        }
+                    }
+                }
+                binding.tvCalibrationStart.text = getString(R.string.cancel)
+                SerialPortManager.sendMessage(MudbusProtocol.ENVIRONMENT_CALIBRATION_COMMAND)//发送环境定标
+            } else {
+                binding.tvCalibrationStart.text = getString(R.string.begin)
+                scope.cancel()
+            }
         }
 
         binding.llSave.setNoRepeatListener {
-
+            Toast.makeText(requireContext(),"手动保存",Toast.LENGTH_SHORT).show()
+            //插入一条手动环境定标
         }
 
         LiveDataBus.get().with(Constants.serialCallback).observe(this) {//解析串口消息
@@ -107,58 +162,41 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
                 }
             }
         }
-
-        tts = TextToSpeech(requireContext()) { status ->
-            if (status == TextToSpeech.SUCCESS) {
-                val result = tts.setLanguage(Locale.CHINESE)
-                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                    println("语言数据丢失或不支持")
-                } else {
-                    binding.llStart.isEnabled = true
-                }
+        binding.ivToggleLock.setNoRepeatListener {
+            isLocked = if (isLocked) {
+                unlockButtonStyle()
+                false
             } else {
-                println("初始化失败!")
+                lockButtonStyle()
+                true
             }
         }
     }
 
-    private var environmentalBeans: MutableList<EnvironmentalCalibrationBean> = ArrayList()
-
-    private fun beanQuery(any: Any) {
-        if (any is List<*>) {
-
-            environmentalBeans.clear()
-
-            val datas = any as MutableList<*>
-
-            var fistBean: EnvironmentalCalibrationBean? = null
-
-            for (num in 0 until datas.size) {
-                val bean = datas[num] as EnvironmentalCalibrationBean
-                environmentalBeans.add(bean)
-            }
-
-            if (environmentalBeans.size > 0) {
-                fistBean = datas[0] as EnvironmentalCalibrationBean
-            }
-
-            binding.atvCreateTime.text = fistBean?.createTime
-            binding.tvTemperature.text = fistBean?.temperature
-            binding.tvHumidity.text = fistBean?.humidity
-            binding.tvPressure.text = fistBean?.pressure
-
-            adapter.setItemsBean(environmentalBeans)
-
-            LogUtils.d(tag + environmentalBeans.toString())
-
-            binding.rvEnvironmental.adapter = adapter
-        }
+    private fun unlockButtonStyle() {
+        binding.ivToggleLock.setImageResource(R.drawable.unlock)
+        binding.llSave.setBackgroundResource(R.drawable.save_bg_line)
+        binding.etTemperature.isEnabled = true
+        binding.etTemperature.setBackgroundResource(R.drawable.frame_with_color_d6d6d6_gray_solid)
+        binding.etHumidity.isEnabled = true
+        binding.etHumidity.setBackgroundResource(R.drawable.frame_with_color_d6d6d6_gray_solid)
+        binding.etPressure.isEnabled = true
+        binding.etPressure.setBackgroundResource(R.drawable.frame_with_color_d6d6d6_gray_solid)
+        binding.llSave.isEnabled = true
     }
 
-
-    override fun initListener() {
-
+    private fun lockButtonStyle() {
+        binding.ivToggleLock.setImageResource(R.drawable.lock)
+        binding.llSave.setBackgroundResource(R.drawable.save_bg_gray)
+        binding.etTemperature.isEnabled = false
+        binding.etTemperature.setBackgroundResource(R.drawable.frame_with_color_transparent)
+        binding.etHumidity.isEnabled = false
+        binding.etHumidity.setBackgroundResource(R.drawable.frame_with_color_transparent)
+        binding.etPressure.isEnabled = false
+        binding.etPressure.setBackgroundResource(R.drawable.frame_with_color_transparent)
+        binding.llSave.isEnabled = false
     }
+
 
     /**
      * 懒加载
@@ -171,13 +209,6 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
         super.onDestroyView()
         // 对于 Fragment，推荐在 onDestroyView 中移除观察者
         LiveDataBus.get().with(Constants.serialCallback).removeObservers(viewLifecycleOwner)
-    }
-
-    override fun onDestroy() {
-        // 释放 TextToSpeech 资源
-        tts.stop()
-        tts.shutdown()
-        super.onDestroy()
     }
 
 

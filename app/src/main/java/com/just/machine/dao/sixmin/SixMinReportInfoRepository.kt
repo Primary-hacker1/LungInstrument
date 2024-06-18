@@ -17,7 +17,7 @@ import javax.inject.Inject
 /**
  * 6分钟数据库操作类。
  *
- * 从 [SixMinReportWalkDao] 中的 Flow 中收集是主要安全的。 Room 支持 Coroutines 并移动
+ * 从 [SixMinReportInfoDao] 中的 Flow 中收集是主要安全的。 Room 支持 Coroutines 并移动
  * 主线程外的查询执行。
  */
 class SixMinReportInfoRepository @Inject constructor(private val reportDao: SixMinReportInfoDao) {

@@ -20,7 +20,7 @@ import com.just.machine.model.sixminreport.SixMinReportWalk
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Plant 类的数据访问对象。
+ * 6分钟报告信息类的数据访问对象。
  */
 @Dao
 interface SixMinReportInfoDao {
