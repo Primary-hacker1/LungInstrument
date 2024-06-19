@@ -7,9 +7,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
+import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent.Companion.DYNAMICSUCCESS
 import com.just.machine.dao.setting.DynamicSettingBean
+import com.just.machine.model.Constants
 import com.just.machine.model.DynamicResultButtonBean
 import com.just.machine.ui.adapter.FragmentChildAdapter
 import com.just.machine.ui.adapter.ResultBtnAdapter
@@ -19,6 +21,7 @@ import com.just.machine.ui.fragment.cardiopulmonary.result.ExtremumAnalysisFragm
 import com.just.machine.ui.fragment.cardiopulmonary.result.FlowRateLoopsFragment
 import com.just.machine.ui.fragment.cardiopulmonary.result.OxygenDomainFragment
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FragmentDynamicResultBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -117,6 +120,7 @@ class DynamicResultFragment : CommonBaseFragment<FragmentDynamicResultBinding>()
         }
 
 
+
     }
 
     private fun createButtonList(activeButtonName: String? = null): MutableList<DynamicResultButtonBean> {
@@ -148,27 +152,21 @@ class DynamicResultFragment : CommonBaseFragment<FragmentDynamicResultBinding>()
             }
         }
 
-    return buttons
-}
+        return buttons
+    }
 
 
-// 更新按钮列表的函数
-private fun updateButtonList(activeButtonName: String?) {
-    bean = createButtonList(activeButtonName)
-    resultBtnAdapter.setItemsBean(bean)
-}
+    // 更新按钮列表的函数
+    private fun updateButtonList(activeButtonName: String?) {
+        bean = createButtonList(activeButtonName)
+        resultBtnAdapter.setItemsBean(bean)
+    }
 
     override fun initListener() {
 
+
     }
 
-    fun onSaveCLick(): LinearLayout {
-        return binding.llSave
-    }
-
-    fun onResetCLick(): LinearLayout {
-        return binding.llReset
-    }
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentDynamicResultBinding.inflate(inflater, container, false)

@@ -2,7 +2,6 @@ package com.just.machine.ui.fragment.cardiopulmonary.result
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.LayoutInflater
@@ -12,7 +11,6 @@ import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.common.network.LogUtils
 import com.github.mikephil.charting.charts.ScatterChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.ScatterData
@@ -23,6 +21,7 @@ import com.just.machine.model.lungdata.AnlyCpxTableModel
 import com.just.machine.ui.adapter.ResultAdapter
 import com.just.news.R
 import com.just.news.databinding.FragmentResultBinding
+import com.xxmassdeveloper.mpchartexample.ValueFormatter
 
 
 class FragmentResultLayout @JvmOverloads constructor(
@@ -209,8 +208,8 @@ class FragmentResultLayout @JvmOverloads constructor(
         chartBean: ChartAxisSettings
     ) {
         scatterChart.data = scatterData
-        // 设置X轴和Y轴的最大最小值
 
+        // 设置X轴和Y轴的最大最小值
         scatterChart.xAxis.axisMinimum = chartBean.axisMinimumL!!
         scatterChart.xAxis.axisMaximum = chartBean.axisMaximumL!!
         scatterChart.axisLeft.axisMinimum = chartBean.axisMinimumR!!
@@ -218,11 +217,18 @@ class FragmentResultLayout @JvmOverloads constructor(
         scatterChart.axisRight.axisMinimum = chartBean.axisMinimumR!!
         scatterChart.axisRight.axisMaximum = chartBean.axisMaximumR!!
 
-        // 设置Y轴的标签间隔
-        scatterChart.axisLeft.granularity = chartBean.granularity!! // 每个间隔10个单位
-        scatterChart.axisLeft.labelCount = chartBean.labelCount!! // 尽量分成11个标签（包括最大值和最小值）
-        scatterChart.axisRight.granularity = chartBean.granularity!! // 每个间隔10个单位
-        scatterChart.axisRight.labelCount = chartBean.labelCount!! // 尽量分成11个标签（包括最大值和最小值）
+        // 设置X轴的标签间隔和标签数量
+        scatterChart.xAxis.granularity = chartBean.xGranularity!! // X轴每个间隔的单位
+        scatterChart.xAxis.labelCount = chartBean.xLabelCount!! // X轴的标签数量
+        scatterChart.xAxis.valueFormatter = CustomValueFormatter(chartBean.xGranularity!!)
+
+        // 设置Y轴的标签间隔和标签数量
+        scatterChart.axisLeft.granularity = chartBean.granularity!! // Y轴每个间隔的单位
+        scatterChart.axisLeft.labelCount = chartBean.labelCount!! // Y轴的标签数量
+        scatterChart.axisLeft.valueFormatter = CustomValueFormatter(chartBean.granularity!!)
+        scatterChart.axisRight.granularity = chartBean.granularity!! // Y轴每个间隔的单位
+        scatterChart.axisRight.labelCount = chartBean.labelCount!! // Y轴的标签数量
+        scatterChart.axisRight.valueFormatter = CustomValueFormatter(chartBean.granularity!!)
 
         // 可选：配置图表样式
         scatterChart.setDrawGridBackground(false)
@@ -239,6 +245,8 @@ class FragmentResultLayout @JvmOverloads constructor(
         scatterChart.invalidate() // 刷新图表
     }
 
+
+
     private fun onChartClick(view: View) {
         val chart = view as FrameLayout
         isExpanded = if (isExpanded) {
@@ -253,7 +261,6 @@ class FragmentResultLayout @JvmOverloads constructor(
             for (i in 0 until binding.gridLayout.childCount) {
                 val child = binding.gridLayout.getChildAt(i)
                 if (child == chart) {
-                    LogUtils.d(tag + child)
                     child.visibility = View.VISIBLE// 切换目标 FrameLayout 的可见性
                 } else {
                     child.visibility = View.GONE
@@ -267,17 +274,27 @@ class FragmentResultLayout @JvmOverloads constructor(
     }
 }
 
+
+class CustomValueFormatter(private val granularity: Float) : ValueFormatter() {
+    override fun getFormattedValue(value: Float): String {
+        val roundedValue = Math.round(value / granularity) * granularity
+        return roundedValue.toString()
+    }
+}
+
+
 data class ChartAxisSettings(
-    //x轴刻度
+    // X轴刻度
     var axisMinimumL: Float ?= 0f,
     var axisMaximumL: Float ?= 100f,
+    var xGranularity: Float? = axisMaximumL?.div(10),
+    var xLabelCount: Int? = (axisMaximumL?.div(xGranularity?.toInt()!!)?.plus(1))?.toInt(),
 
-    //y轴刻度
+    // Y轴刻度
     var axisMinimumR: Float ?= 0f,
     var axisMaximumR: Float ?= 100f,
-
-    //y轴标签,10刻度为一单位
     var granularity: Float? = axisMaximumR?.div(10),
-    var labelCount: Int? = (axisMaximumR?.div(granularity?.toInt()!!)?.plus(1))?.toInt()
+    var labelCount: Int? = (axisMaximumR?.div(granularity?.toInt()!!)?.plus(2))?.toInt()
 )
+
 

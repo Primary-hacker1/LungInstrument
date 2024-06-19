@@ -59,12 +59,10 @@ public class LiveDataBus {
 
         private boolean isCallOnObserve() {
             StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-            if (stackTrace != null && stackTrace.length > 0) {
-                for (StackTraceElement element : stackTrace) {
-                    if ("android.arch.lifecycle.LiveData".equals(element.getClassName()) &&
-                            "observeForever".equals(element.getMethodName())) {
-                        return true;
-                    }
+            for (StackTraceElement element : stackTrace) {
+                if ("android.arch.lifecycle.LiveData".equals(element.getClassName()) &&
+                        "observeForever".equals(element.getMethodName())) {
+                    return true;
                 }
             }
             return false;
@@ -73,7 +71,7 @@ public class LiveDataBus {
 
     private static class BusMutableLiveData<T> extends MutableLiveData<T> {
 
-        private Map<Observer, Observer> observerMap = new HashMap<>();
+        private final Map<Observer, Observer> observerMap = new HashMap<>();
 
         @Override
         public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
@@ -110,6 +108,7 @@ public class LiveDataBus {
             Field fieldObservers = classLiveData.getDeclaredField("mObservers");
             fieldObservers.setAccessible(true);
             Object objectObservers = fieldObservers.get(this);
+            assert objectObservers != null;
             Class<?> classObservers = objectObservers.getClass();
             Method methodGet = classObservers.getDeclaredMethod("get", Object.class);
             methodGet.setAccessible(true);

@@ -12,107 +12,228 @@
                 type="com.just.machine.ui.viewmodel.MainViewModel" />
     </data>
 
+
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginVertical="@dimen/space_6"
-            android:orientation="horizontal">
+        android:layout_marginHorizontal="6dp"
+        android:orientation="vertical">
 
         <LinearLayout
-                android:layout_width="0dp"
-                android:background="@drawable/calibration_bg"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:layout_marginHorizontal="@dimen/space_6"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                tools:ignore="ScrollViewSize">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                    android:text="选择运动终止原因（可手动输入）"
-                    android:layout_width="wrap_content"
-                    android:layout_marginStart="@dimen/space_6"
-                    android:layout_marginTop="@dimen/space_6"
-                    android:textSize="@dimen/space_13"
-                    android:textStyle="bold"
-                    android:layout_height="wrap_content" />
-
-            <EditText
-                    android:id="@+id/edit_input"
-                    android:hint="请输入"
-                    android:textSize="@dimen/space_15"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="@dimen/space_6"
-                android:background="@drawable/calibration_bg"
-                android:layout_weight="2"
-                android:orientation="vertical">
-
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ll_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/space_6"
+                    android:background="@drawable/calibration_bg"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:padding="@dimen/space_8">
 
+
+                <LinearLayout
+                        android:id="@+id/ll_"
+                        android:layout_width="83dp"
+                        android:layout_height="28dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        tools:ignore="MissingConstraints">
+
+                    <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@drawable/dynamic_result"
+                            tools:ignore="ContentDescription" />
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:text="@string/motorAssessment"
+                            android:textColor="@color/text9"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/space_8"
+                        android:orientation="horizontal"
+                        app:layout_constraintRight_toRightOf="parent"
+                        tools:ignore="MissingConstraints">
+
+                    <LinearLayout
+                            android:id="@+id/ll_save"
+                            android:layout_width="83dp"
+                            android:layout_height="35dp"
+                            android:background="@drawable/save_bg"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            tools:ignore="MissingConstraints">
+
+                        <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/save_icon"
+                                android:tint="@color/white"
+                                tools:ignore="ContentDescription,UseAppTint" />
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:text="@string/save"
+                                android:textColor="@color/colorWhile"
+                                android:textSize="12sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                            android:id="@+id/ll_reset"
+                            android:layout_width="83dp"
+                            android:layout_height="35dp"
+                            android:layout_marginStart="@dimen/space_12"
+                            android:background="@drawable/save_bg_line"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            tools:ignore="MissingConstraints">
+
+                        <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:src="@drawable/ic_clean"
+                                tools:ignore="ContentDescription" />
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:text="@string/reset"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="12sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/vp_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:background="@drawable/calibration_bg"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:layout_marginHorizontal="@dimen/space_6"
+                    android:orientation="vertical">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                        android:text="是否达到运动极限"
+                        android:text="选择运动终止原因（可手动输入）"
                         android:layout_width="wrap_content"
-                        android:textStyle="bold"
                         android:layout_marginStart="@dimen/space_6"
+                        android:layout_marginTop="@dimen/space_6"
                         android:textSize="@dimen/space_13"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toStartOf="@id/switchMaterial" />
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content" />
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/switchMaterial"
+                <EditText
+                        android:id="@+id/edit_input"
+                        android:hint="请输入"
+                        android:textSize="@dimen/space_15"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="false"
-                        android:layout_marginStart="@dimen/space_30" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/yes"
-                        android:textSize="@dimen/space_12"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="是/否" />
+                        android:layout_height="wrap_content" />
 
 
             </LinearLayout>
 
             <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/space_6"
+                    android:background="@drawable/calibration_bg"
+                    android:layout_weight="2"
                     android:orientation="vertical">
 
-
-                <androidx.appcompat.widget.AppCompatTextView
-                        android:text="原因模版(单击使用模版)"
-                        android:layout_width="wrap_content"
-                        android:textStyle="bold"
-                        android:layout_marginStart="@dimen/space_6"
-                        android:textSize="@dimen/space_13"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toStartOf="@id/switchMaterial" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                        android:padding="@dimen/space_6"
-                        android:id="@+id/rv_record"
+                <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                            android:text="是否达到运动极限"
+                            android:layout_width="wrap_content"
+                            android:textStyle="bold"
+                            android:layout_marginStart="@dimen/space_6"
+                            android:textSize="@dimen/space_13"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toStartOf="@id/switchMaterial" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchMaterial"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:layout_marginStart="@dimen/space_30" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/yes"
+                            android:textSize="@dimen/space_12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="是/否" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                            android:text="原因模版(单击使用模版)"
+                            android:layout_width="wrap_content"
+                            android:textStyle="bold"
+                            android:layout_marginStart="@dimen/space_6"
+                            android:textSize="@dimen/space_13"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toStartOf="@id/switchMaterial" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                            android:padding="@dimen/space_6"
+                            android:id="@+id/rv_record"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
 
         </LinearLayout>
 
-
     </LinearLayout>
+
 
 </layout>

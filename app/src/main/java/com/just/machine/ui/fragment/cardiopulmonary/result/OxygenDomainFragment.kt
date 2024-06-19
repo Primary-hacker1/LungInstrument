@@ -3,12 +3,13 @@ package com.just.machine.ui.fragment.cardiopulmonary.result
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
-import com.just.machine.model.DynamicResultBean
-import com.just.machine.ui.fragment.cardiopulmonary.DynamicResultFragment
+import com.just.machine.model.Constants
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.machine.util.LiveDataBus
 import com.just.news.databinding.FragmentOxygenDomainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,21 +24,19 @@ class OxygenDomainFragment : CommonBaseFragment<FragmentOxygenDomainBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
 
+
     override fun loadData() {//懒加载
 
     }
 
     override fun initView() {
 
-        val fragment = parentFragment
+        binding.llSave.setNoRepeatListener {
 
-        if (fragment is DynamicResultFragment) {//保存
-            fragment.onSaveCLick().setNoRepeatListener {
-                LogUtils.d(tag + "onClick")
-            }
-            fragment.onResetCLick().setNoRepeatListener { //重置
+        }
 
-            }
+        binding.llReset.setNoRepeatListener {
+
         }
 
         binding.layoutResult.setChartLayout(FragmentResultLayout.ChartLayout.OXYGEN,ChartAxisSettings())

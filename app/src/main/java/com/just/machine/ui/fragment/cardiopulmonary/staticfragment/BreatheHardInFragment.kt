@@ -110,7 +110,6 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
 
         for (index in settingSVC) {
             if (index.isShow == true) {
-                LogUtils.e(tag + LungFormula.main(index.parameterName.toString()))
                 routineLungList.add(
                     createRoutineLungBean(
                         index.parameterName.toString(),
@@ -119,9 +118,6 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
                 )
             }
         }
-
-
-        LogUtils.e(tag + routineLungList.toString())
 
         binding.fragmentLayout.setLungData(routineLungList)
     }

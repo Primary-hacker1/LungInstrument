@@ -7,9 +7,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
+import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.result.SavedDataAdapter
-import com.just.machine.ui.fragment.cardiopulmonary.DynamicResultFragment
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.machine.util.LiveDataBus
 import com.just.news.databinding.FragmentDynamicCleanBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,38 +35,34 @@ class DynamicCleanFragment : CommonBaseFragment<FragmentDynamicCleanBinding>() {
 
     override fun initView() {
 
-        val fragment = parentFragment
 
-        if (fragment is DynamicResultFragment) {//保存
-            adapter = SavedDataAdapter(requireContext(),savedData)
+        adapter = SavedDataAdapter(requireContext(), savedData)
 
-            adapter.setItemOnClickListener(object : SavedDataAdapter.SavedListener {
-                override fun onClick(item: String, position: Int) {
-                    binding.editInput.setText("${binding.editInput.text}\n$item")
-                    adapter.toggleItemBackground(position)
-                }
-            })
-
-            fragment.onSaveCLick().setNoRepeatListener {
-                LogUtils.d(tag + "onClick")
-                val inputText = binding.editInput.text.toString()
-                if (inputText.isNotBlank()) {
-                    savedData.clear()
-                    val lines = inputText.split("\n")
-                    savedData.addAll(lines)
-                    adapter.notifyDataSetChanged()
-//                    binding.editInput.text.clear()
-                }
+        adapter.setItemOnClickListener(object : SavedDataAdapter.SavedListener {
+            override fun onClick(item: String, position: Int) {
+                binding.editInput.setText("${binding.editInput.text}\n$item")
+                adapter.toggleItemBackground(position)
             }
+        })
 
-            binding.rvRecord.layoutManager = LinearLayoutManager(requireContext())
-
-            binding.rvRecord.adapter = adapter
-
-            fragment.onResetCLick().setNoRepeatListener { //重置
-                adapter.dataClean()
+        binding.llSave.setNoRepeatListener {
+            val inputText = binding.editInput.text.toString()
+            if (inputText.isNotBlank()) {
+                savedData.clear()
+                val lines = inputText.split("\n")
+                savedData.addAll(lines)
+                adapter.notifyDataSetChanged()
+//                    binding.editInput.text.clear()
             }
         }
+
+        binding.llReset.setNoRepeatListener {
+            adapter.dataClean()
+        }
+
+        binding.rvRecord.layoutManager = LinearLayoutManager(requireContext())
+
+        binding.rvRecord.adapter = adapter
     }
 
     override fun initListener() {
