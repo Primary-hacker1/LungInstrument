@@ -74,7 +74,12 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
 
                 return@setNoRepeatListener
             }
+            //手动流量定标
+            if(binding.vpFlowTitle.currentItem == 0){
 
+            }else{
+
+            }
             SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)//发送流量定标
         }
 

@@ -51,7 +51,7 @@ class CalibrationFragment : CommonBaseFragment<FragmentCalibrationBinding>() {
         binding.vpCalibration.isUserInputEnabled = false
 
         binding.vpCalibration.orientation = ViewPager2.ORIENTATION_VERTICAL // 设置垂直方向滑动
-
+        binding.vpCalibration.offscreenPageLimit = 3
     }
 
     private fun onButtonClick(button: AppCompatButton, position: Int) {

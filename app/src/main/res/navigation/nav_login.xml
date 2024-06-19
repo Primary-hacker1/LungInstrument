@@ -2,13 +2,23 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_main"
-    app:startDestination="@id/LoginFragment">
+    android:id="@+id/nav_login"
+    app:startDestination="@id/loginFragment">
 
-    <fragment
-        android:id="@+id/LoginFragment"
+    <fragment_navigator
+        android:id="@+id/loginFragment"
         android:name="com.just.machine.ui.fragment.LoginFragment"
         android:label="newFragment"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_LoginFragment_to_PreHeatFragment"
+            app:destination="@id/preHeatFragment" />
+    </fragment_navigator>
+
+    <fragment_navigator
+        android:id="@+id/preHeatFragment"
+        android:name="com.just.machine.ui.fragment.PreHeatFragment"
+        android:label="preHeatFragment"
+        tools:layout="@layout/fragment_preheat" />
 
 </navigation>

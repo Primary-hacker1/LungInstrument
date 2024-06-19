@@ -25,7 +25,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:padding="@dimen/space_6">
+                android:padding="@dimen/space_6"
+                android:visibility="gone">
 
                 <View
                     android:layout_width="@dimen/space_3"
@@ -44,10 +45,9 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/ll_item"
+                android:id="@+id/ll_item_inhale"
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
-                android:layout_marginHorizontal="@dimen/space_6"
                 android:background="@color/cf4f5fa"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -56,7 +56,7 @@
                     android:layout_width="88dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_19"
-                    android:text="吸气标定指标"
+                    android:text="吸气指标"
                     android:textColor="@color/text3"
                     android:textSize="11sp" />
 
@@ -65,7 +65,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:maxLines="1"
-                    android:text="标定值"
+                    android:text="标定值(L)"
                     android:textColor="@color/text3"
                     android:textSize="11sp" />
 
@@ -74,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:maxLines="1"
-                    android:text="实际值"
+                    android:text="实际值(L)"
                     android:textColor="@color/text3"
                     android:textSize="11sp" />
 
@@ -98,7 +98,66 @@
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_flow_handle"
+                android:id="@+id/rv_flow_handle_inhale"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:id="@+id/ll_item_exhale"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:background="@color/cf4f5fa"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="88dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_19"
+                    android:text="呼气指标"
+                    android:textColor="@color/text3"
+                    android:textSize="11sp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:maxLines="1"
+                    android:text="标定值(L)"
+                    android:textColor="@color/text3"
+                    android:textSize="11sp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:maxLines="1"
+                    android:text="实际值(L)"
+                    android:textColor="@color/text3"
+                    android:textSize="11sp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:maxLines="1"
+                    android:text="误差率"
+                    android:textColor="@color/text3"
+                    android:textSize="11sp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:maxLines="1"
+                    android:text="标定结果"
+                    android:textColor="@color/text3"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_flow_handle_exhale"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
@@ -165,7 +224,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="@dimen/space_9"
+            android:layout_marginHorizontal="@dimen/space_9"
+            android:layout_marginTop="@dimen/space_9"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -174,14 +234,63 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:background="@drawable/calibration_bg"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                tools:ignore="NestedWeights">
 
-                <com.justsafe.libview.chart.BaseLineChart
-                    android:id="@+id/chart_time"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="@dimen/space_6" />
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Vol"
+                            android:textSize="9sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="[L]"
+                            android:textSize="9sp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="容量-时间"
+                        android:textColor="@color/text3"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.justsafe.libview.chart.BaseLineChart
+                        android:id="@+id/chart_flow_handle_capacity_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/space_6" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:text="Time(S)"
+                        android:textSize="9sp" />
+
+                </RelativeLayout>
 
             </LinearLayout>
 
@@ -189,16 +298,65 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="@dimen/space_9"
-                android:layout_weight="1"
+                android:layout_weight="1.2"
                 android:background="@drawable/calibration_bg"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
-                <com.justsafe.libview.chart.BaseLineChart
-                    android:id="@+id/chart_speed"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="@dimen/space_6" />
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Flow"
+                            android:textSize="9sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="[L/S]"
+                            android:textSize="9sp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="流速-容量"
+                        android:textColor="@color/text3"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.justsafe.libview.chart.BaseLineChart
+                        android:id="@+id/chart_flow_handle_flow_capacity"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/space_6" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:text="Vol(L)"
+                        android:textSize="9sp" />
+
+                </RelativeLayout>
 
             </LinearLayout>
 

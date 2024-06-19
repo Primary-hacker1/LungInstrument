@@ -48,13 +48,13 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
     }
 
     override fun initListener() {
-        flowAdapter.setItemClickListener { item, position ->
+        flowAdapter.setItemClickListener { _, position ->
             flowAdapter.toggleItemBackground(position)
         }
 
         flowAdapter.setItemsBean(
             mutableListOf
-                (FlowBean(0, "", 1, "容积1", "3", "3.003","%1","通过"))
+                (FlowBean(0, "", 1, "容积1", "3", "3.003","0.93","0"))
         )
 
     }

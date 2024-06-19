@@ -25,6 +25,7 @@ data class EnvironmentalCalibrationBean(
     var temperature: String? = "",//温度
     var humidity: String? = "",//湿度
     var pressure: String? = "",//大气压
+    var calibrationType:String? = ""//标定方式 0手动 1自动
 
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -33,7 +34,8 @@ data class EnvironmentalCalibrationBean(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString()
+        parcel.readString(),
+        parcel.readString(),
     ) {
     }
 
@@ -44,6 +46,7 @@ data class EnvironmentalCalibrationBean(
         parcel.writeString(temperature)
         parcel.writeString(humidity)
         parcel.writeString(pressure)
+        parcel.writeString(calibrationType)
     }
 
     override fun describeContents(): Int {

@@ -619,6 +619,7 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
 //                    }
 //                    val data = mutableMapOf<Long,ByteArray>()
 //                    FileUtil.writeEcg(data,file.absolutePath)
+                    popBackStack()
                     navigate(binding.sixminLlPreReport, R.id.sixMinReportFragment)
 
                 } else {
@@ -811,6 +812,7 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                     viewModel.updateSixMinReportInfo(mActivity.sixMinReportInfo)
                     viewModel.setSixMinReportHeartBeat(mActivity.sixMinReportBloodHeart)
 
+                    popBackStack()
                     navigate(binding.sixminLlPreReport, R.id.sixMinReportFragment)
                 }
             } catch (e: Exception) {

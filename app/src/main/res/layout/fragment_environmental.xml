@@ -69,6 +69,7 @@
                         tools:ignore="ContentDescription" />
 
                     <TextView
+                        android:id="@+id/tv_calibration_start"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
@@ -83,23 +84,25 @@
                     android:layout_width="83dp"
                     android:layout_height="35dp"
                     android:layout_marginStart="@dimen/space_12"
-                    android:background="@drawable/save_bg_line"
+                    android:background="@drawable/save_bg_gray"
                     android:gravity="center"
                     android:orientation="horizontal"
                     tools:ignore="MissingConstraints">
 
                     <ImageView
+                        android:id="@+id/iv_calibration_save"
                         android:layout_width="15dp"
                         android:layout_height="15dp"
-                        android:src="@drawable/save_icon"
+                        android:src="@drawable/save_icon_white"
                         tools:ignore="ContentDescription" />
 
                     <TextView
+                        android:id="@+id/tv_calibration_save"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:text="@string/save"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/colorWhite"
                         android:textSize="12sp" />
 
                 </LinearLayout>
@@ -136,10 +139,9 @@
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/atv_create_time"
-                        android:layout_width="wrap_content"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/space_40"
-                        android:text="10:00:00"
+                        android:layout_marginTop="@dimen/space_30"
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -170,12 +172,17 @@
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tv_temperature"
+                    <EditText
+                        android:id="@+id/et_temperature"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/space_30"
-                        android:text="100"
+                        android:background="@null"
+                        android:inputType="numberDecimal"
+                        android:maxWidth="80dp"
+                        android:maxLength="5"
+                        android:minWidth="20dp"
+                        android:paddingHorizontal="2dp"
                         android:textColor="@color/white"
                         android:textSize="23sp"
                         android:textStyle="bold" />
@@ -183,10 +190,10 @@
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/tv_temperature"
-                        android:layout_marginStart="@dimen/space_16"
+                        android:layout_alignBottom="@+id/et_temperature"
+                        android:layout_marginStart="@dimen/space_5"
                         android:layout_marginTop="@dimen/space_22"
-                        android:layout_toEndOf="@+id/tv_temperature"
+                        android:layout_toEndOf="@+id/et_temperature"
                         android:text="℃"
                         android:textColor="@color/white"
                         android:textSize="13sp"
@@ -218,12 +225,17 @@
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tv_humidity"
+                    <EditText
+                        android:id="@+id/et_humidity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/space_30"
-                        android:text="100"
+                        android:background="@null"
+                        android:inputType="numberDecimal"
+                        android:maxWidth="80dp"
+                        android:maxLength="5"
+                        android:minWidth="20dp"
+                        android:paddingHorizontal="2dp"
                         android:textColor="@color/white"
                         android:textSize="23sp"
                         android:textStyle="bold" />
@@ -231,10 +243,10 @@
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/tv_humidity"
-                        android:layout_marginStart="@dimen/space_16"
+                        android:layout_alignBottom="@+id/et_humidity"
+                        android:layout_marginStart="@dimen/space_5"
                         android:layout_marginTop="@dimen/space_22"
-                        android:layout_toEndOf="@+id/tv_humidity"
+                        android:layout_toEndOf="@+id/et_humidity"
                         android:text="%"
                         android:textColor="@color/white"
                         android:textSize="13sp"
@@ -255,7 +267,8 @@
                     android:layout_height="110dp"
                     android:background="@drawable/pressure_bg"
                     android:gravity="center_vertical"
-                    android:padding="@dimen/space_17">
+                    android:paddingStart="@dimen/space_17"
+                    android:paddingTop="@dimen/space_17">
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -264,12 +277,17 @@
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tv_pressure"
+                    <EditText
+                        android:id="@+id/et_pressure"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/space_30"
-                        android:text="100"
+                        android:background="@null"
+                        android:inputType="numberDecimal"
+                        android:maxWidth="80dp"
+                        android:maxLength="6"
+                        android:minWidth="20dp"
+                        android:paddingHorizontal="2dp"
                         android:textColor="@color/white"
                         android:textSize="23sp"
                         android:textStyle="bold" />
@@ -277,10 +295,10 @@
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/tv_pressure"
-                        android:layout_marginStart="@dimen/space_16"
+                        android:layout_alignBottom="@+id/et_pressure"
+                        android:layout_marginStart="@dimen/space_5"
                         android:layout_marginTop="@dimen/space_22"
-                        android:layout_toEndOf="@+id/tv_pressure"
+                        android:layout_toEndOf="@+id/et_pressure"
                         android:text="mmHg"
                         android:textColor="@color/white"
                         android:textSize="13sp"
@@ -290,7 +308,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
+                        android:layout_marginEnd="@dimen/space_17"
                         android:src="@drawable/pressure"
+                        tools:ignore="RtlHardcoded" />
+
+                    <ImageView
+                        android:id="@+id/iv_toggle_lock"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentBottom="true"
+                        android:src="@drawable/lock"
                         tools:ignore="RtlHardcoded" />
 
                 </RelativeLayout>

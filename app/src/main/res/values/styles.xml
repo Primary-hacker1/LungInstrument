@@ -60,4 +60,17 @@
         <attr name="stepper_rightButtonResources" format="color|reference"/>
     </declare-styleable>
 
+    <style name="SavePwdCheckBox" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/custom_checkbox_selector</item>
+        <item name="android:paddingStart">8dp</item>
+    </style>
+
+    <!-- 防止欢迎页白屏或者黑屏，设置图片 -->
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@mipmap/activity_bg</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>

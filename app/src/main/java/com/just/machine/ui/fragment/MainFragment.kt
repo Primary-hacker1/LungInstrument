@@ -82,10 +82,10 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
         }
 
         binding.btnEcg.setNoRepeatListener {//心肺测试
-            val isClick = SharedPreferencesUtils.instance.isClickBtn
-//            if (Constants.isDebug) {
-//                isClick = "1"
-//            }
+            var isClick = SharedPreferencesUtils.instance.isClickBtn
+            if (Constants.isDebug) {
+                isClick = "1"
+            }
             when (isClick) {
                 "" -> {
                     val patientDialogFragment =

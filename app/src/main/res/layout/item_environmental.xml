@@ -61,7 +61,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="1"
-            android:text="手动"
             android:textColor="@color/text3"
             android:textSize="13sp" />
     </LinearLayout>

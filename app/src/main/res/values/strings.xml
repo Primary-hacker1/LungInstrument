@@ -12,10 +12,10 @@
     <string name="send">发送</string>
     <string name="connect">连接</string>
     <string name="cardiopulmonary">心肺测试</string>
-    <string name="minute_walk">六分钟步行检测</string>
+    <string name="minute_walk">六分钟步行测试</string>
     <string name="patientInformation">患者管理</string>
     <string name="registration">注 册</string>
-    <string name="entry_name">便携式运动心肺测试系统</string>
+    <string name="entry_name">便携式心肺功能测试系统</string>
     <string name="yes">确定</string>
     <string name="cancel">取消</string>
     <string name="close">退出</string>

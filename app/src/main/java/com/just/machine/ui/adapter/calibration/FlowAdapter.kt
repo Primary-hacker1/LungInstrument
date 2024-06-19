@@ -20,6 +20,16 @@ class FlowAdapter(val context: Context) :
         } else {
             binding.llItem.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
         }
+
+        if(item.errorRate?.isNotEmpty() == true){
+            if(item.errorRate.toString().toFloat() < 0){
+                item.calibrationResults = "未通过"
+                binding.atvCalibrationResults.setTextColor(ContextCompat.getColor(context,R.color.red))
+            }else{
+                item.calibrationResults = "通过"
+                binding.atvCalibrationResults.setTextColor(ContextCompat.getColor(context,R.color.text3))
+            }
+        }
     }
 
     /**
