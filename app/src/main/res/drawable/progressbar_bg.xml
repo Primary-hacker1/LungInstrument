@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--  设置背景色  -->
+    <item android:id="@android:id/background">
+        <shape>
+            <solid android:color="@color/colorWhite" />
+            <stroke
+                android:width="1dp"
+                android:color="@color/font_blue" />
+            <corners
+                android:radius="2dp" />/>
+        </shape>
+    </item>
+
+    <!--  设置进度条颜色  -->
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape>
+
+                <gradient
+                    android:endColor="@color/font_blue"
+                    android:startColor="@color/font_blue" />
+            </shape>
+        </clip>
+    </item>
+
+    <!--  进度设置圆角  -->
+    <item android:id="@android:id/progress">
+        <scale android:scaleWidth="100%"
+            android:drawable="@drawable/progress_bar_ct"   />
+    </item>
+
+</layer-list>

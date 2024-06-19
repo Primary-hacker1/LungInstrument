@@ -20,6 +20,12 @@ class EnvironmentalAdapter(val context: Context) :
         } else {
             binding.llItem.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
         }
+
+        if(item.calibrationType == "0"){
+            binding.atvCalibrationMethod.text = "手动"
+        }else{
+            binding.atvCalibrationMethod.text = "自动"
+        }
     }
 
     /**

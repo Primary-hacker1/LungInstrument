@@ -93,35 +93,32 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
         binding.llStart.setNoRepeatListener {
             val start = binding.tvCalibrationStart.text
             if (start == getString(R.string.begin)) {
-//                    if (Constants.isDebug) {
-//                        val temperature: Short = 250 // 温度，单位为摄氏度
-//                        val humidity: Short = 60 // 湿度，单位为百分比
-//                        val pressure = 101325 // 气压，单位为帕斯卡
-//
-//                        val environmentData = MudbusProtocol.generateSerialCommand(
-//                            temperature,
-//                            humidity,
-//                            pressure
-//                        )
-//
-//                        withContext(Dispatchers.Main) {
-//                            LiveDataBus.get().with(Constants.serialCallback).value = environmentData
-//                        }
-//                        return@launch
-//                    }
+                if (Constants.isDebug) {
+                    val temperature: Short = 250 // 温度，单位为摄氏度
+                    val humidity: Short = 60 // 湿度，单位为百分比
+                    val pressure = 101325 // 气压，单位为帕斯卡
 
-                val startTime = System.currentTimeMillis()
-                scope = lifecycleScope.launch(Dispatchers.IO) {
-                    var nextPrintTime = startTime
-                    var i = 0
-                    while (isActive) {
-                        if (System.currentTimeMillis() >= nextPrintTime) {
-                            println("job: I'm sleeping ${i++} ...")
-                            nextPrintTime += 1000L
-                        }
-                    }
+                    val environmentData = MudbusProtocol.generateSerialCommand(
+                        temperature,
+                        humidity,
+                        pressure
+                    )
+
+                    LiveDataBus.get().with(Constants.serialCallback).value = environmentData
                 }
-                binding.tvCalibrationStart.text = getString(R.string.cancel)
+
+//                val startTime = System.currentTimeMillis()
+//                scope = lifecycleScope.launch(Dispatchers.IO) {
+//                    var nextPrintTime = startTime
+//                    var i = 0
+//                    while (isActive) {
+//                        if (System.currentTimeMillis() >= nextPrintTime) {
+//                            println("job: I'm sleeping ${i++} ...")
+//                            nextPrintTime += 1000L
+//                        }
+//                    }
+//                }
+//                binding.tvCalibrationStart.text = getString(R.string.cancel)
                 SerialPortManager.sendMessage(MudbusProtocol.ENVIRONMENT_CALIBRATION_COMMAND)//发送环境定标
             } else {
                 binding.tvCalibrationStart.text = getString(R.string.begin)
@@ -130,8 +127,33 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
         }
 
         binding.llSave.setNoRepeatListener {
-            Toast.makeText(requireContext(),"手动保存",Toast.LENGTH_SHORT).show()
+            if (binding.etTemperature.text.toString().trim() == "") {
+                Toast.makeText(requireContext(), "温度不能为空!", Toast.LENGTH_SHORT).show()
+                return@setNoRepeatListener
+            }
+            if (binding.etHumidity.text.toString().trim() == "") {
+                Toast.makeText(requireContext(), "湿度不能为空!", Toast.LENGTH_SHORT).show()
+                return@setNoRepeatListener
+            }
+            if (binding.etPressure.text.toString().trim() == "") {
+                Toast.makeText(requireContext(), "气压不能为空!", Toast.LENGTH_SHORT).show()
+                return@setNoRepeatListener
+            }
+            Toast.makeText(requireContext(), "手动保存", Toast.LENGTH_SHORT).show()
+            val time = DateUtils.nowTimeString
             //插入一条手动环境定标
+            viewModel.setEnvironmental(
+                EnvironmentalCalibrationBean(//假设用户id为1
+                    0,
+                    1,
+                    time,
+                    binding.etTemperature.text.toString().trim(),
+                    binding.etHumidity.text.toString().trim(),
+                    binding.etPressure.text.toString().trim(),
+                    "0"
+                )
+            )
+            lockButtonStyle()
         }
 
         LiveDataBus.get().with(Constants.serialCallback).observe(this) {//解析串口消息
@@ -147,7 +169,7 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
                     viewModel.setEnvironmental(
                         EnvironmentalCalibrationBean(//假设用户id为1
                             0, 1, time, temperature.toString(),
-                            humidity.toString(), pressure.toString()
+                            humidity.toString(), pressure.toString(), "1"
                         )
                     )//插入数据库并查询
                 } else {
@@ -185,7 +207,12 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
         binding.etPressure.setBackgroundResource(R.drawable.frame_with_color_d6d6d6_gray_solid)
         binding.llSave.isEnabled = true
         binding.ivCalibrationSave.setImageResource(R.drawable.save_icon)
-        binding.tvCalibrationSave.setTextColor(ContextCompat.getColor(requireContext(),R.color.colorPrimary))
+        binding.tvCalibrationSave.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.colorPrimary
+            )
+        )
     }
 
     private fun lockButtonStyle() {
@@ -199,7 +226,12 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
         binding.etPressure.setBackgroundResource(R.drawable.frame_with_color_transparent)
         binding.llSave.isEnabled = false
         binding.ivCalibrationSave.setImageResource(R.drawable.save_icon_white)
-        binding.tvCalibrationSave.setTextColor(ContextCompat.getColor(requireContext(),R.color.colorWhite))
+        binding.tvCalibrationSave.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.colorWhite
+            )
+        )
     }
 
 

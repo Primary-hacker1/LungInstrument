@@ -31,7 +31,11 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
 
-    private val flowAdapter by lazy {
+    private val inHaleFlowAdapter by lazy {
+        FlowAdapter(requireContext())
+    }
+
+    private val exHaleFlowAdapter by lazy {
         FlowAdapter(requireContext())
     }
 
@@ -43,7 +47,11 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
     override fun initView() {
         binding.rvFlowHandleInhale.layoutManager = LinearLayoutManager(requireContext())
 
-        binding.rvFlowHandleInhale.adapter = flowAdapter
+        binding.rvFlowHandleInhale.adapter = inHaleFlowAdapter
+
+        binding.rvFlowHandleExhale.layoutManager = LinearLayoutManager(requireContext())
+
+        binding.rvFlowHandleExhale.adapter = exHaleFlowAdapter
 
         initLineChart(binding.chartFlowHandleCapacityTime, 1)
         initLineChart(binding.chartFlowHandleFlowCapacity, 2)
@@ -54,13 +62,22 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
     }
 
     override fun initListener() {
-        flowAdapter.setItemClickListener { _, position ->
-            flowAdapter.toggleItemBackground(position)
+        inHaleFlowAdapter.setItemClickListener { _, position ->
+            inHaleFlowAdapter.toggleItemBackground(position)
         }
 
-        flowAdapter.setItemsBean(
+        inHaleFlowAdapter.setItemsBean(
             mutableListOf
-                (FlowBean(0, "", 1, "容积1", "3", "3.003", "0.92", "通过"))
+                (FlowBean(0, "", 1, "吸气容积1", "3", "3.003", "0.92"))
+        )
+
+        exHaleFlowAdapter.setItemClickListener { _, position ->
+            exHaleFlowAdapter.toggleItemBackground(position)
+        }
+
+        exHaleFlowAdapter.setItemsBean(
+            mutableListOf
+                (FlowBean(0, "", 1, "呼气容积1", "3", "2.993", "-1.44" ))
         )
 
         viewModel.mEventHub.observe(this) {
@@ -79,7 +96,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                 }
             }
         }
-
+        binding
     }
 
     override fun getViewBinding(

@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.viewmodel.LiveDataEvent
@@ -1437,6 +1438,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
 
     private fun jumpToPreReport() {
         EasyWindow.cancelAll()
+        popBackStack()
         navigate(binding.sixminIvSystemSetting, R.id.sixMinPreReportFragment)
     }
 
@@ -1586,6 +1588,12 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
 
             showGuideDialog()
         }
+    }
+
+    private fun popBackStack(){
+        val navController = findNavController()//fragment返回数据处理
+        navController.previousBackStackEntry?.savedStateHandle?.set("key", "返回")
+        navController.popBackStack()
     }
 
     override fun onResume() {

@@ -113,7 +113,7 @@ public class LoginEditText extends AppCompatEditText {
              * 初始化删除图标
              */
             // 1. 获取资源ID
-            ic_deleteResID = typedArray.getResourceId(R.styleable.LoginEditText_ic_delete, R.drawable.ic_delete);
+            ic_deleteResID = typedArray.getResourceId(R.styleable.LoginEditText_ic_delete, R.drawable.delete);
             // 2. 根据资源ID获取图标资源（转化成Drawable对象）
             ic_delete = ContextCompat.getDrawable(getContext(), ic_deleteResID);
             // 3. 设置图标大小

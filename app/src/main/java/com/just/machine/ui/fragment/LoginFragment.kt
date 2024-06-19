@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.common.base.CommonBaseFragment
 import com.common.base.gone
 import com.common.base.setNoRepeatListener
@@ -18,6 +19,7 @@ import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.ui.activity.MainActivity
 import com.just.news.databinding.FragmentLoginBinding
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.news.R
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -38,7 +40,7 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
         )
         { permissions ->
             val allGranted = permissions.all { it.value }
-            if (allGranted){//
+            if (allGranted) {//
 
             }
             permissions.entries.forEach {
@@ -78,26 +80,37 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
             }.toTypedArray()
         )
 
-        if (!SharedPreferencesUtils.instance.user.equals("")) {
-            MainActivity.startMainActivity(context)
-            activity?.finish()
-        }
+//        if (!SharedPreferencesUtils.instance.user.equals("")) {
+//            MainActivity.startMainActivity(context)
+//            activity?.finish()
+//        }
 
-        if (SharedPreferencesUtils.instance.user.equals("")) {
-            SharedPreferencesUtils.instance.user = "admin"
-        }
+//        if (SharedPreferencesUtils.instance.user.equals("")) {
+//            SharedPreferencesUtils.instance.user = "admin"
+//        }
+//
+//        if (SharedPreferencesUtils.instance.pass.equals("")) {
+//            SharedPreferencesUtils.instance.pass = "123456"
+//        }
 
-        if (SharedPreferencesUtils.instance.pass.equals("")) {
-            SharedPreferencesUtils.instance.pass = "123456"
+        if (!SharedPreferencesUtils.instance.user.equals("") && !SharedPreferencesUtils.instance.pass.equals(
+                ""
+            )
+        ) {
+            binding.atvUser.setText(SharedPreferencesUtils.instance.user)
+            binding.atvPass.setText(SharedPreferencesUtils.instance.pass)
+            binding.cbRememberPwd.isChecked = true
+        } else {
+            binding.cbRememberPwd.isChecked = false
         }
 
         binding.btnLogin.setNoRepeatListener {
 
-            if (Constants.isDebug) {
-                MainActivity.startMainActivity(context)
-                activity?.finish()
-                return@setNoRepeatListener
-            }
+//            if (Constants.isDebug) {
+//                MainActivity.startMainActivity(context)
+//                activity?.finish()
+//                return@setNoRepeatListener
+//            }
 
             hideKeyboard(it.windowToken)
 
@@ -111,26 +124,34 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
                 return@setNoRepeatListener
             }
 
-            if (binding.atvUser.text.toString() !=  SharedPreferencesUtils.instance.user) {
+
+            if (binding.atvUser.text.toString() != "admin") {
                 toast("没有该用户！请检查用户名")
                 return@setNoRepeatListener
             }
 
-            if (binding.atvPass.text.toString() !=  SharedPreferencesUtils.instance.pass) {
+            if (binding.atvPass.text.toString() != "123456") {
                 toast("请输入正确的密码！")
                 return@setNoRepeatListener
             }
 
-            SharedPreferencesUtils.instance.user = binding.atvUser.text.toString()
+            if (binding.cbRememberPwd.isChecked) {
+                SharedPreferencesUtils.instance.user = binding.atvUser.text.toString()
 
-            SharedPreferencesUtils.instance.pass = binding.atvPass.text.toString()
+                SharedPreferencesUtils.instance.pass = binding.atvPass.text.toString()
+            } else {
+                SharedPreferencesUtils.instance.user = ""
 
-            MainActivity.startMainActivity(context)
+                SharedPreferencesUtils.instance.pass = ""
+            }
 
-            activity?.finish()
+//            MainActivity.startMainActivity(context)
+            popBackStack()
+            navigate(it, R.id.preHeatFragment)
+//            activity?.finish()
         }
     }
- 
+
     override fun initListener() {
 
     }
@@ -143,7 +164,12 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
     }
 
 
-
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentLoginBinding.inflate(inflater, container, false)
+
+    private fun popBackStack() {
+        val navController = findNavController()//fragment返回数据处理
+        navController.previousBackStackEntry?.savedStateHandle?.set("key", "返回")
+        navController.popBackStack()
+    }
 }

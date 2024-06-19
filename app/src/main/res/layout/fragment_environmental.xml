@@ -141,8 +141,7 @@
                         android:id="@+id/atv_create_time"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/space_40"
-                        android:text="10:00:00"
+                        android:layout_marginTop="@dimen/space_30"
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -184,7 +183,6 @@
                         android:maxLength="5"
                         android:minWidth="20dp"
                         android:paddingHorizontal="2dp"
-                        android:text="100"
                         android:textColor="@color/white"
                         android:textSize="23sp"
                         android:textStyle="bold" />
@@ -238,7 +236,6 @@
                         android:maxLength="5"
                         android:minWidth="20dp"
                         android:paddingHorizontal="2dp"
-                        android:text="100"
                         android:textColor="@color/white"
                         android:textSize="23sp"
                         android:textStyle="bold" />
@@ -291,7 +288,6 @@
                         android:maxLength="6"
                         android:minWidth="20dp"
                         android:paddingHorizontal="2dp"
-                        android:text="100"
                         android:textColor="@color/white"
                         android:textSize="23sp"
                         android:textStyle="bold" />
