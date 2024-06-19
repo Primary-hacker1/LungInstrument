@@ -3,6 +3,7 @@ package com.just.machine.ui.fragment.calibration
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -183,6 +184,8 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
         binding.etPressure.isEnabled = true
         binding.etPressure.setBackgroundResource(R.drawable.frame_with_color_d6d6d6_gray_solid)
         binding.llSave.isEnabled = true
+        binding.ivCalibrationSave.setImageResource(R.drawable.save_icon)
+        binding.tvCalibrationSave.setTextColor(ContextCompat.getColor(requireContext(),R.color.colorPrimary))
     }
 
     private fun lockButtonStyle() {
@@ -195,6 +198,8 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
         binding.etPressure.isEnabled = false
         binding.etPressure.setBackgroundResource(R.drawable.frame_with_color_transparent)
         binding.llSave.isEnabled = false
+        binding.ivCalibrationSave.setImageResource(R.drawable.save_icon_white)
+        binding.tvCalibrationSave.setTextColor(ContextCompat.getColor(requireContext(),R.color.colorWhite))
     }
 
 

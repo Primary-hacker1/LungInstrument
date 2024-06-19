@@ -134,6 +134,10 @@ public class XAxisRenderer extends AxisRenderer {
             pointF.y = 0.0f;
             drawLabels(c, mViewPortHandler.contentBottom() - yoffset - mXAxis.mLabelRotatedHeight, pointF);
 
+        } else if(mXAxis.getPosition() == XAxisPosition.CENTER){
+            pointF.x = 0.5f;
+            pointF.y = 0.0f;
+            drawLabels(c, mViewPortHandler.contentHeight()/2+yoffset*2+mXAxis.mLabelRotatedHeight, pointF);
         } else { // BOTH SIDED
             pointF.x = 0.5f;
             pointF.y = 1.0f;
