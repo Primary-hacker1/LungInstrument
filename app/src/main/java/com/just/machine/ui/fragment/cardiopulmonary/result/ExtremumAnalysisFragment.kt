@@ -30,16 +30,23 @@ class ExtremumAnalysisFragment : CommonBaseFragment<FragmentExtremumAnalysisBind
 
         val fragment = parentFragment
 
-        if (fragment is DynamicResultFragment){//保存
+        if (fragment is DynamicResultFragment) {//保存
             fragment.onSaveCLick().setNoRepeatListener {
-                LogUtils.d(tag+"onClick")
+                LogUtils.d(tag + "onClick")
             }
             fragment.onResetCLick().setNoRepeatListener { //重置
 
             }
         }
+        val chartSetting = ChartAxisSettings()
+        chartSetting.axisMaximumR = 2700f
+        chartSetting.axisMinimumR = 0f
+        chartSetting.granularity = 150f
 
-        binding.layoutResult.setChartLayout(FragmentResultLayout.ChartLayout.EXTREMUM)
+        binding.layoutResult.setChartLayout(
+            FragmentResultLayout.ChartLayout.EXTREMUM,
+            chartSetting
+        )
 
     }
 

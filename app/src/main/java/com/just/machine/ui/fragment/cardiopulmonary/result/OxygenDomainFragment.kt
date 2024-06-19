@@ -40,7 +40,7 @@ class OxygenDomainFragment : CommonBaseFragment<FragmentOxygenDomainBinding>() {
             }
         }
 
-        binding.layoutResult.setChartLayout(FragmentResultLayout.ChartLayout.OXYGEN)
+        binding.layoutResult.setChartLayout(FragmentResultLayout.ChartLayout.OXYGEN,ChartAxisSettings())
 
         binding.layoutResult.setDynamicResultBeans()
 

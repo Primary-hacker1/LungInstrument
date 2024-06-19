@@ -155,24 +155,24 @@ class FragmentResultLayout @JvmOverloads constructor(
 
     }
 
-    fun setChartLayout(resultLayout: ChartLayout) {
+    fun setChartLayout(resultLayout: ChartLayout,chartAxisSettings: ChartAxisSettings) {
         chartLayout = resultLayout
         when (resultLayout) {
             ChartLayout.EXTREMUM -> {
                 val scatterData = generateScatterData(50)
-                setupScatterChart(binding.scChart1, scatterData, ChartAxisSettings())
+                setupScatterChart(binding.scChart1, scatterData, chartAxisSettings)
                 onChartClick(binding.chart1)
             }
 
             ChartLayout.OXYGEN -> { // 无氧域分析的实现
                 val scatterData = generateScatterData(50)
-                setupScatterChart(binding.scChart2, scatterData, ChartAxisSettings())
+                setupScatterChart(binding.scChart2, scatterData, chartAxisSettings)
             }
 
             ChartLayout.COMPENSATORY -> { // 呼吸代偿点分析的实现
                 val scatterData = generateScatterData(50)//散点图数据
-                setupScatterChart(binding.scChart2, scatterData, ChartAxisSettings())
-                setupScatterChart(binding.scChart3, scatterData, ChartAxisSettings())
+                setupScatterChart(binding.scChart2, scatterData, chartAxisSettings)
+                setupScatterChart(binding.scChart3, scatterData, chartAxisSettings)
             }
 
 //            ChartLayout.SLOP -> TODO()
@@ -211,12 +211,12 @@ class FragmentResultLayout @JvmOverloads constructor(
         scatterChart.data = scatterData
         // 设置X轴和Y轴的最大最小值
 
-        scatterChart.xAxis.axisMinimum = chartBean.axisMinimumL
-        scatterChart.xAxis.axisMaximum = chartBean.axisMaximumL
-        scatterChart.axisLeft.axisMinimum = chartBean.axisMinimumR
-        scatterChart.axisLeft.axisMaximum = chartBean.axisMaximumR
-        scatterChart.axisRight.axisMinimum = chartBean.axisMinimumR
-        scatterChart.axisRight.axisMaximum = chartBean.axisMaximumR
+        scatterChart.xAxis.axisMinimum = chartBean.axisMinimumL!!
+        scatterChart.xAxis.axisMaximum = chartBean.axisMaximumL!!
+        scatterChart.axisLeft.axisMinimum = chartBean.axisMinimumR!!
+        scatterChart.axisLeft.axisMaximum = chartBean.axisMaximumR!!
+        scatterChart.axisRight.axisMinimum = chartBean.axisMinimumR!!
+        scatterChart.axisRight.axisMaximum = chartBean.axisMaximumR!!
 
         // 设置Y轴的标签间隔
         scatterChart.axisLeft.granularity = chartBean.granularity!! // 每个间隔10个单位
@@ -269,20 +269,15 @@ class FragmentResultLayout @JvmOverloads constructor(
 
 data class ChartAxisSettings(
     //x轴刻度
-    val axisMinimumL: Float = 0f,
-    val axisMaximumL: Float = 100f,
+    var axisMinimumL: Float ?= 0f,
+    var axisMaximumL: Float ?= 100f,
 
     //y轴刻度
-    val axisMinimumR: Float = 0f,
-    val axisMaximumR: Float = 100f,
+    var axisMinimumR: Float ?= 0f,
+    var axisMaximumR: Float ?= 100f,
 
     //y轴标签,10刻度为一单位
-    var granularity: Float? = null,
-    var labelCount: Int? = null
-) {
-    init {
-        granularity = axisMaximumR.div(10)
-        labelCount = (axisMaximumR.div(10).plus(1)).toInt()
-    }
-}
+    var granularity: Float? = axisMaximumR?.div(10),
+    var labelCount: Int? = (axisMaximumR?.div(granularity?.toInt()!!)?.plus(1))?.toInt()
+)
 

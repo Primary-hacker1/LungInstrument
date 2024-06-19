@@ -31,16 +31,19 @@ class CompensatoryPointFragment : CommonBaseFragment<FragmentCompensatoryBinding
 
         val fragment = parentFragment
 
-        if (fragment is DynamicResultFragment){//保存
+        if (fragment is DynamicResultFragment) {//保存
             fragment.onSaveCLick().setNoRepeatListener {
-                LogUtils.d(tag+"onClick")
+                LogUtils.d(tag + "onClick")
             }
             fragment.onResetCLick().setNoRepeatListener { //重置
 
             }
         }
 
-        binding.layoutResult.setChartLayout(FragmentResultLayout.ChartLayout.COMPENSATORY)
+        binding.layoutResult.setChartLayout(
+            FragmentResultLayout.ChartLayout.COMPENSATORY,
+            ChartAxisSettings()
+        )
 
         binding.layoutResult.setDynamicResultBeans()
 

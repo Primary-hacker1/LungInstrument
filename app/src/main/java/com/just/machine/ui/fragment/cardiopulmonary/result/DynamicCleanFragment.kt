@@ -66,7 +66,6 @@ class DynamicCleanFragment : CommonBaseFragment<FragmentDynamicCleanBinding>() {
                 adapter.dataClean()
             }
         }
-
     }
 
     override fun initListener() {
