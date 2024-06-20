@@ -8,7 +8,6 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
-import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -18,13 +17,10 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.ui.adapter.calibration.FlowAdapter
-import com.just.machine.ui.fragment.serial.MudbusProtocol
 import com.just.machine.ui.viewmodel.MainViewModel
-import com.just.machine.util.BaseUtil
 import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FragmentFlowHandleBinding
-import com.justsafe.libview.chart.CustomLineChartRenderer
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 
