@@ -13,7 +13,7 @@ import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.FragmentChildAdapter
 import com.just.machine.ui.fragment.serial.MudbusProtocol
 import com.just.machine.ui.fragment.serial.SerialPortManager
-import com.just.machine.util.BaseUtil
+import com.common.base.BaseUtil
 import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FragmentFlowBinding

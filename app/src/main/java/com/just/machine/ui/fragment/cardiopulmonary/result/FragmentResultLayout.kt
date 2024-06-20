@@ -11,7 +11,6 @@ import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.mikephil.charting.charts.ScatterChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.ScatterData
 import com.github.mikephil.charting.data.ScatterDataSet
@@ -54,9 +53,8 @@ class FragmentResultLayout @JvmOverloads constructor(
         EXTREMUM,//极值分析
         OXYGEN,//无氧域分析
         COMPENSATORY,//呼吸代偿点分析
-
         //        SLOP,//斜率分析
-        FLOWRATE//动态流速环分析
+        FLOW_RATE//动态流速环分析
     }
 
     init {
@@ -108,20 +106,16 @@ class FragmentResultLayout @JvmOverloads constructor(
                 }
             })
 
-        setOnTouchListenerForChart(binding.scChart1, gestureDetector1) {
-        }
+        setOnTouchListenerForChart(binding.scChart1, gestureDetector1)
 
 
-        setOnTouchListenerForChart(binding.scChart2, gestureDetector2) {
-        }
+        setOnTouchListenerForChart(binding.scChart2, gestureDetector2)
 
 
-        setOnTouchListenerForChart(binding.scChart3, gestureDetector3) {
-        }
+        setOnTouchListenerForChart(binding.scChart3, gestureDetector3)
 
 
-        setOnTouchListenerForChart(binding.scChart4, gestureDetector4) {
-        }
+        setOnTouchListenerForChart(binding.scChart4, gestureDetector4)
     }
 
     /**
@@ -131,8 +125,7 @@ class FragmentResultLayout @JvmOverloads constructor(
     @SuppressLint("ClickableViewAccessibility")
     fun setOnTouchListenerForChart(
         chart: View,
-        gestureDetector: GestureDetector,
-        onDoubleClickAction: () -> Unit
+        gestureDetector: GestureDetector
     ) {
         // 用于跟踪最后一次触摸事件的时间戳
         chart.setOnTouchListener { _, event ->
@@ -142,7 +135,6 @@ class FragmentResultLayout @JvmOverloads constructor(
 
             // 手势检测器处理触摸事件
             gestureDetector.onTouchEvent(event)
-
             // 返回 true 表示已经消费了触摸事件
             true
         }
@@ -158,9 +150,7 @@ class FragmentResultLayout @JvmOverloads constructor(
             dynamicResultBean.resultData = value.toString()
             dynamicResultBeans.add(dynamicResultBean)
         }
-
     }
-
 
     /**
     * @param resultLayout 枚举类用于传递fragment的标识
@@ -203,8 +193,8 @@ class FragmentResultLayout @JvmOverloads constructor(
                 }
             }
 
-//            ChartLayout.SLOP -> TODO()
-            ChartLayout.FLOWRATE -> TODO()
+//            ChartLayout.SLOP -> {}}
+            ChartLayout.FLOW_RATE -> {}
         }
     }
 
@@ -214,25 +204,6 @@ class FragmentResultLayout @JvmOverloads constructor(
         binding.scChart3.startUpdatingData()
         binding.scChart4.startUpdatingData()
     }
-
-    private fun generateScatterData(numPoints: Int): ScatterData {
-        val entries = mutableListOf<Entry>()
-        for (i in 0 until numPoints) {
-            val x = i.toFloat()
-            val y = i.toFloat()
-            entries.add(Entry(x, y))
-        }
-
-        val dataSet = ScatterDataSet(entries, "Scatter Data Set")
-        dataSet.color = ContextCompat.getColor(context, R.color.colorPrimary)
-        dataSet.setDrawValues(false)
-
-        val dataSets = ArrayList<IScatterDataSet>()
-        dataSets.add(dataSet)
-
-        return ScatterData(dataSets)
-    }
-
 
     private fun setupScatterChart(
         scatterChart: ResultScatterChart,
@@ -308,10 +279,9 @@ class FragmentResultLayout @JvmOverloads constructor(
 class CustomValueFormatter(private val granularity: Float) : ValueFormatter() {
     override fun getFormattedValue(value: Float): String {
         val roundedValue = Math.round(value / granularity) * granularity
-        return roundedValue.toString()
+        return roundedValue.toInt().toString() // 将结果转换为整数，并转换为字符串
     }
 }
-
 
 data class ChartAxisSettings(
     // X轴刻度

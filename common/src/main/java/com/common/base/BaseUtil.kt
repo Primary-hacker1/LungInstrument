@@ -1,4 +1,4 @@
-package com.just.machine.util
+package com.common.base
 
 object BaseUtil {
     private const val DOUBLE_CLICK_TIME_DELTA = 500L // 双击间隔阈值，单位：毫秒

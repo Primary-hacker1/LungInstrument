@@ -2,7 +2,7 @@ package com.just.machine.ui.fragment.serial
 
 import com.common.network.LogUtils
 import com.just.machine.model.LungTestData
-import com.just.machine.util.BaseUtil
+import com.common.base.BaseUtil
 import java.util.zip.CRC32
 import kotlin.experimental.and
 

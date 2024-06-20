@@ -30,7 +30,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
 
-    private val viewModel by viewModels<MainViewModel>()
 
     private val REQUEST_BLUETOOTH_PERMISSION = 1
 

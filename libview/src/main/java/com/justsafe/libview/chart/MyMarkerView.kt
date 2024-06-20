@@ -8,6 +8,9 @@ import android.content.Context
 import android.widget.TextView
 import com.justsafe.libview.R
 
+/*
+* 我的标记视图
+* */
 class MyMarkerView(context: Context, layoutResource: Int) : MarkerView(context, layoutResource) {
     private val tvContent: TextView = findViewById(R.id.tvContent)
 

@@ -34,17 +34,13 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
 
     private val tag = BaseLineChart::class.java.simpleName
 
-    // 折线数据集合
-    private val entriesList: MutableList<LineDataSet> = ArrayList()
+    private val entriesList: MutableList<LineDataSet> = ArrayList()// 折线数据集合
 
-    var title1 = ""
-    var title2 = ""
-    var titleCentent = ""
+    private var title1 = "" // 标题1
+    private var title2 = "" // 标题2
+    private var titleCentent = ""  // 标题内容
 
-    private val yTitles = 2
-
-    // 记录原始的 X 轴最大值
-    private var originalXAxisMaximum: Float = 30f
+    private val yTitles = 2 // Y轴的刻度数
 
     init {
 //        setLineChartFlow(-5f, 5f, originalXAxisMaximum, 11)

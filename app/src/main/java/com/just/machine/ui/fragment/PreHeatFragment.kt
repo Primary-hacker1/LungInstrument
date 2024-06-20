@@ -2,6 +2,7 @@ package com.just.machine.ui.fragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.just.machine.ui.activity.MainActivity
@@ -24,7 +25,10 @@ class PreHeatFragment : CommonBaseFragment<FragmentPreheatBinding>() {
 
     override fun initView() {
         mCountDownTime = object : FixCountDownTime(1200, 1000) {}
-        binding.pbPreheat.progressDrawable = resources.getDrawable(R.drawable.progressbar_bg)
+
+        val progressbarBg =  ContextCompat.getDrawable(requireContext(),R.drawable.progressbar_bg)
+
+        binding.pbPreheat.progressDrawable = progressbarBg
 
         mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack{
             override fun onStart() {
@@ -35,8 +39,7 @@ class PreHeatFragment : CommonBaseFragment<FragmentPreheatBinding>() {
                 val minute = times / 60 % 60
                 val second = times % 60
                 val progress = (((1200 - times-1) / 1200.toFloat()) * 100).toInt()
-                var realSecond = ""
-                realSecond = if (second.toString().length == 1) {
+                val realSecond: String = if (second.toString().length == 1) {
                     "0$second"
                 } else {
                     "${second.toString().substring(0, 1)}${second.toString().substring(1)}"

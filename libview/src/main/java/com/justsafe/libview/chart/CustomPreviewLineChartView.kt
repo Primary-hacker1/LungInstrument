@@ -17,7 +17,9 @@ import lecho.lib.hellocharts.model.Viewport
 import lecho.lib.hellocharts.view.PreviewLineChartView
 import java.math.BigDecimal
 
-
+/*
+* 静态肺专用折线图
+* */
 class CustomPreviewLineChartView(context: Context, attrs: AttributeSet?) :
     PreviewLineChartView(context, attrs) {
 

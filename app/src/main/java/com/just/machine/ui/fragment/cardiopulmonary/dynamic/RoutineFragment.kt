@@ -25,7 +25,7 @@ class RoutineFragment : CommonBaseFragment<FragmentRoutineDynmicBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
 
-    var cpxBreathInOutData: CPXBreathInOutData = CPXBreathInOutData()
+    private var cpxBreathInOutData: CPXBreathInOutData = CPXBreathInOutData()
 
     override fun loadData() {//懒加载
 

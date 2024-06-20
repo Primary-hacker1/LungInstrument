@@ -31,7 +31,7 @@ import kotlin.random.Random
 
 
 /*
-* 动态肺九图专用
+* 动态肺九图专用散点图
 * */
 class CustomScatterChart @JvmOverloads constructor(
     context: Context,

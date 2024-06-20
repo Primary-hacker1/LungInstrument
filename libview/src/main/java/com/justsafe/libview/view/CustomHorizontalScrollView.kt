@@ -1,10 +1,14 @@
-package com.justsafe.libview.chart
+package com.justsafe.libview.view
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.widget.HorizontalScrollView
 
+
+/*
+* 动态肺数据左右上下滑动view还需要修改bug
+* */
 class CustomHorizontalScrollView : HorizontalScrollView {
     private var lastX: Float = 0.0f
     private var isScrolling: Boolean = false

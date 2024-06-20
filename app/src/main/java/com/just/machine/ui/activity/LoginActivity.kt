@@ -31,13 +31,11 @@ class LoginActivity : CommonBaseActivity<ActivityLoginBinding>() {//布局ID
         initNavigationView()
     }
 
-
-
     override fun getViewBinding() = ActivityLoginBinding.inflate(layoutInflater)
 
     private fun initNavigationView() {
         val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.login_layout) as NavHostFragment
+            supportFragmentManager.findFragmentById(R.id.login_layout) as NavHostFragment //自定义导航器，隐藏显示fragment
         val navControllerNavigation = Navigation.findNavController(this, R.id.login_layout)
         val navigator =
             FragmentNavigatorHideShow(this, navHostFragment.childFragmentManager, R.id.login_layout)

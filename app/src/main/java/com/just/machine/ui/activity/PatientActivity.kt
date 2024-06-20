@@ -558,11 +558,8 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         var check4 = ""
         //提前完成了
         if (sixMinRecordsBean.otherBean[0].stopOr == "1") {
-            var stopReason = ""
-            stopReason = if (sixMinRecordsBean.otherBean[0].stopReason.isEmpty()) {
+            val stopReason: String = sixMinRecordsBean.otherBean[0].stopReason.ifEmpty {
                 "无"
-            } else {
-                sixMinRecordsBean.otherBean[0].stopReason
             }
             check4 =
                 "步行了" + sixMinRecordsBean.otherBean[0].stopTime + "，停止原因：" + stopReason + "。"
@@ -601,8 +598,8 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         }
         var strideTitStrs = "/"
         var strideStrs = "/"
-        var movDistanceTitStrs = "运动距离"
-        var movDistanceStrs: String = sixMinRecordsBean.prescriptionBean[0].movementDistance + "米"
+        val movDistanceTitStrs: String
+        val movDistanceStrs: String
         var heartrateRateTitStr = "/"
         var heartrateRateStr = "/"
         var metabMetTitStr = "/"
@@ -615,39 +612,39 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
         //运动步速版本
         if (sixMinRecordsBean.prescriptionBean[0].prescripState == "1" || sixMinRecordsBean.prescriptionBean[0].prescripState.isEmpty()) {
             if (sixMinRecordsBean.prescriptionBean[0].distanceState.isEmpty() || sixMinRecordsBean.prescriptionBean[0].distanceState == "1") {
-                strideTitStrs = "运动步速";
+                strideTitStrs = "运动步速"
                 strideStrs =
                     sixMinRecordsBean.prescriptionBean[0].strideBefore + "-" + sixMinRecordsBean.prescriptionBean[0].strideAfter + "米/分钟";
-                movDistanceTitStrs = "运动距离";
+                movDistanceTitStrs = "运动距离"
                 movDistanceStrs =
                     sixMinRecordsBean.prescriptionBean[0].movementDistance + "-" + sixMinRecordsBean.prescriptionBean[0].movementDistanceAfter + "米";
             } else {
-                movDistanceTitStrs = "/";
-                movDistanceStrs = "/";
+                movDistanceTitStrs = "/"
+                movDistanceStrs = "/"
             }
             if (sixMinRecordsBean.prescriptionBean[0].heartrateState.isEmpty() || sixMinRecordsBean.prescriptionBean[0].heartrateState == "1") {
-                heartrateRateTitStr = "运动心率";
-                heartrateRateStr = sixMinRecordsBean.prescriptionBean[0].heartrateRate + "bpm";
+                heartrateRateTitStr = "运动心率"
+                heartrateRateStr = sixMinRecordsBean.prescriptionBean[0].heartrateRate + "bpm"
             }
             if (sixMinRecordsBean.prescriptionBean[0].metabState.isEmpty() || sixMinRecordsBean.prescriptionBean[0].metabState == "1") {
-                metabMetTitStr = "代谢当量";
-                metabMetStr = sixMinRecordsBean.prescriptionBean[0].metabMet + "METs";
+                metabMetTitStr = "代谢当量"
+                metabMetStr = sixMinRecordsBean.prescriptionBean[0].metabMet + "METs"
             }
             if (sixMinRecordsBean.prescriptionBean[0].pllevState == "2") {
-                strTit45 = "/";
-                str45 = "/";
+                strTit45 = "/"
+                str45 = "/"
             }
-            root["strideTitStrs"] = strideTitStrs;
-            root["strideStrs"] = strideStrs;
-            root["movDisTitStrs"] = movDistanceTitStrs;
-            root["movDisStrs"] = movDistanceStrs;
+            root["strideTitStrs"] = strideTitStrs
+            root["strideStrs"] = strideStrs
+            root["movDisTitStrs"] = movDistanceTitStrs
+            root["movDisStrs"] = movDistanceStrs
             root["movTime"] = sixMinRecordsBean.prescriptionBean[0].movementTime + "分钟"
-            root["heartrateRateTitStr"] = heartrateRateTitStr;
-            root["rateStr"] = heartrateRateStr;
-            root["metabMetTitStr"] = metabMetTitStr;
-            root["metabStr"] = metabMetStr;
-            root["strTit45"] = strTit45;
-            root["str45"] = str45;
+            root["heartrateRateTitStr"] = heartrateRateTitStr
+            root["rateStr"] = heartrateRateStr
+            root["metabMetTitStr"] = metabMetTitStr
+            root["metabStr"] = metabMetStr
+            root["strTit45"] = strTit45
+            root["str45"] = str45
 
             var movementStr: String =
                 sixMinRecordsBean.prescriptionBean[0].movementWeeklyNumber + "次/周，" + sixMinRecordsBean.prescriptionBean[0].movementCycle

@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
-import com.common.base.notNull
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent.Companion.INGREDIENTS_SUCCESS
@@ -16,7 +15,7 @@ import com.just.machine.ui.adapter.calibration.IngredientAdapter
 import com.just.machine.ui.fragment.serial.MudbusProtocol
 import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
-import com.just.machine.util.BaseUtil
+import com.common.base.BaseUtil
 import com.just.machine.util.LiveDataBus
 import com.just.news.databinding.FragmentIngredientBinding
 import dagger.hilt.android.AndroidEntryPoint

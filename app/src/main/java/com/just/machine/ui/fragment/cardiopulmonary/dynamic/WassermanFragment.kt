@@ -15,8 +15,6 @@ import com.common.network.LogUtils
 import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.ScatterDataSet
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.interfaces.datasets.IScatterDataSet
 import com.github.mikephil.charting.utils.MPPointD
 import com.just.machine.dao.lung.CPXBreathInOutData
@@ -25,7 +23,6 @@ import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.LiveDataBus
 import com.just.news.databinding.FragmentWassermanBinding
 import com.justsafe.libview.R
-import com.justsafe.libview.chart.BaseLineChart
 import com.justsafe.libview.chart.CustomScatterChart
 import com.justsafe.libview.chart.VerticalLineView
 import dagger.hilt.android.AndroidEntryPoint
@@ -94,8 +91,7 @@ class WassermanFragment : CommonBaseFragment<FragmentWassermanBinding>() {
                 }
             })
 
-        setOnTouchListenerForChart(chart, gestureDetector) {
-        }
+        setOnTouchListenerForChart(chart, gestureDetector)
 
 
         val xAxis = chart.xAxis
@@ -176,8 +172,7 @@ class WassermanFragment : CommonBaseFragment<FragmentWassermanBinding>() {
     @SuppressLint("ClickableViewAccessibility")
     fun setOnTouchListenerForChart(
         chart: View,
-        gestureDetector: GestureDetector,
-        onDoubleClickAction: () -> Unit
+        gestureDetector: GestureDetector
     ) {
         // 用于跟踪最后一次触摸事件的时间戳
         chart.setOnTouchListener { _, event ->

@@ -7,7 +7,7 @@ import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import com.common.network.LogUtils
 import com.just.machine.model.Constants
-import com.just.machine.util.BaseUtil
+import com.common.base.BaseUtil
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import world.shanya.serialport.SerialPort

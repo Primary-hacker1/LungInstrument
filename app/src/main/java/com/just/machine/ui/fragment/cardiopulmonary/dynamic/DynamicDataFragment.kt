@@ -6,8 +6,6 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.common.base.CommonBaseFragment
-import com.common.base.setNoRepeatListener
-import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
 import com.just.machine.dao.lung.CPXBreathInOutData
 import com.just.machine.ui.adapter.lung.DynamicDataAdapter
@@ -32,11 +30,11 @@ class DynamicDataFragment : CommonBaseFragment<FragmentDynamicDataBinding>() {
 
     private var titles: MutableList<String> = mutableListOf()
 
-    private var adapterTitle: DynamicDataTitleAdapter? = null
+    private var adapterTitle: DynamicDataTitleAdapter? = null //标题适配器
 
-    private var adapterData: DynamicDataAdapter? = null
+    private var adapterData: DynamicDataAdapter? = null //数据适配器
 
-    private val viewModel by viewModels<MainViewModel>()
+    private val viewModel by viewModels<MainViewModel>() //数据绑定
 
     override fun loadData() {//懒加载
 

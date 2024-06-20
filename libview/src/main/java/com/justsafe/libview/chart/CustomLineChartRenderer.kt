@@ -10,7 +10,9 @@ import com.github.mikephil.charting.renderer.LineChartRenderer
 import com.github.mikephil.charting.utils.Transformer
 import com.github.mikephil.charting.utils.ViewPortHandler
 
-
+/*
+* 创建自定义渲染器的实例，并将其应用到 LineChart 中
+* */
 class CustomLineChartRenderer(chart: LineChart, animator: ChartAnimator, viewPortHandler: ViewPortHandler) :
     LineChartRenderer(chart, animator, viewPortHandler) {
 

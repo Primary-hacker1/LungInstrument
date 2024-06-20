@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.gone
 import com.common.base.setNoRepeatListener
 import com.common.base.visible
-import com.common.network.LogUtils
 import com.github.mikephil.charting.data.Entry
 import com.just.machine.model.lungdata.RoutineLungBean
 import com.just.machine.ui.adapter.lung.RoutineLungAdapter

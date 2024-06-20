@@ -20,7 +20,6 @@ import com.just.machine.ui.fragment.cardiopulmonary.dynamic.DynamicDataFragment
 import com.just.machine.ui.fragment.cardiopulmonary.dynamic.RoutineFragment
 import com.just.machine.ui.fragment.cardiopulmonary.dynamic.WassermanFragment
 import com.just.machine.ui.fragment.serial.MudbusProtocol
-import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.model.lungdata.CPXCalcule
 import com.just.machine.model.lungdata.TestModel
@@ -89,10 +88,9 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
             // 生成吸气和呼气数据
             val lungTestDataList = generateBreathCycleData()
-
             test1(lungTestDataList)
+//            SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)//发送流量定标a
             return@setNoRepeatListener
-            SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)//发送流量定标a
         }
 
         binding.llClean.setNoRepeatListener {
@@ -101,9 +99,8 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
     }
 
-    fun generateLungTestData(
+    private fun generateLungTestData(
         flowValue: Int,
-        index: Int,
         bloodOxygen: Int = 95,
         co2: Int = 40,
         o2: Int = 21,
@@ -136,7 +133,7 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
         // 生成几十组吸气数据 (Flow < 0)
         for (i in 1..30) {
-            dataList.add(generateLungTestData(flowValue, i))
+            dataList.add(generateLungTestData(flowValue))
             flowValue -= 1
         }
 
@@ -145,14 +142,14 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
         // 生成几十组呼气数据 (Flow > 0)
         for (i in 1..30) {
-            dataList.add(generateLungTestData(flowValue, i + 30))
+            dataList.add(generateLungTestData(flowValue))
             flowValue += 1
         }
 
         return dataList
     }
 
-    fun test1(lungTestDatas: MutableList<LungTestData>) =
+    private fun test1(lungTestDatas: MutableList<LungTestData>) =
         CoroutineScope(Dispatchers.Main).launch {
             for (data in lungTestDatas) {
                 delay(1000) // 每秒处理一次数据
@@ -160,7 +157,7 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
             }
         }
 
-    suspend fun breathTest(lungTestData: LungTestData) {
+    private fun breathTest(lungTestData: LungTestData) {
         val breathInData = mutableListOf<CPXSerializeData>()
 
         breathInData.add(CPXSerializeData().convertLungTestDataToCPXSerializeData(lungTestData))
@@ -290,10 +287,8 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
     override fun onDestroy() {
         // 释放 TextToSpeech 资源
-        if (tts != null) {
-            tts.stop()
-            tts.shutdown()
-        }
+        tts.stop()
+        tts.shutdown()
         super.onDestroy()
     }
 

@@ -3,7 +3,9 @@ package com.justsafe.libview.chart
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.widget.LinearLayout
@@ -28,7 +30,7 @@ import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 /*
-* 运动评估专用
+* 运动评估专用散点图
 * */
 class ResultScatterChart @JvmOverloads constructor(
     context: Context,
@@ -40,7 +42,7 @@ class ResultScatterChart @JvmOverloads constructor(
     private val entries1: MutableList<Entry> = mutableListOf()
     private val entries2: MutableList<Entry> = mutableListOf()
     private lateinit var dataSet1: ScatterDataSet
-    private lateinit var dataSet2: ScatterDataSet
+//    private lateinit var dataSet2: ScatterDataSet
 
     init {
         setupChart()
@@ -92,13 +94,15 @@ class ResultScatterChart @JvmOverloads constructor(
             axisDependency = YAxis.AxisDependency.LEFT
         }
 
-        dataSet2 = ScatterDataSet(entries2, "数据集2").apply {
+//        dataSet2 = ScatterDataSet(entries2, "数据集2").apply {
 //            color = Color.BLUE
-            scatterShapeSize = 8f
-            axisDependency = YAxis.AxisDependency.RIGHT
-        }
+//            scatterShapeSize = 8f
+//            axisDependency = YAxis.AxisDependency.RIGHT
+//        }
 
-        val scatterData = ScatterData(dataSet1, dataSet2)
+        val scatterData = ScatterData(dataSet1,
+//            dataSet2
+        )
         data = scatterData
 
         // 刷新图表
@@ -113,13 +117,16 @@ class ResultScatterChart @JvmOverloads constructor(
         entries2.add(Entry(xValue2, newValue2))
 
         dataSet1.notifyDataSetChanged()
-        dataSet2.notifyDataSetChanged()
+//        dataSet2.notifyDataSetChanged()
         data.notifyDataChanged()
         notifyDataSetChanged()
         invalidate()
     }
 
-    fun startUpdatingData() {//模拟散点图，真实的要改
+    /**
+     * 模拟散点图，真实的要改
+     * */
+    fun startUpdatingData() {
         var job: Job? = null
         var currentValue1 = 0f
         var currentValue2 = 0.5f
@@ -140,7 +147,62 @@ class ResultScatterChart @JvmOverloads constructor(
         }
     }
 
+    private val mGridPaint: Paint = Paint().apply {
+        color = Color.GRAY
+        style = Paint.Style.STROKE
+        strokeWidth = 1f
+    }
 
+    /**
+     * 绘制双轴
+     * */
+    override fun drawGridBackground(canvas: Canvas?) {
+        super.drawGridBackground(canvas)
+
+        // 绘制右侧 Y 轴的网格线
+        if (data == null || !yAxis2.isEnabled || !yAxis2.isDrawGridLinesEnabled) return
+
+        val clipRect = mViewPortHandler.contentRect
+        val trans = mRightAxisTransformer
+
+        mGridPaint.color = yAxis2.gridColor
+        mGridPaint.strokeWidth = yAxis2.gridLineWidth
+
+        val positions = FloatArray(2)
+        positions[0] = mViewPortHandler.contentRight() // 右侧 Y 轴的位置，根据实际情况调整
+
+        val phaseY = mAnimator.phaseY
+
+        // 获取 Y 轴的值范围（这里假设您的 yAxis2 是右侧 Y 轴对象）
+        val min = yAxis2.axisMinimum
+        val max = yAxis2.axisMaximum
+        val labelCount = yAxis2.labelCount
+
+        // 计算网格线的间隔
+        val interval = (max - min) / (labelCount - 1)
+
+        // 绘制网格线
+        for (i in 0 until labelCount) {
+            positions[1] = max - i * interval // 计算 Y 值位置
+
+            trans.pointValuesToPixel(positions)
+
+            // 检查 Y 值位置是否在绘制区域内
+            if (positions[1] >= clipRect.top && positions[1] <= clipRect.bottom) {
+                canvas?.drawLine(
+                    clipRect.left,
+                    positions[1],
+                    clipRect.right,
+                    positions[1],
+                    mGridPaint
+                )
+            }
+        }
+    }
+
+    /**
+    * 设置拖拽线
+    * */
     @SuppressLint("ClickableViewAccessibility")
     fun setDynamicDragLine() {
         val xAxis = xAxis

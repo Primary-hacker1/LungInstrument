@@ -1,7 +1,5 @@
 package com.just.machine.ui.fragment.serial
 
-import com.common.network.LogUtils
-import com.just.machine.util.BaseUtil
 import world.shanya.serialport.SerialPort
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.LinkedBlockingQueue
