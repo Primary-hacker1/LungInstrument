@@ -14,6 +14,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.ui.adapter.calibration.FlowAdapter
 import com.just.machine.util.FixCountDownTime
+import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FragmentFlowAutoBinding
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
@@ -53,15 +54,19 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
         }
 
         flowAdapter.setItemsBean(
-            mutableListOf
-                (FlowBean(0, "", 1, "容积1", "3", "3.003","0.93","0"))
+            mutableListOf(FlowBean(0, "", 1, "容积1", "3", "3.003", "0.93", "0"))
         )
+        LiveDataBus.get().with("flow").observe(this) {
+            if (it is String) {
+                if (it == "autoFlow") {
 
+                }
+            }
+        }
     }
 
     override fun getViewBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
+        inflater: LayoutInflater, container: ViewGroup?
     ) = FragmentFlowAutoBinding.inflate(inflater, container, false)
 
     private fun initLineChart() {
@@ -142,7 +147,8 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
 
             actualDataSet = LineDataSet(null, "")
             actualDataSet.lineWidth = 1.0f
-            actualDataSet.color = ContextCompat.getColor(requireContext(), R.color.wheel_title_bar_ok_color)
+            actualDataSet.color =
+                ContextCompat.getColor(requireContext(), R.color.wheel_title_bar_ok_color)
             actualDataSet.setDrawValues(false)
             actualDataSet.setDrawCircles(false)
             actualDataSet.setDrawCircleHole(false)
@@ -158,17 +164,17 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
     }
 
     override fun onResume() {
-        mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack{
+        mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack {
             override fun onStart() {
 
             }
 
             override fun onTick(times: Int) {
-                binding.tvFlowAutoTemp.text = (Random().nextInt(3)+1).toFloat().toString()
-                binding.tvFlowAutoActual.text = (Random().nextInt(3)+1).toFloat().toString()
+                binding.tvFlowAutoTemp.text = (Random().nextInt(3) + 1).toFloat().toString()
+                binding.tvFlowAutoActual.text = (Random().nextInt(3) + 1).toFloat().toString()
                 val index = 35 - times
-                tempDataSet.addEntry(Entry(index.toFloat(),(Random().nextInt(3)+1).toFloat()))
-                actualDataSet.addEntry(Entry(index.toFloat(),(Random().nextInt(3)+1).toFloat()))
+                tempDataSet.addEntry(Entry(index.toFloat(), (Random().nextInt(3) + 1).toFloat()))
+                actualDataSet.addEntry(Entry(index.toFloat(), (Random().nextInt(3) + 1).toFloat()))
 
                 binding.chartFlowAuto.lineData.notifyDataChanged()
                 binding.chartFlowAuto.notifyDataSetChanged()

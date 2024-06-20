@@ -169,10 +169,29 @@ object MudbusProtocol {
     val FLOW_CALIBRATION_COMMAND: ByteArray = byteArrayOf(
         (PACKET_HEADER.toInt() ushr 8).toByte(), PACKET_HEADER.toByte(), // 包头
         0x06, // 数据长度
-        0x0A, // 功能码
+        0x04, // 功能码
         0x00, 0x00, 0x00, 0x00, // 占位的 CRC32 校验码
         PACKET_FOOTER // 包尾
     )
+
+    // 上位机自动流量定标命令数据格式
+    val FLOW_AUTO_CALIBRATION_COMMAND: ByteArray = byteArrayOf(
+        (PACKET_HEADER.toInt() ushr 8).toByte(), PACKET_HEADER.toByte(), // 包头
+        0x06, // 数据长度
+        0x10, // 功能码
+        0x00, 0x00, 0x00, 0x00, // 占位的 CRC32 校验码
+        PACKET_FOOTER // 包尾
+    )
+
+    // 上位机停止命令数据格式
+    val FLOW_STOP_COMMAND: ByteArray = byteArrayOf(
+        (PACKET_HEADER.toInt() ushr 8).toByte(), PACKET_HEADER.toByte(), // 包头
+        0x06, // 数据长度
+        0x08, // 功能码
+        0x00, 0x00, 0x00, 0x00, // 占位的 CRC32 校验码
+        PACKET_FOOTER // 包尾
+    )
+
 
     data class FlowCalibrationData(val smallRangeFlow: Int, val largeRangeFlow: Int)
 

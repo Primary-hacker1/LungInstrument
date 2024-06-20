@@ -7,6 +7,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
+import com.common.base.setNoRepeatListener
+import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -16,7 +18,10 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.ui.adapter.calibration.FlowAdapter
+import com.just.machine.ui.fragment.serial.MudbusProtocol
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.machine.util.BaseUtil
+import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FragmentFlowHandleBinding
 import com.justsafe.libview.chart.CustomLineChartRenderer
@@ -30,6 +35,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
+    private var isPull = true
 
     private val inHaleFlowAdapter by lazy {
         FlowAdapter(requireContext())
@@ -77,7 +83,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
 
         exHaleFlowAdapter.setItemsBean(
             mutableListOf
-                (FlowBean(0, "", 1, "呼气容积1", "3", "2.993", "-1.44" ))
+                (FlowBean(0, "", 1, "呼气容积1", "3", "2.993", "-1.44"))
         )
 
         viewModel.mEventHub.observe(this) {
@@ -96,7 +102,23 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                 }
             }
         }
-        binding
+        binding.llPullDirection.setNoRepeatListener {
+            if (isPull) {
+                binding.tvPullDirection.text = "推"
+                binding.tvPullDirection.setBackgroundResource(R.drawable.flow_down)
+            } else {
+                binding.tvPullDirection.text = "拉"
+                binding.tvPullDirection.setBackgroundResource(R.drawable.flow_pull)
+            }
+            isPull = !isPull
+        }
+        LiveDataBus.get().with("flow").observe(this) {
+            if (it is String) {
+                if (it == "handleFlow") {
+                    //开始手动定标
+                }
+            }
+        }
     }
 
     override fun getViewBinding(
@@ -128,7 +150,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                 textColor = ContextCompat.getColor(requireContext(), R.color.text3)
                 //X轴最大值和最小值
                 axisMaximum = if (type == 1) 15f else 3.8f
-                axisMinimum = if (type == 1) 0f else 0.2f
+                axisMinimum = 0f
                 offsetLeftAndRight(10)
                 //X轴每个值的差值(缩放时可以体现出来)
                 granularity = 1.5f
