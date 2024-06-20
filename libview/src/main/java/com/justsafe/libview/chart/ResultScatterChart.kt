@@ -143,8 +143,8 @@ class ResultScatterChart @JvmOverloads constructor(
             while (true) {
                 delay(1000) // 每秒钟执行一次
 
-                currentValue1 += Random.nextFloat() * 10 - 5 // 生成一个随机数用于数据点变化
-                currentValue2 += Random.nextFloat() * 0.1f - 0.05f // 生成一个随机数用于数据点变化
+                currentValue1 += Random.nextFloat() * 0.1f // 生成一个随机数用于数据点变化
+                currentValue2 += Random.nextFloat() * 1f + 0.05f // 生成一个随机数用于数据点变化
 
                 // 添加新数据点
                 updateData(currentValue1, currentValue2)

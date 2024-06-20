@@ -35,6 +35,10 @@ class ExtremumAnalysisFragment : CommonBaseFragment<FragmentExtremumAnalysisBind
         chartSetting.axisMinimumYL = 0f
         chartSetting.granularity = 150f
 
+        chartSetting.axisMaximumYR = 2850f
+        chartSetting.axisMinimumYR = 0f
+        chartSetting.granularityR = 150f
+
         chartSetting.axisMaximumL = 1f
         chartSetting.axisMinimumL = 0f
         chartSetting.xGranularity = 0.2f

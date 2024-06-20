@@ -5,7 +5,6 @@ import androidx.core.content.ContextCompat
 import com.common.base.BaseRecyclerViewAdapter
 import com.common.base.setNoRepeatListener
 import com.just.machine.dao.PatientBean
-import com.just.machine.model.PatientInfoBean
 import com.just.news.R
 import com.just.news.databinding.ItemLayoutPatientBinding
 

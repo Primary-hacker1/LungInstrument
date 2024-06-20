@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
+import com.common.network.LogUtils
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.databinding.FragmentOxygenDomainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,6 +33,10 @@ class OxygenDomainFragment : CommonBaseFragment<FragmentOxygenDomainBinding>() {
         chartSetting.axisMinimumYL = 0f
         chartSetting.granularity = 250f
 
+        chartSetting.axisMaximumYR = 2750f
+        chartSetting.axisMinimumYR = 0f
+        chartSetting.granularityR = 250f
+
         chartSetting.axisMaximumL = 10f
         chartSetting.axisMinimumL = 0f
         chartSetting.xGranularity = 1f
@@ -40,6 +45,10 @@ class OxygenDomainFragment : CommonBaseFragment<FragmentOxygenDomainBinding>() {
         chartSetting2.axisMaximumYL = 2750f
         chartSetting2.axisMinimumYL = 0f
         chartSetting2.granularity = 250f
+
+        chartSetting2.axisMaximumYR = 2750f
+        chartSetting2.axisMinimumYR = 0f
+        chartSetting2.granularityR = 250f
 
         chartSetting2.axisMaximumL = 2750f
         chartSetting2.axisMinimumL = 0f
@@ -50,6 +59,10 @@ class OxygenDomainFragment : CommonBaseFragment<FragmentOxygenDomainBinding>() {
         chartSetting3.axisMinimumYL = 0f
         chartSetting3.granularity = 15f
 
+        chartSetting3.axisMaximumYR = 150f
+        chartSetting3.axisMinimumYR = 0f
+        chartSetting3.granularityR = 15f
+
         chartSetting3.axisMaximumL = 10f
         chartSetting3.axisMinimumL = 0f
         chartSetting3.xGranularity = 1f
@@ -58,6 +71,10 @@ class OxygenDomainFragment : CommonBaseFragment<FragmentOxygenDomainBinding>() {
         chartSetting4.axisMaximumYL = 60f
         chartSetting4.axisMinimumYL = 0f
         chartSetting4.granularity = 10f
+
+        chartSetting4.axisMaximumYR = 60f
+        chartSetting4.axisMinimumYR = 0f
+        chartSetting4.granularityR = 10f
 
         chartSetting4.axisMaximumL = 10f
         chartSetting4.axisMinimumL = 0f

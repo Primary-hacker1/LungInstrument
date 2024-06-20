@@ -1,4 +1,4 @@
-package com.just.machine.ui.adapter
+package com.just.machine.ui.adapter.result
 
 import android.content.Context
 import androidx.core.content.ContextCompat

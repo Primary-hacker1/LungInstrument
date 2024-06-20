@@ -2,26 +2,22 @@ package com.just.machine.ui.fragment.cardiopulmonary
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
-import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent.Companion.DYNAMICSUCCESS
 import com.just.machine.dao.setting.DynamicSettingBean
-import com.just.machine.model.Constants
 import com.just.machine.model.DynamicResultButtonBean
 import com.just.machine.ui.adapter.FragmentChildAdapter
-import com.just.machine.ui.adapter.ResultBtnAdapter
+import com.just.machine.ui.adapter.result.ResultBtnAdapter
 import com.just.machine.ui.fragment.cardiopulmonary.result.CompensatoryPointFragment
 import com.just.machine.ui.fragment.cardiopulmonary.result.DynamicCleanFragment
 import com.just.machine.ui.fragment.cardiopulmonary.result.ExtremumAnalysisFragment
 import com.just.machine.ui.fragment.cardiopulmonary.result.FlowRateLoopsFragment
 import com.just.machine.ui.fragment.cardiopulmonary.result.OxygenDomainFragment
 import com.just.machine.ui.viewmodel.MainViewModel
-import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FragmentDynamicResultBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -118,7 +114,6 @@ class DynamicResultFragment : CommonBaseFragment<FragmentDynamicResultBinding>()
                 }
             }
         }
-
 
 
     }

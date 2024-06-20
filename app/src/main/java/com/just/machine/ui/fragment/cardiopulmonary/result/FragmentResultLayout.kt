@@ -10,11 +10,11 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.common.network.LogUtils
 import com.github.mikephil.charting.data.ScatterData
 import com.just.machine.model.DynamicResultBean
 import com.just.machine.model.lungdata.AnlyCpxTableModel
-import com.just.machine.ui.adapter.ResultAdapter
-import com.just.machine.ui.fragment.cardiopulmonary.result.FragmentResultLayout.ChartLayout
+import com.just.machine.ui.adapter.result.ResultAdapter
 import com.just.news.R
 import com.just.news.databinding.FragmentResultBinding
 import com.justsafe.libview.chart.ResultScatterChart
@@ -162,6 +162,7 @@ class FragmentResultLayout @JvmOverloads constructor(
         chartAxisSettings4: ChartAxisSettings? = ChartAxisSettings()
     ) {
         chartLayout = resultLayout
+        LogUtils.d(tag + "点击了那个布局=" + chartLayout)
         when (resultLayout) {
             ChartLayout.EXTREMUM -> {
                 setupScatterChart(binding.scChart1, chartAxisSettings1)
@@ -177,7 +178,7 @@ class FragmentResultLayout @JvmOverloads constructor(
                     setupScatterChart(binding.scChart3, chartAxisSettings3)
                 }
                 if (chartAxisSettings4 != null) {
-                    setupScatterChart(binding.scChart4, chartAxisSettings4, true)
+                    setupScatterChart(binding.scChart4, chartAxisSettings4)
                 }
             }
 
@@ -190,7 +191,7 @@ class FragmentResultLayout @JvmOverloads constructor(
                     setupScatterChart(binding.scChart3, chartAxisSettings3)
                 }
                 if (chartAxisSettings4 != null) {
-                    setupScatterChart(binding.scChart4, chartAxisSettings4)
+                    setupScatterChart(binding.scChart4, chartAxisSettings4, true)
                     binding.scChart4.setDynamicAxis()//动态设置双轴
                 }
             }
@@ -234,6 +235,7 @@ class FragmentResultLayout @JvmOverloads constructor(
         scatterChart.axisLeft.granularity = chartBean.granularity!! // Y轴每个间隔的单位
         scatterChart.axisLeft.labelCount = chartBean.labelCount!! // Y轴的标签数量
 
+        LogUtils.d(tag + isChart4)
         if (isChart4 == true) {
             scatterChart.axisLeft.valueFormatter = CustomValueFormatterDecimal(
                 chartBean.granularity!!
@@ -309,7 +311,7 @@ class CustomValueFormatterDecimal(
     ValueFormatter() {
     override fun getFormattedValue(value: Float): String {
         val roundedValue = Math.round(value / granularity) * granularity
-        return roundedValue.toString()
+        return String.format("%.1f", roundedValue)
     }
 }
 
