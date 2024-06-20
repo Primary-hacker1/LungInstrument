@@ -31,9 +31,6 @@ class RoutineFragment : CommonBaseFragment<FragmentRoutineDynmicBinding>() {
 
     }
 
-    // 声明一个协程作用域
-    private val coroutineScope = CoroutineScope(Dispatchers.Main)
-
     override fun initView() {
 
         // 创建折线图的样本数据

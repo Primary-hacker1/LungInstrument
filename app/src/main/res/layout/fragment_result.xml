@@ -65,7 +65,7 @@
                     android:layout_columnWeight="1"
                     android:tag="1">
 
-                    <com.github.mikephil.charting.charts.ScatterChart
+                    <com.justsafe.libview.chart.ResultScatterChart
                         android:id="@+id/sc_chart1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
@@ -79,7 +79,7 @@
                     android:layout_columnWeight="1"
                     android:tag="2">
 
-                    <com.github.mikephil.charting.charts.ScatterChart
+                    <com.justsafe.libview.chart.ResultScatterChart
                         android:id="@+id/sc_chart2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
@@ -94,7 +94,7 @@
                     android:layout_columnWeight="1"
                     android:tag="3">
 
-                    <com.github.mikephil.charting.charts.ScatterChart
+                    <com.justsafe.libview.chart.ResultScatterChart
                         android:id="@+id/sc_chart3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
@@ -108,7 +108,7 @@
                     android:layout_columnWeight="1"
                     android:tag="4">
 
-                    <com.github.mikephil.charting.charts.ScatterChart
+                    <com.justsafe.libview.chart.ResultScatterChart
                         android:id="@+id/sc_chart4"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />

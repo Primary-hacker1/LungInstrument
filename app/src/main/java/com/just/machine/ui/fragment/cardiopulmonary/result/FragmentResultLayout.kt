@@ -21,6 +21,7 @@ import com.just.machine.model.lungdata.AnlyCpxTableModel
 import com.just.machine.ui.adapter.ResultAdapter
 import com.just.news.R
 import com.just.news.databinding.FragmentResultBinding
+import com.justsafe.libview.chart.ResultScatterChart
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
 
 
@@ -39,13 +40,15 @@ class FragmentResultLayout @JvmOverloads constructor(
 
     private val tag = FragmentResultLayout::class.java.name
 
-    private var adapter: ResultAdapter? = null
+    private var adapter: ResultAdapter? = null //用于显示结果适配器
 
-    private var chartLayout: ChartLayout? = null
+    private var chartLayout: ChartLayout? = null //用于传递fragment的标识
 
-    var model = AnlyCpxTableModel()
+    var model = AnlyCpxTableModel()//数据分析结果
 
-    private var dynamicResultBeans: MutableList<DynamicResultBean> = ArrayList()
+    private var isExpanded = false //是否展开
+
+    private var dynamicResultBeans: MutableList<DynamicResultBean> = ArrayList()//动态结果数据
 
     enum class ChartLayout {
         EXTREMUM,//极值分析
@@ -121,6 +124,10 @@ class FragmentResultLayout @JvmOverloads constructor(
         }
     }
 
+    /**
+     * @param chart 散点图控件
+     * @param gestureDetector 手势检测器
+     * */
     @SuppressLint("ClickableViewAccessibility")
     fun setOnTouchListenerForChart(
         chart: View,
@@ -154,24 +161,46 @@ class FragmentResultLayout @JvmOverloads constructor(
 
     }
 
-    fun setChartLayout(resultLayout: ChartLayout,chartAxisSettings: ChartAxisSettings) {
+
+    /**
+    * @param resultLayout 枚举类用于传递fragment的标识
+    * @param chartAxisSettings1 自定义X轴和Y轴的刻度
+    * */
+    fun setChartLayout(
+        resultLayout: ChartLayout,
+        chartAxisSettings1: ChartAxisSettings,
+        chartAxisSettings2: ChartAxisSettings? = ChartAxisSettings(),
+        chartAxisSettings3: ChartAxisSettings? = ChartAxisSettings(),
+        chartAxisSettings4: ChartAxisSettings? = ChartAxisSettings()
+    ) {
         chartLayout = resultLayout
         when (resultLayout) {
             ChartLayout.EXTREMUM -> {
-                val scatterData = generateScatterData(50)
-                setupScatterChart(binding.scChart1, scatterData, chartAxisSettings)
+                setupScatterChart(binding.scChart1, chartAxisSettings1)
                 onChartClick(binding.chart1)
             }
 
             ChartLayout.OXYGEN -> { // 无氧域分析的实现
-                val scatterData = generateScatterData(50)
-                setupScatterChart(binding.scChart2, scatterData, chartAxisSettings)
+                setupScatterChart(binding.scChart1, chartAxisSettings1)
+                if (chartAxisSettings2 != null) {
+                    setupScatterChart(binding.scChart2, chartAxisSettings2)
+                }
+                if (chartAxisSettings3 != null) {
+                    setupScatterChart(binding.scChart3, chartAxisSettings3)
+                }
+                if (chartAxisSettings4 != null) {
+                    setupScatterChart(binding.scChart4, chartAxisSettings4)
+                }
             }
 
             ChartLayout.COMPENSATORY -> { // 呼吸代偿点分析的实现
-                val scatterData = generateScatterData(50)//散点图数据
-                setupScatterChart(binding.scChart2, scatterData, chartAxisSettings)
-                setupScatterChart(binding.scChart3, scatterData, chartAxisSettings)
+                setupScatterChart(binding.scChart1, chartAxisSettings1)
+                if (chartAxisSettings2 != null) {
+                    setupScatterChart(binding.scChart2, chartAxisSettings2)
+                }
+                if (chartAxisSettings3 != null) {
+                    setupScatterChart(binding.scChart3, chartAxisSettings3)
+                }
             }
 
 //            ChartLayout.SLOP -> TODO()
@@ -179,9 +208,12 @@ class FragmentResultLayout @JvmOverloads constructor(
         }
     }
 
-
-    private var isExpanded = false
-
+    fun setScatterData(){//先模拟数据
+        binding.scChart1.startUpdatingData()
+        binding.scChart2.startUpdatingData()
+        binding.scChart3.startUpdatingData()
+        binding.scChart4.startUpdatingData()
+    }
 
     private fun generateScatterData(numPoints: Int): ScatterData {
         val entries = mutableListOf<Entry>()
@@ -203,9 +235,9 @@ class FragmentResultLayout @JvmOverloads constructor(
 
 
     private fun setupScatterChart(
-        scatterChart: ScatterChart,
-        scatterData: ScatterData,
-        chartBean: ChartAxisSettings
+        scatterChart: ResultScatterChart,
+        chartBean: ChartAxisSettings,
+        scatterData: ScatterData? = ScatterData()
     ) {
         scatterChart.data = scatterData
 
@@ -246,7 +278,6 @@ class FragmentResultLayout @JvmOverloads constructor(
     }
 
 
-
     private fun onChartClick(view: View) {
         val chart = view as FrameLayout
         isExpanded = if (isExpanded) {
@@ -269,8 +300,7 @@ class FragmentResultLayout @JvmOverloads constructor(
             true
         }
 
-        // 请求重新布局
-        binding.gridLayout.requestLayout()
+        binding.gridLayout.requestLayout()// 请求重新布局
     }
 }
 
@@ -285,14 +315,14 @@ class CustomValueFormatter(private val granularity: Float) : ValueFormatter() {
 
 data class ChartAxisSettings(
     // X轴刻度
-    var axisMinimumL: Float ?= 0f,
-    var axisMaximumL: Float ?= 100f,
+    var axisMinimumL: Float? = 0f,
+    var axisMaximumL: Float? = 100f,
     var xGranularity: Float? = axisMaximumL?.div(10),
     var xLabelCount: Int? = (axisMaximumL?.div(xGranularity?.toInt()!!)?.plus(1))?.toInt(),
 
     // Y轴刻度
-    var axisMinimumR: Float ?= 0f,
-    var axisMaximumR: Float ?= 100f,
+    var axisMinimumR: Float? = 0f,
+    var axisMaximumR: Float? = 100f,
     var granularity: Float? = axisMaximumR?.div(10),
     var labelCount: Int? = (axisMaximumR?.div(granularity?.toInt()!!)?.plus(2))?.toInt()
 )

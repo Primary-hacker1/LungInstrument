@@ -30,7 +30,7 @@ class ExtremumAnalysisFragment : CommonBaseFragment<FragmentExtremumAnalysisBind
 
     override fun initView() {
 
-        val chartSetting = ChartAxisSettings()
+        val chartSetting = ChartAxisSettings() //自定义X轴和Y轴的刻度
         chartSetting.axisMaximumR = 2850f
         chartSetting.axisMinimumR = 0f
         chartSetting.granularity = 150f
@@ -39,16 +39,16 @@ class ExtremumAnalysisFragment : CommonBaseFragment<FragmentExtremumAnalysisBind
         chartSetting.axisMinimumL = 0f
         chartSetting.xGranularity = 0.2f
 
-        binding.layoutResult.setChartLayout(
+        binding.layoutResult.setChartLayout(//设置布局
             FragmentResultLayout.ChartLayout.EXTREMUM,
             chartSetting
         )
 
-        binding.llSave.setNoRepeatListener {
+        binding.llSave.setNoRepeatListener {//保存
 
         }
 
-        binding.llReset.setNoRepeatListener {
+        binding.llReset.setNoRepeatListener {//重置
 
         }
 

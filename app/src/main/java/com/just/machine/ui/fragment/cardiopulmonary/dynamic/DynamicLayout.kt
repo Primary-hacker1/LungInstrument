@@ -28,25 +28,25 @@ class DynamicLayout @JvmOverloads constructor(
         true
     )
 
-    val adapterTime = CustomSpinnerAdapter(context)
-    val adapterVo = CustomSpinnerAdapter(context)
-    val adapterHr = CustomSpinnerAdapter(context)
-    val adapterRer = CustomSpinnerAdapter(context)
-    val adapterO2Hr = CustomSpinnerAdapter(context)
-    val adapterFio2 = CustomSpinnerAdapter(context)
-    val adapterVdVt = CustomSpinnerAdapter(context)
-    val adapterTex = CustomSpinnerAdapter(context)
-    val adapterFeo2 = CustomSpinnerAdapter(context)
+    private val adapterTime = CustomSpinnerAdapter(context)
+    private val adapterVo = CustomSpinnerAdapter(context)
+    private val adapterHr = CustomSpinnerAdapter(context)
+    private val adapterRer = CustomSpinnerAdapter(context)
+    private val adapterO2Hr = CustomSpinnerAdapter(context)
+    private val adapterFio2 = CustomSpinnerAdapter(context)
+    private val adapterVdVt = CustomSpinnerAdapter(context)
+    private val adapterTex = CustomSpinnerAdapter(context)
+    private val adapterFeo2 = CustomSpinnerAdapter(context)
 
-    val adapterLoad = CustomSpinnerAdapter(context)
-    val adapterVO2HR = CustomSpinnerAdapter(context)
-    val adapterVCO2 = CustomSpinnerAdapter(context)
-    val adapterRER = CustomSpinnerAdapter(context)
-    val adapterPdia = CustomSpinnerAdapter(context)
-    val adapterSpo2 = CustomSpinnerAdapter(context)
-    val adapterBf = CustomSpinnerAdapter(context)
-    val adapterVtex = CustomSpinnerAdapter(context)
-    val adapterFeco2 = CustomSpinnerAdapter(context)
+    private val adapterLoad = CustomSpinnerAdapter(context)
+    private val adapterVO2HR = CustomSpinnerAdapter(context)
+    private val adapterVCO2 = CustomSpinnerAdapter(context)
+    private val adapterRER = CustomSpinnerAdapter(context)
+    private val adapterPdia = CustomSpinnerAdapter(context)
+    private val adapterSpo2 = CustomSpinnerAdapter(context)
+    private val adapterBf = CustomSpinnerAdapter(context)
+    private val adapterVtex = CustomSpinnerAdapter(context)
+    private val adapterFeco2 = CustomSpinnerAdapter(context)
 
     init {
         initView()
@@ -113,7 +113,7 @@ class DynamicLayout @JvmOverloads constructor(
             DynamicBean.spinnerItemData("PiCO2").apply { lowRange = cpxData?.PiCO2 },
             DynamicBean.spinnerItemData("PiO2").apply { lowRange = cpxData?.PiO2 },
             DynamicBean.spinnerItemData("PROT").apply { lowRange = cpxData?.PROT },
-            DynamicBean.spinnerItemData("Psys").apply { lowRange = cpxSerializeData?.Psys },
+            DynamicBean.spinnerItemData("Psys").apply { lowRange = cpxSerializeData.Psys },
             DynamicBean.spinnerItemData("Qtc").apply { lowRange = cpxData?.Qtc },
             DynamicBean.spinnerItemData("RER").apply { lowRange = cpxData?.RER },
 //            DynamicBean.spinnerItemData("RPE").apply { lowRange = cpxData?.cpxSerializeData.RPE },

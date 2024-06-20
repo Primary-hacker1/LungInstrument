@@ -3,9 +3,7 @@ package com.justsafe.libview.chart
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.widget.LinearLayout
@@ -29,7 +27,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
-class CustomScatterChart @JvmOverloads constructor(
+/*
+* 运动评估专用
+* */
+class ResultScatterChart @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
@@ -86,13 +87,13 @@ class CustomScatterChart @JvmOverloads constructor(
 
         // 初始化数据集
         dataSet1 = ScatterDataSet(entries1, "数据集1").apply {
-            color = Color.RED
+//            color = Color.RED
             scatterShapeSize = 8f
             axisDependency = YAxis.AxisDependency.LEFT
         }
 
         dataSet2 = ScatterDataSet(entries2, "数据集2").apply {
-            color = Color.BLUE
+//            color = Color.BLUE
             scatterShapeSize = 8f
             axisDependency = YAxis.AxisDependency.RIGHT
         }
@@ -105,7 +106,7 @@ class CustomScatterChart @JvmOverloads constructor(
     }
 
     // 实时更新数据集的方法
-    fun updateData(newValue1: Float, newValue2: Float) {
+    private fun updateData(newValue1: Float, newValue2: Float) {
         val xValue1 = entries1.size.toFloat()
         val xValue2 = entries2.size.toFloat()
         entries1.add(Entry(xValue1, newValue1))
@@ -118,7 +119,7 @@ class CustomScatterChart @JvmOverloads constructor(
         invalidate()
     }
 
-    fun startUpdatingData() {
+    fun startUpdatingData() {//模拟散点图，真实的要改
         var job: Job? = null
         var currentValue1 = 0f
         var currentValue2 = 0.5f
@@ -139,55 +140,6 @@ class CustomScatterChart @JvmOverloads constructor(
         }
     }
 
-    private val mGridPaint: Paint = Paint().apply {
-        color = Color.GRAY
-        style = Paint.Style.STROKE
-        strokeWidth = 1f
-    }
-
-    override fun drawGridBackground(canvas: Canvas?) {
-        super.drawGridBackground(canvas)
-
-        // 绘制右侧 Y 轴的网格线
-        if (data == null || !yAxis2.isEnabled || !yAxis2.isDrawGridLinesEnabled) return
-
-        val clipRect = mViewPortHandler.contentRect
-        val trans = mRightAxisTransformer
-
-        mGridPaint.color = yAxis2.gridColor
-        mGridPaint.strokeWidth = yAxis2.gridLineWidth
-
-        val positions = FloatArray(2)
-        positions[0] = mViewPortHandler.contentRight() // 右侧 Y 轴的位置，根据实际情况调整
-
-        val phaseY = mAnimator.phaseY
-
-        // 获取 Y 轴的值范围（这里假设您的 yAxis2 是右侧 Y 轴对象）
-        val min = yAxis2.axisMinimum
-        val max = yAxis2.axisMaximum
-        val labelCount = yAxis2.labelCount
-
-        // 计算网格线的间隔
-        val interval = (max - min) / (labelCount - 1)
-
-        // 绘制网格线
-        for (i in 0 until labelCount) {
-            positions[1] = max - i * interval // 计算 Y 值位置
-
-            trans.pointValuesToPixel(positions)
-
-            // 检查 Y 值位置是否在绘制区域内
-            if (positions[1] >= clipRect.top && positions[1] <= clipRect.bottom) {
-                canvas?.drawLine(
-                    clipRect.left,
-                    positions[1],
-                    clipRect.right,
-                    positions[1],
-                    mGridPaint
-                )
-            }
-        }
-    }
 
     @SuppressLint("ClickableViewAccessibility")
     fun setDynamicDragLine() {
