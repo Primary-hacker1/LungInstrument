@@ -193,9 +193,10 @@
                     tools:ignore="RtlHardcoded" />
 
                 <LinearLayout
+                    android:id="@+id/ll_pull_direction"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/space_9"
+                    android:layout_marginVertical="@dimen/space_9"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -205,6 +206,7 @@
                         android:src="@drawable/flow_up" />
 
                     <TextView
+                        android:id="@+id/tv_pull_direction"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/space_16"

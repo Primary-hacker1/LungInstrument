@@ -132,7 +132,6 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
                 Toast.makeText(requireContext(), "气压不能为空!", Toast.LENGTH_SHORT).show()
                 return@setNoRepeatListener
             }
-            Toast.makeText(requireContext(), "手动保存", Toast.LENGTH_SHORT).show()
             val time = DateUtils.nowTimeString
             //插入一条手动环境定标
             viewModel.setEnvironmental(
@@ -147,6 +146,7 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
                 )
             )
             lockButtonStyle()
+            Toast.makeText(requireContext(), "保存成功!", Toast.LENGTH_SHORT).show()
         }
 
         LiveDataBus.get().with(Constants.serialCallback).observe(this) {//解析串口消息

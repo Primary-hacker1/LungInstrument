@@ -1,5 +1,6 @@
 package com.just.machine.ui.fragment
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -36,6 +37,7 @@ class PreHeatFragment : CommonBaseFragment<FragmentPreheatBinding>() {
             }
 
             override fun onTick(times: Int) {
+                Log.d("PreHeat","预热倒计时===$times")
                 val minute = times / 60 % 60
                 val second = times % 60
                 val progress = (((1200 - times-1) / 1200.toFloat()) * 100).toInt()
@@ -58,6 +60,7 @@ class PreHeatFragment : CommonBaseFragment<FragmentPreheatBinding>() {
 
     override fun initListener() {
         binding.tvSkipPreheat.setNoRepeatListener {
+            mCountDownTime.cancel()
             MainActivity.startMainActivity(activity)
             activity?.finish()
         }
