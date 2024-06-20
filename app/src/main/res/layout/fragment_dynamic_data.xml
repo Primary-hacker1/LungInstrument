@@ -12,7 +12,7 @@
             android:background="@drawable/spinner_dropdown_background"
             android:layout_height="match_parent">
 
-        <com.justsafe.libview.chart.CustomHorizontalScrollView
+        <com.justsafe.libview.view.CustomHorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -32,7 +32,7 @@
                         android:layout_height="500dp" />
             </LinearLayout>
 
-        </com.justsafe.libview.chart.CustomHorizontalScrollView>
+        </com.justsafe.libview.view.CustomHorizontalScrollView>
 
     </LinearLayout>
 </layout>
