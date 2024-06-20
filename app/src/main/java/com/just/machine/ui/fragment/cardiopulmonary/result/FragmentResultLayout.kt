@@ -191,6 +191,9 @@ class FragmentResultLayout @JvmOverloads constructor(
                 if (chartAxisSettings3 != null) {
                     setupScatterChart(binding.scChart3, chartAxisSettings3)
                 }
+                if (chartAxisSettings4 != null) {
+                    setupScatterChart(binding.scChart4, chartAxisSettings4)
+                }
             }
 
 //            ChartLayout.SLOP -> {}}
