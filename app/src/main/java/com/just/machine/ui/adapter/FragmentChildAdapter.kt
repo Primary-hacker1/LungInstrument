@@ -1,6 +1,5 @@
 package com.just.machine.ui.adapter
 
-import android.annotation.SuppressLint
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 

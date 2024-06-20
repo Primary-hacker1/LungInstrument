@@ -3,13 +3,9 @@ package com.just.machine.ui.fragment.cardiopulmonary.result
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
-import com.common.network.LogUtils
-import com.just.machine.model.Constants
 import com.just.machine.ui.viewmodel.MainViewModel
-import com.just.machine.util.LiveDataBus
 import com.just.news.databinding.FragmentOxygenDomainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,8 +28,8 @@ class OxygenDomainFragment : CommonBaseFragment<FragmentOxygenDomainBinding>() {
     override fun initView() {
 
         val chartSetting = ChartAxisSettings()
-        chartSetting.axisMaximumR = 2750f
-        chartSetting.axisMinimumR = 0f
+        chartSetting.axisMaximumYL = 2750f
+        chartSetting.axisMinimumYL = 0f
         chartSetting.granularity = 250f
 
         chartSetting.axisMaximumL = 10f
@@ -41,8 +37,8 @@ class OxygenDomainFragment : CommonBaseFragment<FragmentOxygenDomainBinding>() {
         chartSetting.xGranularity = 1f
 
         val chartSetting2 = ChartAxisSettings()
-        chartSetting2.axisMaximumR = 2750f
-        chartSetting2.axisMinimumR = 0f
+        chartSetting2.axisMaximumYL = 2750f
+        chartSetting2.axisMinimumYL = 0f
         chartSetting2.granularity = 250f
 
         chartSetting2.axisMaximumL = 2750f
@@ -50,8 +46,8 @@ class OxygenDomainFragment : CommonBaseFragment<FragmentOxygenDomainBinding>() {
         chartSetting2.xGranularity = 250f
 
         val chartSetting3 = ChartAxisSettings()
-        chartSetting3.axisMaximumR = 150f
-        chartSetting3.axisMinimumR = 0f
+        chartSetting3.axisMaximumYL = 150f
+        chartSetting3.axisMinimumYL = 0f
         chartSetting3.granularity = 15f
 
         chartSetting3.axisMaximumL = 10f
@@ -59,8 +55,8 @@ class OxygenDomainFragment : CommonBaseFragment<FragmentOxygenDomainBinding>() {
         chartSetting3.xGranularity = 1f
 
         val chartSetting4 = ChartAxisSettings()
-        chartSetting4.axisMaximumR = 60f
-        chartSetting4.axisMinimumR = 0f
+        chartSetting4.axisMaximumYL = 60f
+        chartSetting4.axisMinimumYL = 0f
         chartSetting4.granularity = 10f
 
         chartSetting4.axisMaximumL = 10f

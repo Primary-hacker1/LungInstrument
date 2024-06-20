@@ -6,11 +6,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
-import com.common.network.LogUtils
-import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.result.SavedDataAdapter
 import com.just.machine.ui.viewmodel.MainViewModel
-import com.just.machine.util.LiveDataBus
 import com.just.news.databinding.FragmentDynamicCleanBinding
 import dagger.hilt.android.AndroidEntryPoint
 

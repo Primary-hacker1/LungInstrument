@@ -42,7 +42,7 @@ class ResultScatterChart @JvmOverloads constructor(
     private val entries1: MutableList<Entry> = mutableListOf()
     private val entries2: MutableList<Entry> = mutableListOf()
     private lateinit var dataSet1: ScatterDataSet
-//    private lateinit var dataSet2: ScatterDataSet
+    private lateinit var dataSet2: ScatterDataSet
 
     init {
         setupChart()
@@ -87,25 +87,33 @@ class ResultScatterChart @JvmOverloads constructor(
             }
         }
 
-        // 初始化数据集
         dataSet1 = ScatterDataSet(entries1, "数据集1").apply {
-//            color = Color.RED
+            color = Color.RED
             scatterShapeSize = 8f
             axisDependency = YAxis.AxisDependency.LEFT
         }
 
-//        dataSet2 = ScatterDataSet(entries2, "数据集2").apply {
-//            color = Color.BLUE
-//            scatterShapeSize = 8f
-//            axisDependency = YAxis.AxisDependency.RIGHT
-//        }
+        dataSet2 = ScatterDataSet(entries2, "数据集2").apply {
+            color = Color.BLUE
+            scatterShapeSize = 8f
+            axisDependency = YAxis.AxisDependency.RIGHT
+        }
 
-        val scatterData = ScatterData(dataSet1,
-//            dataSet2
+        val scatterData = ScatterData(
+            dataSet1,
         )
         data = scatterData
 
-        // 刷新图表
+        invalidate()
+    }
+
+    //动态评估设置双轴
+    fun setDynamicAxis() {
+        val scatterData = ScatterData(
+            dataSet1,
+            dataSet2
+        )
+        data = scatterData
         invalidate()
     }
 
@@ -117,7 +125,7 @@ class ResultScatterChart @JvmOverloads constructor(
         entries2.add(Entry(xValue2, newValue2))
 
         dataSet1.notifyDataSetChanged()
-//        dataSet2.notifyDataSetChanged()
+        dataSet2.notifyDataSetChanged()
         data.notifyDataChanged()
         notifyDataSetChanged()
         invalidate()
@@ -201,8 +209,8 @@ class ResultScatterChart @JvmOverloads constructor(
     }
 
     /**
-    * 设置拖拽线
-    * */
+     * 设置拖拽线
+     * */
     @SuppressLint("ClickableViewAccessibility")
     fun setDynamicDragLine() {
         val xAxis = xAxis

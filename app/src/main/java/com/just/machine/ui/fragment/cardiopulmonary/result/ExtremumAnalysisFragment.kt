@@ -31,8 +31,8 @@ class ExtremumAnalysisFragment : CommonBaseFragment<FragmentExtremumAnalysisBind
     override fun initView() {
 
         val chartSetting = ChartAxisSettings() //自定义X轴和Y轴的刻度
-        chartSetting.axisMaximumR = 2850f
-        chartSetting.axisMinimumR = 0f
+        chartSetting.axisMaximumYL = 2850f
+        chartSetting.axisMinimumYL = 0f
         chartSetting.granularity = 150f
 
         chartSetting.axisMaximumL = 1f
