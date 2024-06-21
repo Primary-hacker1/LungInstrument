@@ -11,7 +11,9 @@ import android.widget.FrameLayout
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.network.LogUtils
+import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.ScatterData
+import com.github.mikephil.charting.interfaces.datasets.IScatterDataSet
 import com.just.machine.model.DynamicResultBean
 import com.just.machine.model.lungdata.AnlyCpxTableModel
 import com.just.machine.ui.adapter.result.ResultAdapter
@@ -45,6 +47,16 @@ class FragmentResultLayout @JvmOverloads constructor(
     private var isExpanded = false //是否展开
 
     private var dynamicResultBeans: MutableList<DynamicResultBean> = ArrayList()//动态结果数据
+
+    private var dragLinePosition: Float = 10f // 初始位置
+
+    private lateinit var scatterChart1: ResultScatterChart
+
+    private lateinit var scatterChart2: ResultScatterChart
+
+    private lateinit var scatterChart3: ResultScatterChart
+
+    private lateinit var scatterChart4: ResultScatterChart
 
     enum class ChartLayout {
         EXTREMUM,//极值分析
@@ -159,10 +171,14 @@ class FragmentResultLayout @JvmOverloads constructor(
         chartAxisSettings1: ChartAxisSettings,
         chartAxisSettings2: ChartAxisSettings? = ChartAxisSettings(),
         chartAxisSettings3: ChartAxisSettings? = ChartAxisSettings(),
-        chartAxisSettings4: ChartAxisSettings? = ChartAxisSettings()
+        chartAxisSettings4: ChartAxisSettings? = ChartAxisSettings(),
+        resultChartBean: ResultScatterChart.ResultChartBean? = ResultScatterChart.ResultChartBean(),
+
     ) {
+        if (resultChartBean != null) {
+            binding.scChart1.setTitle(resultChartBean)
+        }
         chartLayout = resultLayout
-        LogUtils.d(tag + "点击了那个布局=" + chartLayout)
         when (resultLayout) {
             ChartLayout.EXTREMUM -> {
                 setupScatterChart(binding.scChart1, chartAxisSettings1)
@@ -180,6 +196,23 @@ class FragmentResultLayout @JvmOverloads constructor(
                 if (chartAxisSettings4 != null) {
                     setupScatterChart(binding.scChart4, chartAxisSettings4)
                 }
+                binding.scChart1.setDynamicAxis()//动态设置双轴
+                binding.scChart2.setDynamicAxis()//动态设置双轴
+                binding.scChart3.setDynamicAxis()//动态设置双轴
+                binding.scChart4.setDynamicAxis()//动态设置双轴
+
+                binding.scChart1.setDynamicDragLine(::onDragLinePositionChanged)
+                binding.scChart2.setDynamicDragLine(::onDragLinePositionChanged)
+                binding.scChart3.setDynamicDragLine(::onDragLinePositionChanged)
+                binding.scChart4.setDynamicDragLine(::onDragLinePositionChanged)
+
+                binding.scChart1.setOnEntrySelectedListener(::onEntrySelected)
+                binding.scChart2.setOnEntrySelectedListener(::onEntrySelected)
+                binding.scChart3.setOnEntrySelectedListener(::onEntrySelected)
+                binding.scChart4.setOnEntrySelectedListener(::onEntrySelected)
+
+                // 初始化所有图表的拖拽线位置
+                updateAllCharts(dragLinePosition)
             }
 
             ChartLayout.COMPENSATORY -> { // 呼吸代偿点分析的实现
@@ -201,6 +234,18 @@ class FragmentResultLayout @JvmOverloads constructor(
         }
     }
 
+    private fun onDragLinePositionChanged(newPosition: Float) {// 监听拖拽线位置的变化
+        dragLinePosition = newPosition
+        updateAllCharts(newPosition)
+    }
+
+    private fun updateAllCharts(position: Float) {// 更新所有图表的位置
+        binding.scChart1.updateDragLine(position)
+        binding.scChart2.updateDragLine(position)
+        binding.scChart3.updateDragLine(position)
+        binding.scChart4.updateDragLine(position)
+    }
+
     fun setScatterData() {//先模拟数据
         binding.scChart1.startUpdatingData()
         binding.scChart2.startUpdatingData()
@@ -208,11 +253,20 @@ class FragmentResultLayout @JvmOverloads constructor(
         binding.scChart4.startUpdatingData()
     }
 
+    private fun onEntrySelected(entriesMap: Map<IScatterDataSet, List<Entry>>) {
+        for ((dataSet, entries) in entriesMap) {
+            for (entry in entries) {
+                val yValue = entry.y
+//                LogUtils.d("DataSet: ${dataSet.label}, X value: ${entry.x}, Y value: $yValue")
+            }
+        }
+    }
+
     private fun setupScatterChart(
         scatterChart: ResultScatterChart,
         chartBean: ChartAxisSettings,
         isChart4: Boolean? = false,
-        scatterData: ScatterData? = ScatterData()
+        scatterData: ScatterData? = ScatterData(),
     ) {
         scatterChart.data = scatterData
 
@@ -235,7 +289,6 @@ class FragmentResultLayout @JvmOverloads constructor(
         scatterChart.axisLeft.granularity = chartBean.granularity!! // Y轴每个间隔的单位
         scatterChart.axisLeft.labelCount = chartBean.labelCount!! // Y轴的标签数量
 
-        LogUtils.d(tag + isChart4)
         if (isChart4 == true) {
             scatterChart.axisLeft.valueFormatter = CustomValueFormatterDecimal(
                 chartBean.granularity!!

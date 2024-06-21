@@ -6,7 +6,9 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Rect
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
@@ -38,15 +40,39 @@ class ResultScatterChart @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ScatterChart(context, attrs, defStyleAttr) {
 
+    private val tag = ResultScatterChart::class.java.name
+
     private val yAxis2: YAxis = YAxis(YAxis.AxisDependency.RIGHT)
+
     private val entries1: MutableList<Entry> = mutableListOf()
+
     private val entries2: MutableList<Entry> = mutableListOf()
+
     private lateinit var dataSet1: ScatterDataSet
+
     private lateinit var dataSet2: ScatterDataSet
+
+    private lateinit var limitLine: LimitLine
+
+    private var onEntrySelectedListener: ((Map<IScatterDataSet, List<Entry>>) -> Unit)? = null
+
+    data class ResultChartBean(
+        var titleOneL: String? = "VO2",
+        var titleTwoL: String? = "[L/S]",
+        var titleContent: String? = "居中标题",
+    )
+
+    private var resultChartBean = ResultChartBean()
 
     init {
         setupChart()
-        setExtraOffsets(20f, 0f, 20f, 2f) // 设置左、顶部、右、底部的偏移量
+        setExtraOffsets(20f, 20f, 20f, 2f) // 设置左、顶部、右、底部的偏移量
+    }
+
+    fun setTitle(
+        resultChartBean: ResultChartBean
+    ) {
+        this.resultChartBean = resultChartBean
     }
 
     private fun setupChart() {
@@ -179,7 +205,7 @@ class ResultScatterChart @JvmOverloads constructor(
         val positions = FloatArray(2)
         positions[0] = mViewPortHandler.contentRight() // 右侧 Y 轴的位置，根据实际情况调整
 
-        val phaseY = mAnimator.phaseY
+        mAnimator.phaseY
 
         // 获取 Y 轴的值范围（这里假设您的 yAxis2 是右侧 Y 轴对象）
         val min = yAxis2.axisMinimum
@@ -208,14 +234,50 @@ class ResultScatterChart @JvmOverloads constructor(
         }
     }
 
-    /**
-     * 设置拖拽线
-     * */
+    @SuppressLint("DrawAllocation")
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+
+        // 转换 dp 为像素
+        val titleTextSizePx = dpToPx(8f, context) // 标题文本的大小
+        val contentTextSizePx = dpToPx(18f, context) // 文本的大小
+
+        // 绘制标题文本
+        val titlePaint = Paint().apply {
+            textSize = titleTextSizePx
+            color = Color.BLACK
+            textAlign = Paint.Align.CENTER
+        }
+        val totalTitleHeight = titlePaint.fontSpacing * 2 // 两行标题文本的总高度
+        val titleStartX = 40f // 左边留出一定的空白
+        val titleStartY = totalTitleHeight - 26 // 留出与标题文本相同的高度
+        canvas.drawText(resultChartBean.titleOneL.toString(), titleStartX, titleStartY, titlePaint)
+        canvas.drawText(resultChartBean.titleTwoL.toString(), titleStartX, titleStartY + titlePaint.fontSpacing, titlePaint)
+
+        // 绘制垂直居中的文本
+        val verticalText = resultChartBean.titleContent.toString()
+        val verticalTextPaint = Paint().apply {
+            textSize = contentTextSizePx
+            color = ContextCompat.getColor(context, R.color.c888888)
+            textAlign = Paint.Align.CENTER
+        }
+
+        val verticalTextBounds = Rect()
+        verticalTextPaint.getTextBounds(verticalText, 0, verticalText.length, verticalTextBounds)
+        val verticalTextHeight = verticalTextBounds.height()
+        val viewWidth = width
+        val centerX = (viewWidth - verticalTextBounds.width()) / 2 + verticalTextPaint.measureText(
+            verticalText
+        ) / 2 // 文本的水平居中位置
+        val centerY = verticalTextHeight // 文本的顶部位置
+        canvas.drawText(verticalText, centerX, centerY.toFloat(), verticalTextPaint)
+    }
+
     @SuppressLint("ClickableViewAccessibility")
-    fun setDynamicDragLine() {
+    fun setDynamicDragLine(onPositionChanged: (Float) -> Unit) {
         val xAxis = xAxis
         val initialPosition = 10f // 初始位置
-        val limitLine = LimitLine(initialPosition, "拖拽线")
+        limitLine = LimitLine(initialPosition, "拖拽线")
         limitLine.lineColor = ContextCompat.getColor(context, R.color.colorPrimary)
         limitLine.lineWidth = 2f
         xAxis.addLimitLine(limitLine)
@@ -256,6 +318,9 @@ class ResultScatterChart @JvmOverloads constructor(
                     // 更新 LimitLine 的位置到新的 x 坐标值
                     limitLine.limit = xValue
 
+                    // 通知外部回调
+                    onPositionChanged(convertToSharedCoordinate(xValue))
+
                     // 获取与垂直线相交的数据点
                     val entriesMap = mutableMapOf<IScatterDataSet, MutableList<Entry>>()
                     val dataSets = data.dataSets
@@ -272,10 +337,13 @@ class ResultScatterChart @JvmOverloads constructor(
                     for ((dataSet, entries) in entriesMap) {
                         for (entry in entries) {
                             val yValue = entry.y
-                            // 这里处理 yValue，例如打印或存储
-                            println("DataSet: ${dataSet.label}, Y value: $yValue")
+                            // 打印数据集的标签、X值和Y值
+                            println("DataSet: ${dataSet.label}, X value: ${entry.x}, Y value: $yValue")
                         }
                     }
+
+                    // 回调返回相交的数据点
+                    onEntrySelectedListener?.invoke(entriesMap)
 
                     invalidate() // 刷新图表以显示新位置的 LimitLine
 
@@ -286,6 +354,36 @@ class ResultScatterChart @JvmOverloads constructor(
                 else -> false
             }
         }
+    }
+
+    // 更新拖拽线位置的方法
+    fun updateDragLine(sharedPosition: Float) {
+        val localPosition = convertFromSharedCoordinate(sharedPosition)
+        limitLine.limit = localPosition
+        invalidate() // 刷新图表以显示新位置的 LimitLine
+    }
+
+    // 将本地X轴坐标转换为共享的逻辑坐标
+    private fun convertToSharedCoordinate(localX: Float): Float {
+        val xMin = xAxis.axisMinimum
+        val xMax = xAxis.axisMaximum
+        return (localX - xMin) / (xMax - xMin)
+    }
+
+    // 将共享的逻辑坐标转换为本地X轴坐标
+    private fun convertFromSharedCoordinate(sharedX: Float): Float {
+        val xMin = xAxis.axisMinimum
+        val xMax = xAxis.axisMaximum
+        return sharedX * (xMax - xMin) + xMin
+    }
+
+    // 设置相交数据点回调的方法
+    fun setOnEntrySelectedListener(listener: (Map<IScatterDataSet, List<Entry>>) -> Unit) {
+        onEntrySelectedListener = listener
+    }
+
+    fun dpToPx(dp: Float, context: Context): Float {
+        return dp * context.resources.displayMetrics.density
     }
 }
 
