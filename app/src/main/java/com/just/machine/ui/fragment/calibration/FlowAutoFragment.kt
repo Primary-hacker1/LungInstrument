@@ -56,10 +56,50 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
         flowAdapter.setItemsBean(
             mutableListOf(FlowBean(0, "", 1, "容积1", "3", "3.003", "0.93", "0"))
         )
-        LiveDataBus.get().with("flow").observe(this) {
+        //定标开始
+        LiveDataBus.get().with("flowStart").observe(this) {
             if (it is String) {
                 if (it == "autoFlow") {
+                    mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack {
+                        override fun onStart() {
 
+                        }
+
+                        override fun onTick(times: Int) {
+                            binding.tvFlowAutoTemp.text =
+                                (Random().nextInt(3) + 1).toFloat().toString()
+                            binding.tvFlowAutoActual.text =
+                                (Random().nextInt(3) + 1).toFloat().toString()
+                            val index = 35 - times
+                            tempDataSet.addEntry(
+                                Entry(
+                                    index.toFloat(),
+                                    (Random().nextInt(3) + 1).toFloat()
+                                )
+                            )
+                            actualDataSet.addEntry(
+                                Entry(
+                                    index.toFloat(),
+                                    (Random().nextInt(3) + 1).toFloat()
+                                )
+                            )
+
+                            binding.chartFlowAuto.lineData.notifyDataChanged()
+                            binding.chartFlowAuto.notifyDataSetChanged()
+                            binding.chartFlowAuto.invalidate()
+                        }
+
+                        override fun onFinish() {
+
+                        }
+                    })
+                }
+            }
+        }
+        //定标结束
+        LiveDataBus.get().with("flowStop").observe(this) {
+            if (it is String) {
+                if (it == "autoFlow") {
                 }
             }
         }
@@ -161,30 +201,5 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
             val lineData = LineData(lineDataSets)
             data = lineData
         }
-    }
-
-    override fun onResume() {
-        mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack {
-            override fun onStart() {
-
-            }
-
-            override fun onTick(times: Int) {
-                binding.tvFlowAutoTemp.text = (Random().nextInt(3) + 1).toFloat().toString()
-                binding.tvFlowAutoActual.text = (Random().nextInt(3) + 1).toFloat().toString()
-                val index = 35 - times
-                tempDataSet.addEntry(Entry(index.toFloat(), (Random().nextInt(3) + 1).toFloat()))
-                actualDataSet.addEntry(Entry(index.toFloat(), (Random().nextInt(3) + 1).toFloat()))
-
-                binding.chartFlowAuto.lineData.notifyDataChanged()
-                binding.chartFlowAuto.notifyDataSetChanged()
-                binding.chartFlowAuto.invalidate()
-            }
-
-            override fun onFinish() {
-
-            }
-        })
-        super.onResume()
     }
 }

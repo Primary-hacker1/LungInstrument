@@ -3,9 +3,13 @@ package com.just.machine.ui.fragment.calibration
 import android.speech.tts.TextToSpeech
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.CompoundButton
+import android.widget.RadioGroup.OnCheckedChangeListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.common.base.BaseUtil
 import com.common.base.CommonBaseFragment
+import com.common.base.notNull
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent.Companion.INGREDIENTS_SUCCESS
@@ -15,8 +19,8 @@ import com.just.machine.ui.adapter.calibration.IngredientAdapter
 import com.just.machine.ui.fragment.serial.MudbusProtocol
 import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
-import com.common.base.BaseUtil
 import com.just.machine.util.LiveDataBus
+import com.just.news.R
 import com.just.news.databinding.FragmentIngredientBinding
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -42,6 +46,18 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
     }
 
     override fun initView() {
+
+        if (binding.swDepthToggle.isChecked) {
+            binding.etOneO2.isEnabled = true
+            binding.etOneCo2.isEnabled = true
+            binding.etTwoCo2.isEnabled = true
+            binding.etTwoCo2.isEnabled = true
+        } else {
+            binding.etOneO2.isEnabled = false
+            binding.etOneCo2.isEnabled = false
+            binding.etTwoCo2.isEnabled = false
+            binding.etTwoCo2.isEnabled = false
+        }
 
         binding.rvIngredient.layoutManager = LinearLayoutManager(requireContext())
 
@@ -151,7 +167,35 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
     }
 
     override fun initListener() {
+        binding.swDepthToggle.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked){
+                enableEditTextStyle()
+            }else{
+                disEnableEditTextStyle()
+            }
+        }
+    }
 
+    private fun enableEditTextStyle(){
+        binding.etOneO2.isEnabled = true
+        binding.etOneCo2.isEnabled = true
+        binding.etTwoCo2.isEnabled = true
+        binding.etTwoCo2.isEnabled = true
+        binding.etOneO2.setBackgroundResource(R.drawable.frame_with_color_d6d6d6_white_solid)
+        binding.etOneCo2.setBackgroundResource(R.drawable.frame_with_color_d6d6d6_white_solid)
+        binding.etTwoO2.setBackgroundResource(R.drawable.frame_with_color_d6d6d6_white_solid)
+        binding.etTwoCo2.setBackgroundResource(R.drawable.frame_with_color_d6d6d6_white_solid)
+    }
+
+    private fun disEnableEditTextStyle(){
+        binding.etOneO2.isEnabled = false
+        binding.etOneCo2.isEnabled = false
+        binding.etTwoCo2.isEnabled = false
+        binding.etTwoCo2.isEnabled = false
+        binding.etOneO2.setBackgroundResource(R.drawable.frame_with_color_transparent)
+        binding.etOneCo2.setBackgroundResource(R.drawable.frame_with_color_transparent)
+        binding.etTwoO2.setBackgroundResource(R.drawable.frame_with_color_transparent)
+        binding.etTwoCo2.setBackgroundResource(R.drawable.frame_with_color_transparent)
     }
 
     /**

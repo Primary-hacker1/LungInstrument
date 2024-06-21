@@ -6,14 +6,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import com.common.base.BaseUtil
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
-import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.FragmentChildAdapter
 import com.just.machine.ui.fragment.serial.MudbusProtocol
 import com.just.machine.ui.fragment.serial.SerialPortManager
-import com.common.base.BaseUtil
 import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FragmentFlowBinding
@@ -30,6 +29,7 @@ import java.util.Locale
 class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
 
     private lateinit var tts: TextToSpeech
+    private var isTest = false
 
     override fun initView() {
 
@@ -77,15 +77,23 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
 //            }
                 //手动流量定标
                 if (binding.vpFlowTitle.currentItem == 0) {
-                    LiveDataBus.get().with("flow").value = "handleFlow"
+                    LiveDataBus.get().with("flowStart").value = "handleFlow"
                     SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)//发送手动流量定标
                 } else {
-                    LiveDataBus.get().with("flow").value = "autoFlow"
+                    LiveDataBus.get().with("flowStart").value = "autoFlow"
                     SerialPortManager.sendMessage(MudbusProtocol.FLOW_AUTO_CALIBRATION_COMMAND)//发送自动流量定标
                 }
                 binding.tvFlowStart.text = "停止"
             } else {
                 SerialPortManager.sendMessage(MudbusProtocol.FLOW_STOP_COMMAND)
+                //手动流量定标
+                if (binding.vpFlowTitle.currentItem == 0) {
+                    LiveDataBus.get().with("flowStop").value = "handleFlow"
+                    SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)//发送手动流量定标
+                } else {
+                    LiveDataBus.get().with("flowStop").value = "autoFlow"
+                    SerialPortManager.sendMessage(MudbusProtocol.FLOW_AUTO_CALIBRATION_COMMAND)//发送自动流量定标
+                }
                 binding.tvFlowStart.text = "开始"
             }
         }
