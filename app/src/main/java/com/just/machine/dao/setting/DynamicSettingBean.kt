@@ -15,11 +15,11 @@ data class DynamicSettingBean(
 
     var nineDiagramEstimates: String? = "",//九图预计值显示
     var lungWidth: String? = "",//运动肺图形宽度
-    var reasonForTermination: Boolean? = false,//终止原因
-    var isExtremum: Boolean? = false,//运动极值分析
-    var isOxygen: Boolean? = false,//无氧阈分析
-    var isRpe: Boolean? = false,//呼吸代偿点分析
-    var isDynamicTrafficAnalysis: Boolean? = false,//动态流量分析
+    var reasonForTermination: Boolean? = true,//终止原因
+    var isExtremum: Boolean? = true,//运动极值分析
+    var isOxygen: Boolean? = true,//无氧阈分析
+    var isRpe: Boolean? = true,//呼吸代偿点分析
+    var isDynamicTrafficAnalysis: Boolean? = true,//动态流量分析
 
     var isExercisePrescriptionOptions: Boolean? = false,//运动处方选择
 )
