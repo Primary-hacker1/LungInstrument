@@ -10,6 +10,7 @@ import com.just.machine.ui.activity.MainActivity
 import com.just.machine.util.FixCountDownTime
 import com.just.news.R
 import com.just.news.databinding.FragmentPreheatBinding
+import com.justsafe.libview.util.DateUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -25,6 +26,7 @@ class PreHeatFragment : CommonBaseFragment<FragmentPreheatBinding>() {
     }
 
     override fun initView() {
+        binding.tvSystemTime.setTime(System.currentTimeMillis(),DateUtils.nowTimeDataString)
         mCountDownTime = object : FixCountDownTime(1200, 1000) {}
 
         val progressbarBg =  ContextCompat.getDrawable(requireContext(),R.drawable.progressbar_bg)

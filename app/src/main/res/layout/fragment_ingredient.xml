@@ -181,6 +181,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/space_15"
                             android:background="@null"
+                            android:inputType="numberDecimal"
+                            android:maxLength="6"
                             android:paddingHorizontal="5dp"
                             android:text="30.01"
                             android:textColor="@color/c238E23"
@@ -202,6 +204,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/space_15"
                             android:background="@null"
+                            android:inputType="numberDecimal"
+                            android:maxLength="6"
                             android:paddingHorizontal="5dp"
                             android:text="30.01"
                             android:textColor="@color/c3786db"
@@ -238,6 +242,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/space_15"
                             android:background="@null"
+                            android:inputType="numberDecimal"
+                            android:maxLength="6"
                             android:paddingHorizontal="5dp"
                             android:text="30.01"
                             android:textColor="@color/c238E23"
@@ -259,6 +265,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/space_15"
                             android:background="@null"
+                            android:inputType="numberDecimal"
+                            android:maxLength="6"
                             android:paddingHorizontal="5dp"
                             android:text="30.01"
                             android:textColor="@color/c3786db"
@@ -276,9 +284,9 @@
 
 
                     <LinearLayout
-                        android:layout_marginVertical="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginVertical="10dp"
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -567,25 +575,100 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="8"
+                    android:layout_weight="1"
                     android:background="@drawable/calibration_bg"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    tools:ignore="NestedWeights">
 
-                    <com.justsafe.libview.chart.BaseLineChart
-                        android:id="@+id/chart_view"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="@dimen/space_6" />
+                        android:layout_height="wrap_content">
 
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="O2浓度"
+                                android:textColor="@color/colorTextOrange"
+                                android:textSize="9sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end"
+                                android:text="[%]"
+                                android:textColor="@color/colorTextOrange"
+                                android:textSize="9sp" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="成分定标"
+                            android:textColor="@color/text3"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_margin="10dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="CO2浓度"
+                                android:textColor="@color/green"
+                                android:textSize="9sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="[%]"
+                                android:textColor="@color/green"
+                                android:textSize="9sp" />
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <com.justsafe.libview.chart.BaseLineChart
+                            android:id="@+id/chart_ingredient"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="@dimen/space_6"
+                            android:layout_marginTop="@dimen/space_6"
+                            android:layout_marginEnd="@dimen/space_6"
+                            android:layout_marginBottom="@dimen/space_6" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:text="Time(S)"
+                            android:textSize="9sp" />
+
+                    </RelativeLayout>
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/space_9"
-                    android:layout_weight="1"
                     android:background="@drawable/calibration_bg"
                     android:orientation="horizontal">
 
@@ -606,7 +689,7 @@
                         android:gravity="center"
                         android:maxLines="1"
                         android:padding="@dimen/space_9"
-                        android:text="请按照开始后的操作"
+                        android:text="开始测试前请确保干燥管已接入台车成分定标口"
                         android:textColor="@color/colorPrimary"
                         android:textSize="11sp" />
 

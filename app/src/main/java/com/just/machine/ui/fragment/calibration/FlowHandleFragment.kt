@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -24,8 +25,10 @@ import com.just.machine.util.FixCountDownTime
 import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FragmentFlowHandleBinding
+import com.justsafe.libview.util.DateUtils
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Random
 
 /**
  * 手动流量定标
@@ -70,6 +73,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
     private lateinit var inFlowVol5DataSet: LineDataSet
     private lateinit var outFlowVol5DataSet: LineDataSet
 
+    private var isStart = false
     private var calibrateCount = 1 //定标计数器
     private var iflag = 0
     private var isZero = false
@@ -82,6 +86,9 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
     private var startSec = 0f
     private var startVol = 0f
     private var startFlow = 0f
+
+    private var inHaleFlowList = mutableListOf<FlowBean>()
+    private var exHaleFlowList = mutableListOf<FlowBean>()
 
     private val inHaleFlowAdapter by lazy {
         FlowAdapter(requireContext())
@@ -117,17 +124,17 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
             inHaleFlowAdapter.toggleItemBackground(position)
         }
 
-        inHaleFlowAdapter.setItemsBean(
-            mutableListOf(FlowBean(0, "", 1, "吸气容积1", "3", "3.003", "0.92"))
-        )
+//        inHaleFlowAdapter.setItemsBean(
+//            mutableListOf(FlowBean(0, "", 1, "吸气容积1", "3", "3.003", "0.92"))
+//        )
 
         exHaleFlowAdapter.setItemClickListener { _, position ->
             exHaleFlowAdapter.toggleItemBackground(position)
         }
 
-        exHaleFlowAdapter.setItemsBean(
-            mutableListOf(FlowBean(0, "", 1, "呼气容积1", "3", "2.993", "-1.44"))
-        )
+//        exHaleFlowAdapter.setItemsBean(
+//            mutableListOf(FlowBean(0, "", 1, "呼气容积1", "3", "2.993", "-1.44"))
+//        )
 
         viewModel.mEventHub.observe(this) {
             when (it.action) {
@@ -146,6 +153,10 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
             }
         }
         binding.llPullDirection.setNoRepeatListener {
+            if (!isStart) {
+                Toast.makeText(requireContext(), "定标未开始哟!", Toast.LENGTH_SHORT).show()
+                return@setNoRepeatListener
+            }
             if (isPull) {
                 mDownTime.start(object : FixCountDownTime.OnTimerCallBack {
                     override fun onStart() {
@@ -223,7 +234,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                                 )
                                 startSec += 0.05f
                                 startVol += 0.4f
-                                startFlow += 0.6f
+                                startFlow += 0.5f
                             }
 
                             9 -> {
@@ -241,7 +252,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                                 )
                                 startSec += 0.05f
                                 startVol += 0.5f
-                                startFlow += 0.7f
+                                startFlow += 0.6f
                             }
                         }
 
@@ -255,6 +266,20 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                     }
 
                     override fun onFinish() {
+                        inHaleFlowList.add(
+                            FlowBean(
+                                0,
+                                DateUtils.nowTimeString,
+                                1,
+                                "吸气容积1",
+                                "3",
+                                startVol.toString(),
+                                if (calibrateCount == 3) "-1.05" else "0.92"
+                            )
+                        )
+                        inHaleFlowAdapter.setItemsBean(
+                            inHaleFlowList
+                        )
                         mDownTime.setmTimes(20)
                         when (calibrateCount) {
                             1 -> {
@@ -362,7 +387,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                                 )
                                 startSec += 0.05f
                                 startVol += 0.4f
-                                startFlow += 0.6f
+                                startFlow += 0.5f
                             }
 
                             10 -> {
@@ -380,7 +405,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                                 )
                                 startSec += 0.05f
                                 startVol += 0.5f
-                                startFlow += 0.7f
+                                startFlow += 0.6f
                             }
                         }
                         binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
@@ -393,6 +418,20 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                     }
 
                     override fun onFinish() {
+                        exHaleFlowList.add(
+                            FlowBean(
+                                0,
+                                DateUtils.nowTimeString,
+                                1,
+                                "吸气容积1",
+                                "3",
+                                startVol.toString(),
+                                if (calibrateCount == 8) "-0.95" else "1.02"
+                            )
+                        )
+                        exHaleFlowAdapter.setItemsBean(
+                            exHaleFlowList
+                        )
                         mDownTime.setmTimes(20)
                         when (calibrateCount) {
                             2 -> {
@@ -444,6 +483,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
 
                         }
                     })
+                    isStart = true
                 }
             }
         }
@@ -451,6 +491,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
         LiveDataBus.get().with("flowStop").observe(this) {
             if (it is String) {
                 if (it == "handleFlow") {
+                    isStart = false
                 }
             }
         }
