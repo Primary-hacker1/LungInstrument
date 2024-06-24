@@ -7,10 +7,13 @@ import com.common.base.BaseDialogFragment
 import com.just.machine.model.Constants
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogLoadingBinding
+import dagger.hilt.android.AndroidEntryPoint
+
 /**
  *create by 2024/6/19
  * loading弹框
  */
+@AndroidEntryPoint
 class LoadingDialogFragment:  BaseDialogFragment<FragmentDialogLoadingBinding>() {
 
     private var dialogContent = ""

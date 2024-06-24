@@ -66,20 +66,35 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
+                    android:layout_marginEnd="30dp"
                     android:textColor="@color/text7"
                     android:textSize="14sp"
                     tools:ignore="RelativeOverlap" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:text="未连接"
-                    android:textSize="12sp" />
+                <ImageView
+                    android:id="@+id/iv_preheat_device_connect_status"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/warn_red" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="未连接"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/iv_preheat_device_calibrate_status"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/warn_red" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
                     android:text="未完成定标"
                     android:textSize="12sp" />
 
@@ -90,6 +105,7 @@
                     android:src="@mipmap/dianchi" />
 
                 <ImageView
+                    android:id="@+id/iv_preheat_close"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/close_2f89de" />

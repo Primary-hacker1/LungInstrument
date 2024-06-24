@@ -6,9 +6,12 @@ import com.common.base.BaseDialogFragment
 import com.common.base.setNoRepeatListener
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogSixminPermissionBinding
+import dagger.hilt.android.AndroidEntryPoint
+
 /**
  * 6分钟蓝牙设置和删除记录权限dialog
  */
+@AndroidEntryPoint
 class SixMinPermissionDialogFragment : BaseDialogFragment<FragmentDialogSixminPermissionBinding>() {
 
     private lateinit var listener: SixMinPermissionDialogListener

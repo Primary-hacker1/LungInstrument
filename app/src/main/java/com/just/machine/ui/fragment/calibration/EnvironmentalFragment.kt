@@ -17,6 +17,7 @@ import com.just.machine.ui.fragment.serial.MudbusProtocol
 import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.common.base.BaseUtil
+import com.just.machine.ui.dialog.LungCommonDialogFragment
 import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FragmentEnvironmentalBinding
@@ -146,7 +147,9 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
                 )
             )
             lockButtonStyle()
-            Toast.makeText(requireContext(), "保存成功!", Toast.LENGTH_SHORT).show()
+            LungCommonDialogFragment.startCommonDialogFragment(
+                requireActivity().supportFragmentManager, "保存成功!","1"
+            )
         }
 
         LiveDataBus.get().with(Constants.serialCallback).observe(this) {//解析串口消息

@@ -15,10 +15,12 @@ import com.just.machine.ui.adapter.SixMinReportPatientSelfAdapter
 import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogSixminReportSelfCheckBeforeTestBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * 6分钟选择试验前呼吸和疲劳状况等级dialog
  */
+@AndroidEntryPoint
 class SixMinReportSelfCheckBeforeTestFragment :
     BaseDialogFragment<FragmentDialogSixminReportSelfCheckBeforeTestBinding>() {
 

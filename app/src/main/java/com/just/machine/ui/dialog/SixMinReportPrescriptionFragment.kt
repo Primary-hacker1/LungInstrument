@@ -13,10 +13,12 @@ import com.just.machine.model.sixminreport.SixMinReportPrescription
 import com.just.machine.util.SpinnerHelper
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogSixminReportPrescriptionBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * 6分钟预生成报告选择处方参数dialog
  */
+@AndroidEntryPoint
 class SixMinReportPrescriptionFragment :
     BaseDialogFragment<FragmentDialogSixminReportPrescriptionBinding>() {
 

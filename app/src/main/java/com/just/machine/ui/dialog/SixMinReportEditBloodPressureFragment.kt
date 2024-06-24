@@ -9,10 +9,12 @@ import com.just.machine.model.Constants
 import com.just.machine.model.SixMinReportEditBloodPressure
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogSixminReportEditPressureBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * 6分钟预生成报告编辑血压dialog
  */
+@AndroidEntryPoint
 class SixMinReportEditBloodPressureFragment :
     BaseDialogFragment<FragmentDialogSixminReportEditPressureBinding>() {
 
