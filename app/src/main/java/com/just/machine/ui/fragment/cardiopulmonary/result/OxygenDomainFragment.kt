@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
-import com.common.network.LogUtils
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.databinding.FragmentOxygenDomainBinding
 import dagger.hilt.android.AndroidEntryPoint

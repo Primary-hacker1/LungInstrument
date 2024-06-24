@@ -12,25 +12,29 @@
         android:label="mainFragment"
         tools:layout="@layout/fragment_main">
         <action
-            android:id="@+id/action_MainFragment_to_NewFragment"
-            app:destination="@id/newFragment" />
+            android:id="@+id/action_MainFragment_to_fragmentDynamic"
+            app:destination="@id/fragmentDynamic" />
         <action
-            android:id="@+id/action_mainFragment_to_meFragment"
-            app:destination="@id/meFragment" />
+            android:id="@+id/action_mainFragment_to_fragmentDynamicResult"
+            app:destination="@id/fragmentDynamicResult" />
     </fragment_navigator>
 
     <fragment_navigator
-        android:id="@+id/newFragment"
-        android:name="com.just.machine.ui.fragment.NewFragment"
+        android:id="@+id/fragmentDynamic"
+        android:name="com.just.machine.ui.fragment.cardiopulmonary.DynamicFragment"
         android:label="newFragment"
-        tools:layout="@layout/fragment_new" />
+        tools:layout="@layout/fragment_dynamic" />
 
     <fragment_navigator
-        android:id="@+id/meFragment"
-        android:name="com.just.machine.ui.fragment.MeFragment"
-        android:label="meFragment"
-        tools:layout="@layout/fragment_me">
+            android:id="@+id/fragmentDynamicResult"
+            android:name="com.just.machine.ui.fragment.cardiopulmonary.DynamicResultFragment"
+            android:label="newFragment"
+            tools:layout="@layout/fragment_dynamic_result" />
 
-    </fragment_navigator>
+    <fragment_navigator
+            android:id="@+id/fragmentDynamicSetting"
+            android:name="com.just.machine.ui.fragment.setting.DynamicSettingFragment"
+            android:label="newFragment"
+            tools:layout="@layout/fragment_dynamic_setting" />
 
 </navigation>
