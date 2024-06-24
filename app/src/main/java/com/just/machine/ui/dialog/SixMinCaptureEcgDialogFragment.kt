@@ -13,6 +13,7 @@ import com.just.machine.util.ECGDataParse
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogSixminCaptureEcgBinding
 import com.seeker.luckychart.soft.LuckySoftRenderer
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -20,6 +21,7 @@ import kotlinx.coroutines.withContext
 /**
  * 6分钟心电截图dialog
  */
+@AndroidEntryPoint
 class SixMinCaptureEcgDialogFragment : BaseDialogFragment<FragmentDialogSixminCaptureEcgBinding>() {
 
     private lateinit var listener: CaptureEcgDialogListener

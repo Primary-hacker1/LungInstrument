@@ -9,7 +9,9 @@ import com.common.base.setNoRepeatListener
 import com.just.machine.model.Constants
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogLungCommonBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LungCommonDialogFragment : BaseDialogFragment<FragmentDialogLungCommonBinding>() {
 
     private var dialogContent = ""//dialog内容
