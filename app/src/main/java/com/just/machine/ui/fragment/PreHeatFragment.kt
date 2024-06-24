@@ -66,6 +66,9 @@ class PreHeatFragment : CommonBaseFragment<FragmentPreheatBinding>() {
             MainActivity.startMainActivity(activity)
             activity?.finish()
         }
+        binding.ivPreheatClose.setNoRepeatListener {
+            activity?.finish()
+        }
     }
 
     override fun getViewBinding(

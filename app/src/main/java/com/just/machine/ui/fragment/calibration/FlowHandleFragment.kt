@@ -20,6 +20,8 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.ui.adapter.calibration.FlowAdapter
+import com.just.machine.ui.dialog.CommonDialogFragment
+import com.just.machine.ui.dialog.LoadingDialogFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.FixCountDownTime
 import com.just.machine.util.LiveDataBus
@@ -29,6 +31,8 @@ import com.justsafe.libview.util.DateUtils
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Random
+import java.util.Timer
+import kotlin.concurrent.fixedRateTimer
 
 /**
  *create by 2024/6/19
@@ -42,6 +46,8 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
     private var isPull = true
     private lateinit var mCountDownTime: FixCountDownTime
     private lateinit var mDownTime: FixCountDownTime
+    private lateinit var timer: Timer
+    private lateinit var startLoadingDialogFragment: LoadingDialogFragment
 
     // 容量-时间
     private lateinit var inVolSec1DataSet: LineDataSet
@@ -77,7 +83,9 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
 
     private var isStart = false
     private var calibrateCount = 1 //定标计数器
-    private var iflag = 0
+    private var iFlag = 0
+    private var time = 0
+    private var isStop = false
     private var isZero = false
     private var ftemplow = 0
     private var ftemphigh = 0
@@ -107,7 +115,37 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun initView() {
-        mCountDownTime = object : FixCountDownTime(8, 1000) {}
+        timer = fixedRateTimer("",false,0,1000){
+            if(iFlag == 1){
+                time++
+                if(isZero){
+                    time = 0
+                    isStop = true
+                    startLoadingDialogFragment.dismiss()
+                    timer.cancel()
+                }else if(time == 8){
+                    startLoadingDialogFragment.dismiss()
+                    val startSixMinCommonDialogFragment = CommonDialogFragment.startCommonDialogFragment(
+                        requireActivity().supportFragmentManager, "校验超时!"
+                    )
+                    startSixMinCommonDialogFragment.setCommonDialogOnClickListener(object :
+                        CommonDialogFragment.CommonDialogClickListener {
+                        override fun onPositiveClick() {
+
+                        }
+
+                        override fun onNegativeClick() {
+
+                        }
+
+                        override fun onStopNegativeClick(stopReason: String) {
+
+                        }
+                    })
+                    timer.cancel()
+                }
+            }
+        }
         mDownTime = object : FixCountDownTime(20, 1000) {}
         binding.rvFlowHandleInhale.layoutManager = LinearLayoutManager(requireContext())
 
@@ -472,20 +510,11 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
             if (it is String) {
                 if (it == "handleFlow") {
                     //开始手动定标
-                    mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack {
-                        override fun onStart() {
-
-                        }
-
-                        override fun onTick(times: Int) {
-
-                        }
-
-                        override fun onFinish() {
-
-                        }
-                    })
                     isStart = true
+                    startLoadingDialogFragment = LoadingDialogFragment.startLoadingDialogFragment(
+                        requireActivity().supportFragmentManager, "正在校零..."
+                    )
+                    iFlag = 1
                 }
             }
         }

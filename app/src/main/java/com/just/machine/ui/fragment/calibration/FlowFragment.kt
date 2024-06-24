@@ -89,10 +89,8 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
                 //手动流量定标
                 if (binding.vpFlowTitle.currentItem == 0) {
                     LiveDataBus.get().with("flowStop").value = "handleFlow"
-                    SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)//发送手动流量定标
                 } else {
                     LiveDataBus.get().with("flowStop").value = "autoFlow"
-                    SerialPortManager.sendMessage(MudbusProtocol.FLOW_AUTO_CALIBRATION_COMMAND)//发送自动流量定标
                 }
                 binding.tvFlowStart.text = "开始"
             }
