@@ -7,6 +7,11 @@ import com.just.machine.dao.calibration.IngredientBean
 import com.just.news.R
 import com.just.news.databinding.ItemIngredientBinding
 
+/**
+ *create by 2024/6/6
+ * 成分定标适配器
+ *@author zt
+ */
 class IngredientAdapter(val context: Context) :
     BaseRecyclerViewAdapter<IngredientBean, ItemIngredientBinding>() {
 

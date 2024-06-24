@@ -161,12 +161,12 @@ class DyCalculeSerializeCore {
         val breathOutEndIndex = model.breathoutEndIndex
         val dyBreathInOutData = CPXBreathInOutData()
 //        val cpxBreathInOutDataBase = CPXBreathInOutDataBase()
-        LogUtils.d(tag + model.toString() + ",dylist.size=" + dylist.size)
+//        LogUtils.d(tag + model.toString() + ",dylist.size=" + dylist.size)
 
         if (dylist.isEmpty()) {
             return CPXBreathInOutData() // 返回一个空的 CPXBreathInOutData 对象
         }
-        LogUtils.e(tag + dylist.toString())
+//        LogUtils.e(tag + dylist.toString())
         val dy = dylist[model.breathoutEndIndex]
 
         cpxBreathInOutDataBase.EndRealIndex = dy.index

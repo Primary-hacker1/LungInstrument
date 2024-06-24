@@ -5,7 +5,11 @@ import com.common.base.BaseRecyclerViewAdapter
 import com.just.news.R
 import com.just.news.databinding.ItemDynamicDataTitleBinding
 
-
+/**
+ *create by 2024/6/6
+ * 动态肺数据标题适配器
+ *@author zt
+ */
 class DynamicDataTitleAdapter(val context: Context) :
     BaseRecyclerViewAdapter<String, ItemDynamicDataTitleBinding>() {
 

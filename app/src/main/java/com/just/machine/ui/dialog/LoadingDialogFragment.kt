@@ -8,7 +8,8 @@ import com.just.machine.model.Constants
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogLoadingBinding
 /**
- * loading弹窗
+ *create by 2024/6/19
+ * loading弹框
  */
 class LoadingDialogFragment:  BaseDialogFragment<FragmentDialogLoadingBinding>() {
 

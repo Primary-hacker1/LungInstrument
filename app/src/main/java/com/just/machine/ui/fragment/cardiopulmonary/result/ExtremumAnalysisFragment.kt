@@ -3,19 +3,15 @@ package com.just.machine.ui.fragment.cardiopulmonary.result
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
-import com.common.network.LogUtils
-import com.just.machine.model.Constants
 import com.just.machine.ui.viewmodel.MainViewModel
-import com.just.machine.util.LiveDataBus
 import com.just.news.databinding.FragmentExtremumAnalysisBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 
 /**
- *create by 2020/6/19
+ *create by 2024/6/19
  * 运动极值分析散点图
  *@author zt
  */

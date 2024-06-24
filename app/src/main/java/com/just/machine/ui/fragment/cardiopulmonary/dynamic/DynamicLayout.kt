@@ -14,7 +14,11 @@ import com.just.machine.ui.adapter.CustomSpinnerAdapter
 import com.just.news.R
 import com.just.news.databinding.DynamicLayoutBinding
 
-
+/**
+ *create by 2024/4/2
+ * 动态肺的自定义布局
+ *@author zt
+ */
 class DynamicLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,

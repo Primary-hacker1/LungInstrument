@@ -12,6 +12,11 @@ import com.just.news.R
 import com.justsafe.libview.nav.FragmentNavigatorHideShow
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ *create by 2024/6/6
+ * 登陆界面
+ *@author zt
+ */
 @AndroidEntryPoint
 class LoginActivity : CommonBaseActivity<ActivityLoginBinding>() {//布局ID
 

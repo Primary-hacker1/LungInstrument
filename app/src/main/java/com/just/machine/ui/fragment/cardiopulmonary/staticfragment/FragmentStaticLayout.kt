@@ -18,6 +18,11 @@ import com.just.news.R
 import com.just.news.databinding.FragmentLungBinding
 import lecho.lib.hellocharts.model.PointValue
 
+/**
+ *create by 2024/4/2
+ * 静态肺的自定义布局封装
+ *@author zt
+ */
 class FragmentStaticLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,

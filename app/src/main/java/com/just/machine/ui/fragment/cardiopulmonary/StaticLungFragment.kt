@@ -5,13 +5,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
-import com.common.network.LogUtils
 import com.just.machine.ui.adapter.FragmentChildAdapter
-import com.just.machine.ui.adapter.FragmentPagerAdapter
 import com.just.machine.ui.fragment.cardiopulmonary.staticfragment.BreatheHardInFragment
 import com.just.machine.ui.fragment.cardiopulmonary.staticfragment.MaxVentilationFragment
 import com.just.machine.ui.fragment.cardiopulmonary.staticfragment.RoutineLungFragment
@@ -22,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 /**
- *create by 2020/6/19
+ *create by 2024/6/19
  * 静态肺测试
  *@author zt
  */

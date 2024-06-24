@@ -21,7 +21,7 @@ import com.just.news.databinding.FragmentCalibrationBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
- *create by 2020/6/19
+ *create by 2024/6/19
  * 定标界面
  *@author zt
  */

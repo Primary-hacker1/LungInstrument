@@ -7,6 +7,11 @@ import com.just.machine.dao.calibration.EnvironmentalCalibrationBean
 import com.just.news.R
 import com.just.news.databinding.ItemEnvironmentalBinding
 
+/**
+ *create by 2024/6/6
+ * 环境定标适配器
+ *@author zt
+ */
 class EnvironmentalAdapter(val context: Context) :
     BaseRecyclerViewAdapter<EnvironmentalCalibrationBean, ItemEnvironmentalBinding>() {
 

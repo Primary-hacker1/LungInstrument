@@ -10,7 +10,6 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.common.network.LogUtils
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.ScatterData
 import com.github.mikephil.charting.interfaces.datasets.IScatterDataSet
@@ -22,7 +21,11 @@ import com.just.news.databinding.FragmentResultBinding
 import com.justsafe.libview.chart.ResultScatterChart
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
 
-
+/**
+ *create by 2024/4/2
+ *运动评估的自定义布局封装
+ *@author zt
+ */
 class FragmentResultLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -49,14 +52,6 @@ class FragmentResultLayout @JvmOverloads constructor(
     private var dynamicResultBeans: MutableList<DynamicResultBean> = ArrayList()//动态结果数据
 
     private var dragLinePosition: Float = 10f // 初始位置
-
-    private lateinit var scatterChart1: ResultScatterChart
-
-    private lateinit var scatterChart2: ResultScatterChart
-
-    private lateinit var scatterChart3: ResultScatterChart
-
-    private lateinit var scatterChart4: ResultScatterChart
 
     enum class ChartLayout {
         EXTREMUM,//极值分析

@@ -7,6 +7,11 @@ import com.just.machine.dao.calibration.FlowBean
 import com.just.news.R
 import com.just.news.databinding.ItemFlowBinding
 
+/**
+ *create by 2024/6/6
+ * 流量定标适配器
+ *@author zt
+ */
 class FlowAdapter(val context: Context) :
     BaseRecyclerViewAdapter<FlowBean, ItemFlowBinding>() {
 

@@ -56,7 +56,7 @@ import java.math.BigDecimal
 
 
 /**
- *create by 2024/2/27
+ *create by 2024/6/27
  * 患者信息
  *@author zt
  */

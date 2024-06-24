@@ -36,7 +36,7 @@ import java.util.Locale
 
 
 /**
- *create by 2020/6/19
+ *create by 2024/6/19
  * 动态肺测试
  *@author zt
  */
@@ -184,7 +184,7 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
         //        viewModel.insertCPXBreathInOutData(cpxBreathInOutData) // 插入数据库
 
-        LogUtils.e(tag + cpxBreathInOutData.toString())
+//        LogUtils.e(tag + cpxBreathInOutData.toString())
         LiveDataBus.get().with("动态心肺测试").postValue(cpxBreathInOutData)
     }
 

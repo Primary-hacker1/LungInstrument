@@ -10,6 +10,12 @@ import com.just.machine.model.CPETParameter
 import com.just.news.R
 import com.justsafe.libview.text.MarqueeTextView
 
+
+/**
+ *create by 2024/3/6
+ * 运动肺部的右边实时动态参数控件
+ *@author zt
+ */
 class CustomSpinnerAdapter(context: Context, private val dataList: MutableList<CPETParameter>? = ArrayList()) :
     ArrayAdapter<CPETParameter>(context, R.layout.custom_spinner_item, dataList!!) {
 

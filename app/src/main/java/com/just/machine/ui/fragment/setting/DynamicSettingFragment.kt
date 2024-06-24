@@ -15,7 +15,7 @@ import com.just.news.databinding.FragmentDynamicSettingBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
- *create by 2020/6/19
+ *create by 2024/6/19
  * 运动肺设置
  *@author zt
  */

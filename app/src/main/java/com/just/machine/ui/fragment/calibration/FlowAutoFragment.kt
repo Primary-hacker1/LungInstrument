@@ -23,7 +23,9 @@ import java.util.Random
 
 
 /**
+ *create by 2024/6/19
  * 自动流量定标
+ *@author zt
  */
 @AndroidEntryPoint
 class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {

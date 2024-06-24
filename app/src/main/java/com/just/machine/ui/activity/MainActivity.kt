@@ -18,6 +18,11 @@ import com.justsafe.libview.nav.FragmentNavigatorHideShow
 import dagger.hilt.android.AndroidEntryPoint
 
 
+/**
+ *create by 2024/6/6
+ * 主界面（开启串口之类的操作，权限开启）
+ *@author zt
+ */
 @AndroidEntryPoint
 class MainActivity : CommonBaseActivity<ActivityMainBinding>() {
 

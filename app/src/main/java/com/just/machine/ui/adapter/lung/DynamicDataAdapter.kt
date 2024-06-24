@@ -7,6 +7,11 @@ import com.just.news.R
 import com.just.news.databinding.ItemDynamicDataBinding
 
 
+/**
+ *create by 2024/6/6
+ * 动态肺数据适配器
+ *@author zt
+ */
 class DynamicDataAdapter(val context: Context) :
     BaseRecyclerViewAdapter<CPXBreathInOutData, ItemDynamicDataBinding>() {
 

@@ -4,12 +4,16 @@ import android.content.Context
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.common.base.BaseRecyclerViewAdapter
-import com.common.base.gone
-import com.common.base.visible
 import com.just.machine.model.lungdata.RoutineLungBean
 import com.just.news.R
 import com.just.news.databinding.ItemRoutineBinding
 
+
+/**
+ *create by 2024/6/6
+ * 常规肺适配器
+ *@author zt
+ */
 class RoutineLungAdapter(val context: Context) :
     BaseRecyclerViewAdapter<RoutineLungBean, ItemRoutineBinding>() {
 

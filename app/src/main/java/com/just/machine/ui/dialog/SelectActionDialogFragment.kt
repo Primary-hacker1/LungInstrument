@@ -6,12 +6,15 @@ import android.view.View
 import androidx.fragment.app.FragmentManager
 import com.common.base.BaseDialogFragment
 import com.common.base.setNoRepeatListener
-import com.just.machine.dao.PatientBean
 import com.just.machine.model.Constants
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogSelectActionBinding
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ *create by 2024/6/19
+ * 操作记录弹框
+ */
 @AndroidEntryPoint
 class SelectActionDialogFragment : BaseDialogFragment<FragmentDialogSelectActionBinding>() {
 

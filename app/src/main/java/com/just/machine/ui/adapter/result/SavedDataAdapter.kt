@@ -10,6 +10,11 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.just.news.R
 
+/**
+ *create by 2024/6/6
+ * 运动评估终止保存原因适配器
+ *@author zt
+ */
 class SavedDataAdapter(
     private val context: Context,
     private val data: MutableList<String>,

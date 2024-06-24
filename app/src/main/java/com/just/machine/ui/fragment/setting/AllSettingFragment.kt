@@ -23,6 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 /**
  *create by 2024/5/19
  *@author zt
+ * 心肺通用设置
  */
 @AndroidEntryPoint
 class AllSettingFragment : CommonBaseFragment<FragmentAllSettingBinding>() {

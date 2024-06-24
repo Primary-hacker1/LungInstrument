@@ -3,6 +3,11 @@ package com.just.machine.ui.adapter
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
+/**
+ *create by 2024/3/6
+ * 子fragment的管理容器
+ *@author zt
+ */
 class FragmentChildAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
     private val fragments = mutableListOf<Fragment>()
     private val fragmentNames = mutableListOf<String>()

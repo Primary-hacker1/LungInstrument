@@ -18,7 +18,7 @@ import com.just.news.databinding.FrgamentStaticSettingBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
- *create by 2018/6/19
+ *create by 2024/6/19
  * 静态肺设置
  *@author zt
  */

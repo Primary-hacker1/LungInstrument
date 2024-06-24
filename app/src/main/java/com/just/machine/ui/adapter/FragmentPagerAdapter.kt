@@ -5,6 +5,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
+/**
+ *create by 2024/3/6
+ * 父fragment的管理工具
+ *@author zt
+ */
 class FragmentPagerAdapter(fragmentActivity: FragmentActivity) :
     FragmentStateAdapter(fragmentActivity) {
 

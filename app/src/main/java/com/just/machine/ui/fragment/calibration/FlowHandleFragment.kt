@@ -25,7 +25,9 @@ import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
+ *create by 2024/6/19
  * 手动流量定标
+ *@author zt
  */
 @AndroidEntryPoint
 class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {

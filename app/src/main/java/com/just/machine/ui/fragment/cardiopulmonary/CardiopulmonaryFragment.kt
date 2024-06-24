@@ -9,17 +9,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.common.base.CommonBaseFragment
-import com.common.base.gone
 import com.common.base.setNoRepeatListener
 import com.common.base.visible
-import com.common.network.LogUtils
 import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.FragmentChildAdapter
-import com.just.machine.ui.adapter.FragmentPagerAdapter
 import com.just.machine.ui.fragment.NewFragment
-import com.just.machine.ui.fragment.calibration.CalibrationFragment
-import com.just.machine.ui.fragment.calibration.EnvironmentalFragment
-import com.just.machine.ui.fragment.setting.CardiopulmonarySettingFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.FragmentCardiopulmonaryBinding
@@ -28,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 /**
- *create by 2020/6/19
+ *create by 2024/6/19
  * 心肺测试
  *@author zt
  */

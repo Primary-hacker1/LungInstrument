@@ -13,7 +13,8 @@ import com.just.news.databinding.FragmentDialogCommonBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
- * 普通弹窗
+ *create by 2024/6/19
+ * 普通弹框
  */
 @AndroidEntryPoint
 class CommonDialogFragment : BaseDialogFragment<FragmentDialogCommonBinding>() {

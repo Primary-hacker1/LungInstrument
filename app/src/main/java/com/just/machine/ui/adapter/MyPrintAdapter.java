@@ -23,6 +23,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ *create by 2024/3/6
+ * PDF生成打印类
+ */
 public class MyPrintAdapter extends PrintDocumentAdapter {
 
     private Context context;

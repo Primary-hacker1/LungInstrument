@@ -1,20 +1,16 @@
 package com.just.machine.ui.fragment.setting
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.common.base.CommonBaseFragment
 import com.common.base.gone
 import com.common.base.setNoRepeatListener
 import com.common.base.visible
-import com.common.network.LogUtils
 import com.just.machine.model.Constants.Companion.settingsAreSaved
 import com.just.machine.ui.adapter.FragmentChildAdapter
 import com.just.machine.ui.viewmodel.MainViewModel
@@ -23,7 +19,11 @@ import com.just.news.R
 import com.just.news.databinding.FragmentCardiopulmonarySettingBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-
+/**
+ *create by 2024/5/19
+ *@author zt
+ * 心肺设置
+ */
 @AndroidEntryPoint
 class CardiopulmonarySettingFragment : CommonBaseFragment<FragmentCardiopulmonarySettingBinding>() {
 
