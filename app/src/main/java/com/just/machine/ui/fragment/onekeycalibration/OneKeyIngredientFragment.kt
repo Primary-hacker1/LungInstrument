@@ -27,8 +27,8 @@ import java.util.Random
 class OneKeyIngredientFragment : CommonBaseFragment<FragmentOnekeyIngredientBinding>() {
 
     private lateinit var mCountDownTime: FixCountDownTime
-    private lateinit var tempDataSet: LineDataSet
-    private lateinit var actualDataSet: LineDataSet
+    private lateinit var actualO2DataSet: LineDataSet
+    private lateinit var actualCO2DataSet: LineDataSet
 
     private val o2Adapter by lazy {
         IngredientAdapter(requireContext())
@@ -157,27 +157,27 @@ class OneKeyIngredientFragment : CommonBaseFragment<FragmentOnekeyIngredientBind
                 formSize = 0f
             }
 
-            tempDataSet = LineDataSet(null, "")
-            tempDataSet.lineWidth = 1.0f
-            tempDataSet.color = ContextCompat.getColor(requireContext(), R.color.green)
-            tempDataSet.setDrawValues(false)
-            tempDataSet.setDrawCircles(false)
-            tempDataSet.setDrawCircleHole(false)
-            tempDataSet.setDrawFilled(false)
-            tempDataSet.mode = LineDataSet.Mode.LINEAR
+            actualO2DataSet = LineDataSet(null, "")
+            actualO2DataSet.lineWidth = 1.0f
+            actualO2DataSet.color = ContextCompat.getColor(requireContext(), R.color.green)
+            actualO2DataSet.setDrawValues(false)
+            actualO2DataSet.setDrawCircles(false)
+            actualO2DataSet.setDrawCircleHole(false)
+            actualO2DataSet.setDrawFilled(false)
+            actualO2DataSet.mode = LineDataSet.Mode.LINEAR
 
-            actualDataSet = LineDataSet(null, "")
-            actualDataSet.lineWidth = 1.0f
-            actualDataSet.color = ContextCompat.getColor(requireContext(), R.color.colorTextOrange)
-            actualDataSet.setDrawValues(false)
-            actualDataSet.setDrawCircles(false)
-            actualDataSet.setDrawCircleHole(false)
-            actualDataSet.setDrawFilled(false)
-            actualDataSet.mode = LineDataSet.Mode.LINEAR
+            actualCO2DataSet = LineDataSet(null, "")
+            actualCO2DataSet.lineWidth = 1.0f
+            actualCO2DataSet.color = ContextCompat.getColor(requireContext(), R.color.colorTextOrange)
+            actualCO2DataSet.setDrawValues(false)
+            actualCO2DataSet.setDrawCircles(false)
+            actualCO2DataSet.setDrawCircleHole(false)
+            actualCO2DataSet.setDrawFilled(false)
+            actualCO2DataSet.mode = LineDataSet.Mode.LINEAR
 
             val lineDataSets: MutableList<ILineDataSet> = ArrayList()
-            lineDataSets.add(tempDataSet)
-            lineDataSets.add(actualDataSet)
+            lineDataSets.add(actualO2DataSet)
+            lineDataSets.add(actualCO2DataSet)
             val lineData = LineData(lineDataSets)
             data = lineData
         }
@@ -193,8 +193,8 @@ class OneKeyIngredientFragment : CommonBaseFragment<FragmentOnekeyIngredientBind
                 binding.tvOnekeyActualO2.text = "O2(%): ${Random().nextInt(30).toFloat()}"
                 binding.tvOnekeyActualCo2.text = "CO2(%): ${Random().nextInt(30).toFloat()}"
                 val index = 50 - times
-                tempDataSet.addEntry(Entry(index.toFloat(),Random().nextInt(30).toFloat()))
-                actualDataSet.addEntry(Entry(index.toFloat(),Random().nextInt(30).toFloat()))
+                actualO2DataSet.addEntry(Entry(index.toFloat(),Random().nextInt(30).toFloat()))
+                actualCO2DataSet.addEntry(Entry(index.toFloat(),Random().nextInt(30).toFloat()))
 
                 binding.chartIngredientOnekey.lineData.notifyDataChanged()
                 binding.chartIngredientOnekey.notifyDataSetChanged()

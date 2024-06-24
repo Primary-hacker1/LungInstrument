@@ -7,70 +7,159 @@
 
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorWhite"
-        android:gravity="center"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="200dp">
-
-            <ProgressBar
-                android:id="@+id/pb_preheat"
-                style="@android:style/Widget.ProgressBar.Horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:max="100" />
-
-            <TextView
-                android:id="@+id/tv_preheat_progress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:paddingHorizontal="200dp">
-
-            <TextView
-                android:id="@+id/tv_preheat_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:textSize="13sp" />
+            app:cardBackgroundColor="#f5fcff"
+            tools:ignore="NestedWeights">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:orientation="horizontal">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="便携式心肺功能测试系统"
+                        android:textSize="13sp" />
+
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="15dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@color/text3" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="测试系统"
+                        android:textColor="@color/text3"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tv_preheat_remain_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="30dp"
-                    android:textSize="13sp" />
+                    android:text="系统时间:"
+                    android:textSize="14sp" />
+
+                <com.just.machine.util.TimeView
+                    android:id="@+id/tv_system_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@color/text7"
+                    android:textSize="14sp"
+                    tools:ignore="RelativeOverlap" />
 
                 <TextView
-                    android:id="@+id/tv_skip_preheat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="跳过"
-                    android:textColor="@color/font_blue"
-                    android:textSize="13sp" />
+                    android:layout_marginHorizontal="10dp"
+                    android:text="未连接"
+                    android:textSize="12sp" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="未完成定标"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:src="@mipmap/dianchi" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/close_2f89de" />
             </LinearLayout>
 
-        </RelativeLayout>
+        </androidx.cardview.widget.CardView>
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:paddingHorizontal="200dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ProgressBar
+                    android:id="@+id/pb_preheat"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:max="100" />
+
+                <TextView
+                    android:id="@+id/tv_preheat_progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:id="@+id/tv_preheat_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="13sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_preheat_remain_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="30dp"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tv_skip_preheat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="跳过"
+                        android:textColor="@color/font_blue"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </layout>
