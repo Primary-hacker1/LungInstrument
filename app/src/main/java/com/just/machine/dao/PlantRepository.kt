@@ -25,6 +25,8 @@ class PlantRepository @Inject constructor(private val plantDao: PlantDao) {
 
     suspend fun insertAll(plants: List<PatientBean>) = plantDao.insertAll(plants)
 
+    suspend fun updateBean(plants: PatientBean) = plantDao.updateBean(plants)
+
     suspend fun insertPatient(patients: PatientBean): Long = plantDao.insertPatient(patients)
 
     fun getMaxPatient(): Flow<PatientBean>? = plantDao.getMaxPatient()

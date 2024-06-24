@@ -1,4 +1,4 @@
-package com.just.machine.ui.fragment.onekeycalibration
+package com.just.machine.ui.fragment.calibration.onekeycalibration
 
 import android.text.Html
 import android.view.LayoutInflater
