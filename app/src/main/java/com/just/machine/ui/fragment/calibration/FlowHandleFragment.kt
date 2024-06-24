@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
@@ -20,8 +21,10 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.ui.adapter.calibration.FlowAdapter
-import com.just.machine.ui.dialog.CommonDialogFragment
 import com.just.machine.ui.dialog.LoadingDialogFragment
+import com.just.machine.ui.dialog.LungCommonDialogFragment
+import com.just.machine.ui.fragment.serial.MudbusProtocol
+import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.FixCountDownTime
 import com.just.machine.util.LiveDataBus
@@ -30,9 +33,11 @@ import com.just.news.databinding.FragmentFlowHandleBinding
 import com.justsafe.libview.util.DateUtils
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Random
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.Timer
 import kotlin.concurrent.fixedRateTimer
+
 
 /**
  *create by 2024/6/19
@@ -44,7 +49,6 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
     private var isPull = true
-    private lateinit var mCountDownTime: FixCountDownTime
     private lateinit var mDownTime: FixCountDownTime
     private lateinit var timer: Timer
     private lateinit var startLoadingDialogFragment: LoadingDialogFragment
@@ -125,23 +129,9 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                     timer.cancel()
                 }else if(time == 8){
                     startLoadingDialogFragment.dismiss()
-                    val startSixMinCommonDialogFragment = CommonDialogFragment.startCommonDialogFragment(
-                        requireActivity().supportFragmentManager, "校验超时!"
+                    LungCommonDialogFragment.startCommonDialogFragment(
+                        requireActivity().supportFragmentManager, "校验超时!","2"
                     )
-                    startSixMinCommonDialogFragment.setCommonDialogOnClickListener(object :
-                        CommonDialogFragment.CommonDialogClickListener {
-                        override fun onPositiveClick() {
-
-                        }
-
-                        override fun onNegativeClick() {
-
-                        }
-
-                        override fun onStopNegativeClick(stopReason: String) {
-
-                        }
-                    })
                     timer.cancel()
                 }
             }
@@ -511,10 +501,17 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                 if (it == "handleFlow") {
                     //开始手动定标
                     isStart = true
-                    startLoadingDialogFragment = LoadingDialogFragment.startLoadingDialogFragment(
-                        requireActivity().supportFragmentManager, "正在校零..."
-                    )
-                    iFlag = 1
+                    stopPortSend()
+                    lifecycleScope.launch {
+                        delay(100)
+                        isZeroSuccess()
+                    }
+                    lifecycleScope.launch {
+                        delay(100)
+                        if(isZero){
+
+                        }
+                    }
                 }
             }
         }
@@ -984,5 +981,25 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
         }
 
         return list
+    }
+
+
+    private fun isZeroSuccess() {
+        //此处添加零位校验代码
+        iFlag = 1
+        isZero = false
+        try {
+            isStop = false
+            SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)
+            startLoadingDialogFragment = LoadingDialogFragment.startLoadingDialogFragment(
+                requireActivity().supportFragmentManager, "正在校零..."
+            )
+        } catch (ex: Exception) {
+            Toast.makeText(requireContext(),ex.message,Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun stopPortSend() {
+        SerialPortManager.sendMessage(MudbusProtocol.FLOW_STOP_COMMAND)
     }
 }
