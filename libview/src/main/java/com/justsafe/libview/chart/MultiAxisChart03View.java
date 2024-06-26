@@ -35,22 +35,22 @@ public class MultiAxisChart03View extends DemoView {
 	//用来显示面积图，左边及底部的轴
 	private final AreaChart chart = new AreaChart();
 	//标签集合
-	private final LinkedList<String> mLabels = new LinkedList<String>();
+	private final LinkedList<String> mLabels = new LinkedList<>();
 	//数据集合
-	private final LinkedList<AreaData> mDataset = new LinkedList<AreaData>();
+	private final LinkedList<AreaData> mDataset = new LinkedList<>();
 	
 	//用来显示折线,右边及顶部的轴
-	private LineChart chartLn = new LineChart();
-	private final LinkedList<LineData> chartData = new LinkedList<LineData>();
+	private final LineChart chartLn = new LineChart();
+	private final LinkedList<LineData> chartData = new LinkedList<>();
 	
 	//曲线图，用来显示最两边的两条竖轴
 	private final SplineChart chartLnAxes = new SplineChart();
-	private final LinkedList<SplineData> chartDataAxes = new LinkedList<SplineData>();
-	private final LinkedList<String> mLabelsAxes = new LinkedList<String>();
+	private final LinkedList<SplineData> chartDataAxes = new LinkedList<>();
+	private final LinkedList<String> mLabelsAxes = new LinkedList<>();
 	
 	//饼图
 	private final PieChart chartPie = new PieChart();
-	private final LinkedList<PieData> chartDataPie = new LinkedList<PieData>();
+	private final LinkedList<PieData> chartDataPie = new LinkedList<>();
 	
 	private final Paint mPaintTooltips = new Paint(Paint.ANTI_ALIAS_FLAG);
 		
@@ -141,13 +141,13 @@ public class MultiAxisChart03View extends DemoView {
 			//	chart.getCategoryAxis().hideAxisLine();
 				chart.getCategoryAxis().hideTickMarks();	
 				
-				chart.getDataAxis().setTickLabelRotateAngle(0);
+				chart.getDataAxis().setTickLabelRotateAngle(-45);
 				chart.getDataAxis().getTickLabelPaint().setColor(Color.RED); 
 				chart.getCategoryAxis().getTickLabelPaint().setColor(Color.RED);
 			
 				//标题
-				chart.setTitle("混合图(区域、折线、饼图)");
-				chart.addSubtitle("(XCL-Charts Demo)");	
+//				chart.setTitle("混合图(区域、折线、饼图)");
+//				chart.addSubtitle("(XCL-Charts Demo)");
 				//轴标题
 				//chart.getAxisTitle().setLowerAxisTitle("(时间点)");
 				
@@ -191,7 +191,7 @@ public class MultiAxisChart03View extends DemoView {
 	private void chartDataSet()
 	{
 	
-		List<Double> dataSeries2 = new LinkedList<Double>();			
+		List<Double> dataSeries2 = new LinkedList<>();
 		dataSeries2.add((double)140);  //40
 		dataSeries2.add((double)122); 
 		dataSeries2.add((double)130); 	
@@ -259,7 +259,7 @@ public class MultiAxisChart03View extends DemoView {
 			//chartLn.getCategoryAxis().hideAxisLine();
 			chartLn.getCategoryAxis().hideTickMarks();	
 			
-			chartLn.getDataAxis().setTickLabelRotateAngle(0);
+			chartLn.getDataAxis().setTickLabelRotateAngle(-45);
 			chartLn.getDataAxis().getTickLabelPaint().setColor(Color.rgb(106, 218, 92));
 			chartLn.getCategoryAxis().getTickLabelPaint().setColor(Color.rgb(106, 218, 92));
 			chartLn.getDataAxis().setHorizontalTickAlign(Align.RIGHT);
@@ -301,7 +301,7 @@ public class MultiAxisChart03View extends DemoView {
 	private void chartDataSetLn()
 	{
 		
-		LinkedList<Double> dataSeries0= new LinkedList<Double>();	
+		LinkedList<Double> dataSeries0= new LinkedList<>();
 		dataSeries0.add(0d); 
 		LineData line2 = new LineData("Area圆环",dataSeries0,Color.rgb(224, 65, 10)); //(int)Color.rgb(48, 145, 255)); 
 		line2.setDotStyle(XEnum.DotStyle.RING);				
@@ -311,7 +311,7 @@ public class MultiAxisChart03View extends DemoView {
 		
 		
 		//Line 1
-		LinkedList<Double> dataSeries1= new LinkedList<Double>();	
+		LinkedList<Double> dataSeries1= new LinkedList<>();
 		dataSeries1.add(40d); 
 		dataSeries1.add(35d); 
 		dataSeries1.add(50d); 
@@ -357,64 +357,63 @@ public class MultiAxisChart03View extends DemoView {
 		chartData.add(lineData2);
 		chartData.add(lineData3);
 	}
-	
-	
-	private void chartRenderLnAxes()
-	{
-		try {				
-			
-			//设置绘图区默认缩进px值,留置空间显示Axis,Axistitle....		
-			int [] ltrb = getBarLnDefaultSpadding();
-			
-			float left = DensityUtil.dip2px(getContext(), 20); //left 40	
-			float right = DensityUtil.dip2px(getContext(), 20); //right	20			
-			chartLnAxes.setPadding(left, ltrb[1],right, ltrb[3]);	//ltrb[2]
-		
-		
-			//设定数据源
-			chartLnAxes.setCategories(mLabelsAxes);								
+
+
+	private void chartRenderLnAxes() {
+		try {
+			// 设置绘图区默认缩进px值,留置空间显示Axis,Axistitle....
+			int[] ltrb = getBarLnDefaultSpadding();
+
+			float left = DensityUtil.dip2px(getContext(), 20); // left 40
+			float right = DensityUtil.dip2px(getContext(), 20); // right 20
+			chartLnAxes.setPadding(left, ltrb[1], right, ltrb[3]); // ltrb[2]
+
+			// 设定数据源
+			chartLnAxes.setCategories(mLabelsAxes);
 			chartLnAxes.setDataSource(chartDataAxes);
-			
-			//数据轴最大值
+
+			// 数据轴最大值
 			chartLnAxes.getDataAxis().setAxisMax(100);
-			//数据轴刻度间隔
+			// 数据轴刻度间隔
 			chartLnAxes.getDataAxis().setAxisSteps(10);
-			
-			//标签轴最大值
+
+			// 标签轴最大值
 			chartLnAxes.setCategoryAxisMax(70);
-			//标签轴最小值
-			chartLnAxes.setCategoryAxisMin(0);	
-			
+			// 标签轴最小值
+			chartLnAxes.setCategoryAxisMin(0);
+
 			chartLnAxes.getPlotLegend().hide();
-			
-			//背景网格
+
+			// 背景网格
 			chartLnAxes.getPlotGrid().hideEvenRowBgColor();
 			chartLnAxes.getPlotGrid().hideHorizontalLines();
 			chartLnAxes.getPlotGrid().hideOddRowBgColor();
 			chartLnAxes.getPlotGrid().hideVerticalLines();
-			
+
 			chartLnAxes.getDataAxis().hideAxisLine();
-			chartLnAxes.getDataAxis().hideTickMarks();		
-			
+			chartLnAxes.getDataAxis().hideTickMarks();
+
 			chartLnAxes.getCategoryAxis().hideAxisLine();
 			chartLnAxes.getCategoryAxis().hideTickMarks();
-			chartLnAxes.getCategoryAxis().setTickLabelRotateAngle(0);
-			
-			
-			chartLnAxes.getDataAxis().setTickLabelRotateAngle(0);
+			chartLnAxes.getCategoryAxis().setTickLabelRotateAngle(-45);
+
+			chartLnAxes.getDataAxis().setTickLabelRotateAngle(-45);
 			chartLnAxes.getDataAxis().getTickLabelPaint().setColor(Color.rgb(48, 145, 255));
-			
+
 			chartLnAxes.getCategoryAxis().getTickLabelPaint().setColor(Color.rgb(199, 64, 219));
-			chartLnAxes.getDataAxis().setHorizontalTickAlign(Align.RIGHT);
-			chartLnAxes.getDataAxis().getTickLabelPaint().setTextAlign(Align.LEFT);
-					
-			//调整轴显示位置
+			chartLnAxes.getDataAxis().setHorizontalTickAlign(Paint.Align.RIGHT);
+			chartLnAxes.getDataAxis().getTickLabelPaint().setTextAlign(Paint.Align.LEFT);
+
+			// 调整轴显示位置
 			chartLnAxes.setDataAxisLocation(XEnum.AxisLocation.RIGHT);
 			chartLnAxes.setCategoryAxisLocation(XEnum.AxisLocation.LEFT);
-			
-				
+
+			// 去除折线样式，只显示点
+			for (SplineData data : chartDataAxes) {
+				data.setDotStyle(XEnum.DotStyle.RING); // 设置点的样式为圆环
+			}
+
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			Log.e(tag, e.toString());
 		}
 	}
@@ -430,19 +429,17 @@ public class MultiAxisChart03View extends DemoView {
 		mLabelsAxes.add("60");
 		mLabelsAxes.add("70");
 	}
-	
-	private void chartDataSetAxes()
-	{
-		//线1的数据集
-		List<PointD> linePoint1 = new ArrayList<PointD>();
+
+	private void chartDataSetAxes() {
+		// 线1的数据集
+		List<PointD> linePoint1 = new ArrayList<>();
 		linePoint1.add(new PointD(0d, 0d));
-		
-		SplineData dataSeries1 = new SplineData("",linePoint1,
-				Color.rgb(54, 141, 238) );	
-		dataSeries1.setDotStyle(XEnum.DotStyle.HIDE);
-					
-		//设定数据源		
-		chartDataAxes.add(dataSeries1);		
+
+		SplineData dataSeries1 = new SplineData("", linePoint1, Color.rgb(54, 141, 238));
+		dataSeries1.setDotStyle(XEnum.DotStyle.RING); // 设置点的样式为圆环
+
+		// 设定数据源
+		chartDataAxes.add(dataSeries1);
 	}
 	
 	
@@ -462,7 +459,7 @@ public class MultiAxisChart03View extends DemoView {
 	private void chartRenderPie()
 	{								
 		chartPie.setPadding(0,0,0,0);
-		
+
 		//标签显示(隐藏，显示在中间，显示在扇区外面)
 		chartPie.setLabelStyle(XEnum.SliceLabelStyle.INSIDE);
 		chartPie.getLabelPaint().setColor(Color.WHITE);

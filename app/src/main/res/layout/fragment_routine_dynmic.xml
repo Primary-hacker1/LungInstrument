@@ -30,14 +30,21 @@
                     android:id="@+id/multiAxisChart"
                     android:layout_weight="1"
                     android:layout_width="0dp"
-                    android:layout_height="300dp"
+                    android:layout_height="400dp"
                     />
 
             <com.justsafe.libview.chart.CustomScatterChart
                     android:id="@+id/chart2"
                     android:layout_weight="1"
                     android:layout_width="0dp"
-                    android:layout_height="300dp" />
+                    android:visibility="gone"
+                    android:layout_height="400dp" />
+
+            <com.justsafe.libview.chart.ScatterChart01View
+                    android:id="@+id/chart3"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="400dp"/>
 
         </LinearLayout>
 
