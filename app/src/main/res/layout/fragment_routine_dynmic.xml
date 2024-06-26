@@ -22,16 +22,16 @@
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="300dp"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     tools:ignore="NestedWeights" />
 
-            <com.justsafe.libview.chart.BaseLineChart
-                    android:id="@+id/chart1"
+
+            <com.justsafe.libview.chart.MultiAxisChart03View
+                    android:id="@+id/multiAxisChart"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="300dp"
-                    android:visibility="gone"
-                    tools:ignore="NestedWeights" />
+                    />
 
             <com.justsafe.libview.chart.CustomScatterChart
                     android:id="@+id/chart2"

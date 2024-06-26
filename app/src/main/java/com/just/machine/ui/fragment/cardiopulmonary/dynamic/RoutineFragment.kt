@@ -50,22 +50,7 @@ class RoutineFragment : CommonBaseFragment<FragmentRoutineDynmicBinding>() {
             titleCentent = "动态肺常规"
         )
 
-        binding.chart1.setLineDataSetData(
-            binding.chart.flowDataSetList()
-        )//设置数据
-
-        binding.chart1.setLineChartFlow(
-            yAxisMinimum = -5f,
-            yAxisMaximum = 5f,
-            countMaxX = 30f,
-            granularityY = 1f,
-            granularityX = 1f,
-            titleCentent = "动态肺常规"
-        )
-
         binding.chart.setDynamicDragLine()
-
-        binding.chart1.setDynamicDragLine()
 
         viewModel.mEventHub.observe(this) {
             when (it.action) {

@@ -67,6 +67,8 @@ dependencies {
 
     api project(path: ':charts')//备用折线图
 
+    api project(path: ':chart_xcl')
+
     api 'net.objecthunter:exp4j:0.4.8'
 
     //chart
