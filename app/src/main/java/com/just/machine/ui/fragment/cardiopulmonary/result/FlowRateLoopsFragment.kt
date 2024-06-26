@@ -2,20 +2,17 @@ package com.just.machine.ui.fragment.cardiopulmonary.result
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
-import com.github.mikephil.charting.components.Description
-import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.just.machine.ui.viewmodel.MainViewModel
-import com.just.news.R
 import com.just.news.databinding.FragmentRateLoopsBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.random.Random
 
 /**
  *create by 2024/6/19
@@ -41,71 +38,42 @@ class FlowRateLoopsFragment : CommonBaseFragment<FragmentRateLoopsBinding>() {
 
         }
 
-        setupLineChart()
-
-        startUpdatingChart()
-    }
-
-    private fun setupLineChart() {
-        binding.lineChart.apply {
-            val white = ContextCompat.getColor(requireContext(), R.color.white)
-            setBackgroundColor(white)
-            setTouchEnabled(true)
-            setPinchZoom(true)
-            description = Description().apply { text = "动态流速环" }
-
-            val legend: Legend = legend
-            legend.form = Legend.LegendForm.LINE
-
-            xAxis.apply {
-                setDrawGridLines(false)
-                setAvoidFirstLastClipping(true)
-            }
-
-            axisLeft.apply {
-                setDrawGridLines(false)
-                axisMinimum = -100f // 设置 Y 轴最小值为 -100
-                axisMaximum = 100f // 设置 Y 轴最大值为 100
-            }
-
-            axisRight.isEnabled = false
-        }
-    }
-
-    private fun startUpdatingChart() {
         val entries = mutableListOf<Entry>()
-        val lineDataSet = LineDataSet(entries, "流速").apply {
-            val blue = ContextCompat.getColor(requireContext(), R.color.blue)
-            color = blue
-            val red = ContextCompat.getColor(requireContext(), R.color.red)
-            setCircleColor(red)
-            lineWidth = 2f
-            circleRadius = 4f
-            setDrawCircleHole(false)
-            valueTextSize = 10f
-            setDrawFilled(true)
-        }
+        // 示例数据
+        entries.add(Entry(0f, 1f))
+        entries.add(Entry(1f, 2f))
+        entries.add(Entry(2f, 3f))
+        entries.add(Entry(3f, 4f))
+        entries.add(Entry(4f, 5f))
+        entries.add(Entry(5f, -4f))
+        entries.add(Entry(6f, -3f))
+        entries.add(Entry(7f, -2f))
+        entries.add(Entry(8f, -1f))
 
-        val lineData = LineData(lineDataSet)
+        val dataSet = LineDataSet(entries, "Gas Flow Rate")
+        val lineData = LineData(dataSet)
         binding.lineChart.data = lineData
 
-        Thread {
-            for (i in 0..100) {
-                com.common.base.onUI {
-                    addEntry(lineData, lineDataSet, i.toFloat())
-                }
-                Thread.sleep(1000)
-            }
-        }.start()
+        configureChartAppearance()
+
     }
 
-    private fun addEntry(lineData: LineData, lineDataSet: LineDataSet, xValue: Float) {
-        val yValue = Random.nextFloat() * 200 - 100 // 生成范围在 -100 到 100 之间的随机数
-        lineData.addEntry(Entry(xValue, yValue), 0)
-        lineData.notifyDataChanged()
-        binding.lineChart.notifyDataSetChanged()
-        binding.lineChart.setVisibleXRangeMaximum(10f)
-        binding.lineChart.moveViewToX(xValue)
+    private fun configureChartAppearance() {
+        binding.lineChart.description.isEnabled = false
+        binding.lineChart.setTouchEnabled(true)
+        binding.lineChart.isDragEnabled = true
+        binding.lineChart.setScaleEnabled(true)
+        binding.lineChart.setPinchZoom(true)
+
+        val xAxis: XAxis = binding.lineChart.xAxis
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.granularity = 1f
+
+        val leftAxis: YAxis = binding.lineChart.axisLeft
+        leftAxis.axisMinimum = 0f
+
+        val rightAxis: YAxis = binding.lineChart.axisRight
+        rightAxis.isEnabled = false
     }
 
     override fun initListener() {
