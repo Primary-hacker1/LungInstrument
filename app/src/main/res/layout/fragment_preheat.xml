@@ -10,13 +10,12 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorWhite"
-        android:orientation="vertical">
+        android:background="@color/colorWhite">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="#f5fcff"
+            android:layout_height="48dp"
+            app:cardBackgroundColor="@color/colorPrimary"
             tools:ignore="NestedWeights">
 
             <LinearLayout
@@ -37,20 +36,21 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="便携式心肺功能测试系统"
+                        android:textColor="@color/colorWhite"
                         android:textSize="13sp" />
 
                     <View
                         android:layout_width="2dp"
                         android:layout_height="15dp"
                         android:layout_marginStart="10dp"
-                        android:background="@color/text3" />
+                        android:background="@color/colorWhite" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:text="测试系统"
-                        android:textColor="@color/text3"
+                        android:textColor="@color/colorWhite"
                         android:textSize="16sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -59,6 +59,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="系统时间:"
+                    android:textColor="@color/colorWhite"
                     android:textSize="14sp" />
 
                 <com.just.machine.util.TimeView
@@ -67,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="30dp"
-                    android:textColor="@color/text7"
+                    android:textColor="@color/colorWhite"
                     android:textSize="14sp"
                     tools:ignore="RelativeOverlap" />
 
@@ -75,7 +76,7 @@
                     android:id="@+id/iv_preheat_device_connect_status"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/warn_red" />
+                    android:src="@drawable/warn_yellow" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -83,32 +84,35 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="10dp"
                     android:text="未连接"
+                    android:textColor="@color/colorWhite"
                     android:textSize="12sp" />
 
                 <ImageView
                     android:id="@+id/iv_preheat_device_calibrate_status"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/warn_red" />
+                    android:src="@drawable/warn_yellow" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:text="未完成定标"
+                    android:textColor="@color/colorWhite"
                     android:textSize="12sp" />
 
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_marginHorizontal="10dp"
-                    android:src="@mipmap/dianchi" />
+                    android:src="@drawable/battery" />
 
                 <ImageView
                     android:id="@+id/iv_preheat_close"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/close_2f89de" />
+                    android:src="@drawable/close"
+                    android:textColor="@color/colorWhite" />
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
