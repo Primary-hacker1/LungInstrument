@@ -21,16 +21,13 @@
  */
 package com.justsafe.libview.chart;
 
-import java.util.List;
 
 import org.xclcharts.common.DensityUtil;
-import org.xclcharts.renderer.XChart;
 import org.xclcharts.view.ChartView;
 
 import android.content.Context;
 import android.util.AttributeSet;
 
-import static java.security.AccessController.getContext;
 
 /**
  * @ClassName DemoView
@@ -81,6 +78,5 @@ public class DemoView extends ChartView{
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {  
         super.onSizeChanged(w, h, oldw, oldh);  
     
-    }  
-
+    }
 }

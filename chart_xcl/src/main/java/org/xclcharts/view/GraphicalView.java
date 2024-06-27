@@ -83,9 +83,8 @@ public abstract class GraphicalView extends View {
 	public void onDraw(Canvas canvas)
 	  {		 
 		  try {								  			  
-				render(canvas);								
+				render(canvas);
 		  } catch (Exception e) {
-				// TODO Auto-generated catch block
 			  Log.e(TAG, e.toString());
 		  }	
 	   }

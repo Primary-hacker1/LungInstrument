@@ -46,8 +46,7 @@ public abstract class ChartView extends GraphicalView {
 	
 	public ChartView(Context context) {
 		super(context);
-		// TODO Auto-generated constructor stub				
-		
+
 	}	
 	
 	 public ChartView(Context context, AttributeSet attrs){   
@@ -63,14 +62,12 @@ public abstract class ChartView extends GraphicalView {
 	 
 	@Override
 	public void render(Canvas canvas) {
-		// TODO Auto-generated method stub
-		
+
 	}
 		
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		// TODO Auto-generated method stub				
-		//touchChart(event);	
+		//touchChart(event);
 		touchEvent(event);
 		return true;
 	}	

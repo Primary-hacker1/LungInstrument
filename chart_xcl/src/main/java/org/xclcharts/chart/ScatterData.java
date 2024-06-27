@@ -70,8 +70,7 @@ public class ScatterData {
 						List<PointD> dataSeries,
 						int color,
 						XEnum.DotStyle  dotStyle) {
-		// TODO Auto-generated constructor stub
-	
+
 		setKey(key);			
 		setDataSet(dataSeries);
 	

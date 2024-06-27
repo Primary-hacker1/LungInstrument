@@ -15,6 +15,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="8"
+                android:background="@drawable/spinner_dropdown_background"
                 android:orientation="horizontal">
 
             <com.justsafe.libview.chart.BaseLineChart
@@ -40,11 +41,12 @@
                     android:visibility="gone"
                     android:layout_height="400dp" />
 
-            <com.justsafe.libview.chart.ScatterChart01View
-                    android:id="@+id/chart3"
+            <com.justsafe.libview.chart.MultiAxisChart03View
+                    android:id="@+id/chart4"
                     android:layout_weight="1"
                     android:layout_width="0dp"
-                    android:layout_height="400dp"/>
+                    android:layout_height="400dp"
+                    />
 
         </LinearLayout>
 
