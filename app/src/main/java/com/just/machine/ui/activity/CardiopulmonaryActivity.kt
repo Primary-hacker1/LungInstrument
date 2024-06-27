@@ -13,6 +13,7 @@ import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.ActivityCardiopulmonaryBinding
 import com.justsafe.libview.nav.FragmentNavigatorHideShow
+import com.justsafe.libview.util.SystemUtil
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -71,4 +72,16 @@ class CardiopulmonaryActivity : CommonBaseActivity<ActivityCardiopulmonaryBindin
     }
 
     override fun getViewBinding() = ActivityCardiopulmonaryBinding.inflate(layoutInflater)
+
+    override fun onResume() {
+        SystemUtil.immersive(this, true)
+        super.onResume()
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            SystemUtil.immersive(this, true)
+        }
+    }
 }

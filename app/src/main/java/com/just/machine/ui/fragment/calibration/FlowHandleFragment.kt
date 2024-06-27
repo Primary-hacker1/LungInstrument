@@ -1,5 +1,6 @@
 package com.just.machine.ui.fragment.calibration
 
+import android.R.string
 import android.graphics.Color
 import android.os.Build
 import android.view.LayoutInflater
@@ -20,6 +21,7 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.just.machine.dao.calibration.FlowBean
+import com.just.machine.model.lungdata.SttlungDataModel
 import com.just.machine.ui.adapter.calibration.FlowAdapter
 import com.just.machine.ui.dialog.LoadingDialogFragment
 import com.just.machine.ui.dialog.LungCommonDialogFragment
@@ -52,6 +54,19 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
     private lateinit var mDownTime: FixCountDownTime
     private lateinit var timer: Timer
     private lateinit var startLoadingDialogFragment: LoadingDialogFragment
+
+    private val strVol = arrayOf(
+        "吸气容积1",
+        "呼气容积1",
+        "吸气容积2",
+        "呼气容积2",
+        "吸气容积3",
+        "呼气容积3",
+        "吸气容积4",
+        "呼气容积4",
+        "吸气容积5",
+        "呼气容积5"
+    )
 
     // 容量-时间
     private lateinit var inVolSec1DataSet: LineDataSet
@@ -119,20 +134,20 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun initView() {
-        timer = fixedRateTimer("",false,0,1000){
-            if(iFlag == 1){
+        timer = fixedRateTimer("", false, 0, 1000) {
+            if (iFlag == 1) {
                 time++
-                if(isZero){
+                if (isZero) {
                     time = 0
                     isStop = true
                     startLoadingDialogFragment.dismiss()
                     timer.cancel()
-                }else if(time == 8){
+                } else if (time == 8) {
                     startLoadingDialogFragment.dismiss()
-                    LungCommonDialogFragment.startCommonDialogFragment(
-                        requireActivity().supportFragmentManager, "校验超时!","2"
-                    )
                     timer.cancel()
+                    LungCommonDialogFragment.startCommonDialogFragment(
+                        requireActivity().supportFragmentManager, "校验超时!", "2"
+                    )
                 }
             }
         }
@@ -184,7 +199,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
         }
         binding.llPullDirection.setNoRepeatListener {
             if (!isStart) {
-                Toast.makeText(requireContext(), "定标未开始哟!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "定标未开始!", Toast.LENGTH_SHORT).show()
                 return@setNoRepeatListener
             }
             if (isPull) {
@@ -301,7 +316,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                                 0,
                                 DateUtils.nowTimeString,
                                 1,
-                                "吸气容积1",
+                                strVol[calibrateCount - 1],
                                 "3",
                                 startVol.toString(),
                                 if (calibrateCount == 3) "-1.05" else "0.92"
@@ -453,7 +468,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                                 0,
                                 DateUtils.nowTimeString,
                                 1,
-                                "吸气容积1",
+                                strVol[calibrateCount - 1],
                                 "3",
                                 startVol.toString(),
                                 if (calibrateCount == 8) "-0.95" else "1.02"
@@ -508,7 +523,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                     }
                     lifecycleScope.launch {
                         delay(100)
-                        if(isZero){
+                        if (isZero) {
 
                         }
                     }
@@ -995,7 +1010,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                 requireActivity().supportFragmentManager, "正在校零..."
             )
         } catch (ex: Exception) {
-            Toast.makeText(requireContext(),ex.message,Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), ex.message, Toast.LENGTH_SHORT).show()
         }
     }
 
