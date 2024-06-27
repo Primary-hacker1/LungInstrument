@@ -17,6 +17,7 @@ import com.just.machine.ui.fragment.serial.MudbusProtocol
 import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.common.base.BaseUtil
+import com.just.machine.model.EnviorDataModel
 import com.just.machine.ui.dialog.LungCommonDialogFragment
 import com.just.machine.util.LiveDataBus
 import com.just.news.R
@@ -47,6 +48,15 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
             adapter.toggleItemBackground(position)
         }
         binding.rvEnvironmental.adapter = adapter
+
+        val arr = ByteArray(10)
+        arr[0] = 1.toByte()
+        arr[1] = 2.toByte()
+        arr[2] = 3.toByte()
+        arr[3] = 4.toByte()
+        arr[4] = 5.toByte()
+        arr[5] = 6.toByte()
+        val env = EnviorDataModel(arr)
     }
 
     private var environmentalBeans: MutableList<EnvironmentalCalibrationBean> = ArrayList()
