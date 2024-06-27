@@ -18,6 +18,7 @@ import com.just.machine.ui.fragment.calibration.onekeycalibration.OneKeyCalibrat
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.FragmentCalibrationBinding
+import com.justsafe.libview.util.DateUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -34,6 +35,12 @@ class CalibrationFragment : CommonBaseFragment<FragmentCalibrationBinding>() {
         binding.toolbar.title = Constants.cardiopulmonary//标题
         binding.toolbar.tvRight.gone()
         binding.toolbar.ivTitleBack.visible()
+
+        binding.toolbarCardi.title = Constants.cardiopulmonary//标题
+        binding.toolbarCardi.tvRight.setTime(
+            System.currentTimeMillis(),
+            DateUtils.nowTimeDataString
+        )
 
         val adapter = FragmentChildAdapter(this)
 
@@ -71,6 +78,9 @@ class CalibrationFragment : CommonBaseFragment<FragmentCalibrationBinding>() {
 
     override fun initListener() {
         binding.toolbar.ivTitleBack.setNoRepeatListener {
+            popBackStack()
+        }
+        binding.toolbarCardi.ibBack.setNoRepeatListener {
             popBackStack()
         }
 

@@ -19,8 +19,12 @@
         <include
             android:id="@+id/toolbar"
             layout="@layout/view_toolbar"
-            setTitleImage="@{R.drawable.back}" />
+            setTitleImage="@{R.drawable.back}"
+            android:visibility="gone" />
 
+        <include
+            android:id="@+id/toolbar_cardi"
+            layout="@layout/view_toolbar_cardiopulmonary" />
 
         <LinearLayout
             android:layout_width="match_parent"

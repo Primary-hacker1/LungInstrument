@@ -44,6 +44,12 @@ class CardiopulmonaryFragment : CommonBaseFragment<FragmentCardiopulmonaryBindin
         binding.toolbar.title = Constants.cardiopulmonary//标题
 //        binding.toolbar.tvRight.gone()
         binding.toolbar.ivTitleBack.visible()
+
+        binding.toolbarCardi.tvRight.setTime(
+            System.currentTimeMillis(),
+            DateUtils.nowTimeDataString
+        )
+        binding.toolbarCardi.title = Constants.cardiopulmonary//标题
     }
 
     override fun initView() {
@@ -98,6 +104,10 @@ class CardiopulmonaryFragment : CommonBaseFragment<FragmentCardiopulmonaryBindin
         }
 
         binding.toolbar.ivTitleBack.setNoRepeatListener {
+            activity?.finish()
+        }
+
+        binding.toolbarCardi.ibBack.setNoRepeatListener {
             activity?.finish()
         }
 
