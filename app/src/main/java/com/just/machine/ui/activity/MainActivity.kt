@@ -15,6 +15,7 @@ import com.just.machine.util.ListenerThread
 import com.just.news.R
 import com.just.news.databinding.ActivityMainBinding
 import com.justsafe.libview.nav.FragmentNavigatorHideShow
+import com.justsafe.libview.util.SystemUtil
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -112,4 +113,16 @@ class MainActivity : CommonBaseActivity<ActivityMainBinding>() {
 
 
     override fun getViewBinding() = ActivityMainBinding.inflate(layoutInflater)
+
+    override fun onResume() {
+        SystemUtil.immersive(this, true)
+        super.onResume()
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            SystemUtil.immersive(this, true)
+        }
+    }
 }

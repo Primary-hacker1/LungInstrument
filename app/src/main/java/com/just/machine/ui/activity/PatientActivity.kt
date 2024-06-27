@@ -45,6 +45,7 @@ import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.ActivityPatientBinding
+import com.justsafe.libview.util.SystemUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -1044,4 +1045,16 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
     }
 
     override fun getViewBinding() = ActivityPatientBinding.inflate(layoutInflater)
+
+    override fun onResume() {
+        SystemUtil.immersive(this, true)
+        super.onResume()
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            SystemUtil.immersive(this, true)
+        }
+    }
 }
