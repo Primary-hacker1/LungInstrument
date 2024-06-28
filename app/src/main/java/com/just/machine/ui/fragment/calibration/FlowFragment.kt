@@ -5,6 +5,7 @@ import android.speech.tts.TextToSpeech
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.common.base.BaseUtil
 import com.common.base.CommonBaseFragment
@@ -77,15 +78,11 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
 //            }
                 //手动流量定标
                 if (binding.vpFlowTitle.currentItem == 0) {
-                    LiveDataBus.get().with("flowStart").value = "handleFlow"
-                    SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)//发送手动流量定标
+                    LiveDataBus.get().with("clickFlowStart").value = "handleFlow"
                 } else {
-                    LiveDataBus.get().with("flowStart").value = "autoFlow"
-                    SerialPortManager.sendMessage(MudbusProtocol.FLOW_AUTO_CALIBRATION_COMMAND)//发送自动流量定标
+                    LiveDataBus.get().with("clickFlowStart").value = "autoFlow"
                 }
-                binding.tvFlowStart.text = "停止"
             } else {
-                SerialPortManager.sendMessage(MudbusProtocol.FLOW_STOP_COMMAND)
                 //手动流量定标
                 if (binding.vpFlowTitle.currentItem == 0) {
                     LiveDataBus.get().with("flowStop").value = "handleFlow"
@@ -110,23 +107,29 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
 
             }
         }
-        LiveDataBus.get().with("flow").observe(this) {//解析串口消息
+        LiveDataBus.get().with("flowStart").observe(this) {//解析串口消息
             if (it is String) {
-                if (it == "complete") {
-                    binding.tvFlowStart.text = "开始"
-                }
+                binding.tvFlowStart.text = "停止"
             }
         }
     }
 
     override fun initListener() {
         binding.btnHandle.setNoRepeatListener {
-            binding.vpFlowTitle.currentItem = 0
-            setButtonPosition(0)
+            if(binding.tvFlowStart.text == "停止"){
+                Toast.makeText(requireContext(),"定标已开始，请稍后!",Toast.LENGTH_SHORT).show()
+            }else{
+                binding.vpFlowTitle.currentItem = 0
+                setButtonPosition(0)
+            }
         }
         binding.btnAuto.setNoRepeatListener {
-            binding.vpFlowTitle.currentItem = 1
-            setButtonPosition(1)
+            if(binding.tvFlowStart.text == "停止"){
+                Toast.makeText(requireContext(),"定标已开始，请稍后!",Toast.LENGTH_SHORT).show()
+            }else{
+                binding.vpFlowTitle.currentItem = 1
+                setButtonPosition(1)
+            }
         }
     }
 

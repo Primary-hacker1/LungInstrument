@@ -45,7 +45,8 @@ class LungCommonDialogFragment : BaseDialogFragment<FragmentDialogLungCommonBind
     }
 
     override fun start(dialog: Dialog?) {
-
+        dialog?.setCancelable(false)
+        dialog?.setCanceledOnTouchOutside(false)
     }
 
     override fun initView() {
