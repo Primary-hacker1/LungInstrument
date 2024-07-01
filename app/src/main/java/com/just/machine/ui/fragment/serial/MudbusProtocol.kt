@@ -10,6 +10,12 @@ object MudbusProtocol {
 
     private var tag: String = MudbusProtocol::class.java.name
 
+    var isFlowCalibra = false
+    var isIngredientCalibra = false
+    var isEnvironmentCalibra = false
+    var isConnect = false
+    var isWarmup = false
+
 
     // 包头和包尾
     const val PACKET_HEADER: Short = 0xAAAA.toShort()
@@ -188,6 +194,14 @@ object MudbusProtocol {
         (PACKET_HEADER.toInt() ushr 8).toByte(), PACKET_HEADER.toByte(), // 包头
         0x06, // 数据长度
         0x08, // 功能码
+        0x00, 0x00, 0x00, 0x00, // 占位的 CRC32 校验码
+        PACKET_FOOTER // 包尾
+    )
+
+    val EXIT_LOW_POWER_COMMAND: ByteArray = byteArrayOf(
+        (PACKET_HEADER.toInt() ushr 8).toByte(), PACKET_HEADER.toByte(), // 包头
+        0x06, // 数据长度
+        0x0B, // 功能码
         0x00, 0x00, 0x00, 0x00, // 占位的 CRC32 校验码
         PACKET_FOOTER // 包尾
     )

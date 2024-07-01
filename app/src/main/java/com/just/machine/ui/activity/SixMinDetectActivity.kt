@@ -247,6 +247,7 @@ class SixMinDetectActivity : CommonBaseActivity<ActivitySixMinDetectBinding>() {
             binding.sixminIvEcg.setImageResource(R.mipmap.xinlvno)
             binding.sixminIvBloodPressure.setImageResource(R.mipmap.xueyano)
             binding.sixminIvBloodOxygen.setImageResource(R.mipmap.xueyangno)
+            binding.sixminIvBatteryStatus.setImageResource(R.drawable.dianchi)
         }
         SystemUtil.immersive(this, true)
     }

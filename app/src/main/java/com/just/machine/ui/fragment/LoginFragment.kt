@@ -149,6 +149,10 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
             navigate(it, R.id.preHeatFragment)
 //            activity?.finish()
         }
+
+        binding.btnClose.setNoRepeatListener {
+            activity?.finish()
+        }
     }
 
     override fun initListener() {

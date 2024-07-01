@@ -35,6 +35,7 @@ import com.just.news.databinding.FragmentFlowHandleBinding
 import com.justsafe.libview.util.DateUtils
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Timer
@@ -115,6 +116,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
     private var startSec = 0f
     private var startVol = 0f
     private var startFlow = 0f
+    private var tempvol = 0f
 
     private var inHaleFlowList = mutableListOf<FlowBean>()
     private var exHaleFlowList = mutableListOf<FlowBean>()
@@ -134,23 +136,6 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun initView() {
-        timer = fixedRateTimer("", false, 0, 1000) {
-            if (iFlag == 1) {
-                time++
-                if (isZero) {
-                    time = 0
-                    isStop = true
-                    startLoadingDialogFragment.dismiss()
-                    timer.cancel()
-                } else if (time == 8) {
-                    startLoadingDialogFragment.dismiss()
-                    timer.cancel()
-                    LungCommonDialogFragment.startCommonDialogFragment(
-                        requireActivity().supportFragmentManager, "校验超时!", "2"
-                    )
-                }
-            }
-        }
         mDownTime = object : FixCountDownTime(20, 1000) {}
         binding.rvFlowHandleInhale.layoutManager = LinearLayoutManager(requireContext())
 
@@ -226,6 +211,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                                 startSec += 0.05f
                                 startVol += 0.1f
                                 startFlow += 0.2f
+                                tempvol += 0.1f
                             }
 
                             3 -> {
@@ -311,47 +297,70 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                     }
 
                     override fun onFinish() {
-                        inHaleFlowList.add(
-                            FlowBean(
-                                0,
-                                DateUtils.nowTimeString,
-                                1,
-                                strVol[calibrateCount - 1],
-                                "3",
-                                startVol.toString(),
-                                if (calibrateCount == 3) "-1.05" else "0.92"
+                        if(tempvol > 2.0){
+                            inVolSec1DataSet.clear()
+                            inFlowVol1DataSet.clear()
+
+                            binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
+                            binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
+                            binding.chartFlowHandleCapacityTime.invalidate()
+
+                            binding.chartFlowHandleFlowCapacity.lineData.notifyDataChanged()
+                            binding.chartFlowHandleFlowCapacity.notifyDataSetChanged()
+                            binding.chartFlowHandleFlowCapacity.invalidate()
+
+                            startSec = 0f
+                            startVol = 0f
+                            startFlow = 0f
+                            mDownTime.setmTimes(20)
+                            calibrateCount = 1
+                            isPull = true
+                            binding.tvPullDirection.text = "拉"
+                            binding.tvPullDirection.setBackgroundResource(R.drawable.flow_pull)
+                        }else{
+                            inHaleFlowList.add(
+                                FlowBean(
+                                    0,
+                                    DateUtils.nowTimeString,
+                                    1,
+                                    strVol[calibrateCount - 1],
+                                    "3",
+                                    startVol.toString(),
+                                    if (calibrateCount == 3) "-1.05" else "0.92"
+                                )
                             )
-                        )
-                        inHaleFlowAdapter.setItemsBean(
-                            inHaleFlowList
-                        )
-                        mDownTime.setmTimes(20)
-                        when (calibrateCount) {
-                            1 -> {
-                                calibrateCount = 2
-                            }
+                            inHaleFlowAdapter.setItemsBean(
+                                inHaleFlowList
+                            )
+                            mDownTime.setmTimes(20)
+                            when (calibrateCount) {
+                                1 -> {
+                                    calibrateCount = 2
+                                }
 
-                            3 -> {
-                                calibrateCount = 4
-                            }
+                                3 -> {
+                                    calibrateCount = 4
+                                }
 
-                            5 -> {
-                                calibrateCount = 6
-                            }
+                                5 -> {
+                                    calibrateCount = 6
+                                }
 
-                            7 -> {
-                                calibrateCount = 8
-                            }
+                                7 -> {
+                                    calibrateCount = 8
+                                }
 
-                            9 -> {
-                                calibrateCount = 10
+                                9 -> {
+                                    calibrateCount = 10
+                                }
                             }
+                            startSec = 0f
+                            startVol = 0f
+                            startFlow = 0f
+                            binding.tvPullDirection.text = "推"
+                            binding.tvPullDirection.setBackgroundResource(R.drawable.flow_down)
+                            isPull = !isPull
                         }
-                        startSec = 0f
-                        startVol = 0f
-                        startFlow = 0f
-                        binding.tvPullDirection.text = "推"
-                        binding.tvPullDirection.setBackgroundResource(R.drawable.flow_down)
                     }
                 })
             } else {
@@ -505,26 +514,28 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                         startFlow = 0f
                         binding.tvPullDirection.text = "拉"
                         binding.tvPullDirection.setBackgroundResource(R.drawable.flow_pull)
+                        isPull = !isPull
                     }
                 })
             }
-            isPull = !isPull
         }
         //定标开始
-        LiveDataBus.get().with("flowStart").observe(this) {
+        LiveDataBus.get().with("clickFlowStart").observe(this) {
             if (it is String) {
                 if (it == "handleFlow") {
                     //开始手动定标
-                    isStart = true
                     stopPortSend()
-                    lifecycleScope.launch {
+                    lifecycleScope.launch(Dispatchers.Main)  {
                         delay(100)
                         isZeroSuccess()
                     }
-                    lifecycleScope.launch {
+                    lifecycleScope.launch(Dispatchers.Main) {
                         delay(100)
+                        isZero = true
                         if (isZero) {
-
+                            isStart = true
+                            sendCalibraCommand()
+                            LiveDataBus.get().with("flowStart").value = "handleFlow"
                         }
                     }
                 }
@@ -533,8 +544,10 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
         //定标结束
         LiveDataBus.get().with("flowStop").observe(this) {
             if (it is String) {
+                isStart = false
+                stopPortSend()
                 if (it == "handleFlow") {
-                    isStart = false
+
                 }
             }
         }
@@ -1006,6 +1019,23 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
         try {
             isStop = false
             SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)
+            timer = fixedRateTimer("", false, 0, 1000) {
+                if (iFlag == 1) {
+                    time++
+                    if (isZero) {
+                        time = 0
+                        isStop = true
+                        startLoadingDialogFragment.dismiss()
+                        timer.cancel()
+                    } else if (time == 8) {
+                        startLoadingDialogFragment.dismiss()
+                        timer.cancel()
+                        LungCommonDialogFragment.startCommonDialogFragment(
+                            requireActivity().supportFragmentManager, "校验超时!", "2"
+                        )
+                    }
+                }
+            }
             startLoadingDialogFragment = LoadingDialogFragment.startLoadingDialogFragment(
                 requireActivity().supportFragmentManager, "正在校零..."
             )
@@ -1015,6 +1045,18 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
     }
 
     private fun stopPortSend() {
-        SerialPortManager.sendMessage(MudbusProtocol.FLOW_STOP_COMMAND)
+        try {
+            SerialPortManager.sendMessage(MudbusProtocol.FLOW_STOP_COMMAND)
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+    }
+
+    private fun sendCalibraCommand() {
+        try {
+            SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
     }
 }

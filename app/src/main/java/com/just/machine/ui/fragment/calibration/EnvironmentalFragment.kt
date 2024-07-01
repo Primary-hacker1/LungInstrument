@@ -42,21 +42,14 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
 
     private var isLocked = true
 
+    private var isBegin = false
+
     override fun initView() {
         binding.rvEnvironmental.layoutManager = LinearLayoutManager(requireContext())
         adapter.setItemClickListener { _, position ->
             adapter.toggleItemBackground(position)
         }
         binding.rvEnvironmental.adapter = adapter
-
-        val arr = ByteArray(10)
-        arr[0] = 1.toByte()
-        arr[1] = 2.toByte()
-        arr[2] = 3.toByte()
-        arr[3] = 4.toByte()
-        arr[4] = 5.toByte()
-        arr[5] = 6.toByte()
-        val env = EnviorDataModel(arr)
     }
 
     private var environmentalBeans: MutableList<EnvironmentalCalibrationBean> = ArrayList()
@@ -123,10 +116,8 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
 //                    }
 //                }
 //                binding.tvCalibrationStart.text = getString(R.string.cancel)
+                isBegin = true
                 SerialPortManager.sendMessage(MudbusProtocol.ENVIRONMENT_CALIBRATION_COMMAND)//发送环境定标
-            } else {
-                binding.tvCalibrationStart.text = getString(R.string.begin)
-                scope.cancel()
             }
         }
 
@@ -158,29 +149,44 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
             )
             lockButtonStyle()
             LungCommonDialogFragment.startCommonDialogFragment(
-                requireActivity().supportFragmentManager, "保存成功!","1"
+                requireActivity().supportFragmentManager, "保存成功!", "1"
             )
         }
 
         LiveDataBus.get().with(Constants.serialCallback).observe(this) {//解析串口消息
-            if (it is ByteArray) {
+            if (isBegin) {
+                if (it is ByteArray) {
 //                if(BaseUtil.isDoubleClick()) return@observe//有个粘性事件先不处理
-                LogUtils.e(tag + BaseUtil.bytes2HexStr(it) + "字节长度" + BaseUtil.bytes2HexStr(it).length)
-                val environmentData = MudbusProtocol.parseEnvironmentData(it)//环境定标
+                    LogUtils.e(
+                        tag + BaseUtil.bytes2HexStr(it) + "字节长度" + BaseUtil.bytes2HexStr(
+                            it
+                        ).length
+                    )
+                    val environmentData = MudbusProtocol.parseEnvironmentData(it)//环境定标
 
-                if (environmentData != null) {
-                    val (temperature, humidity, pressure) = environmentData
-                    val time = DateUtils.nowTimeString
+                    if (environmentData != null) {
+                        val (temperature, humidity, pressure) = environmentData
+                        val time = DateUtils.nowTimeString
 
-                    viewModel.setEnvironmental(
-                        EnvironmentalCalibrationBean(//假设用户id为1
-                            0, 1, time, temperature.toString(),
-                            humidity.toString(), pressure.toString(), "1"
-                        )
-                    )//插入数据库并查询
-                } else {
-                    LogUtils.e(tag + "接收到的环境定标数据无效！")
+                        if (pressure > 1000 || pressure < 500 || temperature > 50 || temperature <= 0 || humidity > 100 || humidity <= 0)
+                        {
+                            //定标失败
+                            LungCommonDialogFragment.startCommonDialogFragment(
+                                requireActivity().supportFragmentManager, "定标失败!", "2"
+                            )
+                        }else{
+                            viewModel.setEnvironmental(
+                                EnvironmentalCalibrationBean(//假设用户id为1
+                                    0, 1, time, temperature.toString(),
+                                    humidity.toString(), pressure.toString(), "1"
+                                )
+                            )//插入数据库并查询
+                        }
+                    } else {
+                        LogUtils.e(tag + "接收到的环境定标数据无效！")
+                    }
                 }
+                isBegin = false
             }
         }
 
@@ -240,6 +246,16 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
         )
     }
 
+    /**
+     * 获取自动定标数据
+     */
+    private fun exitLowPower() {
+        try {
+            SerialPortManager.sendMessage(MudbusProtocol.EXIT_LOW_POWER_COMMAND)
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+    }
 
     /**
      * 懒加载

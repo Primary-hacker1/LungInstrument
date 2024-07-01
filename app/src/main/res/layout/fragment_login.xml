@@ -18,7 +18,24 @@
         android:layout_height="fill_parent"
         android:background="@mipmap/activity_bg">
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/space_50"
+            android:background="@null"
+            android:drawableStart="@drawable/btn_main_close"
+            android:gravity="center"
+            android:padding="@dimen/space_10"
+            android:text="@string/close"
+            android:textColor="#1890ff"
+            android:layout_marginTop="30dp"
+            android:textSize="19sp"
+            android:layout_alignParentEnd="true"
+            tools:ignore="MissingConstraints" />
+
         <LinearLayout
+            android:id="@+id/ll_login"
             android:layout_width="400dp"
             android:layout_height="400dp"
             android:layout_centerHorizontal="true"

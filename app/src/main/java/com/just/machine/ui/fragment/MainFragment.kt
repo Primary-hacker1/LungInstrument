@@ -117,7 +117,6 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
         }
 
         binding.btnClose.setNoRepeatListener {
-            SharedPreferencesUtils.instance.logout()
             activity?.finish()
         }
     }
