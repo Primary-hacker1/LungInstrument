@@ -24,6 +24,7 @@ import com.just.machine.model.sixminreport.SixMinReportEvaluation;
 import com.just.machine.model.sixminreport.SixMinReportStride;
 import com.just.machine.model.sixminreport.SixMinReportWalk;
 import com.just.machine.model.systemsetting.SixMinSysSettingBean;
+import com.just.machine.ui.fragment.serial.MudbusProtocol;
 import com.just.news.BuildConfig;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -108,7 +109,12 @@ public class USBTransferUtil {
     private SerialInputOutputManager inputOutputManager;  // 数据输入输出流管理器
 
     // 连接参数，按需求自行修改，一般情况下改变的参数只有波特率，数据位、停止位、奇偶校验都是固定的8/1/none ---------------------
-    private int baudRate = 460800;  // 波特率
+//    private int baudRate = 460800;  // 波特率
+//    private int dataBits = 8;  // 数据位
+//    private int stopBits = UsbSerialPort.STOPBITS_1;  // 停止位
+//    private int parity = UsbSerialPort.PARITY_NONE;// 奇偶校验
+
+    private int baudRate = 256000;  // 波特率
     private int dataBits = 8;  // 数据位
     private int stopBits = UsbSerialPort.STOPBITS_1;  // 停止位
     private int parity = UsbSerialPort.PARITY_NONE;// 奇偶校验
@@ -271,19 +277,24 @@ public class USBTransferUtil {
                 String data_str = CRC16Util.bytes2Hex(data);
                 Log.i(TAG, "收到 usb 数据长度: " + data_str.length());
                 Log.i(TAG, "收到 usb 数据: " + data_str);
-                try {
-                    Long time = System.currentTimeMillis();
-                    if (map.containsKey(time)) {
-                        time = time + 1;
-                        if (!map.containsKey(time)) {
-                            map.put(time, data);
-                        }
-                    } else {
-                        map.put(time, data);
-                    }
-                    parseData(map);
-                } catch (Exception e) {
-                    e.printStackTrace();
+//                try {
+//                    Long time = System.currentTimeMillis();
+//                    if (map.containsKey(time)) {
+//                        time = time + 1;
+//                        if (!map.containsKey(time)) {
+//                            map.put(time, data);
+//                        }
+//                    } else {
+//                        map.put(time, data);
+//                    }
+//                    parseData(map);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+                if(data_str.startsWith("55aa01")){
+                    LiveDataBus.get().with("GetVersionInfo").postValue(data_str);
+                }else if(data_str.startsWith("55aa02")){
+                    LiveDataBus.get().with("GetDeviceInfo").postValue(data_str);
                 }
             }
 
@@ -306,7 +317,9 @@ public class USBTransferUtil {
     // 下发数据：建议使用线程池
     public void write(byte[] data_bytes) {
         if (usbSerialPort != null) {
+            String data_str = CRC16Util.bytes2Hex(data_bytes);
             Log.e(TAG, "当前usb状态: isOpen-" + usbSerialPort.isOpen());
+            Log.e(TAG, "usb 写入数据: " + data_str);
             // 当串口打开时再下发
             if (usbSerialPort.isOpen()) {
                 if (data_bytes == null || data_bytes.length == 0) return;

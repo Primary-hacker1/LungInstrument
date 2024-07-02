@@ -4,17 +4,22 @@ package com.just.machine.ui.activity
 import android.content.Context
 import android.content.Intent
 import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import com.common.base.CommonBaseActivity
 import com.just.machine.ui.fragment.serial.MudbusProtocol
 import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.machine.util.LiveDataBus
+import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.ActivityCardiopulmonaryBinding
 import com.justsafe.libview.nav.FragmentNavigatorHideShow
 import com.justsafe.libview.util.SystemUtil
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  *create by 2024/3/4
@@ -24,7 +29,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class CardiopulmonaryActivity : CommonBaseActivity<ActivityCardiopulmonaryBinding>() {
 
-
+    private lateinit var usbTransferUtil: USBTransferUtil //usb工具类
     private val viewModel by viewModels<MainViewModel>()
 
     companion object {
@@ -45,9 +50,31 @@ class CardiopulmonaryActivity : CommonBaseActivity<ActivityCardiopulmonaryBindin
     override fun initView() {
         initToolbar()
         initNavigationView()
-        SerialPortManager.initialize(this)
-        SerialPortManager.sendMessage(MudbusProtocol.HANDSHAKE_COMMAND)//握手
+//        SerialPortManager.initialize(this)
+//        SerialPortManager.sendMessage(MudbusProtocol.HANDSHAKE_COMMAND)//握手
+        usbTransferUtil = USBTransferUtil.getInstance()
+//        usbTransferUtil.write(MudbusProtocol.cmdSend("01"))
+        lifecycleScope.launch {
+            delay(200)
+            usbTransferUtil.write(MudbusProtocol.cmdSend("02"))
+        }
 
+        //串口数据
+        LiveDataBus.get().with("GetVersionInfo").observe(this) {
+            if(it is String){
+                val hardWareVersion = MudbusProtocol.formatVersion(it.substring(8,12))
+                val softWareVersion = MudbusProtocol.formatVersion(it.substring(12,16))
+            }
+        }
+
+        LiveDataBus.get().with("GetDeviceInfo").observe(this) {
+            if(it is String){
+                val batteryHex = it.substring(10, 12)
+                val battery = batteryHex.toInt(16)
+                val heatSecHex = it.substring(12, 16)
+                val heatSec = heatSecHex.toInt(16)
+            }
+        }
     }
 
     override fun onDestroy() {

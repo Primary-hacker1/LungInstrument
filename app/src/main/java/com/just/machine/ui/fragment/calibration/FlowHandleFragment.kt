@@ -30,6 +30,7 @@ import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.FixCountDownTime
 import com.just.machine.util.LiveDataBus
+import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.FragmentFlowHandleBinding
 import com.justsafe.libview.util.DateUtils
@@ -50,6 +51,7 @@ import kotlin.concurrent.fixedRateTimer
 @AndroidEntryPoint
 class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
 
+    private lateinit var usbTransferUtil: USBTransferUtil //usb工具类
     private val viewModel by viewModels<MainViewModel>()
     private var isPull = true
     private lateinit var mDownTime: FixCountDownTime
@@ -136,6 +138,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun initView() {
+        usbTransferUtil = USBTransferUtil.getInstance()
         mDownTime = object : FixCountDownTime(20, 1000) {}
         binding.rvFlowHandleInhale.layoutManager = LinearLayoutManager(requireContext())
 
@@ -493,7 +496,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
             }
         }
         //定标结束
-        LiveDataBus.get().with("flowStop").observe(this) {
+        LiveDataBus.get().with("clickFlowStop").observe(this) {
             if (it is String) {
                 isStart = false
                 stopPortSend()
@@ -864,7 +867,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
         isZero = false
         try {
             isStop = false
-            SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)
+            usbTransferUtil.write(MudbusProtocol.FLOW_CALIBRATION_COMMAND)
             timer = fixedRateTimer("", false, 0, 1000) {
                 if (iFlag == 1) {
                     time++
@@ -892,7 +895,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
 
     private fun stopPortSend() {
         try {
-            SerialPortManager.sendMessage(MudbusProtocol.FLOW_STOP_COMMAND)
+            usbTransferUtil.write(MudbusProtocol.FLOW_STOP_COMMAND)
         } catch (e: Exception) {
             e.printStackTrace()
         }
