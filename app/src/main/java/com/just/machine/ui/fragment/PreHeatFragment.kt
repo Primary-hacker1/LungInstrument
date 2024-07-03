@@ -1,5 +1,6 @@
 package com.just.machine.ui.fragment
 
+import android.content.Intent
 import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
@@ -20,7 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class PreHeatFragment : CommonBaseFragment<FragmentPreheatBinding>() {
 
-    private lateinit var mCountDownTime: FixCountDownTime
+    private var mCountDownTime: FixCountDownTime? = null
 
     override fun loadData() {
 
@@ -35,7 +36,7 @@ class PreHeatFragment : CommonBaseFragment<FragmentPreheatBinding>() {
 
         binding.pbPreheat.progressDrawable = progressbarBg
 
-        mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack{
+        mCountDownTime!!.start(object : FixCountDownTime.OnTimerCallBack{
             override fun onStart() {
                 binding.tvPreheatStatus.text = "正在预热..."
             }
@@ -56,7 +57,8 @@ class PreHeatFragment : CommonBaseFragment<FragmentPreheatBinding>() {
             }
 
             override fun onFinish() {
-                MainActivity.startMainActivity(activity)
+                val intent = Intent(activity, MainActivity::class.java)
+                startActivity(intent)
                 activity?.finish()
             }
         })
@@ -64,11 +66,12 @@ class PreHeatFragment : CommonBaseFragment<FragmentPreheatBinding>() {
 
     override fun initListener() {
         binding.tvSkipPreheat.setNoRepeatListener {
-            mCountDownTime.cancel()
+            mCountDownTime!!.cancel()
             MainActivity.startMainActivity(activity)
             activity?.finish()
         }
         binding.ivPreheatClose.setNoRepeatListener {
+            mCountDownTime!!.cancel()
             activity?.finish()
         }
     }

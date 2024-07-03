@@ -34,7 +34,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
     private var patientListSize = 0
-    private lateinit var usbTransferUtil: USBTransferUtil
+
     override fun loadData() {//懒加载
         viewModel.getPatients()
         viewModel.mEventHub.observe(this) {
@@ -126,13 +126,12 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
         FragmentMainBinding.inflate(inflater, container, false)
 
     private fun initSixMinUsbConnection() {
-        usbTransferUtil = USBTransferUtil.getInstance()
-        usbTransferUtil.init(requireContext())
-        usbTransferUtil.connect()
+        USBTransferUtil.getInstance().init(requireContext())
+        USBTransferUtil.getInstance().connect()
     }
 
     private fun checkBluetoothAndSelfCheck(patientId:String) {
-        if (usbTransferUtil.isConnectUSB && usbTransferUtil.bloodOxygenConnection && usbTransferUtil.ecgConnection && usbTransferUtil.bloodPressureConnection) {
+        if (USBTransferUtil.getInstance().isConnectUSB && USBTransferUtil.getInstance().bloodOxygenConnection && USBTransferUtil.getInstance().ecgConnection && USBTransferUtil.getInstance().bloodPressureConnection) {
             val selfCheckBeforeTestDialogFragment =
                 SixMinReportSelfCheckBeforeTestFragment.startPatientSelfCheckDialogFragment(
                     activity!!.supportFragmentManager, "1", "1"
@@ -211,7 +210,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
     }
 
     override fun onDestroy() {
-        usbTransferUtil.disconnect()
+        USBTransferUtil.getInstance().disconnect()
         super.onDestroy()
     }
 }
