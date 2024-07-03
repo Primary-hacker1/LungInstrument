@@ -20,6 +20,7 @@ import com.common.base.BaseUtil
 import com.just.machine.model.EnviorDataModel
 import com.just.machine.ui.dialog.LungCommonDialogFragment
 import com.just.machine.util.LiveDataBus
+import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.FragmentEnvironmentalBinding
 import com.justsafe.libview.util.DateUtils
@@ -34,6 +35,8 @@ import kotlinx.coroutines.Job
 @AndroidEntryPoint
 class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>() {
 
+    private lateinit var usbTransferUtil: USBTransferUtil //usb工具类
+
     private val viewModel by viewModels<MainViewModel>()
 
     private val adapter by lazy { EnvironmentalAdapter(requireContext()) }
@@ -45,6 +48,7 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
     private var isBegin = false
 
     override fun initView() {
+        usbTransferUtil = USBTransferUtil.getInstance()
         binding.rvEnvironmental.layoutManager = LinearLayoutManager(requireContext())
         adapter.setItemClickListener { _, position ->
             adapter.toggleItemBackground(position)
@@ -90,19 +94,19 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
         binding.llStart.setNoRepeatListener {
             val start = binding.tvCalibrationStart.text
             if (start == getString(R.string.begin)) {
-                if (Constants.isDebug) {
-                    val temperature: Short = 250 // 温度，单位为摄氏度
-                    val humidity: Short = 60 // 湿度，单位为百分比
-                    val pressure = 101325 // 气压，单位为帕斯卡
-
-                    val environmentData = MudbusProtocol.generateSerialCommand(
-                        temperature,
-                        humidity,
-                        pressure
-                    )
-
-                    LiveDataBus.get().with(Constants.serialCallback).value = environmentData
-                }
+//                if (Constants.isDebug) {
+//                    val temperature: Short = 250 // 温度，单位为摄氏度
+//                    val humidity: Short = 60 // 湿度，单位为百分比
+//                    val pressure = 101325 // 气压，单位为帕斯卡
+//
+//                    val environmentData = MudbusProtocol.generateSerialCommand(
+//                        temperature,
+//                        humidity,
+//                        pressure
+//                    )
+//
+//                    LiveDataBus.get().with(Constants.serialCallback).value = environmentData
+//                }
 
 //                val startTime = System.currentTimeMillis()
 //                scope = lifecycleScope.launch(Dispatchers.IO) {
@@ -117,7 +121,7 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
 //                }
 //                binding.tvCalibrationStart.text = getString(R.string.cancel)
                 isBegin = true
-                SerialPortManager.sendMessage(MudbusProtocol.ENVIRONMENT_CALIBRATION_COMMAND)//发送环境定标
+                usbTransferUtil.write(MudbusProtocol.allowOneSensor)//发送环境定标
             }
         }
 

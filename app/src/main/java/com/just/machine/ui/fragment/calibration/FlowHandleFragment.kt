@@ -28,6 +28,7 @@ import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.FixCountDownTime
 import com.just.machine.util.LiveDataBus
+import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.FragmentFlowHandleBinding
 import com.justsafe.libview.util.DateUtils
@@ -48,6 +49,7 @@ import kotlin.concurrent.fixedRateTimer
 @AndroidEntryPoint
 class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
 
+    private lateinit var usbTransferUtil: USBTransferUtil //usb工具类
     private val viewModel by viewModels<MainViewModel>()
     private var isPull = true
     private lateinit var mDownTime: FixCountDownTime
@@ -68,36 +70,36 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
     )
 
     // 容量-时间
-    private lateinit var inVolSec1DataSet: LineDataSet
-    private lateinit var outVolSec1DataSet: LineDataSet
+    private var inVolSec1DataSet: LineDataSet? = null
+    private var outVolSec1DataSet: LineDataSet? = null
 
-    private lateinit var inVolSec2DataSet: LineDataSet
-    private lateinit var outVolSec2DataSet: LineDataSet
+    private var inVolSec2DataSet: LineDataSet? = null
+    private var outVolSec2DataSet: LineDataSet? = null
 
-    private lateinit var inVolSec3DataSet: LineDataSet
-    private lateinit var outVolSec3DataSet: LineDataSet
+    private var inVolSec3DataSet: LineDataSet? = null
+    private var outVolSec3DataSet: LineDataSet? = null
 
-    private lateinit var inVolSec4DataSet: LineDataSet
-    private lateinit var outVolSec4DataSet: LineDataSet
+    private var inVolSec4DataSet: LineDataSet? = null
+    private var outVolSec4DataSet: LineDataSet? = null
 
-    private lateinit var inVolSec5DataSet: LineDataSet
-    private lateinit var outVolSec5DataSet: LineDataSet
+    private var inVolSec5DataSet: LineDataSet? = null
+    private var outVolSec5DataSet: LineDataSet? = null
 
     // 流速-容量
-    private lateinit var inFlowVol1DataSet: LineDataSet
-    private lateinit var outFlowVol1DataSet: LineDataSet
+    private var inFlowVol1DataSet: LineDataSet? = null
+    private var outFlowVol1DataSet: LineDataSet? = null
 
-    private lateinit var inFlowVol2DataSet: LineDataSet
-    private lateinit var outFlowVol2DataSet: LineDataSet
+    private var inFlowVol2DataSet: LineDataSet? = null
+    private var outFlowVol2DataSet: LineDataSet? = null
 
-    private lateinit var inFlowVol3DataSet: LineDataSet
-    private lateinit var outFlowVol3DataSet: LineDataSet
+    private var inFlowVol3DataSet: LineDataSet? = null
+    private var outFlowVol3DataSet: LineDataSet? = null
 
-    private lateinit var inFlowVol4DataSet: LineDataSet
-    private lateinit var outFlowVol4DataSet: LineDataSet
+    private var inFlowVol4DataSet: LineDataSet? = null
+    private var outFlowVol4DataSet: LineDataSet? = null
 
-    private lateinit var inFlowVol5DataSet: LineDataSet
-    private lateinit var outFlowVol5DataSet: LineDataSet
+    private var inFlowVol5DataSet: LineDataSet? = null
+    private var outFlowVol5DataSet: LineDataSet? = null
 
     private var isStart = false
     private var calibrateCount = 1 //定标计数器
@@ -134,6 +136,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun initView() {
+        usbTransferUtil = USBTransferUtil.getInstance()
         mDownTime = object : FixCountDownTime(20, 1000) {}
         binding.rvFlowHandleInhale.layoutManager = LinearLayoutManager(requireContext())
 
@@ -194,13 +197,13 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                     override fun onTick(times: Int) {
                         when (calibrateCount) {
                             1 -> {
-                                inVolSec1DataSet.addEntry(
+                                inVolSec1DataSet!!.addEntry(
                                     Entry(
                                         startSec,
                                         startVol
                                     )
                                 )
-                                inFlowVol1DataSet.addEntry(
+                                inFlowVol1DataSet!!.addEntry(
                                     Entry(
                                         startVol,
                                         startFlow
@@ -213,13 +216,13 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                             }
 
                             3 -> {
-                                inVolSec2DataSet.addEntry(
+                                inVolSec2DataSet!!.addEntry(
                                     Entry(
                                         startSec,
                                         startVol
                                     )
                                 )
-                                inFlowVol2DataSet.addEntry(
+                                inFlowVol2DataSet!!.addEntry(
                                     Entry(
                                         startVol,
                                         startFlow
@@ -231,13 +234,13 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                             }
 
                             5 -> {
-                                inVolSec3DataSet.addEntry(
+                                inVolSec3DataSet!!.addEntry(
                                     Entry(
                                         startSec,
                                         startVol
                                     )
                                 )
-                                inFlowVol3DataSet.addEntry(
+                                inFlowVol3DataSet!!.addEntry(
                                     Entry(
                                         startVol,
                                         startFlow
@@ -249,13 +252,13 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                             }
 
                             7 -> {
-                                inVolSec4DataSet.addEntry(
+                                inVolSec4DataSet!!.addEntry(
                                     Entry(
                                         startSec,
                                         startVol
                                     )
                                 )
-                                inFlowVol4DataSet.addEntry(
+                                inFlowVol4DataSet!!.addEntry(
                                     Entry(
                                         startVol,
                                         startFlow
@@ -267,13 +270,13 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                             }
 
                             9 -> {
-                                inVolSec5DataSet.addEntry(
+                                inVolSec5DataSet!!.addEntry(
                                     Entry(
                                         startSec,
                                         startVol
                                     )
                                 )
-                                inFlowVol5DataSet.addEntry(
+                                inFlowVol5DataSet!!.addEntry(
                                     Entry(
                                         startVol,
                                         startFlow
@@ -295,27 +298,9 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                     }
 
                     override fun onFinish() {
-                        if(tempvol > 2.0){
-                            inVolSec1DataSet.clear()
-                            inFlowVol1DataSet.clear()
-
-                            binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
-                            binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
-                            binding.chartFlowHandleCapacityTime.invalidate()
-
-                            binding.chartFlowHandleFlowCapacity.lineData.notifyDataChanged()
-                            binding.chartFlowHandleFlowCapacity.notifyDataSetChanged()
-                            binding.chartFlowHandleFlowCapacity.invalidate()
-
-                            startSec = 0f
-                            startVol = 0f
-                            startFlow = 0f
-                            mDownTime.setmTimes(20)
-                            calibrateCount = 1
-                            isPull = true
-                            binding.tvPullDirection.text = "拉"
-                            binding.tvPullDirection.setBackgroundResource(R.drawable.flow_pull)
-                        }else{
+                        if (tempvol > 2.0) {
+                            resetParmet(1)
+                        } else {
                             inHaleFlowList.add(
                                 FlowBean(
                                     0,
@@ -331,27 +316,8 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                                 inHaleFlowList
                             )
                             mDownTime.setmTimes(20)
-                            when (calibrateCount) {
-                                1 -> {
-                                    calibrateCount = 2
-                                }
 
-                                3 -> {
-                                    calibrateCount = 4
-                                }
-
-                                5 -> {
-                                    calibrateCount = 6
-                                }
-
-                                7 -> {
-                                    calibrateCount = 8
-                                }
-
-                                9 -> {
-                                    calibrateCount = 10
-                                }
-                            }
+                            calibrateCount++
                             startSec = 0f
                             startVol = 0f
                             startFlow = 0f
@@ -370,13 +336,13 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                     override fun onTick(times: Int) {
                         when (calibrateCount) {
                             2 -> {
-                                outVolSec1DataSet.addEntry(
+                                outVolSec1DataSet!!.addEntry(
                                     Entry(
                                         startSec,
                                         -startVol
                                     )
                                 )
-                                outFlowVol1DataSet.addEntry(
+                                outFlowVol1DataSet!!.addEntry(
                                     Entry(
                                         startVol,
                                         -startFlow
@@ -388,13 +354,13 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                             }
 
                             4 -> {
-                                outVolSec2DataSet.addEntry(
+                                outVolSec2DataSet!!.addEntry(
                                     Entry(
                                         startSec,
                                         -startVol
                                     )
                                 )
-                                outFlowVol2DataSet.addEntry(
+                                outFlowVol2DataSet!!.addEntry(
                                     Entry(
                                         startVol,
                                         -startFlow
@@ -406,13 +372,13 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                             }
 
                             6 -> {
-                                outVolSec3DataSet.addEntry(
+                                outVolSec3DataSet!!.addEntry(
                                     Entry(
                                         startSec,
                                         -startVol
                                     )
                                 )
-                                outFlowVol3DataSet.addEntry(
+                                outFlowVol3DataSet!!.addEntry(
                                     Entry(
                                         startVol,
                                         -startFlow
@@ -424,14 +390,14 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                             }
 
                             8 -> {
-                                outVolSec4DataSet.addEntry(
+                                outVolSec4DataSet!!.addEntry(
                                     Entry(
                                         startSec,
                                         -startVol
                                     )
                                 )
 
-                                outFlowVol4DataSet.addEntry(
+                                outFlowVol4DataSet!!.addEntry(
                                     Entry(
                                         startVol,
                                         -startFlow
@@ -443,13 +409,13 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                             }
 
                             10 -> {
-                                outVolSec5DataSet.addEntry(
+                                outVolSec5DataSet!!.addEntry(
                                     Entry(
                                         startSec,
                                         -startVol
                                     )
                                 )
-                                outFlowVol5DataSet.addEntry(
+                                outFlowVol5DataSet!!.addEntry(
                                     Entry(
                                         startVol,
                                         -startFlow
@@ -485,28 +451,8 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                             exHaleFlowList
                         )
                         mDownTime.setmTimes(20)
-                        when (calibrateCount) {
-                            2 -> {
-                                calibrateCount = 3
-                            }
 
-                            4 -> {
-                                calibrateCount = 5
-                            }
-
-                            6 -> {
-                                calibrateCount = 7
-                            }
-
-                            8 -> {
-                                calibrateCount = 9
-                            }
-
-                            10 -> {
-                                calibrateCount = 1
-                            }
-                        }
-
+                        calibrateCount++
                         startSec = 0f
                         startVol = 0f
                         startFlow = 0f
@@ -523,24 +469,32 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                 if (it == "handleFlow") {
                     //开始手动定标
                     stopPortSend()
-                    lifecycleScope.launch(Dispatchers.Main)  {
+                    lifecycleScope.launch(Dispatchers.Main) {
                         delay(100)
                         isZeroSuccess()
                     }
                     lifecycleScope.launch(Dispatchers.Main) {
                         delay(100)
-                        isZero = true
+                        isZero = false
                         if (isZero) {
                             isStart = true
                             sendCalibraCommand()
                             LiveDataBus.get().with("flowStart").value = "handleFlow"
+                            iFlag = 2
+                            isStop = false
+                            binding.tvPullDirection.text = "拉"
+                            binding.tvPullDirection.setBackgroundResource(R.drawable.flow_pull)
+                        }else{
+                            LungCommonDialogFragment.startCommonDialogFragment(
+                                requireActivity().supportFragmentManager, "定标失败!", "2"
+                            )
                         }
                     }
                 }
             }
         }
         //定标结束
-        LiveDataBus.get().with("flowStop").observe(this) {
+        LiveDataBus.get().with("clickFlowStop").observe(this) {
             if (it is String) {
                 isStart = false
                 stopPortSend()
@@ -548,6 +502,11 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
 
                 }
             }
+        }
+
+        //串口数据
+        LiveDataBus.get().with("GetDeviceInfo").observe(this) {
+
         }
     }
 
@@ -690,325 +649,215 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                 }
 
                 inVolSec1DataSet = LineDataSet(null, "")
-                inVolSec1DataSet.lineWidth = 1.0f
-                inVolSec1DataSet.color = ContextCompat.getColor(requireContext(), R.color.green)
-                inVolSec1DataSet.setDrawValues(false)
-                inVolSec1DataSet.setDrawCircles(false)
-                inVolSec1DataSet.setDrawCircleHole(false)
-                inVolSec1DataSet.setDrawFilled(false)
-                inVolSec1DataSet.mode = LineDataSet.Mode.LINEAR
+                inVolSec1DataSet!!.lineWidth = 1.0f
+                inVolSec1DataSet!!.color = ContextCompat.getColor(requireContext(), R.color.green)
+                inVolSec1DataSet!!.setDrawValues(false)
+                inVolSec1DataSet!!.setDrawCircles(false)
+                inVolSec1DataSet!!.setDrawCircleHole(false)
+                inVolSec1DataSet!!.setDrawFilled(false)
+                inVolSec1DataSet!!.mode = LineDataSet.Mode.LINEAR
 
                 outVolSec1DataSet = LineDataSet(null, "")
-                outVolSec1DataSet.lineWidth = 1.0f
-                outVolSec1DataSet.color = ContextCompat.getColor(requireContext(), R.color.green)
-                outVolSec1DataSet.setDrawValues(false)
-                outVolSec1DataSet.setDrawCircles(false)
-                outVolSec1DataSet.setDrawCircleHole(false)
-                outVolSec1DataSet.setDrawFilled(false)
-                outVolSec1DataSet.mode = LineDataSet.Mode.LINEAR
+                outVolSec1DataSet!!.lineWidth = 1.0f
+                outVolSec1DataSet!!.color = ContextCompat.getColor(requireContext(), R.color.green)
+                outVolSec1DataSet!!.setDrawValues(false)
+                outVolSec1DataSet!!.setDrawCircles(false)
+                outVolSec1DataSet!!.setDrawCircleHole(false)
+                outVolSec1DataSet!!.setDrawFilled(false)
+                outVolSec1DataSet!!.mode = LineDataSet.Mode.LINEAR
 
                 inVolSec2DataSet = LineDataSet(null, "")
-                inVolSec2DataSet.lineWidth = 1.0f
-                inVolSec2DataSet.color = ContextCompat.getColor(requireContext(), R.color.blue)
-                inVolSec2DataSet.setDrawValues(false)
-                inVolSec2DataSet.setDrawCircles(false)
-                inVolSec2DataSet.setDrawCircleHole(false)
-                inVolSec2DataSet.setDrawFilled(false)
-                inVolSec2DataSet.mode = LineDataSet.Mode.LINEAR
+                inVolSec2DataSet!!.lineWidth = 1.0f
+                inVolSec2DataSet!!.color = ContextCompat.getColor(requireContext(), R.color.blue)
+                inVolSec2DataSet!!.setDrawValues(false)
+                inVolSec2DataSet!!.setDrawCircles(false)
+                inVolSec2DataSet!!.setDrawCircleHole(false)
+                inVolSec2DataSet!!.setDrawFilled(false)
+                inVolSec2DataSet!!.mode = LineDataSet.Mode.LINEAR
 
                 outVolSec2DataSet = LineDataSet(null, "")
-                outVolSec2DataSet.lineWidth = 1.0f
-                outVolSec2DataSet.color = ContextCompat.getColor(requireContext(), R.color.blue)
-                outVolSec2DataSet.setDrawValues(false)
-                outVolSec2DataSet.setDrawCircles(false)
-                outVolSec2DataSet.setDrawCircleHole(false)
-                outVolSec2DataSet.setDrawFilled(false)
-                outVolSec2DataSet.mode = LineDataSet.Mode.LINEAR
+                outVolSec2DataSet!!.lineWidth = 1.0f
+                outVolSec2DataSet!!.color = ContextCompat.getColor(requireContext(), R.color.blue)
+                outVolSec2DataSet!!.setDrawValues(false)
+                outVolSec2DataSet!!.setDrawCircles(false)
+                outVolSec2DataSet!!.setDrawCircleHole(false)
+                outVolSec2DataSet!!.setDrawFilled(false)
+                outVolSec2DataSet!!.mode = LineDataSet.Mode.LINEAR
 
                 inVolSec3DataSet = LineDataSet(null, "")
-                inVolSec3DataSet.lineWidth = 1.0f
-                inVolSec3DataSet.color = ContextCompat.getColor(requireContext(), R.color.brown)
-                inVolSec3DataSet.setDrawValues(false)
-                inVolSec3DataSet.setDrawCircles(false)
-                inVolSec3DataSet.setDrawCircleHole(false)
-                inVolSec3DataSet.setDrawFilled(false)
-                inVolSec3DataSet.mode = LineDataSet.Mode.LINEAR
+                inVolSec3DataSet!!.lineWidth = 1.0f
+                inVolSec3DataSet!!.color = ContextCompat.getColor(requireContext(), R.color.brown)
+                inVolSec3DataSet!!.setDrawValues(false)
+                inVolSec3DataSet!!.setDrawCircles(false)
+                inVolSec3DataSet!!.setDrawCircleHole(false)
+                inVolSec3DataSet!!.setDrawFilled(false)
+                inVolSec3DataSet!!.mode = LineDataSet.Mode.LINEAR
 
                 outVolSec3DataSet = LineDataSet(null, "")
-                outVolSec3DataSet.lineWidth = 1.0f
-                outVolSec3DataSet.color = ContextCompat.getColor(requireContext(), R.color.brown)
-                outVolSec3DataSet.setDrawValues(false)
-                outVolSec3DataSet.setDrawCircles(false)
-                outVolSec3DataSet.setDrawCircleHole(false)
-                outVolSec3DataSet.setDrawFilled(false)
-                outVolSec3DataSet.mode = LineDataSet.Mode.LINEAR
+                outVolSec3DataSet!!.lineWidth = 1.0f
+                outVolSec3DataSet!!.color = ContextCompat.getColor(requireContext(), R.color.brown)
+                outVolSec3DataSet!!.setDrawValues(false)
+                outVolSec3DataSet!!.setDrawCircles(false)
+                outVolSec3DataSet!!.setDrawCircleHole(false)
+                outVolSec3DataSet!!.setDrawFilled(false)
+                outVolSec3DataSet!!.mode = LineDataSet.Mode.LINEAR
 
                 inVolSec4DataSet = LineDataSet(null, "")
-                inVolSec4DataSet.lineWidth = 1.0f
-                inVolSec4DataSet.color = ContextCompat.getColor(requireContext(), R.color.olive)
-                inVolSec4DataSet.setDrawValues(false)
-                inVolSec4DataSet.setDrawCircles(false)
-                inVolSec4DataSet.setDrawCircleHole(false)
-                inVolSec4DataSet.setDrawFilled(false)
-                inVolSec4DataSet.mode = LineDataSet.Mode.LINEAR
+                inVolSec4DataSet!!.lineWidth = 1.0f
+                inVolSec4DataSet!!.color = ContextCompat.getColor(requireContext(), R.color.olive)
+                inVolSec4DataSet!!.setDrawValues(false)
+                inVolSec4DataSet!!.setDrawCircles(false)
+                inVolSec4DataSet!!.setDrawCircleHole(false)
+                inVolSec4DataSet!!.setDrawFilled(false)
+                inVolSec4DataSet!!.mode = LineDataSet.Mode.LINEAR
 
                 outVolSec4DataSet = LineDataSet(null, "")
-                outVolSec4DataSet.lineWidth = 1.0f
-                outVolSec4DataSet.color = ContextCompat.getColor(requireContext(), R.color.olive)
-                outVolSec4DataSet.setDrawValues(false)
-                outVolSec4DataSet.setDrawCircles(false)
-                outVolSec4DataSet.setDrawCircleHole(false)
-                outVolSec4DataSet.setDrawFilled(false)
-                outVolSec4DataSet.mode = LineDataSet.Mode.LINEAR
+                outVolSec4DataSet!!.lineWidth = 1.0f
+                outVolSec4DataSet!!.color = ContextCompat.getColor(requireContext(), R.color.olive)
+                outVolSec4DataSet!!.setDrawValues(false)
+                outVolSec4DataSet!!.setDrawCircles(false)
+                outVolSec4DataSet!!.setDrawCircleHole(false)
+                outVolSec4DataSet!!.setDrawFilled(false)
+                outVolSec4DataSet!!.mode = LineDataSet.Mode.LINEAR
 
                 inVolSec5DataSet = LineDataSet(null, "")
-                inVolSec5DataSet.lineWidth = 1.0f
-                inVolSec5DataSet.color =
+                inVolSec5DataSet!!.lineWidth = 1.0f
+                inVolSec5DataSet!!.color =
                     ContextCompat.getColor(requireContext(), R.color.blueViolet)
-                inVolSec5DataSet.setDrawValues(false)
-                inVolSec5DataSet.setDrawCircles(false)
-                inVolSec5DataSet.setDrawCircleHole(false)
-                inVolSec5DataSet.setDrawFilled(false)
-                inVolSec5DataSet.mode = LineDataSet.Mode.LINEAR
+                inVolSec5DataSet!!.setDrawValues(false)
+                inVolSec5DataSet!!.setDrawCircles(false)
+                inVolSec5DataSet!!.setDrawCircleHole(false)
+                inVolSec5DataSet!!.setDrawFilled(false)
+                inVolSec5DataSet!!.mode = LineDataSet.Mode.LINEAR
 
                 outVolSec5DataSet = LineDataSet(null, "")
-                outVolSec5DataSet.lineWidth = 1.0f
-                outVolSec5DataSet.color =
+                outVolSec5DataSet!!.lineWidth = 1.0f
+                outVolSec5DataSet!!.color =
                     ContextCompat.getColor(requireContext(), R.color.blueViolet)
-                outVolSec5DataSet.setDrawValues(false)
-                outVolSec5DataSet.setDrawCircles(false)
-                outVolSec5DataSet.setDrawCircleHole(false)
-                outVolSec5DataSet.setDrawFilled(false)
-                outVolSec5DataSet.mode = LineDataSet.Mode.LINEAR
+                outVolSec5DataSet!!.setDrawValues(false)
+                outVolSec5DataSet!!.setDrawCircles(false)
+                outVolSec5DataSet!!.setDrawCircleHole(false)
+                outVolSec5DataSet!!.setDrawFilled(false)
+                outVolSec5DataSet!!.mode = LineDataSet.Mode.LINEAR
 
-                lineDataSets.add(inVolSec1DataSet)
-                lineDataSets.add(outVolSec1DataSet)
-                lineDataSets.add(inVolSec2DataSet)
-                lineDataSets.add(outVolSec2DataSet)
-                lineDataSets.add(inVolSec3DataSet)
-                lineDataSets.add(outVolSec3DataSet)
-                lineDataSets.add(inVolSec4DataSet)
-                lineDataSets.add(outVolSec4DataSet)
-                lineDataSets.add(inVolSec5DataSet)
-                lineDataSets.add(outVolSec5DataSet)
+                lineDataSets.add(inVolSec1DataSet!!)
+                lineDataSets.add(outVolSec1DataSet!!)
+                lineDataSets.add(inVolSec2DataSet!!)
+                lineDataSets.add(outVolSec2DataSet!!)
+                lineDataSets.add(inVolSec3DataSet!!)
+                lineDataSets.add(outVolSec3DataSet!!)
+                lineDataSets.add(inVolSec4DataSet!!)
+                lineDataSets.add(outVolSec4DataSet!!)
+                lineDataSets.add(inVolSec5DataSet!!)
+                lineDataSets.add(outVolSec5DataSet!!)
             } else {
                 inFlowVol1DataSet = LineDataSet(null, "")
-                inFlowVol1DataSet.lineWidth = 1.0f
-                inFlowVol1DataSet.color = ContextCompat.getColor(requireContext(), R.color.green)
-                inFlowVol1DataSet.setDrawValues(false)
-                inFlowVol1DataSet.setDrawCircles(false)
-                inFlowVol1DataSet.setDrawCircleHole(false)
-                inFlowVol1DataSet.setDrawFilled(false)
-                inFlowVol1DataSet.mode = LineDataSet.Mode.LINEAR
+                inFlowVol1DataSet!!.lineWidth = 1.0f
+                inFlowVol1DataSet!!.color = ContextCompat.getColor(requireContext(), R.color.green)
+                inFlowVol1DataSet!!.setDrawValues(false)
+                inFlowVol1DataSet!!.setDrawCircles(false)
+                inFlowVol1DataSet!!.setDrawCircleHole(false)
+                inFlowVol1DataSet!!.setDrawFilled(false)
+                inFlowVol1DataSet!!.mode = LineDataSet.Mode.LINEAR
 
                 outFlowVol1DataSet = LineDataSet(null, "")
-                outFlowVol1DataSet.lineWidth = 1.0f
-                outFlowVol1DataSet.color = ContextCompat.getColor(requireContext(), R.color.green)
-                outFlowVol1DataSet.setDrawValues(false)
-                outFlowVol1DataSet.setDrawCircles(false)
-                outFlowVol1DataSet.setDrawCircleHole(false)
-                outFlowVol1DataSet.setDrawFilled(false)
-                outFlowVol1DataSet.mode = LineDataSet.Mode.LINEAR
+                outFlowVol1DataSet!!.lineWidth = 1.0f
+                outFlowVol1DataSet!!.color = ContextCompat.getColor(requireContext(), R.color.green)
+                outFlowVol1DataSet!!.setDrawValues(false)
+                outFlowVol1DataSet!!.setDrawCircles(false)
+                outFlowVol1DataSet!!.setDrawCircleHole(false)
+                outFlowVol1DataSet!!.setDrawFilled(false)
+                outFlowVol1DataSet!!.mode = LineDataSet.Mode.LINEAR
 
                 inFlowVol2DataSet = LineDataSet(null, "")
-                inFlowVol2DataSet.lineWidth = 1.0f
-                inFlowVol2DataSet.color = ContextCompat.getColor(requireContext(), R.color.blue)
-                inFlowVol2DataSet.setDrawValues(false)
-                inFlowVol2DataSet.setDrawCircles(false)
-                inFlowVol2DataSet.setDrawCircleHole(false)
-                inFlowVol2DataSet.setDrawFilled(false)
-                inFlowVol2DataSet.mode = LineDataSet.Mode.LINEAR
+                inFlowVol2DataSet!!.lineWidth = 1.0f
+                inFlowVol2DataSet!!.color = ContextCompat.getColor(requireContext(), R.color.blue)
+                inFlowVol2DataSet!!.setDrawValues(false)
+                inFlowVol2DataSet!!.setDrawCircles(false)
+                inFlowVol2DataSet!!.setDrawCircleHole(false)
+                inFlowVol2DataSet!!.setDrawFilled(false)
+                inFlowVol2DataSet!!.mode = LineDataSet.Mode.LINEAR
 
                 outFlowVol2DataSet = LineDataSet(null, "")
-                outFlowVol2DataSet.lineWidth = 1.0f
-                outFlowVol2DataSet.color = ContextCompat.getColor(requireContext(), R.color.blue)
-                outFlowVol2DataSet.setDrawValues(false)
-                outFlowVol2DataSet.setDrawCircles(false)
-                outFlowVol2DataSet.setDrawCircleHole(false)
-                outFlowVol2DataSet.setDrawFilled(false)
-                outFlowVol2DataSet.mode = LineDataSet.Mode.LINEAR
+                outFlowVol2DataSet!!.lineWidth = 1.0f
+                outFlowVol2DataSet!!.color = ContextCompat.getColor(requireContext(), R.color.blue)
+                outFlowVol2DataSet!!.setDrawValues(false)
+                outFlowVol2DataSet!!.setDrawCircles(false)
+                outFlowVol2DataSet!!.setDrawCircleHole(false)
+                outFlowVol2DataSet!!.setDrawFilled(false)
+                outFlowVol2DataSet!!.mode = LineDataSet.Mode.LINEAR
 
                 inFlowVol3DataSet = LineDataSet(null, "")
-                inFlowVol3DataSet.lineWidth = 1.0f
-                inFlowVol3DataSet.color = ContextCompat.getColor(requireContext(), R.color.brown)
-                inFlowVol3DataSet.setDrawValues(false)
-                inFlowVol3DataSet.setDrawCircles(false)
-                inFlowVol3DataSet.setDrawCircleHole(false)
-                inFlowVol3DataSet.setDrawFilled(false)
-                inFlowVol3DataSet.mode = LineDataSet.Mode.LINEAR
+                inFlowVol3DataSet!!.lineWidth = 1.0f
+                inFlowVol3DataSet!!.color = ContextCompat.getColor(requireContext(), R.color.brown)
+                inFlowVol3DataSet!!.setDrawValues(false)
+                inFlowVol3DataSet!!.setDrawCircles(false)
+                inFlowVol3DataSet!!.setDrawCircleHole(false)
+                inFlowVol3DataSet!!.setDrawFilled(false)
+                inFlowVol3DataSet!!.mode = LineDataSet.Mode.LINEAR
 
                 outFlowVol3DataSet = LineDataSet(null, "")
-                outFlowVol3DataSet.lineWidth = 1.0f
-                outFlowVol3DataSet.color = ContextCompat.getColor(requireContext(), R.color.brown)
-                outFlowVol3DataSet.setDrawValues(false)
-                outFlowVol3DataSet.setDrawCircles(false)
-                outFlowVol3DataSet.setDrawCircleHole(false)
-                outFlowVol3DataSet.setDrawFilled(false)
-                outFlowVol3DataSet.mode = LineDataSet.Mode.LINEAR
+                outFlowVol3DataSet!!.lineWidth = 1.0f
+                outFlowVol3DataSet!!.color = ContextCompat.getColor(requireContext(), R.color.brown)
+                outFlowVol3DataSet!!.setDrawValues(false)
+                outFlowVol3DataSet!!.setDrawCircles(false)
+                outFlowVol3DataSet!!.setDrawCircleHole(false)
+                outFlowVol3DataSet!!.setDrawFilled(false)
+                outFlowVol3DataSet!!.mode = LineDataSet.Mode.LINEAR
 
                 inFlowVol4DataSet = LineDataSet(null, "")
-                inFlowVol4DataSet.lineWidth = 1.0f
-                inFlowVol4DataSet.color = ContextCompat.getColor(requireContext(), R.color.olive)
-                inFlowVol4DataSet.setDrawValues(false)
-                inFlowVol4DataSet.setDrawCircles(false)
-                inFlowVol4DataSet.setDrawCircleHole(false)
-                inFlowVol4DataSet.setDrawFilled(false)
-                inFlowVol4DataSet.mode = LineDataSet.Mode.LINEAR
+                inFlowVol4DataSet!!.lineWidth = 1.0f
+                inFlowVol4DataSet!!.color = ContextCompat.getColor(requireContext(), R.color.olive)
+                inFlowVol4DataSet!!.setDrawValues(false)
+                inFlowVol4DataSet!!.setDrawCircles(false)
+                inFlowVol4DataSet!!.setDrawCircleHole(false)
+                inFlowVol4DataSet!!.setDrawFilled(false)
+                inFlowVol4DataSet!!.mode = LineDataSet.Mode.LINEAR
 
                 outFlowVol4DataSet = LineDataSet(null, "")
-                outFlowVol4DataSet.lineWidth = 1.0f
-                outFlowVol4DataSet.color = ContextCompat.getColor(requireContext(), R.color.olive)
-                outFlowVol4DataSet.setDrawValues(false)
-                outFlowVol4DataSet.setDrawCircles(false)
-                outFlowVol4DataSet.setDrawCircleHole(false)
-                outFlowVol4DataSet.setDrawFilled(false)
-                outFlowVol4DataSet.mode = LineDataSet.Mode.LINEAR
+                outFlowVol4DataSet!!.lineWidth = 1.0f
+                outFlowVol4DataSet!!.color = ContextCompat.getColor(requireContext(), R.color.olive)
+                outFlowVol4DataSet!!.setDrawValues(false)
+                outFlowVol4DataSet!!.setDrawCircles(false)
+                outFlowVol4DataSet!!.setDrawCircleHole(false)
+                outFlowVol4DataSet!!.setDrawFilled(false)
+                outFlowVol4DataSet!!.mode = LineDataSet.Mode.LINEAR
 
                 inFlowVol5DataSet = LineDataSet(null, "")
-                inFlowVol5DataSet.lineWidth = 1.0f
-                inFlowVol5DataSet.color =
+                inFlowVol5DataSet!!.lineWidth = 1.0f
+                inFlowVol5DataSet!!.color =
                     ContextCompat.getColor(requireContext(), R.color.blueViolet)
-                inFlowVol5DataSet.setDrawValues(false)
-                inFlowVol5DataSet.setDrawCircles(false)
-                inFlowVol5DataSet.setDrawCircleHole(false)
-                inFlowVol5DataSet.setDrawFilled(false)
-                inFlowVol5DataSet.mode = LineDataSet.Mode.LINEAR
+                inFlowVol5DataSet!!.setDrawValues(false)
+                inFlowVol5DataSet!!.setDrawCircles(false)
+                inFlowVol5DataSet!!.setDrawCircleHole(false)
+                inFlowVol5DataSet!!.setDrawFilled(false)
+                inFlowVol5DataSet!!.mode = LineDataSet.Mode.LINEAR
 
                 outFlowVol5DataSet = LineDataSet(null, "")
-                outFlowVol5DataSet.lineWidth = 1.0f
-                outFlowVol5DataSet.color =
+                outFlowVol5DataSet!!.lineWidth = 1.0f
+                outFlowVol5DataSet!!.color =
                     ContextCompat.getColor(requireContext(), R.color.blueViolet)
-                outFlowVol5DataSet.setDrawValues(false)
-                outFlowVol5DataSet.setDrawCircles(false)
-                outFlowVol5DataSet.setDrawCircleHole(false)
-                outFlowVol5DataSet.setDrawFilled(false)
-                outFlowVol5DataSet.mode = LineDataSet.Mode.LINEAR
+                outFlowVol5DataSet!!.setDrawValues(false)
+                outFlowVol5DataSet!!.setDrawCircles(false)
+                outFlowVol5DataSet!!.setDrawCircleHole(false)
+                outFlowVol5DataSet!!.setDrawFilled(false)
+                outFlowVol5DataSet!!.mode = LineDataSet.Mode.LINEAR
 
-                lineDataSets.add(inFlowVol1DataSet)
-                lineDataSets.add(outFlowVol1DataSet)
-                lineDataSets.add(inFlowVol2DataSet)
-                lineDataSets.add(outFlowVol2DataSet)
-                lineDataSets.add(inFlowVol3DataSet)
-                lineDataSets.add(outFlowVol3DataSet)
-                lineDataSets.add(inFlowVol4DataSet)
-                lineDataSets.add(outFlowVol4DataSet)
-                lineDataSets.add(inFlowVol5DataSet)
-                lineDataSets.add(outFlowVol5DataSet)
+                lineDataSets.add(inFlowVol1DataSet!!)
+                lineDataSets.add(outFlowVol1DataSet!!)
+                lineDataSets.add(inFlowVol2DataSet!!)
+                lineDataSets.add(outFlowVol2DataSet!!)
+                lineDataSets.add(inFlowVol3DataSet!!)
+                lineDataSets.add(outFlowVol3DataSet!!)
+                lineDataSets.add(inFlowVol4DataSet!!)
+                lineDataSets.add(outFlowVol4DataSet!!)
+                lineDataSets.add(inFlowVol5DataSet!!)
+                lineDataSets.add(outFlowVol5DataSet!!)
             }
             val lineData = LineData(lineDataSets)
             data = lineData
         }
     }
-
-    private fun flowDataSetList(
-        valueTextColor: Int? = com.justsafe.libview.R.color.Indigo_colorPrimary,
-        dataSetColors: List<Int>? = listOf(
-            com.justsafe.libview.R.color.gray,
-            com.justsafe.libview.R.color.gray,
-            com.justsafe.libview.R.color.gray,
-            com.justsafe.libview.R.color.gray,
-            com.justsafe.libview.R.color.gray,
-            com.justsafe.libview.R.color.gray,
-            com.justsafe.libview.R.color.gray,
-            com.justsafe.libview.R.color.gray
-        ),
-    ): MutableList<LineDataSet> {
-
-        val dataSetEntriesMap = mutableMapOf<String, MutableList<Entry>>()
-
-        val entries1 = mutableListOf<Entry>()
-        val entries2 = mutableListOf<Entry>()
-        val entries3 = mutableListOf<Entry>()
-        val entries4 = mutableListOf<Entry>()
-        val entries5 = mutableListOf<Entry>()
-        val entries6 = mutableListOf<Entry>()
-        val entries7 = mutableListOf<Entry>()
-        val entries8 = mutableListOf<Entry>()
-
-        // 模拟十个数据点
-        for (i in 0..10) {
-            // 在 x 轴上以递增的方式设置数据点的 x 值，y 值可以根据需要设置
-            val entry1 = Entry(i * 0.1.toFloat(), i * 0.3.toFloat())
-            entries1.add(entry1)
-
-            val entry2 = Entry(i * 0.3.toFloat(), i * 0.3.toFloat())
-            entries2.add(entry2)
-
-            val entry3 = Entry(i * 0.65.toFloat(), i * 0.3.toFloat())
-            entries3.add(entry3)
-
-            val entry4 = Entry(i * 0.9.toFloat(), i * 0.3.toFloat())
-            entries4.add(entry4)
-
-            val entry5 = Entry(i * 0.1.toFloat(), -i * 0.3.toFloat())
-            entries5.add(entry5)
-
-            val entry6 = Entry(i * 0.3.toFloat(), -i * 0.3.toFloat())
-            entries6.add(entry6)
-
-            val entry7 = Entry(i * 0.65.toFloat(), -i * 0.3.toFloat())
-            entries7.add(entry7)
-
-            val entry8 = Entry(i * 0.9.toFloat(), -i * 0.3.toFloat())
-            entries8.add(entry8)
-        }
-
-        dataSetEntriesMap["1"] = entries1
-        dataSetEntriesMap["2"] = entries2
-        dataSetEntriesMap["3"] = entries3
-        dataSetEntriesMap["4"] = entries4
-        dataSetEntriesMap["5"] = entries5
-        dataSetEntriesMap["6"] = entries6
-        dataSetEntriesMap["7"] = entries7
-        dataSetEntriesMap["8"] = entries8
-
-        // 创建多个 LineDataSet 对象
-        val dataSet1 = LineDataSet(dataSetEntriesMap["1"], "")
-        val dataSet2 = LineDataSet(dataSetEntriesMap["2"], "")
-        val dataSet3 = LineDataSet(dataSetEntriesMap["3"], "")
-        val dataSet4 = LineDataSet(dataSetEntriesMap["4"], "")
-        val dataSet5 = LineDataSet(dataSetEntriesMap["5"], "")
-        val dataSet6 = LineDataSet(dataSetEntriesMap["6"], "")
-        val dataSet7 = LineDataSet(dataSetEntriesMap["7"], "")
-        val dataSet8 = LineDataSet(dataSetEntriesMap["8"], "")
-
-        // 将 LineDataSet 对象添加到一个列表中
-        val list = mutableListOf(
-            dataSet1, dataSet2, dataSet3, dataSet4, dataSet5, dataSet6, dataSet7, dataSet8
-        )
-
-        for ((index, dataSet) in list.withIndex()) {
-
-            // 确保颜色列表不为空，且颜色足够多以覆盖所有的 LineDataSet
-            val color = dataSetColors?.get(index) ?: com.justsafe.libview.R.color.colorPrimary
-
-            dataSet.setDrawCircleHole(false)
-
-            dataSet.setDrawCircles(false)
-
-            dataSet.enableDashedLine(1f, 2f, 1f)
-
-            dataSet.color = ContextCompat.getColor(requireContext(), color)
-
-            dataSet.setCircleColor(Color.BLUE)
-
-            dataSet.lineWidth = 1f
-
-            dataSet.circleRadius = 2f
-
-            dataSet.valueTextSize = 10f
-
-            if (valueTextColor != null) {
-                dataSet.setCircleColor(valueTextColor)
-            }
-            dataSet.setDrawValues(false)
-
-            dataSet.mode = LineDataSet.Mode.LINEAR
-        }
-
-        return list
-    }
-
 
     private fun isZeroSuccess() {
         //此处添加零位校验代码
@@ -1016,7 +865,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
         isZero = false
         try {
             isStop = false
-            SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)
+            usbTransferUtil.write(MudbusProtocol.FLOW_CALIBRATION_COMMAND)
             timer = fixedRateTimer("", false, 0, 1000) {
                 if (iFlag == 1) {
                     time++
@@ -1044,8 +893,8 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
 
     private fun stopPortSend() {
         try {
-            SerialPortManager.sendMessage(MudbusProtocol.FLOW_STOP_COMMAND)
-        }catch (e:Exception){
+            usbTransferUtil.write(MudbusProtocol.FLOW_STOP_COMMAND)
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
@@ -1053,8 +902,98 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
     private fun sendCalibraCommand() {
         try {
             SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    private fun resetParmet(type: Int) {
+        if (type == 1) {
+            when (calibrateCount) {
+                1 -> {
+                    inVolSec1DataSet!!.clear()
+                    inFlowVol1DataSet!!.clear()
+                }
+
+                2 -> {
+                    inVolSec2DataSet!!.clear()
+                    inFlowVol2DataSet!!.clear()
+                }
+
+                3 -> {
+                    inVolSec3DataSet!!.clear()
+                    inFlowVol3DataSet!!.clear()
+                }
+
+                4 -> {
+                    inVolSec4DataSet!!.clear()
+                    inFlowVol4DataSet!!.clear()
+                }
+
+                5 -> {
+                    inVolSec5DataSet!!.clear()
+                    inFlowVol5DataSet!!.clear()
+                }
+            }
+
+            binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
+            binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
+            binding.chartFlowHandleCapacityTime.invalidate()
+
+            binding.chartFlowHandleFlowCapacity.lineData.notifyDataChanged()
+            binding.chartFlowHandleFlowCapacity.notifyDataSetChanged()
+            binding.chartFlowHandleFlowCapacity.invalidate()
+
+            startSec = 0f
+            startVol = 0f
+            startFlow = 0f
+            mDownTime.setmTimes(20)
+            isPull = true
+            binding.tvPullDirection.text = "拉"
+            binding.tvPullDirection.setBackgroundResource(R.drawable.flow_pull)
+        }else{
+            when (calibrateCount) {
+                6 -> {
+                    outVolSec1DataSet!!.clear()
+                    outFlowVol1DataSet!!.clear()
+                }
+
+                7 -> {
+                    outVolSec2DataSet!!.clear()
+                    outFlowVol2DataSet!!.clear()
+                }
+
+                8 -> {
+                    outVolSec3DataSet!!.clear()
+                    outFlowVol3DataSet!!.clear()
+                }
+
+                9 -> {
+                    outVolSec4DataSet!!.clear()
+                    outFlowVol4DataSet!!.clear()
+                }
+
+                10 -> {
+                    outVolSec5DataSet!!.clear()
+                    outFlowVol5DataSet!!.clear()
+                }
+            }
+
+            binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
+            binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
+            binding.chartFlowHandleCapacityTime.invalidate()
+
+            binding.chartFlowHandleFlowCapacity.lineData.notifyDataChanged()
+            binding.chartFlowHandleFlowCapacity.notifyDataSetChanged()
+            binding.chartFlowHandleFlowCapacity.invalidate()
+
+            startSec = 0f
+            startVol = 0f
+            startFlow = 0f
+            mDownTime.setmTimes(20)
+            isPull = true
+            binding.tvPullDirection.text = "推"
+            binding.tvPullDirection.setBackgroundResource(R.drawable.flow_down)
         }
     }
 }

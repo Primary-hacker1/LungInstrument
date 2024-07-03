@@ -13,13 +13,19 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.ui.adapter.calibration.FlowAdapter
+import com.just.machine.ui.fragment.serial.MudbusProtocol
+import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.util.FixCountDownTime
 import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FragmentFlowAutoBinding
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Queue
 import java.util.Random
+
+
+
 
 
 /**
@@ -59,9 +65,11 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
             mutableListOf(FlowBean(0, "", 1, "容积1", "3", "3.003", "0.93", "0"))
         )
         //定标开始
-        LiveDataBus.get().with("flowStart").observe(this) {
+        LiveDataBus.get().with("clickFlowStart").observe(this) {
             if (it is String) {
                 if (it == "autoFlow") {
+                    sendCalibraCommand()
+            
                     mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack {
                         override fun onStart() {
 
@@ -99,11 +107,16 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
             }
         }
         //定标结束
-        LiveDataBus.get().with("flowStop").observe(this) {
+        LiveDataBus.get().with("clickFlowStop").observe(this) {
             if (it is String) {
                 if (it == "autoFlow") {
                 }
             }
+        }
+
+        //串口数据
+        LiveDataBus.get().with("GetDeviceInfo").observe(this) {
+
         }
     }
 
@@ -202,6 +215,14 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
             lineDataSets.add(actualDataSet)
             val lineData = LineData(lineDataSets)
             data = lineData
+        }
+    }
+
+    private fun sendCalibraCommand() {
+        try {
+            SerialPortManager.sendMessage(MudbusProtocol.FLOW_AUTO_CALIBRATION_COMMAND)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }

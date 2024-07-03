@@ -1,5 +1,6 @@
 package com.just.machine.ui.fragment
 
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -26,6 +27,7 @@ class PreHeatFragment : CommonBaseFragment<FragmentPreheatBinding>() {
     }
 
     override fun initView() {
+        binding.tvSkipPreheat.text = Html.fromHtml("<u>跳过</u>")
         binding.tvSystemTime.setTime(System.currentTimeMillis(),DateUtils.nowTimeDataString)
         mCountDownTime = object : FixCountDownTime(1200, 1000) {}
 

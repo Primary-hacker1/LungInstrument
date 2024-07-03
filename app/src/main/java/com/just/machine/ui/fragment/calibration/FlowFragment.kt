@@ -85,9 +85,9 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
             } else {
                 //手动流量定标
                 if (binding.vpFlowTitle.currentItem == 0) {
-                    LiveDataBus.get().with("flowStop").value = "handleFlow"
+                    LiveDataBus.get().with("clickFlowStop").value = "handleFlow"
                 } else {
-                    LiveDataBus.get().with("flowStop").value = "autoFlow"
+                    LiveDataBus.get().with("clickFlowStop").value = "autoFlow"
                 }
                 binding.tvFlowStart.text = "开始"
             }

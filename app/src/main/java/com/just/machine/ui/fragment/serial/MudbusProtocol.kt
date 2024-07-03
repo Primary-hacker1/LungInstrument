@@ -3,6 +3,7 @@ package com.just.machine.ui.fragment.serial
 import com.common.network.LogUtils
 import com.just.machine.model.LungTestData
 import com.common.base.BaseUtil
+import com.just.machine.util.CRC16Util
 import java.util.zip.CRC32
 import kotlin.experimental.and
 
@@ -20,6 +21,9 @@ object MudbusProtocol {
     // 包头和包尾
     const val PACKET_HEADER: Short = 0xAAAA.toShort()
     const val PACKET_FOOTER: Byte = 0xED.toByte()
+    val allowOneSensor: ByteArray = byteArrayOf(0x55,
+        0xAA.toByte(), 0x11, 0x02, 0x07, 0x00, 0xA6.toByte(), 0xE8.toByte()
+    )
 
     // 上位机握手命令数据格式
     val HANDSHAKE_COMMAND: ByteArray = byteArrayOf(
@@ -657,6 +661,40 @@ object MudbusProtocol {
         result[2] = (crcValue ushr 8).toByte()
         result[3] = crcValue.toByte()
         return result
+    }
+
+    fun cmdSend(cmd: String,dataLength:String="00"): ByteArray {
+        val head = "55AA"
+        val data = cmd+dataLength
+        val crc = CRC16Util.getCRC16(data)
+        val cmdHex = head + data + crc
+        return CRC16Util.hexStringToBytes(cmdHex)
+    }
+
+    fun formatVersion(bitFieldHex: String): String {
+        // Step 1: Swap first two and last two characters
+        val swappedHex = bitFieldHex.takeLast(2) + bitFieldHex.dropLast(2)
+
+        // Step 2: Convert swapped hex string to a Long
+        val bitField = swappedHex.toLong(16)
+
+        // Step 3: Extract fields from the bitField
+        val versionType = if ((1.toLong() shl 15 and bitField) != 0L) "B" else "V"
+        val versionNumber = (bitField.toInt() ushr 5) and 0x3FF // Extract bits 14-5
+        val testNumber = bitField.toInt() and 0x1F // Extract bits 4-0
+
+        // Step 4: Format the string according to the rules
+        return if (versionType == "V") {
+            val aa = versionNumber / 100
+            val b = (versionNumber % 100) / 10
+            val c = versionNumber % 10
+            "V$aa.$b.$c"
+        } else {
+            val aa = versionNumber / 100
+            val b = (versionNumber % 100) / 10
+            val c = versionNumber % 10
+            "B$aa.$b.${c}_$testNumber"
+        }
     }
 }
 
