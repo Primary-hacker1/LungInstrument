@@ -102,7 +102,7 @@
                     android:textSize="12sp" />
 
                 <com.justsafe.libview.view.BatteryView
-                    android:id="@+id/battery_view"
+                    android:id="@+id/battery_status"
                     android:layout_width="32dp"
                     android:layout_height="14dp"
                     app:bv_orientation="horizontal_right"

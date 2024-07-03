@@ -143,12 +143,16 @@
                 android:textColor="@color/colorWhite"
                 android:textSize="12sp" />
 
-            <ImageView
+            <com.justsafe.libview.view.BatteryView
                 android:id="@+id/iv_battery_status"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="32dp"
+                android:layout_height="14dp"
+                app:bv_orientation="horizontal_right"
                 android:layout_marginHorizontal="10dp"
-                android:src="@drawable/battery" />
+                app:bv_border_padding="1.5dp"
+                app:bv_border_width="1dp"
+                app:bv_header_width="2dp"
+                app:bv_radis="1dp" />
         </LinearLayout>
     </RelativeLayout>
 

@@ -30,7 +30,7 @@ class PreHeatFragment : CommonBaseFragment<FragmentPreheatBinding>() {
     override fun loadData() {
         lifecycleScope.launch(Dispatchers.Main) {
             delay(100)
-            binding.batteryView.setPower(50)
+            binding.batteryStatus.setPower(50)
         }
     }
 
