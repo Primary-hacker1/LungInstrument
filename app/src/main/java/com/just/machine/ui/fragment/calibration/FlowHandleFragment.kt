@@ -23,7 +23,7 @@ import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.ui.adapter.calibration.FlowAdapter
 import com.just.machine.ui.dialog.LoadingDialogFragment
 import com.just.machine.ui.dialog.LungCommonDialogFragment
-import com.just.machine.ui.fragment.serial.MudbusProtocol
+import com.just.machine.ui.fragment.serial.ModbusProtocol
 import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.FixCountDownTime
@@ -865,7 +865,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
         isZero = false
         try {
             isStop = false
-            usbTransferUtil.write(MudbusProtocol.FLOW_CALIBRATION_COMMAND)
+            usbTransferUtil.write(ModbusProtocol.FLOW_CALIBRATION_COMMAND)
             timer = fixedRateTimer("", false, 0, 1000) {
                 if (iFlag == 1) {
                     time++
@@ -893,7 +893,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
 
     private fun stopPortSend() {
         try {
-            usbTransferUtil.write(MudbusProtocol.FLOW_STOP_COMMAND)
+            usbTransferUtil.write(ModbusProtocol.FLOW_STOP_COMMAND)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -901,7 +901,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
 
     private fun sendCalibraCommand() {
         try {
-            SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)
+            SerialPortManager.sendMessage(ModbusProtocol.FLOW_CALIBRATION_COMMAND)
         } catch (e: Exception) {
             e.printStackTrace()
         }

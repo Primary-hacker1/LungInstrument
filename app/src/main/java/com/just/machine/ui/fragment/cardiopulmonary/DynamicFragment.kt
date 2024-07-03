@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
@@ -18,11 +19,12 @@ import com.just.machine.ui.adapter.FragmentPagerAdapter
 import com.just.machine.ui.fragment.cardiopulmonary.dynamic.DynamicDataFragment
 import com.just.machine.ui.fragment.cardiopulmonary.dynamic.RoutineFragment
 import com.just.machine.ui.fragment.cardiopulmonary.dynamic.WassermanFragment
-import com.just.machine.ui.fragment.serial.MudbusProtocol
+import com.just.machine.ui.fragment.serial.ModbusProtocol
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.model.lungdata.CPXCalcule
 import com.just.machine.model.lungdata.TestModel
 import com.just.machine.util.LiveDataBus
+import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.FragmentDynamicBinding
 import com.justsafe.libview.util.DateUtils
@@ -50,6 +52,10 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
     }
 
+    private val usbTransferUtil: USBTransferUtil by lazy {
+        USBTransferUtil.getInstance()
+    }
+
 
     private fun initToolbar() {
 
@@ -60,18 +66,7 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
         initViewPager()
 
-        tts = TextToSpeech(requireContext()) { status ->
-            if (status == TextToSpeech.SUCCESS) {
-                val result = tts.setLanguage(Locale.CHINESE)
-                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                    println("语言数据丢失或不支持")
-                } else {
-                    binding.llStart.isEnabled = true
-                }
-            } else {
-                println("初始化失败!")
-            }
-        }
+
 
         binding.llStart.setNoRepeatListener {
 
@@ -84,7 +79,7 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
             val lungTestDatas: MutableList<LungTestData> = mutableListOf()
 
             byteArrayList.forEach { data ->
-                MudbusProtocol.parseLungTestData(data)?.let { it1 -> lungTestDatas.add(it1) }
+                ModbusProtocol.parseLungTestData(data)?.let { it1 -> lungTestDatas.add(it1) }
             }
 
             val lungTestDataList = generateBreathCycleData()// 生成吸气和呼气数据
@@ -92,11 +87,31 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
             test1(lungTestDataList)//模拟串口消息
 
 //            SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)//发送流量定标a
+
+            lifecycleScope.launch {
+                delay(200)
+                usbTransferUtil.write(ModbusProtocol.cmdSend("02"))
+            }
+
             return@setNoRepeatListener
         }
 
         binding.llClean.setNoRepeatListener {
 
+        }
+
+        if (!::tts.isInitialized) return
+        tts = TextToSpeech(requireContext()) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                val result = tts.setLanguage(Locale.CHINESE)
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    println("语言数据丢失或不支持")
+                } else {
+                    binding.llStart.isEnabled = true
+                }
+            } else {
+                println("初始化失败!")
+            }
         }
 
     }

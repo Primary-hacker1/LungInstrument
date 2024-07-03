@@ -8,7 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import com.common.base.CommonBaseActivity
-import com.just.machine.ui.fragment.serial.MudbusProtocol
+import com.just.machine.ui.fragment.serial.ModbusProtocol
 import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.LiveDataBus
@@ -29,8 +29,11 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class CardiopulmonaryActivity : CommonBaseActivity<ActivityCardiopulmonaryBinding>() {
 
-    private lateinit var usbTransferUtil: USBTransferUtil //usb工具类
     private val viewModel by viewModels<MainViewModel>()
+
+    private val usbTransferUtil: USBTransferUtil by lazy {
+        USBTransferUtil.getInstance()
+    }
 
     companion object {
         /**
@@ -52,18 +55,17 @@ class CardiopulmonaryActivity : CommonBaseActivity<ActivityCardiopulmonaryBindin
         initNavigationView()
 //        SerialPortManager.initialize(this)
 //        SerialPortManager.sendMessage(MudbusProtocol.HANDSHAKE_COMMAND)//握手
-        usbTransferUtil = USBTransferUtil.getInstance()
 //        usbTransferUtil.write(MudbusProtocol.cmdSend("01"))
         lifecycleScope.launch {
             delay(200)
-            usbTransferUtil.write(MudbusProtocol.cmdSend("02"))
+            usbTransferUtil.write(ModbusProtocol.cmdSend("02"))
         }
 
         //串口数据
         LiveDataBus.get().with("GetVersionInfo").observe(this) {
             if(it is String){
-                val hardWareVersion = MudbusProtocol.formatVersion(it.substring(8,12))
-                val softWareVersion = MudbusProtocol.formatVersion(it.substring(12,16))
+                val hardWareVersion = ModbusProtocol.formatVersion(it.substring(8,12))
+                val softWareVersion = ModbusProtocol.formatVersion(it.substring(12,16))
             }
         }
 

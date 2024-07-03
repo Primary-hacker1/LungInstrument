@@ -24,7 +24,6 @@ import com.just.machine.model.sixminreport.SixMinReportEvaluation;
 import com.just.machine.model.sixminreport.SixMinReportStride;
 import com.just.machine.model.sixminreport.SixMinReportWalk;
 import com.just.machine.model.systemsetting.SixMinSysSettingBean;
-import com.just.machine.ui.fragment.serial.MudbusProtocol;
 import com.just.news.BuildConfig;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

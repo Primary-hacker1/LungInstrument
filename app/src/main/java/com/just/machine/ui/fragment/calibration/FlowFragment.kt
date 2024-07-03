@@ -12,8 +12,7 @@ import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
 import com.just.machine.ui.adapter.FragmentChildAdapter
-import com.just.machine.ui.fragment.serial.MudbusProtocol
-import com.just.machine.ui.fragment.serial.SerialPortManager
+import com.just.machine.ui.fragment.serial.ModbusProtocol
 import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FragmentFlowBinding
@@ -95,7 +94,7 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
         LiveDataBus.get().with("测试").observe(this) {//解析串口消息
             if (it is ByteArray) {
                 LogUtils.d(tag + BaseUtil.bytes2HexStr(it) + "字节长度" + BaseUtil.bytes2HexStr(it).length)
-                val data = MudbusProtocol.parseFlowCalibrationData(it)
+                val data = ModbusProtocol.parseFlowCalibrationData(it)
                 if (data != null) {
                     val (smallRangeFlow, largeRangeFlow) = data
 

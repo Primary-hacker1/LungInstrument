@@ -7,9 +7,9 @@ import com.just.machine.util.CRC16Util
 import java.util.zip.CRC32
 import kotlin.experimental.and
 
-object MudbusProtocol {
+object ModbusProtocol {
 
-    private var tag: String = MudbusProtocol::class.java.name
+    private var tag: String = ModbusProtocol::class.java.name
 
     var isFlowCalibra = false
     var isIngredientCalibra = false
@@ -19,29 +19,25 @@ object MudbusProtocol {
 
 
     // 包头和包尾
-    const val PACKET_HEADER: Short = 0xAAAA.toShort()
-    const val PACKET_FOOTER: Byte = 0xED.toByte()
+    const val PACKET_HEADER: Short = 0x55AA.toShort()
+
+
     val allowOneSensor: ByteArray = byteArrayOf(0x55,
         0xAA.toByte(), 0x11, 0x02, 0x07, 0x00, 0xA6.toByte(), 0xE8.toByte()
     )
 
-    // 上位机握手命令数据格式
-    val HANDSHAKE_COMMAND: ByteArray = byteArrayOf(
-        (PACKET_HEADER.toInt() ushr 8).toByte(), PACKET_HEADER.toByte(), // 包头
-        0x06, // 数据长度
-        0x01, // 功能码
-        0x00, 0x00, 0x00, 0x00, // 占位的 CRC 校验码
-        PACKET_FOOTER // 包尾
-    )
 
-    // 主控板握手应答命令数据格式
-    val HANDSHAKE_RESPONSE: ByteArray = byteArrayOf(
-        (PACKET_HEADER.toInt() ushr 8).toByte(), PACKET_HEADER.toByte(), // 包头
-        0x06, // 数据长度
-        0x99.toByte(), // 功能码
-        0x00, 0x00, 0x00, 0x00, // 占位的 CRC32 校验码
-        PACKET_FOOTER // 包尾
-    )
+    /**
+     * @param cmd 发送到指令 *
+     * @param dataLength 数据长度
+     */
+    fun cmdSend(cmd: String,dataLength:String="00"): ByteArray {
+        val head = "55AA"
+        val data = cmd+dataLength
+        val crc = CRC16Util.getCRC16(data)
+        val cmdHex = head + data + crc
+        return CRC16Util.hexStringToBytes(cmdHex)
+    }
 
     // 上位机设备状态信息读取命令数据格式
     val DEVICE_STATUS_COMMAND: ByteArray = byteArrayOf(
@@ -49,13 +45,11 @@ object MudbusProtocol {
         0x06, // 数据长度
         0x02, // 功能码
         0x00, 0x00, 0x00, 0x00, // 占位的 CRC32 校验码
-        PACKET_FOOTER // 包尾
     )
 
     fun isHandshakeResponseValid(response: ByteArray): Boolean {
         // 检查包头和包尾
-        if (response.size != 9 || response[0] != PACKET_HEADER.toByte() || response[1] != PACKET_HEADER.toByte() ||
-            response[8] != PACKET_FOOTER
+        if (response.size != 9 || response[0] != PACKET_HEADER.toByte() || response[1] != PACKET_HEADER.toByte()
         ) {
             return false
         }
@@ -91,7 +85,6 @@ object MudbusProtocol {
             (batteryInfo.toInt() ushr 8).toByte(), batteryInfo.toByte(), // 电量信息
             (crcValue.toInt() ushr 24).toByte(), (crcValue.toInt() ushr 16).toByte(), // CRC32校验码
             (crcValue.toInt() ushr 8).toByte(), crcValue.toByte(),
-            PACKET_FOOTER // 包尾
         )
     }
 
@@ -102,7 +95,6 @@ object MudbusProtocol {
         0x06, // 数据长度
         0x03, // 功能码
         0x00, 0x00, 0x00, 0x00, // 占位的 CRC32 校验码
-        PACKET_FOOTER // 包尾
     )
 
     // 主控板环境定标数据格式
@@ -181,7 +173,6 @@ object MudbusProtocol {
         0x06, // 数据长度
         0x04, // 功能码
         0x00, 0x00, 0x00, 0x00, // 占位的 CRC32 校验码
-        PACKET_FOOTER // 包尾
     )
 
     // 上位机自动流量定标命令数据格式
@@ -190,7 +181,6 @@ object MudbusProtocol {
         0x06, // 数据长度
         0x10, // 功能码
         0x00, 0x00, 0x00, 0x00, // 占位的 CRC32 校验码
-        PACKET_FOOTER // 包尾
     )
 
     // 上位机停止命令数据格式
@@ -199,7 +189,6 @@ object MudbusProtocol {
         0x06, // 数据长度
         0x08, // 功能码
         0x00, 0x00, 0x00, 0x00, // 占位的 CRC32 校验码
-        PACKET_FOOTER // 包尾
     )
 
     val EXIT_LOW_POWER_COMMAND: ByteArray = byteArrayOf(
@@ -207,7 +196,6 @@ object MudbusProtocol {
         0x06, // 数据长度
         0x0B, // 功能码
         0x00, 0x00, 0x00, 0x00, // 占位的 CRC32 校验码
-        PACKET_FOOTER // 包尾
     )
 
 
@@ -290,7 +278,6 @@ object MudbusProtocol {
         0x06, // 数据长度
         0x05, // 功能码
         0x00, 0x00, 0x00, 0x00, // 占位的 CRC32 校验码
-        PACKET_FOOTER // 包尾
     )
 
 
@@ -663,14 +650,11 @@ object MudbusProtocol {
         return result
     }
 
-    fun cmdSend(cmd: String,dataLength:String="00"): ByteArray {
-        val head = "55AA"
-        val data = cmd+dataLength
-        val crc = CRC16Util.getCRC16(data)
-        val cmdHex = head + data + crc
-        return CRC16Util.hexStringToBytes(cmdHex)
-    }
 
+
+    /**
+     * @return 获取硬件版本如v 1.0.1。
+     */
     fun formatVersion(bitFieldHex: String): String {
         // Step 1: Swap first two and last two characters
         val swappedHex = bitFieldHex.takeLast(2) + bitFieldHex.dropLast(2)

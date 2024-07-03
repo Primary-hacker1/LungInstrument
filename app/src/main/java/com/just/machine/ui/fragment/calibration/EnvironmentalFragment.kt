@@ -13,11 +13,10 @@ import com.common.viewmodel.LiveDataEvent
 import com.just.machine.dao.calibration.EnvironmentalCalibrationBean
 import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.calibration.EnvironmentalAdapter
-import com.just.machine.ui.fragment.serial.MudbusProtocol
+import com.just.machine.ui.fragment.serial.ModbusProtocol
 import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.common.base.BaseUtil
-import com.just.machine.model.EnviorDataModel
 import com.just.machine.ui.dialog.LungCommonDialogFragment
 import com.just.machine.util.LiveDataBus
 import com.just.machine.util.USBTransferUtil
@@ -121,7 +120,7 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
 //                }
 //                binding.tvCalibrationStart.text = getString(R.string.cancel)
                 isBegin = true
-                usbTransferUtil.write(MudbusProtocol.allowOneSensor)//发送环境定标
+                usbTransferUtil.write(ModbusProtocol.allowOneSensor)//发送环境定标
             }
         }
 
@@ -166,7 +165,7 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
                             it
                         ).length
                     )
-                    val environmentData = MudbusProtocol.parseEnvironmentData(it)//环境定标
+                    val environmentData = ModbusProtocol.parseEnvironmentData(it)//环境定标
 
                     if (environmentData != null) {
                         val (temperature, humidity, pressure) = environmentData
@@ -255,7 +254,7 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
      */
     private fun exitLowPower() {
         try {
-            SerialPortManager.sendMessage(MudbusProtocol.EXIT_LOW_POWER_COMMAND)
+            SerialPortManager.sendMessage(ModbusProtocol.EXIT_LOW_POWER_COMMAND)
         }catch (e:Exception){
             e.printStackTrace()
         }

@@ -30,7 +30,7 @@ object SerialPortManager {
                         stringBuilder.append(it)
                         val byteArray = stringBuilder.toString().toByteArray()
 
-                        isStart = MudbusProtocol.isHandshakeResponseValid(byteArray)//握手指令ture成功
+                        isStart = ModbusProtocol.isHandshakeResponseValid(byteArray)//握手指令ture成功
 
                         if (isStart) {//握手成功后的操作
 //                            LiveDataBus.get().with(Constants.serialCallback).value = byteArray

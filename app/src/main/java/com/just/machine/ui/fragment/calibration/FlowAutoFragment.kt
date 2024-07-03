@@ -13,7 +13,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.ui.adapter.calibration.FlowAdapter
-import com.just.machine.ui.fragment.serial.MudbusProtocol
+import com.just.machine.ui.fragment.serial.ModbusProtocol
 import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.util.FixCountDownTime
 import com.just.machine.util.LiveDataBus
@@ -21,7 +21,6 @@ import com.just.news.R
 import com.just.news.databinding.FragmentFlowAutoBinding
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Queue
 import java.util.Random
 
 
@@ -220,7 +219,7 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
 
     private fun sendCalibraCommand() {
         try {
-            SerialPortManager.sendMessage(MudbusProtocol.FLOW_AUTO_CALIBRATION_COMMAND)
+            SerialPortManager.sendMessage(ModbusProtocol.FLOW_AUTO_CALIBRATION_COMMAND)
         } catch (e: Exception) {
             e.printStackTrace()
         }

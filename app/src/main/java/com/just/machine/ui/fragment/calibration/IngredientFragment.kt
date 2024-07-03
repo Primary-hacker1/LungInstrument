@@ -19,7 +19,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.just.machine.dao.calibration.IngredientBean
 import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.calibration.IngredientAdapter
-import com.just.machine.ui.fragment.serial.MudbusProtocol
+import com.just.machine.ui.fragment.serial.ModbusProtocol
 import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.LiveDataBus
@@ -115,7 +115,7 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
             tts.speak("开始成分定标", TextToSpeech.QUEUE_FLUSH, null, "")
             if (Constants.isDebug) {
                 // 调用生成主控板返回数据方法并打印生成的数据
-                val controlBoardResponse = MudbusProtocol.ControlBoardData(
+                val controlBoardResponse = ModbusProtocol.ControlBoardData(
                     0x12.toByte(), // 返回命令
                     1000, // 大量程流量传感器数据
                     500, // 小量程流量传感器数据
@@ -127,7 +127,7 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
                     80 // 电量数据
                 )
 
-                val data = MudbusProtocol.generateControlBoardResponse(
+                val data = ModbusProtocol.generateControlBoardResponse(
                     controlBoardResponse
                 )
 
@@ -138,13 +138,13 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
                 return@setNoRepeatListener
             }
 
-            SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)//发送流量定标
+            SerialPortManager.sendMessage(ModbusProtocol.FLOW_CALIBRATION_COMMAND)//发送流量定标
         }
 
         LiveDataBus.get().with("测试3").observe(this) {//解析串口消息
             if (it is ByteArray) {
                 LogUtils.e(tag + BaseUtil.bytes2HexStr(it) + "字节长度" + BaseUtil.bytes2HexStr(it).length)
-                val data = MudbusProtocol.parseControlBoardResponse(it)
+                val data = ModbusProtocol.parseControlBoardResponse(it)
                 if (data != null) {
                     LogUtils.e(tag + data.toString())
                     val o2Bean = IngredientBean()
