@@ -9,7 +9,6 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
-import com.common.network.LogUtils
 import com.just.machine.model.LungTestData
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.lungdata.BreathState
@@ -75,7 +74,9 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
         }
 
         binding.llStart.setNoRepeatListener {
+
             tts.speak("准备开始正常呼吸3次，然后开始深呼吸", TextToSpeech.QUEUE_FLUSH, null, "")
+
             val dataList = TestModel().dataList
 
             val byteArrayList = dataList.map { TestModel().hexStringToByteArray(it) }
@@ -86,9 +87,10 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
                 MudbusProtocol.parseLungTestData(data)?.let { it1 -> lungTestDatas.add(it1) }
             }
 
-            // 生成吸气和呼气数据
-            val lungTestDataList = generateBreathCycleData()
-            test1(lungTestDataList)
+            val lungTestDataList = generateBreathCycleData()// 生成吸气和呼气数据
+
+            test1(lungTestDataList)//模拟串口消息
+
 //            SerialPortManager.sendMessage(MudbusProtocol.FLOW_CALIBRATION_COMMAND)//发送流量定标a
             return@setNoRepeatListener
         }
@@ -150,22 +152,22 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
     }
 
     private fun test1(lungTestDatas: MutableList<LungTestData>) =
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.IO).launch {
             for (data in lungTestDatas) {
-                delay(1000) // 每秒处理一次数据
+                delay(100) // 每秒处理一次数据
                 breathTest(data)
             }
         }
 
     private fun breathTest(lungTestData: LungTestData) {
-        val breathInData = mutableListOf<CPXSerializeData>()
-
-        breathInData.add(CPXSerializeData().convertLungTestDataToCPXSerializeData(lungTestData))
+        val breathInData = CPXSerializeData().convertLungTestDataToCPXSerializeData(lungTestData)
 
         val dyCalculeSerializeCore = DyCalculeSerializeCore()
+
         dyCalculeSerializeCore.setBegin(BreathState.None)
 
-        val cpxSerializeData = dyCalculeSerializeCore.enqueDyDataModel(breathInData[0])
+        val cpxSerializeData = dyCalculeSerializeCore.enqueDyDataModel(breathInData)
+
         dyCalculeSerializeCore.caluculeData(dyCalculeSerializeCore.observeBreathModel)
 
         val cpxBreathInOutData = CPXCalcule.calDyBreathInOutData(
@@ -174,6 +176,7 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
         )
 
         val patientBean = SharedPreferencesUtils.instance.patientBean
+
         val id = patientBean?.patientId
 
         if (id != null) {
@@ -182,7 +185,7 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
 
         cpxBreathInOutData.createTime = DateUtils.nowMinutesDataString
 
-        //        viewModel.insertCPXBreathInOutData(cpxBreathInOutData) // 插入数据库
+//        viewModel.insertCPXBreathInOutData(cpxBreathInOutData) // 插入数据库
 
 //        LogUtils.e(tag + cpxBreathInOutData.toString())
         LiveDataBus.get().with("动态心肺测试").postValue(cpxBreathInOutData)
@@ -194,7 +197,9 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
         val adapter = FragmentPagerAdapter(requireActivity())
 
         adapter.addFragment(RoutineFragment())
+
         adapter.addFragment(WassermanFragment())
+
         adapter.addFragment(DynamicDataFragment())
 
         binding.vpTitle.setCurrentItem(0, true)

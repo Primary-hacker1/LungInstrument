@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <import type="com.just.news.R" />
+
         <variable
-            name="viewModel"
-            type="com.just.machine.ui.viewmodel.MainViewModel" />
+                name="viewModel"
+                type="com.just.machine.ui.viewmodel.MainViewModel" />
     </data>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
         <LinearLayout
                 android:layout_width="match_parent"
@@ -127,10 +129,99 @@
                     android:layout_height="match_parent" />
         </LinearLayout>
 
-        <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/lineChart"
+        <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:orientation="horizontal"
+                android:layout_height="match_parent">
+
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center_horizontal"
+                        android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                            android:text="Time:"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tv_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_marginStart="@dimen/space_38"
+                            android:text="功率:"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tv_power"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_marginStart="@dimen/space_38"
+                            android:text="EELV:"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tv_eelv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_marginStart="@dimen/space_38"
+                            android:text="EILV:"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tv_eilv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <com.justsafe.libview.chart.BaseLineChart
+                        android:id="@+id/lc_flow"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_height="0dp"
+                        tools:ignore="NestedWeights" />
+
+                <com.justsafe.libview.chart.BaseLineChart
+                        android:id="@+id/lc_vol"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_height="0dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                <com.justsafe.libview.chart.BaseLineChart
+                        android:id="@+id/lc_fvc_flow"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
 
     </LinearLayout>
 

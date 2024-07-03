@@ -1,6 +1,5 @@
 package com.just.machine.ui.fragment.calibration
 
-import android.R.string
 import android.graphics.Color
 import android.os.Build
 import android.view.LayoutInflater
@@ -21,7 +20,6 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.just.machine.dao.calibration.FlowBean
-import com.just.machine.model.lungdata.SttlungDataModel
 import com.just.machine.ui.adapter.calibration.FlowAdapter
 import com.just.machine.ui.dialog.LoadingDialogFragment
 import com.just.machine.ui.dialog.LungCommonDialogFragment
