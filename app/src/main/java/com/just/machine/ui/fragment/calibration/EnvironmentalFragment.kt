@@ -24,7 +24,6 @@ import com.just.news.R
 import com.just.news.databinding.FragmentEnvironmentalBinding
 import com.justsafe.libview.util.DateUtils
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Job
 
 /**
  *create by 2024/6/19
@@ -35,6 +34,10 @@ import kotlinx.coroutines.Job
 class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
+
+    private val usbTransferUtil: USBTransferUtil by lazy {
+        USBTransferUtil.getInstance()
+    }
 
     private val adapter by lazy { EnvironmentalAdapter(requireContext()) }
 
