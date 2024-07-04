@@ -17,6 +17,7 @@ import com.just.machine.ui.fragment.serial.ModbusProtocol
 import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.common.base.BaseUtil
+import com.common.base.toast
 import com.just.machine.ui.dialog.LungCommonDialogFragment
 import com.just.machine.util.LiveDataBus
 import com.just.machine.util.USBTransferUtil
@@ -125,15 +126,15 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
 
         binding.llSave.setNoRepeatListener {
             if (binding.etTemperature.text.toString().trim() == "") {
-                Toast.makeText(requireContext(), "温度不能为空!", Toast.LENGTH_SHORT).show()
+                toast("温度不能为空!")
                 return@setNoRepeatListener
             }
             if (binding.etHumidity.text.toString().trim() == "") {
-                Toast.makeText(requireContext(), "湿度不能为空!", Toast.LENGTH_SHORT).show()
+                toast("湿度不能为空!")
                 return@setNoRepeatListener
             }
             if (binding.etPressure.text.toString().trim() == "") {
-                Toast.makeText(requireContext(), "气压不能为空!", Toast.LENGTH_SHORT).show()
+                toast("气压不能为空!")
                 return@setNoRepeatListener
             }
             val time = DateUtils.nowTimeString

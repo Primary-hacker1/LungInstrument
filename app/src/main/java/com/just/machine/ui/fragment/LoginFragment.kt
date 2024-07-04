@@ -48,7 +48,7 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
                 if (isGranted) {
 
                 } else {
-                    toast("${permissionName}被拒绝了，请在应用设置里打开权限")
+//                    toast("${permissionName}被拒绝了，请在应用设置里打开权限")
                 }
             }
         }

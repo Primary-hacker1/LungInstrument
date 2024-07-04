@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
+import com.common.base.toast
 import com.common.viewmodel.LiveDataEvent
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -185,7 +186,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
         }
         binding.llPullDirection.setNoRepeatListener {
             if (!isStart) {
-                Toast.makeText(requireContext(), "定标未开始!", Toast.LENGTH_SHORT).show()
+                toast("定标未开始!")
                 return@setNoRepeatListener
             }
             if (isPull) {

@@ -3,11 +3,11 @@ package com.just.machine.ui.dialog
 import android.app.Dialog
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.BaseDialogFragment
 import com.common.base.setNoRepeatListener
+import com.common.base.toast
 import com.just.machine.model.Constants
 import com.just.machine.model.SixMinReportPatientSelfBean
 import com.just.machine.model.SixMinReportPatientSelfItemBean
@@ -122,14 +122,14 @@ class SixMinReportSelfCheckBeforeTestFragment :
                 } else {
                     val split = selectStrList[0].split("&")
                     if (split[0] == "呼吸状况等级") {
-                        Toast.makeText(context, "请选择试验前的疲劳状况", Toast.LENGTH_SHORT).show()
+                        toast("请选择试验前的疲劳状况")
                     } else {
-                        Toast.makeText(context, "请选择试验前的呼吸状况", Toast.LENGTH_SHORT).show()
+                        toast("请选择试验前的呼吸状况")
                     }
                     return@setNoRepeatListener
                 }
             } else {
-                Toast.makeText(context, "请选择试验前状况评级", Toast.LENGTH_SHORT).show()
+                toast("请选择试验前状况评级")
                 return@setNoRepeatListener
             }
         }
