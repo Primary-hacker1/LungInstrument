@@ -155,28 +155,25 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
             )
         }
 
-        LiveDataBus.get().with(Constants.serialCallback).observe(this) {//解析串口消息
-            if (isBegin) {
-                if (it is ByteArray) {
-//                if(BaseUtil.isDoubleClick()) return@observe//有个粘性事件先不处理
-                    LogUtils.e(
-                        tag + BaseUtil.bytes2HexStr(it) + "字节长度" + BaseUtil.bytes2HexStr(
-                            it
-                        ).length
-                    )
-                    val environmentData = ModbusProtocol.parseEnvironmentData(it)//环境定标
+        LiveDataBus.get().with(Constants.envCaliSerialCallback).observe(this) {//解析串口消息
+            try {
+                if (isBegin) {
+                    if (it is ModbusProtocol.EnvironmentData) {
 
-                    if (environmentData != null) {
-                        val (temperature, humidity, pressure) = environmentData
+                        LogUtils.e(
+                            "接收环境定标数据 ----temperature----${it.temperature}----humidity----${it.humidity}----atmosphericPressure----${it.pressure}"
+                        )
+
+                        val (temperature, humidity, pressure) = it
+
                         val time = DateUtils.nowTimeString
 
-                        if (pressure > 1000 || pressure < 500 || temperature > 50 || temperature <= 0 || humidity > 100 || humidity <= 0)
-                        {
+                        if (pressure > 1000 || pressure < 500 || temperature > 50 || temperature <= 0 || humidity > 100 || humidity <= 0) {
                             //定标失败
                             LungCommonDialogFragment.startCommonDialogFragment(
                                 requireActivity().supportFragmentManager, "定标失败!", "2"
                             )
-                        }else{
+                        } else {
                             viewModel.setEnvironmental(
                                 EnvironmentalCalibrationBean(//假设用户id为1
                                     0, 1, time, temperature.toString(),
@@ -184,11 +181,11 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
                                 )
                             )//插入数据库并查询
                         }
-                    } else {
-                        LogUtils.e(tag + "接收到的环境定标数据无效！")
                     }
+                    isBegin = false
                 }
-                isBegin = false
+            } catch (e: Exception) {
+                LogUtils.d(e.toString())
             }
         }
 
@@ -254,7 +251,7 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
     private fun exitLowPower() {
         try {
             SerialPortManager.sendMessage(ModbusProtocol.EXIT_LOW_POWER_COMMAND)
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }

@@ -6,10 +6,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
+import com.common.viewmodel.LiveDataEvent
+import com.just.machine.dao.setting.AllSettingBean
 import com.just.machine.ui.activity.MainActivity
+import com.just.machine.ui.fragment.serial.ModbusProtocol
+import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.FixCountDownTime
 import com.just.news.R
 import com.just.news.databinding.FragmentPreheatBinding
@@ -25,23 +30,53 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class PreHeatFragment : CommonBaseFragment<FragmentPreheatBinding>() {
 
+    private val viewModel by viewModels<MainViewModel>()
     private var mCountDownTime: FixCountDownTime? = null
 
     override fun loadData() {
         lifecycleScope.launch(Dispatchers.Main) {
             delay(100)
-            binding.batteryStatus.setPower(50)
+            binding.batteryStatus.setPower(ModbusProtocol.batteryLevel)
         }
     }
 
     override fun initView() {
+        viewModel.getAllSettingBeans()
+
+        viewModel.mEventHub.observe(this) {
+            when (it.action) {
+                LiveDataEvent.ALL_SETTING_SUCCESS -> {
+                    if (it.any !is MutableList<*>) {
+                        return@observe
+                    }
+
+                    val settings = it.any as MutableList<*>
+
+                    for (settingBean in settings) {
+                        if (settingBean !is AllSettingBean) {
+                            return@observe
+                        }
+                        binding.tvHospitalName.text = settingBean.hospitalName
+                    }
+                }
+            }
+        }
+
         binding.tvSkipPreheat.text = Html.fromHtml("<u>跳过</u>")
         binding.tvSystemTime.setTime(System.currentTimeMillis(),DateUtils.nowTimeDataString)
-        mCountDownTime = object : FixCountDownTime(1200, 1000) {}
+        mCountDownTime = object : FixCountDownTime(1200-ModbusProtocol.warmLeaveSec, 1000) {}
 
         val progressbarBg =  ContextCompat.getDrawable(requireContext(),R.drawable.progressbar_bg)
 
         binding.pbPreheat.progressDrawable = progressbarBg
+
+        if(ModbusProtocol.isDeviceConnect){
+            binding.tvPreheatDeviceConnectStatus.text = "已连接"
+            binding.ivPreheatDeviceConnectStatus.setImageResource(R.drawable.wifi_on)
+        }else{
+            binding.tvPreheatDeviceConnectStatus.text = "未连接"
+            binding.ivPreheatDeviceConnectStatus.setImageResource(R.drawable.warn_yellow)
+        }
 
         mCountDownTime!!.start(object : FixCountDownTime.OnTimerCallBack{
             override fun onStart() {

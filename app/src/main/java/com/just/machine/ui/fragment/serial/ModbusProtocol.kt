@@ -3,6 +3,7 @@ package com.just.machine.ui.fragment.serial
 import com.common.network.LogUtils
 import com.just.machine.model.LungTestData
 import com.common.base.BaseUtil
+import com.just.machine.model.Constants
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.lungdata.BreathState
 import com.just.machine.model.lungdata.CPXCalcule
@@ -21,8 +22,10 @@ object ModbusProtocol {
     var isFlowCalibra = false
     var isIngredientCalibra = false
     var isEnvironmentCalibra = false
-    var isConnect = false
+    var isDeviceConnect = false
     var isWarmup = false
+    var batteryLevel = 0
+    var warmLeaveSec  = 0
 
 
     // 包头和包尾
@@ -150,6 +153,7 @@ object ModbusProtocol {
 
             0x02 -> { // 读取下位机设备信息
                 // 处理逻辑
+                parseDeviceInfo(data)
             }
 
             0x03 -> { // 控制下位机设备
@@ -190,6 +194,7 @@ object ModbusProtocol {
 
             0x91 -> { // 上传一类传感器数据
                 // 处理逻辑
+                parseEnvironmentData(data)
             }
 
             0x92 -> { // 上传二类传感器数据
@@ -204,6 +209,60 @@ object ModbusProtocol {
 
             }
         }
+    }
+
+    // 解析设备信息数据
+    data class DeviceInfoData(val batterLevel: Int, val warmLeaveSec: Int, val connectStatus: Boolean)
+
+    /**
+     * 解析设备信息
+     */
+    private fun parseDeviceInfo(response: ByteArray) {
+        // 检查数据长度是否正确
+        if (response.size != 11) {
+            LogUtils.e("主控板返回数据长度不正确")
+            return
+        }
+
+        // 检查包头和包尾
+        if (response[0] != 0x55.toByte()) {
+            LogUtils.e("环境定标返回包头或包尾不正确")
+            return
+        }
+
+        // 解析 CRC 校验码
+        val crcValue = response.sliceArray(9 until 11)
+
+        val calculatedCRC = CRC16Util.getCRC16Bytes(response.sliceArray(2 until 9))
+
+        // 验证 CRC 校验码
+        if (!crcValue.contentEquals(calculatedCRC)) {
+            LogUtils.e(
+                "获取设备信息CRC校验失败----" + crcValue.joinToString(" ") { "%02X".format(it) } + "!=calculatedCRC----"
+                        + calculatedCRC.joinToString(" ") { "%02X".format(it) }
+            )
+            return
+        }
+
+        // 解析数据
+        val bytes2Hex = CRC16Util.bytes2Hex(response)
+        batteryLevel = response[5].toInt() and 0xFF //电量信息
+        if(batteryLevel == 255){
+            batteryLevel = 100
+        }
+        val heatSecHex1 = bytes2Hex.substring(12, 14)
+        val heatSecHex2 = bytes2Hex.substring(14, 16)
+        val heatSexHex = heatSecHex2 +heatSecHex1
+        warmLeaveSec = heatSexHex.toInt(16) //热机时间
+        isDeviceConnect = true
+
+        LogUtils.e(
+            "设备信息数据 ----batteryLevel----$batteryLevel----warmLeaveSec----$warmLeaveSec----isDeviceConnect----$isDeviceConnect"
+        )
+
+//        val deviceInfoData = DeviceInfoData(batteryLevel,warmLeaveSec, isConnect)
+//
+//        LiveDataBus.get().with(Constants.getDevInfoSerialCallback).postValue(deviceInfoData)
     }
 
     // 上位机设备状态信息读取命令数据格式
@@ -287,52 +346,63 @@ object ModbusProtocol {
 
 
     // 解析环境定标数据
-    data class EnvironmentData(val temperature: Float, val humidity: Float, val pressure: Int)
+    data class EnvironmentData(val temperature: Float, val humidity: Float, val pressure: Float)
 
-    fun parseEnvironmentData(response: ByteArray): EnvironmentData? {
-        // 检查数据长度是否符合规范
-        if (response.size != 17) {
-            // 数据长度不正确，返回空
-            LogUtils.e(tag + "环境定标数据长度不正确")
-            return null
+    private fun parseEnvironmentData(response: ByteArray) {
+
+        // 检查数据长度是否正确
+        if (response.size != 12) {
+            LogUtils.e("主控板返回数据长度不正确")
+            return
         }
 
         // 检查包头和包尾
-        if (response[0] != 0xAA.toByte() || response[1] != 0xAA.toByte() || response[16] != 0xED.toByte()) {
-            // 包头或包尾不正确，返回空
-            LogUtils.e(tag + "环境定标包头或包尾不正确")
-            return null
+        if (response[0] != 0x55.toByte()) {
+            LogUtils.e("环境定标返回包头或包尾不正确")
+            return
         }
 
-        // 解析温度数据
-        val temperature = ((response[4].toInt() shl 8) or response[5].toInt()).toFloat() / 100
+        // 解析 CRC 校验码
+        val crcValue = response.sliceArray(10 until 12)
 
-        // 解析湿度数据
-        val humidity = ((response[6].toInt() shl 8) or response[7].toInt()).toFloat() / 100
+        val calculatedCRC = CRC16Util.getCRC16Bytes(response.sliceArray(2 until 10))
 
-        // 解析大气压力数据
-        val pressure = (response[8].toInt() shl 24) or (response[9].toInt() shl 16) or
-                (response[10].toInt() shl 8) or response[11].toInt()
-
-        // 计算 CRC 校验码
-        val crcValue =
-            crc32ToByteArray(
-                calculateCRC32(response.sliceArray(3 until 12))
+        // 验证 CRC 校验码
+        if (!crcValue.contentEquals(calculatedCRC)) {
+            LogUtils.e(
+                "环境定标CRC校验失败----" + crcValue.joinToString(" ") { "%02X".format(it) } + "!=calculatedCRC----"
+                        + calculatedCRC.joinToString(" ") { "%02X".format(it) }
             )
-
-        // 提取接收到的 CRC 校验码
-        val receivedCRC = response.sliceArray(12 until 16)
-
-        if (!crcValue.contentEquals(receivedCRC)) {
-            // CRC 校验失败，返回空
-            LogUtils.e(tag + "CRC 校验失败==" + crcValue)
-            return null
+            return
         }
 
-        // 返回解析后的环境数据
-        return EnvironmentData(temperature, humidity, pressure)
-    }
+        // 解析数据
+        var temperature =
+            ((response[4].toInt() and 0xFF) + (response[5].toInt() and 0xFF)) / 10f  // 环境温度数据
+        if (temperature <= 0f || temperature > 500f) {
+            temperature = 50f
+        }
 
+        var humidity =
+            ((response[6].toInt() and 0xFF) + (response[7].toInt() and 0xFF)) / 10f  // 环境湿度数据
+        if (humidity <= 0f || humidity > 100f) {
+            humidity = 50f
+        }
+
+        var atmosphericPressure =
+            ((response[8].toInt() and 0xFF) + (response[9].toInt() and 0xFF) * 256).toFloat() * 0.075f  // 大气压数据
+        if (atmosphericPressure < 500f || atmosphericPressure > 1000f) {
+            atmosphericPressure = 765f
+        }
+
+//        LogUtils.e(
+//            "环境定标数据 ----temperature----$temperature----humidity----$humidity----atmosphericPressure----$atmosphericPressure"
+//        )
+
+        val environmentData = EnvironmentData(temperature, humidity, atmosphericPressure)
+
+        LiveDataBus.get().with(Constants.serialCallback).postValue(environmentData)
+    }
 
     // 上位机流量定标命令数据格式
     val FLOW_CALIBRATION_COMMAND: ByteArray = byteArrayOf(
