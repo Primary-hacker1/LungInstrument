@@ -14,8 +14,6 @@ import kotlin.random.Random
  * @property lowRangeFlowSensorData 低量程流量传感器数据。
  * @property co2SensorData CO2传感器数据。
  * @property o2SensorData O2传感器数据。
- * @property gasFlowSpeedSensorData 气体流速传感器数据。
- * @property gasPressureSensorData 气体压力传感器数据。
  * @property bloodOxygen 血氧数据。
  * @property batteryLevel 电池电量数据。
  */
@@ -28,10 +26,8 @@ data class LungTestData(
     val lowRangeFlowSensorData: Int,
     val co2SensorData: Int,
     val o2SensorData: Int,
-    val gasFlowSpeedSensorData: Int,
-    val gasPressureSensorData: Int,
-    val bloodOxygen: Int,
-    val batteryLevel: Int
+    val bloodOxygen: Int? = 0,
+    val batteryLevel: Int? = 0
 ) {
 
     override fun toString(): String {
@@ -43,8 +39,6 @@ data class LungTestData(
                 "lowRangeFlowSensorData=$lowRangeFlowSensorData, " +
                 "co2SensorData=$co2SensorData, " +
                 "o2SensorData=$o2SensorData, " +
-                "gasFlowSpeedSensorData=$gasFlowSpeedSensorData, " +
-                "gasPressureSensorData=$gasPressureSensorData, " +
                 "bloodOxygen=$bloodOxygen, " +
                 "batteryLevel=$batteryLevel" +
                 ")"
@@ -61,8 +55,6 @@ data class LungTestData(
         val lowRangeFlow = lungTestData.lowRangeFlowSensorData
         val co2 = lungTestData.co2SensorData
         val o2 = lungTestData.o2SensorData
-        val gasFlowSpeed = lungTestData.gasFlowSpeedSensorData
-        val gasPressure = lungTestData.gasPressureSensorData
 
         // 计算流量
         val flowIn = CPXCalBase.calcFlowIn(
@@ -132,7 +124,9 @@ data class LungTestData(
             this.o2_ac3 = 0.0 // 第三次加速度波形的O2值，这里先设置为0
             this.analysis_flow = flowIn.toInt() // 分析流量
             this.analysis_pressure = atmosphericPressure.toDouble() // 分析压力
-            this.spo2 = bloodOxygen // 血氧饱和度
+            if (bloodOxygen != null) {
+                this.spo2 = bloodOxygen
+            } // 血氧饱和度
             this.analysis_temp = temperature.toDouble() // 分析温度
         }
 

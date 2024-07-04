@@ -24,6 +24,7 @@ import com.just.machine.model.sixminreport.SixMinReportEvaluation;
 import com.just.machine.model.sixminreport.SixMinReportStride;
 import com.just.machine.model.sixminreport.SixMinReportWalk;
 import com.just.machine.model.systemsetting.SixMinSysSettingBean;
+import com.just.machine.ui.fragment.serial.ModbusProtocol;
 import com.just.news.BuildConfig;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -262,6 +263,8 @@ public class USBTransferUtil {
         inputOutputManager = new SerialInputOutputManager(usbSerialPort, new SerialInputOutputManager.Listener() {
             @Override
             public void onNewData(byte[] data) {
+
+                ModbusProtocol.INSTANCE.receiveSerialData(data);
                 // 在这里处理接收到的 usb 数据 -------------------------------
                 // 按照结尾标识符处理
 //                baos.write(data,0,data.length);

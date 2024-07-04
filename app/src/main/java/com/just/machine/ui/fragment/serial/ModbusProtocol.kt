@@ -3,7 +3,14 @@ package com.just.machine.ui.fragment.serial
 import com.common.network.LogUtils
 import com.just.machine.model.LungTestData
 import com.common.base.BaseUtil
+import com.just.machine.model.SharedPreferencesUtils
+import com.just.machine.model.lungdata.BreathState
+import com.just.machine.model.lungdata.CPXCalcule
+import com.just.machine.model.lungdata.CPXSerializeData
+import com.just.machine.model.lungdata.DyCalculeSerializeCore
 import com.just.machine.util.CRC16Util
+import com.just.machine.util.LiveDataBus
+import com.justsafe.libview.util.DateUtils
 import java.util.zip.CRC32
 import kotlin.experimental.and
 
@@ -21,22 +28,182 @@ object ModbusProtocol {
     // 包头和包尾
     const val PACKET_HEADER: Short = 0x55AA.toShort()
 
+    /**
+     * 功能复位
+     */
+    val reset: ByteArray = byteArrayOf(0x55, 0xAA.toByte(), 0x03, 0x01, 0x01, 0x41, 0x90.toByte())
 
-    val allowOneSensor: ByteArray = byteArrayOf(0x55,
-        0xAA.toByte(), 0x11, 0x02, 0x07, 0x00, 0xA6.toByte(), 0xE8.toByte()
+    /**
+     * 读取下位机版本信息
+     */
+    val readVersion: ByteArray = byteArrayOf(0x55, 0xAA.toByte(), 0x01, 0x00, 0x00, 0x20)
+
+    /**
+     * 读取下位机设备信息
+     */
+    val readDevice: ByteArray = byteArrayOf(0x55, 0xAA.toByte(), 0x02, 0x00, 0x00, 0xD0.toByte())
+
+    /**
+     * 允许一类传感器上传(环境温湿度与大气压)
+     */
+    val allowOneSensor: ByteArray = byteArrayOf(
+        0x55, 0xAA.toByte(), 0x11, 0x02, 0x07, 0x00, 0xA6.toByte(), 0xE8.toByte()
     )
 
+    /**
+     * 禁止一类传感器上传
+     */
+    val banOneSensor: ByteArray = byteArrayOf(
+        0x55, 0xAA.toByte(), 0x11, 0x02, 0x00, 0x00, 0xA4.toByte(), 0xD8.toByte()
+    )
+
+    /**
+     * 允许二类传感器上传(上传所有数据)
+     */
+    val allowTwoSensor: ByteArray = byteArrayOf(
+        0x55, 0xAA.toByte(), 0x12, 0x02, 0xFF.toByte(), 0xFF.toByte(), 0xA5.toByte(), 0x2C
+    )
+
+    /**
+     * 禁止二类传感器上传
+     */
+    val banTwoSensor: ByteArray = byteArrayOf(
+        0x55, 0xAA.toByte(), 0x12, 0x02, 0x00, 0x00, 0xA4.toByte(), 0x9C.toByte()
+    )
+
+    /**
+     * 设置电磁阀成分定标流程
+     */
+    val setIngredientSolenoidValve: ByteArray = byteArrayOf(
+        0x55, 0xAA.toByte(), 0x22, 0x02, 0x03, 0x03, 0xEB.toByte(), 0x6D
+    )
+
+    /**
+     * 关闭电磁阀
+     */
+    val closeSolenoidValve: ByteArray = byteArrayOf(
+        0x55, 0xAA.toByte(), 0x22, 0x02, 0x02, 0x02, 0x2B, 0x3D
+    )
+
+    /**
+     * 开电磁阀1
+     */
+    val openSolenoid1: ByteArray = byteArrayOf(
+        0x55, 0xAA.toByte(), 0x22, 0x02, 0x01, 0x02, 0x2B, 0xCD.toByte()
+    )
+
+    /**
+     * 开电磁阀2
+     */
+    val openSolenoid2: ByteArray = byteArrayOf(
+        0x55, 0xAA.toByte(), 0x22, 0x02, 0x02, 0x01, 0x6B, 0x3C
+    )
+
+    /**
+     * 设置风机高流速(600)
+     */
+    val setBlowerHigh: ByteArray = byteArrayOf(
+        0x55, 0xAA.toByte(), 0x32, 0x03, 0x02, 0x02, 0x58,
+        0xBC.toByte(), 0xDA.toByte()
+    )
+
+    /**
+     * 设置风机低流速(100)
+     */
+    val setBlowerLow: ByteArray = byteArrayOf(
+        0x55, 0xAA.toByte(), 0x32, 0x03, 0x02, 0x00, 0x64, 0xBD.toByte(), 0xAB.toByte()
+    )
+
+    /**
+     * 设置风机自动流量定标流程
+     */
+    val setAutoFlowBlow: ByteArray = byteArrayOf(
+        0x55, 0xAA.toByte(), 0x32, 0x03, 0x04, 0x00, 0x00, 0x5C, 0x41
+    )
 
     /**
      * @param cmd 发送到指令 *
      * @param dataLength 数据长度
      */
-    fun cmdSend(cmd: String,dataLength:String="00"): ByteArray {
+    fun cmdSend(cmd: String, dataLength: String = "00"): ByteArray {
         val head = "55AA"
-        val data = cmd+dataLength
+        val data = cmd + dataLength
         val crc = CRC16Util.getCRC16(data)
         val cmdHex = head + data + crc
         return CRC16Util.hexStringToBytes(cmdHex)
+    }
+
+    /**
+     * @param data 发送数据到串口的方法，参数可以是要发送的数据。
+     */
+    fun receiveSerialData(data: ByteArray) {
+        if (data.size < 3) {
+            return
+        }
+        val hexString = String.format("0x%02X", data[2].toInt() and 0xFF)
+//        LogUtils.d(tag + "功能码：" + hexString)
+
+        when (data[2].toInt() and 0xFF) { // data[2] 是功能码
+            0x01 -> { // 读取下位机版本信息
+                // 处理逻辑
+            }
+
+            0x02 -> { // 读取下位机设备信息
+                // 处理逻辑
+            }
+
+            0x03 -> { // 控制下位机设备
+                // 处理逻辑
+            }
+
+            0x11 -> { // 允许/禁止上传一类传感器数据
+                // 处理逻辑
+            }
+
+            0x12 -> { // 允许/禁止上传二类传感器数据
+                // 处理逻辑
+            }
+
+            0x21 -> { // 读取电磁阀信息
+                // 处理逻辑
+            }
+
+            0x22 -> { // 控制电磁阀
+                // 处理逻辑
+            }
+
+            0x31 -> { // 读取风机信息
+                // 处理逻辑
+            }
+
+            0x32 -> { // 控制风机
+                // 处理逻辑
+            }
+
+            0x81 -> { // 下位机启动完成通知
+                // 处理逻辑
+            }
+
+            0x82 -> { // 设备心跳帧
+                // 处理逻辑
+            }
+
+            0x91 -> { // 上传一类传感器数据
+                // 处理逻辑
+            }
+
+            0x92 -> { // 上传二类传感器数据
+                // 检查数据长度是否正确
+                if (data.size != 26) {
+                    return
+                }
+                parseLungTestData(data)
+            }
+
+            else -> { // 处理未知功能码或其他情况
+
+            }
+        }
     }
 
     // 上位机设备状态信息读取命令数据格式
@@ -489,16 +656,11 @@ object ModbusProtocol {
             lungTestData.co2SensorData.toByte(), // CO2传感器数据低字节
             (lungTestData.o2SensorData shr 8).toByte(), // O2传感器数据高字节
             lungTestData.o2SensorData.toByte(), // O2传感器数据低字节
-            (lungTestData.gasFlowSpeedSensorData shr 8).toByte(), // 分析气体流速高字节
-            lungTestData.gasFlowSpeedSensorData.toByte(), // 分析气体流速低字节
-            (lungTestData.gasPressureSensorData shr 8).toByte(), // 分析气体压力高字节
-            lungTestData.gasPressureSensorData.toByte(), // 分析气体压力低字节
-            (lungTestData.bloodOxygen shr 8).toByte(), // 血氧高字节
+            (lungTestData.bloodOxygen?.shr(8))!!.toByte(), // 血氧高字节
             lungTestData.bloodOxygen.toByte(), // 血氧低字节
             (lungTestData.temperature shr 8).toByte(), // 温度数据高字节
             lungTestData.temperature.toByte(), // 温度数据低字节
-            (lungTestData.batteryLevel shr 8).toByte(), // 电量数据高字节
-            lungTestData.batteryLevel.toByte() // 电量数据低字节
+//            (lungTestData.batteryLevel shr 8).toByte(), // 电量数据高字节
         )
 
         // 计算 CRC 校验码并转换为字节数组
@@ -516,63 +678,86 @@ object ModbusProtocol {
 
 
     // 解析动态肺测试数据
-    fun parseLungTestData(response: ByteArray): LungTestData? {
+    private fun parseLungTestData(response: ByteArray) {
+
         // 检查数据长度是否正确
-        if (response.size != 35) {
-            LogUtils.e("动态肺测试返回数据长度不正确")
-            return null
+        if (response.size != 26) {
+            LogUtils.e("主控板返回数据长度不正确")
+            return
         }
 
         // 检查包头和包尾
-        if (response[0] != 0xAA.toByte() || response[1] != 0xAA.toByte() || response[34] != 0xED.toByte()) {
+        if (response[0] != 0x55.toByte() || response[1] != 0xAA.toByte()) {
             LogUtils.e("动态肺测试返回包头或包尾不正确")
-            return null
+            return
         }
 
         // 解析数据
         val temperature =
-            (response[4].toInt() and 0xFF shl 8) or (response[5].toInt() and 0xFF)  // 温度数据
+            (response[4].toInt() and 0xFF) or (response[5].toInt() and 0xFF)  // 环境温度数据
+
         val humidity =
-            (response[6].toInt() and 0xFF shl 8) or (response[7].toInt() and 0xFF)  // 湿度数据
-        val atmosphericPressure =
-            ((response[8].toLong() and 0xFF shl 24) or
-                    (response[9].toLong() and 0xFF shl 16) or
-                    (response[10].toLong() and 0xFF shl 8) or
-                    (response[11].toLong() and 0xFF)).toFloat() / 100.0f  // 大气压力数据
+            (response[6].toInt() and 0xFF) or (response[7].toInt() and 0xFF)  // 环境湿度数据
+
+        var atmosphericPressure =
+            ((response[8].toInt() and 0xFF) + (response[9].toInt() and 0xFF) * 256).toFloat()  // 大气压数据
+
+        atmosphericPressure = (atmosphericPressure * 0.075).toFloat()
+
+        if (atmosphericPressure < 500 || atmosphericPressure > 1000) {
+            atmosphericPressure = 765f
+        }
+
+        val solenoidValve1 =
+            (response[10].toInt() and 0xFF)  // 电磁阀1
+
+        val solenoidValve2 =
+            (response[11].toInt() and 0xFF)  // 电磁阀2
+
+        val calibratedFlowRate =
+            (response[12].toInt() and 0xFF) or (response[13].toInt() and 0xFF) // 定标流量
+
         val highRangeFlowSensorData =
-            (response[12].toInt() and 0xFF shl 8) or (response[13].toInt() and 0xFF)  // 高量程流量传感器数据
+            (response[14].toInt() and 0xFF) or (response[15].toInt() and 0xFF)  // 高量程流量传感器数据
+
         val lowRangeFlowSensorData =
-            (response[14].toInt() and 0xFF shl 8) or (response[15].toInt() and 0xFF)  // 低量程流量传感器数据
+            (response[16].toInt() and 0xFF) or (response[17].toInt() and 0xFF)  // 低量程流量传感器数据
+
         val co2SensorData =
-            (response[16].toInt() and 0xFF shl 8) or (response[17].toInt() and 0xFF)  // CO2传感器数据
+            (response[18].toInt() and 0xFF) or (response[19].toInt() and 0xFF)  // CO2传感器数据
+
         val o2SensorData =
-            (response[18].toInt() and 0xFF shl 8) or (response[19].toInt() and 0xFF)  // O2传感器数据
-        val gasFlowSpeedSensorData =
-            (response[20].toInt() and 0xFF shl 8) or (response[21].toInt() and 0xFF)  // 分析气体流速传感器数据
-        val gasPressureSensorData =
-            (response[22].toInt() and 0xFF shl 8) or (response[23].toInt() and 0xFF)  // 分析气体压力传感器数据
-        val bloodOxygen =
-            (response[24].toInt() and 0xFF shl 8) or (response[25].toInt() and 0xFF)  // 血氧数据
+            (response[20].toInt() and 0xFF) or (response[21].toInt() and 0xFF)  // O2传感器数据
+
+//        val bloodOxygen =
+//            (response[24].toInt() and 0xFF shl 8) or (response[25].toInt() and 0xFF)  // 血氧数据
+
         val batteryTemperature =
-            (response[26].toInt() and 0xFF shl 8) or (response[27].toInt() and 0xFF)  // 温度数据
-        val batteryLevel =
-            (response[28].toInt() and 0xFF shl 8) or (response[29].toInt() and 0xFF)  // 电池数据
+            (response[22].toInt() and 0xFF) or (response[23].toInt() and 0xFF)  // O2温度数据
+
+//        val batteryLevel =
+//            (response[28].toInt() and 0xFF shl 8) or (response[29].toInt() and 0xFF)  // 电池数据
+
+//        val str = String(response.sliceArray(3 until 24), Charsets.UTF_8)  // 使用指定的字符集（这里使用UTF-8）
+//        val crcStirng = CRC16Util.getCRC16(str)
+//        LogUtils.d(tag + crcStirng)
 
         // 解析 CRC 校验码
-        val crcValue = response.sliceArray(30 until 34)
-        val calculatedCRC = crc32ToByteArray(calculateCRC32(response.sliceArray(4 until 30)))
+        val crcValue = response.sliceArray(24 until 26)
+
+        val calculatedCRC = CRC16Util.getCRC16Bytes(response.sliceArray(2 until 24))
 
         // 验证 CRC 校验码
-//        if (!crcValue.contentEquals(calculatedCRC)) {
-//            LogUtils.e(
-//                "动态肺测试CRC校验失败----" + crcValue.joinToString(" ") { "%02X".format(it) } + "!=calculatedCRC----"
-//                        + calculatedCRC.joinToString(" ") { "%02X".format(it) }
-//            )
-//            return null
-//        }
+        if (!crcValue.contentEquals(calculatedCRC)) {
+            LogUtils.e(
+                "动态肺测试CRC校验失败----" + crcValue.joinToString(" ") { "%02X".format(it) } + "!=calculatedCRC----"
+                        + calculatedCRC.joinToString(" ") { "%02X".format(it) }
+            )
+            return
+        }
 
-        // 返回解析后的数据
-        return LungTestData(
+        val lungTestData = LungTestData(
+            // 返回解析后的数据
             0x07,
             temperature,
             humidity,
@@ -581,11 +766,41 @@ object ModbusProtocol {
             lowRangeFlowSensorData,
             co2SensorData,
             o2SensorData,
-            gasFlowSpeedSensorData,
-            gasPressureSensorData,
-            bloodOxygen,
-            batteryLevel
         )
+
+//        LogUtils.d(tag + lungTestData)
+
+        val breathInData = CPXSerializeData().convertLungTestDataToCPXSerializeData(lungTestData)
+
+        val dyCalculeSerializeCore = DyCalculeSerializeCore()
+
+        dyCalculeSerializeCore.setBegin(BreathState.None)
+
+        val cpxSerializeData = dyCalculeSerializeCore.enqueDyDataModel(breathInData)
+
+        dyCalculeSerializeCore.caluculeData(dyCalculeSerializeCore.observeBreathModel)
+
+        val cpxBreathInOutData = CPXCalcule.calDyBreathInOutData(
+            cpxSerializeData,
+            dyCalculeSerializeCore.cpxBreathInOutDataBase
+        )
+
+        val patientBean = SharedPreferencesUtils.instance.patientBean
+
+        val id = patientBean?.patientId
+
+        if (id != null) {
+            cpxBreathInOutData.patientId = id
+        }
+
+        cpxBreathInOutData.createTime = DateUtils.nowMinutesDataString
+
+//        viewModel.insertCPXBreathInOutData(cpxBreathInOutData) // 插入数据库
+
+//        LogUtils.e(tag + cpxBreathInOutData.toString())
+        LiveDataBus.get().with("动态心肺测试").postValue(cpxBreathInOutData)
+
+
     }
 
 
@@ -649,7 +864,6 @@ object ModbusProtocol {
         result[3] = crcValue.toByte()
         return result
     }
-
 
 
     /**

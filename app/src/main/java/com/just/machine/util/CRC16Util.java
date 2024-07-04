@@ -309,4 +309,31 @@ public class CRC16Util {
         String str = result.substring(2, 4)  + result.substring(0, 2);
         return str;
     }
+
+    /**
+     * 计算CRC16校验码
+     * @param bytes 字节数组
+     * @return 校验码的字节数组，高位在前低位在后
+     */
+    public static byte[] getCRC16Bytes(byte[] bytes) {
+        int CRC = 0x0000ffff;
+        int POLYNOMIAL = 0x0000a001;
+        int i, j;
+        for (i = 0; i < bytes.length; i++) {
+            CRC ^= ((int) bytes[i] & 0x000000ff);
+            for (j = 0; j < 8; j++) {
+                if ((CRC & 0x00000001) != 0) {
+                    CRC >>= 1;
+                    CRC ^= POLYNOMIAL;
+                } else {
+                    CRC >>= 1;
+                }
+            }
+        }
+        // 将CRC转换为字节数组，高位在前低位在后
+        byte[] crcBytes = new byte[2];
+        crcBytes[0] = (byte) (CRC & 0xff); // 低位
+        crcBytes[1] = (byte) ((CRC >> 8) & 0xff); // 高位
+        return crcBytes;
+    }
 }
