@@ -24,9 +24,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.Random
 
 
-
-
-
 /**
  *create by 2024/6/19
  * 自动流量定标
@@ -35,9 +32,9 @@ import java.util.Random
 @AndroidEntryPoint
 class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
 
-    private lateinit var mCountDownTime: FixCountDownTime
-    private lateinit var tempDataSet: LineDataSet
-    private lateinit var actualDataSet: LineDataSet
+    private var mCountDownTime: FixCountDownTime? = null
+    private var tempDataSet: LineDataSet? = null
+    private var actualDataSet: LineDataSet? = null
 
     private val flowAdapter by lazy {
         FlowAdapter(requireContext())
@@ -68,8 +65,8 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
             if (it is String) {
                 if (it == "autoFlow") {
                     sendCalibraCommand()
-            
-                    mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack {
+
+                    mCountDownTime!!.start(object : FixCountDownTime.OnTimerCallBack {
                         override fun onStart() {
 
                         }
@@ -80,13 +77,13 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
                             binding.tvFlowAutoActual.text =
                                 (Random().nextInt(3) + 1).toFloat().toString()
                             val index = 35 - times
-                            tempDataSet.addEntry(
+                            tempDataSet!!.addEntry(
                                 Entry(
                                     index.toFloat(),
                                     (Random().nextInt(3) + 1).toFloat()
                                 )
                             )
-                            actualDataSet.addEntry(
+                            actualDataSet!!.addEntry(
                                 Entry(
                                     index.toFloat(),
                                     (Random().nextInt(3) + 1).toFloat()
@@ -191,27 +188,27 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
             }
 
             tempDataSet = LineDataSet(null, "")
-            tempDataSet.lineWidth = 1.0f
-            tempDataSet.color = ContextCompat.getColor(requireContext(), R.color.blue)
-            tempDataSet.setDrawValues(false)
-            tempDataSet.setDrawCircles(false)
-            tempDataSet.setDrawCircleHole(false)
-            tempDataSet.setDrawFilled(false)
-            tempDataSet.mode = LineDataSet.Mode.LINEAR
+            tempDataSet!!.lineWidth = 1.0f
+            tempDataSet!!.color = ContextCompat.getColor(requireContext(), R.color.blue)
+            tempDataSet!!.setDrawValues(false)
+            tempDataSet!!.setDrawCircles(false)
+            tempDataSet!!.setDrawCircleHole(false)
+            tempDataSet!!.setDrawFilled(false)
+            tempDataSet!!.mode = LineDataSet.Mode.LINEAR
 
             actualDataSet = LineDataSet(null, "")
-            actualDataSet.lineWidth = 1.0f
-            actualDataSet.color =
+            actualDataSet!!.lineWidth = 1.0f
+            actualDataSet!!.color =
                 ContextCompat.getColor(requireContext(), R.color.wheel_title_bar_ok_color)
-            actualDataSet.setDrawValues(false)
-            actualDataSet.setDrawCircles(false)
-            actualDataSet.setDrawCircleHole(false)
-            actualDataSet.setDrawFilled(false)
-            actualDataSet.mode = LineDataSet.Mode.LINEAR
+            actualDataSet!!.setDrawValues(false)
+            actualDataSet!!.setDrawCircles(false)
+            actualDataSet!!.setDrawCircleHole(false)
+            actualDataSet!!.setDrawFilled(false)
+            actualDataSet!!.mode = LineDataSet.Mode.LINEAR
 
             val lineDataSets: MutableList<ILineDataSet> = ArrayList()
-            lineDataSets.add(tempDataSet)
-            lineDataSets.add(actualDataSet)
+            lineDataSets.add(tempDataSet!!)
+            lineDataSets.add(actualDataSet!!)
             val lineData = LineData(lineDataSets)
             data = lineData
         }

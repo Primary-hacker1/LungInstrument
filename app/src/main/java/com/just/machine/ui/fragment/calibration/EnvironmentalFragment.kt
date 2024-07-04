@@ -34,20 +34,16 @@ import kotlinx.coroutines.Job
 @AndroidEntryPoint
 class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>() {
 
-    private lateinit var usbTransferUtil: USBTransferUtil //usb工具类
-
     private val viewModel by viewModels<MainViewModel>()
 
     private val adapter by lazy { EnvironmentalAdapter(requireContext()) }
-
-    private lateinit var scope: Job
 
     private var isLocked = true
 
     private var isBegin = false
 
     override fun initView() {
-        usbTransferUtil = USBTransferUtil.getInstance()
+
         binding.rvEnvironmental.layoutManager = LinearLayoutManager(requireContext())
         adapter.setItemClickListener { _, position ->
             adapter.toggleItemBackground(position)

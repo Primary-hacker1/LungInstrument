@@ -41,8 +41,8 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
 
     private lateinit var tts: TextToSpeech
 
-    private lateinit var actualO2DataSet: LineDataSet
-    private lateinit var actualCO2DataSet: LineDataSet
+    private var actualO2DataSet: LineDataSet? = null
+    private var actualCO2DataSet: LineDataSet? = null
 
     private val o2Adapter by lazy {
         IngredientAdapter(requireContext())
@@ -104,9 +104,9 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
 
     override fun initListener() {
         binding.swDepthToggle.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked){
+            if (isChecked) {
                 enableEditTextStyle()
-            }else{
+            } else {
                 disEnableEditTextStyle()
             }
         }
@@ -185,7 +185,7 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
         }
     }
 
-    private fun enableEditTextStyle(){
+    private fun enableEditTextStyle() {
         binding.etOneO2.isEnabled = true
         binding.etOneCo2.isEnabled = true
         binding.etTwoCo2.isEnabled = true
@@ -196,7 +196,7 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
         binding.etTwoCo2.setBackgroundResource(R.drawable.frame_with_color_d6d6d6_white_solid)
     }
 
-    private fun disEnableEditTextStyle(){
+    private fun disEnableEditTextStyle() {
         binding.etOneO2.isEnabled = false
         binding.etOneCo2.isEnabled = false
         binding.etTwoCo2.isEnabled = false
@@ -319,26 +319,27 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
             }
 
             actualO2DataSet = LineDataSet(null, "")
-            actualO2DataSet.lineWidth = 1.0f
-            actualO2DataSet.color = ContextCompat.getColor(requireContext(), R.color.green)
-            actualO2DataSet.setDrawValues(false)
-            actualO2DataSet.setDrawCircles(false)
-            actualO2DataSet.setDrawCircleHole(false)
-            actualO2DataSet.setDrawFilled(false)
-            actualO2DataSet.mode = LineDataSet.Mode.LINEAR
+            actualO2DataSet!!.lineWidth = 1.0f
+            actualO2DataSet!!.color = ContextCompat.getColor(requireContext(), R.color.green)
+            actualO2DataSet!!.setDrawValues(false)
+            actualO2DataSet!!.setDrawCircles(false)
+            actualO2DataSet!!.setDrawCircleHole(false)
+            actualO2DataSet!!.setDrawFilled(false)
+            actualO2DataSet!!.mode = LineDataSet.Mode.LINEAR
 
             actualCO2DataSet = LineDataSet(null, "")
-            actualCO2DataSet.lineWidth = 1.0f
-            actualCO2DataSet.color = ContextCompat.getColor(requireContext(), R.color.colorTextOrange)
-            actualCO2DataSet.setDrawValues(false)
-            actualCO2DataSet.setDrawCircles(false)
-            actualCO2DataSet.setDrawCircleHole(false)
-            actualCO2DataSet.setDrawFilled(false)
-            actualCO2DataSet.mode = LineDataSet.Mode.LINEAR
+            actualCO2DataSet!!.lineWidth = 1.0f
+            actualCO2DataSet!!.color =
+                ContextCompat.getColor(requireContext(), R.color.colorTextOrange)
+            actualCO2DataSet!!.setDrawValues(false)
+            actualCO2DataSet!!.setDrawCircles(false)
+            actualCO2DataSet!!.setDrawCircleHole(false)
+            actualCO2DataSet!!.setDrawFilled(false)
+            actualCO2DataSet!!.mode = LineDataSet.Mode.LINEAR
 
             val lineDataSets: MutableList<ILineDataSet> = ArrayList()
-            lineDataSets.add(actualO2DataSet)
-            lineDataSets.add(actualCO2DataSet)
+            lineDataSets.add(actualO2DataSet!!)
+            lineDataSets.add(actualCO2DataSet!!)
             val lineData = LineData(lineDataSets)
             data = lineData
         }

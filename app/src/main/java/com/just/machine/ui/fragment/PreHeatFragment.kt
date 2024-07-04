@@ -1,10 +1,12 @@
 package com.just.machine.ui.fragment
 
+import android.content.Intent
 import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.just.machine.ui.activity.MainActivity
@@ -13,6 +15,9 @@ import com.just.news.R
 import com.just.news.databinding.FragmentPreheatBinding
 import com.justsafe.libview.util.DateUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * 预热界面
@@ -20,10 +25,13 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class PreHeatFragment : CommonBaseFragment<FragmentPreheatBinding>() {
 
-    private lateinit var mCountDownTime: FixCountDownTime
+    private var mCountDownTime: FixCountDownTime? = null
 
     override fun loadData() {
-
+        lifecycleScope.launch(Dispatchers.Main) {
+            delay(100)
+            binding.batteryStatus.setPower(50)
+        }
     }
 
     override fun initView() {
@@ -35,7 +43,7 @@ class PreHeatFragment : CommonBaseFragment<FragmentPreheatBinding>() {
 
         binding.pbPreheat.progressDrawable = progressbarBg
 
-        mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack{
+        mCountDownTime!!.start(object : FixCountDownTime.OnTimerCallBack{
             override fun onStart() {
                 binding.tvPreheatStatus.text = "正在预热..."
             }
@@ -56,7 +64,8 @@ class PreHeatFragment : CommonBaseFragment<FragmentPreheatBinding>() {
             }
 
             override fun onFinish() {
-                MainActivity.startMainActivity(activity)
+                val intent = Intent(activity, MainActivity::class.java)
+                startActivity(intent)
                 activity?.finish()
             }
         })
@@ -64,11 +73,12 @@ class PreHeatFragment : CommonBaseFragment<FragmentPreheatBinding>() {
 
     override fun initListener() {
         binding.tvSkipPreheat.setNoRepeatListener {
-            mCountDownTime.cancel()
+            mCountDownTime!!.cancel()
             MainActivity.startMainActivity(activity)
             activity?.finish()
         }
         binding.ivPreheatClose.setNoRepeatListener {
+            mCountDownTime!!.cancel()
             activity?.finish()
         }
     }

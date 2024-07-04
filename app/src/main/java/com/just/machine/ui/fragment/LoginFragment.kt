@@ -30,7 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
 
-
+    private var warmLeaveSec = 0
     private val REQUEST_BLUETOOTH_PERMISSION = 1
 
     private val activityResultLauncher =
@@ -144,10 +144,13 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
                 SharedPreferencesUtils.instance.pass = ""
             }
 
-//            MainActivity.startMainActivity(context)
-            popBackStack()
-            navigate(it, R.id.preHeatFragment)
-//            activity?.finish()
+            if (warmLeaveSec > 0) {
+                popBackStack()
+                navigate(it, R.id.preHeatFragment)
+            } else {
+                MainActivity.startMainActivity(context)
+                activity?.finish()
+            }
         }
 
         binding.btnClose.setNoRepeatListener {
