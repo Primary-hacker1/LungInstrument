@@ -81,7 +81,8 @@ public class FileUtil {
         try {
             String[] fileNames = context.getAssets().list(srcPath);
             if (fileNames.length > 0) {
-                File file = new File(context.getExternalFilesDir("").getAbsolutePath(), dstPath);
+//                File file = new File(context.getExternalFilesDir("").getAbsolutePath(), dstPath);
+                File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), dstPath);
                 if (!file.exists()) file.mkdirs();
                 for (String fileName : fileNames) {
                     File outFile = new File(file.getAbsolutePath(), fileName);
@@ -222,7 +223,8 @@ public class FileUtil {
     public static File createErrorFile(Context context) {
         File file = null;
         try {
-            String DIR = context.getExternalFilesDir("").getAbsolutePath() + "/LungInstruments/log/";
+//            String DIR = context.getExternalFilesDir("").getAbsolutePath() + "/LungInstruments/log/";
+            String DIR = Environment.getExternalStorageDirectory().getAbsolutePath() + "/LungInstruments/log/";
             String NAME = CommonUtil.getCurrentTime() + ".txt";
             File dir = new File(DIR);
             if (!dir.exists()) {

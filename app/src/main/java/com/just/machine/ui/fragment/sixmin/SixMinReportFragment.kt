@@ -1,7 +1,9 @@
 package com.just.machine.ui.fragment.sixmin
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
+import android.os.Environment
 import android.print.PrintAttributes
 import android.print.PrintManager
 import android.util.Log
@@ -121,11 +123,11 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
             }
             generateEcgPng()
             val bloodPng = File(
-                mActivity.getExternalFilesDir("")?.absolutePath,
+                Environment.getExternalStorageDirectory().absolutePath,
                 pngSavePath + File.separator + "imageBlood.png"
             )
             val heartPng = File(
-                mActivity.getExternalFilesDir("")?.absolutePath,
+                Environment.getExternalStorageDirectory().absolutePath,
                 pngSavePath + File.separator + "imageHeart.png"
             )
             val hsHxlPng =
@@ -142,22 +144,22 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
 
                 }
             val imageEcg1 = File(
-                mActivity.getExternalFilesDir("")?.absolutePath,
+                Environment.getExternalStorageDirectory().absolutePath,
                 pngSavePath + File.separator + "imageEcg1.png"
             )
             val imageEcg2 = File(
-                mActivity.getExternalFilesDir("")?.absolutePath,
+                Environment.getExternalStorageDirectory().absolutePath,
                 pngSavePath + File.separator + "imageEcg2.png"
             )
 
             val filePath = File(
-                mActivity.getExternalFilesDir("")?.absolutePath,
-                File.separator + "sixmin/sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo + File.separator + "六分钟步行试验检测报告.doc"
+                Environment.getExternalStorageDirectory().absolutePath,
+                File.separator + "SixMin/SixMinReport" + File.separator + sixMinRecordsBean.infoBean.reportNo + File.separator + "六分钟步行试验检测报告.doc"
             )
 
             val pdfFilePath = File(
-                mActivity.getExternalFilesDir("")?.absolutePath,
-                File.separator + "sixmin/sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo + File.separator + "六分钟步行试验检测报告.pdf"
+                Environment.getExternalStorageDirectory().absolutePath,
+                File.separator + "SixMin/SixMinReport" + File.separator + sixMinRecordsBean.infoBean.reportNo + File.separator + "六分钟步行试验检测报告.pdf"
             )
 
             if (filePath.parentFile?.exists() == false) {
@@ -296,12 +298,12 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
 
                         val filePath = File(
                             mActivity.getExternalFilesDir("")?.absolutePath,
-                            File.separator + "sixmin/sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo + File.separator + "六分钟步行试验检测报告.doc"
+                            File.separator + "SixMin/SixMinReport" + File.separator + sixMinRecordsBean.infoBean.reportNo + File.separator + "六分钟步行试验检测报告.doc"
                         )
 
                         val pdfFilePath = File(
                             mActivity.getExternalFilesDir("")?.absolutePath,
-                            File.separator + "sixmin/sixminreport" + File.separator + sixMinRecordsBean.infoBean.reportNo + File.separator + "六分钟步行试验检测报告.pdf"
+                            File.separator + "SixMin/SixMinReport" + File.separator + sixMinRecordsBean.infoBean.reportNo + File.separator + "六分钟步行试验检测报告.pdf"
                         )
 
                         if (filePath.parentFile?.exists() == false) {
@@ -547,11 +549,11 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         //运动处方建议
         val checkPng = File(
             mActivity.getExternalFilesDir("")?.absolutePath,
-            "sixmin/templates" + File.separator + "check.png"
+            "SixMin/Templates" + File.separator + "check.png"
         )
         val unCheckPng = File(
             mActivity.getExternalFilesDir("")?.absolutePath,
-            "sixmin/templates" + File.separator + "uncheck.png"
+            "SixMin/Templates" + File.separator + "uncheck.png"
         )
         if (sixMinRecordsBean.prescriptionBean[0].movementWay == "0") {
             root["checkcf1"] = PictureRenderData(14, 14, checkPng.absolutePath)
@@ -938,6 +940,7 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun beanQuery(any: Any) {
         try {
             if (any is List<*>) {
@@ -1414,8 +1417,8 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 binding.sixminReportLineChartBloodOxygen.invalidate()
 
                 pngSavePath =
-                    File.separator + "sixmin/sixminreportpng" + File.separator + sixMinRecordsBean.infoBean.reportNo
-                val file = File(mActivity.getExternalFilesDir("")?.absolutePath, pngSavePath)
+                    File.separator + "SixMin/SixMinReportPng" + File.separator + sixMinRecordsBean.infoBean.reportNo
+                val file = File(Environment.getExternalStorageDirectory().absolutePath, pngSavePath)
                 if (!file.exists()) {
                     file.mkdirs()
                 }

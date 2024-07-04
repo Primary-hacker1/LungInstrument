@@ -30,7 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
 
-    private var warmLeaveSec = 0
+    private var warmLeaveSec = 0 //热机时间，从硬件读取
     private val REQUEST_BLUETOOTH_PERMISSION = 1
 
     private val activityResultLauncher =
@@ -63,7 +63,7 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
             ) {
                 ActivityCompat.requestPermissions(
                     activity!!,
-                    arrayOf(Manifest.permission.BLUETOOTH_CONNECT),
+                    arrayOf(Manifest.permission.BLUETOOTH_CONNECT,Manifest.permission.BLUETOOTH_ADMIN),
                     REQUEST_BLUETOOTH_PERMISSION
                 )
             }

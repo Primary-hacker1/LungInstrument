@@ -2,13 +2,15 @@ package com.just.machine.ui.fragment.setting
 
 import android.annotation.SuppressLint
 import android.content.pm.PackageInfo
+import android.os.Build
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.fragment.app.viewModels
 import com.common.base.*
-import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent.Companion.ALL_SETTING_SUCCESS
 import com.just.machine.dao.setting.AllSettingBean
 import com.just.machine.model.Constants.Companion.settingsAreSaved
@@ -19,6 +21,7 @@ import com.just.machine.util.SpinnerHelper
 import com.just.news.R
 import com.just.news.databinding.FragmentAllSettingBinding
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
 
 /**
  *create by 2024/5/19
@@ -121,6 +124,7 @@ class AllSettingFragment : CommonBaseFragment<FragmentAllSettingBinding>() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun initListener() {
         spScenarios.setSpinnerSelectionListener(object : SpinnerHelper.SpinnerSelectionListener {
             override fun onItemSelected(selectedItem: String, view: View?) {
@@ -177,6 +181,21 @@ class AllSettingFragment : CommonBaseFragment<FragmentAllSettingBinding>() {
             viewModel.setAllSettingBean(allSettingBean)
         }
 
+        binding.tvDataBackup.setNoRepeatListener {
+            //备份以下三个文件夹
+            val databasePath = activity?.dataDir?.path + "/databases"
+            val internalFilePath = activity?.filesDir
+            val externalFilePath = activity?.getExternalFilesDir(null)
+            val backupPath =
+                Environment.getExternalStorageDirectory().absolutePath + File.separator + "RoomBackup" + File.separator
+            val filePath = File(backupPath)
+            if (!filePath.exists()) {
+                filePath.mkdirs()
+            }
+        }
+        binding.tvDataRestoration.setNoRepeatListener {
+
+        }
     }
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =

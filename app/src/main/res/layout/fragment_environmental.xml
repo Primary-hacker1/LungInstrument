@@ -182,7 +182,7 @@
                         android:maxWidth="80dp"
                         android:maxLength="5"
                         android:minWidth="20dp"
-                        android:paddingHorizontal="2dp"
+                        android:paddingHorizontal="5dp"
                         android:textColor="@color/white"
                         android:textSize="23sp"
                         android:textStyle="bold" />
@@ -235,7 +235,7 @@
                         android:maxWidth="80dp"
                         android:maxLength="5"
                         android:minWidth="20dp"
-                        android:paddingHorizontal="2dp"
+                        android:paddingHorizontal="5dp"
                         android:textColor="@color/white"
                         android:textSize="23sp"
                         android:textStyle="bold" />
@@ -287,7 +287,7 @@
                         android:maxWidth="80dp"
                         android:maxLength="6"
                         android:minWidth="20dp"
-                        android:paddingHorizontal="2dp"
+                        android:paddingHorizontal="5dp"
                         android:textColor="@color/white"
                         android:textSize="23sp"
                         android:textStyle="bold" />
