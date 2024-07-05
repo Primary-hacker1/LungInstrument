@@ -19,15 +19,14 @@ object ModbusProtocol {
 
     private var tag: String = ModbusProtocol::class.java.name
 
-    var isFlowCalibra = false
-    var isIngredientCalibra = false
-    var isEnvironmentCalibra = false
-    var isDeviceConnect = false
-    var isWarmup = false
-    var batteryLevel = 0
-    var warmLeaveSec  = 0
-    var hardWareVersion = ""
-    var softWareVersion = ""
+    var isFlowCalibra = false //流量定标
+    var isIngredientCalibra = false //成分定标
+    var isEnvironmentCalibra = false //环境定标
+    var isDeviceConnect = false //设备是否连接
+    var batteryLevel = 0 //电量
+    var warmLeaveSec  = 0 //预热剩余时间
+    var hardWareVersion = "" //下位机硬件版本
+    var softWareVersion = "" //下位机软件版本
 
 
     // 包头和包尾
@@ -417,13 +416,13 @@ object ModbusProtocol {
 
         // 解析数据
         var temperature =
-            ((response[4].toInt() and 0xFF) + (response[5].toInt() and 0xFF)) / 10f  // 环境温度数据
+            ((response[4].toInt() and 0xFF) + (response[5].toInt() and 0xFF)*256).toFloat() / 10f  // 环境温度数据
         if (temperature <= 0f || temperature > 500f) {
             temperature = 50f
         }
 
         var humidity =
-            ((response[6].toInt() and 0xFF) + (response[7].toInt() and 0xFF)) / 10f  // 环境湿度数据
+            ((response[6].toInt() and 0xFF) + (response[7].toInt() and 0xFF)*256).toFloat() / 10f  // 环境湿度数据
         if (humidity <= 0f || humidity > 100f) {
             humidity = 50f
         }
@@ -440,7 +439,7 @@ object ModbusProtocol {
 
         val environmentData = EnvironmentData(temperature, humidity, atmosphericPressure)
 
-        LiveDataBus.get().with(Constants.serialCallback).postValue(environmentData)
+        LiveDataBus.get().with(Constants.envCaliSerialCallback).postValue(environmentData)
     }
 
     // 上位机流量定标命令数据格式
