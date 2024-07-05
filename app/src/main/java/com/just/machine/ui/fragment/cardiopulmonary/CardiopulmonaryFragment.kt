@@ -6,19 +6,26 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.base.visible
+import com.common.viewmodel.LiveDataEvent
+import com.just.machine.dao.setting.AllSettingBean
 import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.FragmentChildAdapter
 import com.just.machine.ui.fragment.NewFragment
+import com.just.machine.ui.fragment.serial.ModbusProtocol
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
 import com.just.news.databinding.FragmentCardiopulmonaryBinding
 import com.justsafe.libview.util.DateUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 /**
@@ -32,7 +39,10 @@ class CardiopulmonaryFragment : CommonBaseFragment<FragmentCardiopulmonaryBindin
     private val viewModel by viewModels<MainViewModel>()
 
     override fun loadData() {//懒加载
-
+        lifecycleScope.launch(Dispatchers.Main) {
+            delay(100)
+            binding.toolbarCardi.ivBatteryStatus.setPower(ModbusProtocol.batteryLevel)
+        }
     }
 
     private fun initToolbar() {
@@ -50,6 +60,43 @@ class CardiopulmonaryFragment : CommonBaseFragment<FragmentCardiopulmonaryBindin
             DateUtils.nowTimeDataString
         )
         binding.toolbarCardi.title = Constants.cardiopulmonary//标题
+
+        if(ModbusProtocol.isDeviceConnect){
+            binding.toolbarCardi.tvDeviceConnectStatus.text = "已连接"
+            binding.toolbarCardi.ivDeviceConnectStatus.setImageResource(R.drawable.wifi_on)
+        }else{
+            binding.toolbarCardi.tvDeviceConnectStatus.text = "未连接"
+            binding.toolbarCardi.ivDeviceConnectStatus.setImageResource(R.drawable.warn_yellow)
+        }
+
+        if(ModbusProtocol.warmLeaveSec >= 1200){
+            binding.toolbarCardi.tvPreheatStatus.text = "已预热"
+            binding.toolbarCardi.ivPreheatStatus.setImageResource(R.drawable.preheat)
+        }else{
+            binding.toolbarCardi.tvPreheatStatus.text = "未预热"
+            binding.toolbarCardi.ivPreheatStatus.setImageResource(R.drawable.warn_yellow)
+        }
+
+        viewModel.getAllSettingBeans()
+
+        viewModel.mEventHub.observe(this) {
+            when (it.action) {
+                LiveDataEvent.ALL_SETTING_SUCCESS -> {
+                    if (it.any !is MutableList<*>) {
+                        return@observe
+                    }
+
+                    val settings = it.any as MutableList<*>
+
+                    for (settingBean in settings) {
+                        if (settingBean !is AllSettingBean) {
+                            return@observe
+                        }
+                        binding.toolbarCardi.tvHospitalName.text = settingBean.hospitalName
+                    }
+                }
+            }
+        }
     }
 
     override fun initView() {

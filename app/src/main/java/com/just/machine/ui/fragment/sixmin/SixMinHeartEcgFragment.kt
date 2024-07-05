@@ -1,6 +1,7 @@
 package com.just.machine.ui.fragment.sixmin
 
 import android.graphics.Bitmap
+import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -106,9 +107,9 @@ class SixMinHeartEcgFragment : CommonBaseFragment<FragmentSixminHeartEcgBinding>
                 SixMinCaptureEcgDialogFragment.CaptureEcgDialogListener {
                 override fun onClickSaveEcg(imagePreview: Bitmap,type:Int) {
                     val ecgSavePath =
-                        File.separator + "sixmin/sixminreportpng" + File.separator + mActivity.sixMinReportNo
+                        File.separator + "SixMin/SixMinReportPng" + File.separator + mActivity.sixMinReportNo
                     val file = File(
-                        mActivity.getExternalFilesDir("")?.absolutePath,
+                        Environment.getExternalStorageDirectory().absolutePath,
                         ecgSavePath + File.separator + "imageEcg${type}.png"
                     )
                     val saveBitmapToFile = FileUtil.getInstance(mActivity)

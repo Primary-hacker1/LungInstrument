@@ -237,7 +237,7 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                     befoBreathingLevel: Int,
                     befoFatigueLevelStr: String,
                     befoBreathingLevelStr: String,
-                    faceMask: String
+                    faceMaskStr: String
                 ) {
                     Log.d("tag", "$befoFatigueLevel$befoBreathingLevel")
                 }

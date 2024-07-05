@@ -1,10 +1,15 @@
 package com.common.base
 
 import android.Manifest
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.IBinder
+import android.provider.Settings
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -12,6 +17,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -27,6 +33,11 @@ abstract class CommonBaseActivity<VB : ViewDataBinding> : AppCompatActivity() {
     private lateinit var _binding: VB
 
     protected val binding get() = _binding
+
+    private val REQUIRED_PERMISSIONS = arrayOf(
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,9 +112,48 @@ abstract class CommonBaseActivity<VB : ViewDataBinding> : AppCompatActivity() {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_MEDIA_IMAGES), 2001)
             }
         }else{
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE), 2001)
+            allPermissionsGranted()
+        }
+    }
+
+    private val requestDataLauncher =
+        registerForActivityResult(object : ActivityResultContract<Int, String>() {
+            override fun createIntent(context: Context, input: Int?): Intent {
+                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                intent.data = Uri.parse("package:$packageName")
+                return intent
+            }
+
+
+            override fun parseResult(resultCode: Int, intent: Intent?): String {
+                TODO("Not yet implemented")
+            }
+        }
+        ) {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        }
+
+    private fun allPermissionsGranted() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // 先判断有没有权限
+            if (Environment.isExternalStorageManager()) {
+                REQUIRED_PERMISSIONS.all {
+                    ContextCompat.checkSelfPermission(
+                        baseContext,
+                        it
+                    ) == PackageManager.PERMISSION_GRANTED
+                }
+            } else {
+                requestDataLauncher.launch(2001)
+            }
+        } else {
+            REQUIRED_PERMISSIONS.all {
+                ContextCompat.checkSelfPermission(
+                    baseContext,
+                    it
+                ) == PackageManager.PERMISSION_GRANTED
             }
         }
     }
+
 }

@@ -17,6 +17,7 @@ import com.common.base.toast
 import com.just.machine.model.Constants
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.ui.activity.MainActivity
+import com.just.machine.ui.fragment.serial.ModbusProtocol
 import com.just.news.databinding.FragmentLoginBinding
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
@@ -30,7 +31,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
 
-    private var warmLeaveSec = 0
     private val REQUEST_BLUETOOTH_PERMISSION = 1
 
     private val activityResultLauncher =
@@ -48,7 +48,7 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
                 if (isGranted) {
 
                 } else {
-                    toast("${permissionName}被拒绝了，请在应用设置里打开权限")
+//                    toast("${permissionName}被拒绝了，请在应用设置里打开权限")
                 }
             }
         }
@@ -63,7 +63,7 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
             ) {
                 ActivityCompat.requestPermissions(
                     activity!!,
-                    arrayOf(Manifest.permission.BLUETOOTH_CONNECT),
+                    arrayOf(Manifest.permission.BLUETOOTH_CONNECT,Manifest.permission.BLUETOOTH_ADMIN),
                     REQUEST_BLUETOOTH_PERMISSION
                 )
             }
@@ -102,7 +102,9 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
         } else {
             binding.cbRememberPwd.isChecked = false
         }
+    }
 
+    override fun initListener() {
         binding.btnLogin.setNoRepeatListener {
 
 //            if (Constants.isDebug) {
@@ -144,7 +146,7 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
                 SharedPreferencesUtils.instance.pass = ""
             }
 
-            if (warmLeaveSec > 0) {
+            if (1200 - ModbusProtocol.warmLeaveSec > 0) {
                 popBackStack()
                 navigate(it, R.id.preHeatFragment)
             } else {
@@ -156,10 +158,6 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
         binding.btnClose.setNoRepeatListener {
             activity?.finish()
         }
-    }
-
-    override fun initListener() {
-
     }
 
     /**

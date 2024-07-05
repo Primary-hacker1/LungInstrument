@@ -52,7 +52,7 @@ public class BatteryView extends View implements LifecycleObserver {
     // 高电量 默认值 21%-100% 白色
     private int highColor;
     private int headerColor;
-    private int currentPower = 60; // 当前电量
+    private int currentPower = 100; // 当前电量
 
     // 未充电时高电量颜色
     private int noChargingHighColor;

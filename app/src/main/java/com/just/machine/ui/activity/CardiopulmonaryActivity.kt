@@ -31,10 +31,6 @@ class CardiopulmonaryActivity : CommonBaseActivity<ActivityCardiopulmonaryBindin
 
     private val viewModel by viewModels<MainViewModel>()
 
-    private val usbTransferUtil: USBTransferUtil by lazy {
-        USBTransferUtil.getInstance()
-    }
-
     companion object {
         /**
          * @param context context
@@ -55,28 +51,6 @@ class CardiopulmonaryActivity : CommonBaseActivity<ActivityCardiopulmonaryBindin
         initNavigationView()
 //        SerialPortManager.initialize(this)
 //        SerialPortManager.sendMessage(MudbusProtocol.HANDSHAKE_COMMAND)//握手
-//        usbTransferUtil.write(MudbusProtocol.cmdSend("01"))
-        lifecycleScope.launch {
-            delay(200)
-            usbTransferUtil.write(ModbusProtocol.cmdSend("02"))
-        }
-
-        //串口数据
-        LiveDataBus.get().with("GetVersionInfo").observe(this) {
-            if(it is String){
-                val hardWareVersion = ModbusProtocol.formatVersion(it.substring(8,12))
-                val softWareVersion = ModbusProtocol.formatVersion(it.substring(12,16))
-            }
-        }
-
-        LiveDataBus.get().with("GetDeviceInfo").observe(this) {
-            if(it is String){
-                val batteryHex = it.substring(10, 12)
-                val battery = batteryHex.toInt(16)
-                val heatSecHex = it.substring(12, 16)
-                val heatSec = heatSecHex.toInt(16)
-            }
-        }
     }
 
     override fun onDestroy() {

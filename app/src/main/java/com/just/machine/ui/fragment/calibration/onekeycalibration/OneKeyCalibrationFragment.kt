@@ -18,14 +18,15 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBinding>() {
 
-    private lateinit var mCountDownTime: FixCountDownTime
+    private val mCountDownTime by lazy {
+        object : FixCountDownTime(95, 1000) {}
+    }
 
     override fun loadData() {
 
     }
 
     override fun initView() {
-        mCountDownTime = object : FixCountDownTime(95, 1000) {}
         val adapter = FragmentChildAdapter(this)
 
         adapter.addFragment(OneKeyGuideFragment())
@@ -135,4 +136,8 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
         binding.ivOnekeyStart.setImageResource(R.drawable.baseline_play)
     }
 
+    override fun onDestroy() {
+        mCountDownTime.cancel()
+        super.onDestroy()
+    }
 }

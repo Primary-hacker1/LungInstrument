@@ -34,5 +34,8 @@ interface Constants {
         const val sixMinLiveDataBusKey = "simMinTest"//6分钟USB数据key
         const val sixMinFaceMask= "sixMinFaceMask"//6分钟是否佩戴面罩
         const val sixMinEcgVisibleLeft = "sixMinEcgVisibleLeft"//6分钟心电回放位置
+
+        const val envCaliSerialCallback = "环境定标"//串口返回消息
+        const val getDevInfoSerialCallback = "获取设备信息"//串口返回消息
     }
 }

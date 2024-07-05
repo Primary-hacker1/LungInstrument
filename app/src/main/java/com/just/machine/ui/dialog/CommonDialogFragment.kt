@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import com.common.base.BaseDialogFragment
 import com.common.base.setNoRepeatListener
+import com.common.base.toast
 import com.just.machine.model.Constants
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogCommonBinding
@@ -174,12 +175,12 @@ class CommonDialogFragment : BaseDialogFragment<FragmentDialogCommonBinding>() {
             val otherStopReason = binding.etCommonDialogStopOtherReason.text.toString()
             if(stopReasonList.isNotEmpty()){
                 if(stopReasonList.size > 3){
-                    Toast.makeText(requireContext(),if(stopType == "0") "最多选择三个症状" else "最多选择三个原因",Toast.LENGTH_SHORT).show()
+                    toast(if(stopType == "0") "最多选择三个症状" else "最多选择三个原因")
                     return@setNoRepeatListener
                 }
             }else{
                 if(otherStopReason != "" && otherStopReason.length > 9){
-                    Toast.makeText(requireContext(),if(stopType == "0") "其他症状长度不能大于9" else "其他原因长度不能大于9",Toast.LENGTH_SHORT).show()
+                    toast(if(stopType == "0") "其他症状长度不能大于9" else "其他原因长度不能大于9")
                     return@setNoRepeatListener
                 }
             }

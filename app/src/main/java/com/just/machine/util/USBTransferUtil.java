@@ -278,7 +278,7 @@ public class USBTransferUtil {
                 // 直接处理
                 String data_str = CRC16Util.bytes2Hex(data);
 //                Log.i(TAG, "收到 usb 数据长度: " + data_str.length());
-//                Log.i(TAG, "收到 usb 数据: " + data_str);
+                Log.i(TAG, "收到 usb 数据: " + data_str);
 //                try {
 //                    Long time = System.currentTimeMillis();
 //                    if (map.containsKey(time)) {
@@ -293,11 +293,6 @@ public class USBTransferUtil {
 //                } catch (Exception e) {
 //                    e.printStackTrace();
 //                }
-                if(data_str.startsWith("55aa01")){
-                    LiveDataBus.get().with("GetVersionInfo").postValue(data_str);
-                }else if(data_str.startsWith("55aa02")){
-                    LiveDataBus.get().with("GetDeviceInfo").postValue(data_str);
-                }
             }
 
             @Override

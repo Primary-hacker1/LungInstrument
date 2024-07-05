@@ -3,9 +3,11 @@ package com.just.machine
 
 import android.app.Activity
 import android.app.Application
+import android.content.Intent
 import android.util.Log
 import com.common.log.ThinkerLogger
 import com.just.machine.helper.UriConfig
+import com.just.machine.ui.service.GetDeviceInfoService
 import com.just.machine.util.FileUtil
 import dagger.hilt.android.HiltAndroidApp
 import me.jessyan.autosize.AutoSize
@@ -55,6 +57,7 @@ open class App : Application() {
                 )
             }
         }
+        startService(Intent(this,GetDeviceInfoService::class.java))
 //        configUncaughtExceptionHandler()
     }
 
