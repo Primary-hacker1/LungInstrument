@@ -2,7 +2,6 @@ package com.just.machine.ui.fragment.sixmin
 
 import android.graphics.Bitmap
 import android.os.Environment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.SeekBar
@@ -11,7 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.viewmodel.LiveDataEvent
-import com.just.machine.model.SixMinRecordsBean
+import com.just.machine.model.sixmininfo.SixMinRecordsBean
 import com.just.machine.ui.activity.SixMinDetectActivity
 import com.just.machine.ui.dialog.SixMinCaptureEcgDialogFragment
 import com.just.machine.ui.viewmodel.MainViewModel

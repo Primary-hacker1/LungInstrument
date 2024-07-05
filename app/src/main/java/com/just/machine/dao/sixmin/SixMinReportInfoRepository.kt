@@ -1,6 +1,6 @@
 package com.just.machine.dao.sixmin
 
-import com.just.machine.model.SixMinRecordsBean
+import com.just.machine.model.sixmininfo.SixMinRecordsBean
 import com.just.machine.model.sixminreport.SixMinBloodOxygen
 import com.just.machine.model.sixminreport.SixMinHeartEcg
 import com.just.machine.model.sixminreport.SixMinReportBreathing

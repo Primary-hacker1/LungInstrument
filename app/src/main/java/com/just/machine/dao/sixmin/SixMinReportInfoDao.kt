@@ -5,8 +5,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.just.machine.model.SixMinRecordsBean
-import com.just.machine.model.SixMinReportInfoAndEvaluation
+import com.just.machine.model.sixmininfo.SixMinRecordsBean
+import com.just.machine.model.sixmininfo.SixMinReportInfoAndEvaluation
 import com.just.machine.model.sixminreport.SixMinBloodOxygen
 import com.just.machine.model.sixminreport.SixMinHeartEcg
 import com.just.machine.model.sixminreport.SixMinReportBreathing

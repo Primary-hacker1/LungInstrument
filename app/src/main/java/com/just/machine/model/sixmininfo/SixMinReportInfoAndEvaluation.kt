@@ -1,4 +1,4 @@
-package com.just.machine.model
+package com.just.machine.model.sixmininfo
 
 import com.just.machine.model.sixminreport.SixMinReportEvaluation
 import com.just.machine.model.sixminreport.SixMinReportInfo

@@ -1,4 +1,4 @@
-package com.just.machine.model.systemsetting
+package com.just.machine.model.sixminsystemsetting
 
 
 data class SixMinSysSettingPwdBean(

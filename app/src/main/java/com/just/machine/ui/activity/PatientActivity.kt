@@ -28,10 +28,10 @@ import com.just.machine.dao.PatientBean
 import com.just.machine.model.Constants
 import com.just.machine.model.PatientInfoBean
 import com.just.machine.model.SharedPreferencesUtils
-import com.just.machine.model.SixMinRecordsBean
-import com.just.machine.model.SixMinReportInfoAndEvaluation
+import com.just.machine.model.sixmininfo.SixMinRecordsBean
+import com.just.machine.model.sixmininfo.SixMinReportInfoAndEvaluation
 import com.just.machine.model.sixminreport.SixMinReportInfo
-import com.just.machine.model.systemsetting.SixMinSysSettingBean
+import com.just.machine.model.sixminsystemsetting.SixMinSysSettingBean
 import com.just.machine.ui.adapter.CardiopulAdapter
 import com.just.machine.ui.adapter.PatientsAdapter
 import com.just.machine.ui.adapter.SixMinAdapter

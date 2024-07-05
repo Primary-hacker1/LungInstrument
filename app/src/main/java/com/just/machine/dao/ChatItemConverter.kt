@@ -6,7 +6,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.just.machine.model.CPETParameter
 import com.just.machine.model.CardiopulmonaryRecordsBean
-import com.just.machine.model.SixMinRecordsBean
+import com.just.machine.model.sixmininfo.SixMinRecordsBean
 
 /**
  *中转list不然room不能用

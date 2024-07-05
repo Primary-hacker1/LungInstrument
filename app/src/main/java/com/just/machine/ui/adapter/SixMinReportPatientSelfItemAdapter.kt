@@ -2,7 +2,7 @@ package com.just.machine.ui.adapter
 
 import android.content.Context
 import com.common.base.BaseRecyclerViewAdapter
-import com.just.machine.model.SixMinReportPatientSelfItemBean
+import com.just.machine.model.sixmininfo.SixMinReportPatientSelfItemBean
 import com.just.news.R
 import com.just.news.databinding.ItemSixminReportPatientSelfItemBinding
 

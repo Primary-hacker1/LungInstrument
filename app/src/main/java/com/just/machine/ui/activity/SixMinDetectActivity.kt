@@ -18,7 +18,7 @@ import com.just.machine.model.sixminreport.SixMinReportOther
 import com.just.machine.model.sixminreport.SixMinReportPrescription
 import com.just.machine.model.sixminreport.SixMinReportStride
 import com.just.machine.model.sixminreport.SixMinReportWalk
-import com.just.machine.model.systemsetting.SixMinSysSettingBean
+import com.just.machine.model.sixminsystemsetting.SixMinSysSettingBean
 import com.just.machine.ui.dialog.CommonDialogFragment
 import com.just.machine.ui.fragment.sixmin.SixMinPreReportFragment
 import com.just.machine.ui.fragment.sixmin.SixMinReportFragment

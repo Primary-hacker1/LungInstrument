@@ -1,4 +1,4 @@
-package com.just.machine.model
+package com.just.machine.model.sixmininfo
 
 import android.os.Parcel
 import android.os.Parcelable

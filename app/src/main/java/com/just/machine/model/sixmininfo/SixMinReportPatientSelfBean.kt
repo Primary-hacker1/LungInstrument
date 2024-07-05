@@ -1,4 +1,4 @@
-package com.just.machine.model
+package com.just.machine.model.sixmininfo
 
 data class SixMinReportPatientSelfBean(
     val itemName: String = "",

@@ -92,7 +92,8 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
     override fun initListener() {
         binding.llStart.setNoRepeatListener {
             val start = binding.tvCalibrationStart.text
-            if (start == getString(R.string.begin)) {
+            if (ModbusProtocol.isDeviceConnect) {
+                if (start == getString(R.string.begin)) {
 //                if (Constants.isDebug) {
 //                    val temperature: Short = 250 // 温度，单位为摄氏度
 //                    val humidity: Short = 60 // 湿度，单位为百分比
@@ -119,8 +120,11 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
 //                    }
 //                }
 //                binding.tvCalibrationStart.text = getString(R.string.cancel)
-                isBegin = true
-                usbTransferUtil.write(ModbusProtocol.allowOneSensor)//发送环境定标
+                    isBegin = true
+                    usbTransferUtil.write(ModbusProtocol.allowOneSensor)//发送环境定标
+                }
+            }else{
+                toast("设备未连接!")
             }
         }
 
