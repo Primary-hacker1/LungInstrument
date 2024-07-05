@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentManager
 import com.common.base.BaseDialogFragment
 import com.common.base.setNoRepeatListener
 import com.just.machine.model.Constants
-import com.just.machine.model.SixMinReportEditBloodPressure
+import com.just.machine.model.sixmininfo.SixMinReportEditBloodPressure
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogSixminReportEditPressureBinding
 import dagger.hilt.android.AndroidEntryPoint

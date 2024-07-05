@@ -25,12 +25,12 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.google.gson.Gson
 import com.hjq.window.EasyWindow
-import com.just.machine.model.BloodOxyLineEntryBean
+import com.just.machine.model.sixmininfo.BloodOxyLineEntryBean
 import com.just.machine.model.Constants
 import com.just.machine.model.PatientInfoBean
 import com.just.machine.model.SharedPreferencesUtils
-import com.just.machine.model.UsbSerialData
-import com.just.machine.model.systemsetting.SixMinSysSettingBean
+import com.just.machine.model.sixmininfo.UsbSerialData
+import com.just.machine.model.sixminsystemsetting.SixMinSysSettingBean
 import com.just.machine.ui.activity.SixMinDetectActivity
 import com.just.machine.ui.dialog.CommonDialogFragment
 import com.just.machine.ui.dialog.SixMinCollectRestoreEcgDialogFragment

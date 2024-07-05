@@ -31,10 +31,10 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.just.machine.model.BloodOxyLineEntryBean
-import com.just.machine.model.SixMinRecordsBean
-import com.just.machine.model.SixMinReportInfoAndEvaluation
-import com.just.machine.model.SixMinReportItemBean
+import com.just.machine.model.sixmininfo.BloodOxyLineEntryBean
+import com.just.machine.model.sixmininfo.SixMinRecordsBean
+import com.just.machine.model.sixmininfo.SixMinReportInfoAndEvaluation
+import com.just.machine.model.sixmininfo.SixMinReportItemBean
 import com.just.machine.ui.activity.SixMinDetectActivity
 import com.just.machine.ui.adapter.MyPrintAdapter
 import com.just.machine.ui.dialog.LoadingDialogFragment

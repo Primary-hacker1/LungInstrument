@@ -1,4 +1,4 @@
-package com.just.machine.model.systemsetting
+package com.just.machine.model.sixminsystemsetting
 
 data class SixMinSysSettingOther(
     var circleCountType: String = "0", //记圈方式 0自动 1手动

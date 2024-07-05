@@ -24,11 +24,11 @@ import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.viewmodel.LiveDataEvent
 import com.google.gson.Gson
-import com.just.machine.model.SixMinRecordsBean
-import com.just.machine.model.SixMinReportEditBloodPressure
-import com.just.machine.model.SixMinReportItemBean
-import com.just.machine.model.SixMinReportPatientSelfBean
-import com.just.machine.model.SixMinReportPatientSelfItemBean
+import com.just.machine.model.sixmininfo.SixMinRecordsBean
+import com.just.machine.model.sixmininfo.SixMinReportEditBloodPressure
+import com.just.machine.model.sixmininfo.SixMinReportItemBean
+import com.just.machine.model.sixmininfo.SixMinReportPatientSelfBean
+import com.just.machine.model.sixmininfo.SixMinReportPatientSelfItemBean
 import com.just.machine.ui.activity.SixMinDetectActivity
 import com.just.machine.ui.adapter.SixMinReportPatientSelfAdapter
 import com.just.machine.ui.dialog.SixMinReportEditBloodPressureFragment

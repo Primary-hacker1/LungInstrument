@@ -7,7 +7,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.just.machine.model.CardiopulmonaryRecordsBean
-import com.just.machine.model.SixMinRecordsBean
+import com.just.machine.model.sixmininfo.SixMinRecordsBean
 
 /*
 基本信息：姓名、性别、身高、体重、身份证、生日、年龄、BMI

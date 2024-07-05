@@ -8,8 +8,6 @@ import android.widget.Button
 import androidx.core.content.ContextCompat
 import com.common.base.BaseRecyclerViewAdapter
 import com.common.base.setNoRepeatListener
-import com.just.machine.dao.PatientBean
-import com.just.machine.model.SixMinRecordsBean
 import com.just.machine.model.sixminreport.SixMinReportInfo
 import com.just.news.R
 import com.just.news.databinding.ItemLayoutSixTestBinding

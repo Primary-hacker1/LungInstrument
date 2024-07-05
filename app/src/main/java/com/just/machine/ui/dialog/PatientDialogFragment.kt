@@ -8,7 +8,6 @@ import android.text.TextWatcher
 import android.util.DisplayMetrics
 import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
@@ -20,7 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.just.machine.dao.PatientBean
 import com.just.machine.model.CardiopulmonaryRecordsBean
 import com.just.machine.model.Constants
-import com.just.machine.model.SixMinRecordsBean
+import com.just.machine.model.sixmininfo.SixMinRecordsBean
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.CommonUtil
 import com.just.news.R

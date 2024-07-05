@@ -4,7 +4,7 @@ import android.content.Context
 import android.widget.RadioButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.BaseRecyclerViewAdapter
-import com.just.machine.model.SixMinReportPatientSelfBean
+import com.just.machine.model.sixmininfo.SixMinReportPatientSelfBean
 import com.just.news.R
 import com.just.news.databinding.ItemSixminReportPatientSelfBinding
 

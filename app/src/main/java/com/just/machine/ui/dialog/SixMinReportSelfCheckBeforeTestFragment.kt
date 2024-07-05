@@ -9,8 +9,8 @@ import com.common.base.BaseDialogFragment
 import com.common.base.setNoRepeatListener
 import com.common.base.toast
 import com.just.machine.model.Constants
-import com.just.machine.model.SixMinReportPatientSelfBean
-import com.just.machine.model.SixMinReportPatientSelfItemBean
+import com.just.machine.model.sixmininfo.SixMinReportPatientSelfBean
+import com.just.machine.model.sixmininfo.SixMinReportPatientSelfItemBean
 import com.just.machine.ui.adapter.SixMinReportPatientSelfAdapter
 import com.just.machine.util.USBTransferUtil
 import com.just.news.R

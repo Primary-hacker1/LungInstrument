@@ -1,4 +1,4 @@
-package com.just.machine.model
+package com.just.machine.model.sixmininfo
 
 import androidx.room.Embedded
 import androidx.room.Relation

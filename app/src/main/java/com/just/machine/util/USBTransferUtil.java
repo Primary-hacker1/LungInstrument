@@ -16,15 +16,16 @@ import com.hoho.android.usbserial.driver.UsbSerialDriver;
 import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
 import com.hoho.android.usbserial.util.SerialInputOutputManager;
-import com.just.machine.model.BloodOxyLineEntryBean;
+import com.just.machine.model.sixmininfo.BloodOxyLineEntryBean;
 import com.just.machine.model.Constants;
-import com.just.machine.model.UsbSerialData;
+import com.just.machine.model.sixmininfo.UsbSerialData;
 import com.just.machine.model.sixminreport.SixMinBloodOxygen;
 import com.just.machine.model.sixminreport.SixMinReportEvaluation;
 import com.just.machine.model.sixminreport.SixMinReportStride;
 import com.just.machine.model.sixminreport.SixMinReportWalk;
-import com.just.machine.model.systemsetting.SixMinSysSettingBean;
+import com.just.machine.model.sixminsystemsetting.SixMinSysSettingBean;
 import com.just.machine.ui.fragment.serial.ModbusProtocol;
+import com.just.machine.ui.service.GetDeviceInfoService;
 import com.just.news.BuildConfig;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -303,6 +304,7 @@ public class USBTransferUtil {
                 bloodOxygenConnection = false;
                 bloodPressureConnection = false;
                 e.printStackTrace();
+                my_context.stopService(new Intent(my_context, GetDeviceInfoService.class));
             }
         });
         inputOutputManager.setReadBufferSize(2048);

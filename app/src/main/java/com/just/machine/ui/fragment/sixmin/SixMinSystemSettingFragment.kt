@@ -11,7 +11,7 @@ import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.google.gson.Gson
 import com.just.machine.model.SharedPreferencesUtils
-import com.just.machine.model.systemsetting.SixMinSysSettingBean
+import com.just.machine.model.sixminsystemsetting.SixMinSysSettingBean
 import com.just.machine.ui.activity.SixMinDetectActivity
 import com.just.machine.ui.dialog.LoadingDialogFragment
 import com.just.machine.ui.dialog.SixMinPermissionDialogFragment
