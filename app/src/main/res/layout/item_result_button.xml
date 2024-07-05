@@ -6,7 +6,7 @@
 
         <variable
             name="item"
-            type="com.just.machine.model.DynamicResultButtonBean" />
+            type="com.just.machine.model.result.DynamicResultButtonBean" />
     </data>
 
     <RelativeLayout

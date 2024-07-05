@@ -1,4 +1,4 @@
-package com.just.machine.model
+package com.just.machine.model.result
 
 import android.graphics.drawable.Drawable
 

@@ -29,7 +29,7 @@ class FragmentStaticLayout @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
-    private val binding: FragmentLungBinding = DataBindingUtil.inflate(
+    val binding: FragmentLungBinding = DataBindingUtil.inflate(
         LayoutInflater.from(context),
         R.layout.fragment_lung,
         this,
@@ -71,20 +71,20 @@ class FragmentStaticLayout @JvmOverloads constructor(
             "常规" -> {
                 binding.llChat.gone()
                 binding.previewChart.gone()
-                binding.chartFvc.visible()
+                binding.chartSvc.visible()
             }
 
             "MVV" -> {
                 binding.llChat.visible()
                 binding.previewChart.visible()
-                binding.chartFvc.gone()
+                binding.chartSvc.gone()
                 binding.previewChartFVC.gone()
             }
 
             else -> {
                 binding.llChat.visible()
                 binding.previewChart.visible()
-                binding.chartFvc.gone()
+                binding.chartSvc.gone()
                 binding.previewChartFVC.visible()
             }
 
@@ -130,7 +130,7 @@ class FragmentStaticLayout @JvmOverloads constructor(
     }
 
     @Deprecated("暂时不用，用lineChartView这个不支持区域数据动态监听！")
-    private fun initChartLow() {
+    fun initChartLow() {
 
         // 创建折线图的样本数据
         val entries = arrayListOf<Entry>()
@@ -138,11 +138,11 @@ class FragmentStaticLayout @JvmOverloads constructor(
             entries.add(Entry(index.toFloat(), index.toFloat() / 6 - 3))
         }
 
-        binding.chartFvc.setLineDataSetData(
-            binding.chartFvc.flowDataSetList()
+        binding.chartSvc.setLineDataSetData(
+            binding.chartSvc.flowDataSetList()
         )//设置数据
 
-        binding.chartFvc.setLineChartFlow(
+        binding.chartSvc.setLineChartFlow(
             yAxisMinimum = -5f,
             yAxisMaximum = 5f,
             countMaxX = 30f,

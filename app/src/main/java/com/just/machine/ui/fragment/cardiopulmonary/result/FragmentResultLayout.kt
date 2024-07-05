@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.ScatterData
 import com.github.mikephil.charting.interfaces.datasets.IScatterDataSet
-import com.just.machine.model.DynamicResultBean
+import com.just.machine.model.result.DynamicResultBean
 import com.just.machine.model.lungdata.AnlyCpxTableModel
 import com.just.machine.ui.adapter.result.ResultAdapter
 import com.just.news.R

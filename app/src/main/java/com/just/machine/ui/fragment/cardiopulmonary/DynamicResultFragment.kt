@@ -9,7 +9,7 @@ import com.common.base.CommonBaseFragment
 import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent.Companion.DYNAMICSUCCESS
 import com.just.machine.dao.setting.DynamicSettingBean
-import com.just.machine.model.DynamicResultButtonBean
+import com.just.machine.model.result.DynamicResultButtonBean
 import com.just.machine.ui.adapter.FragmentChildAdapter
 import com.just.machine.ui.adapter.result.ResultBtnAdapter
 import com.just.machine.ui.fragment.cardiopulmonary.result.CompensatoryPointFragment

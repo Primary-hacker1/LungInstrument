@@ -1,10 +1,9 @@
 package com.just.machine.ui.fragment.serial
 
-import android.util.Log
 import com.common.base.BaseUtil
 import com.common.network.LogUtils
 import com.just.machine.model.Constants
-import com.just.machine.model.LungTestData
+import com.just.machine.model.lungdata.LungTestData
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.lungdata.BreathState
 import com.just.machine.model.lungdata.CPXCalcule

@@ -1,4 +1,4 @@
-package com.just.machine.model
+package com.just.machine.model.result
 
 //var time: String? = "",//运动评估的时间
 //var load: String? = "",

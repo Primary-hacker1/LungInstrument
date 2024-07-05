@@ -3,7 +3,7 @@ package com.just.machine.ui.adapter.result
 import android.content.Context
 import androidx.core.content.ContextCompat
 import com.common.base.BaseRecyclerViewAdapter
-import com.just.machine.model.DynamicResultBean
+import com.just.machine.model.result.DynamicResultBean
 import com.just.news.R
 import com.just.news.databinding.ItemResultBinding
 

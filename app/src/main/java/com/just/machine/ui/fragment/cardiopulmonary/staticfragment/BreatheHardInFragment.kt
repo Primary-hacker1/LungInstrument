@@ -67,11 +67,24 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
                         if (settingBean !is StaticSettingBean) {
                             return@observe
                         }
-                        LogUtils.e(tag + settingBean.settingSVC)
                         settingSVC = settingBean.settingSVC
+
+                        val xTimeSvc = settingBean.xTimeSvc?.toFloat()
+                        val yTimeUpSvc = settingBean.yTimeUpSvc?.toFloat()
+                        val yTimeDownSvc = settingBean.yTimeDownSvc?.toFloat()
+
+                        binding.fragmentLayout.binding.chartSvc.setLineChartFlow(
+                            yAxisMinimum = yTimeDownSvc,
+                            yAxisMaximum = yTimeUpSvc,
+                            countMaxX = xTimeSvc,
+                            granularityY = 1f,
+                            granularityX = 1f,
+                            titleCentent = "容量-时间"
+                        )
+                        LogUtils.e(tag + settingBean.toString())
                     }
+
                     initData()
-                    LogUtils.e(tag + settingSVC.toString())
                 }
             }
         }

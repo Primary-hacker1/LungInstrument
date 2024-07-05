@@ -8,7 +8,7 @@ import androidx.core.content.ContextCompat
 import com.common.base.BaseRecyclerViewAdapter
 import com.common.base.gone
 import com.common.base.visible
-import com.just.machine.model.DynamicResultButtonBean
+import com.just.machine.model.result.DynamicResultButtonBean
 import com.just.news.R
 import com.just.news.databinding.ItemResultButtonBinding
 

@@ -1,9 +1,4 @@
-package com.just.machine.model
-
-import com.just.machine.model.lungdata.CPXCalBase
-import com.just.machine.model.lungdata.CPXModel
-import com.just.machine.model.lungdata.SttlungDataModel
-import kotlin.random.Random
+package com.just.machine.model.lungdata
 
 /**
  * 表示从下位机接收到的肺活量测试数据。

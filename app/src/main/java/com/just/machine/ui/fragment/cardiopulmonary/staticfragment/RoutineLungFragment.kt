@@ -54,7 +54,7 @@ class RoutineLungFragment : CommonBaseFragment<FragmentRoutineBinding>() {
 
                     val settings = it.any as MutableList<*>
 
-                    if (settings.isEmpty()){
+                    if (settings.isEmpty()) {
                         return@observe
                     }
 
@@ -121,6 +121,8 @@ class RoutineLungFragment : CommonBaseFragment<FragmentRoutineBinding>() {
 //        LogUtils.e(tag + routineLungList.toString())
 
         binding.fragmentLayout.setLungData(routineLungList)
+
+
     }
 
     override fun initListener() {

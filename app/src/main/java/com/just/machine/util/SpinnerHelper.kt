@@ -7,6 +7,9 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import com.just.news.R
 
+/**
+ *运动心肺下拉框动态选择参数
+ * */
 class SpinnerHelper(
     private val context: Context,
     private val spinner: Spinner,

@@ -142,7 +142,7 @@
 
 
             <com.justsafe.libview.chart.BaseLineChart
-                    android:id="@+id/chart_fvc"
+                    android:id="@+id/chart_svc"
                     android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

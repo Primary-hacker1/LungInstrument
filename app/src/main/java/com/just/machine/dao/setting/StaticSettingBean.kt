@@ -17,9 +17,9 @@ import com.just.machine.model.CPETParameter
 data class StaticSettingBean(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id")
     var settingId: Long = 0,
-    var xTimeSvc: String? = "",
-    var yTimeUpSvc: String? = "",
-    var yTimeDownSvc: String? = "",
+    var xTimeSvc: String? = "30",
+    var yTimeUpSvc: String? = "5",
+    var yTimeDownSvc: String? = "-5",
 
     var xTimeFvc: String? = "",
     var yTimeUpFvc: String? = "",

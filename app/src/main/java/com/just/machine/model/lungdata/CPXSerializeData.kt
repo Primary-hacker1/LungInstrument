@@ -1,7 +1,6 @@
 package com.just.machine.model.lungdata
 
 import com.just.machine.dao.lung.CPXBreathInOutData
-import com.just.machine.model.LungTestData
 import java.io.Serializable
 
 data class CPXSerializeData(

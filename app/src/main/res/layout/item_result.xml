@@ -6,7 +6,7 @@
 
         <variable
             name="item"
-            type="com.just.machine.model.DynamicResultBean" />
+            type="com.just.machine.model.result.DynamicResultBean" />
 
     </data>
 

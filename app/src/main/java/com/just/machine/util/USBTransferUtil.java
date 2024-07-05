@@ -298,6 +298,7 @@ public class USBTransferUtil {
 
             @Override
             public void onRunError(Exception e) {
+
                 Log.e(TAG, "usb 断开了");
                 isConnectUSB = false;
                 ecgConnection = false;
