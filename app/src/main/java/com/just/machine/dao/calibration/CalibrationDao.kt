@@ -2,6 +2,7 @@ package com.just.machine.dao.calibration
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
@@ -36,5 +37,17 @@ interface CalibrationDao {
 
     @Insert
     suspend fun insertIngredient(flow: IngredientBean)
+
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllIngredientBean(ingredientbean: List<IngredientBean>)
+
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllFlow(flowBean: List<FlowBean>)
+
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllEnvironmental(environmental: List<EnvironmentalCalibrationBean>)
 
 }

@@ -149,12 +149,10 @@ object ModbusProtocol {
 
         when (data[2].toInt() and 0xFF) { // data[2] 是功能码
             0x01 -> { // 读取下位机版本信息
-                // 处理逻辑
                 parseVersionInfo(data)
             }
 
             0x02 -> { // 读取下位机设备信息
-                // 处理逻辑
                 parseDeviceInfo(data)
             }
 
@@ -195,7 +193,6 @@ object ModbusProtocol {
             }
 
             0x91 -> { // 上传一类传感器数据
-                // 处理逻辑
                 parseEnvironmentData(data)
             }
 
@@ -219,7 +216,6 @@ object ModbusProtocol {
     private fun parseVersionInfo(response: ByteArray) {
         // 检查数据长度是否正确
         if (response.size != 12) {
-            LogUtils.e("主控板返回数据长度不正确")
             return
         }
 
@@ -259,7 +255,6 @@ object ModbusProtocol {
     private fun parseDeviceInfo(response: ByteArray) {
         // 检查数据长度是否正确
         if (response.size != 11) {
-            LogUtils.e("主控板返回数据长度不正确")
             return
         }
 
@@ -902,8 +897,6 @@ object ModbusProtocol {
         }
 
         cpxBreathInOutData.createTime = DateUtils.nowMinutesDataString
-
-//        viewModel.insertCPXBreathInOutData(cpxBreathInOutData) // 插入数据库
 
 //        LogUtils.e(tag + cpxBreathInOutData.toString())
         LiveDataBus.get().with("动态心肺测试").postValue(cpxBreathInOutData)

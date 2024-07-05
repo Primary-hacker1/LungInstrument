@@ -15,7 +15,7 @@ interface LungDao {
 
     @Transaction
     @Query("SELECT * FROM cpx_breath ORDER BY createTime DESC")
-    fun getCPXBreathInOutDatas(): Flow<List<CPXBreathInOutData>>
+    fun getCPSBreathInOutData(): Flow<List<CPXBreathInOutData>>
 
     @Transaction
     @Query("SELECT * FROM cpx_breath WHERE patientId = :patientId ORDER BY createTime DESC")
@@ -23,4 +23,8 @@ interface LungDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCPXBreathInOutData(bean: CPXBreathInOutData): Long
+
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllCPXBreathInOutData(cpxBreathInOutData: List<CPXBreathInOutData>)
 }

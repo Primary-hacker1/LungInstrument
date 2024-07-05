@@ -47,6 +47,9 @@ interface PlantDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(plants: List<PatientBean>)
 
+    @Query("SELECT * FROM patients")
+    suspend fun getAllPatient(): List<PatientBean>
+
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateBean(plants: PatientBean)

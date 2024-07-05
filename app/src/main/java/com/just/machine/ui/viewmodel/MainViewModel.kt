@@ -135,6 +135,17 @@ class MainViewModel @Inject constructor(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             bean.createTime = DateManagementTool.getCurrentDateTime()
         }
+
+        val spBena = SharedPreferencesUtils.instance.patientBean
+
+        val patientId = spBena?.patientId
+
+        if (patientId != null) {
+            bean.patientId = patientId
+        }
+
+        LogUtils.e(tag + patientId)
+
         viewModelScope.launch {
             val patient = lungDao.insertCPXBreathInOutData(bean)
             getCPXBreathInOutData()
@@ -154,6 +165,18 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
+    fun getCPXBreathInOutDataAll() {//查询当前所有动态肺数据
+        viewModelScope.launch {
+            lungDao.getCPXBreathInOutDatas().collect {
+                LogUtils.e(tag + it.toString())
+//                    mEventHub.value = LiveDataEvent(
+//                        LiveDataEvent.CPXDYNAMICBEAN, it
+//                    )
+            }
+        }
+    }
+
 
     fun setAllSettingBean(bean: AllSettingBean) {
         bean.allSettingId = 1 //每次都设置id为1覆盖数据库数据

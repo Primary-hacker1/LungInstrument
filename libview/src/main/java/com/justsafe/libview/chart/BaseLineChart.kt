@@ -83,7 +83,7 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
         )
         xAxis.setDrawGridLines(false)
 
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.position = XAxis.XAxisPosition.CENTER
 
         // xAxis.setCenterAxisLabels(true)
 
@@ -445,12 +445,14 @@ class BaseLineChart(context: Context, attrs: AttributeSet?) : LineChart(context,
     class CustomYAxisValueFormatter(private val divisor: Int) : ValueFormatter() {
         @SuppressLint("DefaultLocale")
         override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-            return String.format("%.1f", value) + "｜" + String.format("%.1f", value / divisor)
+            return String.format("%.1f", value)
+//            + "｜" + String.format("%.1f", value / divisor)
         }
 
         override fun getFormattedValue(value: Float): String {
             // 你可以根据 value 返回任何格式的字符串
-            return String.format("%.1f", value) + "｜" + String.format("%.1f", value / divisor)
+            return String.format("%.1f", value)
+//            + "｜" + String.format("%.1f", value / divisor)
         }
     }
 

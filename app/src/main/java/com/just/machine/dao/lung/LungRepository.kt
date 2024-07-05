@@ -11,7 +11,7 @@ import javax.inject.Inject
  */
 class LungRepository @Inject constructor(private val dao: LungDao) {
 
-    fun getCPXBreathInOutDatas(): Flow<List<CPXBreathInOutData>> = dao.getCPXBreathInOutDatas()
+    fun getCPXBreathInOutDatas(): Flow<List<CPXBreathInOutData>> = dao.getCPSBreathInOutData()
 
     fun getCPXBreathInOutData(patientId: Long): Flow<List<CPXBreathInOutData>> =
         dao.getCPXBreathInOutData(patientId)

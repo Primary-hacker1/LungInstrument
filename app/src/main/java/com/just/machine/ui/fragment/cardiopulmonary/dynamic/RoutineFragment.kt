@@ -2,7 +2,6 @@ package com.just.machine.ui.fragment.cardiopulmonary.dynamic
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
@@ -12,7 +11,6 @@ import com.just.machine.dao.lung.CPXBreathInOutData
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.LiveDataBus
 import com.just.news.databinding.FragmentRoutineDynmicBinding
-import com.justsafe.libview.chart.MultiAxisChart03View
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -83,7 +81,10 @@ class RoutineFragment : CommonBaseFragment<FragmentRoutineDynmicBinding>() {
         LiveDataBus.get().with("动态心肺测试").observe(this) {//解析串口消息
             if (it is CPXBreathInOutData) {
                 binding.layoutDynamicData.setDynamicData(it)
+
                 binding.chart2.startUpdatingData() // 模拟数据散点图
+
+                viewModel.insertCPXBreathInOutData(it) // 插入数据库
             }
         }
 
@@ -92,6 +93,7 @@ class RoutineFragment : CommonBaseFragment<FragmentRoutineDynmicBinding>() {
 
 
     override fun initListener() {
+
 
     }
 

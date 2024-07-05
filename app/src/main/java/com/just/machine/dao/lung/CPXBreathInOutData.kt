@@ -5,7 +5,6 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.just.machine.dao.PatientBean
-import com.just.machine.model.lungdata.CPXSerializeData
 
 /**
  * 动态肺数据bean
@@ -25,6 +24,7 @@ import com.just.machine.model.lungdata.CPXSerializeData
 data class CPXBreathInOutData(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id")
     var dynmicId: Long = 0,
+
     var patientId: Long = 0,
 
     var createTime: String? = "",
