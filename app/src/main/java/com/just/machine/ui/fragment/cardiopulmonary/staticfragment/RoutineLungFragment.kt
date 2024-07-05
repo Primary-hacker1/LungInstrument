@@ -15,6 +15,7 @@ import com.just.machine.model.lungdata.RoutineLungBean
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.databinding.FragmentRoutineBinding
 import dagger.hilt.android.AndroidEntryPoint
+import lecho.lib.hellocharts.model.PointValue
 
 
 /**
@@ -60,12 +61,29 @@ class RoutineLungFragment : CommonBaseFragment<FragmentRoutineBinding>() {
 
                     settingFVC.clear()
 
+
+                    val values: MutableList<PointValue> = ArrayList()// 模拟数据
+
+                    for (i in 0..32) {
+                        values.add(PointValue(i.toFloat(), Math.random().toFloat() * 5 - 3))
+                    }
+
                     for (settingBean in settings) {
                         if (settingBean !is StaticSettingBean) {
                             return@observe
                         }
                         LogUtils.e(tag + settingBean.settingFVC)
                         settingFVC = settingBean.settingFVC
+
+                        val xTimeFvc = settingBean.xTimeFvc?.toIntOrNull() ?: 30
+                        val yTimeUpFvc = settingBean.yTimeUpFvc?.toIntOrNull() ?: 5
+                        val yTimeDownFvc = settingBean.yTimeDownFvc?.toIntOrNull() ?: -5
+
+                        binding.fragmentLayout.binding.previewChart.setData(
+                            values, maxX = xTimeFvc, maxY = yTimeUpFvc, minY = yTimeDownFvc,averageY = 5
+                        )
+
+                        LogUtils.e(tag + settingBean.toString())
                     }
                     initData()
                 }
@@ -105,13 +123,8 @@ class RoutineLungFragment : CommonBaseFragment<FragmentRoutineBinding>() {
                 LogUtils.e(tag + LungFormula.main(index.parameterName.toString()))
                 routineLungList.add(
                     createRoutineLungBean(
-                        index.parameterName.toString(),
-                        LungFormula.main(
-                            index.parameterName.toString(),
-                            age,
-                            height,
-                            weight,
-                            isMale
+                        index.parameterName.toString(), LungFormula.main(
+                            index.parameterName.toString(), age, height, weight, isMale
                         )
                     )
                 )

@@ -21,13 +21,13 @@ data class StaticSettingBean(
     var yTimeUpSvc: String? = "5",
     var yTimeDownSvc: String? = "-5",
 
-    var xTimeFvc: String? = "",
-    var yTimeUpFvc: String? = "",
-    var yTimeDownFvc: String? = "",
+    var xTimeFvc: String? = "30",
+    var yTimeUpFvc: String? = "5",
+    var yTimeDownFvc: String? = "-5",
 
-    var xTimeMvv: String? = "",
-    var yTimeUpMvv: String? = "",
-    var yTimeDownMvv: String? = "",
+    var xTimeMvv: String? = "30",
+    var yTimeUpMvv: String? = "5",
+    var yTimeDownMvv: String? = "-5",
 
     var radioVt: Boolean? = true,//是否显示vt
     var radioVideoAutoplaySvc: Boolean? = true,//是否自动播放

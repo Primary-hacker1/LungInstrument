@@ -78,16 +78,13 @@ class FragmentStaticLayout @JvmOverloads constructor(
                 binding.llChat.visible()
                 binding.previewChart.visible()
                 binding.chartSvc.gone()
-                binding.previewChartFVC.gone()
             }
 
             else -> {
                 binding.llChat.visible()
                 binding.previewChart.visible()
                 binding.chartSvc.gone()
-                binding.previewChartFVC.visible()
             }
-
         }
     }
 
@@ -107,11 +104,7 @@ class FragmentStaticLayout @JvmOverloads constructor(
             values.add(PointValue(i.toFloat(), Math.random().toFloat() * 5 - 3))
         }
 
-        binding.previewChart.setData(values)
-
         binding.previewChartFlow.setData(values, averageX = 0.5f)
-
-        binding.previewChartFVC.setData(values)
 
         // 获取初始视口数据
         val initialViewport = binding.previewChart.currentViewport

@@ -172,14 +172,6 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content" />
 
-                <com.justsafe.libview.chart.CustomPreviewLineChartView
-                        android:id="@+id/previewChartFVC"
-                        android:layout_width="match_parent"
-                        android:background="@drawable/calibration_bg"
-                        android:layout_marginEnd="@dimen/space_6"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content" />
-
                 <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/chart_flow"
                         android:layout_width="match_parent"

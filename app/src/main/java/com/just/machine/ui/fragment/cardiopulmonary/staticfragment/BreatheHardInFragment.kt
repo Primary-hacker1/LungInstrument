@@ -63,6 +63,7 @@ class BreatheHardInFragment : CommonBaseFragment<FragmentBreatheBinding>() {
                     }
 
                     settingSVC.clear()
+
                     for (settingBean in settings) {
                         if (settingBean !is StaticSettingBean) {
                             return@observe
