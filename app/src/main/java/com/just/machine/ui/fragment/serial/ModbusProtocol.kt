@@ -1,9 +1,10 @@
 package com.just.machine.ui.fragment.serial
 
-import com.common.network.LogUtils
-import com.just.machine.model.LungTestData
+import android.util.Log
 import com.common.base.BaseUtil
+import com.common.network.LogUtils
 import com.just.machine.model.Constants
+import com.just.machine.model.LungTestData
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.lungdata.BreathState
 import com.just.machine.model.lungdata.CPXCalcule
@@ -782,16 +783,17 @@ object ModbusProtocol {
 
     // 解析动态肺测试数据
     private fun parseLungTestData(response: ByteArray) {
+        val dataStr = CRC16Util.bytes2Hex(response)
 
         // 检查数据长度是否正确
         if (response.size != 26) {
-            LogUtils.e("主控板返回数据长度不正确")
+            LogUtils.e("主控板返回数据长度不正确:$dataStr")
             return
         }
 
         // 检查包头和包尾
         if (response[0] != 0x55.toByte() || response[1] != 0xAA.toByte()) {
-            LogUtils.e("动态肺测试返回包头或包尾不正确")
+            LogUtils.e("动态肺测试返回包头或包尾不正确:$dataStr")
             return
         }
 

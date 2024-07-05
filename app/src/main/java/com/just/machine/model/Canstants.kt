@@ -37,5 +37,6 @@ interface Constants {
 
         const val envCaliSerialCallback = "环境定标"//串口返回消息
         const val getDevInfoSerialCallback = "获取设备信息"//串口返回消息
+        const val LungData = "动态心肺测试"//串口返回消息
     }
 }

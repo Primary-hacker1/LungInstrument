@@ -10,26 +10,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
-import com.just.machine.model.LungTestData
-import com.just.machine.model.SharedPreferencesUtils
-import com.just.machine.model.lungdata.BreathState
-import com.just.machine.model.lungdata.CPXSerializeData
-import com.just.machine.model.lungdata.DyCalculeSerializeCore
 import com.just.machine.ui.adapter.FragmentPagerAdapter
 import com.just.machine.ui.fragment.cardiopulmonary.dynamic.DynamicDataFragment
 import com.just.machine.ui.fragment.cardiopulmonary.dynamic.RoutineFragment
 import com.just.machine.ui.fragment.cardiopulmonary.dynamic.WassermanFragment
 import com.just.machine.ui.fragment.serial.ModbusProtocol
 import com.just.machine.ui.viewmodel.MainViewModel
-import com.just.machine.model.lungdata.CPXCalcule
-import com.just.machine.util.LiveDataBus
 import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.FragmentDynamicBinding
-import com.justsafe.libview.util.DateUtils
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -93,11 +83,11 @@ class DynamicFragment : CommonBaseFragment<FragmentDynamicBinding>() {
         }
 
         binding.llClean.setNoRepeatListener {
-
+            lifecycleScope.launch {
+                delay(200)
+                usbTransferUtil.write(ModbusProtocol.banTwoSensor)
+            }//测试串口非蓝牙模式，需要蓝牙串口链接下面那个
         }
-
-
-
     }
 
     private fun initViewPager() {

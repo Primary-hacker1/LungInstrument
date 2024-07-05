@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.common.base.CommonBaseFragment
 import com.common.viewmodel.LiveDataEvent
 import com.just.machine.dao.lung.CPXBreathInOutData
+import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.lung.DynamicDataAdapter
 import com.just.machine.ui.adapter.lung.DynamicDataTitleAdapter
 import com.just.machine.ui.viewmodel.MainViewModel
@@ -85,7 +86,7 @@ class DynamicDataFragment : CommonBaseFragment<FragmentDynamicDataBinding>() {
             }
         }
 
-        LiveDataBus.get().with("动态心肺测试").observe(this) {//解析串口消息
+        LiveDataBus.get().with(Constants.LungData).observe(this) {//解析串口消息
             if (it is CPXBreathInOutData) {
                 mutableListCPX.add(it)
                 adapterData?.setItemsBean(mutableListCPX)

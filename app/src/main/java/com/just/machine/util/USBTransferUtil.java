@@ -315,8 +315,8 @@ public class USBTransferUtil {
     public void write(byte[] data_bytes) {
         if (usbSerialPort != null) {
             String data_str = CRC16Util.bytes2Hex(data_bytes);
-            Log.e(TAG, "当前usb状态: isOpen-" + usbSerialPort.isOpen());
-            Log.e(TAG, "usb 写入数据: " + data_str);
+//            Log.e(TAG, "当前usb状态: isOpen-" + usbSerialPort.isOpen());
+//            Log.e(TAG, "usb 写入数据: " + data_str);
             // 当串口打开时再下发
             if (usbSerialPort.isOpen()) {
                 if (data_bytes == null || data_bytes.length == 0) return;
