@@ -47,6 +47,15 @@
             android:exported="true"
             android:theme="@style/SplashTheme"
             android:screenOrientation="landscape">
+
+            <meta-data
+                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                android:resource="@xml/device_filter"/>
+
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -58,13 +67,6 @@
             android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="landscape">
-            <intent-filter>
-                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
-                android:resource="@xml/device_filter" />
         </activity>
         <activity
             android:name="com.just.machine.ui.activity.PatientActivity"

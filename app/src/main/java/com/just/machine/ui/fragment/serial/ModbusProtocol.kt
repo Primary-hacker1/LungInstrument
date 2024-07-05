@@ -26,6 +26,8 @@ object ModbusProtocol {
     var isWarmup = false
     var batteryLevel = 0
     var warmLeaveSec  = 0
+    var hardWareVersion = ""
+    var softWareVersion = ""
 
 
     // 包头和包尾
@@ -149,6 +151,7 @@ object ModbusProtocol {
         when (data[2].toInt() and 0xFF) { // data[2] 是功能码
             0x01 -> { // 读取下位机版本信息
                 // 处理逻辑
+                parseVersionInfo(data)
             }
 
             0x02 -> { // 读取下位机设备信息
@@ -211,6 +214,43 @@ object ModbusProtocol {
         }
     }
 
+    /**
+     * 解析版本信息
+     */
+    private fun parseVersionInfo(response: ByteArray) {
+        // 检查数据长度是否正确
+        if (response.size != 12) {
+            LogUtils.e("主控板返回数据长度不正确")
+            return
+        }
+
+        // 检查包头和包尾
+        if (response[0] != 0x55.toByte()) {
+            LogUtils.e("环境定标返回包头或包尾不正确")
+            return
+        }
+
+        // 解析 CRC 校验码
+        val crcValue = response.sliceArray(10 until 12)
+        val calculatedCRC = CRC16Util.getCRC16Bytes(response.sliceArray(2 until 10))
+        // 验证 CRC 校验码
+        if (!crcValue.contentEquals(calculatedCRC)) {
+            LogUtils.e(
+                "获取版本信息CRC校验失败----" + crcValue.joinToString(" ") { "%02X".format(it) } + "!=calculatedCRC----"
+                        + calculatedCRC.joinToString(" ") { "%02X".format(it) }
+            )
+            return
+        }
+
+        val bytes2Hex = CRC16Util.bytes2Hex(response)
+        hardWareVersion = formatVersion(bytes2Hex.substring(8,12))
+        softWareVersion = formatVersion(bytes2Hex.substring(12,16))
+
+        LogUtils.e(
+            "版本信息数据 ----hardWareVersion----$hardWareVersion----softWareVersion----$softWareVersion"
+        )
+    }
+
     // 解析设备信息数据
     data class DeviceInfoData(val batterLevel: Int, val warmLeaveSec: Int, val connectStatus: Boolean)
 
@@ -232,7 +272,6 @@ object ModbusProtocol {
 
         // 解析 CRC 校验码
         val crcValue = response.sliceArray(9 until 11)
-
         val calculatedCRC = CRC16Util.getCRC16Bytes(response.sliceArray(2 until 9))
 
         // 验证 CRC 校验码
@@ -256,9 +295,9 @@ object ModbusProtocol {
         warmLeaveSec = heatSexHex.toInt(16) //热机时间
         isDeviceConnect = true
 
-        LogUtils.e(
-            "设备信息数据 ----batteryLevel----$batteryLevel----warmLeaveSec----$warmLeaveSec----isDeviceConnect----$isDeviceConnect"
-        )
+//        LogUtils.e(
+//            "设备信息数据 ----batteryLevel----$batteryLevel----warmLeaveSec----$warmLeaveSec----isDeviceConnect----$isDeviceConnect"
+//        )
 
 //        val deviceInfoData = DeviceInfoData(batteryLevel,warmLeaveSec, isConnect)
 //
