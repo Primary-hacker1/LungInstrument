@@ -58,7 +58,7 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
 
             val bundle = Bundle()
 
-            bundle.putParcelable(Constants.patientBean, bean)
+            bundle.putParcelable(Constants.patientDialog, bean)
 
             dialogFragment.arguments = bundle
 
@@ -103,7 +103,7 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
     }
 
     override fun initData() {
-        val bean = arguments?.getParcelable<PatientBean>(Constants.patientBean)
+        val bean = arguments?.getParcelable<PatientBean>(Constants.patientDialog)
         if (bean != null) {
             patient = bean
             if (patient.name.toString().isNotEmpty()) {

@@ -16,6 +16,7 @@ interface Constants {
         const val setting = "设置"
         const val time: String = "time"
         const val serialCallback = "环境定标"//串口返回消息
+        const val patientDialog = "patientDialog"
         const val patientBean = "patientBean"
         const val editBloodPressure = "editBloodPressure"//6分钟预生成报告编辑血压
         const val finishSixMinTest = "finishSixMinTest"//完成6分钟试验
@@ -37,6 +38,6 @@ interface Constants {
 
         const val envCaliSerialCallback = "环境定标"//串口返回消息
         const val getDevInfoSerialCallback = "获取设备信息"//串口返回消息
-        const val LungData = "动态心肺测试"//串口返回消息
+        const val LungData = "动态心肺测试"
     }
 }

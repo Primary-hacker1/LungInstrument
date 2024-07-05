@@ -168,11 +168,10 @@ class MainViewModel @Inject constructor(
 
     fun getCPXBreathInOutDataAll() {//查询当前所有动态肺数据
         viewModelScope.launch {
-            lungDao.getCPXBreathInOutDatas().collect {
-                LogUtils.e(tag + it.toString())
-//                    mEventHub.value = LiveDataEvent(
-//                        LiveDataEvent.CPXDYNAMICBEAN, it
-//                    )
+            lungDao.getCPXBreathInOutDataAll().collect {
+                    mEventHub.value = LiveDataEvent(
+                        LiveDataEvent.CPXDYNAMICALL, it
+                    )
             }
         }
     }

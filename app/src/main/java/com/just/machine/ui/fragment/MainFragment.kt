@@ -9,6 +9,7 @@ import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
+import com.just.machine.dao.PatientBean
 import com.just.machine.model.Constants
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.ui.activity.CardiopulmonaryActivity
@@ -61,7 +62,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                         PatientDialogFragment.startPatientDialogFragment(parentFragmentManager)//添加患者修改患者信息
                     patientDialogFragment.setDialogOnClickListener(object :
                         PatientDialogFragment.PatientDialogListener {
-                        override fun onClickConfirmBtn(patientId:String) {//确认
+                        override fun onClickConfirmBtn(patientId: String) {//确认
                             SharedPreferencesUtils.instance.isClickBtn = "1"
                             patientDialogFragment.dismiss()
                             checkBluetoothAndSelfCheck(patientId)
@@ -92,10 +93,13 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                         PatientDialogFragment.startPatientDialogFragment(parentFragmentManager)//添加患者修改患者信息
                     patientDialogFragment.setDialogOnClickListener(object :
                         PatientDialogFragment.PatientDialogListener {
-                        override fun onClickConfirmBtn(patientId:String) {//确认
+                        override fun onClickConfirmBtn(patientId: String) {//确认
 //                            SharedPreferencesUtils.instance.isClickBtn = "1"
                             patientDialogFragment.dismiss()
-                            CardiopulmonaryActivity.startCardiopulmonaryActivity(context)
+                            CardiopulmonaryActivity.startCardiopulmonaryActivity(
+                                context,
+                                PatientBean()
+                            )
                         }
 
                         override fun onClickCleanBtn() {//取消
@@ -105,7 +109,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                 }
 
                 "1" -> {
-                    CardiopulmonaryActivity.startCardiopulmonaryActivity(context)
+                    CardiopulmonaryActivity.startCardiopulmonaryActivity(context, PatientBean())
                 }
 
                 null -> TODO()
@@ -130,7 +134,7 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
         USBTransferUtil.getInstance().connect()
     }
 
-    private fun checkBluetoothAndSelfCheck(patientId:String) {
+    private fun checkBluetoothAndSelfCheck(patientId: String) {
         if (USBTransferUtil.getInstance().isConnectUSB && USBTransferUtil.getInstance().bloodOxygenConnection && USBTransferUtil.getInstance().ecgConnection && USBTransferUtil.getInstance().bloodPressureConnection) {
             val selfCheckBeforeTestDialogFragment =
                 SixMinReportSelfCheckBeforeTestFragment.startPatientSelfCheckDialogFragment(
@@ -143,14 +147,17 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                     befoBreathingLevel: Int,
                     befoFatigueLevelStr: String,
                     befoBreathingLevelStr: String,
-                    faceMaskStr:String
+                    faceMaskStr: String
                 ) {
                     val intent = Intent(activity, SixMinDetectActivity::class.java)
                     val bundle = Bundle()
-                    bundle.putString(Constants.sixMinSelfCheckViewSelection,"$befoFatigueLevelStr&$befoBreathingLevelStr")
+                    bundle.putString(
+                        Constants.sixMinSelfCheckViewSelection,
+                        "$befoFatigueLevelStr&$befoBreathingLevelStr"
+                    )
                     bundle.putString(Constants.sixMinPatientInfo, patientId)
                     bundle.putString(Constants.sixMinReportType, "1")
-                    bundle.putString(Constants.sixMinFaceMask,faceMaskStr)
+                    bundle.putString(Constants.sixMinFaceMask, faceMaskStr)
                     intent.putExtras(bundle)
                     startActivity(intent)
                 }
@@ -179,16 +186,19 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
                                     befoBreathingLevel: Int,
                                     befoFatigueLevelStr: String,
                                     befoBreathingLevelStr: String,
-                                    faceMaskStr:String
+                                    faceMaskStr: String
                                 ) {
                                     val intent = Intent(activity, SixMinDetectActivity::class.java)
                                     val bundle = Bundle()
-                                    bundle.putString(Constants.sixMinSelfCheckViewSelection,"$befoFatigueLevelStr&$befoBreathingLevelStr")
-                                    bundle.putString(Constants.sixMinPatientInfo,"")
+                                    bundle.putString(
+                                        Constants.sixMinSelfCheckViewSelection,
+                                        "$befoFatigueLevelStr&$befoBreathingLevelStr"
+                                    )
+                                    bundle.putString(Constants.sixMinPatientInfo, "")
                                     bundle.putString(Constants.sixMinReportType, "1")
-                                    bundle.putString(Constants.sixMinFaceMask,faceMaskStr)
+                                    bundle.putString(Constants.sixMinFaceMask, faceMaskStr)
                                     intent.putExtras(bundle)
-                                    startActivity(intent,bundle)
+                                    startActivity(intent, bundle)
                                 }
 
                                 override fun onClickClose() {

@@ -869,7 +869,7 @@ class PatientActivity : CommonBaseActivity<ActivityPatientBinding>() {
                     override fun onClickConfirm(actionType: Int) {
                         //0 心肺测试  1 6分钟测试
                         if (actionType == 0) {
-
+                            CardiopulmonaryActivity.startCardiopulmonaryActivity(this@PatientActivity, bean)
                         } else {
                             if (usbTransferUtil.isConnectUSB && usbTransferUtil.bloodOxygenConnection && usbTransferUtil.ecgConnection && usbTransferUtil.bloodPressureConnection) {
                                 val selfCheckBeforeTestDialogFragment =

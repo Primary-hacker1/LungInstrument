@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import com.common.base.*
 import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent.Companion.ALL_SETTING_SUCCESS
+import com.common.viewmodel.LiveDataEvent.Companion.CPXDYNAMICALL
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
@@ -91,6 +92,10 @@ class AllSettingFragment : CommonBaseFragment<FragmentAllSettingBinding>() {
                         allSettingBean = settingBean
                     }
                     initData()
+                }
+
+                CPXDYNAMICALL ->{
+                    LogUtils.d(tag+it.any.toString())
                 }
             }
         }
@@ -250,7 +255,7 @@ class AllSettingFragment : CommonBaseFragment<FragmentAllSettingBinding>() {
         environmentsBackupFile.writeText(Gson().toJson(environments))
 
         // 备份动态心肺数据 - lung
-        val lung = db.lungDao().getCPSBreathInOutData()
+        val lung = db.lungDao().getCPXBreathInOutDataAll()
         val lungBackupFile = File(backupDir, "lung-backup.json")
         lungBackupFile.writeText(Gson().toJson(lung))
     }

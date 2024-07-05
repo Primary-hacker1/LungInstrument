@@ -15,7 +15,7 @@ interface LungDao {
 
     @Transaction
     @Query("SELECT * FROM cpx_breath ORDER BY createTime DESC")
-    fun getCPSBreathInOutData(): Flow<List<CPXBreathInOutData>>
+    fun getCPXBreathInOutDataAll(): Flow<List<CPXBreathInOutData>>
 
     @Transaction
     @Query("SELECT * FROM cpx_breath WHERE patientId = :patientId ORDER BY createTime DESC")

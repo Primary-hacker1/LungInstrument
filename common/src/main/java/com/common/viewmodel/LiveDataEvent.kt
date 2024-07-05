@@ -52,6 +52,7 @@ class LiveDataEvent {
 
         const val CPXDYNAMICBEAN: Int = 0x027
 
+        const val CPXDYNAMICALL: Int = 0x029
 
         const val MaxPatient: Int = 0x16//6分钟报告呼吸率
 
