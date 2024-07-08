@@ -56,8 +56,6 @@ class MultiAxisChartView @JvmOverloads constructor(
     private val chartPie = PieChart()
     private val chartDataPie = LinkedList<PieData>()
 
-    private val mPaintTooltips = Paint(Paint.ANTI_ALIAS_FLAG)
-
     private var touchX = -1f
 
     init {
@@ -77,7 +75,7 @@ class MultiAxisChartView @JvmOverloads constructor(
         chartRenderLn()
         chartRenderLnAxes()
 
-        //		chartRenderPie();//饼图
+//		chartRenderPie();//饼图
 
 //		this.bindTouch(this,chart);//綁定手势滑动事件
 
@@ -96,9 +94,9 @@ class MultiAxisChartView @JvmOverloads constructor(
         val left = DensityUtil.dip2px(context, 42f).toFloat()
         val top = DensityUtil.dip2px(context, 62f).toFloat()
 
-        val piewidth = min(w.toDouble(), h.toDouble()).toFloat() / 4 //1.5f;
+        val pieWidth = min(w.toDouble(), h.toDouble()).toFloat() / 4 //1.5f;
 
-        chartPie.setChartRange(left, top, piewidth, piewidth)
+        chartPie.setChartRange(left, top, pieWidth, pieWidth)
     }
 
     private fun chartRender() {
@@ -227,9 +225,9 @@ class MultiAxisChartView @JvmOverloads constructor(
             chartLn.dataSource = chartData
 
             //数据轴最大值
-            chartLn.dataAxis.setAxisMax(1000.0)
+            chartLn.dataAxis.setAxisMax(180.0)
             //数据轴刻度间隔
-            chartLn.dataAxis.axisSteps = 100.0
+            chartLn.dataAxis.axisSteps = 10.0
 
             //仅横向平移
             chartLn.plotPanMode = XEnum.PanMode.HORIZONTAL
@@ -350,7 +348,7 @@ class MultiAxisChartView @JvmOverloads constructor(
         dataSeries3.add(45.0)
         val lineData3 = LineData(
             "角", dataSeries3,
-            ContextCompat.getColor(context, R.color.white)
+            ContextCompat.getColor(context, R.color.colorAccent)
         )
         lineData3.dotStyle = XEnum.DotStyle.TRIANGLE
         lineData3.labelOptions.setLabelBoxStyle(XEnum.LabelBoxStyle.TEXT)
@@ -445,19 +443,6 @@ class MultiAxisChartView @JvmOverloads constructor(
         }
     }
 
-    private fun chartRenderPie() {
-        chartPie.setPadding(0f, 0f, 0f, 0f)
-
-        //标签显示(隐藏，显示在中间，显示在扇区外面)
-        chartPie.labelStyle = XEnum.SliceLabelStyle.INSIDE
-        chartPie.labelPaint.color = Color.WHITE
-
-        chartPie.dataSource = chartDataPie
-
-        //显示图例
-        chartPie.plotLegend.hide()
-    }
-
     private fun chartDataSetPie() {
         chartDataPie.add(PieData("closed", "25%", 25.0, Color.rgb(155, 187, 90)))
         chartDataPie.add(PieData("inspect", "45%", 45.0, Color.rgb(191, 79, 75)))
@@ -488,24 +473,6 @@ class MultiAxisChartView @JvmOverloads constructor(
             }
         }
         return super.onTouchEvent(event)
-    }
-
-    //触发监听
-    private fun triggerClick(x: Float, y: Float) {
-        val record = chart.getPositionRecord(x, y) ?: return
-
-        val lData = mDataset[record.dataID]
-        val lValue = lData.linePoint[record.dataChildID]
-
-        //在点击处显示tooltip
-        mPaintTooltips.color = Color.rgb(240, 73, 119)
-        chart.toolTip.backgroundPaint.color = Color.GREEN
-        chart.toolTip.setCurrentXY(x, y)
-        chart.toolTip.addToolTip(" Key:" + lData.lineKey, mPaintTooltips)
-        chart.toolTip.addToolTip(" Label:" + lData.label, mPaintTooltips)
-        chart.toolTip.addToolTip(" Current Value:$lValue", mPaintTooltips)
-        chart.toolTip.setAlign(Paint.Align.LEFT)
-        this.invalidate()
     }
 
     private fun drawVerticalLineAndYValues(canvas: Canvas) {
