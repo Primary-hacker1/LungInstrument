@@ -52,8 +52,7 @@ public class SplineData extends LnData{
 			public SplineData(String lineKey,					
 							List<PointD> dataSeries,
 							int color ) {
-				// TODO Auto-generated constructor stub
-			
+
 				setLineKey(lineKey);			
 				setLineDataSet(dataSeries);
 				setLineColor(color );			

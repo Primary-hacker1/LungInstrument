@@ -10,6 +10,8 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.common.base.gone
+import com.common.base.visible
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.ScatterData
 import com.github.mikephil.charting.interfaces.datasets.IScatterDataSet
@@ -167,20 +169,39 @@ class FragmentResultLayout @JvmOverloads constructor(
         chartAxisSettings2: ChartAxisSettings? = ChartAxisSettings(),
         chartAxisSettings3: ChartAxisSettings? = ChartAxisSettings(),
         chartAxisSettings4: ChartAxisSettings? = ChartAxisSettings(),
-        resultChartBean: ResultScatterChart.ResultChartBean? = ResultScatterChart.ResultChartBean(),
+        resultChartBean1: ResultScatterChart.ResultChartBean? = ResultScatterChart.ResultChartBean(),
+        resultChartBean2: ResultScatterChart.ResultChartBean? = ResultScatterChart.ResultChartBean(),
+        resultChartBean3: ResultScatterChart.ResultChartBean? = ResultScatterChart.ResultChartBean(),
+        resultChartBean4: ResultScatterChart.ResultChartBean? = ResultScatterChart.ResultChartBean(),
 
-    ) {
-        if (resultChartBean != null) {
-            binding.scChart1.setTitle(resultChartBean)
+        ) {
+        if (resultChartBean1 != null) {
+            binding.scChart1.setTitle(resultChartBean1)
+        }
+        if (resultChartBean2 != null) {
+            binding.scChart2.setTitle(resultChartBean2)
+        }
+        if (resultChartBean3 != null) {
+            binding.scChart3.setTitle(resultChartBean3)
+        }
+        if (resultChartBean4 != null) {
+            binding.scChart4.setTitle(resultChartBean4)
         }
         chartLayout = resultLayout
         when (resultLayout) {
             ChartLayout.EXTREMUM -> {
-                setupScatterChart(binding.scChart1, chartAxisSettings1)
-                onChartClick(binding.chart1)
+                binding.multiAxisChart.visible()
+                binding.gridLayout.gone()
+
+
+
+//                setupScatterChart(binding.scChart1, chartAxisSettings1)//双轴不满足需求
+//                onChartClick(binding.chart1)
             }
 
             ChartLayout.OXYGEN -> { // 无氧域分析的实现
+                binding.multiAxisChart.gone()
+                binding.gridLayout.visible()
                 setupScatterChart(binding.scChart1, chartAxisSettings1)
                 if (chartAxisSettings2 != null) {
                     setupScatterChart(binding.scChart2, chartAxisSettings2)
@@ -211,6 +232,8 @@ class FragmentResultLayout @JvmOverloads constructor(
             }
 
             ChartLayout.COMPENSATORY -> { // 呼吸代偿点分析的实现
+                binding.multiAxisChart.gone()
+                binding.gridLayout.visible()
                 setupScatterChart(binding.scChart1, chartAxisSettings1)
                 if (chartAxisSettings2 != null) {
                     setupScatterChart(binding.scChart2, chartAxisSettings2)

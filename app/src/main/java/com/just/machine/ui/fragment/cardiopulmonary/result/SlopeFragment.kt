@@ -15,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
  * 斜率分析
  *@author zt
  */
+@Deprecated("这版本不用开发！")
 @AndroidEntryPoint
 class SlopeFragment : CommonBaseFragment<FragmentSlopeBinding>() {
 

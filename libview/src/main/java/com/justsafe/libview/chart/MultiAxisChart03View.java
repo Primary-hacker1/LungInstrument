@@ -1,6 +1,5 @@
 package com.justsafe.libview.chart;
 
-import static android.os.Build.VERSION_CODES.R;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -20,7 +19,6 @@ import org.xclcharts.event.click.PointPosition;
 import org.xclcharts.renderer.XEnum;
 import org.xclcharts.renderer.plot.PlotGrid;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -30,10 +28,10 @@ import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.widget.LinearLayout;
 
 import androidx.core.content.ContextCompat;
 
+@Deprecated
 public class MultiAxisChart03View extends DemoView {
     private final String tag = "MultiAxisChart03View";
 

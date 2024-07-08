@@ -5,6 +5,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
+import com.common.viewmodel.LiveDataEvent
+import com.just.machine.dao.lung.CPXBreathInOutData
+import com.just.machine.model.lungdata.AnlyCpxTableModel
+import com.just.machine.model.lungdata.CPXSerializeData
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.databinding.FragmentExtremumAnalysisBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,6 +23,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class ExtremumAnalysisFragment : CommonBaseFragment<FragmentExtremumAnalysisBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
+
+    private var mutableListCPX: MutableList<AnlyCpxTableModel> = mutableListOf()
 
     override fun loadData() {//懒加载
 
@@ -50,6 +56,27 @@ class ExtremumAnalysisFragment : CommonBaseFragment<FragmentExtremumAnalysisBind
 
         binding.llReset.setNoRepeatListener {//重置
 
+        }
+
+        viewModel.getCPXBreathInOutData()
+
+        viewModel.mEventHub.observe(this) { event ->
+            when (event.action) {
+                LiveDataEvent.CPXDYNAMICBEAN -> {
+                    if (event.any !is List<*>) {
+                        return@observe
+                    }
+                    mutableListCPX.clear()
+                    val listBean = event.any as List<*>
+                    for (bean in listBean) {
+                        if (bean !is CPXBreathInOutData) {
+                            return@observe
+                        }
+                        val cpxBean = CPXSerializeData().createAnlyCpxTableModels(bean)
+                        mutableListCPX.add(cpxBean)
+                    }
+                }
+            }
         }
 
     }

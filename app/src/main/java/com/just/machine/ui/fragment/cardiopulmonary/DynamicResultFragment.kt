@@ -7,8 +7,12 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
 import com.common.network.LogUtils
+import com.common.viewmodel.LiveDataEvent
 import com.common.viewmodel.LiveDataEvent.Companion.DYNAMICSUCCESS
+import com.just.machine.dao.lung.CPXBreathInOutData
 import com.just.machine.dao.setting.DynamicSettingBean
+import com.just.machine.model.lungdata.AnlyCpxTableModel
+import com.just.machine.model.lungdata.CPXSerializeData
 import com.just.machine.model.result.DynamicResultButtonBean
 import com.just.machine.ui.adapter.FragmentChildAdapter
 import com.just.machine.ui.adapter.result.ResultBtnAdapter
@@ -36,6 +40,8 @@ class DynamicResultFragment : CommonBaseFragment<FragmentDynamicResultBinding>()
     private val resultBtnAdapter by lazy { ResultBtnAdapter(requireContext()) }
 
     private var bean: MutableList<DynamicResultButtonBean> = ArrayList()
+
+    private var mutableListCPX: MutableList<AnlyCpxTableModel> = mutableListOf()
 
     override fun loadData() {//懒加载
 
@@ -73,6 +79,8 @@ class DynamicResultFragment : CommonBaseFragment<FragmentDynamicResultBinding>()
         }
 
         viewModel.getDynamicSettings()
+
+        viewModel.getCPXBreathInOutData()
 
         viewModel.mEventHub.observe(this) { event ->
             when (event.action) {
@@ -112,10 +120,23 @@ class DynamicResultFragment : CommonBaseFragment<FragmentDynamicResultBinding>()
                         resultBtnAdapter.setItemsBean(bean)
                     }
                 }
+
+                LiveDataEvent.CPXDYNAMICBEAN -> {
+                    if (event.any !is List<*>) {
+                        return@observe
+                    }
+                    mutableListCPX.clear()
+                    val listBean = event.any as List<*>
+                    for (bean in listBean) {
+                        if (bean !is CPXBreathInOutData) {
+                            return@observe
+                        }
+                        val cpxBean = CPXSerializeData().createAnlyCpxTableModels(bean)
+                        mutableListCPX.add(cpxBean)
+                    }
+                }
             }
         }
-
-
     }
 
     private fun createButtonList(activeButtonName: String? = null): MutableList<DynamicResultButtonBean> {

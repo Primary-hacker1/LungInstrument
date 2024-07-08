@@ -59,6 +59,9 @@ class ResultScatterChart @JvmOverloads constructor(
     data class ResultChartBean(
         var titleOneL: String? = "VO2",
         var titleTwoL: String? = "[L/S]",
+
+        var titleOneR: String? = "VCO2",
+        var titleTwoR: String? = "[L/S]",
         var titleContent: String? = "居中标题",
     )
 
@@ -242,17 +245,27 @@ class ResultScatterChart @JvmOverloads constructor(
         val titleTextSizePx = dpToPx(8f, context) // 标题文本的大小
         val contentTextSizePx = dpToPx(18f, context) // 文本的大小
 
-        // 绘制标题文本
-        val titlePaint = Paint().apply {
+        // 绘制左边标题文本
+        val titlePaintLeft = Paint().apply {
             textSize = titleTextSizePx
             color = Color.BLACK
-            textAlign = Paint.Align.CENTER
+            textAlign = Paint.Align.LEFT
         }
-        val totalTitleHeight = titlePaint.fontSpacing * 2 // 两行标题文本的总高度
-        val titleStartX = 40f // 左边留出一定的空白
+        val totalTitleHeight = titlePaintLeft.fontSpacing * 2 // 两行标题文本的总高度
+        val titleStartXLeft = 40f // 左边留出一定的空白
         val titleStartY = totalTitleHeight - 26 // 留出与标题文本相同的高度
-        canvas.drawText(resultChartBean.titleOneL.toString(), titleStartX, titleStartY, titlePaint)
-        canvas.drawText(resultChartBean.titleTwoL.toString(), titleStartX, titleStartY + titlePaint.fontSpacing, titlePaint)
+        canvas.drawText(resultChartBean.titleOneL.toString(), titleStartXLeft, titleStartY, titlePaintLeft)
+        canvas.drawText(resultChartBean.titleTwoL.toString(), titleStartXLeft, titleStartY + titlePaintLeft.fontSpacing, titlePaintLeft)
+
+        // 绘制右边标题文本
+        val titlePaintRight = Paint().apply {
+            textSize = titleTextSizePx
+            color = Color.BLACK
+            textAlign = Paint.Align.RIGHT
+        }
+        val titleStartXRight = width - 40f // 右边留出一定的空白
+        canvas.drawText(resultChartBean.titleOneR.toString(), titleStartXRight, titleStartY, titlePaintRight)
+        canvas.drawText(resultChartBean.titleTwoR.toString(), titleStartXRight, titleStartY + titlePaintRight.fontSpacing, titlePaintRight)
 
         // 绘制垂直居中的文本
         val verticalText = resultChartBean.titleContent.toString()

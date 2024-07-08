@@ -27,7 +27,7 @@
                     tools:ignore="NestedWeights" />
 
 
-            <com.justsafe.libview.chart.MultiAxisChart03View
+            <com.justsafe.libview.chart.MultiAxisChartView
                     android:id="@+id/multiAxisChart"
                     android:layout_weight="1"
                     android:layout_width="0dp"
@@ -41,7 +41,7 @@
                     android:visibility="gone"
                     android:layout_height="400dp" />
 
-            <com.justsafe.libview.chart.MultiAxisChart03View
+            <com.justsafe.libview.chart.MultiAxisChartView
                     android:id="@+id/chart4"
                     android:layout_weight="1"
                     android:layout_width="0dp"

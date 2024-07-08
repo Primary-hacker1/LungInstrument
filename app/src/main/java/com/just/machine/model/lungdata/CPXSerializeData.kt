@@ -1,5 +1,6 @@
 package com.just.machine.model.lungdata
 
+import android.annotation.SuppressLint
 import com.just.machine.dao.lung.CPXBreathInOutData
 import java.io.Serializable
 
@@ -83,6 +84,38 @@ data class CPXSerializeData(
         )
         cpxTableModelList.add(cpxTableModel)
         return cpxTableModelList
+    }
+
+    @SuppressLint("DefaultLocale")
+    fun createAnlyCpxTableModels(breathData: CPXBreathInOutData? = CPXBreathInOutData()): AnlyCpxTableModel {//运动评估数据
+
+        val cpxTableModel = AnlyCpxTableModel(
+            time = String.format(
+                "%02d:%02d",
+                (index * 0.005f / 60).toInt(),
+                (index * 0.005f % 60).toInt()
+            ),
+            load = Load.toInt(),
+            speed = Speed.toInt(),
+            grade = Grade.toInt(),
+            HR = HR.toInt(),
+            VO2 = "%.2f".format(breathData?.VO2),
+            VCO2 = "%.2f".format(breathData?.VCO2),
+            VO2_div_kg = "%.2f".format(breathData?.VO2_div_KG),
+            VE = "%.2f".format(breathData?.VE),
+            RER = "%.2f".format(breathData?.RER),
+            BF = breathData?.BF!!,
+            psys = Psys.toInt(),
+            pdia = Pdia.toInt(),
+            EE = "%.2f".format(breathData.EE),
+            fat_g = "%.2f".format(breathData.FAT),
+            fat_kal = "%.2f".format(breathData.FAT),
+            cho_g = "%.2f".format(breathData.CHO),
+            cho_kal = "%.2f".format(breathData.CHO),
+            prot = "%.2f".format(breathData.PROT),
+            mets = "%.2f".format(breathData.METS)
+        )
+        return cpxTableModel
     }
 
     fun createAnlyCpxTableModel(data: CPXSerializeData): AnlyCpxTableModel {//运动评估数据
