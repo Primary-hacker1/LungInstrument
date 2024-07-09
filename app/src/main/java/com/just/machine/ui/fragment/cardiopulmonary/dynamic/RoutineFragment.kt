@@ -78,13 +78,15 @@ class RoutineFragment : CommonBaseFragment<FragmentRoutineDynmicBinding>() {
 
         binding.chart4
 
-        binding.chart2.setDynamicDragLine()
+//        binding.chart2.setDynamicDragLine()//设置拖拽线
 
         LiveDataBus.get().with(Constants.LungData).observe(this) {//解析串口消息
             if (it is CPXBreathInOutData) {
                 binding.layoutDynamicData.setDynamicData(it)
 
-                binding.chart2.startUpdatingData() // 模拟数据散点图
+//                binding.chart2.startUpdatingData() // 模拟数据散点图
+
+                it.VCO2?.let { it1 -> binding.multiAxisChart.chartDataSet(it1) }
 
                 LogUtils.d(tag + it.toString())
 

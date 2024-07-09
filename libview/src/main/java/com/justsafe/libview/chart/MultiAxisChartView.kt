@@ -27,9 +27,7 @@ import kotlin.math.abs
 import kotlin.math.min
 
 class MultiAxisChartView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyle: Int = 0
+    context: Context, attrs: AttributeSet? = null, defStyle: Int = 0
 ) : DemoView(context, attrs, defStyle) {
 
     private val tag = MultiAxisChartView::class.java.name
@@ -64,16 +62,19 @@ class MultiAxisChartView @JvmOverloads constructor(
 
     private fun initView() {
         chartLabels()
-        chartLabelsAxes()
+
+        chartLabelsAxes()//左1轴
+
         chartDataSetPie()
 
-        chartDataSet()
         chartDataSetLn()
         chartDataSetAxes()
 
-        chartRender()
-        chartRenderLn()
-        chartRenderLnAxes()
+        chartRender()//左边2轴
+
+        chartRenderLn()//右边1轴
+
+        chartRenderLnAxes()//右边2轴,左1轴
 
 //		chartRenderPie();//饼图
 
@@ -176,18 +177,15 @@ class MultiAxisChartView @JvmOverloads constructor(
         }
     }
 
-    private fun chartDataSet() {
-        val dataSeries2: MutableList<Double> = LinkedList()
-        dataSeries2.add(140.0) //40
-        dataSeries2.add(122.0)
-        dataSeries2.add(130.0)
-        dataSeries2.add(135.0)
-        dataSeries2.add(115.0) //15
+    val dataSeries2: MutableList<Double> = LinkedList()
+
+    /**
+    * @param dataLine2 左边y轴2轴数据
+    * */
+    fun chartDataSet(dataLine2: Double) {
 
         val line2 = AreaData(
-            "小小熊", dataSeries2,
-            Color.RED,
-            Color.YELLOW //(int)Color.rgb(254, 170, 50)
+            "小小熊", dataSeries2, Color.RED, Color.YELLOW //(int)Color.rgb(254, 170, 50)
         )
         //设置线上每点对应标签的颜色
         line2.dotLabelPaint.color = Color.rgb(83, 148, 235)
@@ -286,8 +284,7 @@ class MultiAxisChartView @JvmOverloads constructor(
         dataSeries0.add(5.0)
         dataSeries0.add(6.0)
         val line2 = LineData(
-            "Area圆环", dataSeries0,
-            ContextCompat.getColor(context, R.color.white)
+            "Area圆环", dataSeries0, ContextCompat.getColor(context, R.color.white)
         )
         line2.dotStyle = XEnum.DotStyle.RING
         line2.plotLine.dotPaint.color = Color.WHITE
@@ -305,8 +302,7 @@ class MultiAxisChartView @JvmOverloads constructor(
         dataSeries1.add(55.0)
         dataSeries1.add(55.0)
         val lineData1 = LineData(
-            "棱形", dataSeries1,
-            ContextCompat.getColor(context, R.color.blue)
+            "棱形", dataSeries1, ContextCompat.getColor(context, R.color.blue)
         )
         lineData1.labelVisible = false
         lineData1.dotStyle = XEnum.DotStyle.PRISMATIC
@@ -327,8 +323,7 @@ class MultiAxisChartView @JvmOverloads constructor(
         dataSeries2.add(58.0)
         dataSeries2.add(58.0)
         val lineData2 = LineData(
-            "圆环", dataSeries2,
-            ContextCompat.getColor(context, R.color.white)
+            "圆环", dataSeries2, ContextCompat.getColor(context, R.color.white)
         )
         lineData2.dotStyle = XEnum.DotStyle.RING
         lineData2.plotLine.dotPaint.color = Color.RED
@@ -347,8 +342,7 @@ class MultiAxisChartView @JvmOverloads constructor(
         dataSeries3.add(45.0)
         dataSeries3.add(45.0)
         val lineData3 = LineData(
-            "角", dataSeries3,
-            ContextCompat.getColor(context, R.color.colorAccent)
+            "角", dataSeries3, ContextCompat.getColor(context, R.color.colorAccent)
         )
         lineData3.dotStyle = XEnum.DotStyle.TRIANGLE
         lineData3.labelOptions.setLabelBoxStyle(XEnum.LabelBoxStyle.TEXT)
@@ -379,7 +373,7 @@ class MultiAxisChartView @JvmOverloads constructor(
             chartLnAxes.dataAxis.axisSteps = 10.0
 
             // 标签轴最大值
-            chartLnAxes.setCategoryAxisMax(70.0)
+            chartLnAxes.setCategoryAxisMax(50.0)
             // 标签轴最小值
             chartLnAxes.setCategoryAxisMin(0.0)
 
@@ -422,12 +416,16 @@ class MultiAxisChartView @JvmOverloads constructor(
         mLabelsAxes.add("50")
         mLabelsAxes.add("60")
         mLabelsAxes.add("70")
+        mLabelsAxes.add("80")
     }
 
     private fun chartDataSetAxes() {
         // 线1的数据集
         val linePoint1: MutableList<PointD> = ArrayList()
         linePoint1.add(PointD(0.0, 0.0))
+        linePoint1.add(PointD(1.0, 10.0))
+        linePoint1.add(PointD(2.0, 20.0))
+        linePoint1.add(PointD(3.0, 70.0))
 
         val dataSeries1 = SplineData("", linePoint1, Color.rgb(54, 141, 238))
         dataSeries1.dotStyle = XEnum.DotStyle.RING // 设置点的样式为圆环
