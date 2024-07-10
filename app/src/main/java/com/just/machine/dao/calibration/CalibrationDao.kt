@@ -50,4 +50,27 @@ interface CalibrationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllEnvironmental(environmental: List<EnvironmentalCalibrationBean>)
 
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertFlowCalibrationResult(resultBean: FlowCalibrationResultBean)
+
+    @Transaction
+    @Query("SELECT * FROM flowCalibrationResult ORDER BY calibrationTime DESC")
+    fun getFlowCalibrationResult(): Flow<List<FlowCalibrationResultBean>>
+
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertFlowManualCalibrationResult(resultBean: FlowManualCalibrationResultBean)
+
+    @Transaction
+    @Query("SELECT * FROM flowManualCalibrationResult ORDER BY calibrationTime DESC")
+    fun getFlowManualCalibrationResult(): Flow<List<FlowManualCalibrationResultBean>>
+
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertFlowAutoCalibrationResult(resultBean: FlowAutoCalibrationResultBean)
+
+    @Transaction
+    @Query("SELECT * FROM flowAutoCalibrationResult ORDER BY calibrationTime DESC")
+    fun getFlowAutoCalibrationResult(): Flow<List<FlowAutoCalibrationResultBean>>
 }

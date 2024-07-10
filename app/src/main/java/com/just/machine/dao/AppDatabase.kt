@@ -10,7 +10,10 @@ import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.just.machine.dao.calibration.CalibrationDao
 import com.just.machine.dao.calibration.EnvironmentalCalibrationBean
+import com.just.machine.dao.calibration.FlowAutoCalibrationResultBean
 import com.just.machine.dao.calibration.FlowBean
+import com.just.machine.dao.calibration.FlowCalibrationResultBean
+import com.just.machine.dao.calibration.FlowManualCalibrationResultBean
 import com.just.machine.dao.calibration.IngredientBean
 import com.just.machine.dao.lung.CPXBreathInOutData
 import com.just.machine.dao.lung.LungDao
@@ -41,7 +44,8 @@ import com.just.machine.workers.SeedDatabaseWorker.Companion.KEY_FILENAME
  */
 @Database(
     entities = [PatientBean::class, EnvironmentalCalibrationBean::class, AllSettingBean::class, StaticSettingBean::class,
-        CPXBreathInOutData::class, FlowBean::class, IngredientBean::class, DynamicSettingBean::class, SixMinReportWalk::class,
+        CPXBreathInOutData::class, FlowBean::class, IngredientBean::class, DynamicSettingBean::class, FlowCalibrationResultBean::class,
+        FlowAutoCalibrationResultBean::class, FlowManualCalibrationResultBean::class, SixMinReportWalk::class,
         SixMinBloodOxygen::class, SixMinHeartEcg::class, SixMinReportBreathing::class,
         SixMinReportEvaluation::class, SixMinReportHeartBeat::class, SixMinReportInfo::class,
         SixMinReportOther::class, SixMinReportPrescription::class, SixMinReportStride::class],

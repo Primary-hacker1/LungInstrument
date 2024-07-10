@@ -2,6 +2,7 @@ package com.just.machine.ui.fragment.calibration
 
 import android.graphics.Color
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
@@ -9,7 +10,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
-import com.common.base.setNoRepeatListener
 import com.common.base.toast
 import com.common.viewmodel.LiveDataEvent
 import com.github.mikephil.charting.charts.LineChart
@@ -19,12 +19,16 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.just.machine.dao.calibration.FlowBean
+import com.just.machine.dao.calibration.FlowCalibrationResultBean
+import com.just.machine.dao.calibration.FlowManualCalibrationResultBean
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.calibrate.Definition
 import com.just.machine.ui.adapter.calibration.FlowAdapter
 import com.just.machine.ui.dialog.LoadingDialogFragment
+import com.just.machine.ui.dialog.LungCommonDialogFragment
 import com.just.machine.ui.fragment.serial.ModbusProtocol
 import com.just.machine.ui.viewmodel.MainViewModel
+import com.just.machine.util.CRC16Util
 import com.just.machine.util.FixCountDownTime
 import com.just.machine.util.LiveDataBus
 import com.just.machine.util.USBTransferUtil
@@ -50,9 +54,6 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
 
     private var usbTransferUtil: USBTransferUtil? = null //usb工具类
     private val viewModel by viewModels<MainViewModel>()
-    private var isPull = true
-    private var mDownTime: FixCountDownTime? = null
-    private var timer: Timer? = null
     private var startLoadingDialogFragment: LoadingDialogFragment? = null
 
     private val strVol = arrayOf(
@@ -109,7 +110,6 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
     private var iscer = false
     private var startsec = 0f
     private var Autoindex = 0
-    private var startSec = 0f
     private var startVol = 0f
     private var startFlow = 0f
     private var tempvol = 0f
@@ -162,7 +162,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun initView() {
         usbTransferUtil = USBTransferUtil.getInstance()
-        mDownTime = object : FixCountDownTime(20, 1000) {}
+
         binding.rvFlowHandleInhale.layoutManager = LinearLayoutManager(requireContext())
 
         binding.rvFlowHandleInhale.adapter = inHaleFlowAdapter
@@ -200,302 +200,19 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                 }
             }
         }
-        binding.llPullDirection.setNoRepeatListener {
-            if (!isStart) {
-                toast("定标未开始!")
-                return@setNoRepeatListener
-            }
-            if (isPull) {
-                mDownTime!!.start(object : FixCountDownTime.OnTimerCallBack {
-                    override fun onStart() {
 
-                    }
-
-                    override fun onTick(times: Int) {
-                        when (k) {
-                            1 -> {
-                                inVolSec1DataSet!!.addEntry(
-                                    Entry(
-                                        startSec,
-                                        startVol
-                                    )
-                                )
-                                inFlowVol1DataSet!!.addEntry(
-                                    Entry(
-                                        startVol,
-                                        startFlow
-                                    )
-                                )
-                                startSec += 0.05f
-                                startVol += 0.1f
-                                startFlow += 0.2f
-                                tempvol += 0.1f
-                            }
-
-                            3 -> {
-                                inVolSec2DataSet!!.addEntry(
-                                    Entry(
-                                        startSec,
-                                        startVol
-                                    )
-                                )
-                                inFlowVol2DataSet!!.addEntry(
-                                    Entry(
-                                        startVol,
-                                        startFlow
-                                    )
-                                )
-                                startSec += 0.05f
-                                startVol += 0.2f
-                                startFlow += 0.3f
-                            }
-
-                            5 -> {
-                                inVolSec3DataSet!!.addEntry(
-                                    Entry(
-                                        startSec,
-                                        startVol
-                                    )
-                                )
-                                inFlowVol3DataSet!!.addEntry(
-                                    Entry(
-                                        startVol,
-                                        startFlow
-                                    )
-                                )
-                                startSec += 0.05f
-                                startVol += 0.3f
-                                startFlow += 0.4f
-                            }
-
-                            7 -> {
-                                inVolSec4DataSet!!.addEntry(
-                                    Entry(
-                                        startSec,
-                                        startVol
-                                    )
-                                )
-                                inFlowVol4DataSet!!.addEntry(
-                                    Entry(
-                                        startVol,
-                                        startFlow
-                                    )
-                                )
-                                startSec += 0.05f
-                                startVol += 0.4f
-                                startFlow += 0.5f
-                            }
-
-                            9 -> {
-                                inVolSec5DataSet!!.addEntry(
-                                    Entry(
-                                        startSec,
-                                        startVol
-                                    )
-                                )
-                                inFlowVol5DataSet!!.addEntry(
-                                    Entry(
-                                        startVol,
-                                        startFlow
-                                    )
-                                )
-                                startSec += 0.05f
-                                startVol += 0.5f
-                                startFlow += 0.6f
-                            }
-                        }
-
-                        binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
-                        binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
-                        binding.chartFlowHandleCapacityTime.invalidate()
-
-                        binding.chartFlowHandleFlowCapacity.lineData.notifyDataChanged()
-                        binding.chartFlowHandleFlowCapacity.notifyDataSetChanged()
-                        binding.chartFlowHandleFlowCapacity.invalidate()
-                    }
-
-                    override fun onFinish() {
-                        if (tempvol > 2.0) {
-                            resetParmet(1)
-                        } else {
-                            inHaleFlowList.add(
-                                FlowBean(
-                                    0,
-                                    DateUtils.nowTimeString,
-                                    1,
-                                    strVol[k - 1],
-                                    "3",
-                                    startVol.toString(),
-                                    if (k == 3) "-1.05" else "0.92"
-                                )
-                            )
-                            inHaleFlowAdapter.setItemsBean(
-                                inHaleFlowList
-                            )
-                            mDownTime!!.setmTimes(20)
-
-                            k++
-                            startSec = 0f
-                            startVol = 0f
-                            startFlow = 0f
-                            binding.tvPullDirection.text = "推"
-                            binding.tvPullDirection.setBackgroundResource(R.drawable.flow_down)
-                            isPull = !isPull
-                        }
-                    }
-                })
-            } else {
-                mDownTime!!.start(object : FixCountDownTime.OnTimerCallBack {
-                    override fun onStart() {
-
-                    }
-
-                    override fun onTick(times: Int) {
-                        when (k) {
-                            2 -> {
-                                outVolSec1DataSet!!.addEntry(
-                                    Entry(
-                                        startSec,
-                                        -startVol
-                                    )
-                                )
-                                outFlowVol1DataSet!!.addEntry(
-                                    Entry(
-                                        startVol,
-                                        -startFlow
-                                    )
-                                )
-                                startSec += 0.05f
-                                startVol += 0.1f
-                                startFlow += 0.2f
-                            }
-
-                            4 -> {
-                                outVolSec2DataSet!!.addEntry(
-                                    Entry(
-                                        startSec,
-                                        -startVol
-                                    )
-                                )
-                                outFlowVol2DataSet!!.addEntry(
-                                    Entry(
-                                        startVol,
-                                        -startFlow
-                                    )
-                                )
-                                startSec += 0.05f
-                                startVol += 0.2f
-                                startFlow += 0.3f
-                            }
-
-                            6 -> {
-                                outVolSec3DataSet!!.addEntry(
-                                    Entry(
-                                        startSec,
-                                        -startVol
-                                    )
-                                )
-                                outFlowVol3DataSet!!.addEntry(
-                                    Entry(
-                                        startVol,
-                                        -startFlow
-                                    )
-                                )
-                                startSec += 0.05f
-                                startVol += 0.3f
-                                startFlow += 0.4f
-                            }
-
-                            8 -> {
-                                outVolSec4DataSet!!.addEntry(
-                                    Entry(
-                                        startSec,
-                                        -startVol
-                                    )
-                                )
-
-                                outFlowVol4DataSet!!.addEntry(
-                                    Entry(
-                                        startVol,
-                                        -startFlow
-                                    )
-                                )
-                                startSec += 0.05f
-                                startVol += 0.4f
-                                startFlow += 0.5f
-                            }
-
-                            10 -> {
-                                outVolSec5DataSet!!.addEntry(
-                                    Entry(
-                                        startSec,
-                                        -startVol
-                                    )
-                                )
-                                outFlowVol5DataSet!!.addEntry(
-                                    Entry(
-                                        startVol,
-                                        -startFlow
-                                    )
-                                )
-                                startSec += 0.05f
-                                startVol += 0.5f
-                                startFlow += 0.6f
-                            }
-                        }
-                        binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
-                        binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
-                        binding.chartFlowHandleCapacityTime.invalidate()
-
-                        binding.chartFlowHandleFlowCapacity.lineData.notifyDataChanged()
-                        binding.chartFlowHandleFlowCapacity.notifyDataSetChanged()
-                        binding.chartFlowHandleFlowCapacity.invalidate()
-                    }
-
-                    override fun onFinish() {
-                        exHaleFlowList.add(
-                            FlowBean(
-                                0,
-                                DateUtils.nowTimeString,
-                                1,
-                                strVol[k - 1],
-                                "3",
-                                startVol.toString(),
-                                if (k == 8) "-0.95" else "1.02"
-                            )
-                        )
-                        exHaleFlowAdapter.setItemsBean(
-                            exHaleFlowList
-                        )
-                        mDownTime!!.setmTimes(20)
-
-                        k++
-                        startSec = 0f
-                        startVol = 0f
-                        startFlow = 0f
-                        binding.tvPullDirection.text = "拉"
-                        binding.tvPullDirection.setBackgroundResource(R.drawable.flow_pull)
-                        isPull = !isPull
-                    }
-                })
-            }
-        }
         //定标开始
         LiveDataBus.get().with("clickFlowStart").observe(this) {
             if (it is String) {
                 if (it == "handleFlow") {
                     //开始手动定标
-//                    lifecycleScope.launch(Dispatchers.Main) {
-//                        delay(100)
-//                        isZeroSuccess()
-//                    }
+
                     if (ModbusProtocol.isDeviceConnect) {
                         prepareManualFlowCalibration()
                         sendCalibraCommand()
-                        LiveDataBus.get().with("flowStart").postValue("handleFlow")
+                        startLoadingDialogFragment = LoadingDialogFragment.startLoadingDialogFragment(activity!!.supportFragmentManager,"正在校零...")
                     } else {
                         toast("设备未连接!!!")
-//                        startLoadingDialogFragment = LoadingDialogFragment.startLoadingDialogFragment(activity!!.supportFragmentManager,"正在校零...")
                     }
                 }
             }
@@ -505,15 +222,13 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
             if (it is String) {
                 isStart = false
                 stopPortSend()
-                if (it == "handleFlow") {
-
-                }
             }
         }
 
         //串口数据
         LiveDataBus.get().with("二类传感器").observe(this) {
             if (it is ByteArray) {
+                val bytes2Hex = CRC16Util.bytes2Hex(it)
                 Autoindex++
                 if (Autoindex <= 200) {
                     ftemplow += it[14] + it[15] * 256;
@@ -539,8 +254,8 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
         dh = (signalhigh - Definition.fzeroHigh).toDouble()
         var dtemp = 0.0
         var dtemphigh = 0.0
-        TempDl.add(dl)
-        TempDh.add(dh)
+        TempDl.offer(dl)
+        TempDh.offer(dh)
 
         if (TempDl.size >= 21) {
             TempDl.poll()
@@ -550,32 +265,35 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
             dtemphigh = TempDh.sum() / TempDh.size
 
             if (k == 0) {
+                Log.i(TAG, "dtemp 数据: $dtemp")
+                startLoadingDialogFragment?.dismiss()
                 if (dtemp > Definition.Noise_AD) {
                     tempv++
                     if (tempv > 1) {
                         iscer = true
                         k = 0
                         if (dtemp < Definition.LDES_AD && dtemp >= Definition.LowLimit_AD) {
-                            flow = (sqrt(dtemp) * Definition.Cur_ADC_IN_LDES * 1f).toFloat()
-                            ftemp += flow / Definition.Sample_rate;
-                            tempcalc += (sqrt(dtemp) * 1f / Definition.Sample_rate).toFloat()
-                            tempvol = abs(ftemp + ftempHigh);
+                            flow = (sqrt(dtemp) * Definition.Cur_ADC_IN_LDES * iset).toFloat()
+                            ftemp += flow / Definition.Sample_rate.toFloat()
+                            tempcalc += (sqrt(dtemp) * iset / Definition.Sample_rate.toFloat()).toFloat()
+                            tempvol = abs(ftemp + ftempHigh)
                         } else if (dtemp > Definition.LDES_AD && dtemp <= Definition.HighLimit_AD) {
                             flow = (sqrt(dtemp) * Definition.Cur_ADC_IN_LDES).toFloat()
-                            ftemp += flow / Definition.Sample_rate
-                            tempcalc += (sqrt(dtemp) / Definition.Sample_rate).toFloat()
-                            tempvol = abs(ftemp + ftempHigh);
+                            ftemp += flow / Definition.Sample_rate.toFloat()
+                            tempcalc += (sqrt(dtemp) / Definition.Sample_rate.toFloat()).toFloat()
+                            tempvol = abs(ftemp + ftempHigh)
                         } else if (dtemp > Definition.HighLimit_AD || dtemp < Definition.LowLimit_AD) {
                             flow = (sqrt(dtemphigh) * Definition.Cur_ADC_IN_HDIM).toFloat()
-                            ftempHigh += flow / Definition.Sample_rate
-                            tempcalcHigh += (sqrt(dtemphigh) / Definition.Sample_rate).toFloat()
+                            ftempHigh += flow / Definition.Sample_rate.toFloat()
+                            tempcalcHigh += (sqrt(dtemphigh) / Definition.Sample_rate.toFloat()).toFloat()
                             tempvol = abs((ftemp + ftempHigh))
                         }
-                        startsec += 0.01f
+
+                        Log.i(TAG, "startsec====$startsec====ftemp + ftempHigh 数据: ${ftemp + ftempHigh}====flow===$flow")
 
                         inVolSec1DataSet!!.addEntry(
                             Entry(
-                                startSec,
+                                startsec,
                                 (ftemp + ftempHigh)
                             )
                         )
@@ -585,7 +303,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                                 flow
                             )
                         )
-
+                        startsec += 0.01f
                         binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
                         binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
                         binding.chartFlowHandleCapacityTime.invalidate()
@@ -610,13 +328,13 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                         if (tempvol > 2 && tempvol < 4) {
                             checkCerbra()
                             if (ftemp > 2.6) {
-                                ADC_IN_LDES_temp.add(3 / tempcalc);
+                                ADC_IN_LDES_temp.add(3 / tempcalc)
                                 ADC_IN_LDES = ADC_IN_LDES_temp.average().toFloat()
                             } else {
                                 if (tempcalcHigh == 0f) {
                                     ADC_IN_HDIM = 0f
                                 } else {
-                                    ADC_IN_HDIM_temp.add((3 - ftemp) / tempcalcHigh);
+                                    ADC_IN_HDIM_temp.add((3 - ftemp) / tempcalcHigh)
                                     ADC_IN_HDIM = ADC_IN_HDIM_temp.average().toFloat()
                                 }
                             }
@@ -655,21 +373,20 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                             tempcalcHigh += (sqrt(-dtemphigh) / Definition.Sample_rate).toFloat()
                             tempvol = abs((-ftemp - ftempHigh))
                         }
-                        startsec += 0.01f
 
                         outVolSec1DataSet!!.addEntry(
                             Entry(
-                                startSec,
-                                (ftemp + ftempHigh)
+                                startsec,
+                                -ftemp - ftempHigh
                             )
                         )
                         outFlowVol1DataSet!!.addEntry(
                             Entry(
-                                (ftemp + ftempHigh),
-                                flow
+                                abs(-ftemp - ftempHigh),
+                                -flow
                             )
                         )
-
+                        startsec += 0.01f
                         binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
                         binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
                         binding.chartFlowHandleCapacityTime.invalidate()
@@ -697,20 +414,20 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                                 ADC_OUT_LDES_temp.add(3 / tempcalc)
                                 ADC_OUT_LDES = ADC_OUT_LDES_temp.average().toFloat()
                             } else {
-                                if (tempcalcHigh == 0f) {
-                                    ADC_OUT_HDIM = 0f
+                                ADC_OUT_HDIM = if (tempcalcHigh == 0f) {
+                                    0f
                                 } else {
                                     ADC_OUT_HDIM_temp.add((3 - ftemp) / tempcalcHigh);
-                                    ADC_OUT_HDIM = ADC_OUT_HDIM_temp.average().toFloat()
+                                    ADC_OUT_HDIM_temp.average().toFloat()
                                 }
                             }
                             resetElement()
                             setPullStyle()
-                            k = 1
+                            k = 2
                         } else {
                             resetParmet(1)
                             setPushStyle()
-                            k = 0
+                            k = 1
                             if (dicvol.containsKey(k))
                                 dicvol[k]?.clear()
                         }
@@ -724,9 +441,9 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                         iscer = true
                         k = 2
                         if (dtemp < Definition.LDES_AD) {
-                            flow = (sqrt(dtemp) * Definition.Cur_ADC_IN_LDES * 1f).toFloat()
+                            flow = (sqrt(dtemp) * Definition.Cur_ADC_IN_LDES * iset).toFloat()
                             ftemp += flow / Definition.Sample_rate;
-                            tempcalc += (sqrt(dtemp) * 1f / Definition.Sample_rate).toFloat()
+                            tempcalc += (sqrt(dtemp) * iset / Definition.Sample_rate).toFloat()
                             tempvol = abs(ftemp + ftempHigh);
                         } else if (dtemp > Definition.LDES_AD && dtemp < Definition.HighLimit_AD) {
                             flow = (sqrt(dtemp) * Definition.Cur_ADC_IN_LDES).toFloat()
@@ -739,21 +456,20 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                             tempcalcHigh += (sqrt(dtemphigh) / Definition.Sample_rate).toFloat()
                             tempvol = abs((ftemp + ftempHigh))
                         }
-                        startsec += 0.01f
 
                         inVolSec2DataSet!!.addEntry(
                             Entry(
-                                startSec,
-                                (ftemp + ftempHigh)
+                                startsec,
+                                ftemp + ftempHigh
                             )
                         )
                         inFlowVol2DataSet!!.addEntry(
                             Entry(
-                                (ftemp + ftempHigh),
+                                ftemp + ftempHigh,
                                 flow
                             )
                         )
-
+                        startsec += 0.01f
                         binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
                         binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
                         binding.chartFlowHandleCapacityTime.invalidate()
@@ -823,21 +539,20 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                             tempcalcHigh += (sqrt(-dtemphigh) / Definition.Sample_rate).toFloat()
                             tempvol = abs((-ftemp - ftempHigh))
                         }
-                        startsec += 0.01f
 
                         outVolSec2DataSet!!.addEntry(
                             Entry(
-                                startSec,
-                                (ftemp + ftempHigh)
+                                startsec,
+                                -ftemp - ftempHigh
                             )
                         )
                         outFlowVol2DataSet!!.addEntry(
                             Entry(
-                                (ftemp + ftempHigh),
-                                flow
+                                abs(-ftemp - ftempHigh),
+                                -flow
                             )
                         )
-
+                        startsec += 0.01f
                         binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
                         binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
                         binding.chartFlowHandleCapacityTime.invalidate()
@@ -908,21 +623,20 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                             tempcalcHigh += (sqrt(dtemphigh) / Definition.Sample_rate).toFloat()
                             tempvol = abs((ftemp + ftempHigh))
                         }
-                        startsec += 0.01f
 
                         inVolSec3DataSet!!.addEntry(
                             Entry(
-                                startSec,
-                                (ftemp + ftempHigh)
+                                startsec,
+                                ftemp + ftempHigh
                             )
                         )
                         inFlowVol3DataSet!!.addEntry(
                             Entry(
-                                (ftemp + ftempHigh),
+                                ftemp + ftempHigh,
                                 flow
                             )
                         )
-
+                        startsec += 0.01f
                         binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
                         binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
                         binding.chartFlowHandleCapacityTime.invalidate()
@@ -993,21 +707,20 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                             tempcalcHigh += (sqrt(-dtemphigh) / Definition.Sample_rate).toFloat()
                             tempvol = abs((-ftemp - ftempHigh))
                         }
-                        startsec += 0.01f
 
                         outVolSec3DataSet!!.addEntry(
                             Entry(
-                                startSec,
-                                (ftemp + ftempHigh)
+                                startsec,
+                                -ftemp - ftempHigh
                             )
                         )
                         outFlowVol3DataSet!!.addEntry(
                             Entry(
-                                (ftemp + ftempHigh),
-                                flow
+                                abs(-ftemp - ftempHigh),
+                                -flow
                             )
                         )
-
+                        startsec += 0.01f
                         binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
                         binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
                         binding.chartFlowHandleCapacityTime.invalidate()
@@ -1078,21 +791,20 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                             tempcalcHigh += (sqrt(dtemphigh) / Definition.Sample_rate).toFloat()
                             tempvol = abs((ftemp + ftempHigh))
                         }
-                        startsec += 0.01f
 
                         inVolSec4DataSet!!.addEntry(
                             Entry(
-                                startSec,
-                                (ftemp + ftempHigh)
+                                startsec,
+                                ftemp + ftempHigh
                             )
                         )
                         inFlowVol4DataSet!!.addEntry(
                             Entry(
-                                (ftemp + ftempHigh),
+                                ftemp + ftempHigh,
                                 flow
                             )
                         )
-
+                        startsec += 0.01f
                         binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
                         binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
                         binding.chartFlowHandleCapacityTime.invalidate()
@@ -1163,21 +875,20 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                             tempcalcHigh += (sqrt(-dtemphigh) / Definition.Sample_rate).toFloat()
                             tempvol = abs((-ftemp - ftempHigh))
                         }
-                        startsec += 0.01f
 
                         outVolSec4DataSet!!.addEntry(
                             Entry(
-                                startSec,
-                                (ftemp + ftempHigh)
+                                startsec,
+                                -ftemp - ftempHigh
                             )
                         )
                         outFlowVol4DataSet!!.addEntry(
                             Entry(
-                                (ftemp + ftempHigh),
-                                flow
+                                abs(-ftemp - ftempHigh),
+                                -flow
                             )
                         )
-
+                        startsec += 0.01f
                         binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
                         binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
                         binding.chartFlowHandleCapacityTime.invalidate()
@@ -1231,7 +942,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                     tempv++
                     if (tempv > 1) {
                         iscer = true
-                        k = 6
+                        k = 8
                         if (dtemp < Definition.LDES_AD) {
                             flow = (sqrt(dtemp) * Definition.Cur_ADC_IN_LDES * iset).toFloat()
                             ftemp += flow / Definition.Sample_rate
@@ -1248,21 +959,20 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                             tempcalcHigh += (sqrt(dtemphigh) / Definition.Sample_rate).toFloat()
                             tempvol = abs((ftemp + ftempHigh))
                         }
-                        startsec += 0.01f
 
                         inVolSec5DataSet!!.addEntry(
                             Entry(
-                                startSec,
-                                (ftemp + ftempHigh)
+                                startsec,
+                                ftemp + ftempHigh
                             )
                         )
                         inFlowVol5DataSet!!.addEntry(
                             Entry(
-                                (ftemp + ftempHigh),
+                                ftemp + ftempHigh,
                                 flow
                             )
                         )
-
+                        startsec += 0.01f
                         binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
                         binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
                         binding.chartFlowHandleCapacityTime.invalidate()
@@ -1316,7 +1026,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                     tempv++
                     if (tempv > 1) {
                         iscer = true
-                        k = 7
+                        k = 9
                         if (dtemp > -Definition.LDES_AD) {
                             flow = (sqrt(-dtemp) * Definition.Cur_ADC_OUT_LDES * iset).toFloat()
                             ftemp += flow / Definition.Sample_rate
@@ -1333,21 +1043,20 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                             tempcalcHigh += (sqrt(-dtemphigh) / Definition.Sample_rate).toFloat()
                             tempvol = abs((-ftemp - ftempHigh))
                         }
-                        startsec += 0.01f
 
                         outVolSec5DataSet!!.addEntry(
                             Entry(
-                                startSec,
-                                (ftemp + ftempHigh)
+                                startsec,
+                                -ftemp - ftempHigh
                             )
                         )
                         outFlowVol5DataSet!!.addEntry(
                             Entry(
-                                (ftemp + ftempHigh),
-                                flow
+                                abs(-ftemp - ftempHigh),
+                                -flow
                             )
                         )
-
+                        startsec += 0.01f
                         binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
                         binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
                         binding.chartFlowHandleCapacityTime.invalidate()
@@ -1397,6 +1106,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
             }
 
             if (k == 10) {
+                stopPortSend()
                 resetElement()
                 ADC_IN_LDES = if (ADC_IN_LDES == 0f) Definition.Cur_ADC_IN_LDES else ADC_IN_LDES
                 ADC_OUT_LDES = if (ADC_OUT_LDES == 0f) Definition.Cur_ADC_OUT_LDES else ADC_OUT_LDES
@@ -1406,6 +1116,35 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                 Definition.Cur_ADC_OUT_LDES = ADC_OUT_LDES
                 Definition.Cur_ADC_IN_HDIM = ADC_IN_HDIM
                 Definition.Cur_ADC_OUT_HDIM = ADC_OUT_HDIM
+
+                val result = inHaleFlowList.any { it.calibrationResults == "0" } || exHaleFlowList.any{it.calibrationResults == "0"}
+                //定标结果写入数据库
+                val flowResult = FlowCalibrationResultBean()
+                flowResult.calibrationTime = DateUtils.nowTimeString
+                flowResult.calibrationType = 0
+                flowResult.inCoefficient = ADC_IN_LDES.toString()
+                flowResult.outCoefficient = ADC_OUT_LDES.toString()
+                flowResult.inHighCoefficient = ADC_IN_HDIM.toString()
+                flowResult.outHighCoefficient = ADC_OUT_HDIM.toString()
+                flowResult.calibrationResult = if(result) "0" else "1"
+                viewModel.setFlowCaliResultBean(flowResult)
+                val flowManualResult = FlowManualCalibrationResultBean()
+                flowManualResult.calibrationTime = DateUtils.nowTimeString
+                flowManualResult.inFluctuation = String.format("%.2f",m_AccuracyIn)
+                flowManualResult.inError = String.format("%.2f",m_PrecisionIn)
+                flowManualResult.outFluctuation = String.format("%.2f",m_AccuracyOut)
+                flowManualResult.outError = String.format("%.2f",m_PrecisionOut)
+                flowManualResult.calibrationResult = if(result) "0" else "1"
+                viewModel.setFlowManualCaliResultBean(flowManualResult)
+                if(result){
+                    LungCommonDialogFragment.startCommonDialogFragment(
+                        requireActivity().supportFragmentManager, "流量手动定标失败！定标参数保存到数据库！", "2"
+                    )
+                }else{
+                    LungCommonDialogFragment.startCommonDialogFragment(
+                        requireActivity().supportFragmentManager, "流量手动定标成功！定标参数保存到数据库！", "1"
+                    )
+                }
                 return
             }
         }
@@ -1763,6 +1502,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
     private fun stopPortSend() {
         try {
             usbTransferUtil!!.write(ModbusProtocol.banTwoSensor)
+            LiveDataBus.get().with("flowStop").postValue("handleFlow")
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -1771,12 +1511,14 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
     private fun sendCalibraCommand() {
         try {
             usbTransferUtil?.write(ModbusProtocol.allowTwoSensor)
+            LiveDataBus.get().with("flowStart").postValue("handleFlow")
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
     private fun resetParmet(type: Int) {
+        resetElement()
         when (type) {
             0 -> {
                 inVolSec1DataSet!!.clear()
@@ -1836,8 +1578,6 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
         binding.chartFlowHandleFlowCapacity.lineData.notifyDataChanged()
         binding.chartFlowHandleFlowCapacity.notifyDataSetChanged()
         binding.chartFlowHandleFlowCapacity.invalidate()
-
-        resetElement()
     }
 
     private fun resetElement() {
@@ -1899,6 +1639,20 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
         outVolSec3DataSet!!.clear()
         outVolSec4DataSet!!.clear()
         outVolSec5DataSet!!.clear()
+
+        binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
+        binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
+        binding.chartFlowHandleCapacityTime.invalidate()
+
+        binding.chartFlowHandleFlowCapacity.lineData.notifyDataChanged()
+        binding.chartFlowHandleFlowCapacity.notifyDataSetChanged()
+        binding.chartFlowHandleFlowCapacity.invalidate()
+
+        inHaleFlowList.clear()
+        exHaleFlowList.clear()
+
+        inHaleFlowAdapter.notifyDataSetChanged()
+        exHaleFlowAdapter.notifyDataSetChanged()
     }
 
     private fun checkCerbra() {
@@ -1912,7 +1666,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                     m_AccuracyIn = abs(curvol1 - 3);
 
             } else if (k == 1 || k == 3 || k == 5 || k == 7) {
-                curvol1 = -vol!![vol.size - 1]
+                curvol1 = -vol[vol.size - 1]
                 ManualFlowState = false;
                 if (abs(curvol1 - 3) > m_AccuracyOut)
                     m_AccuracyOut = abs(curvol1 - 3);
@@ -1941,7 +1695,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
             val patientBean = SharedPreferencesUtils.instance.patientBean
             if (k == 0 || k == 2 || k == 4 || k == 6 || k == 8) {
                 val error = String.format("%.2f", (3 - curvol1) / 3 * 100)
-                val result = if (abs(error.toFloat()) < 3) "通过" else "未通过"
+                val result = if (abs(error.toFloat()) < 3) "1" else "0"
                 inHaleFlowList.add(
                     FlowBean(
                         patientBean!!.patientId,
@@ -1954,14 +1708,14 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                         result
                     )
                 )
-                exHaleFlowAdapter.setItemsBean(
+                inHaleFlowAdapter.setItemsBean(
                     inHaleFlowList
                 )
             }
 
             if (k == 1 || k == 3 || k == 5 || k == 7 || k == 9) {
                 val error = String.format("%.2f", (3 - curvol1) / 3 * 100)
-                val result = if (abs(error.toFloat()) < 3) "通过" else "未通过"
+                val result = if (abs(error.toFloat()) < 3) "1" else "0"
                 exHaleFlowList.add(
                     FlowBean(
                         patientBean!!.patientId,

@@ -60,21 +60,6 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
         binding.llStart.setNoRepeatListener {
             if (binding.tvFlowStart.text == "开始") {
                 tts.speak("开始流量定标", TextToSpeech.QUEUE_FLUSH, null, "")
-//            if (Constants.isDebug) {
-//                val smallRangeFlow = 0 // 例如，120 L/min
-//                val largeRangeFlow = 30 // 例如，3000 L/min
-//
-//                val data = MudbusProtocol.generateFlowCalibrationCommand(
-//                    smallRangeFlow,
-//                    largeRangeFlow,
-//                )
-//
-//                LogUtils.d(tag + BaseUtil.bytes2HexStr(data) + "发送的数据")
-//
-//                LiveDataBus.get().with("测试").value = data
-//
-//                return@setNoRepeatListener
-//            }
                 //手动流量定标
                 if (binding.vpFlowTitle.currentItem == 0) {
                     LiveDataBus.get().with("clickFlowStart").value = "handleFlow"
@@ -91,24 +76,18 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
                 binding.tvFlowStart.text = "开始"
             }
         }
-        LiveDataBus.get().with("测试").observe(this) {//解析串口消息
-            if (it is ByteArray) {
-                LogUtils.d(tag + BaseUtil.bytes2HexStr(it) + "字节长度" + BaseUtil.bytes2HexStr(it).length)
-                val data = ModbusProtocol.parseFlowCalibrationData(it)
-                if (data != null) {
-                    val (smallRangeFlow, largeRangeFlow) = data
 
-                    LogUtils.d(tag + smallRangeFlow)
-
-                    LogUtils.d(tag + largeRangeFlow)
-
-                }
-
-            }
-        }
-        LiveDataBus.get().with("flowStart").observe(this) {//解析串口消息
+        //定标开始
+        LiveDataBus.get().with("flowStart").observe(this) {
             if (it is String) {
                 binding.tvFlowStart.text = "停止"
+            }
+        }
+
+        //定标结束
+        LiveDataBus.get().with("flowStop").observe(this) {
+            if (it is String) {
+                binding.tvFlowStart.text = "开始"
             }
         }
     }

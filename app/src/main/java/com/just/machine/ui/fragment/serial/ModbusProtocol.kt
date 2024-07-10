@@ -190,6 +190,7 @@ object ModbusProtocol {
 
             0x82 -> { // 设备心跳帧
                 // 处理逻辑
+                parseDeviceInfo(data)
             }
 
             0x91 -> { // 上传一类传感器数据
@@ -859,6 +860,8 @@ object ModbusProtocol {
             )
             return
         }
+
+        LiveDataBus.get().with("二类传感器").postValue(response)
 
         val lungTestData = LungTestData(
             // 返回解析后的数据

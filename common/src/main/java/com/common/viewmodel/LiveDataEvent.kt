@@ -54,6 +54,10 @@ class LiveDataEvent {
 
         const val CPXDYNAMICALL: Int = 0x029
 
+        const val FLOWS_MANUAL_SUCCESS: Int = 0x031
+
+        const val FLOWS_AUTO_SUCCESS: Int = 0x033
+
         const val MaxPatient: Int = 0x16//6分钟报告呼吸率
 
         /**

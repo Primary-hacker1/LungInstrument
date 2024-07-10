@@ -12,7 +12,10 @@ import com.just.machine.dao.PatientBean
 import com.just.machine.dao.PlantRepository
 import com.just.machine.dao.calibration.CalibrationRepository
 import com.just.machine.dao.calibration.EnvironmentalCalibrationBean
+import com.just.machine.dao.calibration.FlowAutoCalibrationResultBean
 import com.just.machine.dao.calibration.FlowBean
+import com.just.machine.dao.calibration.FlowCalibrationResultBean
+import com.just.machine.dao.calibration.FlowManualCalibrationResultBean
 import com.just.machine.dao.calibration.IngredientBean
 import com.just.machine.dao.lung.CPXBreathInOutData
 import com.just.machine.dao.lung.LungRepository
@@ -98,6 +101,33 @@ class MainViewModel @Inject constructor(
         )
     }
 
+    fun setFlowCaliResultBean(bean: FlowCalibrationResultBean) {
+        setBean(
+            bean,
+            environmentalDao::insertFlowCaliResult,
+            environmentalDao::getFlowCaliResult,
+            LiveDataEvent.FLOWS_SUCCESS
+        )
+    }
+
+    fun setFlowManualCaliResultBean(bean: FlowManualCalibrationResultBean) {
+        setBean(
+            bean,
+            environmentalDao::insertFlowManualCaliResult,
+            environmentalDao::getFlowManualCaliResult,
+            LiveDataEvent.FLOWS_MANUAL_SUCCESS
+        )
+    }
+
+    fun setFlowAutoCaliResultBean(bean: FlowAutoCalibrationResultBean) {
+        setBean(
+            bean,
+            environmentalDao::insertFlowAutoCaliResult,
+            environmentalDao::getFlowAutoCaliResult,
+            LiveDataEvent.FLOWS_AUTO_SUCCESS
+        )
+    }
+
     fun getEnvironmental() {//查询所有环境定标
         viewModelScope.launch {
             environmentalDao.getEnvironmentals().collect {
@@ -130,6 +160,35 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun getFlowCaliResult() {//查询流量定标结果
+        viewModelScope.launch {
+            environmentalDao.getFlowCaliResult().collect {
+                mEventHub.value = LiveDataEvent(
+                    LiveDataEvent.FLOWS_SUCCESS, it
+                )
+            }
+        }
+    }
+
+    fun getFlowManualCaliResult() {//查询流量手动定标结果
+        viewModelScope.launch {
+            environmentalDao.getFlowManualCaliResult().collect {
+                mEventHub.value = LiveDataEvent(
+                    LiveDataEvent.FLOWS_MANUAL_SUCCESS, it
+                )
+            }
+        }
+    }
+
+    fun getFlowAutoCaliResult() {//查询流量自动动定标结果
+        viewModelScope.launch {
+            environmentalDao.getFlowAutoCaliResult().collect {
+                mEventHub.value = LiveDataEvent(
+                    LiveDataEvent.FLOWS_AUTO_SUCCESS, it
+                )
+            }
+        }
+    }
 
     fun insertCPXBreathInOutData(bean: CPXBreathInOutData) {//新增运动参数
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

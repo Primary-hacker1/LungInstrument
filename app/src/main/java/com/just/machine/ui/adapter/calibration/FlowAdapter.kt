@@ -27,9 +27,11 @@ class FlowAdapter(val context: Context) :
         }
 
         if(item.calibrationResults?.isNotEmpty() == true){
-            if(item.calibrationResults == "未通过"){
+            if(item.calibrationResults == "0"){
+                binding.atvCalibrationResults.text = "未通过"
                 binding.atvCalibrationResults.setTextColor(ContextCompat.getColor(context,R.color.red))
             }else{
+                binding.atvCalibrationResults.text = "通过"
                 binding.atvCalibrationResults.setTextColor(ContextCompat.getColor(context,R.color.text3))
             }
         }

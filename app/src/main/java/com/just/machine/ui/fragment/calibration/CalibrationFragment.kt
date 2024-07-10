@@ -16,6 +16,7 @@ import com.common.base.visible
 import com.common.viewmodel.LiveDataEvent
 import com.just.machine.dao.setting.AllSettingBean
 import com.just.machine.model.Constants
+import com.just.machine.model.calibrate.Definition
 import com.just.machine.ui.adapter.FragmentChildAdapter
 import com.just.machine.ui.fragment.calibration.onekeycalibration.OneKeyCalibrationFragment
 import com.just.machine.ui.fragment.serial.ModbusProtocol
@@ -70,6 +71,7 @@ class CalibrationFragment : CommonBaseFragment<FragmentCalibrationBinding>() {
         }
 
         viewModel.getAllSettingBeans()
+        viewModel.getFlowCaliResult()
 
         viewModel.mEventHub.observe(this) {
             when (it.action) {
@@ -86,6 +88,15 @@ class CalibrationFragment : CommonBaseFragment<FragmentCalibrationBinding>() {
                         }
                         binding.toolbarCardi.tvHospitalName.text = settingBean.hospitalName
                     }
+                }
+
+                LiveDataEvent.FLOWS_SUCCESS -> {
+                    if (it.any !is MutableList<*>) {
+                        return@observe
+                    }
+
+                    val settings = it.any as MutableList<*>
+
                 }
             }
         }
@@ -107,6 +118,14 @@ class CalibrationFragment : CommonBaseFragment<FragmentCalibrationBinding>() {
 
         binding.vpCalibration.orientation = ViewPager2.ORIENTATION_VERTICAL // 设置垂直方向滑动
         binding.vpCalibration.offscreenPageLimit = 3
+
+        Definition.Cur_ADC_IN_LDES = 0.22F
+        Definition.Cur_ADC_OUT_LDES = 0.22F
+        Definition.Cur_ADC_IN_HDIM = 0.22F
+        Definition.Cur_ADC_OUT_HDIM = 0.22F
+
+        Definition.Cur_ADCSMALL_IN_LDES = 0.017F
+        Definition.Cur_ADCSMALL_OUT_LDES = 0.017F
     }
 
     private fun onButtonClick(button: AppCompatButton, position: Int) {
@@ -130,6 +149,7 @@ class CalibrationFragment : CommonBaseFragment<FragmentCalibrationBinding>() {
 //        }
         binding.toolbarCardi.ibBack.setNoRepeatListener {
             usbTransferUtil.write(ModbusProtocol.banOneSensor)
+            usbTransferUtil.write(ModbusProtocol.banTwoSensor)
             popBackStack()
         }
 
@@ -154,6 +174,8 @@ class CalibrationFragment : CommonBaseFragment<FragmentCalibrationBinding>() {
         }
 
         binding.btnCalibrationClose.setOnClickListener {
+            usbTransferUtil.write(ModbusProtocol.banOneSensor)
+            usbTransferUtil.write(ModbusProtocol.banTwoSensor)
             popBackStack()
         }
     }
