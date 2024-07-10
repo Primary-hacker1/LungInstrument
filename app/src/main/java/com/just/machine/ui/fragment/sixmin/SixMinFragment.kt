@@ -92,12 +92,12 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
     private var ready = false
 
     private var easyWindow: EasyWindow<EasyWindow<*>>? = null
-    private lateinit var vo2PerHr: TextView
-    private lateinit var vo2: TextView
-    private lateinit var rer: TextView
-    private lateinit var vo2PerKg: TextView
-    private lateinit var vco2: TextView
-    private lateinit var bf: TextView
+    private var vo2PerHr: TextView? = null
+    private var vo2: TextView? = null
+    private var rer: TextView? = null
+    private var vo2PerKg: TextView? = null
+    private var vco2: TextView? = null
+    private var bf: TextView? = null
 
     override fun loadData() {//懒加载
 

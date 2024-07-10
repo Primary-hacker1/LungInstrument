@@ -4,11 +4,9 @@ import android.graphics.Color
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
@@ -21,11 +19,11 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.just.machine.dao.calibration.FlowBean
+import com.just.machine.model.SharedPreferencesUtils
+import com.just.machine.model.calibrate.Definition
 import com.just.machine.ui.adapter.calibration.FlowAdapter
 import com.just.machine.ui.dialog.LoadingDialogFragment
-import com.just.machine.ui.dialog.LungCommonDialogFragment
 import com.just.machine.ui.fragment.serial.ModbusProtocol
-import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.FixCountDownTime
 import com.just.machine.util.LiveDataBus
@@ -35,11 +33,11 @@ import com.just.news.databinding.FragmentFlowHandleBinding
 import com.justsafe.libview.util.DateUtils
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import java.util.LinkedList
+import java.util.Queue
 import java.util.Timer
-import kotlin.concurrent.fixedRateTimer
+import kotlin.math.abs
+import kotlin.math.sqrt
 
 
 /**
@@ -50,12 +48,12 @@ import kotlin.concurrent.fixedRateTimer
 @AndroidEntryPoint
 class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
 
-    private lateinit var usbTransferUtil: USBTransferUtil //usb工具类
+    private var usbTransferUtil: USBTransferUtil? = null //usb工具类
     private val viewModel by viewModels<MainViewModel>()
     private var isPull = true
-    private lateinit var mDownTime: FixCountDownTime
-    private lateinit var timer: Timer
-    private lateinit var startLoadingDialogFragment: LoadingDialogFragment
+    private var mDownTime: FixCountDownTime? = null
+    private var timer: Timer? = null
+    private var startLoadingDialogFragment: LoadingDialogFragment? = null
 
     private val strVol = arrayOf(
         "吸气容积1",
@@ -103,21 +101,47 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
     private var outFlowVol5DataSet: LineDataSet? = null
 
     private var isStart = false
-    private var calibrateCount = 1 //定标计数器
-    private var iFlag = 0
+    private var k = 1 //定标计数器
     private var time = 0
-    private var isStop = false
-    private var isZero = false
     private var ftemplow = 0
     private var ftemphigh = 0
-    private var ftemp = 0;
+    private var ftemp = 0f
     private var iscer = false
-    private var startsec = 0
-    private var autoIndex = 0
+    private var startsec = 0f
+    private var Autoindex = 0
     private var startSec = 0f
     private var startVol = 0f
     private var startFlow = 0f
     private var tempvol = 0f
+    private var dl: Double = 0.0
+    private var dh: Double = 0.0
+    private var tempv = 0
+    private var tempq = 0
+    private var tempcalc = 0f
+    private var tempcalcHigh = 0f
+    private var ftempHigh = 0f
+    private var ManualFlowState = false //false为拉(吸)，true为推(呼)
+
+    private var ADC_OUT_LDES_temp = mutableListOf<Float>()
+    private var ADC_IN_LDES_temp = mutableListOf<Float>()
+    private var ADC_OUT_HDIM_temp = mutableListOf<Float>()
+    private var ADC_IN_HDIM_temp = mutableListOf<Float>()
+
+    private var ADC_OUT_LDES = 0f
+    private var ADC_IN_LDES = 0f
+    private var ADC_OUT_HDIM = 0f
+    private var ADC_IN_HDIM = 0f
+    private var iset = 1f
+
+    private var m_AccuracyIn = 0f
+    private var m_AccuracyOut = 0f
+    private var m_PrecisionIn = 0f
+    private var m_PrecisionOut = 0f
+
+    var TempDl: Queue<Double> = LinkedList()
+    var TempDh: Queue<Double> = LinkedList()
+
+    var dicvol: MutableMap<Int, MutableList<Float>> = mutableMapOf()
 
     private var inHaleFlowList = mutableListOf<FlowBean>()
     private var exHaleFlowList = mutableListOf<FlowBean>()
@@ -156,17 +180,9 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
             inHaleFlowAdapter.toggleItemBackground(position)
         }
 
-//        inHaleFlowAdapter.setItemsBean(
-//            mutableListOf(FlowBean(0, "", 1, "吸气容积1", "3", "3.003", "0.92"))
-//        )
-
         exHaleFlowAdapter.setItemClickListener { _, position ->
             exHaleFlowAdapter.toggleItemBackground(position)
         }
-
-//        exHaleFlowAdapter.setItemsBean(
-//            mutableListOf(FlowBean(0, "", 1, "呼气容积1", "3", "2.993", "-1.44"))
-//        )
 
         viewModel.mEventHub.observe(this) {
             when (it.action) {
@@ -190,13 +206,13 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                 return@setNoRepeatListener
             }
             if (isPull) {
-                mDownTime.start(object : FixCountDownTime.OnTimerCallBack {
+                mDownTime!!.start(object : FixCountDownTime.OnTimerCallBack {
                     override fun onStart() {
 
                     }
 
                     override fun onTick(times: Int) {
-                        when (calibrateCount) {
+                        when (k) {
                             1 -> {
                                 inVolSec1DataSet!!.addEntry(
                                     Entry(
@@ -307,18 +323,18 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                                     0,
                                     DateUtils.nowTimeString,
                                     1,
-                                    strVol[calibrateCount - 1],
+                                    strVol[k - 1],
                                     "3",
                                     startVol.toString(),
-                                    if (calibrateCount == 3) "-1.05" else "0.92"
+                                    if (k == 3) "-1.05" else "0.92"
                                 )
                             )
                             inHaleFlowAdapter.setItemsBean(
                                 inHaleFlowList
                             )
-                            mDownTime.setmTimes(20)
+                            mDownTime!!.setmTimes(20)
 
-                            calibrateCount++
+                            k++
                             startSec = 0f
                             startVol = 0f
                             startFlow = 0f
@@ -329,13 +345,13 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                     }
                 })
             } else {
-                mDownTime.start(object : FixCountDownTime.OnTimerCallBack {
+                mDownTime!!.start(object : FixCountDownTime.OnTimerCallBack {
                     override fun onStart() {
 
                     }
 
                     override fun onTick(times: Int) {
-                        when (calibrateCount) {
+                        when (k) {
                             2 -> {
                                 outVolSec1DataSet!!.addEntry(
                                     Entry(
@@ -442,18 +458,18 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                                 0,
                                 DateUtils.nowTimeString,
                                 1,
-                                strVol[calibrateCount - 1],
+                                strVol[k - 1],
                                 "3",
                                 startVol.toString(),
-                                if (calibrateCount == 8) "-0.95" else "1.02"
+                                if (k == 8) "-0.95" else "1.02"
                             )
                         )
                         exHaleFlowAdapter.setItemsBean(
                             exHaleFlowList
                         )
-                        mDownTime.setmTimes(20)
+                        mDownTime!!.setmTimes(20)
 
-                        calibrateCount++
+                        k++
                         startSec = 0f
                         startVol = 0f
                         startFlow = 0f
@@ -469,27 +485,17 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
             if (it is String) {
                 if (it == "handleFlow") {
                     //开始手动定标
-                    stopPortSend()
-                    lifecycleScope.launch(Dispatchers.Main) {
-                        delay(100)
-                        isZeroSuccess()
-                    }
-                    lifecycleScope.launch(Dispatchers.Main) {
-                        delay(100)
-                        isZero = false
-                        if (isZero) {
-                            isStart = true
-                            sendCalibraCommand()
-                            LiveDataBus.get().with("flowStart").value = "handleFlow"
-                            iFlag = 2
-                            isStop = false
-                            binding.tvPullDirection.text = "拉"
-                            binding.tvPullDirection.setBackgroundResource(R.drawable.flow_pull)
-                        }else{
-                            LungCommonDialogFragment.startCommonDialogFragment(
-                                requireActivity().supportFragmentManager, "定标失败!", "2"
-                            )
-                        }
+//                    lifecycleScope.launch(Dispatchers.Main) {
+//                        delay(100)
+//                        isZeroSuccess()
+//                    }
+                    if (ModbusProtocol.isDeviceConnect) {
+                        prepareManualFlowCalibration()
+                        sendCalibraCommand()
+                        LiveDataBus.get().with("flowStart").postValue("handleFlow")
+                    } else {
+                        toast("设备未连接!!!")
+//                        startLoadingDialogFragment = LoadingDialogFragment.startLoadingDialogFragment(activity!!.supportFragmentManager,"正在校零...")
                     }
                 }
             }
@@ -506,8 +512,902 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
         }
 
         //串口数据
-        LiveDataBus.get().with("GetDeviceInfo").observe(this) {
+        LiveDataBus.get().with("二类传感器").observe(this) {
+            if (it is ByteArray) {
+                Autoindex++
+                if (Autoindex <= 200) {
+                    ftemplow += it[14] + it[15] * 256;
+                    ftemphigh += it[16] + it[17] * 256;
+                }
+                if (Autoindex == 200) {
+                    Definition.fzeroLow = ftemplow / Autoindex.toFloat()
+                    Definition.fzeroHigh = ftemphigh / Autoindex.toFloat()
+                }
+                if (Autoindex > 200) {
+                    calculateFlow(
+                        (it[14] + it[15] * 256).toFloat(),
+                        (it[16] + it[17] * 256).toFloat()
+                    )
+                }
+            }
+        }
+    }
 
+    private fun calculateFlow(signallow: Float, signalhigh: Float) {
+        var flow = 0f
+        dl = (signallow - Definition.fzeroLow).toDouble()
+        dh = (signalhigh - Definition.fzeroHigh).toDouble()
+        var dtemp = 0.0
+        var dtemphigh = 0.0
+        TempDl.add(dl)
+        TempDh.add(dh)
+
+        if (TempDl.size >= 21) {
+            TempDl.poll()
+            TempDh.poll()
+
+            dtemp = TempDl.sum() / TempDl.size
+            dtemphigh = TempDh.sum() / TempDh.size
+
+            if (k == 0) {
+                if (dtemp > Definition.Noise_AD) {
+                    tempv++
+                    if (tempv > 1) {
+                        iscer = true
+                        k = 0
+                        if (dtemp < Definition.LDES_AD && dtemp >= Definition.LowLimit_AD) {
+                            flow = (sqrt(dtemp) * Definition.Cur_ADC_IN_LDES * 1f).toFloat()
+                            ftemp += flow / Definition.Sample_rate;
+                            tempcalc += (sqrt(dtemp) * 1f / Definition.Sample_rate).toFloat()
+                            tempvol = abs(ftemp + ftempHigh);
+                        } else if (dtemp > Definition.LDES_AD && dtemp <= Definition.HighLimit_AD) {
+                            flow = (sqrt(dtemp) * Definition.Cur_ADC_IN_LDES).toFloat()
+                            ftemp += flow / Definition.Sample_rate
+                            tempcalc += (sqrt(dtemp) / Definition.Sample_rate).toFloat()
+                            tempvol = abs(ftemp + ftempHigh);
+                        } else if (dtemp > Definition.HighLimit_AD || dtemp < Definition.LowLimit_AD) {
+                            flow = (sqrt(dtemphigh) * Definition.Cur_ADC_IN_HDIM).toFloat()
+                            ftempHigh += flow / Definition.Sample_rate
+                            tempcalcHigh += (sqrt(dtemphigh) / Definition.Sample_rate).toFloat()
+                            tempvol = abs((ftemp + ftempHigh))
+                        }
+                        startsec += 0.01f
+
+                        inVolSec1DataSet!!.addEntry(
+                            Entry(
+                                startSec,
+                                (ftemp + ftempHigh)
+                            )
+                        )
+                        inFlowVol1DataSet!!.addEntry(
+                            Entry(
+                                (ftemp + ftempHigh),
+                                flow
+                            )
+                        )
+
+                        binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
+                        binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
+                        binding.chartFlowHandleCapacityTime.invalidate()
+
+                        binding.chartFlowHandleFlowCapacity.lineData.notifyDataChanged()
+                        binding.chartFlowHandleFlowCapacity.notifyDataSetChanged()
+                        binding.chartFlowHandleFlowCapacity.invalidate()
+
+                        if (dicvol.containsKey(k)) {
+                            dicvol[k]!!.add((ftemp + ftempHigh))
+                        } else {
+                            dicvol[k] = arrayListOf((ftemp + ftempHigh))
+                        }
+                    }
+                }
+                if (-Definition.Noise_AD < dtemp && dtemp < Definition.Noise_AD && !iscer) {
+                    tempv = 0
+                }
+                if (-Definition.Noise_AD < dtemp && dtemp < Definition.Noise_AD && iscer) {
+                    tempq++
+                    if (tempq == 50) {
+                        if (tempvol > 2 && tempvol < 4) {
+                            checkCerbra()
+                            if (ftemp > 2.6) {
+                                ADC_IN_LDES_temp.add(3 / tempcalc);
+                                ADC_IN_LDES = ADC_IN_LDES_temp.average().toFloat()
+                            } else {
+                                if (tempcalcHigh == 0f) {
+                                    ADC_IN_HDIM = 0f
+                                } else {
+                                    ADC_IN_HDIM_temp.add((3 - ftemp) / tempcalcHigh);
+                                    ADC_IN_HDIM = ADC_IN_HDIM_temp.average().toFloat()
+                                }
+                            }
+                            resetElement()
+                            setPushStyle()
+                            k = 1
+                        } else {
+                            resetParmet(0)
+                            setPullStyle()
+                            k = 0
+                            if (dicvol.containsKey(k))
+                                dicvol[k]?.clear()
+                        }
+                    }
+                }
+            }
+            if (k == 1) {
+                if (dtemp < -Definition.Noise_AD) {
+                    tempv++
+                    if (tempv > 1) {
+                        iscer = true
+                        k = 1
+                        if (dtemp > -Definition.LDES_AD) {
+                            flow = (sqrt(-dtemp) * Definition.Cur_ADC_OUT_LDES * iset).toFloat()
+                            ftemp += flow / Definition.Sample_rate
+                            tempcalc += (sqrt(-dtemp) * iset / Definition.Sample_rate).toFloat()
+                            tempvol = abs(-ftemp - ftempHigh)
+                        } else if (dtemp < -Definition.LDES_AD && dtemp > Definition.LowLimit_AD) {
+                            flow = (sqrt(-dtemp) * Definition.Cur_ADC_OUT_LDES).toFloat()
+                            ftemp += flow / Definition.Sample_rate
+                            tempcalc += (sqrt(-dtemp) / Definition.Sample_rate).toFloat()
+                            tempvol = abs(-ftemp - ftempHigh);
+                        } else if (dtemp < Definition.LowLimit_AD) {
+                            flow = (sqrt(-dtemphigh) * Definition.Cur_ADC_OUT_HDIM).toFloat()
+                            ftempHigh += flow / Definition.Sample_rate
+                            tempcalcHigh += (sqrt(-dtemphigh) / Definition.Sample_rate).toFloat()
+                            tempvol = abs((-ftemp - ftempHigh))
+                        }
+                        startsec += 0.01f
+
+                        outVolSec1DataSet!!.addEntry(
+                            Entry(
+                                startSec,
+                                (ftemp + ftempHigh)
+                            )
+                        )
+                        outFlowVol1DataSet!!.addEntry(
+                            Entry(
+                                (ftemp + ftempHigh),
+                                flow
+                            )
+                        )
+
+                        binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
+                        binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
+                        binding.chartFlowHandleCapacityTime.invalidate()
+
+                        binding.chartFlowHandleFlowCapacity.lineData.notifyDataChanged()
+                        binding.chartFlowHandleFlowCapacity.notifyDataSetChanged()
+                        binding.chartFlowHandleFlowCapacity.invalidate()
+
+                        if (dicvol.containsKey(k)) {
+                            dicvol[k]!!.add(-ftemp - ftempHigh)
+                        } else {
+                            dicvol[k] = arrayListOf(-ftemp - ftempHigh)
+                        }
+                    }
+                }
+                if (-Definition.Noise_AD < dtemp && dtemp < Definition.Noise_AD && !iscer) {
+                    tempv = 0
+                }
+                if (-Definition.Noise_AD < dtemp && dtemp < Definition.Noise_AD && iscer) {
+                    tempq++
+                    if (tempq == 50) {
+                        if (tempvol > 2 && tempvol < 4) {
+                            checkCerbra()
+                            if (ftemp > 2.6) {
+                                ADC_OUT_LDES_temp.add(3 / tempcalc)
+                                ADC_OUT_LDES = ADC_OUT_LDES_temp.average().toFloat()
+                            } else {
+                                if (tempcalcHigh == 0f) {
+                                    ADC_OUT_HDIM = 0f
+                                } else {
+                                    ADC_OUT_HDIM_temp.add((3 - ftemp) / tempcalcHigh);
+                                    ADC_OUT_HDIM = ADC_OUT_HDIM_temp.average().toFloat()
+                                }
+                            }
+                            resetElement()
+                            setPullStyle()
+                            k = 1
+                        } else {
+                            resetParmet(1)
+                            setPushStyle()
+                            k = 0
+                            if (dicvol.containsKey(k))
+                                dicvol[k]?.clear()
+                        }
+                    }
+                }
+            }
+            if (k == 2) {
+                if (dtemp > Definition.Noise_AD) {
+                    tempv++
+                    if (tempv > 1) {
+                        iscer = true
+                        k = 2
+                        if (dtemp < Definition.LDES_AD) {
+                            flow = (sqrt(dtemp) * Definition.Cur_ADC_IN_LDES * 1f).toFloat()
+                            ftemp += flow / Definition.Sample_rate;
+                            tempcalc += (sqrt(dtemp) * 1f / Definition.Sample_rate).toFloat()
+                            tempvol = abs(ftemp + ftempHigh);
+                        } else if (dtemp > Definition.LDES_AD && dtemp < Definition.HighLimit_AD) {
+                            flow = (sqrt(dtemp) * Definition.Cur_ADC_IN_LDES).toFloat()
+                            ftemp += flow / Definition.Sample_rate
+                            tempcalc += (sqrt(dtemp) / Definition.Sample_rate).toFloat()
+                            tempvol = abs(ftemp + ftempHigh)
+                        } else if (dtemp > Definition.HighLimit_AD) {
+                            flow = (sqrt(dtemphigh) * Definition.Cur_ADC_IN_HDIM).toFloat()
+                            ftempHigh += flow / Definition.Sample_rate
+                            tempcalcHigh += (sqrt(dtemphigh) / Definition.Sample_rate).toFloat()
+                            tempvol = abs((ftemp + ftempHigh))
+                        }
+                        startsec += 0.01f
+
+                        inVolSec2DataSet!!.addEntry(
+                            Entry(
+                                startSec,
+                                (ftemp + ftempHigh)
+                            )
+                        )
+                        inFlowVol2DataSet!!.addEntry(
+                            Entry(
+                                (ftemp + ftempHigh),
+                                flow
+                            )
+                        )
+
+                        binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
+                        binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
+                        binding.chartFlowHandleCapacityTime.invalidate()
+
+                        binding.chartFlowHandleFlowCapacity.lineData.notifyDataChanged()
+                        binding.chartFlowHandleFlowCapacity.notifyDataSetChanged()
+                        binding.chartFlowHandleFlowCapacity.invalidate()
+
+                        if (dicvol.containsKey(k)) {
+                            dicvol[k]!!.add((ftemp + ftempHigh))
+                        } else {
+                            dicvol[k] = arrayListOf((ftemp + ftempHigh))
+                        }
+                    }
+                }
+                if (-Definition.Noise_AD < dtemp && dtemp < Definition.Noise_AD && !iscer) {
+                    tempv = 0
+                }
+                if (-Definition.Noise_AD < dtemp && dtemp < Definition.Noise_AD && iscer) {
+                    tempq++
+                    if (tempq == 50) {
+                        if (tempvol > 2 && tempvol < 4) {
+                            checkCerbra()
+                            if (ftemp > 2.6) {
+                                ADC_IN_LDES_temp.add(3 / tempcalc);
+                                ADC_IN_LDES = ADC_IN_LDES_temp.average().toFloat()
+                            } else {
+                                if (tempcalcHigh == 0f) {
+                                    ADC_IN_HDIM = 0f
+                                } else {
+                                    ADC_IN_HDIM_temp.add((3 - ftemp) / tempcalcHigh);
+                                    ADC_IN_HDIM = ADC_IN_HDIM_temp.average().toFloat()
+                                }
+                            }
+                            resetElement()
+                            setPushStyle()
+                            k = 3
+                        } else {
+                            resetParmet(2)
+                            setPullStyle()
+                            k = 2
+                            if (dicvol.containsKey(k))
+                                dicvol[k]?.clear()
+                        }
+                    }
+                }
+            }
+            if (k == 3) {
+                if (dtemp < -Definition.Noise_AD) {
+                    tempv++
+                    if (tempv > 1) {
+                        iscer = true
+                        k = 3
+                        if (dtemp > -Definition.LDES_AD) {
+                            flow = (sqrt(-dtemp) * Definition.Cur_ADC_OUT_LDES * iset).toFloat()
+                            ftemp += flow / Definition.Sample_rate
+                            tempcalc += (sqrt(-dtemp) * iset / Definition.Sample_rate).toFloat()
+                            tempvol = abs(-ftemp - ftempHigh)
+                        } else if (dtemp < -Definition.LDES_AD && dtemp > Definition.LowLimit_AD) {
+                            flow = (sqrt(-dtemp) * Definition.Cur_ADC_OUT_LDES).toFloat()
+                            ftemp += flow / Definition.Sample_rate
+                            tempcalc += (sqrt(-dtemp) / Definition.Sample_rate).toFloat()
+                            tempvol = abs(-ftemp - ftempHigh);
+                        } else if (dtemp < Definition.LowLimit_AD) {
+                            flow = (sqrt(-dtemphigh) * Definition.Cur_ADC_OUT_HDIM).toFloat()
+                            ftempHigh += flow / Definition.Sample_rate
+                            tempcalcHigh += (sqrt(-dtemphigh) / Definition.Sample_rate).toFloat()
+                            tempvol = abs((-ftemp - ftempHigh))
+                        }
+                        startsec += 0.01f
+
+                        outVolSec2DataSet!!.addEntry(
+                            Entry(
+                                startSec,
+                                (ftemp + ftempHigh)
+                            )
+                        )
+                        outFlowVol2DataSet!!.addEntry(
+                            Entry(
+                                (ftemp + ftempHigh),
+                                flow
+                            )
+                        )
+
+                        binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
+                        binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
+                        binding.chartFlowHandleCapacityTime.invalidate()
+
+                        binding.chartFlowHandleFlowCapacity.lineData.notifyDataChanged()
+                        binding.chartFlowHandleFlowCapacity.notifyDataSetChanged()
+                        binding.chartFlowHandleFlowCapacity.invalidate()
+
+                        if (dicvol.containsKey(k)) {
+                            dicvol[k]!!.add(-ftemp - ftempHigh)
+                        } else {
+                            dicvol[k] = arrayListOf(-ftemp - ftempHigh)
+                        }
+                    }
+                }
+                if (-Definition.Noise_AD < dtemp && dtemp < Definition.Noise_AD && !iscer) {
+                    tempv = 0
+                }
+                if (-Definition.Noise_AD < dtemp && dtemp < Definition.Noise_AD && iscer) {
+                    tempq++
+                    if (tempq == 50) {
+                        if (tempvol > 2 && tempvol < 4) {
+                            checkCerbra()
+                            if (ftemp > 2.6) {
+                                ADC_OUT_LDES_temp.add(3 / tempcalc)
+                                ADC_OUT_LDES = ADC_OUT_LDES_temp.average().toFloat()
+                            } else {
+                                if (tempcalcHigh == 0f) {
+                                    ADC_OUT_HDIM = 0f
+                                } else {
+                                    ADC_OUT_HDIM_temp.add((3 - ftemp) / tempcalcHigh);
+                                    ADC_OUT_HDIM = ADC_OUT_HDIM_temp.average().toFloat()
+                                }
+                            }
+                            resetElement()
+                            setPullStyle()
+                            k = 4
+                        } else {
+                            resetParmet(3)
+                            setPushStyle()
+                            k = 3
+                            if (dicvol.containsKey(k))
+                                dicvol[k]?.clear()
+                        }
+                    }
+                }
+            }
+            if (k == 4) {
+                dtemp = TempDl.average()
+                if (dtemp > Definition.Noise_AD) {
+                    tempv++
+                    if (tempv > 1) {
+                        iscer = true
+                        k = 4
+                        if (dtemp < Definition.LDES_AD) {
+                            flow = (sqrt(dtemp) * Definition.Cur_ADC_IN_LDES * iset).toFloat()
+                            ftemp += flow / Definition.Sample_rate
+                            tempcalc += (sqrt(dtemp) / Definition.Sample_rate).toFloat()
+                            tempvol = abs(ftemp + ftempHigh)
+                        } else if (dtemp > Definition.LDES_AD && dtemp < Definition.HighLimit_AD) {
+                            flow = (sqrt(dtemp) * Definition.Cur_ADC_IN_LDES).toFloat()
+                            ftemp += flow / Definition.Sample_rate
+                            tempcalc += (sqrt(dtemp) / Definition.Sample_rate).toFloat()
+                            tempvol = abs(ftemp + ftempHigh)
+                        } else if (dtemp > Definition.HighLimit_AD) {
+                            flow = (sqrt(dtemphigh) * Definition.Cur_ADC_IN_HDIM).toFloat()
+                            ftempHigh += flow / Definition.Sample_rate
+                            tempcalcHigh += (sqrt(dtemphigh) / Definition.Sample_rate).toFloat()
+                            tempvol = abs((ftemp + ftempHigh))
+                        }
+                        startsec += 0.01f
+
+                        inVolSec3DataSet!!.addEntry(
+                            Entry(
+                                startSec,
+                                (ftemp + ftempHigh)
+                            )
+                        )
+                        inFlowVol3DataSet!!.addEntry(
+                            Entry(
+                                (ftemp + ftempHigh),
+                                flow
+                            )
+                        )
+
+                        binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
+                        binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
+                        binding.chartFlowHandleCapacityTime.invalidate()
+
+                        binding.chartFlowHandleFlowCapacity.lineData.notifyDataChanged()
+                        binding.chartFlowHandleFlowCapacity.notifyDataSetChanged()
+                        binding.chartFlowHandleFlowCapacity.invalidate()
+
+                        if (dicvol.containsKey(k)) {
+                            dicvol[k]!!.add((ftemp + ftempHigh))
+                        } else {
+                            dicvol[k] = arrayListOf((ftemp + ftempHigh))
+                        }
+                    }
+                }
+                if (-Definition.Noise_AD < dtemp && dtemp < Definition.Noise_AD && !iscer) {
+                    tempv = 0
+                }
+                if (-Definition.Noise_AD < dtemp && dtemp < Definition.Noise_AD && iscer) {
+                    tempq++
+                    if (tempq == 50) {
+                        if (tempvol > 2 && tempvol < 4) {
+                            if (ftemp > 2.6) {
+                                ADC_IN_LDES_temp.add(3 / tempcalc)
+                                ADC_IN_LDES = ADC_IN_LDES_temp.average().toFloat()
+                            } else {
+                                if (tempcalcHigh == 0f) {
+                                    ADC_IN_HDIM = 0f
+                                } else {
+                                    ADC_IN_HDIM_temp.add((3 - ftemp) / tempcalcHigh);
+                                    ADC_IN_HDIM = ADC_IN_HDIM_temp.average().toFloat()
+                                }
+                            }
+                            checkCerbra()
+                            resetElement()
+                            setPushStyle()
+                            k = 5
+                        } else {
+                            resetParmet(4)
+                            setPullStyle()
+                            k = 4
+                            if (dicvol.containsKey(k))
+                                dicvol[k]?.clear()
+                        }
+                    }
+                }
+            }
+            if (k == 5) {
+                dtemp = TempDl.average()
+                if (dtemp < -Definition.Noise_AD) {
+                    tempv++
+                    if (tempv > 1) {
+                        iscer = true
+                        k = 5
+                        if (dtemp > -Definition.LDES_AD) {
+                            flow = (sqrt(-dtemp) * Definition.Cur_ADC_OUT_LDES * iset).toFloat()
+                            ftemp += flow / Definition.Sample_rate
+                            tempcalc += (sqrt(-dtemp) * iset / Definition.Sample_rate).toFloat()
+                            tempvol = abs(-ftemp - ftempHigh)
+                        } else if (dtemp < -Definition.LDES_AD && dtemp > Definition.LowLimit_AD) {
+                            flow = (sqrt(-dtemp) * Definition.Cur_ADC_OUT_LDES).toFloat()
+                            ftemp += flow / Definition.Sample_rate
+                            tempcalc += (sqrt(-dtemp) / Definition.Sample_rate).toFloat()
+                            tempvol = abs(-ftemp - ftempHigh)
+                        } else if (dtemp < Definition.LowLimit_AD) {
+                            flow = (sqrt(-dtemphigh) * Definition.Cur_ADC_OUT_HDIM).toFloat()
+                            ftempHigh += flow / Definition.Sample_rate
+                            tempcalcHigh += (sqrt(-dtemphigh) / Definition.Sample_rate).toFloat()
+                            tempvol = abs((-ftemp - ftempHigh))
+                        }
+                        startsec += 0.01f
+
+                        outVolSec3DataSet!!.addEntry(
+                            Entry(
+                                startSec,
+                                (ftemp + ftempHigh)
+                            )
+                        )
+                        outFlowVol3DataSet!!.addEntry(
+                            Entry(
+                                (ftemp + ftempHigh),
+                                flow
+                            )
+                        )
+
+                        binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
+                        binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
+                        binding.chartFlowHandleCapacityTime.invalidate()
+
+                        binding.chartFlowHandleFlowCapacity.lineData.notifyDataChanged()
+                        binding.chartFlowHandleFlowCapacity.notifyDataSetChanged()
+                        binding.chartFlowHandleFlowCapacity.invalidate()
+
+                        if (dicvol.containsKey(k)) {
+                            dicvol[k]!!.add(-ftemp - ftempHigh)
+                        } else {
+                            dicvol[k] = arrayListOf(-ftemp - ftempHigh)
+                        }
+                    }
+                }
+                if (-Definition.Noise_AD < dtemp && dtemp < Definition.Noise_AD && !iscer) {
+                    tempv = 0
+                }
+                if (-Definition.Noise_AD < dtemp && dtemp < Definition.Noise_AD && iscer) {
+                    tempq++
+                    if (tempq == 50) {
+                        if (tempvol > 2 && tempvol < 4) {
+                            if (ftemp > 2.6) {
+                                ADC_OUT_LDES_temp.add(3 / tempcalc)
+                                ADC_OUT_LDES = ADC_OUT_LDES_temp.average().toFloat()
+                            } else {
+                                if (tempcalcHigh == 0f) {
+                                    ADC_OUT_HDIM = 0f
+                                } else {
+                                    ADC_OUT_HDIM_temp.add((3 - ftemp) / tempcalcHigh);
+                                    ADC_OUT_HDIM = ADC_OUT_HDIM_temp.average().toFloat()
+                                }
+                            }
+                            checkCerbra()
+                            resetElement()
+                            setPullStyle()
+                            k = 6
+                        } else {
+                            resetParmet(5)
+                            setPushStyle()
+                            k = 5
+                            if (dicvol.containsKey(k))
+                                dicvol[k]?.clear()
+                        }
+                    }
+                }
+            }
+            if (k == 6) {
+                dtemp = TempDl.average()
+                if (dtemp > Definition.Noise_AD) {
+                    tempv++
+                    if (tempv > 1) {
+                        iscer = true
+                        k = 6
+                        if (dtemp < Definition.LDES_AD) {
+                            flow = (sqrt(dtemp) * Definition.Cur_ADC_IN_LDES * iset).toFloat()
+                            ftemp += flow / Definition.Sample_rate
+                            tempcalc += (sqrt(dtemp) / Definition.Sample_rate).toFloat()
+                            tempvol = abs(ftemp + ftempHigh)
+                        } else if (dtemp > Definition.LDES_AD && dtemp < Definition.HighLimit_AD) {
+                            flow = (sqrt(dtemp) * Definition.Cur_ADC_IN_LDES).toFloat()
+                            ftemp += flow / Definition.Sample_rate
+                            tempcalc += (sqrt(dtemp) / Definition.Sample_rate).toFloat()
+                            tempvol = abs(ftemp + ftempHigh)
+                        } else if (dtemp > Definition.HighLimit_AD) {
+                            flow = (sqrt(dtemphigh) * Definition.Cur_ADC_IN_HDIM).toFloat()
+                            ftempHigh += flow / Definition.Sample_rate
+                            tempcalcHigh += (sqrt(dtemphigh) / Definition.Sample_rate).toFloat()
+                            tempvol = abs((ftemp + ftempHigh))
+                        }
+                        startsec += 0.01f
+
+                        inVolSec4DataSet!!.addEntry(
+                            Entry(
+                                startSec,
+                                (ftemp + ftempHigh)
+                            )
+                        )
+                        inFlowVol4DataSet!!.addEntry(
+                            Entry(
+                                (ftemp + ftempHigh),
+                                flow
+                            )
+                        )
+
+                        binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
+                        binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
+                        binding.chartFlowHandleCapacityTime.invalidate()
+
+                        binding.chartFlowHandleFlowCapacity.lineData.notifyDataChanged()
+                        binding.chartFlowHandleFlowCapacity.notifyDataSetChanged()
+                        binding.chartFlowHandleFlowCapacity.invalidate()
+
+                        if (dicvol.containsKey(k)) {
+                            dicvol[k]!!.add((ftemp + ftempHigh))
+                        } else {
+                            dicvol[k] = arrayListOf((ftemp + ftempHigh))
+                        }
+                    }
+                }
+                if (-Definition.Noise_AD < dtemp && dtemp < Definition.Noise_AD && !iscer) {
+                    tempv = 0
+                }
+                if (-Definition.Noise_AD < dtemp && dtemp < Definition.Noise_AD && iscer) {
+                    tempq++
+                    if (tempq == 50) {
+                        if (tempvol > 2 && tempvol < 4) {
+                            if (ftemp > 2.6) {
+                                ADC_IN_LDES_temp.add(3 / tempcalc)
+                                ADC_IN_LDES = ADC_IN_LDES_temp.average().toFloat()
+                            } else {
+                                if (tempcalcHigh == 0f) {
+                                    ADC_IN_HDIM = 0f
+                                } else {
+                                    ADC_IN_HDIM_temp.add((3 - ftemp) / tempcalcHigh);
+                                    ADC_IN_HDIM = ADC_IN_HDIM_temp.average().toFloat()
+                                }
+                            }
+                            checkCerbra()
+                            resetElement()
+                            setPushStyle()
+                            k = 7
+                        } else {
+                            resetParmet(6)
+                            setPullStyle()
+                            k = 6
+                            if (dicvol.containsKey(k))
+                                dicvol[k]?.clear()
+                        }
+                    }
+                }
+            }
+            if (k == 7) {
+                dtemp = TempDl.average()
+                if (dtemp < -Definition.Noise_AD) {
+                    tempv++
+                    if (tempv > 1) {
+                        iscer = true
+                        k = 7
+                        if (dtemp > -Definition.LDES_AD) {
+                            flow = (sqrt(-dtemp) * Definition.Cur_ADC_OUT_LDES * iset).toFloat()
+                            ftemp += flow / Definition.Sample_rate
+                            tempcalc += (sqrt(-dtemp) * iset / Definition.Sample_rate).toFloat()
+                            tempvol = abs(-ftemp - ftempHigh)
+                        } else if (dtemp < -Definition.LDES_AD && dtemp > Definition.LowLimit_AD) {
+                            flow = (sqrt(-dtemp) * Definition.Cur_ADC_OUT_LDES).toFloat()
+                            ftemp += flow / Definition.Sample_rate
+                            tempcalc += (sqrt(-dtemp) / Definition.Sample_rate).toFloat()
+                            tempvol = abs(-ftemp - ftempHigh)
+                        } else if (dtemp < Definition.LowLimit_AD) {
+                            flow = (sqrt(-dtemphigh) * Definition.Cur_ADC_OUT_HDIM).toFloat()
+                            ftempHigh += flow / Definition.Sample_rate
+                            tempcalcHigh += (sqrt(-dtemphigh) / Definition.Sample_rate).toFloat()
+                            tempvol = abs((-ftemp - ftempHigh))
+                        }
+                        startsec += 0.01f
+
+                        outVolSec4DataSet!!.addEntry(
+                            Entry(
+                                startSec,
+                                (ftemp + ftempHigh)
+                            )
+                        )
+                        outFlowVol4DataSet!!.addEntry(
+                            Entry(
+                                (ftemp + ftempHigh),
+                                flow
+                            )
+                        )
+
+                        binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
+                        binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
+                        binding.chartFlowHandleCapacityTime.invalidate()
+
+                        binding.chartFlowHandleFlowCapacity.lineData.notifyDataChanged()
+                        binding.chartFlowHandleFlowCapacity.notifyDataSetChanged()
+                        binding.chartFlowHandleFlowCapacity.invalidate()
+
+                        if (dicvol.containsKey(k)) {
+                            dicvol[k]!!.add(-ftemp - ftempHigh)
+                        } else {
+                            dicvol[k] = arrayListOf(-ftemp - ftempHigh)
+                        }
+                    }
+                }
+                if (-Definition.Noise_AD < dtemp && dtemp < Definition.Noise_AD && !iscer) {
+                    tempv = 0
+                }
+                if (-Definition.Noise_AD < dtemp && dtemp < Definition.Noise_AD && iscer) {
+                    tempq++
+                    if (tempq == 50) {
+                        if (tempvol > 2 && tempvol < 4) {
+                            if (ftemp > 2.6) {
+                                ADC_OUT_LDES_temp.add(3 / tempcalc)
+                                ADC_OUT_LDES = ADC_OUT_LDES_temp.average().toFloat()
+                            } else {
+                                if (tempcalcHigh == 0f) {
+                                    ADC_OUT_HDIM = 0f
+                                } else {
+                                    ADC_OUT_HDIM_temp.add((3 - ftemp) / tempcalcHigh);
+                                    ADC_OUT_HDIM = ADC_OUT_HDIM_temp.average().toFloat()
+                                }
+                            }
+                            checkCerbra()
+                            resetElement()
+                            setPullStyle()
+                            k = 8
+                        } else {
+                            resetParmet(7)
+                            setPushStyle()
+                            k = 7
+                            if (dicvol.containsKey(k))
+                                dicvol[k]?.clear()
+                        }
+                    }
+                }
+            }
+            if (k == 8) {
+                dtemp = TempDl.average()
+                if (dtemp > Definition.Noise_AD) {
+                    tempv++
+                    if (tempv > 1) {
+                        iscer = true
+                        k = 6
+                        if (dtemp < Definition.LDES_AD) {
+                            flow = (sqrt(dtemp) * Definition.Cur_ADC_IN_LDES * iset).toFloat()
+                            ftemp += flow / Definition.Sample_rate
+                            tempcalc += (sqrt(dtemp) / Definition.Sample_rate).toFloat()
+                            tempvol = abs(ftemp + ftempHigh)
+                        } else if (dtemp > Definition.LDES_AD && dtemp < Definition.HighLimit_AD) {
+                            flow = (sqrt(dtemp) * Definition.Cur_ADC_IN_LDES).toFloat()
+                            ftemp += flow / Definition.Sample_rate
+                            tempcalc += (sqrt(dtemp) / Definition.Sample_rate).toFloat()
+                            tempvol = abs(ftemp + ftempHigh)
+                        } else if (dtemp > Definition.HighLimit_AD) {
+                            flow = (sqrt(dtemphigh) * Definition.Cur_ADC_IN_HDIM).toFloat()
+                            ftempHigh += flow / Definition.Sample_rate
+                            tempcalcHigh += (sqrt(dtemphigh) / Definition.Sample_rate).toFloat()
+                            tempvol = abs((ftemp + ftempHigh))
+                        }
+                        startsec += 0.01f
+
+                        inVolSec5DataSet!!.addEntry(
+                            Entry(
+                                startSec,
+                                (ftemp + ftempHigh)
+                            )
+                        )
+                        inFlowVol5DataSet!!.addEntry(
+                            Entry(
+                                (ftemp + ftempHigh),
+                                flow
+                            )
+                        )
+
+                        binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
+                        binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
+                        binding.chartFlowHandleCapacityTime.invalidate()
+
+                        binding.chartFlowHandleFlowCapacity.lineData.notifyDataChanged()
+                        binding.chartFlowHandleFlowCapacity.notifyDataSetChanged()
+                        binding.chartFlowHandleFlowCapacity.invalidate()
+
+                        if (dicvol.containsKey(k)) {
+                            dicvol[k]!!.add((ftemp + ftempHigh))
+                        } else {
+                            dicvol[k] = arrayListOf((ftemp + ftempHigh))
+                        }
+                    }
+                }
+                if (-Definition.Noise_AD < dtemp && dtemp < Definition.Noise_AD && !iscer) {
+                    tempv = 0
+                }
+                if (-Definition.Noise_AD < dtemp && dtemp < Definition.Noise_AD && iscer) {
+                    tempq++
+                    if (tempq == 50) {
+                        if (tempvol > 2 && tempvol < 4) {
+                            if (ftemp > 2.6) {
+                                ADC_IN_LDES_temp.add(3 / tempcalc)
+                                ADC_IN_LDES = ADC_IN_LDES_temp.average().toFloat()
+                            } else {
+                                if (tempcalcHigh == 0f) {
+                                    ADC_IN_HDIM = 0f
+                                } else {
+                                    ADC_IN_HDIM_temp.add((3 - ftemp) / tempcalcHigh);
+                                    ADC_IN_HDIM = ADC_IN_HDIM_temp.average().toFloat()
+                                }
+                            }
+                            checkCerbra()
+                            resetElement()
+                            setPushStyle()
+                            k = 9
+                        } else {
+                            resetParmet(8)
+                            setPullStyle()
+                            k = 8
+                            if (dicvol.containsKey(k))
+                                dicvol[k]?.clear()
+                        }
+                    }
+                }
+            }
+            if (k == 9) {
+                dtemp = TempDl.average()
+                if (dtemp < -Definition.Noise_AD) {
+                    tempv++
+                    if (tempv > 1) {
+                        iscer = true
+                        k = 7
+                        if (dtemp > -Definition.LDES_AD) {
+                            flow = (sqrt(-dtemp) * Definition.Cur_ADC_OUT_LDES * iset).toFloat()
+                            ftemp += flow / Definition.Sample_rate
+                            tempcalc += (sqrt(-dtemp) * iset / Definition.Sample_rate).toFloat()
+                            tempvol = abs(-ftemp - ftempHigh)
+                        } else if (dtemp < -Definition.LDES_AD && dtemp > Definition.LowLimit_AD) {
+                            flow = (sqrt(-dtemp) * Definition.Cur_ADC_OUT_LDES).toFloat()
+                            ftemp += flow / Definition.Sample_rate
+                            tempcalc += (sqrt(-dtemp) / Definition.Sample_rate).toFloat()
+                            tempvol = abs(-ftemp - ftempHigh)
+                        } else if (dtemp < Definition.LowLimit_AD) {
+                            flow = (sqrt(-dtemphigh) * Definition.Cur_ADC_OUT_HDIM).toFloat()
+                            ftempHigh += flow / Definition.Sample_rate
+                            tempcalcHigh += (sqrt(-dtemphigh) / Definition.Sample_rate).toFloat()
+                            tempvol = abs((-ftemp - ftempHigh))
+                        }
+                        startsec += 0.01f
+
+                        outVolSec5DataSet!!.addEntry(
+                            Entry(
+                                startSec,
+                                (ftemp + ftempHigh)
+                            )
+                        )
+                        outFlowVol5DataSet!!.addEntry(
+                            Entry(
+                                (ftemp + ftempHigh),
+                                flow
+                            )
+                        )
+
+                        binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
+                        binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
+                        binding.chartFlowHandleCapacityTime.invalidate()
+
+                        binding.chartFlowHandleFlowCapacity.lineData.notifyDataChanged()
+                        binding.chartFlowHandleFlowCapacity.notifyDataSetChanged()
+                        binding.chartFlowHandleFlowCapacity.invalidate()
+
+                        if (dicvol.containsKey(k)) {
+                            dicvol[k]!!.add(-ftemp - ftempHigh)
+                        } else {
+                            dicvol[k] = arrayListOf(-ftemp - ftempHigh)
+                        }
+                    }
+                }
+                if (-Definition.Noise_AD < dtemp && dtemp < Definition.Noise_AD && !iscer) {
+                    tempv = 0
+                }
+                if (-Definition.Noise_AD < dtemp && dtemp < Definition.Noise_AD && iscer) {
+                    tempq++
+                    if (tempq == 50) {
+                        if (tempvol > 2 && tempvol < 4) {
+                            if (ftemp > 2.6) {
+                                ADC_OUT_LDES_temp.add(3 / tempcalc)
+                                ADC_OUT_LDES = ADC_OUT_LDES_temp.average().toFloat()
+                            } else {
+                                if (tempcalcHigh == 0f) {
+                                    ADC_OUT_HDIM = 0f
+                                } else {
+                                    ADC_OUT_HDIM_temp.add((3 - ftemp) / tempcalcHigh);
+                                    ADC_OUT_HDIM = ADC_OUT_HDIM_temp.average().toFloat()
+                                }
+                            }
+                            checkCerbra()
+                            resetElement()
+                            setPullStyle()
+                            k = 10
+                        } else {
+                            resetParmet(9)
+                            setPushStyle()
+                            k = 9
+                            if (dicvol.containsKey(k))
+                                dicvol[k]?.clear()
+                        }
+                    }
+                }
+            }
+
+            if (k == 10) {
+                resetElement()
+                ADC_IN_LDES = if (ADC_IN_LDES == 0f) Definition.Cur_ADC_IN_LDES else ADC_IN_LDES
+                ADC_OUT_LDES = if (ADC_OUT_LDES == 0f) Definition.Cur_ADC_OUT_LDES else ADC_OUT_LDES
+                ADC_IN_HDIM = if (ADC_IN_HDIM == 0f) Definition.Cur_ADC_IN_HDIM else ADC_IN_HDIM
+                ADC_OUT_HDIM = if (ADC_OUT_HDIM == 0f) Definition.Cur_ADC_OUT_HDIM else ADC_OUT_HDIM
+                Definition.Cur_ADC_IN_LDES = ADC_IN_LDES
+                Definition.Cur_ADC_OUT_LDES = ADC_OUT_LDES
+                Definition.Cur_ADC_IN_HDIM = ADC_IN_HDIM
+                Definition.Cur_ADC_OUT_HDIM = ADC_OUT_HDIM
+                return
+            }
         }
     }
 
@@ -860,41 +1760,9 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
         }
     }
 
-    private fun isZeroSuccess() {
-        //此处添加零位校验代码
-        iFlag = 1
-        isZero = false
-        try {
-            isStop = false
-            usbTransferUtil.write(ModbusProtocol.FLOW_CALIBRATION_COMMAND)
-            timer = fixedRateTimer("", false, 0, 1000) {
-                if (iFlag == 1) {
-                    time++
-                    if (isZero) {
-                        time = 0
-                        isStop = true
-                        startLoadingDialogFragment.dismiss()
-                        timer.cancel()
-                    } else if (time == 8) {
-                        startLoadingDialogFragment.dismiss()
-                        timer.cancel()
-                        LungCommonDialogFragment.startCommonDialogFragment(
-                            requireActivity().supportFragmentManager, "校验超时!", "2"
-                        )
-                    }
-                }
-            }
-            startLoadingDialogFragment = LoadingDialogFragment.startLoadingDialogFragment(
-                requireActivity().supportFragmentManager, "正在校零..."
-            )
-        } catch (ex: Exception) {
-            Toast.makeText(requireContext(), ex.message, Toast.LENGTH_SHORT).show()
-        }
-    }
-
     private fun stopPortSend() {
         try {
-            usbTransferUtil.write(ModbusProtocol.FLOW_STOP_COMMAND)
+            usbTransferUtil!!.write(ModbusProtocol.banTwoSensor)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -902,99 +1770,224 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
 
     private fun sendCalibraCommand() {
         try {
-            SerialPortManager.sendMessage(ModbusProtocol.FLOW_CALIBRATION_COMMAND)
+            usbTransferUtil?.write(ModbusProtocol.allowTwoSensor)
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
     private fun resetParmet(type: Int) {
-        if (type == 1) {
-            when (calibrateCount) {
-                1 -> {
-                    inVolSec1DataSet!!.clear()
-                    inFlowVol1DataSet!!.clear()
-                }
-
-                2 -> {
-                    inVolSec2DataSet!!.clear()
-                    inFlowVol2DataSet!!.clear()
-                }
-
-                3 -> {
-                    inVolSec3DataSet!!.clear()
-                    inFlowVol3DataSet!!.clear()
-                }
-
-                4 -> {
-                    inVolSec4DataSet!!.clear()
-                    inFlowVol4DataSet!!.clear()
-                }
-
-                5 -> {
-                    inVolSec5DataSet!!.clear()
-                    inFlowVol5DataSet!!.clear()
-                }
+        when (type) {
+            0 -> {
+                inVolSec1DataSet!!.clear()
+                inFlowVol1DataSet!!.clear()
             }
 
-            binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
-            binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
-            binding.chartFlowHandleCapacityTime.invalidate()
-
-            binding.chartFlowHandleFlowCapacity.lineData.notifyDataChanged()
-            binding.chartFlowHandleFlowCapacity.notifyDataSetChanged()
-            binding.chartFlowHandleFlowCapacity.invalidate()
-
-            startSec = 0f
-            startVol = 0f
-            startFlow = 0f
-            mDownTime.setmTimes(20)
-            isPull = true
-            binding.tvPullDirection.text = "拉"
-            binding.tvPullDirection.setBackgroundResource(R.drawable.flow_pull)
-        }else{
-            when (calibrateCount) {
-                6 -> {
-                    outVolSec1DataSet!!.clear()
-                    outFlowVol1DataSet!!.clear()
-                }
-
-                7 -> {
-                    outVolSec2DataSet!!.clear()
-                    outFlowVol2DataSet!!.clear()
-                }
-
-                8 -> {
-                    outVolSec3DataSet!!.clear()
-                    outFlowVol3DataSet!!.clear()
-                }
-
-                9 -> {
-                    outVolSec4DataSet!!.clear()
-                    outFlowVol4DataSet!!.clear()
-                }
-
-                10 -> {
-                    outVolSec5DataSet!!.clear()
-                    outFlowVol5DataSet!!.clear()
-                }
+            1 -> {
+                outVolSec1DataSet!!.clear()
+                outFlowVol1DataSet!!.clear()
             }
 
-            binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
-            binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
-            binding.chartFlowHandleCapacityTime.invalidate()
+            2 -> {
+                inVolSec2DataSet!!.clear()
+                inFlowVol2DataSet!!.clear()
+            }
 
-            binding.chartFlowHandleFlowCapacity.lineData.notifyDataChanged()
-            binding.chartFlowHandleFlowCapacity.notifyDataSetChanged()
-            binding.chartFlowHandleFlowCapacity.invalidate()
+            3 -> {
+                outVolSec2DataSet!!.clear()
+                outFlowVol2DataSet!!.clear()
+            }
 
-            startSec = 0f
-            startVol = 0f
-            startFlow = 0f
-            mDownTime.setmTimes(20)
-            isPull = true
-            binding.tvPullDirection.text = "推"
-            binding.tvPullDirection.setBackgroundResource(R.drawable.flow_down)
+            4 -> {
+                inVolSec3DataSet!!.clear()
+                inFlowVol3DataSet!!.clear()
+            }
+
+            5 -> {
+                outVolSec3DataSet!!.clear()
+                outFlowVol3DataSet!!.clear()
+            }
+
+            6 -> {
+                inVolSec4DataSet!!.clear()
+                inFlowVol4DataSet!!.clear()
+            }
+
+            7 -> {
+                outVolSec4DataSet!!.clear()
+                outFlowVol4DataSet!!.clear()
+            }
+
+            8 -> {
+                inVolSec5DataSet!!.clear()
+                inFlowVol5DataSet!!.clear()
+            }
+
+            9 -> {
+                outVolSec5DataSet!!.clear()
+                outFlowVol5DataSet!!.clear()
+            }
         }
+
+        binding.chartFlowHandleCapacityTime.lineData.notifyDataChanged()
+        binding.chartFlowHandleCapacityTime.notifyDataSetChanged()
+        binding.chartFlowHandleCapacityTime.invalidate()
+
+        binding.chartFlowHandleFlowCapacity.lineData.notifyDataChanged()
+        binding.chartFlowHandleFlowCapacity.notifyDataSetChanged()
+        binding.chartFlowHandleFlowCapacity.invalidate()
+
+        resetElement()
+    }
+
+    private fun resetElement() {
+        ftempHigh = 0f
+        tempv = 0
+        tempcalc = 0f
+        tempcalcHigh = 0f
+        ftemp = 0f
+        iscer = false
+        startsec = 0f
+        tempq = 0
+    }
+
+    private fun prepareManualFlowCalibration() {
+        ManualFlowState = false
+        Autoindex = 0
+        k = 0
+        ftemplow = 0
+        ftemphigh = 0
+        TempDl.clear()
+        TempDh.clear()
+        dl = 0.0
+        dh = 0.0
+        ftemp = 0f
+        tempv = 0
+        tempq = 0
+        tempcalc = 0f
+        tempcalcHigh = 0f
+        tempvol = 0f
+        ftempHigh = 0f
+        startsec = 0f
+        ADC_OUT_LDES_temp = mutableListOf()
+        ADC_IN_LDES_temp = mutableListOf()
+        ADC_OUT_HDIM_temp = mutableListOf()
+        ADC_IN_HDIM_temp = mutableListOf()
+        m_AccuracyIn = 0f
+        m_AccuracyOut = 0f
+        m_PrecisionIn = 0f
+        m_PrecisionOut = 0f
+
+        inFlowVol1DataSet!!.clear()
+        inFlowVol2DataSet!!.clear()
+        inFlowVol3DataSet!!.clear()
+        inFlowVol4DataSet!!.clear()
+        inFlowVol5DataSet!!.clear()
+        outFlowVol1DataSet!!.clear()
+        outFlowVol2DataSet!!.clear()
+        outFlowVol3DataSet!!.clear()
+        outFlowVol4DataSet!!.clear()
+        outFlowVol5DataSet!!.clear()
+
+        inVolSec1DataSet!!.clear()
+        inVolSec2DataSet!!.clear()
+        inVolSec3DataSet!!.clear()
+        inVolSec4DataSet!!.clear()
+        inVolSec5DataSet!!.clear()
+        outVolSec1DataSet!!.clear()
+        outVolSec2DataSet!!.clear()
+        outVolSec3DataSet!!.clear()
+        outVolSec4DataSet!!.clear()
+        outVolSec5DataSet!!.clear()
+    }
+
+    private fun checkCerbra() {
+        val vol = dicvol[k]
+        var curvol1 = 0f
+        if (vol?.isNotEmpty() == true) {
+            if (k % 2 == 0) {
+                curvol1 = vol[vol.size - 1]
+                ManualFlowState = true;
+                if (abs(curvol1 - 3) > m_AccuracyIn)
+                    m_AccuracyIn = abs(curvol1 - 3);
+
+            } else if (k == 1 || k == 3 || k == 5 || k == 7) {
+                curvol1 = -vol!![vol.size - 1]
+                ManualFlowState = false;
+                if (abs(curvol1 - 3) > m_AccuracyOut)
+                    m_AccuracyOut = abs(curvol1 - 3);
+            } else {
+                val volin = arrayListOf(
+                    dicvol[0]?.get(dicvol[0]!!.size - 1) ?: 0f,
+                    dicvol[2]?.get(dicvol[2]!!.size - 1) ?: 0f,
+                    dicvol[4]?.get(dicvol[4]!!.size - 1) ?: 0f,
+                    dicvol[6]?.get(dicvol[6]!!.size - 1) ?: 0f,
+                    dicvol[8]?.get(dicvol[8]!!.size - 1) ?: 0f
+                )
+                val volout = arrayListOf<Float>(
+                    dicvol[1]?.get(dicvol[1]!!.size - 1) ?: 0f,
+                    dicvol[3]?.get(dicvol[3]!!.size - 1) ?: 0f,
+                    dicvol[5]?.get(dicvol[5]!!.size - 1) ?: 0f,
+                    dicvol[7]?.get(dicvol[7]!!.size - 1) ?: 0f,
+                    dicvol[9]?.get(dicvol[9]!!.size - 1) ?: 0f
+                )
+                curvol1 = -vol[vol.size - 1]
+
+                if (abs(curvol1 - 3) > m_AccuracyOut)
+                    m_AccuracyOut = abs(curvol1 - 3);
+                m_PrecisionIn = abs(volin.minOrNull()!! - volin.maxOrNull()!!)
+                m_PrecisionOut = abs(volout.minOrNull()!! - volout.maxOrNull()!!)
+            }
+            val patientBean = SharedPreferencesUtils.instance.patientBean
+            if (k == 0 || k == 2 || k == 4 || k == 6 || k == 8) {
+                val error = String.format("%.2f", (3 - curvol1) / 3 * 100)
+                val result = if (abs(error.toFloat()) < 3) "通过" else "未通过"
+                inHaleFlowList.add(
+                    FlowBean(
+                        patientBean!!.patientId,
+                        DateUtils.nowTimeString,
+                        patientBean.patientId,
+                        strVol[k],
+                        "3",
+                        String.format("%.3f", curvol1),
+                        error,
+                        result
+                    )
+                )
+                exHaleFlowAdapter.setItemsBean(
+                    inHaleFlowList
+                )
+            }
+
+            if (k == 1 || k == 3 || k == 5 || k == 7 || k == 9) {
+                val error = String.format("%.2f", (3 - curvol1) / 3 * 100)
+                val result = if (abs(error.toFloat()) < 3) "通过" else "未通过"
+                exHaleFlowList.add(
+                    FlowBean(
+                        patientBean!!.patientId,
+                        DateUtils.nowTimeString,
+                        patientBean.patientId,
+                        strVol[k],
+                        "3",
+                        String.format("%.3f", curvol1),
+                        error,
+                        result
+                    )
+                )
+                exHaleFlowAdapter.setItemsBean(
+                    exHaleFlowList
+                )
+            }
+        }
+    }
+
+    private fun setPullStyle(){
+        binding.tvPullDirection.text = "拉"
+        binding.tvPullDirection.setBackgroundResource(R.drawable.flow_pull)
+    }
+
+    private fun setPushStyle(){
+        binding.tvPullDirection.text = "推"
+        binding.tvPullDirection.setBackgroundResource(R.drawable.flow_down)
     }
 }

@@ -80,7 +80,7 @@
                 android:id="@+id/btn_check"
                 android:layout_width="@dimen/space_20"
                 android:layout_height="@dimen/space_20"
-                android:background="@drawable/icon_file_open"
+                android:background="@drawable/icon_file_open_gray"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 

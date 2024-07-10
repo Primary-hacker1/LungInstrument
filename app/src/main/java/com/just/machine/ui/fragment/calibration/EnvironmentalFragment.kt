@@ -18,6 +18,7 @@ import com.just.machine.ui.fragment.serial.SerialPortManager
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.common.base.BaseUtil
 import com.common.base.toast
+import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.ui.dialog.LungCommonDialogFragment
 import com.just.machine.util.LiveDataBus
 import com.just.machine.util.USBTransferUtil
@@ -141,12 +142,13 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
                 toast("气压不能为空!")
                 return@setNoRepeatListener
             }
+            val patientBean = SharedPreferencesUtils.instance.patientBean
             val time = DateUtils.nowTimeString
             //插入一条手动环境定标
             viewModel.setEnvironmental(
                 EnvironmentalCalibrationBean(//假设用户id为1
                     0,
-                    1,
+                    patientBean!!.patientId,
                     time,
                     binding.etTemperature.text.toString().trim(),
                     binding.etHumidity.text.toString().trim(),
@@ -179,9 +181,10 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
                                 requireActivity().supportFragmentManager, "定标失败!", "2"
                             )
                         } else {
+                            val patientBean = SharedPreferencesUtils.instance.patientBean
                             viewModel.setEnvironmental(
                                 EnvironmentalCalibrationBean(//假设用户id为1
-                                    0, 1, time, temperature.toString(),
+                                    0, patientBean!!.patientId, time, temperature.toString(),
                                     humidity.toString(), pressure.toString(), "1"
                                 )
                             )//插入数据库并查询
@@ -271,7 +274,7 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
     override fun onDestroyView() {
         super.onDestroyView()
         // 对于 Fragment，推荐在 onDestroyView 中移除观察者
-        LiveDataBus.get().with(Constants.serialCallback).removeObservers(viewLifecycleOwner)
+        LiveDataBus.get().with(Constants.envCaliSerialCallback).removeObservers(viewLifecycleOwner)
     }
 
 

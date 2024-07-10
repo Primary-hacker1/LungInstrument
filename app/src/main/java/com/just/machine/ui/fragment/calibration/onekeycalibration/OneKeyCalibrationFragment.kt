@@ -7,10 +7,15 @@ import androidx.core.content.ContextCompat
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.just.machine.ui.adapter.FragmentChildAdapter
+import com.just.machine.ui.dialog.LungCommonDialogFragment
+import com.just.machine.ui.fragment.serial.ModbusProtocol
 import com.just.machine.util.FixCountDownTime
+import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FragmentOnekeyCalibrationBinding
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Timer
+import kotlin.concurrent.fixedRateTimer
 
 /**
  * 一键定标
@@ -18,8 +23,12 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBinding>() {
 
+    private var countSec = 0
+    private var iFlag = 0
+    private var envSuccess = false
+    private lateinit var timer: Timer
     private val mCountDownTime by lazy {
-        object : FixCountDownTime(95, 1000) {}
+        object : FixCountDownTime(110, 1000) {}
     }
 
     override fun loadData() {
@@ -43,16 +52,48 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
 
     override fun initListener() {
         binding.llOnekeyStart.setNoRepeatListener {
+            timer = fixedRateTimer("", false, 0, 1000) {
+                Log.d("oneky", "正计时======")
+                if (countSec == 0) {
+                    iFlag = 1
+                    binding.vpOnekey.setCurrentItem(1, true)
+                }
+                if (countSec < 5 && iFlag == 1) {
+                    if(envSuccess){
+                        binding.vpOnekey.setCurrentItem(2, true)
+                        binding.tvOnekeyCalibrationEnvironment.setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.green
+                            )
+                        )
+                        binding.ivOnekeyCalibrationEnvironment.setImageResource(R.drawable.environment_highlight)
+                        iFlag = 2
+                    }else{
+                        LungCommonDialogFragment.startCommonDialogFragment(
+                            requireActivity().supportFragmentManager, "一键定标失败!", "2"
+                        )
+                        timer.cancel()
+                        enableStartBtn()
+                        binding.vpOnekey.setCurrentItem(0, true)
+                    }
+                } else if (countSec == 5 && iFlag == 1) {
+                    binding.vpOnekey.setCurrentItem(2, true)
+                    iFlag = 2
+                }
+                countSec++
+            }
             mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack {
                 override fun onStart() {
                     disEnableStartBtn()
                     binding.vpOnekey.setCurrentItem(1, true)
+                    LiveDataBus.get().with("oneKeyCalibra").value = "environment"
                 }
 
                 override fun onTick(times: Int) {
                     Log.d("oneky", "倒计时======$times")
                     when (times) {
-                        90 -> {
+                        105 -> {
                             binding.vpOnekey.setCurrentItem(2, true)
                             binding.tvOnekeyCalibrationEnvironment.setTextColor(
                                 ContextCompat.getColor(
@@ -103,6 +144,16 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
 
                 }
             })
+        }
+
+        LiveDataBus.get().with("oneKeyCalibra").observe(this) {
+            if (it is String) {
+                if (it == "environmentFailed") {
+                    envSuccess = false
+                }else if(it == "environmentSuccess"){
+                    envSuccess = true
+                }
+            }
         }
     }
 

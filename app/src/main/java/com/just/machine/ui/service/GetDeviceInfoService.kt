@@ -20,9 +20,9 @@ class GetDeviceInfoService: Service(){
         super.onCreate()
         usbTransferUtil.init(this)
         usbTransferUtil.connect()
-        timer = fixedRateTimer("", false, 0, 1000) {
-            usbTransferUtil.write(ModbusProtocol.readDevice)
-        }
+//        timer = fixedRateTimer("", false, 0, 1000) {
+//            usbTransferUtil.write(ModbusProtocol.readDevice)
+//        }
     }
 
     override fun onBind(intent: Intent?): IBinder? {
