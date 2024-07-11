@@ -55,6 +55,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
     private var usbTransferUtil: USBTransferUtil? = null //usb工具类
     private val viewModel by viewModels<MainViewModel>()
     private var startLoadingDialogFragment: LoadingDialogFragment? = null
+    private var isHandleFlowStart = false
 
     private val strVol = arrayOf(
         "吸气容积1",
@@ -101,20 +102,16 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
     private var inFlowVol5DataSet: LineDataSet? = null
     private var outFlowVol5DataSet: LineDataSet? = null
 
-    private var isStart = false
     private var k = 1 //定标计数器
-    private var time = 0
     private var ftemplow = 0
     private var ftemphigh = 0
     private var ftemp = 0f
     private var iscer = false
     private var startsec = 0f
     private var Autoindex = 0
-    private var startVol = 0f
-    private var startFlow = 0f
     private var tempvol = 0f
-    private var dl: Double = 0.0
-    private var dh: Double = 0.0
+    private var dl = 0.0
+    private var dh = 0.0
     private var tempv = 0
     private var tempq = 0
     private var tempcalc = 0f
@@ -201,12 +198,11 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
             }
         }
 
-        //定标开始
+        //点击定标开始
         LiveDataBus.get().with("clickFlowStart").observe(this) {
             if (it is String) {
                 if (it == "handleFlow") {
                     //开始手动定标
-
                     if (ModbusProtocol.isDeviceConnect) {
                         prepareManualFlowCalibration()
                         sendCalibraCommand()
@@ -217,37 +213,40 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                 }
             }
         }
-        //定标结束
+        //点击定标结束
         LiveDataBus.get().with("clickFlowStop").observe(this) {
             if (it is String) {
-                isStart = false
                 stopPortSend()
             }
         }
 
         //串口数据
         LiveDataBus.get().with("二类传感器").observe(this) {
-            if (it is ByteArray) {
-                val bytes2Hex = CRC16Util.bytes2Hex(it)
-                Autoindex++
-                if (Autoindex <= 200) {
-                    ftemplow += it[14] + it[15] * 256;
-                    ftemphigh += it[16] + it[17] * 256;
-                }
-                if (Autoindex == 200) {
-                    Definition.fzeroLow = ftemplow / Autoindex.toFloat()
-                    Definition.fzeroHigh = ftemphigh / Autoindex.toFloat()
-                }
-                if (Autoindex > 200) {
-                    calculateFlow(
-                        (it[14] + it[15] * 256).toFloat(),
-                        (it[16] + it[17] * 256).toFloat()
-                    )
+            if(isHandleFlowStart){
+                if (it is ByteArray) {
+                    Autoindex++
+                    if (Autoindex <= 200) {
+                        ftemplow += it[14] + it[15] * 256;
+                        ftemphigh += it[16] + it[17] * 256;
+                    }
+                    if (Autoindex == 200) {
+                        Definition.fzeroLow = ftemplow / Autoindex.toFloat()
+                        Definition.fzeroHigh = ftemphigh / Autoindex.toFloat()
+                    }
+                    if (Autoindex > 200) {
+                        calculateFlow(
+                            (it[14] + it[15] * 256).toFloat(),
+                            (it[16] + it[17] * 256).toFloat()
+                        )
+                    }
                 }
             }
         }
     }
 
+    /**
+     * 计算流速
+     */
     private fun calculateFlow(signallow: Float, signalhigh: Float) {
         var flow = 0f
         dl = (signallow - Definition.fzeroLow).toDouble()
@@ -266,7 +265,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
 
             if (k == 0) {
                 Log.i(TAG, "dtemp 数据: $dtemp")
-                startLoadingDialogFragment?.dismiss()
+                startLoadingDialogFragment!!.dismiss()
                 if (dtemp > Definition.Noise_AD) {
                     tempv++
                     if (tempv > 1) {
@@ -1503,6 +1502,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
         try {
             usbTransferUtil!!.write(ModbusProtocol.banTwoSensor)
             LiveDataBus.get().with("flowStop").postValue("handleFlow")
+            isHandleFlowStart = false
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -1512,11 +1512,15 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
         try {
             usbTransferUtil?.write(ModbusProtocol.allowTwoSensor)
             LiveDataBus.get().with("flowStart").postValue("handleFlow")
+            isHandleFlowStart = true
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
+    /**
+     * 重置曲线
+     */
     private fun resetParmet(type: Int) {
         resetElement()
         when (type) {
@@ -1580,6 +1584,9 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
         binding.chartFlowHandleFlowCapacity.invalidate()
     }
 
+    /**
+     * 重置参数
+     */
     private fun resetElement() {
         ftempHigh = 0f
         tempv = 0
@@ -1591,6 +1598,9 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
         tempq = 0
     }
 
+    /**
+     * 准备流量手动定标初始操作
+     */
     private fun prepareManualFlowCalibration() {
         ManualFlowState = false
         Autoindex = 0
@@ -1655,6 +1665,9 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
         exHaleFlowAdapter.notifyDataSetChanged()
     }
 
+    /**
+     * 定标结果
+     */
     private fun checkCerbra() {
         val vol = dicvol[k]
         var curvol1 = 0f

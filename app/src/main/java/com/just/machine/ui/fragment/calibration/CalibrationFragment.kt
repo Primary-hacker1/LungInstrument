@@ -14,6 +14,7 @@ import com.common.base.gone
 import com.common.base.setNoRepeatListener
 import com.common.base.visible
 import com.common.viewmodel.LiveDataEvent
+import com.just.machine.dao.calibration.FlowCalibrationResultBean
 import com.just.machine.dao.setting.AllSettingBean
 import com.just.machine.model.Constants
 import com.just.machine.model.calibrate.Definition
@@ -95,8 +96,12 @@ class CalibrationFragment : CommonBaseFragment<FragmentCalibrationBinding>() {
                         return@observe
                     }
 
-                    val settings = it.any as MutableList<*>
+                    val caliResult = it.any as MutableList<*>
+                    for (resultBean in caliResult){
+                        if(resultBean is FlowCalibrationResultBean){
 
+                        }
+                    }
                 }
             }
         }
