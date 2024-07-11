@@ -49,7 +49,6 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
 
     private val viewModel by viewModels<MainViewModel>()
     private var usbTransferUtil: USBTransferUtil? = null //usb工具类
-    private var mCountDownTime: FixCountDownTime? = null
     private var patientBean: PatientBean? = null
     private var startLoadingDialogFragment: LoadingDialogFragment? = null
     private var isAutoFlowStart = false
@@ -86,8 +85,6 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
         patientBean = SharedPreferencesUtils.instance.patientBean
         binding.rvFlowAuto.layoutManager = LinearLayoutManager(requireContext())
         binding.rvFlowAuto.adapter = flowAdapter
-
-        mCountDownTime = object : FixCountDownTime(35, 1000) {}
         initLineChart()
     }
 
@@ -126,12 +123,12 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
             if (isAutoFlowStart) {
                 if (it is ByteArray) {
                     if (ratedFlowZero.size <= 200) {
-                        ratedFlowZero.add(sqrt((it[12] + it[13] * 256).toDouble()) * flowCoefficientOut);//校零标定流速
+                        ratedFlowZero.add(sqrt((it[12] + it[13] * 256).toDouble()) * flowCoefficientOut)//校零标定流速
                         var pa = it[14] + it[15] * 256//采集低流量压差
                         if (pa > 16000) {
-                            pa = it[16] + it[17] * 256;//采集高流量压差
+                            pa = it[16] + it[17] * 256//采集高流量压差
                         }
-                        measuredFlowZero.add(sqrt(pa.toDouble()) * flowCoefficientOut);//校零实测流速
+                        measuredFlowZero.add(sqrt(pa.toDouble()) * flowCoefficientOut)//校零实测流速
                         if (ratedFlowZero.size == 200) {
                             ratedZero = ratedFlowZero.drop(50).take(150).average()//标定校零结果
                             measuredZero = measuredFlowZero.drop(50).take(150).average()//实测校零结果
@@ -143,7 +140,7 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
                         TempDl.offer(dl)
                         var pa = it[14] + it[15] * 256//采集低流量压差
                         if (pa > 16000) {
-                            pa = it[16] + it[17] * 256;//采集高流量压差
+                            pa = it[16] + it[17] * 256//采集高流量压差
                         }
                         dh = abs(sqrt(pa.toDouble()) * flowCoefficientOut - measuredZero)
                         if (dl - dh > dl * 0.03 && dh > dl * 0.4) {
@@ -186,7 +183,8 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
 
                     if (autoFlowNum == 2700)//3000留200余量
                     {
-                        stopPortSend()
+//                        stopPortSend()
+                        resetSend()
                         LogUtils.d("ratedDataSet length====${ratedDataSet!!.entries.size}====ratedDataSet====${ratedDataSet!!.entries}")
                         val list = mutableListOf<FlowBean>()
                         val ratedFlowHigh = String.format(

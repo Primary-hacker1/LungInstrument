@@ -79,6 +79,7 @@
                         tools:ignore="ContentDescription" />
 
                     <TextView
+                        android:id="@+id/tv_ingredient_calibrate_start"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
@@ -96,6 +97,7 @@
                     android:background="@drawable/save_bg_line"
                     android:gravity="center"
                     android:orientation="horizontal"
+                    android:visibility="gone"
                     tools:ignore="MissingConstraints">
 
                     <ImageView
@@ -183,8 +185,8 @@
                             android:background="@null"
                             android:inputType="numberDecimal"
                             android:maxLength="6"
-                            android:paddingVertical="2dp"
                             android:paddingHorizontal="10dp"
+                            android:paddingVertical="2dp"
                             android:text="30.01"
                             android:textColor="@color/c238E23"
                             android:textSize="13sp"
@@ -207,8 +209,8 @@
                             android:background="@null"
                             android:inputType="numberDecimal"
                             android:maxLength="6"
-                            android:paddingVertical="2dp"
                             android:paddingHorizontal="10dp"
+                            android:paddingVertical="2dp"
                             android:text="30.01"
                             android:textColor="@color/c3786db"
                             android:textSize="13sp"
@@ -246,8 +248,8 @@
                             android:background="@null"
                             android:inputType="numberDecimal"
                             android:maxLength="6"
-                            android:paddingVertical="2dp"
                             android:paddingHorizontal="10dp"
+                            android:paddingVertical="2dp"
                             android:text="30.01"
                             android:textColor="@color/c238E23"
                             android:textSize="13sp"
@@ -270,8 +272,8 @@
                             android:background="@null"
                             android:inputType="numberDecimal"
                             android:maxLength="6"
-                            android:paddingVertical="2dp"
                             android:paddingHorizontal="10dp"
+                            android:paddingVertical="2dp"
                             android:text="30.01"
                             android:textColor="@color/c3786db"
                             android:textSize="13sp"
@@ -390,7 +392,8 @@
                         android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="88dp"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:text="浓度指标"
                             android:textColor="@color/text3"
@@ -452,7 +455,7 @@
                     </LinearLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_ingredient"
+                        android:id="@+id/rv_ingredient_o2"
                         android:layout_width="match_parent"
                         android:layout_height="150dp" />
 
@@ -498,9 +501,10 @@
                         android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="88dp"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
                             android:layout_height="wrap_content"
-                            android:text="吸气标定指标"
+                            android:text="浓度指标"
                             android:textColor="@color/text3"
                             android:textSize="11sp" />
 
@@ -560,7 +564,7 @@
                     </LinearLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_ingredient2"
+                        android:id="@+id/rv_ingredient_co2"
                         android:layout_width="match_parent"
                         android:layout_height="150dp" />
 

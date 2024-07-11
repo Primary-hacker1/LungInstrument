@@ -226,8 +226,8 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                 if (it is ByteArray) {
                     Autoindex++
                     if (Autoindex <= 200) {
-                        ftemplow += it[14] + it[15] * 256;
-                        ftemphigh += it[16] + it[17] * 256;
+                        ftemplow += it[14] + it[15] * 256
+                        ftemphigh += it[16] + it[17] * 256
                     }
                     if (Autoindex == 200) {
                         Definition.fzeroLow = ftemplow / Autoindex.toFloat()
@@ -365,7 +365,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                             flow = (sqrt(-dtemp) * Definition.Cur_ADC_OUT_LDES).toFloat()
                             ftemp += flow / Definition.Sample_rate
                             tempcalc += (sqrt(-dtemp) / Definition.Sample_rate).toFloat()
-                            tempvol = abs(-ftemp - ftempHigh);
+                            tempvol = abs(-ftemp - ftempHigh)
                         } else if (dtemp < Definition.LowLimit_AD) {
                             flow = (sqrt(-dtemphigh) * Definition.Cur_ADC_OUT_HDIM).toFloat()
                             ftempHigh += flow / Definition.Sample_rate
@@ -416,7 +416,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                                 ADC_OUT_HDIM = if (tempcalcHigh == 0f) {
                                     0f
                                 } else {
-                                    ADC_OUT_HDIM_temp.add((3 - ftemp) / tempcalcHigh);
+                                    ADC_OUT_HDIM_temp.add((3 - ftemp) / tempcalcHigh)
                                     ADC_OUT_HDIM_temp.average().toFloat()
                                 }
                             }
@@ -441,9 +441,9 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                         k = 2
                         if (dtemp < Definition.LDES_AD) {
                             flow = (sqrt(dtemp) * Definition.Cur_ADC_IN_LDES * iset).toFloat()
-                            ftemp += flow / Definition.Sample_rate;
+                            ftemp += flow / Definition.Sample_rate
                             tempcalc += (sqrt(dtemp) * iset / Definition.Sample_rate).toFloat()
-                            tempvol = abs(ftemp + ftempHigh);
+                            tempvol = abs(ftemp + ftempHigh)
                         } else if (dtemp > Definition.LDES_AD && dtemp < Definition.HighLimit_AD) {
                             flow = (sqrt(dtemp) * Definition.Cur_ADC_IN_LDES).toFloat()
                             ftemp += flow / Definition.Sample_rate
@@ -493,13 +493,13 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                         if (tempvol > 2 && tempvol < 4) {
                             checkCerbra()
                             if (ftemp > 2.6) {
-                                ADC_IN_LDES_temp.add(3 / tempcalc);
+                                ADC_IN_LDES_temp.add(3 / tempcalc)
                                 ADC_IN_LDES = ADC_IN_LDES_temp.average().toFloat()
                             } else {
                                 if (tempcalcHigh == 0f) {
                                     ADC_IN_HDIM = 0f
                                 } else {
-                                    ADC_IN_HDIM_temp.add((3 - ftemp) / tempcalcHigh);
+                                    ADC_IN_HDIM_temp.add((3 - ftemp) / tempcalcHigh)
                                     ADC_IN_HDIM = ADC_IN_HDIM_temp.average().toFloat()
                                 }
                             }
@@ -531,7 +531,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                             flow = (sqrt(-dtemp) * Definition.Cur_ADC_OUT_LDES).toFloat()
                             ftemp += flow / Definition.Sample_rate
                             tempcalc += (sqrt(-dtemp) / Definition.Sample_rate).toFloat()
-                            tempvol = abs(-ftemp - ftempHigh);
+                            tempvol = abs(-ftemp - ftempHigh)
                         } else if (dtemp < Definition.LowLimit_AD) {
                             flow = (sqrt(-dtemphigh) * Definition.Cur_ADC_OUT_HDIM).toFloat()
                             ftempHigh += flow / Definition.Sample_rate
@@ -582,7 +582,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                                 if (tempcalcHigh == 0f) {
                                     ADC_OUT_HDIM = 0f
                                 } else {
-                                    ADC_OUT_HDIM_temp.add((3 - ftemp) / tempcalcHigh);
+                                    ADC_OUT_HDIM_temp.add((3 - ftemp) / tempcalcHigh)
                                     ADC_OUT_HDIM = ADC_OUT_HDIM_temp.average().toFloat()
                                 }
                             }
@@ -665,7 +665,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                                 if (tempcalcHigh == 0f) {
                                     ADC_IN_HDIM = 0f
                                 } else {
-                                    ADC_IN_HDIM_temp.add((3 - ftemp) / tempcalcHigh);
+                                    ADC_IN_HDIM_temp.add((3 - ftemp) / tempcalcHigh)
                                     ADC_IN_HDIM = ADC_IN_HDIM_temp.average().toFloat()
                                 }
                             }
@@ -749,7 +749,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                                 if (tempcalcHigh == 0f) {
                                     ADC_OUT_HDIM = 0f
                                 } else {
-                                    ADC_OUT_HDIM_temp.add((3 - ftemp) / tempcalcHigh);
+                                    ADC_OUT_HDIM_temp.add((3 - ftemp) / tempcalcHigh)
                                     ADC_OUT_HDIM = ADC_OUT_HDIM_temp.average().toFloat()
                                 }
                             }
@@ -833,7 +833,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                                 if (tempcalcHigh == 0f) {
                                     ADC_IN_HDIM = 0f
                                 } else {
-                                    ADC_IN_HDIM_temp.add((3 - ftemp) / tempcalcHigh);
+                                    ADC_IN_HDIM_temp.add((3 - ftemp) / tempcalcHigh)
                                     ADC_IN_HDIM = ADC_IN_HDIM_temp.average().toFloat()
                                 }
                             }
@@ -917,7 +917,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                                 if (tempcalcHigh == 0f) {
                                     ADC_OUT_HDIM = 0f
                                 } else {
-                                    ADC_OUT_HDIM_temp.add((3 - ftemp) / tempcalcHigh);
+                                    ADC_OUT_HDIM_temp.add((3 - ftemp) / tempcalcHigh)
                                     ADC_OUT_HDIM = ADC_OUT_HDIM_temp.average().toFloat()
                                 }
                             }
@@ -1001,7 +1001,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                                 if (tempcalcHigh == 0f) {
                                     ADC_IN_HDIM = 0f
                                 } else {
-                                    ADC_IN_HDIM_temp.add((3 - ftemp) / tempcalcHigh);
+                                    ADC_IN_HDIM_temp.add((3 - ftemp) / tempcalcHigh)
                                     ADC_IN_HDIM = ADC_IN_HDIM_temp.average().toFloat()
                                 }
                             }
@@ -1085,7 +1085,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                                 if (tempcalcHigh == 0f) {
                                     ADC_OUT_HDIM = 0f
                                 } else {
-                                    ADC_OUT_HDIM_temp.add((3 - ftemp) / tempcalcHigh);
+                                    ADC_OUT_HDIM_temp.add((3 - ftemp) / tempcalcHigh)
                                     ADC_OUT_HDIM = ADC_OUT_HDIM_temp.average().toFloat()
                                 }
                             }
@@ -1674,15 +1674,15 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
         if (vol?.isNotEmpty() == true) {
             if (k % 2 == 0) {
                 curvol1 = vol[vol.size - 1]
-                ManualFlowState = true;
+                ManualFlowState = true
                 if (abs(curvol1 - 3) > m_AccuracyIn)
-                    m_AccuracyIn = abs(curvol1 - 3);
+                    m_AccuracyIn = abs(curvol1 - 3)
 
             } else if (k == 1 || k == 3 || k == 5 || k == 7) {
                 curvol1 = -vol[vol.size - 1]
-                ManualFlowState = false;
+                ManualFlowState = false
                 if (abs(curvol1 - 3) > m_AccuracyOut)
-                    m_AccuracyOut = abs(curvol1 - 3);
+                    m_AccuracyOut = abs(curvol1 - 3)
             } else {
                 val volin = arrayListOf(
                     dicvol[0]?.get(dicvol[0]!!.size - 1) ?: 0f,
@@ -1701,7 +1701,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                 curvol1 = -vol[vol.size - 1]
 
                 if (abs(curvol1 - 3) > m_AccuracyOut)
-                    m_AccuracyOut = abs(curvol1 - 3);
+                    m_AccuracyOut = abs(curvol1 - 3)
                 m_PrecisionIn = abs(volin.minOrNull()!! - volin.maxOrNull()!!)
                 m_PrecisionOut = abs(volout.minOrNull()!! - volout.maxOrNull()!!)
             }

@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "ingredientCalibrationResult")
 data class IngredientCalibrationResultBean(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id")
-    val ingredientId: Long = 0,
+    var ingredientId: Long = 0,
     var calibrationTime: String? = "",//定标时间
     var kCO2: String? = "",//二氧化碳Y=kX+b
     var bCO2: String? = "",//二氧化碳Y=kX+b
