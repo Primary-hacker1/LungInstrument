@@ -24,6 +24,10 @@ class SharedPreferencesUtils private constructor() {
         private const val SIX_MIN_SYS_SETTING = "per_six_min_sys_setting"
         private const val SIX_MIN_TEST_GUIDE = "per_six_min_test_guide"
         private const val PATIENTBEAN = "per_patient_bean"
+        private const val INGREDIENT_CALIBRATE_STANDARDONE_O2 = "per_ingredient_calibrate_standardone_o2"
+        private const val INGREDIENT_CALIBRATE_STANDARDONE_CO2 = "per_ingredient_calibrate_standardone_co2"
+        private const val INGREDIENT_CALIBRATE_STANDARDTWO_O2 = "per_ingredient_calibrate_standardtwo_o2"
+        private const val INGREDIENT_CALIBRATE_STANDARDTWO_CO2 = "per_ingredient_calibrate_standardtwo_co2"
     }
 
     var user: String? = null
@@ -101,6 +105,54 @@ class SharedPreferencesUtils private constructor() {
                 CommonSharedPreferences.setBean(PATIENTBEAN, serialNo)
             }
             field = serialNo
+        }
+
+    var ingredientCaliStanderOneO2: String? = null //成分定标标气1氧气
+        get() {
+            if (field == null) {
+                field = CommonSharedPreferences.getSPValue(INGREDIENT_CALIBRATE_STANDARDONE_O2, "")
+            }
+            return field
+        }
+        set(serialNo) {
+            field = serialNo
+            CommonSharedPreferences.setSPValue(INGREDIENT_CALIBRATE_STANDARDONE_O2, serialNo)
+        }
+
+    var ingredientCaliStanderOneCO2: String? = null //成分定标标气1二氧化碳
+        get() {
+            if (field == null) {
+                field = CommonSharedPreferences.getSPValue(INGREDIENT_CALIBRATE_STANDARDONE_CO2, "")
+            }
+            return field
+        }
+        set(serialNo) {
+            field = serialNo
+            CommonSharedPreferences.setSPValue(INGREDIENT_CALIBRATE_STANDARDONE_CO2, serialNo)
+        }
+
+    var ingredientCaliStanderTwoO2: String? = null //成分定标标气2氧气
+        get() {
+            if (field == null) {
+                field = CommonSharedPreferences.getSPValue(INGREDIENT_CALIBRATE_STANDARDTWO_O2, "")
+            }
+            return field
+        }
+        set(serialNo) {
+            field = serialNo
+            CommonSharedPreferences.setSPValue(INGREDIENT_CALIBRATE_STANDARDTWO_O2, serialNo)
+        }
+
+    var ingredientCaliStanderTwoCO2: String? = null //成分定标标气2二氧化碳
+        get() {
+            if (field == null) {
+                field = CommonSharedPreferences.getSPValue(INGREDIENT_CALIBRATE_STANDARDTWO_CO2, "")
+            }
+            return field
+        }
+        set(serialNo) {
+            field = serialNo
+            CommonSharedPreferences.setSPValue(INGREDIENT_CALIBRATE_STANDARDTWO_CO2, serialNo)
         }
 
     /**

@@ -15,6 +15,7 @@ import com.common.base.toast
 import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent.Companion.INGREDIENTS_SUCCESS
 import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
@@ -87,6 +88,53 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
         IngredientAdapter(requireContext())
     }
 
+    private val textWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+        }
+
+        override fun afterTextChanged(s: Editable?) {
+            if (s.hashCode() == binding.etOneO2.text.hashCode()) {
+                standardOneGasO2Concentration = if (s?.isNotEmpty() == true) {
+                    s.toString().toDouble()
+                } else {
+                    0.0
+                }
+                SharedPreferencesUtils.instance.ingredientCaliStanderOneO2 =
+                    standardOneGasO2Concentration.toString()
+            } else if (s.hashCode() == binding.etOneCo2.text.hashCode()) {
+                standardOneGasCO2Concentration = if (s?.isNotEmpty() == true) {
+                    s.toString().toDouble()
+                } else {
+                    0.0
+                }
+                SharedPreferencesUtils.instance.ingredientCaliStanderOneCO2 =
+                    standardOneGasCO2Concentration.toString()
+            } else if (s.hashCode() == binding.etTwoO2.text.hashCode()) {
+                standardTwoGasO2Concentration = if (s?.isNotEmpty() == true) {
+                    s.toString().toDouble()
+                } else {
+                    0.0
+                }
+                SharedPreferencesUtils.instance.ingredientCaliStanderTwoO2 =
+                    standardTwoGasO2Concentration.toString()
+            } else if (s.hashCode() == binding.etTwoCo2.text.hashCode()) {
+                standardTwoGasCO2Concentration = if (s?.isNotEmpty() == true) {
+                    s.toString().toDouble()
+                } else {
+                    0.0
+                }
+                SharedPreferencesUtils.instance.ingredientCaliStanderTwoCO2 =
+                    standardTwoGasCO2Concentration.toString()
+            }
+        }
+    }
+
+
     override fun initView() {
         usbTransferUtil = USBTransferUtil.getInstance()
         if (binding.swDepthToggle.isChecked) {
@@ -134,20 +182,31 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
     }
 
     private fun initStandData() {
-        standardOneGasO2Concentration = binding.etOneO2.text.toString().toDouble()
-        binding.etOneO2.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        val ingredientCaliStanderOneO2 = SharedPreferencesUtils.instance.ingredientCaliStanderOneO2
+        val ingredientCaliStanderOneCO2 =
+            SharedPreferencesUtils.instance.ingredientCaliStanderOneCO2
+        val ingredientCaliStanderTwoO2 = SharedPreferencesUtils.instance.ingredientCaliStanderTwoO2
+        val ingredientCaliStanderTwoCO2 =
+            SharedPreferencesUtils.instance.ingredientCaliStanderTwoCO2
 
-            }
+        standardOneGasO2Concentration =
+            if (ingredientCaliStanderOneO2?.isEmpty() == true) 21.0 else ingredientCaliStanderOneO2!!.toDouble()
+        standardOneGasCO2Concentration =
+            if (ingredientCaliStanderOneCO2?.isEmpty() == true) 0.0 else ingredientCaliStanderOneCO2!!.toDouble()
+        standardTwoGasO2Concentration =
+            if (ingredientCaliStanderTwoO2?.isEmpty() == true) 0.0 else ingredientCaliStanderTwoO2!!.toDouble()
+        standardTwoGasCO2Concentration =
+            if (ingredientCaliStanderTwoCO2?.isEmpty() == true) 0.0 else ingredientCaliStanderTwoCO2!!.toDouble()
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        binding.etOneO2.setText(standardOneGasO2Concentration.toString())
+        binding.etOneCo2.setText(standardOneGasCO2Concentration.toString())
+        binding.etTwoO2.setText(standardTwoGasO2Concentration.toString())
+        binding.etTwoCo2.setText(standardTwoGasCO2Concentration.toString())
 
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                standardOneGasO2Concentration = s?.toString()?.toDouble()!!
-            }
-        })
+        binding.etOneO2.addTextChangedListener(textWatcher)
+        binding.etOneCo2.addTextChangedListener(textWatcher)
+        binding.etTwoO2.addTextChangedListener(textWatcher)
+        binding.etTwoCo2.addTextChangedListener(textWatcher)
     }
 
     override fun initListener() {
@@ -156,6 +215,10 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
                 enableEditTextStyle()
             } else {
                 disEnableEditTextStyle()
+                binding.etOneO2.clearFocus()
+                binding.etOneCo2.clearFocus()
+                binding.etTwoO2.clearFocus()
+                binding.etTwoCo2.clearFocus()
             }
         }
 
@@ -233,6 +296,24 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
 
                     listO2.add(measuredO2Concentration)
                     listCO2.add(measuredCO2Concentration)
+
+                    val num = measuredO2DataSet!!.entries.size
+                    if (listO2.size - 10 > num) {
+                        for (i in 0 until 10) {
+                            measuredO2DataSet!!.addEntry(
+                                Entry(
+                                    ((num + i) * 0.01).toFloat(),
+                                    listO2[num + i].toFloat()
+                                )
+                            )
+                            measuredCO2DataSet!!.addEntry(
+                                Entry(
+                                    ((num + i) * 0.01).toFloat(),
+                                    listCO2[num + i].toFloat()
+                                )
+                            )
+                        }
+                    }
 
                     if (o2SensorList[11].size > 360) {
                         LogUtils.d("-------------------成分定标--------------------" + it[20] + it[21])
@@ -686,22 +767,28 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
             ingredientCalibrationResultEntity.bO2 = bo2.toString()
             ingredientCalibrationResultEntity.o2Offset = o2offset.toString()
             ingredientCalibrationResultEntity.o2T90 = o2t90.toString()
-            ingredientCalibrationResultEntity.o2Error = listIng.take(2).maxOf { it.errorRate.toString() }
+            ingredientCalibrationResultEntity.o2Error =
+                listIng.take(2).maxOf { it.errorRate.toString() }
             ingredientCalibrationResultEntity.kCO2 = kco2.toString()
             ingredientCalibrationResultEntity.bCO2 = bco2.toString()
             ingredientCalibrationResultEntity.o2Offset = co2offset.toString()
             ingredientCalibrationResultEntity.o2T90 = co2t90.toString()
-            ingredientCalibrationResultEntity.o2Error = listIng.drop(2).take(2).maxOf { it.errorRate.toString() }
+            ingredientCalibrationResultEntity.o2Error =
+                listIng.drop(2).take(2).maxOf { it.errorRate.toString() }
 
             viewModel.setIngredientCaliResultBean(ingredientCalibrationResultEntity)
 
-            if(result){
+            if (result) {
                 LungCommonDialogFragment.startCommonDialogFragment(
-                    requireActivity().supportFragmentManager, "成分定标失败！定标参数保存到数据库！", "2"
+                    requireActivity().supportFragmentManager,
+                    "成分定标失败！定标参数保存到数据库！",
+                    "2"
                 )
-            }else{
+            } else {
                 LungCommonDialogFragment.startCommonDialogFragment(
-                    requireActivity().supportFragmentManager, "成分定标成功！定标参数保存到数据库！", "1"
+                    requireActivity().supportFragmentManager,
+                    "成分定标成功！定标参数保存到数据库！",
+                    "1"
                 )
             }
         }
