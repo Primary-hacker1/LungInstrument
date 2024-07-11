@@ -17,6 +17,7 @@ import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.dao.calibration.FlowCalibrationResultBean
 import com.just.machine.dao.calibration.FlowManualCalibrationResultBean
 import com.just.machine.dao.calibration.IngredientBean
+import com.just.machine.dao.calibration.IngredientCalibrationResultBean
 import com.just.machine.dao.lung.CPXBreathInOutData
 import com.just.machine.dao.lung.LungRepository
 import com.just.machine.dao.setting.AllSettingBean
@@ -128,6 +129,15 @@ class MainViewModel @Inject constructor(
         )
     }
 
+    fun setIngredientCaliResultBean(bean: IngredientCalibrationResultBean) {
+        setBean(
+            bean,
+            environmentalDao::insertIngredientCaliResult,
+            environmentalDao::getIngredientCaliResult,
+            LiveDataEvent.INGREDIENTS_SUCCESS
+        )
+    }
+
     fun getEnvironmental() {//查询所有环境定标
         viewModelScope.launch {
             environmentalDao.getEnvironmentals().collect {
@@ -180,11 +190,21 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun getFlowAutoCaliResult() {//查询流量自动动定标结果
+    fun getFlowAutoCaliResult() {//查询流量自动定标结果
         viewModelScope.launch {
             environmentalDao.getFlowAutoCaliResult().collect {
                 mEventHub.value = LiveDataEvent(
                     LiveDataEvent.FLOWS_AUTO_SUCCESS, it
+                )
+            }
+        }
+    }
+
+    fun getIngredientCaliResult() {//查询成分定标结果
+        viewModelScope.launch {
+            environmentalDao.getIngredientCaliResult().collect {
+                mEventHub.value = LiveDataEvent(
+                    LiveDataEvent.INGREDIENTS_SUCCESS, it
                 )
             }
         }

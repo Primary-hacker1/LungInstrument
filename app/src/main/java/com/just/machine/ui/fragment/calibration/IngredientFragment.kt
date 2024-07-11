@@ -17,7 +17,6 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.just.machine.dao.calibration.IngredientBean
-import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.calibration.IngredientAdapter
 import com.just.machine.ui.fragment.serial.ModbusProtocol
 import com.just.machine.ui.fragment.serial.SerialPortManager
@@ -41,8 +40,34 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
 
     private lateinit var tts: TextToSpeech
 
-    private var actualO2DataSet: LineDataSet? = null
-    private var actualCO2DataSet: LineDataSet? = null
+    private var standardOneGasO2Concentration = 0.0 //标准1气体氧气(O2)浓度
+    private var standardOneGasCO2Concentration = 0.0 //标准1气体二氧化碳(CO2)浓度
+
+    private var standardTwoGasO2Concentration = 0.0 //标准2气体氧气(O2)浓度
+    private var standardTwoGasCO2Concentration = 0.0 //标准2气体二氧化碳(CO2)浓度
+
+    private var measuredO2Concentration = 0.0 //氧气(O2)测量浓度
+    private var measuredCO2Concentration = 0.0 //二氧化碳(CO2)测量浓度
+
+    private var measuredO2DataSet: LineDataSet? = null //氧气(O2)实测流量曲线
+    private var measuredCO2DataSet: LineDataSet? = null //二氧化碳(CO2)实测流量曲线
+
+    private var o2IngredientCalibrationModelList = mutableListOf<IngredientBean>() //氧气(O2)成分定标结果列表
+    private var co2IngredientCalibrationModelList = mutableListOf<IngredientBean>() //二氧化碳(CO2)成分定标结果列表
+
+    private var kCO2 = 0.01 //二氧化碳kx+b的k
+    private var bCO2 = 0.0 //二氧化碳kx+b的b
+    private var kO2 = 0.0017 //氧气kx+b的k
+    private var bO2 = -1 //氧气kx+b的k
+
+    private val o2SensorList = ArrayList<ArrayList<Double>>() //氧气传感器值
+    private val co2SensorList = ArrayList<ArrayList<Double>>() //二氧化碳传感器值
+
+    private var listO2 = ArrayList<Double>()
+    private var listCO2 = ArrayList<Double>()
+
+    private var ingredientState = false //成分定标状态
+    private var ingredientStateList = ArrayList<Boolean>() //成分定标状态列表
 
     private val o2Adapter by lazy {
         IngredientAdapter(requireContext())
@@ -59,11 +84,13 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
             binding.etOneCo2.isEnabled = true
             binding.etTwoCo2.isEnabled = true
             binding.etTwoCo2.isEnabled = true
+            enableEditTextStyle()
         } else {
             binding.etOneO2.isEnabled = false
             binding.etOneCo2.isEnabled = false
             binding.etTwoCo2.isEnabled = false
             binding.etTwoCo2.isEnabled = false
+            disEnableEditTextStyle()
         }
 
         binding.rvIngredient.layoutManager = LinearLayoutManager(requireContext())
@@ -71,17 +98,6 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
         o2Adapter.setItemClickListener { _, position ->
             o2Adapter.toggleItemBackground(position)
         }
-
-//        binding.chartView.setLineDataSetData(binding.chartView.flowDataSetList())
-//
-//        binding.chartView.setLineChartFlow(
-//            yAxisMinimum = 0f,
-//            yAxisMaximum = 30f,
-//            countMaxX = 60f,
-//            granularityY = 1.5f,
-//            granularityX = 2f,
-//            titleCentent = "成分定标"
-//        )
 
         binding.rvIngredient.adapter = o2Adapter
         binding.rvIngredient2.adapter = co2Adapter
@@ -113,30 +129,6 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
 
         binding.llStart.setNoRepeatListener {
             tts.speak("开始成分定标", TextToSpeech.QUEUE_FLUSH, null, "")
-            if (Constants.isDebug) {
-                // 调用生成主控板返回数据方法并打印生成的数据
-                val controlBoardResponse = ModbusProtocol.ControlBoardData(
-                    0x12.toByte(), // 返回命令
-                    1000, // 大量程流量传感器数据
-                    500, // 小量程流量传感器数据
-                    800, // CO2传感器数据
-                    200, // O2传感器数据
-                    1500, // 分析气体流速传感器数据
-                    1000, // 分析气体压力传感器数据
-                    300, // 温度数据
-                    80 // 电量数据
-                )
-
-                val data = ModbusProtocol.generateControlBoardResponse(
-                    controlBoardResponse
-                )
-
-                LogUtils.e(tag + BaseUtil.bytes2HexStr(data) + "发送的数据")
-
-                LiveDataBus.get().with("测试3").value = data
-
-                return@setNoRepeatListener
-            }
 
             SerialPortManager.sendMessage(ModbusProtocol.FLOW_CALIBRATION_COMMAND)//发送流量定标
         }
@@ -201,10 +193,10 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
         binding.etOneCo2.isEnabled = false
         binding.etTwoCo2.isEnabled = false
         binding.etTwoCo2.isEnabled = false
-        binding.etOneO2.setBackgroundResource(R.drawable.frame_with_color_transparent)
-        binding.etOneCo2.setBackgroundResource(R.drawable.frame_with_color_transparent)
-        binding.etTwoO2.setBackgroundResource(R.drawable.frame_with_color_transparent)
-        binding.etTwoCo2.setBackgroundResource(R.drawable.frame_with_color_transparent)
+        binding.etOneO2.setBackgroundResource(R.drawable.frame_with_color_d6d6d6_gray_solid)
+        binding.etOneCo2.setBackgroundResource(R.drawable.frame_with_color_d6d6d6_gray_solid)
+        binding.etTwoO2.setBackgroundResource(R.drawable.frame_with_color_d6d6d6_gray_solid)
+        binding.etTwoCo2.setBackgroundResource(R.drawable.frame_with_color_d6d6d6_gray_solid)
     }
 
     /**
@@ -318,30 +310,49 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
                 formSize = 0f
             }
 
-            actualO2DataSet = LineDataSet(null, "")
-            actualO2DataSet!!.lineWidth = 1.0f
-            actualO2DataSet!!.color = ContextCompat.getColor(requireContext(), R.color.green)
-            actualO2DataSet!!.setDrawValues(false)
-            actualO2DataSet!!.setDrawCircles(false)
-            actualO2DataSet!!.setDrawCircleHole(false)
-            actualO2DataSet!!.setDrawFilled(false)
-            actualO2DataSet!!.mode = LineDataSet.Mode.LINEAR
+            measuredO2DataSet = LineDataSet(null, "")
+            measuredO2DataSet!!.lineWidth = 1.0f
+            measuredO2DataSet!!.color = ContextCompat.getColor(requireContext(), R.color.green)
+            measuredO2DataSet!!.setDrawValues(false)
+            measuredO2DataSet!!.setDrawCircles(false)
+            measuredO2DataSet!!.setDrawCircleHole(false)
+            measuredO2DataSet!!.setDrawFilled(false)
+            measuredO2DataSet!!.mode = LineDataSet.Mode.LINEAR
 
-            actualCO2DataSet = LineDataSet(null, "")
-            actualCO2DataSet!!.lineWidth = 1.0f
-            actualCO2DataSet!!.color =
+            measuredCO2DataSet = LineDataSet(null, "")
+            measuredCO2DataSet!!.lineWidth = 1.0f
+            measuredCO2DataSet!!.color =
                 ContextCompat.getColor(requireContext(), R.color.colorTextOrange)
-            actualCO2DataSet!!.setDrawValues(false)
-            actualCO2DataSet!!.setDrawCircles(false)
-            actualCO2DataSet!!.setDrawCircleHole(false)
-            actualCO2DataSet!!.setDrawFilled(false)
-            actualCO2DataSet!!.mode = LineDataSet.Mode.LINEAR
+            measuredCO2DataSet!!.setDrawValues(false)
+            measuredCO2DataSet!!.setDrawCircles(false)
+            measuredCO2DataSet!!.setDrawCircleHole(false)
+            measuredCO2DataSet!!.setDrawFilled(false)
+            measuredCO2DataSet!!.mode = LineDataSet.Mode.LINEAR
 
             val lineDataSets: MutableList<ILineDataSet> = ArrayList()
-            lineDataSets.add(actualO2DataSet!!)
-            lineDataSets.add(actualCO2DataSet!!)
+            lineDataSets.add(measuredO2DataSet!!)
+            lineDataSets.add(measuredCO2DataSet!!)
             val lineData = LineData(lineDataSets)
             data = lineData
         }
+    }
+
+    private fun prepareIngredientCalibration(){
+        o2IngredientCalibrationModelList.clear()
+        co2IngredientCalibrationModelList.clear()
+        o2SensorList.clear()
+        co2SensorList.clear()
+        ingredientStateList.clear()
+        ingredientState = false
+
+        measuredCO2DataSet!!.clear()
+        measuredO2DataSet!!.clear()
+
+        binding.chartIngredient.lineData.notifyDataChanged()
+        binding.chartIngredient.notifyDataSetChanged()
+        binding.chartIngredient.invalidate()
+
+        listO2 = arrayListOf()
+        listCO2 = arrayListOf()
     }
 }

@@ -15,6 +15,7 @@ import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.dao.calibration.FlowCalibrationResultBean
 import com.just.machine.dao.calibration.FlowManualCalibrationResultBean
 import com.just.machine.dao.calibration.IngredientBean
+import com.just.machine.dao.calibration.IngredientCalibrationResultBean
 import com.just.machine.dao.lung.CPXBreathInOutData
 import com.just.machine.dao.lung.LungDao
 import com.just.machine.dao.setting.AllSettingBean
@@ -45,7 +46,7 @@ import com.just.machine.workers.SeedDatabaseWorker.Companion.KEY_FILENAME
 @Database(
     entities = [PatientBean::class, EnvironmentalCalibrationBean::class, AllSettingBean::class, StaticSettingBean::class,
         CPXBreathInOutData::class, FlowBean::class, IngredientBean::class, DynamicSettingBean::class, FlowCalibrationResultBean::class,
-        FlowAutoCalibrationResultBean::class, FlowManualCalibrationResultBean::class, SixMinReportWalk::class,
+        FlowAutoCalibrationResultBean::class, FlowManualCalibrationResultBean::class, IngredientCalibrationResultBean::class,SixMinReportWalk::class,
         SixMinBloodOxygen::class, SixMinHeartEcg::class, SixMinReportBreathing::class,
         SixMinReportEvaluation::class, SixMinReportHeartBeat::class, SixMinReportInfo::class,
         SixMinReportOther::class, SixMinReportPrescription::class, SixMinReportStride::class],

@@ -35,4 +35,8 @@ class CalibrationRepository @Inject constructor(private val dao: CalibrationDao)
     suspend fun insertFlowAutoCaliResult(bean: FlowAutoCalibrationResultBean) = dao.insertFlowAutoCalibrationResult(bean)
 
     fun getFlowAutoCaliResult(): Flow<List<FlowAutoCalibrationResultBean>>  = dao.getFlowAutoCalibrationResult()
+
+    suspend fun insertIngredientCaliResult(bean: IngredientCalibrationResultBean) = dao.insertIngredientCalibrationResult(bean)
+
+    fun getIngredientCaliResult(): Flow<List<IngredientCalibrationResultBean>>  = dao.getIngredientCalibrationResult()
 }

@@ -73,4 +73,12 @@ interface CalibrationDao {
     @Transaction
     @Query("SELECT * FROM flowAutoCalibrationResult ORDER BY calibrationTime DESC")
     fun getFlowAutoCalibrationResult(): Flow<List<FlowAutoCalibrationResultBean>>
+
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertIngredientCalibrationResult(resultBean: IngredientCalibrationResultBean)
+
+    @Transaction
+    @Query("SELECT * FROM ingredientCalibrationResult ORDER BY calibrationTime DESC")
+    fun getIngredientCalibrationResult(): Flow<List<IngredientCalibrationResultBean>>
 }
