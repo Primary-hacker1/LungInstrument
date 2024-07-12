@@ -25,10 +25,11 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.google.gson.Gson
 import com.hjq.window.EasyWindow
-import com.just.machine.model.sixmininfo.BloodOxyLineEntryBean
 import com.just.machine.model.Constants
 import com.just.machine.model.PatientInfoBean
 import com.just.machine.model.SharedPreferencesUtils
+import com.just.machine.model.sixmininfo.BloodOxyLineEntryBean
+import com.just.machine.model.sixmininfo.HeartRateLineEntryBean
 import com.just.machine.model.sixmininfo.UsbSerialData
 import com.just.machine.model.sixminsystemsetting.SixMinSysSettingBean
 import com.just.machine.ui.activity.SixMinDetectActivity
@@ -37,7 +38,6 @@ import com.just.machine.ui.dialog.SixMinCollectRestoreEcgDialogFragment
 import com.just.machine.ui.dialog.SixMinGuideDialogFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.CommonUtil
-import com.just.machine.util.ECGDataParse
 import com.just.machine.util.FixCountDownTime
 import com.just.machine.util.LiveDataBus
 import com.just.machine.util.MyLineChartRenderer
@@ -45,7 +45,6 @@ import com.just.machine.util.ScreenUtils
 import com.just.machine.util.SixMinCmdUtils
 import com.just.news.R
 import com.just.news.databinding.FragmentSixminBinding
-import com.seeker.luckychart.annotation.UIMode
 import com.seeker.luckychart.model.ECGPointValue
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,6 +56,9 @@ import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.Timer
+import java.util.TimerTask
+import kotlin.concurrent.fixedRateTimer
 
 
 /**
@@ -65,11 +67,15 @@ import java.util.Locale
 @AndroidEntryPoint
 class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech.OnInitListener {
 
+    private lateinit var timerTask1: TimerTask
+    private lateinit var timer1: Timer
+    private var heartEcgTimer: Timer? = null
     private val viewModel by viewModels<MainViewModel>()
     private lateinit var textToSpeech: TextToSpeech
     private lateinit var mActivity: SixMinDetectActivity
     private lateinit var mCountDownTime: FixCountDownTime //试验6分钟倒计时
     private lateinit var mCountDownTimeThree: CountDownTimer//每3秒一个值获取心率，血氧
+    private lateinit var mCountDownTimeHeartRate: CountDownTimer//每3秒一个值获取心率，血氧
     private lateinit var mStartTestCountDownTime: FixCountDownTime//6分钟试验5秒倒计时
     private lateinit var mGetSportHeartEcgCountDownTime: FixCountDownTime//采集运动心率倒计时
     private lateinit var bloodOxyDataSet: LineDataSet
@@ -168,34 +174,50 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
 
     private fun initEcgChart() {
         try {
-            binding.sixminEcg.setMode(UIMode.ERASE)
-            binding.sixminEcg.initDefaultChartData(false, false)
-            binding.sixminEcg.setFrameRenderCallback {
-                if (!ready || binding.sixminEcg.chartData == null) {
-                    return@setFrameRenderCallback
-                }
-                val count = 4
-                if (index + count < mValues[0]!!.size) {
-                    val lineCount: Int = binding.sixminEcg.ecgRenderStrategy.ecgLineCount
-                    val values: Array<Array<ECGPointValue>?> = arrayOfNulls(lineCount)
-                    for (i in 0 until lineCount) {
-                        val value =
-                            mValues[i]!!.copyOfRange(index, index + count)
-                        values[i] = value
+//            binding.sixminEcg.setMode(UIMode.ERASE)
+//            binding.sixminEcg.initDefaultChartData(false, false)
+//            binding.sixminEcg.setFrameRenderCallback {
+//                if (!ready || binding.sixminEcg.chartData == null) {
+//                    return@setFrameRenderCallback
+//                }
+//                val count = 4
+//                if (index + count < mValues[0]!!.size) {
+//                    val lineCount: Int = binding.sixminEcg.ecgRenderStrategy.ecgLineCount
+//                    val values: Array<Array<ECGPointValue>?> = arrayOfNulls(lineCount)
+//                    for (i in 0 until lineCount) {
+//                        val value =
+//                            mValues[i]!!.copyOfRange(index, index + count)
+//                        values[i] = value
+//                    }
+//                    binding.sixminEcg.updatePointsToRender(*values)
+//                    index += count
+//                }
+//            }
+//            lifecycleScope.launch(Dispatchers.Default) {
+//                val count: Int = binding.sixminEcg.ecgRenderStrategy.ecgLineCount
+//                mValues = arrayOfNulls(count)
+//                for (i in 0 until count) {
+//                    val dataParse = ECGDataParse(mActivity)
+//                    mValues[i] = dataParse.values
+//                }
+//                ready = true
+//            }
+
+            timer1 = Timer()
+            timerTask1 = object : TimerTask() {
+                override fun run() {
+                    try {
+                        val mapHeartEcg = mActivity.usbTransferUtil.mapHeartEcg
+                        Log.d("mapHeartEcg",Gson().toJson(mapHeartEcg))
+                        if(mapHeartEcg.isNotEmpty()){
+                            binding.sixminEcg.showLine(mapHeartEcg[0])
+                        }
+                    } catch (e: java.lang.Exception) {
+                        Log.d("EcgError", e.toString())
                     }
-                    binding.sixminEcg.updatePointsToRender(*values)
-                    index += count
                 }
             }
-            lifecycleScope.launch(Dispatchers.Default) {
-                val count: Int = binding.sixminEcg.ecgRenderStrategy.ecgLineCount
-                mValues = arrayOfNulls(count)
-                for (i in 0 until count) {
-                    val dataParse = ECGDataParse(mActivity)
-                    mValues[i] = dataParse.values
-                }
-                ready = true
-            }
+            timer1.schedule(timerTask1, 1, 5)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -668,6 +690,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                 binding.sixminTvCircleCount.text = mActivity.usbTransferUtil.circleCount.toString()
             } else {
                 mActivity.showMsg("试验未开始!")
+                mCountDownTimeHeartRate.start()
             }
         }
         binding.sixminIvCircleCountMinus.setNoRepeatListener {
@@ -746,6 +769,54 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
         }
         mStartTestCountDownTime = object : FixCountDownTime(5, 1000) {}
         mGetSportHeartEcgCountDownTime = object : FixCountDownTime(10, 1000) {}
+
+        mCountDownTimeHeartRate = object : CountDownTimer(1080000, 3000) {
+            override fun onTick(millisUntilFinished: Long) {
+                try {
+                    val mapHeartRate = mActivity.usbTransferUtil.mapHeartRate
+                    if (mapHeartRate.isNotEmpty()) {
+                        val value = mapHeartRate.entries.last().value
+                        if(value == "0"||value.isEmpty()){
+                            binding.sixminTvHeartBeat.text = "---"
+                        }else{
+                            binding.sixminTvHeartBeat.text = value
+                        }
+                        addHeartRateEntry(value.toFloat(), (millisUntilFinished / 1000).toFloat())
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onFinish() {
+
+            }
+        }
+    }
+
+    private fun addHeartRateEntry(entryData: Float, times: Float) {
+        val decimalFormat = DecimalFormat("#.00")
+        val index: Float = times / 60
+
+        heartBeatDataSet.addEntry(
+            Entry(
+                ((18.00 - decimalFormat.format(index).toFloat()).toFloat()), entryData
+            )
+        )
+        binding.sixminLineChartHeartBeat.lineData.addDataSet(
+            heartBeatDataSet
+        )
+
+        mActivity.usbTransferUtil.heartRateLineData.add(
+            HeartRateLineEntryBean(
+                ((18.00 - decimalFormat.format(index).toFloat()).toFloat()),
+                entryData
+            )
+        )
+
+        binding.sixminLineChartHeartBeat.lineData.notifyDataChanged()
+        binding.sixminLineChartHeartBeat.notifyDataSetChanged()
+        binding.sixminLineChartHeartBeat.invalidate()
     }
 
     private fun addEntryData(entryData: Float, times: Int) {
@@ -956,7 +1027,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
             } else {
                 heartBeatDataSet = LineDataSet(null, "")
                 heartBeatDataSet.lineWidth = 1.0f
-                heartBeatDataSet.color = ContextCompat.getColor(mActivity, R.color.text3)
+                heartBeatDataSet.color = ContextCompat.getColor(mActivity, R.color.red)
                 heartBeatDataSet.setDrawValues(false)
                 heartBeatDataSet.setDrawCircles(false)
                 heartBeatDataSet.setDrawCircleHole(false)
@@ -964,6 +1035,20 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                 heartBeatDataSet.mode = LineDataSet.Mode.LINEAR
                 val lineData = LineData(heartBeatDataSet)
                 data = lineData
+
+                val mtRenderer = MyLineChartRenderer(this, animator, viewPortHandler)
+                val colors = IntArray(4)
+                colors[0] = Color.parseColor("#333333")
+                colors[1] = Color.parseColor("#333333")
+                colors[2] = Color.parseColor("#ff0000")
+                colors[3] = Color.parseColor("#ff0000")
+                mtRenderer.setHeartLine(
+                    60,
+                    120,
+                    mActivity.sysSettingBean.sysAlarm.heartBeat.toInt(),
+                    colors
+                )
+                renderer = mtRenderer
             }
         }
     }
@@ -1599,14 +1684,14 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
     override fun onResume() {
         initSysInfo()
         mActivity.setToolbarTitle(getString(R.string.sixmin_test_title))
-        binding.sixminEcg.onResume()
+//        binding.sixminEcg.onResume()
         initFloatingCardiopulmonary()
         mActivity.sixMinReportInfo.bsHxl = mActivity.sysSettingBean.sysOther.stepsOrBreath
         super.onResume()
     }
 
     override fun onPause() {
-        binding.sixminEcg.onPause()
+//        binding.sixminEcg.onPause()
         super.onPause()
     }
 

@@ -927,23 +927,29 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="160dp"
                         android:layout_marginHorizontal="5dp"
                         android:layout_marginTop="5dp"
                         android:background="@drawable/dialog_bg"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="5dp">
 
-                        <com.seeker.luckychart.charts.ECGChartView
+                        <!--                        <com.seeker.luckychart.charts.ECGChartView-->
+                        <!--                            android:id="@+id/sixmin_ecg"-->
+                        <!--                            android:layout_width="match_parent"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_gravity="center"-->
+                        <!--                            app:canLineBound="false"-->
+                        <!--                            app:ecgLineCount="1"-->
+                        <!--                            app:markTextStyle="10,2"-->
+                        <!--                            app:renderMode="RENDER_CONTINUOUS"-->
+                        <!--                            app:yOuterCellCounts="6" />-->
+
+                        <com.justsafe.libview.ecg.WaveShowView
                             android:id="@+id/sixmin_ecg"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            app:canLineBound="false"
-                            app:ecgLineCount="1"
-                            app:markTextStyle="10,2"
-                            app:renderMode="RENDER_CONTINUOUS"
-                            app:yOuterCellCounts="6" />
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center" />
                     </LinearLayout>
 
                     <LinearLayout

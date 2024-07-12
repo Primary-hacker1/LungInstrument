@@ -11,6 +11,7 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.hoho.android.usbserial.driver.UsbSerialDriver;
 import com.hoho.android.usbserial.driver.UsbSerialPort;
@@ -18,15 +19,16 @@ import com.hoho.android.usbserial.driver.UsbSerialProber;
 import com.hoho.android.usbserial.util.SerialInputOutputManager;
 import com.just.machine.model.sixmininfo.BloodOxyLineEntryBean;
 import com.just.machine.model.Constants;
+import com.just.machine.model.sixmininfo.HeartRateLineEntryBean;
 import com.just.machine.model.sixmininfo.UsbSerialData;
 import com.just.machine.model.sixminreport.SixMinBloodOxygen;
 import com.just.machine.model.sixminreport.SixMinReportEvaluation;
 import com.just.machine.model.sixminreport.SixMinReportStride;
 import com.just.machine.model.sixminreport.SixMinReportWalk;
 import com.just.machine.model.sixminsystemsetting.SixMinSysSettingBean;
-import com.just.machine.ui.fragment.serial.ModbusProtocol;
 import com.just.machine.ui.service.GetDeviceInfoService;
 import com.just.news.BuildConfig;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -69,9 +71,12 @@ public class USBTransferUtil {
     public Map<Long, byte[]> map = new HashMap<>();//接收数据
     public Map<Long, byte[]> mapNew = new TreeMap<>();
     public Map<Long, String> mapBloodOxygen = new TreeMap<>();//血氧数据
+    public Map<Long, String> mapHeartRate = new TreeMap<>();//心率数据
+    public List<Float> mapHeartEcg = new ArrayList<>();//心电数据
     public List<Integer> bloodListAvg = new ArrayList<>();//血氧数据，每秒一个值
     public List<Integer> bloodAllListAvg = new ArrayList<>();//6分钟所有血氧数据
     public List<BloodOxyLineEntryBean> bloodOxyLineData = new ArrayList<>();//6分钟血氧折线图数据
+    public List<HeartRateLineEntryBean> heartRateLineData = new ArrayList<>();//6分钟心率折线图数据
     public String byteStr = "";
     public UsbSerialData usbSerialData = null;
     public boolean isBegin = false;//是否开始试验
@@ -265,7 +270,7 @@ public class USBTransferUtil {
             @Override
             public void onNewData(byte[] data) {
 
-                ModbusProtocol.INSTANCE.receiveSerialData(data);
+//                ModbusProtocol.INSTANCE.receiveSerialData(data);
                 // 在这里处理接收到的 usb 数据 -------------------------------
                 // 按照结尾标识符处理
 //                baos.write(data,0,data.length);
@@ -279,7 +284,57 @@ public class USBTransferUtil {
                 // 直接处理
                 String data_str = CRC16Util.bytes2Hex(data);
 //                Log.i(TAG, "收到 usb 数据长度: " + data_str.length());
-//                Log.i(TAG, "收到 usb 数据: " + data_str);
+                Log.i(TAG, "收到 usb 数据: " + data_str);
+                if (data_str.startsWith("a88b")) {
+                    int index = data_str.lastIndexOf("a88a");
+                    String ecgData = data_str.substring(6, index);
+                    String head = ecgData.substring(0, 2);
+                    if (head.equals("a5")) {
+                        String cmd1 = ecgData.substring(2, 4);
+                        String cmd2 = ecgData.substring(4, 6);
+                        if ((255 - Integer.parseInt(cmd2, 16) == Integer.parseInt(cmd1, 16))) {
+                            String len1 = ecgData.substring(10, 12);
+                            String len2 = ecgData.substring(12, 14);
+                            int len = Integer.parseInt(len2 + len1, 16);
+                            String dataStr = ecgData.substring(0, (len * 2) + 16);
+                            if (dataStr.length() / 2 >= len + 8) {
+                                String content = dataStr.substring(14, dataStr.length() - 2);
+                                String heartRate = String.valueOf(Integer.parseInt(content.substring(2, 4) + content.substring(0, 2), 16));
+                                int batterLevel = Integer.parseInt(content.substring(6, 8), 16);
+                                int runStatus = Integer.parseInt(content.substring(16, 18), 16);
+                                long time = System.currentTimeMillis();
+                                mapHeartRate.put(time, heartRate);
+                                String waveForm = content.substring(40);
+                                String waveData = waveForm.substring(4);
+
+                                int lvbo = 0;
+                                List<Float> waveArr = new ArrayList<>();
+                                if(waveData.length() > 4){
+                                    for (int i = 0; i < waveData.length(); i += 4) {
+                                        float wave = Integer.parseInt(waveData.substring(i + 2, i + 4) + waveData.substring(i, i + 2), 16);
+                                        if (wave > 32767) {
+                                            wave = wave - 65536;
+                                        } else if (wave == 32767) {
+                                            wave = 0;
+                                        }
+                                        wave = (float) (wave * (1.0035 * 1800) / (4096 * 178.74));
+                                        waveArr.add(wave);
+                                        lvbo++;
+                                        if (lvbo == 2) {
+                                            float realt = (waveArr.get(0) + waveArr.get(1)) / 2;
+                                            long timeMillis = System.currentTimeMillis();
+                                            mapHeartEcg.add(0,realt);
+                                            waveArr = new ArrayList<>();
+                                            lvbo = 0;
+                                        }
+                                    }
+                                }
+                            }
+                        }else{
+                            Log.e(TAG,"数据类型不正确");
+                        }
+                    }
+                }
 //                try {
 //                    Long time = System.currentTimeMillis();
 //                    if (map.containsKey(time)) {
@@ -308,7 +363,7 @@ public class USBTransferUtil {
                 my_context.stopService(new Intent(my_context, GetDeviceInfoService.class));
             }
         });
-        inputOutputManager.setReadBufferSize(2048);
+        inputOutputManager.setReadBufferSize(512);
         inputOutputManager.start();
         isConnectUSB = true;  // 修改连接标识
         Toast.makeText(my_context, "连接成功", Toast.LENGTH_SHORT).show();
@@ -359,10 +414,6 @@ public class USBTransferUtil {
             }
             // 清空设备列表
             availableDrivers.clear();
-            // 注销广播监听
-            if (usbReceiver != null) {
-                my_context.unregisterReceiver(usbReceiver);
-            }
             if (isConnectUSB) {
                 isConnectUSB = false;  // 修改标识
                 ecgConnection = false;
@@ -377,6 +428,10 @@ public class USBTransferUtil {
     }
 
     public void release() {
+        // 注销广播监听
+        if (usbReceiver != null) {
+            my_context.unregisterReceiver(usbReceiver);
+        }
         map.clear();
         mapNew.clear();
         mapBloodOxygen.clear();
@@ -873,6 +928,7 @@ public class USBTransferUtil {
 
     /**
      * 处理推荐距离
+     *
      * @param percentStr
      * @param strideAverage
      * @param shichang
