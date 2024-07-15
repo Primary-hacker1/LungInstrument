@@ -67,8 +67,8 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
     private var dh = 0.0
     private val flowCoefficientOut = 0.05
 
-    var TempDl: Queue<Double> = LinkedList()
-    var TempDh: Queue<Double> = LinkedList()
+    private var TempDl: Queue<Double> = LinkedList()
+    private var TempDh: Queue<Double> = LinkedList()
 
     private var autoFlowList = mutableListOf<FlowBean>()
 
@@ -300,7 +300,7 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
                         flowAutoResult.ratedLowFlow = list[1].calibratedValue
                         flowAutoResult.measuredLowFlow = list[1].actual
                         flowAutoResult.lowFlowError = list[1].errorRate
-                        viewModel.setFlowAutoCaliResultBean(flowAutoResult)
+//                        viewModel.setFlowAutoCaliResultBean(flowAutoResult)
                         flowAdapter.setItemsBean(autoFlowList)
                         if (result) {
                             //定标未通过

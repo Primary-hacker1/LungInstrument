@@ -25,11 +25,11 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
 
     private var countSec = 0
     private var iFlag = 0
-    private var envSuccess = false
+    private var isFlowSend = false //流量定标指令是否发送
+    private var envSuccess = false //环境定标是否成功
+    private var flowSuccess = false //自动流量定标是否成功
+    private var ingredientSuccess = false //成分定标是否成功
     private lateinit var timer: Timer
-    private val mCountDownTime by lazy {
-        object : FixCountDownTime(110, 1000) {}
-    }
 
     override fun loadData() {
 
@@ -52,6 +52,8 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
 
     override fun initListener() {
         binding.llOnekeyStart.setNoRepeatListener {
+            prepareStart()
+            disEnableStartBtn()
             timer = fixedRateTimer("", false, 0, 1000) {
                 Log.d("oneky", "正计时======")
                 if (countSec == 0) {
@@ -59,7 +61,7 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
                     binding.vpOnekey.setCurrentItem(1, true)
                 }
                 if (countSec < 5 && iFlag == 1) {
-                    if(envSuccess){
+                    if (envSuccess) {
                         binding.vpOnekey.setCurrentItem(2, true)
                         binding.tvOnekeyCalibrationEnvironment.setTextColor(
                             ContextCompat.getColor(
@@ -69,92 +71,84 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
                         )
                         binding.ivOnekeyCalibrationEnvironment.setImageResource(R.drawable.environment_highlight)
                         iFlag = 2
-                    }else{
-                        LungCommonDialogFragment.startCommonDialogFragment(
-                            requireActivity().supportFragmentManager, "一键定标失败!", "2"
-                        )
-                        timer.cancel()
-                        enableStartBtn()
-                        binding.vpOnekey.setCurrentItem(0, true)
                     }
                 } else if (countSec == 5 && iFlag == 1) {
                     binding.vpOnekey.setCurrentItem(2, true)
                     iFlag = 2
+                } else if (countSec in 6..54 && iFlag == 2) {
+                    //自动流量定标开始
+                    if (!isFlowSend) {
+                        isFlowSend = true
+                        LiveDataBus.get().with("oneKeyCalibra").value = "flowAuto"
+                    }
+                    if (flowSuccess) {
+                        binding.vpOnekey.setCurrentItem(3, true)
+                        binding.tvOnekeyCalibrationLineTwo.setBackgroundColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.green
+                            )
+                        )
+                        binding.tvOnekeyCalibrationFlow.setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.green
+                            )
+                        )
+                        binding.ivOnekeyCalibrationFlow.setImageResource(R.drawable.flow_highlight)
+                        iFlag = 3
+                    }
+                }else if(countSec > 54 && iFlag == 3) {
+                    if(ingredientSuccess){
+                        binding.vpOnekey.setCurrentItem(0, true)
+                        binding.tvOnekeyCalibrationLineTwo.setBackgroundColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.green
+                            )
+                        )
+                        binding.tvOnekeyCalibrationFlow.setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.green
+                            )
+                        )
+                        binding.ivOnekeyCalibrationFlow.setImageResource(R.drawable.flow_highlight)
+                        timer.cancel()
+                        enableStartBtn()
+                    }
                 }
                 countSec++
             }
-            mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack {
-                override fun onStart() {
-                    disEnableStartBtn()
-                    binding.vpOnekey.setCurrentItem(1, true)
-                    LiveDataBus.get().with("oneKeyCalibra").value = "environment"
-                }
-
-                override fun onTick(times: Int) {
-                    Log.d("oneky", "倒计时======$times")
-                    when (times) {
-                        105 -> {
-                            binding.vpOnekey.setCurrentItem(2, true)
-                            binding.tvOnekeyCalibrationEnvironment.setTextColor(
-                                ContextCompat.getColor(
-                                    requireContext(),
-                                    R.color.green
-                                )
-                            )
-                            binding.ivOnekeyCalibrationEnvironment.setImageResource(R.drawable.environment_highlight)
-                        }
-
-                        50 -> {
-                            binding.vpOnekey.setCurrentItem(3, true)
-                            binding.tvOnekeyCalibrationLineOne.setBackgroundColor(
-                                ContextCompat.getColor(
-                                    requireContext(),
-                                    R.color.green
-                                )
-                            )
-                            binding.tvOnekeyCalibrationFlow.setTextColor(
-                                ContextCompat.getColor(
-                                    requireContext(),
-                                    R.color.green
-                                )
-                            )
-                            binding.ivOnekeyCalibrationFlow.setImageResource(R.drawable.flow_highlight)
-                        }
-
-                        0, 1 -> {
-                            binding.tvOnekeyCalibrationLineTwo.setBackgroundColor(
-                                ContextCompat.getColor(
-                                    requireContext(),
-                                    R.color.green
-                                )
-                            )
-                            binding.tvOnekeyCalibrationIngredient.setTextColor(
-                                ContextCompat.getColor(
-                                    requireContext(),
-                                    R.color.green
-                                )
-                            )
-                            binding.ivOnekeyCalibrationIngredient.setImageResource(R.drawable.ingredient_highlight)
-                            enableStartBtn()
-                        }
-                    }
-                }
-
-                override fun onFinish() {
-
-                }
-            })
         }
 
         LiveDataBus.get().with("oneKeyCalibra").observe(this) {
             if (it is String) {
-                if (it == "environmentFailed") {
-                    envSuccess = false
-                }else if(it == "environmentSuccess"){
-                    envSuccess = true
+                when (it) {
+                    "environmentFailed" -> {
+                        envSuccess = false
+                    }
+                    "environmentSuccess" -> {
+                        envSuccess = true
+                    }
+                    "flowAutoFailed" -> {
+                        flowSuccess = false
+                    }
+                    "flowAutoSuccess" -> {
+                        flowSuccess = true
+                    }
                 }
             }
         }
+    }
+
+    private fun prepareStart() {
+        countSec = 0
+        iFlag = 0
+        isFlowSend = false
+        envSuccess = false
+        flowSuccess = false
+        ingredientSuccess = false
     }
 
     override fun getViewBinding(
@@ -175,7 +169,7 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
         binding.ivOnekeyStart.setImageResource(R.drawable.baseline_play_gray)
     }
 
-    fun enableStartBtn() {
+    private fun enableStartBtn() {
         binding.llOnekeyStart.setBackgroundResource(R.drawable.save_bg)
         binding.llOnekeyStart.isEnabled = true
         binding.tvOnekeyStart.setTextColor(
@@ -188,7 +182,7 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
     }
 
     override fun onDestroy() {
-        mCountDownTime.cancel()
+        timer.cancel()
         super.onDestroy()
     }
 }

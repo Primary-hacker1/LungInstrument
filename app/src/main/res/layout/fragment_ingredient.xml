@@ -318,14 +318,13 @@
                             android:textSize="13sp"
                             android:textStyle="bold" />
 
-                        <EditText
-                            android:id="@+id/et_actual_o2"
+                        <TextView
+                            android:id="@+id/tv_actual_o2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/space_15"
                             android:background="@null"
                             android:enabled="false"
-                            android:text="30.01"
                             android:textColor="@color/c238E23"
                             android:textSize="13sp"
                             android:textStyle="bold" />
@@ -339,14 +338,13 @@
                             android:textSize="13sp"
                             android:textStyle="bold" />
 
-                        <EditText
-                            android:id="@+id/et_actual_co2"
+                        <TextView
+                            android:id="@+id/tv_actual_co2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/space_5"
                             android:background="@null"
                             android:enabled="false"
-                            android:text="30.01"
                             android:textColor="@color/c3786db"
                             android:textSize="13sp"
                             android:textStyle="bold" />

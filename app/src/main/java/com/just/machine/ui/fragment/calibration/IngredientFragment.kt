@@ -560,10 +560,10 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
         var bo2 = 0.0
         var kco2 = 0.0
         var bco2 = 0.0
-        var listko2 = arrayListOf<Double>()
-        var listbo2 = arrayListOf<Double>()
-        var listkco2 = arrayListOf<Double>()
-        var listbco2 = arrayListOf<Double>()
+        val listko2 = arrayListOf<Double>()
+        val listbo2 = arrayListOf<Double>()
+        val listkco2 = arrayListOf<Double>()
+        val listbco2 = arrayListOf<Double>()
         for (i in 0 until 5) {
             if (o2SensorList[(i + 1) * 2].size == 0 || o2SensorList[(i + 1) * 2 + 1].size == 0 || co2SensorList[(i + 1) * 2].size == 0 || co2SensorList[(i + 1) * 2 + 1].size == 0)
                 continue
