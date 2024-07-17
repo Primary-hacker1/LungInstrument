@@ -26,6 +26,7 @@ import com.just.machine.model.sixminreport.SixMinReportEvaluation;
 import com.just.machine.model.sixminreport.SixMinReportStride;
 import com.just.machine.model.sixminreport.SixMinReportWalk;
 import com.just.machine.model.sixminsystemsetting.SixMinSysSettingBean;
+import com.just.machine.ui.fragment.serial.ModbusProtocol;
 import com.just.machine.ui.service.GetDeviceInfoService;
 import com.just.news.BuildConfig;
 
@@ -292,7 +293,7 @@ public class USBTransferUtil {
                     if (head.equals("a5")) {
                         String cmd1 = ecgData.substring(2, 4);
                         String cmd2 = ecgData.substring(4, 6);
-                        if ((255 - Integer.parseInt(cmd2, 16) == Integer.parseInt(cmd1, 16))) {
+                        if (((Integer.parseInt(cmd1, 16) == Integer.parseInt("03",16)) &&(255 - Integer.parseInt(cmd1, 16) == Integer.parseInt(cmd2, 16)))) {
                             String len1 = ecgData.substring(10, 12);
                             String len2 = ecgData.substring(12, 14);
                             int len = Integer.parseInt(len2 + len1, 16);
@@ -300,6 +301,7 @@ public class USBTransferUtil {
                             if (dataStr.length() / 2 >= len + 8) {
                                 String content = dataStr.substring(14, dataStr.length() - 2);
                                 String heartRate = String.valueOf(Integer.parseInt(content.substring(2, 4) + content.substring(0, 2), 16));
+                                usbSerialData.setHeartRate(heartRate);
                                 int batterLevel = Integer.parseInt(content.substring(6, 8), 16);
                                 int runStatus = Integer.parseInt(content.substring(16, 18), 16);
                                 long time = System.currentTimeMillis();
@@ -320,15 +322,21 @@ public class USBTransferUtil {
                                         wave = (float) (wave * (1.0035 * 1800) / (4096 * 178.74));
                                         waveArr.add(wave);
                                         lvbo++;
-                                        if (lvbo == 2) {
-                                            float realt = (waveArr.get(0) + waveArr.get(1)) / 2;
-                                            long timeMillis = System.currentTimeMillis();
-                                            mapHeartEcg.add(0,realt);
-                                            waveArr = new ArrayList<>();
-                                            lvbo = 0;
-                                        }
+                                        mapHeartEcg.clear();
+                                        mapHeartEcg.addAll(waveArr);
+//                                        if (lvbo == 2) {
+//                                            float realt = (waveArr.get(0) + waveArr.get(1)) / 2;
+//                                            long timeMillis = System.currentTimeMillis();
+//                                            waveArr = new ArrayList<>();
+//                                            lvbo = 0;
+//                                        }
                                     }
+                                }else{
+                                    waveArr.add(0f);
+                                    mapHeartEcg.clear();
+                                    mapHeartEcg.addAll(waveArr);
                                 }
+                                LiveDataBus.get().with(Constants.sixMinLiveDataBusKey).postValue(new Gson().toJson(usbSerialData));
                             }
                         }else{
                             Log.e(TAG,"数据类型不正确");
@@ -363,7 +371,7 @@ public class USBTransferUtil {
                 my_context.stopService(new Intent(my_context, GetDeviceInfoService.class));
             }
         });
-        inputOutputManager.setReadBufferSize(512);
+        inputOutputManager.setReadBufferSize(1024);
         inputOutputManager.start();
         isConnectUSB = true;  // 修改连接标识
         Toast.makeText(my_context, "连接成功", Toast.LENGTH_SHORT).show();

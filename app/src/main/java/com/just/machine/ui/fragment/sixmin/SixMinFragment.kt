@@ -54,6 +54,7 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.util.ArrayList
 import java.util.Date
 import java.util.Locale
 import java.util.Timer
@@ -67,8 +68,8 @@ import kotlin.concurrent.fixedRateTimer
 @AndroidEntryPoint
 class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech.OnInitListener {
 
-    private lateinit var timerTask1: TimerTask
-    private lateinit var timer1: Timer
+    private var timerTask: TimerTask? = null
+    private var timer: Timer? = null
     private var heartEcgTimer: Timer? = null
     private val viewModel by viewModels<MainViewModel>()
     private lateinit var textToSpeech: TextToSpeech
@@ -96,6 +97,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
     private lateinit var mValues: Array<Array<ECGPointValue>?>
     private var index = 0
     private var ready = false
+    private var tempEcgList = mutableListOf<Float>()
 
     private var easyWindow: EasyWindow<EasyWindow<*>>? = null
     private var vo2PerHr: TextView? = null
@@ -203,21 +205,21 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
 //                ready = true
 //            }
 
-            timer1 = Timer()
-            timerTask1 = object : TimerTask() {
+            timer = Timer()
+            timerTask = object : TimerTask() {
                 override fun run() {
                     try {
-                        val mapHeartEcg = mActivity.usbTransferUtil.mapHeartEcg
-                        Log.d("mapHeartEcg",Gson().toJson(mapHeartEcg))
-                        if(mapHeartEcg.isNotEmpty()){
-                            binding.sixminEcg.showLine(mapHeartEcg[0])
+                        Log.d("tempEcgList", Gson().toJson(tempEcgList))
+                        if(tempEcgList.isNotEmpty()){
+                            binding.sixminEcg.showLine(tempEcgList[0])
+                            tempEcgList.removeAt(0)
                         }
                     } catch (e: java.lang.Exception) {
                         Log.d("EcgError", e.toString())
                     }
                 }
             }
-            timer1.schedule(timerTask1, 1, 5)
+            timer?.schedule(timerTask, 0, 8)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -530,7 +532,33 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                 } else {
                     binding.sixminTvCircleCount.text = "- -"
                 }
-
+                //心率数据
+                if (mActivity.usbTransferUtil.usbSerialData.heartRate != null && mActivity.usbTransferUtil.usbSerialData.heartRate!= "" && mActivity.usbTransferUtil.usbSerialData.heartRate!= "" && mActivity.usbTransferUtil.usbSerialData.heartRate!= "0") {
+                    binding.sixminTvHeartBeat.text =
+                        mActivity.usbTransferUtil.usbSerialData.heartRate
+                    if(mActivity.usbTransferUtil.usbSerialData.heartRate.toInt() < mActivity.sysSettingBean.sysAlarm.heartBeat.toInt()) {
+                        binding.sixminTvHeartBeat.setTextColor(
+                            ContextCompat.getColor(
+                                mActivity, R.color.red
+                            )
+                        )
+                    }else{
+                        binding.sixminTvHeartBeat.setTextColor(
+                            ContextCompat.getColor(
+                                mActivity, R.color.colorWhite
+                            )
+                        )
+                    }
+                } else {
+                    binding.sixminTvHeartBeat.text = "---"
+                    binding.sixminTvHeartBeat.setTextColor(
+                        ContextCompat.getColor(
+                            mActivity, R.color.red
+                        )
+                    )
+                }
+                val mapHeartEcg = mActivity.usbTransferUtil.mapHeartEcg
+                tempEcgList.addAll(mapHeartEcg)
                 Log.d("SixMinActivity", usbSerialData.toString())
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -1709,6 +1737,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
         mCountDownTimeThree.cancel()
         mStartTestCountDownTime.cancel()
         EasyWindow.recycleAll()
+        timer?.cancel()
         super.onDestroyView()
     }
 }

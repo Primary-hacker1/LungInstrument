@@ -13,6 +13,7 @@ public class UsbSerialData {
     private String bloodOxygen;
     private String circleCount;
     private String stepsCount;
+    private String heartRate;
 
     public String getBloodLow() {
         return bloodLow;
@@ -94,6 +95,14 @@ public class UsbSerialData {
         this.stepsCount = stepsCount;
     }
 
+    public String getHeartRate() {
+        return heartRate;
+    }
+
+    public void setHeartRate(String heartRate) {
+        this.heartRate = heartRate;
+    }
+
     @Override
     public String toString() {
         return "UsbSerialData{" +
@@ -107,6 +116,7 @@ public class UsbSerialData {
                 ", bloodOxygen='" + bloodOxygen + '\'' +
                 ", circleCount='" + circleCount + '\'' +
                 ", stepsCount='" + stepsCount + '\'' +
+                ", heartRate='" + heartRate + '\'' +
                 '}';
     }
 }

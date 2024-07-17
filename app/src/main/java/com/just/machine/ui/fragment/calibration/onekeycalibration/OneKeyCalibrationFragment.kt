@@ -29,7 +29,7 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
     private var envSuccess = false //环境定标是否成功
     private var flowSuccess = false //自动流量定标是否成功
     private var ingredientSuccess = false //成分定标是否成功
-    private lateinit var timer: Timer
+    private var timer: Timer? = null
 
     override fun loadData() {
 
@@ -114,7 +114,7 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
                             )
                         )
                         binding.ivOnekeyCalibrationFlow.setImageResource(R.drawable.flow_highlight)
-                        timer.cancel()
+                        timer?.cancel()
                         enableStartBtn()
                     }
                 }
@@ -182,7 +182,7 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
     }
 
     override fun onDestroy() {
-        timer.cancel()
+        timer?.cancel()
         super.onDestroy()
     }
 }

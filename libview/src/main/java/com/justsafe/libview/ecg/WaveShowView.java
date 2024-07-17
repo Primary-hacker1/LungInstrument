@@ -27,7 +27,8 @@ public class WaveShowView extends View {
     private Path mPath;//心电图的路径
     private final ArrayList<Float> refreshList = new ArrayList<>();//后加的数据点
     private int row;//背景网格的行数和列数
-    private final int mWaveLineColor = Color.parseColor("#3E99D2");//波形颜色
+    private final int mWaveLineColor = Color.parseColor("#000000");//波形颜色
+//    private final int mWaveLineColor = Color.parseColor("#3E99D2");//波形颜色
 
     //网格
     private final int GRID_SMALL_WIDTH = 8;//每一个网格的宽度和高度,包括线
@@ -176,6 +177,11 @@ public class WaveShowView extends View {
             canvas.drawLine(i * GRID_BIG_WIDTH, 0,
                     i * GRID_BIG_WIDTH, mHeight, mLinePaint);
         }
+    }
+
+    public void showAllLine(ArrayList<Float> line) {
+        refreshList.addAll(line);
+        postInvalidate();
     }
 
     public void showLine(Float line) {
