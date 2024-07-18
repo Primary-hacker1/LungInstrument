@@ -2,7 +2,10 @@ package com.just.machine.ui.fragment.sixmin
 
 import android.annotation.SuppressLint
 import android.graphics.Color
+import android.icu.math.BigDecimal.ROUND_DOWN
+import android.os.Build
 import android.os.CountDownTimer
+import android.os.Environment
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.util.Log
@@ -10,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -28,8 +32,9 @@ import com.hjq.window.EasyWindow
 import com.just.machine.model.Constants
 import com.just.machine.model.PatientInfoBean
 import com.just.machine.model.SharedPreferencesUtils
-import com.just.machine.model.sixmininfo.BloodOxyLineEntryBean
-import com.just.machine.model.sixmininfo.HeartRateLineEntryBean
+import com.just.machine.model.sixmininfo.SixMinBloodOxyLineEntryBean
+import com.just.machine.model.sixmininfo.SixMinEcgBean
+import com.just.machine.model.sixmininfo.SixMinHeartRateLineEntryBean
 import com.just.machine.model.sixmininfo.UsbSerialData
 import com.just.machine.model.sixminsystemsetting.SixMinSysSettingBean
 import com.just.machine.ui.activity.SixMinDetectActivity
@@ -38,6 +43,7 @@ import com.just.machine.ui.dialog.SixMinCollectRestoreEcgDialogFragment
 import com.just.machine.ui.dialog.SixMinGuideDialogFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.CommonUtil
+import com.just.machine.util.FileUtil
 import com.just.machine.util.FixCountDownTime
 import com.just.machine.util.LiveDataBus
 import com.just.machine.util.MyLineChartRenderer
@@ -45,21 +51,19 @@ import com.just.machine.util.ScreenUtils
 import com.just.machine.util.SixMinCmdUtils
 import com.just.news.R
 import com.just.news.databinding.FragmentSixminBinding
-import com.seeker.luckychart.model.ECGPointValue
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.File
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
-import java.util.ArrayList
 import java.util.Date
 import java.util.Locale
 import java.util.Timer
 import java.util.TimerTask
-import kotlin.concurrent.fixedRateTimer
 
 
 /**
@@ -69,14 +73,13 @@ import kotlin.concurrent.fixedRateTimer
 class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech.OnInitListener {
 
     private var timerTask: TimerTask? = null
-    private var timer: Timer? = null
     private var heartEcgTimer: Timer? = null
     private val viewModel by viewModels<MainViewModel>()
     private lateinit var textToSpeech: TextToSpeech
     private lateinit var mActivity: SixMinDetectActivity
     private lateinit var mCountDownTime: FixCountDownTime //试验6分钟倒计时
     private lateinit var mCountDownTimeThree: CountDownTimer//每3秒一个值获取心率，血氧
-    private lateinit var mCountDownTimeHeartRate: CountDownTimer//每3秒一个值获取心率，血氧
+    private lateinit var mCountDownTimeHeartRate: FixCountDownTime//每3秒一个值获取心率，血氧
     private lateinit var mStartTestCountDownTime: FixCountDownTime//6分钟试验5秒倒计时
     private lateinit var mGetSportHeartEcgCountDownTime: FixCountDownTime//采集运动心率倒计时
     private lateinit var bloodOxyDataSet: LineDataSet
@@ -94,10 +97,8 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
     private var bloodEndUtteranceId = "" //运动后血压语音播报标识
     private var defaultUtteranceId = ""//语音播报开始标识
 
-    private lateinit var mValues: Array<Array<ECGPointValue>?>
-    private var index = 0
-    private var ready = false
-    private var tempEcgList = mutableListOf<Float>()
+    private var realTimeEcgList = mutableListOf<Float>() //实时心电数据
+    private var restoreEcgList = mutableListOf<Int>() //恢复心电数据
 
     private var easyWindow: EasyWindow<EasyWindow<*>>? = null
     private var vo2PerHr: TextView? = null
@@ -153,8 +154,8 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                     // 设置动画样式
                     setAnimStyle(android.R.style.Animation_Translucent)
                 }
-                easyWindow?.setWidth(CommonUtil.dip2px(mActivity,420))
-                easyWindow?.setHeight(CommonUtil.dip2px(mActivity,180))
+                easyWindow?.setWidth(CommonUtil.dip2px(mActivity, 420))
+                easyWindow?.setHeight(CommonUtil.dip2px(mActivity, 180))
                 vo2PerHr =
                     easyWindow?.findViewById(R.id.sixmin_tv_floating_cardiopulmonary_vo2_per_hr) as TextView
                 vo2 =
@@ -169,57 +170,27 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                     easyWindow?.findViewById(R.id.sixmin_tv_floating_cardiopulmonary_bf) as TextView
             }
             easyWindow?.show()
-        }else{
+        } else {
             binding.sixminTvToggleCardiopulmonary.visibility = View.GONE
         }
     }
 
     private fun initEcgChart() {
         try {
-//            binding.sixminEcg.setMode(UIMode.ERASE)
-//            binding.sixminEcg.initDefaultChartData(false, false)
-//            binding.sixminEcg.setFrameRenderCallback {
-//                if (!ready || binding.sixminEcg.chartData == null) {
-//                    return@setFrameRenderCallback
-//                }
-//                val count = 4
-//                if (index + count < mValues[0]!!.size) {
-//                    val lineCount: Int = binding.sixminEcg.ecgRenderStrategy.ecgLineCount
-//                    val values: Array<Array<ECGPointValue>?> = arrayOfNulls(lineCount)
-//                    for (i in 0 until lineCount) {
-//                        val value =
-//                            mValues[i]!!.copyOfRange(index, index + count)
-//                        values[i] = value
-//                    }
-//                    binding.sixminEcg.updatePointsToRender(*values)
-//                    index += count
-//                }
-//            }
-//            lifecycleScope.launch(Dispatchers.Default) {
-//                val count: Int = binding.sixminEcg.ecgRenderStrategy.ecgLineCount
-//                mValues = arrayOfNulls(count)
-//                for (i in 0 until count) {
-//                    val dataParse = ECGDataParse(mActivity)
-//                    mValues[i] = dataParse.values
-//                }
-//                ready = true
-//            }
-
-            timer = Timer()
+            heartEcgTimer = Timer()
             timerTask = object : TimerTask() {
                 override fun run() {
                     try {
-                        Log.d("tempEcgList", Gson().toJson(tempEcgList))
-                        if(tempEcgList.isNotEmpty()){
-                            binding.sixminEcg.showLine(tempEcgList[0])
-                            tempEcgList.removeAt(0)
+                        if (realTimeEcgList.isNotEmpty()) {
+                            binding.sixminEcg.showLine(realTimeEcgList[0])
+                            realTimeEcgList.removeAt(0)
                         }
                     } catch (e: java.lang.Exception) {
                         Log.d("EcgError", e.toString())
                     }
                 }
             }
-            timer?.schedule(timerTask, 0, 8)
+            heartEcgTimer?.schedule(timerTask, 0, 8)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -533,16 +504,16 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                     binding.sixminTvCircleCount.text = "- -"
                 }
                 //心率数据
-                if (mActivity.usbTransferUtil.usbSerialData.heartRate != null && mActivity.usbTransferUtil.usbSerialData.heartRate!= "" && mActivity.usbTransferUtil.usbSerialData.heartRate!= "" && mActivity.usbTransferUtil.usbSerialData.heartRate!= "0") {
+                if (mActivity.usbTransferUtil.usbSerialData.heartRate != null && mActivity.usbTransferUtil.usbSerialData.heartRate != "" && mActivity.usbTransferUtil.usbSerialData.heartRate != "" && mActivity.usbTransferUtil.usbSerialData.heartRate != "0") {
                     binding.sixminTvHeartBeat.text =
                         mActivity.usbTransferUtil.usbSerialData.heartRate
-                    if(mActivity.usbTransferUtil.usbSerialData.heartRate.toInt() < mActivity.sysSettingBean.sysAlarm.heartBeat.toInt()) {
+                    if (mActivity.usbTransferUtil.usbSerialData.heartRate.toInt() < mActivity.sysSettingBean.sysAlarm.heartBeat.toInt()) {
                         binding.sixminTvHeartBeat.setTextColor(
                             ContextCompat.getColor(
                                 mActivity, R.color.red
                             )
                         )
-                    }else{
+                    } else {
                         binding.sixminTvHeartBeat.setTextColor(
                             ContextCompat.getColor(
                                 mActivity, R.color.colorWhite
@@ -558,7 +529,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                     )
                 }
                 val mapHeartEcg = mActivity.usbTransferUtil.mapHeartEcg
-                tempEcgList.addAll(mapHeartEcg)
+                realTimeEcgList.addAll(mapHeartEcg)
                 Log.d("SixMinActivity", usbSerialData.toString())
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -675,6 +646,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                                     mActivity.setToolbarTitle(getString(R.string.sixmin_test_title))
                                     mCountDownTime.cancel()
                                     mCountDownTime.setmTimes(360)
+                                    mCountDownTimeThree.cancel()
                                     mActivity.usbTransferUtil.ignoreBlood = false
 
                                     val min = 5 - mActivity.usbTransferUtil.min.toString().toInt()
@@ -718,7 +690,33 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                 binding.sixminTvCircleCount.text = mActivity.usbTransferUtil.circleCount.toString()
             } else {
                 mActivity.showMsg("试验未开始!")
-                mCountDownTimeHeartRate.start()
+                mCountDownTimeHeartRate.start(object : FixCountDownTime.OnTimerCallBack {
+                    override fun onStart() {
+                        Log.d("SixMinFragment", "采集心率数据开始")
+                    }
+
+                    override fun onTick(times: Int) {
+                        try {
+                            val mapHeartRate = mActivity.usbTransferUtil.mapHeartRate
+                            val heartBeat = mActivity.usbTransferUtil.mapHeartEcg
+                            if (mapHeartRate.isNotEmpty()) {
+                                val value = mapHeartRate.entries.last().value
+                                val sixMinEcgBean = SixMinEcgBean(value, heartBeat)
+                                mActivity.usbTransferUtil.mapRealTimeEcg[360 - times] = sixMinEcgBean
+                                if(times % 3 == 0){
+                                    addHeartRateEntryData(value.toFloat(), times.toFloat())
+                                }
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+
+                    override fun onFinish() {
+                        Log.d("SixMinFragment", "采集心率数据结束")
+                    }
+
+                })
             }
         }
         binding.sixminIvCircleCountMinus.setNoRepeatListener {
@@ -746,10 +744,10 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
             }
         }
         binding.sixminTvToggleCardiopulmonary.setNoRepeatListener {
-            if(easyWindow?.isShowing == true){
+            if (easyWindow?.isShowing == true) {
                 easyWindow?.cancel()
                 binding.sixminTvToggleCardiopulmonary.text = "显示心肺参数"
-            }else{
+            } else {
                 easyWindow?.show()
                 binding.sixminTvToggleCardiopulmonary.text = "隐藏心肺参数"
             }
@@ -776,14 +774,16 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
 
     private fun initCountDownTimerExt() {
         mCountDownTime = object : FixCountDownTime(360, 1000) {}
-        mCountDownTimeThree = object : CountDownTimer(1080000, 3000) {
+        mCountDownTimeThree = object : CountDownTimer(360, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 try {
                     if (mActivity.usbTransferUtil.bloodOxygenConnection) {
-                        val mapBloodOxygen = mActivity.usbTransferUtil.mapBloodOxygen
-                        if (mapBloodOxygen.isNotEmpty()) {
-                            val value = mapBloodOxygen.entries.last().value
-                            addEntryData(value.toFloat(), (millisUntilFinished / 1000).toInt())
+                        if (millisUntilFinished.toInt() % 3 == 0) {
+                            val mapBloodOxygen = mActivity.usbTransferUtil.mapBloodOxygen
+                            if (mapBloodOxygen.isNotEmpty()) {
+                                val value = mapBloodOxygen.entries.last().value
+                                addBloodOxyEntryData(value.toFloat(), millisUntilFinished.toInt())
+                            }
                         }
                     }
                 } catch (e: Exception) {
@@ -796,39 +796,17 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
             }
         }
         mStartTestCountDownTime = object : FixCountDownTime(5, 1000) {}
-        mGetSportHeartEcgCountDownTime = object : FixCountDownTime(10, 1000) {}
-
-        mCountDownTimeHeartRate = object : CountDownTimer(1080000, 3000) {
-            override fun onTick(millisUntilFinished: Long) {
-                try {
-                    val mapHeartRate = mActivity.usbTransferUtil.mapHeartRate
-                    if (mapHeartRate.isNotEmpty()) {
-                        val value = mapHeartRate.entries.last().value
-                        if(value == "0"||value.isEmpty()){
-                            binding.sixminTvHeartBeat.text = "---"
-                        }else{
-                            binding.sixminTvHeartBeat.text = value
-                        }
-                        addHeartRateEntry(value.toFloat(), (millisUntilFinished / 1000).toFloat())
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-
-            override fun onFinish() {
-
-            }
-        }
+        mGetSportHeartEcgCountDownTime = object : FixCountDownTime(60, 1000) {}
+        mCountDownTimeHeartRate = object : FixCountDownTime(360, 1000) {}
     }
 
-    private fun addHeartRateEntry(entryData: Float, times: Float) {
+    private fun addHeartRateEntryData(entryData: Float, times: Float) {
         val decimalFormat = DecimalFormat("#.00")
         val index: Float = times / 60
 
         heartBeatDataSet.addEntry(
             Entry(
-                ((18.00 - decimalFormat.format(index).toFloat()).toFloat()), entryData
+                (6.00 - decimalFormat.format(index).toFloat()).toFloat(), entryData
             )
         )
         binding.sixminLineChartHeartBeat.lineData.addDataSet(
@@ -836,9 +814,16 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
         )
 
         mActivity.usbTransferUtil.heartRateLineData.add(
-            HeartRateLineEntryBean(
-                ((18.00 - decimalFormat.format(index).toFloat()).toFloat()),
+            SixMinHeartRateLineEntryBean(
+                (6.00 - decimalFormat.format(index).toFloat()).toFloat(),
                 entryData
+            )
+        )
+
+        mActivity.usbTransferUtil.heartRateLineData.add(
+            SixMinHeartRateLineEntryBean(
+                (6.00 - decimalFormat.format(index).toFloat()).toFloat(),
+                entryData/4
             )
         )
 
@@ -847,13 +832,13 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
         binding.sixminLineChartHeartBeat.invalidate()
     }
 
-    private fun addEntryData(entryData: Float, times: Int) {
+    private fun addBloodOxyEntryData(entryData: Float, times: Int) {
         val decimalFormat = DecimalFormat("#.00")
         val index: Float = (times.toFloat() / 60)
 
         bloodOxyDataSet.addEntry(
             Entry(
-                ((18.00 - decimalFormat.format(index).toFloat()).toFloat()), entryData
+                (6.00 - decimalFormat.format(index).toFloat()).toFloat(), entryData
             )
         )
         binding.sixminLineChartBloodOxygen.lineData.addDataSet(
@@ -861,8 +846,8 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
         )
 
         mActivity.usbTransferUtil.bloodOxyLineData.add(
-            BloodOxyLineEntryBean(
-                ((18.00 - decimalFormat.format(index).toFloat()).toFloat()),
+            SixMinBloodOxyLineEntryBean(
+                (6.00 - decimalFormat.format(index).toFloat()).toFloat(),
                 entryData
             )
         )
@@ -1234,6 +1219,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
 
             }
 
+            @RequiresApi(Build.VERSION_CODES.N)
             override fun onTick(times: Int) {
                 try {
                     val minute = times / 60 % 60
@@ -1272,12 +1258,30 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                         }
                         mActivity.usbTransferUtil.checkBSStr = bsStr
                     }
-                    if (binding.sixminTvBloodOxygen.text != "---" && binding.sixminTvBloodOxygen.text != "--") {
+                    //识别每秒的血氧
+                    if (binding.sixminTvBloodOxygen.text != "" && binding.sixminTvBloodOxygen.text != "---" && binding.sixminTvBloodOxygen.text != "--") {
                         mActivity.usbTransferUtil.bloodListAvg.add(
-                            binding.sixminTvBloodOxygen.text.toString().toInt()
+                            binding.sixminTvBloodOxygen.text.toString().trim().toInt()
                         )
                         mActivity.usbTransferUtil.bloodAllListAvg.add(
-                            binding.sixminTvBloodOxygen.text.toString().toInt()
+                            binding.sixminTvBloodOxygen.text.toString().trim().toInt()
+                        )
+                    }
+                    //识别每秒的心率和呼吸率
+                    if (binding.sixminTvHeartBeat.text != "" && binding.sixminTvHeartBeat.text != "---" && binding.sixminTvHeartBeat.text != "--") {
+                        mActivity.usbTransferUtil.heartRateListAvg.add(
+                            binding.sixminTvHeartBeat.text.toString().toInt()
+                        )
+                        mActivity.usbTransferUtil.heartRateAllListAvg.add(
+                            binding.sixminTvHeartBeat.text.toString().trim().toInt()
+                        )
+
+                        val breath = BigDecimal(binding.sixminTvHeartBeat.text.toString().trim()).divide(BigDecimal("4"), 0, ROUND_DOWN)
+                        mActivity.usbTransferUtil.breathingListAvg.add(
+                            breath.toInt()
+                        )
+                        mActivity.usbTransferUtil.breathingAllListAvg.add(
+                            breath.toInt()
                         )
                     }
                     if (second == 0) {
@@ -1294,6 +1298,20 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                                     mActivity.usbTransferUtil.bloodListAvg
                                 )
                                 mActivity.usbTransferUtil.bloodListAvg.clear()
+
+                                mActivity.usbTransferUtil.dealHeartRateBe(
+                                    mActivity.sixMinReportBloodHeart,
+                                    minute,
+                                    mActivity.usbTransferUtil.heartRateListAvg
+                                )
+                                mActivity.usbTransferUtil.heartRateListAvg.clear()
+
+                                mActivity.usbTransferUtil.dealBreathBe(
+                                    mActivity.sixMinReportBreathing,
+                                    minute,
+                                    mActivity.usbTransferUtil.breathingListAvg
+                                )
+                                mActivity.usbTransferUtil.breathingListAvg.clear()
                             }
 
                             4 -> {
@@ -1308,6 +1326,20 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                                     mActivity.usbTransferUtil.bloodListAvg
                                 )
                                 mActivity.usbTransferUtil.bloodListAvg.clear()
+
+                                mActivity.usbTransferUtil.dealHeartRateBe(
+                                    mActivity.sixMinReportBloodHeart,
+                                    minute,
+                                    mActivity.usbTransferUtil.heartRateListAvg
+                                )
+                                mActivity.usbTransferUtil.heartRateListAvg.clear()
+
+                                mActivity.usbTransferUtil.dealBreathBe(
+                                    mActivity.sixMinReportBreathing,
+                                    minute,
+                                    mActivity.usbTransferUtil.breathingListAvg
+                                )
+                                mActivity.usbTransferUtil.breathingListAvg.clear()
                             }
 
                             3 -> {
@@ -1322,6 +1354,20 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                                     mActivity.usbTransferUtil.bloodListAvg
                                 )
                                 mActivity.usbTransferUtil.bloodListAvg.clear()
+
+                                mActivity.usbTransferUtil.dealHeartRateBe(
+                                    mActivity.sixMinReportBloodHeart,
+                                    minute,
+                                    mActivity.usbTransferUtil.heartRateListAvg
+                                )
+                                mActivity.usbTransferUtil.heartRateListAvg.clear()
+
+                                mActivity.usbTransferUtil.dealBreathBe(
+                                    mActivity.sixMinReportBreathing,
+                                    minute,
+                                    mActivity.usbTransferUtil.breathingListAvg
+                                )
+                                mActivity.usbTransferUtil.breathingListAvg.clear()
                             }
 
                             2 -> {
@@ -1336,6 +1382,20 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                                     mActivity.usbTransferUtil.bloodListAvg
                                 )
                                 mActivity.usbTransferUtil.bloodListAvg.clear()
+
+                                mActivity.usbTransferUtil.dealHeartRateBe(
+                                    mActivity.sixMinReportBloodHeart,
+                                    minute,
+                                    mActivity.usbTransferUtil.heartRateListAvg
+                                )
+                                mActivity.usbTransferUtil.heartRateListAvg.clear()
+
+                                mActivity.usbTransferUtil.dealBreathBe(
+                                    mActivity.sixMinReportBreathing,
+                                    minute,
+                                    mActivity.usbTransferUtil.breathingListAvg
+                                )
+                                mActivity.usbTransferUtil.breathingListAvg.clear()
                             }
 
                             1 -> {
@@ -1350,6 +1410,20 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                                     mActivity.usbTransferUtil.bloodListAvg
                                 )
                                 mActivity.usbTransferUtil.bloodListAvg.clear()
+
+                                mActivity.usbTransferUtil.dealHeartRateBe(
+                                    mActivity.sixMinReportBloodHeart,
+                                    minute,
+                                    mActivity.usbTransferUtil.heartRateListAvg
+                                )
+                                mActivity.usbTransferUtil.heartRateListAvg.clear()
+
+                                mActivity.usbTransferUtil.dealBreathBe(
+                                    mActivity.sixMinReportBreathing,
+                                    minute,
+                                    mActivity.usbTransferUtil.breathingListAvg
+                                )
+                                mActivity.usbTransferUtil.breathingListAvg.clear()
                             }
                         }
                     }
@@ -1357,6 +1431,29 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                     if (minute == 0 && second == 16) {
                         if (mActivity.sysSettingBean.sysOther.broadcastVoice == "1" || mActivity.sysSettingBean.sysOther.broadcastVoice == "0") {
                             speechContent(getString(R.string.sixmin_test_start_count_down_zero_tips))
+                        }
+                    }
+
+                    //每3秒钟采集血氧数据
+                    if (mActivity.usbTransferUtil.bloodOxygenConnection) {
+                        if (times % 3 == 0) {
+                            val mapBloodOxygen = mActivity.usbTransferUtil.mapBloodOxygen
+                            if (mapBloodOxygen.isNotEmpty()) {
+                                val value = mapBloodOxygen.entries.last().value
+                                addBloodOxyEntryData(value.toFloat(), times)
+                            }
+                        }
+                    }
+
+                    //每3秒钟采集心率数据以及每秒的心电数据
+                    val mapHeartRate = mActivity.usbTransferUtil.mapHeartRate
+                    val heartBeat = mActivity.usbTransferUtil.mapHeartEcg
+                    if (mapHeartRate.isNotEmpty()) {
+                        val value = mapHeartRate.entries.last().value
+                        val sixMinEcgBean = SixMinEcgBean(value, heartBeat)
+                        mActivity.usbTransferUtil.mapRealTimeEcg[360 - times] = sixMinEcgBean
+                        if(times % 3 == 0){
+                            addHeartRateEntryData(value.toFloat(), times.toFloat())
                         }
                     }
                 } catch (e: Exception) {
@@ -1374,6 +1471,19 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                     mActivity.usbTransferUtil.bloodListAvg
                 )
                 mActivity.usbTransferUtil.bloodListAvg.clear()
+                mActivity.usbTransferUtil.dealHeartRateBe(
+                    mActivity.sixMinReportBloodHeart,
+                    0,
+                    mActivity.usbTransferUtil.heartRateListAvg
+                )
+                mActivity.usbTransferUtil.heartRateListAvg.clear()
+
+                mActivity.usbTransferUtil.dealBreathBe(
+                    mActivity.sixMinReportBreathing,
+                    0,
+                    mActivity.usbTransferUtil.breathingListAvg
+                )
+                mActivity.usbTransferUtil.breathingListAvg.clear()
 
                 if (mActivity.sysSettingBean.sysOther.broadcastVoice == "1" || mActivity.sysSettingBean.sysOther.broadcastVoice == "0") {
                     speechContent(getString(R.string.sixmin_test_start_timeout))
@@ -1395,6 +1505,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                     kotlinx.coroutines.delay(2000L)
                     mGetSportHeartEcgCountDownTime.start(object : FixCountDownTime.OnTimerCallBack {
                         override fun onStart() {
+                            restoreEcgList.clear()
                             mActivity.usbTransferUtil.testType = 3
                             startRestoreEcgDialogFragment =
                                 SixMinCollectRestoreEcgDialogFragment.startRestoreEcgDialogFragment(
@@ -1407,11 +1518,19 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                         override fun onTick(times: Int) {
                             timeRemain = times.toString()
                             LiveDataBus.get().with("simMinRestore").postValue(timeRemain)
+                            val mapHeartRate = mActivity.usbTransferUtil.mapHeartRate
+                            if (mapHeartRate.isNotEmpty()) {
+                                val value = mapHeartRate.entries.last().value
+                                if(value.isNotEmpty()){
+                                    restoreEcgList.add(value.toInt())
+                                }
+                            }
                         }
 
                         override fun onFinish() {
                             startRestoreEcgDialogFragment.dismiss()
                             binding.sixminIvIgnoreBlood.isEnabled = false
+                            mActivity.sixMinReportBloodHeart.heartRestore = restoreEcgList.average().toString()
                             if (!mActivity.usbTransferUtil.ignoreBlood) {
                                 if (mActivity.sysSettingBean.sysOther.autoMeasureBlood == "1") {
                                     lifecycleScope.launch {
@@ -1498,11 +1617,23 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                 mActivity.usbTransferUtil.circleCount.toString()
             mActivity.sixMinReportEvaluation.totalWalk = mActivity.usbTransferUtil.stepsStr
 
+            //处理训练结束后的步数
             mActivity.usbTransferUtil.dealWalk(mActivity.sixMinReportWalk)
-            mActivity.usbTransferUtil.dealBlood(
+            //处理训练结束后的血氧
+            mActivity.usbTransferUtil.dealBloodOxy(
                 mActivity.sixMinReportBloodOxy,
                 Gson().toJson(mActivity.usbTransferUtil.bloodOxyLineData)
             )
+            //处理训练结束后的心率
+            mActivity.usbTransferUtil.dealHeartRate(
+                mActivity.sixMinReportBloodHeart,
+                Gson().toJson(mActivity.usbTransferUtil.heartRateLineData)
+            )
+            //处理训练结束后的呼吸率
+            mActivity.usbTransferUtil.dealBreath(
+                mActivity.sixMinReportBreathing,
+                Gson().toJson(mActivity.usbTransferUtil.breathingLineData))
+
             if (mActivity.sysSettingBean.sysOther.circleCountType == "0") {
                 mActivity.usbTransferUtil.dealPreption(
                     mActivity.sysSettingBean,
@@ -1540,8 +1671,6 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                 )
             val bd2: BigDecimal = bd.multiply(BigDecimal(100)).setScale(0)
             mActivity.sixMinReportEvaluation.accounted = bd2.toString()
-
-            mActivity.usbTransferUtil.release()
 
             jumpToPreReport()
         } catch (e: Exception) {
@@ -1703,7 +1832,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
         }
     }
 
-    private fun popBackStack(){
+    private fun popBackStack() {
         val navController = findNavController()//fragment返回数据处理
         navController.previousBackStackEntry?.savedStateHandle?.set("key", "返回")
         navController.popBackStack()
@@ -1712,15 +1841,9 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
     override fun onResume() {
         initSysInfo()
         mActivity.setToolbarTitle(getString(R.string.sixmin_test_title))
-//        binding.sixminEcg.onResume()
         initFloatingCardiopulmonary()
         mActivity.sixMinReportInfo.bsHxl = mActivity.sysSettingBean.sysOther.stepsOrBreath
         super.onResume()
-    }
-
-    override fun onPause() {
-//        binding.sixminEcg.onPause()
-        super.onPause()
     }
 
     override fun onDestroyView() {
@@ -1737,7 +1860,9 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
         mCountDownTimeThree.cancel()
         mStartTestCountDownTime.cancel()
         EasyWindow.recycleAll()
-        timer?.cancel()
+        heartEcgTimer?.cancel()
+        heartEcgTimer?.purge()
+        timerTask?.cancel()
         super.onDestroyView()
     }
 }

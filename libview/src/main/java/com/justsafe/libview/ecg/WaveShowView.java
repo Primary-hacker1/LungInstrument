@@ -27,7 +27,7 @@ public class WaveShowView extends View {
     private Path mPath;//心电图的路径
     private final ArrayList<Float> refreshList = new ArrayList<>();//后加的数据点
     private int row;//背景网格的行数和列数
-    private final int mWaveLineColor = Color.parseColor("#000000");//波形颜色
+    private final int mWaveLineColor = Color.parseColor("#333333");//波形颜色
 //    private final int mWaveLineColor = Color.parseColor("#3E99D2");//波形颜色
 
     //网格
@@ -67,7 +67,7 @@ public class WaveShowView extends View {
         mWavePaint = new Paint();
         mWavePaint.setStyle(Paint.Style.STROKE);
         mWavePaint.setColor(mWaveLineColor);
-        float WAVE_LINE_STROKE_WIDTH = 4f;
+        float WAVE_LINE_STROKE_WIDTH = 2f;
         mWavePaint.setStrokeWidth(WAVE_LINE_STROKE_WIDTH);
         mWavePaint.setAntiAlias(true);//抗锯齿效果
         mPath = new Path();

@@ -31,7 +31,7 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.just.machine.model.sixmininfo.BloodOxyLineEntryBean
+import com.just.machine.model.sixmininfo.SixMinBloodOxyLineEntryBean
 import com.just.machine.model.sixmininfo.SixMinRecordsBean
 import com.just.machine.model.sixmininfo.SixMinReportInfoAndEvaluation
 import com.just.machine.model.sixmininfo.SixMinReportItemBean
@@ -1157,8 +1157,8 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 }
 
                 val bloodAll = sixMinRecordsBean.bloodOxyBean[0].bloodAll
-                val listType = object : TypeToken<List<BloodOxyLineEntryBean>>() {}.type
-                val bloodOxyList: List<BloodOxyLineEntryBean> = Gson().fromJson(bloodAll, listType)
+                val listType = object : TypeToken<List<SixMinBloodOxyLineEntryBean>>() {}.type
+                val bloodOxyList: List<SixMinBloodOxyLineEntryBean> = Gson().fromJson(bloodAll, listType)
                 if (bloodOxyList.isNotEmpty()) {
                     bloodOxyList.forEach {
                         bloodOxyDataSet.addEntry(Entry(it.bloodX, it.bloodY))

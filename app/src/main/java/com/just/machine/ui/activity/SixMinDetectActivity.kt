@@ -309,4 +309,9 @@ class SixMinDetectActivity : CommonBaseActivity<ActivitySixMinDetectBinding>() {
             }
         }
     }
+
+    override fun onDestroy() {
+        usbTransferUtil.release()
+        super.onDestroy()
+    }
 }

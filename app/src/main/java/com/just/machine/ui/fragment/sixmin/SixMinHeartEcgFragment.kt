@@ -36,19 +36,20 @@ class SixMinHeartEcgFragment : CommonBaseFragment<FragmentSixminHeartEcgBinding>
 
     override fun loadData() {
         lifecycleScope.launch(Dispatchers.Default) {
-            val dataParse = ECGDataParse(mActivity)
-            val count = dataParse.values.size
-            val containers = arrayOfNulls<ECGPointContainer>(count)
-
-            for (i in 0 until count) {
-                val container1 = ECGPointContainer.create(dataParse.values)
-                container1.isDrawRpeak = false
-                container1.isDrawNoise = false
-                containers[i] = container1
-            }
-            val chartData = ECGChartData.create(*containers)
-            binding.sixminStaticHeartEcg.chartData = chartData
-            binding.sixminStaticHeartEcg.applyRenderUpdate()
+//            val dataParse = ECGDataParse(mActivity)
+//            val count = dataParse.values.size
+//            val containers = arrayOfNulls<ECGPointContainer>(count)
+//
+//            for (i in 0 until count) {
+//                val container1 = ECGPointContainer.create(dataParse.values)
+//                container1.isDrawRpeak = false
+//                container1.isDrawNoise = false
+//                containers[i] = container1
+//            }
+//            val chartData = ECGChartData.create(*containers)
+//            binding.sixminStaticHeartEcg.chartData = chartData
+//            binding.sixminStaticHeartEcg.applyRenderUpdate()
+            val ecgPath = Environment.getExternalStorageDirectory().absolutePath + "/SixMin/SixMinReportPng/" + mActivity.sixMinReportNo + "/imageEcg3.png"
         }
     }
 
@@ -143,14 +144,4 @@ class SixMinHeartEcgFragment : CommonBaseFragment<FragmentSixminHeartEcgBinding>
         inflater: LayoutInflater, container: ViewGroup?
     ): FragmentSixminHeartEcgBinding =
         FragmentSixminHeartEcgBinding.inflate(inflater, container, false)
-
-    override fun onPause() {
-        binding.sixminStaticHeartEcg.onPause()
-        super.onPause()
-    }
-
-    override fun onResume() {
-        binding.sixminStaticHeartEcg.onResume()
-        super.onResume()
-    }
 }

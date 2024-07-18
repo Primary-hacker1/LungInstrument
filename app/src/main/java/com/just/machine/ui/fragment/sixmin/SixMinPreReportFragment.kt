@@ -2,6 +2,7 @@ package com.just.machine.ui.fragment.sixmin
 
 import android.annotation.SuppressLint
 import android.graphics.Color
+import android.os.Environment
 import android.text.Editable
 import android.text.Html
 import android.text.InputFilter
@@ -18,6 +19,7 @@ import android.widget.TableRow
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
@@ -36,9 +38,13 @@ import com.just.machine.ui.dialog.SixMinReportPrescriptionFragment
 import com.just.machine.ui.dialog.SixMinReportSelfCheckBeforeTestFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.CommonUtil
+import com.just.machine.util.FileUtil
 import com.just.news.R
 import com.just.news.databinding.FragmentSixminPreReportBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.io.File
 import java.math.BigDecimal
 
 /**
@@ -57,9 +63,12 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
     private var isFirst = true
 
     override fun loadData() {//懒加载
-
+        lifecycleScope.launch(Dispatchers.IO) {
+            val path = "SixMin/SixMinReportEcg" + File.separator +mActivity.sixMinReportInfo.reportNo+ File.separator+"ecgData.json"
+            val file = File(Environment.getExternalStorageDirectory().absolutePath, path)
+            FileUtil.writeEcg(mActivity.usbTransferUtil.mapRealTimeEcg,file.absolutePath)
+        }
     }
-
 
     override fun initView() {
         if (activity is SixMinDetectActivity) {
