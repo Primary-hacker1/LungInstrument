@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -38,6 +39,7 @@ public class WaveShowView extends View {
 //    private final int mWaveBigLineColor = Color.parseColor("#000000");//小网格颜色
     private final int mWaveSmallLineColor = Color.parseColor("#EFE4F1");//小网格颜色
     private final int mWaveBigLineColor = Color.parseColor("#3FEDA5B5");//小网格颜色
+    private boolean showAll = false;
 
     public WaveShowView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -119,7 +121,7 @@ public class WaveShowView extends View {
             canvas.drawPath(mPath, mWavePaint);
             // refreshList.clear();
             // mPath.reset();
-            if (refreshList.size() > row * 4.9) {
+            if (refreshList.size() > row * 4.9 && !showAll) {
                // for(int i=0;i<row;i++){
                     refreshList.clear();
                // }
@@ -179,7 +181,13 @@ public class WaveShowView extends View {
         }
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
+    }
+
     public void showAllLine(ArrayList<Float> line) {
+        showAll = true;
         refreshList.addAll(line);
         postInvalidate();
     }

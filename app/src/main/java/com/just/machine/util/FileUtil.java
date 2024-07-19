@@ -1,11 +1,13 @@
 package com.just.machine.util;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.TextUtils;
 import android.text.format.DateUtils;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -16,18 +18,25 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.just.machine.model.sixmininfo.SixMinEcgBean;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class FileUtil {
 
@@ -190,13 +199,14 @@ public class FileUtil {
 
     /**
      * 保存图片到本地
+     *
      * @param bitmap
      * @param filePath
      */
     public Boolean saveBitmapToFile(Bitmap bitmap, String filePath) {
         boolean save = false;
         File file = new File(filePath);
-        if(!file.getParentFile().exists()){
+        if (!file.getParentFile().exists()) {
             file.getParentFile().mkdirs();
         }
         FileOutputStream fileOutputStream = null;
@@ -243,13 +253,15 @@ public class FileUtil {
                 fos = new FileOutputStream(file, true);
                 bw = new BufferedWriter(new OutputStreamWriter(fos));
                 if (!map.isEmpty()) {
-                    for (Integer time : map.keySet()) {
-                        String byteStr = new Gson().toJson(map.get(time));
-                        bw.write("[" + time + ":" + byteStr + "]");
-                        //这里要说明一下，write方法是写入缓存区，并没有写进file文件里面，要使用flush方法才写进去
-                        bw.flush();
-                        bw.newLine();
-                    }
+//                    for (Integer time : map.keySet()) {
+//                        String byteStr = new Gson().toJson(map.get(time));
+//                        bw.write("[" + time + ":" + byteStr + "]");
+//                        //这里要说明一下，write方法是写入缓存区，并没有写进file文件里面，要使用flush方法才写进去
+//                        bw.flush();
+//                        bw.newLine();
+//                    }
+                    bw.write(new Gson().toJson(map));
+                    bw.flush();
                     bw.close();
                     fos.close();
                 }
@@ -268,5 +280,47 @@ public class FileUtil {
                 }
             }
         }
+    }
+
+    /**
+     * 读取心电数据
+     *
+     * @param path
+     * @throws IOException
+     */
+    public static Map<Integer, SixMinEcgBean> readEcg(String path) {
+        Map<Integer, SixMinEcgBean> ecgBeanMap = new TreeMap<>();
+        File file = new File(path);
+        FileInputStream reader = null;//定义一个fileReader对象，用来初始化BufferedReader
+        BufferedReader bReader = null;
+        try {
+            reader = new FileInputStream(file);
+            bReader = new BufferedReader(new InputStreamReader(reader));
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+            while ((line = bReader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+            if (stringBuilder.length() > 0) {
+                ecgBeanMap = new Gson().fromJson(stringBuilder.toString(), new TypeToken<Map<Integer, SixMinEcgBean>>() {
+                }.getType());
+            }
+            bReader.close();
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != bReader) {
+                    bReader.close();
+                }
+                if (null != reader) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return ecgBeanMap;
     }
 }

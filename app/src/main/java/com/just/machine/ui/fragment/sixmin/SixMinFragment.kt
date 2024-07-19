@@ -504,7 +504,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                     binding.sixminTvCircleCount.text = "- -"
                 }
                 //心率数据
-                if (mActivity.usbTransferUtil.usbSerialData.heartRate != null && mActivity.usbTransferUtil.usbSerialData.heartRate != "" && mActivity.usbTransferUtil.usbSerialData.heartRate != "" && mActivity.usbTransferUtil.usbSerialData.heartRate != "0") {
+                if (mActivity.usbTransferUtil.usbSerialData.heartRate != null && mActivity.usbTransferUtil.usbSerialData.heartRate.isNotEmpty() && mActivity.usbTransferUtil.usbSerialData.heartRate != "0") {
                     binding.sixminTvHeartBeat.text =
                         mActivity.usbTransferUtil.usbSerialData.heartRate
                     if (mActivity.usbTransferUtil.usbSerialData.heartRate.toInt() < mActivity.sysSettingBean.sysAlarm.heartBeat.toInt()) {
@@ -714,6 +714,9 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
 
                     override fun onFinish() {
                         Log.d("SixMinFragment", "采集心率数据结束")
+                        val path = "SixMin/SixMinReportEcg" + File.separator +mActivity.sixMinReportInfo.reportNo+ File.separator+"ecgData.json"
+                        val file = File(Environment.getExternalStorageDirectory().absolutePath, path)
+                        FileUtil.writeEcg(mActivity.usbTransferUtil.mapRealTimeEcg,file.absolutePath)
                     }
 
                 })
@@ -797,7 +800,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
         }
         mStartTestCountDownTime = object : FixCountDownTime(5, 1000) {}
         mGetSportHeartEcgCountDownTime = object : FixCountDownTime(60, 1000) {}
-        mCountDownTimeHeartRate = object : FixCountDownTime(360, 1000) {}
+        mCountDownTimeHeartRate = object : FixCountDownTime(120, 1000) {}
     }
 
     private fun addHeartRateEntryData(entryData: Float, times: Float) {

@@ -218,9 +218,4 @@ class MainFragment : CommonBaseFragment<FragmentMainBinding>() {
             }
         }
     }
-
-    override fun onDestroy() {
-        USBTransferUtil.getInstance().disconnect()
-        super.onDestroy()
-    }
 }

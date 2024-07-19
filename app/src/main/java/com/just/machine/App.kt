@@ -57,7 +57,6 @@ open class App : Application() {
                 )
             }
         }
-        startService(Intent(this,GetDeviceInfoService::class.java))
 //        configUncaughtExceptionHandler()
     }
 

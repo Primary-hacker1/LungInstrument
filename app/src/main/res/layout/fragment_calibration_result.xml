@@ -36,14 +36,14 @@
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:src="@drawable/flow"
+                    android:src="@drawable/result"
                     tools:ignore="ContentDescription" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:text="@string/flow"
+                    android:text="标定结果"
                     android:textColor="@color/text7"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -61,14 +61,26 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/btn_flow"
+                    android:id="@+id/btn_flow_handle"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/super_edittext_bg"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="@string/flow"
+                    android:text="@string/flow_handle"
                     android:textColor="@color/colorPrimary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/btn_flow_auto"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_18"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/flow_auto"
+                    android:textColor="@color/cD9D9D9"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -108,8 +120,7 @@
                 <View
                     android:layout_width="@dimen/space_5"
                     android:layout_height="14dp"
-                    android:background="@color/text7"
-                    />
+                    android:background="@color/text7" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
@@ -121,86 +132,11 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/ll_item"
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp_calibration_result"
                 android:layout_width="match_parent"
-                android:layout_height="38dp"
-                android:layout_marginHorizontal="@dimen/space_6"
-                android:background="@color/cf4f5fa"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="@dimen/space_19"
-                    android:text="定标时间"
-                    android:textColor="@color/text3"
-                    android:textSize="14sp" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:maxLines="1"
-                    android:text="吸气准确度误差"
-                    android:textColor="@color/text3"
-                    android:textSize="14sp" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:maxLines="1"
-                    android:text="吸气精确度误差"
-                    android:textColor="@color/text3"
-                    android:textSize="14sp" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:maxLines="1"
-                    android:text="呼气准确度误差"
-                    android:textColor="@color/text3"
-                    android:textSize="14sp" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:maxLines="1"
-                    android:text="呼气精确度误差"
-                    android:textColor="@color/text3"
-                    android:textSize="14sp" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:maxLines="1"
-                    android:text="定标结果"
-                    android:textColor="@color/text3"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_result_flow"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="visible"
-                />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_result_ingredient"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone"
-                />
-
+                android:layout_height="match_parent" />
         </LinearLayout>
-
 
     </LinearLayout>
 </layout>

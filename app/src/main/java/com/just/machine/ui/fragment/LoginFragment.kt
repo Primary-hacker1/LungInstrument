@@ -1,6 +1,7 @@
 package com.just.machine.ui.fragment
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ import com.just.machine.model.Constants
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.ui.activity.MainActivity
 import com.just.machine.ui.fragment.serial.ModbusProtocol
+import com.just.machine.ui.service.GetDeviceInfoService
 import com.just.news.databinding.FragmentLoginBinding
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.news.R
@@ -54,7 +56,7 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
         }
 
     override fun initView() {
-
+        activity?.startService(Intent(activity, GetDeviceInfoService::class.java))
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (ContextCompat.checkSelfPermission(
                     requireContext(),

@@ -171,6 +171,8 @@
     <string name="temperature">温度(℃)</string>
     <string name="humidity">湿度(%)</string>
     <string name="flow">流量定标</string>
+    <string name="flow_handle">流量手动定标</string>
+    <string name="flow_auto">流量自动定标</string>
     <string name="Inspiratory_calibration">吸气标定指标</string>
     <string name="pull">拉</string>
     <string name="ingredient_calibration">成分定标</string>

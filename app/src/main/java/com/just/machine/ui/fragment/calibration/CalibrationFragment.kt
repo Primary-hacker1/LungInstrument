@@ -20,6 +20,7 @@ import com.just.machine.model.Constants
 import com.just.machine.model.calibrate.Definition
 import com.just.machine.ui.adapter.FragmentChildAdapter
 import com.just.machine.ui.fragment.calibration.onekeycalibration.OneKeyCalibrationFragment
+import com.just.machine.ui.fragment.calibration.result.CalibrationResultFragment
 import com.just.machine.ui.fragment.serial.ModbusProtocol
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.USBTransferUtil
