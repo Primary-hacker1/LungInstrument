@@ -300,7 +300,7 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
                         flowAutoResult.ratedLowFlow = list[1].calibratedValue
                         flowAutoResult.measuredLowFlow = list[1].actual
                         flowAutoResult.lowFlowError = list[1].errorRate
-//                        viewModel.setFlowAutoCaliResultBean(flowAutoResult)
+                        viewModel.setFlowAutoCaliResultBean(flowAutoResult)
                         flowAdapter.setItemsBean(autoFlowList)
                         if (result) {
                             //定标未通过

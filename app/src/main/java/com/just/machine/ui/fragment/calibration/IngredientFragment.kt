@@ -194,9 +194,9 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
         standardOneGasCO2Concentration =
             if (ingredientCaliStanderOneCO2?.isEmpty() == true) 0.0 else ingredientCaliStanderOneCO2!!.toDouble()
         standardTwoGasO2Concentration =
-            if (ingredientCaliStanderTwoO2?.isEmpty() == true) 0.0 else ingredientCaliStanderTwoO2!!.toDouble()
+            if (ingredientCaliStanderTwoO2?.isEmpty() == true) 15.01 else ingredientCaliStanderTwoO2!!.toDouble()
         standardTwoGasCO2Concentration =
-            if (ingredientCaliStanderTwoCO2?.isEmpty() == true) 0.0 else ingredientCaliStanderTwoCO2!!.toDouble()
+            if (ingredientCaliStanderTwoCO2?.isEmpty() == true) 6.02 else ingredientCaliStanderTwoCO2!!.toDouble()
 
         binding.etOneO2.setText(standardOneGasO2Concentration.toString())
         binding.etOneCo2.setText(standardOneGasCO2Concentration.toString())
@@ -291,8 +291,10 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
 
                     measuredO2Concentration =
                         String.format("%.2f", CerlibraHelper.setO2Value(sensorO2)).toDouble()
+                    binding.tvActualO2.text = "$measuredO2Concentration%"
                     measuredCO2Concentration =
                         String.format("%.2f", CerlibraHelper.setCo2Value(sensorCO2)).toDouble()
+                    binding.tvActualCo2.text = "$measuredCO2Concentration%"
 
                     listO2.add(measuredO2Concentration)
                     listCO2.add(measuredCO2Concentration)
@@ -761,19 +763,22 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
             val result = listIng.any { it.calibrationResults == "0" }
             val patientBean = SharedPreferencesUtils.instance.patientBean
             val ingredientCalibrationResultEntity = IngredientCalibrationResultBean()
+            ingredientCalibrationResultEntity.calibrationResult = if(result) "1" else "0"
             ingredientCalibrationResultEntity.ingredientId = patientBean?.patientId!!
             ingredientCalibrationResultEntity.calibrationTime = DateUtils.nowTimeString
+
             ingredientCalibrationResultEntity.kO2 = ko2.toString()
             ingredientCalibrationResultEntity.bO2 = bo2.toString()
             ingredientCalibrationResultEntity.o2Offset = o2offset.toString()
             ingredientCalibrationResultEntity.o2T90 = o2t90.toString()
             ingredientCalibrationResultEntity.o2Error =
                 listIng.take(2).maxOf { it.errorRate.toString() }
+
             ingredientCalibrationResultEntity.kCO2 = kco2.toString()
             ingredientCalibrationResultEntity.bCO2 = bco2.toString()
-            ingredientCalibrationResultEntity.o2Offset = co2offset.toString()
-            ingredientCalibrationResultEntity.o2T90 = co2t90.toString()
-            ingredientCalibrationResultEntity.o2Error =
+            ingredientCalibrationResultEntity.cO2T90 = co2offset.toString()
+            ingredientCalibrationResultEntity.cO2T90 = co2t90.toString()
+            ingredientCalibrationResultEntity.cO2Error =
                 listIng.drop(2).take(2).maxOf { it.errorRate.toString() }
 
             viewModel.setIngredientCaliResultBean(ingredientCalibrationResultEntity)

@@ -269,14 +269,17 @@ class OneKeyFlowFragment : CommonBaseFragment<FragmentOnekeyFlowBinding>() {
                         flowAutoResult.ratedLowFlow = list[1].calibratedValue
                         flowAutoResult.measuredLowFlow = list[1].actual
                         flowAutoResult.lowFlowError = list[1].errorRate
+                        flowAutoResult.calibrationResult = if(result) "1" else "0"
 
                         flowAdapter.setItemsBean(autoFlowList)
                         if (result) {
                             //定标未通过
+                            binding.tvFlowOnekeyResult.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
                             binding.tvFlowOnekeyResult.text = "定标未通过"
                             LiveDataBus.get().with("oneKeyCalibra").value = "flowAutoFailed"
                         } else {
                             //定标通过
+                            binding.tvFlowOnekeyResult.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
                             binding.tvFlowOnekeyResult.text = "定标通过"
                             LiveDataBus.get().with("oneKeyCalibra").value = "flowAutoSuccess"
                         }

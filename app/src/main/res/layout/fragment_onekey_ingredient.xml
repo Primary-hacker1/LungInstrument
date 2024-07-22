@@ -51,6 +51,7 @@
                             android:textColor="@color/blue" />
 
                         <TextView
+                            android:id="@+id/tv_onekey_standerd_one_calibration_o2"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="2dp"
@@ -70,6 +71,7 @@
                             android:textColor="@color/blue" />
 
                         <TextView
+                            android:id="@+id/tv_onekey_standerd_one_calibration_co2"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="2dp"
@@ -106,6 +108,7 @@
                             android:textColor="@color/blue" />
 
                         <TextView
+                            android:id="@+id/tv_onekey_standerd_two_calibration_o2"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="2dp"
@@ -125,6 +128,7 @@
                             android:textColor="@color/blue" />
 
                         <TextView
+                            android:id="@+id/tv_onekey_standerd_two_calibration_co2"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="2dp"
@@ -334,7 +338,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/tv_flow_onekey_result"
+                android:id="@+id/tv_ingredient_onekey_result"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="@dimen/space_8"

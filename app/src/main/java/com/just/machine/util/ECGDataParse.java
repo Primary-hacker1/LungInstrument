@@ -21,7 +21,7 @@ public class ECGDataParse {
     private ECGPointValue[] values;
 
     public ECGDataParse(Context context){
-        String json = parseJson(context,"ecgData.json");
+        String json = parseJson(context,"ecgData2.json");
         Gson gson = new Gson();
         values = gson.fromJson(json,new TypeToken<ECGPointValue[]>(){}.getType());
     }

@@ -26,6 +26,7 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
     private var countSec = 0
     private var iFlag = 0
     private var isFlowSend = false //流量定标指令是否发送
+    private var isIngredientSend = false //成分定标指令是否发送
     private var envSuccess = false //环境定标是否成功
     private var flowSuccess = false //自动流量定标是否成功
     private var ingredientSuccess = false //成分定标是否成功
@@ -62,7 +63,6 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
                 }
                 if (countSec < 5 && iFlag == 1) {
                     if (envSuccess) {
-                        binding.vpOnekey.setCurrentItem(2, true)
                         binding.tvOnekeyCalibrationEnvironment.setTextColor(
                             ContextCompat.getColor(
                                 requireContext(),
@@ -71,18 +71,25 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
                         )
                         binding.ivOnekeyCalibrationEnvironment.setImageResource(R.drawable.environment_highlight)
                         iFlag = 2
+                    }else if(!envSuccess && countSec >= 4){
+                        timer?.cancel()
+                        enableStartBtn()
+                        binding.vpOnekey.setCurrentItem(0, true)
+                        LungCommonDialogFragment.startCommonDialogFragment(
+                            requireActivity().supportFragmentManager, "一键定标失败!", "2"
+                        )
+                        return@fixedRateTimer
                     }
                 } else if (countSec == 5 && iFlag == 1) {
                     binding.vpOnekey.setCurrentItem(2, true)
                     iFlag = 2
-                } else if (countSec in 6..54 && iFlag == 2) {
+                } else if (countSec in 6 until 55 && iFlag == 2) {
                     //自动流量定标开始
                     if (!isFlowSend) {
                         isFlowSend = true
                         LiveDataBus.get().with("oneKeyCalibra").value = "flowAuto"
                     }
                     if (flowSuccess) {
-                        binding.vpOnekey.setCurrentItem(3, true)
                         binding.tvOnekeyCalibrationLineTwo.setBackgroundColor(
                             ContextCompat.getColor(
                                 requireContext(),
@@ -98,9 +105,15 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
                         binding.ivOnekeyCalibrationFlow.setImageResource(R.drawable.flow_highlight)
                         iFlag = 3
                     }
-                }else if(countSec > 54 && iFlag == 3) {
-                    if(ingredientSuccess){
-                        binding.vpOnekey.setCurrentItem(0, true)
+                } else if (countSec == 56 && iFlag == 3) {
+                    binding.vpOnekey.setCurrentItem(3, true)
+                } else if (countSec > 56 && iFlag == 3) {
+                    //成分流量定标开始
+                    if (!isIngredientSend) {
+                        isIngredientSend = true
+                        LiveDataBus.get().with("oneKeyCalibra").value = "ingredient"
+                    }
+                    if (ingredientSuccess) {
                         binding.tvOnekeyCalibrationLineTwo.setBackgroundColor(
                             ContextCompat.getColor(
                                 requireContext(),
@@ -114,9 +127,20 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
                             )
                         )
                         binding.ivOnekeyCalibrationFlow.setImageResource(R.drawable.flow_highlight)
-                        timer?.cancel()
-                        enableStartBtn()
                     }
+                } else if (countSec == 110) {
+                    binding.vpOnekey.setCurrentItem(0, true)
+                    if (envSuccess && flowSuccess && ingredientSuccess) {
+                        LungCommonDialogFragment.startCommonDialogFragment(
+                            requireActivity().supportFragmentManager, "一键定标成功!", "1"
+                        )
+                    } else {
+                        LungCommonDialogFragment.startCommonDialogFragment(
+                            requireActivity().supportFragmentManager, "一键定标失败!", "2"
+                        )
+                    }
+                    timer?.cancel()
+                    enableStartBtn()
                 }
                 countSec++
             }
@@ -128,14 +152,25 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
                     "environmentFailed" -> {
                         envSuccess = false
                     }
+
                     "environmentSuccess" -> {
                         envSuccess = true
                     }
+
                     "flowAutoFailed" -> {
                         flowSuccess = false
                     }
+
                     "flowAutoSuccess" -> {
                         flowSuccess = true
+                    }
+
+                    "ingredientFailed" -> {
+                        ingredientSuccess = false
+                    }
+
+                    "ingredientSuccess" -> {
+                        ingredientSuccess = true
                     }
                 }
             }

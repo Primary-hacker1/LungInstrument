@@ -33,7 +33,9 @@ import com.just.machine.model.Constants
 import com.just.machine.model.PatientInfoBean
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.sixmininfo.SixMinBloodOxyLineEntryBean
+import com.just.machine.model.sixmininfo.SixMinBreathingLineEntryBean
 import com.just.machine.model.sixmininfo.SixMinEcgBean
+import com.just.machine.model.sixmininfo.SixMinEcgInfoBean
 import com.just.machine.model.sixmininfo.SixMinHeartRateLineEntryBean
 import com.just.machine.model.sixmininfo.UsbSerialData
 import com.just.machine.model.sixminsystemsetting.SixMinSysSettingBean
@@ -51,6 +53,7 @@ import com.just.machine.util.ScreenUtils
 import com.just.machine.util.SixMinCmdUtils
 import com.just.news.R
 import com.just.news.databinding.FragmentSixminBinding
+import com.seeker.luckychart.model.ECGPointValue
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -107,6 +110,10 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
     private var vo2PerKg: TextView? = null
     private var vco2: TextView? = null
     private var bf: TextView? = null
+
+    private lateinit var mValues: Array<Array<ECGPointValue>?>
+    private var index = 0
+    private var ready = false
 
     override fun loadData() {//懒加载
 
@@ -699,11 +706,18 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                         try {
                             val mapHeartRate = mActivity.usbTransferUtil.mapHeartRate
                             val heartBeat = mActivity.usbTransferUtil.mapHeartEcg
+                            val heartBeatList = mutableListOf<SixMinEcgInfoBean>()
+                            var ecgBean: SixMinEcgInfoBean
                             if (mapHeartRate.isNotEmpty()) {
                                 val value = mapHeartRate.entries.last().value
-                                val sixMinEcgBean = SixMinEcgBean(value, heartBeat)
+                                heartBeat.forEach {
+                                    ecgBean = SixMinEcgInfoBean()
+                                    ecgBean.coorY = it
+                                    heartBeatList.add(ecgBean)
+                                }
+                                val sixMinEcgBean = SixMinEcgBean(value, heartBeatList)
                                 mActivity.usbTransferUtil.mapRealTimeEcg[360 - times] = sixMinEcgBean
-                                if(times % 3 == 0){
+                                if (times % 3 == 0) {
                                     addHeartRateEntryData(value.toFloat(), times.toFloat())
                                 }
                             }
@@ -714,9 +728,14 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
 
                     override fun onFinish() {
                         Log.d("SixMinFragment", "采集心率数据结束")
-                        val path = "SixMin/SixMinReportEcg" + File.separator +mActivity.sixMinReportInfo.reportNo+ File.separator+"ecgData.json"
-                        val file = File(Environment.getExternalStorageDirectory().absolutePath, path)
-                        FileUtil.writeEcg(mActivity.usbTransferUtil.mapRealTimeEcg,file.absolutePath)
+                        val path =
+                            "SixMin/SixMinReportEcg" + File.separator + mActivity.sixMinReportInfo.reportNo + File.separator + "ecgData.json"
+                        val file =
+                            File(Environment.getExternalStorageDirectory().absolutePath, path)
+                        FileUtil.writeEcg(
+                            mActivity.usbTransferUtil.mapRealTimeEcg,
+                            file.absolutePath
+                        )
                     }
 
                 })
@@ -823,10 +842,10 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
             )
         )
 
-        mActivity.usbTransferUtil.heartRateLineData.add(
-            SixMinHeartRateLineEntryBean(
+        mActivity.usbTransferUtil.breathingLineData.add(
+            SixMinBreathingLineEntryBean(
                 (6.00 - decimalFormat.format(index).toFloat()).toFloat(),
-                entryData/4
+                entryData / 4
             )
         )
 
@@ -1279,7 +1298,12 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                             binding.sixminTvHeartBeat.text.toString().trim().toInt()
                         )
 
-                        val breath = BigDecimal(binding.sixminTvHeartBeat.text.toString().trim()).divide(BigDecimal("4"), 0, ROUND_DOWN)
+                        val breath =
+                            BigDecimal(binding.sixminTvHeartBeat.text.toString().trim()).divide(
+                                BigDecimal("4"),
+                                0,
+                                ROUND_DOWN
+                            )
                         mActivity.usbTransferUtil.breathingListAvg.add(
                             breath.toInt()
                         )
@@ -1451,11 +1475,18 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                     //每3秒钟采集心率数据以及每秒的心电数据
                     val mapHeartRate = mActivity.usbTransferUtil.mapHeartRate
                     val heartBeat = mActivity.usbTransferUtil.mapHeartEcg
+                    val heartBeatList = mutableListOf<SixMinEcgInfoBean>()
+                    var ecgBean: SixMinEcgInfoBean
                     if (mapHeartRate.isNotEmpty()) {
                         val value = mapHeartRate.entries.last().value
-                        val sixMinEcgBean = SixMinEcgBean(value, heartBeat)
+                        heartBeat.forEach {
+                            ecgBean = SixMinEcgInfoBean()
+                            ecgBean.coorY = it
+                            heartBeatList.add(ecgBean)
+                        }
+                        val sixMinEcgBean = SixMinEcgBean(value, heartBeatList)
                         mActivity.usbTransferUtil.mapRealTimeEcg[360 - times] = sixMinEcgBean
-                        if(times % 3 == 0){
+                        if (times % 3 == 0) {
                             addHeartRateEntryData(value.toFloat(), times.toFloat())
                         }
                     }
@@ -1524,7 +1555,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                             val mapHeartRate = mActivity.usbTransferUtil.mapHeartRate
                             if (mapHeartRate.isNotEmpty()) {
                                 val value = mapHeartRate.entries.last().value
-                                if(value.isNotEmpty()){
+                                if (value.isNotEmpty()) {
                                     restoreEcgList.add(value.toInt())
                                 }
                             }
@@ -1533,7 +1564,8 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                         override fun onFinish() {
                             startRestoreEcgDialogFragment.dismiss()
                             binding.sixminIvIgnoreBlood.isEnabled = false
-                            mActivity.sixMinReportBloodHeart.heartRestore = restoreEcgList.average().toString()
+                            mActivity.sixMinReportBloodHeart.heartRestore =
+                                restoreEcgList.average().toString()
                             if (!mActivity.usbTransferUtil.ignoreBlood) {
                                 if (mActivity.sysSettingBean.sysOther.autoMeasureBlood == "1") {
                                     lifecycleScope.launch {
@@ -1635,7 +1667,8 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
             //处理训练结束后的呼吸率
             mActivity.usbTransferUtil.dealBreath(
                 mActivity.sixMinReportBreathing,
-                Gson().toJson(mActivity.usbTransferUtil.breathingLineData))
+                Gson().toJson(mActivity.usbTransferUtil.breathingLineData)
+            )
 
             if (mActivity.sysSettingBean.sysOther.circleCountType == "0") {
                 mActivity.usbTransferUtil.dealPreption(

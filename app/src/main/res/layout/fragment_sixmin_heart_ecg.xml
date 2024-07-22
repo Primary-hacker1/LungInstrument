@@ -19,11 +19,22 @@
             android:orientation="vertical"
             tools:ignore="MissingDefaultResource">
 
-            <com.justsafe.libview.ecg.WaveShowView
+<!--            <com.justsafe.libview.ecg.WaveShowView-->
+<!--                android:id="@+id/sixmin_static_heart_ecg"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="300dp"-->
+<!--                android:layout_gravity="center_horizontal" />-->
+
+            <com.seeker.luckychart.charts.ECGChartView
                 android:id="@+id/sixmin_static_heart_ecg"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_gravity="center_horizontal" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                app:isTouchable="false"
+                app:ecgLineCount="1"
+                app:markTextStyle="10,2"
+                app:renderMode="RENDER_CONTINUOUS"
+                app:yOuterCellCounts="10" />
 
             <LinearLayout
                 android:layout_width="match_parent"

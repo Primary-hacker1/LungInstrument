@@ -18,9 +18,13 @@ import com.just.machine.ui.activity.SixMinDetectActivity
 import com.just.machine.ui.dialog.SixMinCaptureEcgDialogFragment
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.CommonUtil
+import com.just.machine.util.ECGDataParse
 import com.just.machine.util.FileUtil
 import com.just.machine.util.SeekBarPopUtils
 import com.just.news.databinding.FragmentSixminHeartEcgBinding
+import com.seeker.luckychart.charts.ECGChartView
+import com.seeker.luckychart.model.chartdata.ECGChartData
+import com.seeker.luckychart.model.container.ECGPointContainer
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -57,6 +61,20 @@ class SixMinHeartEcgFragment : CommonBaseFragment<FragmentSixminHeartEcgBinding>
 //                    }
 //                }
 //            }
+
+            val dataParse = ECGDataParse(mActivity)
+            val count = dataParse.values.size
+            val containers = arrayOfNulls<ECGPointContainer>(count)
+
+            for (i in 0 until count) {
+                val container1 = ECGPointContainer.create(dataParse.values)
+                container1.isDrawRpeak = false
+                container1.isDrawNoise = false
+                containers[i] = container1
+            }
+            val chartData = ECGChartData.create(*containers)
+            binding.sixminStaticHeartEcg.chartData = chartData
+            binding.sixminStaticHeartEcg.applyRenderUpdate()
         }
     }
 
@@ -79,7 +97,7 @@ class SixMinHeartEcgFragment : CommonBaseFragment<FragmentSixminHeartEcgBinding>
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
                     val percent = 1f * progress / seekBar.max
-//                    binding.sixminStaticHeartEcg.setProgress(percent)
+                    binding.sixminStaticHeartEcg.setProgress(percent)
                     SeekBarPopUtils.move(
                         mActivity,
                         progress,
@@ -98,13 +116,13 @@ class SixMinHeartEcgFragment : CommonBaseFragment<FragmentSixminHeartEcgBinding>
             }
         })
 
-//        binding.sixminStaticHeartEcg.setOnVisibleCoorPortChangedListener(
-//            OnVisibleCoorPortChangedListener { visiblePort, maxPort ->
-//                visibleLeft = visiblePort.left.toInt()
-//                val progress = visiblePort.left / (maxPort.width() - visiblePort.width())
-//                binding.sixminStaticEcgSeekbar.progress =
-//                    (binding.sixminStaticEcgSeekbar.max * progress).toInt()
-//            })
+        binding.sixminStaticHeartEcg.setOnVisibleCoorPortChangedListener(
+            ECGChartView.OnVisibleCoorPortChangedListener { visiblePort, maxPort ->
+                visibleLeft = visiblePort.left.toInt()
+                val progress = visiblePort.left / (maxPort.width() - visiblePort.width())
+                binding.sixminStaticEcgSeekbar.progress =
+                    (binding.sixminStaticEcgSeekbar.max * progress).toInt()
+            })
 
         binding.sixminStaticEcgClose.setNoRepeatListener {
             mActivity.finish()

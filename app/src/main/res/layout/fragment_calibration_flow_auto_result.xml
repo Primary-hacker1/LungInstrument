@@ -48,7 +48,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:maxLines="1"
-                    android:text="吸气准确度误差"
+                    android:text="标准流速"
                     android:textColor="@color/text3"
                     android:textSize="14sp" />
 
@@ -57,7 +57,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:maxLines="1"
-                    android:text="吸气精确度误差"
+                    android:text="实测流速"
                     android:textColor="@color/text3"
                     android:textSize="14sp" />
 
@@ -66,16 +66,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:maxLines="1"
-                    android:text="呼气准确度误差"
-                    android:textColor="@color/text3"
-                    android:textSize="14sp" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:maxLines="1"
-                    android:text="呼气精确度误差"
+                    android:text="误差"
                     android:textColor="@color/text3"
                     android:textSize="14sp" />
 
@@ -90,16 +81,9 @@
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_result_flow"
+                android:id="@+id/rv_result_flow_auto"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="visible" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_result_ingredient"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone" />
+                android:layout_height="match_parent" />
 
         </LinearLayout>
 

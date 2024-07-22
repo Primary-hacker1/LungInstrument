@@ -2,6 +2,7 @@ package com.just.machine.ui.fragment.calibration.onekeycalibration
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.common.base.CommonBaseFragment
 import com.common.network.LogUtils
@@ -13,6 +14,7 @@ import com.just.machine.ui.fragment.serial.ModbusProtocol
 import com.just.machine.ui.viewmodel.MainViewModel
 import com.just.machine.util.LiveDataBus
 import com.just.machine.util.USBTransferUtil
+import com.just.news.R
 import com.just.news.databinding.FragmentOnekeyEnvironmentBinding
 import com.justsafe.libview.util.DateUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -68,10 +70,12 @@ class OneKeyEnvironmentFragment : CommonBaseFragment<FragmentOnekeyEnvironmentBi
 
                         if (pressure > 1000 || pressure < 500 || temperature > 50 || temperature <= 0 || humidity > 100 || humidity <= 0) {
                             //定标失败
+                            binding.tvOnekeyCalibrationResult.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
                             binding.tvOnekeyCalibrationResult.text = "定标未通过"
                             LiveDataBus.get().with("oneKeyCalibra").value = "environmentFailed"
                         } else {
                             binding.tvOnekeyCalibrationResult.text = "定标通过"
+                            binding.tvOnekeyCalibrationResult.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
                             val patientBean = SharedPreferencesUtils.instance.patientBean
                             viewModel.setEnvironmental(
                                 EnvironmentalCalibrationBean(//假设用户id为1
