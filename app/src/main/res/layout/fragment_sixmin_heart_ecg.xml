@@ -32,7 +32,7 @@
                 android:layout_gravity="center_horizontal"
                 app:isTouchable="false"
                 app:ecgLineCount="1"
-                app:markTextStyle="10,2"
+                app:markTextStyle="10,1"
                 app:renderMode="RENDER_CONTINUOUS"
                 app:yOuterCellCounts="10" />
 

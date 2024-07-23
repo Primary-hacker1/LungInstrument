@@ -676,6 +676,7 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
                     o2TwoResult, o2t90.toString(), o2offset.toString()
                 )
             )
+            o2Adapter.setItemsBean(o2IngredientCalibrationModelList)
 
             val measurOneCO2 =
                 String.format("%.2f", CerlibraHelper.setO2Value(co2mvalue1)).toDouble()
@@ -710,6 +711,7 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
                     co2TwoResult, co2t90.toString(), co2offset.toString()
                 )
             )
+            co2Adapter.setItemsBean(co2IngredientCalibrationModelList)
 
             val listIng = arrayListOf<IngredientBean>()
             listIng.add(

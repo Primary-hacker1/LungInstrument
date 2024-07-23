@@ -10,8 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.viewmodel.LiveDataEvent
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.just.machine.model.sixmininfo.SixMinEcgBean
 import com.just.machine.model.sixmininfo.SixMinRecordsBean
 import com.just.machine.ui.activity.SixMinDetectActivity
@@ -23,11 +21,13 @@ import com.just.machine.util.FileUtil
 import com.just.machine.util.SeekBarPopUtils
 import com.just.news.databinding.FragmentSixminHeartEcgBinding
 import com.seeker.luckychart.charts.ECGChartView
+import com.seeker.luckychart.model.ECGPointValue
 import com.seeker.luckychart.model.chartdata.ECGChartData
 import com.seeker.luckychart.model.container.ECGPointContainer
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 
 @AndroidEntryPoint
@@ -38,43 +38,56 @@ class SixMinHeartEcgFragment : CommonBaseFragment<FragmentSixminHeartEcgBinding>
     private var visibleLeft: Int = 0 //可见试图的左坐标，也是数据的起始位置，随着seekbar的滑动，起始位置也会随着变化
     private var maxTime: Int = 0
     private var ecgBeanList = mutableListOf<SixMinEcgBean>()
+    private var ecgInfoList = mutableListOf<Float>()
     private var ecgDataList = mutableListOf<MutableList<Float>>()
+    private var ecgFile: File? = null
 
     override fun loadData() {
         viewModel.getSixMinReportInfoById(
             mActivity.sixMinPatientId.toLong(), mActivity.sixMinReportNo
         )
-        lifecycleScope.launch(Dispatchers.Default) {
-//            val path =
-//                "SixMin/SixMinReportEcg" + File.separator + mActivity.sixMinReportNo + File.separator + "ecgData.json"
-//            val file = File(Environment.getExternalStorageDirectory().absolutePath, path)
-//            if (file.exists()) {
-//                val readEcg = FileUtil.readEcg(file.absolutePath)
-//                readEcg.entries.forEach {
-//                    ecgBeanList.add(it.value)
-//                }
-//                maxTime = 360 - readEcg.keys.first()+1
-//                withContext(Dispatchers.Main) {
-//                    binding.sixminStaticEcgEndTime.text = CommonUtil.secondsToMMSS(maxTime)
-//                    ecgBeanList.forEachIndexed { _, it ->
-//                        binding.sixminStaticHeartEcg.showAllLine(it.ecgList as ArrayList<Float>?)
-//                    }
-//                }
-//            }
+        lifecycleScope.launch(Dispatchers.IO) {
+            val path =
+                "SixMin/SixMinReportEcg" + File.separator + mActivity.sixMinReportNo + File.separator + "ecgData.json"
+            ecgFile = File(Environment.getExternalStorageDirectory().absolutePath, path)
+            if (ecgFile?.exists() == true) {
+                val dataParse = ECGDataParse(mActivity, ecgFile?.absolutePath)
+                withContext(Dispatchers.Main) {
+                    maxTime = 360 - dataParse.values.keys.first() + 1
+                    binding.sixminStaticEcgEndTime.text = CommonUtil.secondsToMMSS(maxTime)
+                    dataParse.values.entries.forEach {
+                        ecgBeanList.add(it.value)
+                    }
+                    ecgBeanList.forEach {
+                        ecgInfoList.addAll(it.ecgList)
+                    }
+//            binding.sixminStaticHeartEcg.showAllLine(ecgInfoList as ArrayList<Float>?)
+                    val values = arrayOfNulls<ECGPointValue>(ecgInfoList.size)
+                    var ecgPointValue: ECGPointValue
+                    ecgInfoList.forEachIndexed { index, it ->
+                        ecgPointValue = ECGPointValue()
+                        ecgPointValue.coorY = -it
+                        ecgPointValue.coorX = 0.0f
+                        values[index] = ecgPointValue
+                    }
+                    val count = values.size
+                    val containers = arrayOfNulls<ECGPointContainer>(count)
 
-            val dataParse = ECGDataParse(mActivity)
-            val count = dataParse.values.size
-            val containers = arrayOfNulls<ECGPointContainer>(count)
-
-            for (i in 0 until count) {
-                val container1 = ECGPointContainer.create(dataParse.values)
-                container1.isDrawRpeak = false
-                container1.isDrawNoise = false
-                containers[i] = container1
+                    for (i in values.indices) {
+                        val container1 = ECGPointContainer.create(values)
+                        container1.isDrawRpeak = false
+                        container1.isDrawNoise = false
+                        containers[i] = container1
+                    }
+                    val chartData = ECGChartData.create(*containers)
+                    binding.sixminStaticHeartEcg.chartData = chartData
+                    binding.sixminStaticHeartEcg.applyRenderUpdate()
+                }
+            } else {
+                withContext(Dispatchers.Main) {
+                    mActivity.showMsg("心电文件未找到")
+                }
             }
-            val chartData = ECGChartData.create(*containers)
-            binding.sixminStaticHeartEcg.chartData = chartData
-            binding.sixminStaticHeartEcg.applyRenderUpdate()
         }
     }
 
@@ -128,30 +141,64 @@ class SixMinHeartEcgFragment : CommonBaseFragment<FragmentSixminHeartEcgBinding>
             mActivity.finish()
         }
         binding.sixminStaticEcgCapture.setNoRepeatListener {
-            val captureEcgDialogFragment =
-                SixMinCaptureEcgDialogFragment.startSixMinCaptureEcgDialogFragment(mActivity.supportFragmentManager)
-            captureEcgDialogFragment.setCaptureEcgDialogListener(object :
-                SixMinCaptureEcgDialogFragment.CaptureEcgDialogListener {
-                override fun onClickSaveEcg(imagePreview: Bitmap, type: Int) {
-                    val ecgSavePath =
-                        File.separator + "SixMin/SixMinReportPng" + File.separator + mActivity.sixMinReportNo
-                    val file = File(
-                        Environment.getExternalStorageDirectory().absolutePath,
-                        ecgSavePath + File.separator + "imageEcg${type}.png"
+            if (ecgFile?.exists() == true) {
+                val captureEcgDialogFragment =
+                    SixMinCaptureEcgDialogFragment.startSixMinCaptureEcgDialogFragment(
+                        mActivity.supportFragmentManager,
+                        visibleLeft,
+                        mActivity.sixMinReportNo
                     )
-                    val saveBitmapToFile = FileUtil.getInstance(mActivity)
-                        .saveBitmapToFile(imagePreview, file.absolutePath)
-                    if (saveBitmapToFile) {
-                        mActivity.showMsg("心电截图保存成功")
-                        if (type == 3) {
-                            mActivity.sixMinReportBloodHeartEcg.jietuOr = "1"
+                captureEcgDialogFragment.setCaptureEcgDialogListener(object :
+                    SixMinCaptureEcgDialogFragment.CaptureEcgDialogListener {
+                    override fun onClickSaveEcg(
+                        imagePreview: Bitmap,
+                        type: Int,
+                        time: Int,
+                        heartBeat: String,
+                        ecgData: String
+                    ) {
+                        val ecgSavePath =
+                            File.separator + "SixMin/SixMinReportPng" + File.separator + mActivity.sixMinReportNo
+                        val file = File(
+                            Environment.getExternalStorageDirectory().absolutePath,
+                            ecgSavePath + File.separator + "imageEcg${type}.png"
+                        )
+                        val saveBitmapToFile = FileUtil.getInstance(mActivity)
+                            .saveBitmapToFile(imagePreview, file.absolutePath)
+                        if (saveBitmapToFile) {
+                            when (type) {
+                                1 -> {
+                                    mActivity.sixMinReportBloodHeartEcg.bigHreat = heartBeat
+                                    val secondsToMMSS = CommonUtil.secondsToMSS(time)
+                                    mActivity.sixMinReportBloodHeartEcg.bigHreatTime = secondsToMMSS
+                                    mActivity.sixMinReportBloodHeartEcg.bigHreatEcg = ecgData
+                                }
+
+                                2 -> {
+                                    mActivity.sixMinReportBloodHeartEcg.smallHreat = heartBeat
+                                    val secondsToMMSS = CommonUtil.secondsToMSS(time)
+                                    mActivity.sixMinReportBloodHeartEcg.smallHreatTime = secondsToMMSS
+                                    mActivity.sixMinReportBloodHeartEcg.smallHreatEcg = ecgData
+                                }
+
+                                3 -> {
+                                    mActivity.sixMinReportBloodHeartEcg.hreatRate = heartBeat
+                                    val secondsToMMSS = CommonUtil.secondsToMSS(time)
+                                    mActivity.sixMinReportBloodHeartEcg.hreatTime = secondsToMMSS
+                                    mActivity.sixMinReportBloodHeartEcg.hreatEcg = ecgData
+                                    mActivity.sixMinReportBloodHeartEcg.jietuOr = "1"
+                                }
+                            }
                             viewModel.setSixMinReportHeartEcg(mActivity.sixMinReportBloodHeartEcg)
+                            mActivity.showMsg("心电截图保存成功")
+                        } else {
+                            mActivity.showMsg("心电截图保存失败")
                         }
-                    } else {
-                        mActivity.showMsg("心电截图保存失败")
                     }
-                }
-            })
+                })
+            } else {
+                mActivity.showMsg("心电文件未找到")
+            }
         }
     }
 

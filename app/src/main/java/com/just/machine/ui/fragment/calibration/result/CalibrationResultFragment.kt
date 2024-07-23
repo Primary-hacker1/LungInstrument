@@ -35,12 +35,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class CalibrationResultFragment : CommonBaseFragment<FragmentCalibrationResultBinding>() {
 
-    private val viewModel by viewModels<MainViewModel>()
-
-    private val adapterFlow by lazy { ResultFlowAdapter(requireContext()) }
-
-    private val adapterIngredient by lazy { ResultIngredientAdapter(requireContext()) }
-
     override fun initView() {
 
         val adapter = FragmentChildAdapter(this)
@@ -78,40 +72,6 @@ class CalibrationResultFragment : CommonBaseFragment<FragmentCalibrationResultBi
                 binding.btnFlowAuto
             )
         }
-
-        viewModel.getIngredients()
-
-        viewModel.getFlows()
-
-        viewModel.mEventHub.observe(this) {
-            when (it.action) {
-                FLOWS_SUCCESS -> {
-                    val flowsBean: MutableList<FlowBean> = ArrayList()
-                    if (it.any is List<*>) {
-                        val list = it.any as List<*>
-                        for (index in list) {
-                            if (index is FlowBean) {
-                                flowsBean.add(index)
-                            }
-                        }
-                    }
-                    adapterFlow.setItemsBean(flowsBean)
-                }
-                INGREDIENTS_SUCCESS -> {
-                    val flowsBean: MutableList<IngredientBean> = ArrayList()
-                    if (it.any is List<*>) {
-                        val list = it.any as List<*>
-                        for (index in list) {
-                            if (index is IngredientBean) {
-                                flowsBean.add(index)
-                            }
-                        }
-                    }
-                    adapterIngredient.setItemsBean(flowsBean)
-                }
-            }
-        }
-
     }
 
     override fun initListener() {

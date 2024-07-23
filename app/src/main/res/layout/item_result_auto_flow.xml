@@ -2,12 +2,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-
         <import type="com.just.news.R" />
 
         <variable
             name="bean"
-            type="com.just.machine.dao.calibration.IngredientCalibrationResultBean" />
+            type="com.just.machine.dao.calibration.FlowAutoCalibrationResultBean" />
     </data>
 
     <LinearLayout
@@ -21,8 +20,8 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_19"
             android:layout_weight="1"
+            android:layout_marginStart="@dimen/space_19"
             android:text="@{bean.calibrationTime}"
             android:textColor="@color/text3"
             android:textSize="14sp" />
@@ -32,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="1"
-            android:text="@{bean.o2Error}"
+            android:text="@{bean.ratedHighFlow}"
             android:textColor="@color/text3"
             android:textSize="14sp" />
 
@@ -41,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="1"
-            android:text="@{bean.o2T90}"
+            android:text="@{bean.measuredHighFlow}"
             android:textColor="@color/text3"
             android:textSize="14sp" />
 
@@ -50,25 +49,26 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="1"
-            android:text="@{bean.cO2Error}"
+            android:text="@{bean.highFlowError}"
             android:textColor="@color/text3"
             android:textSize="14sp" />
 
+<!--        <androidx.appcompat.widget.AppCompatTextView-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:maxLines="1"-->
+<!--            android:text="@{bean.outError}"-->
+<!--            android:textColor="@color/text3"-->
+<!--            android:textSize="14sp" />-->
+
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_auto_flow_result"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="1"
-            android:text="@{bean.cO2T90}"
-            android:textColor="@color/text3"
-            android:textSize="14sp" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_ingredient_result"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:maxLines="1"
+            android:text="@{bean.calibrationResult}"
             android:textColor="@color/text3"
             android:textSize="14sp" />
     </LinearLayout>

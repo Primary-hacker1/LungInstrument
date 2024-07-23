@@ -705,18 +705,10 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                     override fun onTick(times: Int) {
                         try {
                             val mapHeartRate = mActivity.usbTransferUtil.mapHeartRate
-                            val heartBeat = mActivity.usbTransferUtil.mapHeartEcg
-                            val heartBeatList = mutableListOf<SixMinEcgInfoBean>()
-                            var ecgBean: SixMinEcgInfoBean
+                            val heartBeat = mActivity.usbTransferUtil.heartEcgList
                             if (mapHeartRate.isNotEmpty()) {
                                 val value = mapHeartRate.entries.last().value
-                                heartBeat.forEach {
-                                    ecgBean = SixMinEcgInfoBean()
-                                    ecgBean.coorY = it
-                                    heartBeatList.add(ecgBean)
-                                }
-                                val sixMinEcgBean = SixMinEcgBean(value, heartBeatList)
-                                mActivity.usbTransferUtil.mapRealTimeEcg[360 - times] = sixMinEcgBean
+                                mActivity.usbTransferUtil.mapRealTimeEcg[360 - times] = heartBeat[0]
                                 if (times % 3 == 0) {
                                     addHeartRateEntryData(value.toFloat(), times.toFloat())
                                 }
@@ -1474,18 +1466,12 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
 
                     //每3秒钟采集心率数据以及每秒的心电数据
                     val mapHeartRate = mActivity.usbTransferUtil.mapHeartRate
-                    val heartBeat = mActivity.usbTransferUtil.mapHeartEcg
-                    val heartBeatList = mutableListOf<SixMinEcgInfoBean>()
-                    var ecgBean: SixMinEcgInfoBean
+                    val heartBeat = mActivity.usbTransferUtil.heartEcgList
+                    if(heartBeat.isNotEmpty()){
+                        mActivity.usbTransferUtil.mapRealTimeEcg[360 - times] = heartBeat[0]
+                    }
                     if (mapHeartRate.isNotEmpty()) {
                         val value = mapHeartRate.entries.last().value
-                        heartBeat.forEach {
-                            ecgBean = SixMinEcgInfoBean()
-                            ecgBean.coorY = it
-                            heartBeatList.add(ecgBean)
-                        }
-                        val sixMinEcgBean = SixMinEcgBean(value, heartBeatList)
-                        mActivity.usbTransferUtil.mapRealTimeEcg[360 - times] = sixMinEcgBean
                         if (times % 3 == 0) {
                             addHeartRateEntryData(value.toFloat(), times.toFloat())
                         }

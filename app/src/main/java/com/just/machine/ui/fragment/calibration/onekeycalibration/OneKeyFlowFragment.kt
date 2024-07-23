@@ -17,9 +17,7 @@ import com.just.machine.dao.calibration.FlowAutoCalibrationResultBean
 import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.ui.adapter.calibration.FlowAdapter
-import com.just.machine.ui.dialog.LungCommonDialogFragment
 import com.just.machine.ui.fragment.serial.ModbusProtocol
-import com.just.machine.util.FixCountDownTime
 import com.just.machine.util.LiveDataBus
 import com.just.machine.util.USBTransferUtil
 import com.just.news.R

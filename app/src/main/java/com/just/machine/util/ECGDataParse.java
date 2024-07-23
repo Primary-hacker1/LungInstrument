@@ -5,12 +5,15 @@ import android.content.res.AssetManager;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.just.machine.model.sixmininfo.SixMinEcgBean;
 import com.seeker.luckychart.model.ECGPointValue;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * @author Seeker
@@ -18,7 +21,7 @@ import java.io.InputStreamReader;
  */
 public class ECGDataParse {
 
-    private ECGPointValue[] values;
+    private TreeMap<Integer, SixMinEcgBean> values;
 
     public ECGDataParse(Context context){
         String json = parseJson(context,"ecgData2.json");
@@ -29,7 +32,7 @@ public class ECGDataParse {
     public ECGDataParse(Context context,String filePath){
         String json = parseLocalFile(context,filePath);
         Gson gson = new Gson();
-        values = gson.fromJson(json,new TypeToken<ECGPointValue[]>(){}.getType());
+        values = gson.fromJson(json,new TypeToken<TreeMap<Integer, SixMinEcgBean>>(){}.getType());
     }
 
     private static String parseJson(Context context, String fileName) {
@@ -61,10 +64,10 @@ public class ECGDataParse {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return stringBuilder.toString();
     }
 
-    public ECGPointValue[] getValues() {
+    public TreeMap<Integer, SixMinEcgBean> getValues() {
         return values;
     }
 }

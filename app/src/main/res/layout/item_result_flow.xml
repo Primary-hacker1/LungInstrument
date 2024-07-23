@@ -6,7 +6,7 @@
 
         <variable
             name="bean"
-            type="com.just.machine.dao.calibration.FlowBean" />
+            type="com.just.machine.dao.calibration.FlowManualCalibrationResultBean" />
     </data>
 
     <LinearLayout
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="@dimen/space_19"
-            android:text="@{bean.createTime}"
+            android:text="@{bean.calibrationTime}"
             android:textColor="@color/text3"
             android:textSize="14sp" />
 
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="1"
-            android:text="@{bean.inspiratoryIndicators}"
+            android:text="@{bean.inFluctuation}"
             android:textColor="@color/text3"
             android:textSize="14sp" />
 
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="1"
-            android:text="@{bean.calibratedValue}"
+            android:text="@{bean.inError}"
             android:textColor="@color/text3"
             android:textSize="14sp" />
 
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="1"
-            android:text="@{bean.actual}"
+            android:text="@{bean.outFluctuation}"
             android:textColor="@color/text3"
             android:textSize="14sp" />
 
@@ -58,16 +58,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="1"
-            android:text="@{bean.errorRate}"
+            android:text="@{bean.outError}"
             android:textColor="@color/text3"
             android:textSize="14sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_handle_flow_result"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="1"
-            android:text="@{bean.calibrationResults}"
             android:textColor="@color/text3"
             android:textSize="14sp" />
     </LinearLayout>

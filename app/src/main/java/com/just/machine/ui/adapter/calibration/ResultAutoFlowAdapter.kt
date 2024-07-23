@@ -3,22 +3,24 @@ package com.just.machine.ui.adapter.calibration
 import android.content.Context
 import androidx.core.content.ContextCompat
 import com.common.base.BaseRecyclerViewAdapter
-import com.just.machine.dao.calibration.IngredientBean
-import com.just.machine.dao.calibration.IngredientCalibrationResultBean
+import com.just.machine.dao.calibration.FlowAutoCalibrationResultBean
+import com.just.machine.dao.calibration.FlowBean
+import com.just.machine.dao.calibration.FlowManualCalibrationResultBean
 import com.just.news.R
-import com.just.news.databinding.ItemResultIngredientBinding
+import com.just.news.databinding.ItemResultAutoFlowBinding
+import com.just.news.databinding.ItemResultFlowBinding
 
 /**
  *create by 2024/6/6
- * 成分定标适配器
+ * 流量自动定标结果适配器
  *@author zt
  */
-class ResultIngredientAdapter(val context: Context) :
-    BaseRecyclerViewAdapter<IngredientCalibrationResultBean, ItemResultIngredientBinding>() {
+class ResultAutoFlowAdapter(val context: Context) :
+    BaseRecyclerViewAdapter<FlowAutoCalibrationResultBean, ItemResultAutoFlowBinding>() {
 
     private var selectedItem = -1
 
-    override fun bindData(item: IngredientCalibrationResultBean, position: Int) {
+    override fun bindData(item: FlowAutoCalibrationResultBean, position: Int) {
         binding.bean = item
 
         if (position == selectedItem) {
@@ -28,11 +30,11 @@ class ResultIngredientAdapter(val context: Context) :
         }
 
         if (item.calibrationResult?.isNotEmpty() == true && item.calibrationResult == "1") {
-            binding.tvIngredientResult.setTextColor(ContextCompat.getColor(context, R.color.text3))
-            binding.tvIngredientResult.text = "通过"
+            binding.tvAutoFlowResult.setTextColor(ContextCompat.getColor(context, R.color.text3))
+            binding.tvAutoFlowResult.text = "通过"
         } else {
-            binding.tvIngredientResult.setTextColor(ContextCompat.getColor(context, R.color.red))
-            binding.tvIngredientResult.text = "未通过"
+            binding.tvAutoFlowResult.setTextColor(ContextCompat.getColor(context, R.color.red))
+            binding.tvAutoFlowResult.text = "未通过"
         }
     }
 
@@ -50,6 +52,6 @@ class ResultIngredientAdapter(val context: Context) :
 
 
     override fun getLayoutRes(): Int {
-        return R.layout.item_result_ingredient
+        return R.layout.item_result_flow
     }
 }

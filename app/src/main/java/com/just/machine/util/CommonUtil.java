@@ -243,6 +243,19 @@ public class CommonUtil {
     }
 
     /**
+     * 秒转成分秒格式
+     * @param seconds
+     * @return
+     */
+    public static String secondsToMSS(int seconds) {
+        int minutes = seconds / 60;
+        int secs = seconds % 60;
+
+        String result = String.format("第%1d分%02d秒", minutes, secs);
+        return result;
+    }
+
+    /**
      * 验证系统设置参数
      *
      * @param parameter

@@ -361,12 +361,12 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
             pngSavePath + File.separator + "imageEcg1.png"
         )
         lifecycleScope.launch(Dispatchers.IO) {
-            val dataParse = ECGDataParse(requireContext())
-            val imagePreview = LuckySoftRenderer.instantiate(
-                requireContext(),
-                dataParse.values
-            ).startRender()
-            FileUtil.getInstance(requireContext()).saveBitmapToFile(imagePreview,imageEcg1.absolutePath)
+//            val dataParse = ECGDataParse(requireContext())
+//            val imagePreview = LuckySoftRenderer.instantiate(
+//                requireContext(),
+//                dataParse.values
+//            ).startRender()
+//            FileUtil.getInstance(requireContext()).saveBitmapToFile(imagePreview,imageEcg1.absolutePath)
         }
 
         //最慢心电截图
@@ -375,12 +375,12 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
             pngSavePath + File.separator + "imageEcg2.png"
         )
         lifecycleScope.launch(Dispatchers.IO) {
-            val dataParse = ECGDataParse(requireContext())
-            val imagePreview = LuckySoftRenderer.instantiate(
-                requireContext(),
-                dataParse.values
-            ).startRender()
-            FileUtil.getInstance(requireContext()).saveBitmapToFile(imagePreview,imageEcg2.absolutePath)
+//            val dataParse = ECGDataParse(requireContext())
+//            val imagePreview = LuckySoftRenderer.instantiate(
+//                requireContext(),
+//                dataParse.values
+//            ).startRender()
+//            FileUtil.getInstance(requireContext()).saveBitmapToFile(imagePreview,imageEcg2.absolutePath)
         }
     }
 
