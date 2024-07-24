@@ -700,6 +700,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
                 mCountDownTimeHeartRate.start(object : FixCountDownTime.OnTimerCallBack {
                     override fun onStart() {
                         Log.d("SixMinFragment", "采集心率数据开始")
+                        mActivity.usbTransferUtil.heartEcgList.clear()
                     }
 
                     override fun onTick(times: Int) {
@@ -1230,7 +1231,7 @@ class SixMinFragment : CommonBaseFragment<FragmentSixminBinding>(), TextToSpeech
         SixMinCmdUtils.openQSAndBS()
         mCountDownTime.start(object : FixCountDownTime.OnTimerCallBack {
             override fun onStart() {
-
+                mActivity.usbTransferUtil.heartEcgList.clear()
             }
 
             @RequiresApi(Build.VERSION_CODES.N)

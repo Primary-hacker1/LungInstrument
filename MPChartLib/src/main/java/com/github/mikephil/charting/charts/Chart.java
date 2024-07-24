@@ -1543,7 +1543,7 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      */
     public boolean saveToPath(Context context,String title, String pathOnSD) {
 
-        String imagePath = context.getExternalFilesDir("").getAbsolutePath() + pathOnSD + "/" + title + ".png";
+        String imagePath = Environment.getExternalStorageDirectory().getAbsolutePath() + pathOnSD + "/" + title + ".png";
         File imageFile = new File(imagePath);
         if(imageFile.exists()){
             return false;
@@ -1553,7 +1553,7 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
 
         OutputStream stream = null;
         try {
-            stream = new FileOutputStream(context.getExternalFilesDir("").getAbsolutePath()
+            stream = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath()
                     + pathOnSD + "/" + title
                     + ".png");
 

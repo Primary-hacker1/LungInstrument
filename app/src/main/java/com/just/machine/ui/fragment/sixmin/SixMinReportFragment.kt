@@ -32,6 +32,8 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.just.machine.model.sixmininfo.SixMinBloodOxyLineEntryBean
+import com.just.machine.model.sixmininfo.SixMinBreathingLineEntryBean
+import com.just.machine.model.sixmininfo.SixMinHeartRateLineEntryBean
 import com.just.machine.model.sixmininfo.SixMinRecordsBean
 import com.just.machine.model.sixmininfo.SixMinReportInfoAndEvaluation
 import com.just.machine.model.sixmininfo.SixMinReportItemBean
@@ -46,6 +48,7 @@ import com.just.machine.util.FileUtil
 import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.FragmentSixminReportBinding
+import com.seeker.luckychart.model.ECGPointValue
 import com.seeker.luckychart.soft.LuckySoftRenderer
 import com.xxmassdeveloper.mpchartexample.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,6 +59,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.math.BigDecimal
+import java.util.ArrayList
 
 /**
  * 6分钟报告界面
@@ -133,12 +137,12 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
             val hsHxlPng =
                 if (sixMinRecordsBean.infoBean.bsHxl.isEmpty() || sixMinRecordsBean.infoBean.bsHxl == "0") {
                     File(
-                        mActivity.getExternalFilesDir("")?.absolutePath,
+                        Environment.getExternalStorageDirectory(),
                         pngSavePath + File.separator + "imageSteps.png"
                     )
                 } else {
                     File(
-                        mActivity.getExternalFilesDir("")?.absolutePath,
+                        Environment.getExternalStorageDirectory(),
                         pngSavePath + File.separator + "imageBreathing.png"
                     )
 
@@ -267,42 +271,42 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                         }
                         generateEcgPng()
                         val bloodPng = File(
-                            mActivity.getExternalFilesDir("")?.absolutePath,
+                            Environment.getExternalStorageDirectory(),
                             pngSavePath + File.separator + "imageBlood.png"
                         )
                         val heartPng = File(
-                            mActivity.getExternalFilesDir("")?.absolutePath,
+                            Environment.getExternalStorageDirectory(),
                             pngSavePath + File.separator + "imageHeart.png"
                         )
                         val hsHxlPng =
                             if (sixMinRecordsBean.infoBean.bsHxl.isEmpty() || sixMinRecordsBean.infoBean.bsHxl == "0") {
                                 File(
-                                    mActivity.getExternalFilesDir("")?.absolutePath,
+                                    Environment.getExternalStorageDirectory(),
                                     pngSavePath + File.separator + "imageSteps.png"
                                 )
                             } else {
                                 File(
-                                    mActivity.getExternalFilesDir("")?.absolutePath,
+                                    Environment.getExternalStorageDirectory(),
                                     pngSavePath + File.separator + "imageBreathing.png"
                                 )
 
                             }
                         val imageEcg1 = File(
-                            mActivity.getExternalFilesDir("")?.absolutePath,
+                            Environment.getExternalStorageDirectory(),
                             pngSavePath + File.separator + "imageEcg1.png"
                         )
                         val imageEcg2 = File(
-                            mActivity.getExternalFilesDir("")?.absolutePath,
+                            Environment.getExternalStorageDirectory(),
                             pngSavePath + File.separator + "imageEcg2.png"
                         )
 
                         val filePath = File(
-                            mActivity.getExternalFilesDir("")?.absolutePath,
+                            Environment.getExternalStorageDirectory(),
                             File.separator + "SixMin/SixMinReport" + File.separator + sixMinRecordsBean.infoBean.reportNo + File.separator + "六分钟步行试验检测报告.doc"
                         )
 
                         val pdfFilePath = File(
-                            mActivity.getExternalFilesDir("")?.absolutePath,
+                            Environment.getExternalStorageDirectory(),
                             File.separator + "SixMin/SixMinReport" + File.separator + sixMinRecordsBean.infoBean.reportNo + File.separator + "六分钟步行试验检测报告.pdf"
                         )
 
@@ -357,30 +361,60 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
     private fun generateEcgPng() {
         //最快心电截图
         val imageEcg1 = File(
-            mActivity.getExternalFilesDir("")?.absolutePath,
+            Environment.getExternalStorageDirectory(),
             pngSavePath + File.separator + "imageEcg1.png"
         )
         lifecycleScope.launch(Dispatchers.IO) {
-//            val dataParse = ECGDataParse(requireContext())
-//            val imagePreview = LuckySoftRenderer.instantiate(
-//                requireContext(),
-//                dataParse.values
-//            ).startRender()
-//            FileUtil.getInstance(requireContext()).saveBitmapToFile(imagePreview,imageEcg1.absolutePath)
+            val bigHeartEcg = sixMinRecordsBean.heartEcgBean[0].bigHreatEcg
+            if (bigHeartEcg.isNotEmpty()) {
+                val bigEcgList: MutableList<Float> =
+                    Gson().fromJson(bigHeartEcg, object : TypeToken<MutableList<Float>>() {}.type)
+                if (bigEcgList.isNotEmpty()) {
+                    val values = arrayOfNulls<ECGPointValue>(bigEcgList.size)
+                    var ecgPointValue: ECGPointValue
+                    bigEcgList.forEachIndexed { index, it ->
+                        ecgPointValue = ECGPointValue()
+                        ecgPointValue.coorX = 0.0f
+                        ecgPointValue.coorY = -it
+                        values[index] = ecgPointValue
+                    }
+                    val imagePreview = LuckySoftRenderer.instantiate(
+                        requireContext(),
+                        values
+                    ).startRender()
+                    FileUtil.getInstance(requireContext())
+                        .saveBitmapToFile(imagePreview, imageEcg1.absolutePath)
+                }
+            }
         }
 
         //最慢心电截图
         val imageEcg2 = File(
-            mActivity.getExternalFilesDir("")?.absolutePath,
+            Environment.getExternalStorageDirectory(),
             pngSavePath + File.separator + "imageEcg2.png"
         )
         lifecycleScope.launch(Dispatchers.IO) {
-//            val dataParse = ECGDataParse(requireContext())
-//            val imagePreview = LuckySoftRenderer.instantiate(
-//                requireContext(),
-//                dataParse.values
-//            ).startRender()
-//            FileUtil.getInstance(requireContext()).saveBitmapToFile(imagePreview,imageEcg2.absolutePath)
+            val smallHeartEcg = sixMinRecordsBean.heartEcgBean[0].smallHreatEcg
+            if (smallHeartEcg.isNotEmpty()) {
+                val smallEcgList: MutableList<Float> =
+                    Gson().fromJson(smallHeartEcg, object : TypeToken<MutableList<Float>>() {}.type)
+                if (smallEcgList.isNotEmpty()) {
+                    val values = arrayOfNulls<ECGPointValue>(smallEcgList.size)
+                    var ecgPointValue: ECGPointValue
+                    smallEcgList.forEachIndexed { index, it ->
+                        ecgPointValue = ECGPointValue()
+                        ecgPointValue.coorX = 0.0f
+                        ecgPointValue.coorY = -it
+                        values[index] = ecgPointValue
+                    }
+                    val imagePreview = LuckySoftRenderer.instantiate(
+                        requireContext(),
+                        values
+                    ).startRender()
+                    FileUtil.getInstance(requireContext())
+                        .saveBitmapToFile(imagePreview, imageEcg2.absolutePath)
+                }
+            }
         }
     }
 
@@ -548,11 +582,11 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
 
         //运动处方建议
         val checkPng = File(
-            mActivity.getExternalFilesDir("")?.absolutePath,
+            Environment.getExternalStorageDirectory(),
             "SixMin/Templates" + File.separator + "check.png"
         )
         val unCheckPng = File(
-            mActivity.getExternalFilesDir("")?.absolutePath,
+            Environment.getExternalStorageDirectory(),
             "SixMin/Templates" + File.separator + "uncheck.png"
         )
         if (sixMinRecordsBean.prescriptionBean[0].movementWay == "0") {
@@ -726,19 +760,22 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
     private fun dealPageThree(
         root: MutableMap<String, Any>, imageEcg1: File, imageEcg2: File, imageEcg3: File? = null
     ) {
-        root["imageEcg1Str"] = "最快心率心电图: 心率92 bmp，速度: 25mm/s，增益: 10mm/mv"
-        root["imageEcg1Time"] = "第4分22秒"
+        root["imageEcg1Str"] =
+            "最快心率心电图: 心率${sixMinRecordsBean.heartEcgBean[0].bigHreat} bmp，速度: 25mm/s，增益: 10mm/mv"
+        root["imageEcg1Time"] = sixMinRecordsBean.heartEcgBean[0].bigHreatTime
         root["imageEcg1"] = PictureRenderData(750, 200, imageEcg1.absolutePath)
-        root["imageEcg2Str"] = "最慢心率心电图: 心率61 bmp，速度: 25mm/s，增益: 10mm/mv"
-        root["imageEcg2Time"] = "第1分35秒"
+        root["imageEcg2Str"] =
+            "最慢心率心电图: 心率${sixMinRecordsBean.heartEcgBean[0].smallHreat} bmp，速度: 25mm/s，增益: 10mm/mv"
+        root["imageEcg2Time"] = sixMinRecordsBean.heartEcgBean[0].smallHreatTime
         root["imageEcg2"] = PictureRenderData(750, 200, imageEcg2.absolutePath)
         val imageEcg3 = File(
-            mActivity.getExternalFilesDir("")?.absolutePath,
+            Environment.getExternalStorageDirectory(),
             pngSavePath + File.separator + "imageEcg3.png"
         )
         if (sixMinRecordsBean.heartEcgBean[0].jietuOr == "1" && imageEcg3.exists()) {
-            root["imageEcg3Str"] = "截取心率心电图: 心率75 bmp，速度: 25mm/s，增益: 10mm/mv"
-            root["imageEcg3Time"] = "第3分33秒"
+            root["imageEcg3Str"] =
+                "截取心率心电图: 心率${sixMinRecordsBean.heartEcgBean[0].hreatRate} bmp，速度: 25mm/s，增益: 10mm/mv"
+            root["imageEcg3Time"] = sixMinRecordsBean.heartEcgBean[0].hreatTime
             root["imageEcg3"] = PictureRenderData(750, 200, imageEcg3.absolutePath)
         }
     }
@@ -1157,19 +1194,54 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 }
 
                 val bloodAll = sixMinRecordsBean.bloodOxyBean[0].bloodAll
-                val listType = object : TypeToken<List<SixMinBloodOxyLineEntryBean>>() {}.type
-                val bloodOxyList: List<SixMinBloodOxyLineEntryBean> = Gson().fromJson(bloodAll, listType)
-                if (bloodOxyList.isNotEmpty()) {
-                    bloodOxyList.forEach {
-                        bloodOxyDataSet.addEntry(Entry(it.bloodX, it.bloodY))
+                if (bloodAll.isNotEmpty()) {
+                    val listType = object : TypeToken<List<SixMinBloodOxyLineEntryBean>>() {}.type
+                    val bloodOxyList: List<SixMinBloodOxyLineEntryBean> =
+                        Gson().fromJson(bloodAll, listType)
+                    if (bloodOxyList.isNotEmpty()) {
+                        bloodOxyList.forEach {
+                            bloodOxyDataSet.addEntry(Entry(it.bloodX, it.bloodY))
+                        }
                     }
+                    binding.sixminReportLineChartBloodOxygen.lineData.addDataSet(
+                        bloodOxyDataSet
+                    )
+                    binding.sixminReportLineChartBloodOxygen.lineData.notifyDataChanged()
+                    binding.sixminReportLineChartBloodOxygen.notifyDataSetChanged()
+                    binding.sixminReportLineChartBloodOxygen.invalidate()
                 }
-                binding.sixminReportLineChartBloodOxygen.lineData.addDataSet(
-                    bloodOxyDataSet
-                )
-                binding.sixminReportLineChartBloodOxygen.lineData.notifyDataChanged()
-                binding.sixminReportLineChartBloodOxygen.notifyDataSetChanged()
-                binding.sixminReportLineChartBloodOxygen.invalidate()
+
+                val breathingAll = sixMinRecordsBean.breathingBean[0].breathingAll
+                if (breathingAll.isNotEmpty()) {
+                    val breathingList: List<SixMinBreathingLineEntryBean> = Gson().fromJson(
+                        breathingAll,
+                        object : TypeToken<List<SixMinBreathingLineEntryBean>>() {}.type
+                    )
+                    if (breathingList.isNotEmpty()) {
+                        breathingList.forEach {
+                            breathingDataSet.addEntry(Entry(it.breathingX, it.breathingY))
+                        }
+                    }
+                    binding.sixminReportLineChartBreathing.lineData.notifyDataChanged()
+                    binding.sixminReportLineChartBreathing.notifyDataSetChanged()
+                    binding.sixminReportLineChartBreathing.invalidate()
+                }
+
+                val heartRateAll = sixMinRecordsBean.heartBeatBean[0].heartAll
+                if (heartRateAll.isNotEmpty()) {
+                    val heartRateList: List<SixMinHeartRateLineEntryBean> = Gson().fromJson(
+                        heartRateAll,
+                        object : TypeToken<List<SixMinHeartRateLineEntryBean>>() {}.type
+                    )
+                    if (heartRateList.isNotEmpty()) {
+                        heartRateList.forEach {
+                            heartBeatDataSet.addEntry(Entry(it.heartRateX, it.heartRateY))
+                        }
+                    }
+                    binding.sixminReportLineChartHeartBeat.lineData.notifyDataChanged()
+                    binding.sixminReportLineChartHeartBeat.notifyDataSetChanged()
+                    binding.sixminReportLineChartHeartBeat.invalidate()
+                }
 
                 if (sixMinRecordsBean.otherBean[0].stopOr == "0") {
                     stepsDataSet.addEntry(
@@ -1441,17 +1513,39 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                 binding.sixminReportTvMostQuickHeart.text = String.format(
                     getString(R.string.sixmin_test_report_heart_beart_capture_title),
                     "最快",
-                    "92",
+                    sixMinRecordsBean.heartEcgBean[0].bigHreat.ifEmpty { "0" },
                     "25",
                     "10"
                 )
+                binding.sixminReportTvMostQuickHeartTime.text =
+                    sixMinRecordsBean.heartEcgBean[0].bigHreatTime.ifEmpty { "第0分00秒" }
+                val bigHeartEcg = sixMinRecordsBean.heartEcgBean[0].bigHreatEcg
+                if (bigHeartEcg.isNotEmpty()) {
+                    val bigEcgList: MutableList<Float> = Gson().fromJson(
+                        bigHeartEcg,
+                        object : TypeToken<MutableList<Float>>() {}.type
+                    )
+                    binding.sixminReportEcgMostQuick.showAllLine(bigEcgList as ArrayList<Float>?)
+                }
+
                 binding.sixminReportTvMostSlowHeart.text = String.format(
                     getString(R.string.sixmin_test_report_heart_beart_capture_title),
                     "最慢",
-                    "61",
+                    sixMinRecordsBean.heartEcgBean[0].smallHreat.ifEmpty { "0" },
                     "25",
                     "10"
                 )
+                binding.sixminReportTvMostSlowHeartTime.text =
+                    sixMinRecordsBean.heartEcgBean[0].smallHreatTime.ifEmpty { "第0分00秒" }
+
+                val smallHeartEcg = sixMinRecordsBean.heartEcgBean[0].smallHreatEcg
+                if (smallHeartEcg.isNotEmpty()) {
+                    val smallEcgList: MutableList<Float> = Gson().fromJson(
+                        smallHeartEcg,
+                        object : TypeToken<MutableList<Float>>() {}.type
+                    )
+                    binding.sixminReportEcgMostSlow.showAllLine(smallEcgList as ArrayList<Float>?)
+                }
                 if (sixMinRecordsBean.heartEcgBean[0].jietuOr.isEmpty() || sixMinRecordsBean.heartEcgBean[0].jietuOr == "0") {
                     binding.sixminReportLlCaptureHeart.visibility = View.GONE
                 } else {
@@ -1459,10 +1553,20 @@ class SixMinReportFragment : CommonBaseFragment<FragmentSixminReportBinding>() {
                     binding.sixminReportTvCaptureHeart.text = String.format(
                         getString(R.string.sixmin_test_report_heart_beart_capture_title),
                         "截取",
-                        "75",
+                        sixMinRecordsBean.heartEcgBean[0].hreatRate.ifEmpty { "0" },
                         "25",
                         "10"
                     )
+                    binding.sixminReportTvCaptureHeartTime.text =
+                        sixMinRecordsBean.heartEcgBean[0].hreatTime.ifEmpty { "第0分00秒" }
+                    val heartEcg = sixMinRecordsBean.heartEcgBean[0].hreatEcg
+                    if (heartEcg.isNotEmpty()) {
+                        val ecgList: MutableList<Float> = Gson().fromJson(
+                            heartEcg,
+                            object : TypeToken<MutableList<Float>>() {}.type
+                        )
+                        binding.sixminReportEcgCapture.showAllLine(ecgList as ArrayList<Float>?)
+                    }
                 }
             }
         } catch (e: Exception) {

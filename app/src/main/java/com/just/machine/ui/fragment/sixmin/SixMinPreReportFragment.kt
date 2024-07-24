@@ -26,6 +26,7 @@ import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
 import com.common.viewmodel.LiveDataEvent
 import com.google.gson.Gson
+import com.just.machine.model.sixmininfo.SixMinEcgBean
 import com.just.machine.model.sixmininfo.SixMinRecordsBean
 import com.just.machine.model.sixmininfo.SixMinReportEditBloodPressure
 import com.just.machine.model.sixmininfo.SixMinReportItemBean
@@ -33,6 +34,7 @@ import com.just.machine.model.sixmininfo.SixMinReportPatientSelfBean
 import com.just.machine.model.sixmininfo.SixMinReportPatientSelfItemBean
 import com.just.machine.ui.activity.SixMinDetectActivity
 import com.just.machine.ui.adapter.SixMinReportPatientSelfAdapter
+import com.just.machine.ui.dialog.LoadingDialogFragment
 import com.just.machine.ui.dialog.SixMinReportEditBloodPressureFragment
 import com.just.machine.ui.dialog.SixMinReportPrescriptionFragment
 import com.just.machine.ui.dialog.SixMinReportSelfCheckBeforeTestFragment
@@ -43,7 +45,9 @@ import com.just.news.R
 import com.just.news.databinding.FragmentSixminPreReportBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.math.BigDecimal
 
@@ -61,13 +65,10 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
     private var selectStrList = mutableListOf<String>()
     private var strideAvg: BigDecimal = BigDecimal(0.00)
     private var isFirst = true
+    private var startLoadingDialogFragment: LoadingDialogFragment? = null
 
     override fun loadData() {//懒加载
-        lifecycleScope.launch(Dispatchers.IO) {
-            val path = "SixMin/SixMinReportEcg" + File.separator +mActivity.sixMinReportInfo.reportNo+ File.separator+"ecgData.json"
-            val file = File(Environment.getExternalStorageDirectory().absolutePath, path)
-            FileUtil.writeEcg(mActivity.usbTransferUtil.mapRealTimeEcg,file.absolutePath)
-        }
+
     }
 
     override fun initView() {
@@ -601,6 +602,50 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                     mActivity.sixMinReportPrescription.cycleUnit =
                         if (binding.sixminRbPrescriptionCycleWeek.isChecked) "0" else if (binding.sixminRbPrescriptionCycleMonth.isChecked) "1" else "2"
 
+                    //最快和最慢心率时间和心电数据
+                    val ecgBeanList = mutableListOf<SixMinEcgBean>()
+                    mActivity.usbTransferUtil.mapRealTimeEcg.entries.forEach {
+                        ecgBeanList.add(it.value)
+                    }
+                    val bigHeartBeat = ecgBeanList.maxOf { it.heartBeat }
+                    val smallHeartBeat = ecgBeanList.minOf { it.heartBeat }
+
+                    val bigFilterBean = ecgBeanList.find { it.heartBeat == bigHeartBeat }
+                    val bigCaptureTime = mActivity.usbTransferUtil.mapRealTimeEcg.entries.firstOrNull {
+                        it.value.heartBeat == bigFilterBean?.heartBeat
+                    }?.key!!
+                    val bigIndex = ecgBeanList.indexOf(bigFilterBean)
+
+                    val smallFilterBean = ecgBeanList.find { it.heartBeat == smallHeartBeat }
+                    val smallCaptureTime = mActivity.usbTransferUtil.mapRealTimeEcg.entries.firstOrNull {
+                        it.value.heartBeat == smallFilterBean?.heartBeat
+                    }?.key!!
+                    val smallIndex = ecgBeanList.indexOf(smallFilterBean)
+
+                    mActivity.sixMinReportBloodHeartEcg.bigHreat = bigHeartBeat
+                    mActivity.sixMinReportBloodHeartEcg.bigHreatTime = CommonUtil.secondsToMSS(bigCaptureTime)
+                    val bigHeartEcg: MutableList<Float> = mutableListOf()
+                    var bigSum = 0
+                    ecgBeanList.forEachIndexed { index, sixMinEcgBean ->
+                        if (index >= bigIndex && bigSum <= 1960) {
+                            bigHeartEcg.addAll(sixMinEcgBean.ecgList)
+                            bigSum += sixMinEcgBean.ecgList.size
+                        }
+                    }
+                    mActivity.sixMinReportBloodHeartEcg.bigHreatEcg = Gson().toJson(bigHeartEcg)
+
+                    mActivity.sixMinReportBloodHeartEcg.smallHreat = smallHeartBeat
+                    mActivity.sixMinReportBloodHeartEcg.smallHreatTime = CommonUtil.secondsToMSS(smallCaptureTime)
+                    val smallHeartEcg: MutableList<Float> = mutableListOf()
+                    var smallSum = 0
+                    ecgBeanList.forEachIndexed { index, sixMinEcgBean ->
+                        if (index >= smallIndex && smallSum <= 1960) {
+                            smallHeartEcg.addAll(sixMinEcgBean.ecgList)
+                            smallSum += sixMinEcgBean.ecgList.size
+                        }
+                    }
+                    mActivity.sixMinReportBloodHeartEcg.smallHreatEcg = Gson().toJson(smallHeartEcg)
+
                     viewModel.setSixMinReportInfo(mActivity.sixMinReportInfo)
                     viewModel.setSixMinReportBloodOxyData(mActivity.sixMinReportBloodOxy)
                     viewModel.setSixMinReportWalkData(mActivity.sixMinReportWalk)
@@ -616,24 +661,34 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                         mActivity.sixMinReportInfo.patientId.toString().trim()
                     mActivity.sixMinReportNo = mActivity.sixMinReportInfo.reportNo
 
-                    //保存心电数据到本地
-//                    val ecgPath =
-//                        File.separator + "sixmin/sixminreportecgdata" + File.separator + mActivity.sixMinReportInfo.reportNo
-//                    val file = File(
-//                        mActivity.getExternalFilesDir("")?.absolutePath,
-//                        ecgPath + File.separator + "ecgData.json"
-//                    )
-//                    if (!file.exists()) {
-//                        file.mkdirs()
-//                    }
-//                    val data = mutableMapOf<Long,ByteArray>()
-//                    FileUtil.writeEcg(data,file.absolutePath)
-                    popBackStack()
-                    navigate(binding.sixminLlPreReport, R.id.sixMinReportFragment)
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        //保存心电数据到本地
+                        val path =
+                            "SixMin/SixMinReportEcg" + File.separator + mActivity.sixMinReportInfo.reportNo + File.separator + "ecgData.json"
+                        val file =
+                            File(Environment.getExternalStorageDirectory().absolutePath, path)
+                        if (!file.exists()) {
+                            file.mkdirs()
+                        }
+                        FileUtil.writeEcg(
+                            mActivity.usbTransferUtil.mapRealTimeEcg,
+                            file.absolutePath
+                        )
 
+                        withContext(Dispatchers.Main) {
+                            startLoadingDialogFragment =
+                                LoadingDialogFragment.startLoadingDialogFragment(
+                                    activity!!.supportFragmentManager,
+                                    "正在生成报告..."
+                                )
+                            delay(2000)
+                            startLoadingDialogFragment?.dismiss()
+                            popBackStack()
+                            navigate(binding.sixminLlPreReport, R.id.sixMinReportFragment)
+                        }
+                    }
                 } else {
                     //保存报告
-
                     val heartBeatConclusion =
                         binding.sixminEtHeartBeatConclusion.text.toString().trim()
                     if (heartBeatConclusion.isNotEmpty() && heartBeatConclusion.length > 44) {
@@ -821,8 +876,19 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                     viewModel.updateSixMinReportInfo(mActivity.sixMinReportInfo)
                     viewModel.setSixMinReportHeartBeat(mActivity.sixMinReportBloodHeart)
 
-                    popBackStack()
-                    navigate(binding.sixminLlPreReport, R.id.sixMinReportFragment)
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        withContext(Dispatchers.Main) {
+                            startLoadingDialogFragment =
+                                LoadingDialogFragment.startLoadingDialogFragment(
+                                    activity!!.supportFragmentManager,
+                                    "正在保存报告..."
+                                )
+                            delay(1000)
+                            startLoadingDialogFragment?.dismiss()
+                            popBackStack()
+                            navigate(binding.sixminLlPreReport, R.id.sixMinReportFragment)
+                        }
+                    }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -1295,7 +1361,7 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                 }
                 linearLayout.addView(tvNo)
 
-                if(j == 0 || j == 1 || j == 7){
+                if (j == 0 || j == 1 || j == 7) {
                     // 创建一个新的View，作为竖线
                     val view = View(mActivity)
                     // 设置竖线的宽度（如果需要）
@@ -1308,7 +1374,7 @@ class SixMinPreReportFragment : CommonBaseFragment<FragmentSixminPreReportBindin
                     )
                     // 设置竖线的背景色，这里使用黑色
                     view.setBackgroundColor(Color.BLACK)
-                    linearLayout.addView(view,params)
+                    linearLayout.addView(view, params)
                 }
             }
             newRow.setPadding(

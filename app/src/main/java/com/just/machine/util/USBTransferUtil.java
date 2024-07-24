@@ -11,17 +11,15 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.hoho.android.usbserial.driver.UsbSerialDriver;
 import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
 import com.hoho.android.usbserial.util.SerialInputOutputManager;
-import com.just.machine.model.sixmininfo.SixMinBloodOxyLineEntryBean;
 import com.just.machine.model.Constants;
+import com.just.machine.model.sixmininfo.SixMinBloodOxyLineEntryBean;
 import com.just.machine.model.sixmininfo.SixMinBreathingLineEntryBean;
 import com.just.machine.model.sixmininfo.SixMinEcgBean;
-import com.just.machine.model.sixmininfo.SixMinEcgInfoBean;
 import com.just.machine.model.sixmininfo.SixMinHeartRateLineEntryBean;
 import com.just.machine.model.sixmininfo.UsbSerialData;
 import com.just.machine.model.sixminreport.SixMinBloodOxygen;
@@ -34,13 +32,11 @@ import com.just.machine.model.sixminsystemsetting.SixMinSysSettingBean;
 import com.just.machine.ui.fragment.serial.ModbusProtocol;
 import com.just.machine.ui.service.GetDeviceInfoService;
 import com.just.news.BuildConfig;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ConcurrentModificationException;
@@ -107,6 +103,7 @@ public class USBTransferUtil {
     public boolean bloodOxygenConnection = false;//血氧连接状态
     public int batteryLevel = 0;//电池电量
     public String restBloodOxy = "";//静息血氧集合
+    public String restHeartRate = "";//静息心率集合
     public int restTime = 0;//休息时长
     public String stepsStr = "0";//步数
     public int checkBSInd = 0;//检查步数字段
@@ -287,78 +284,82 @@ public class USBTransferUtil {
                 // 直接处理
                 String data_str = CRC16Util.bytes2Hex(data);
 //                Log.i(TAG, "收到 usb 数据长度: " + data_str.length());
-//                Log.i(TAG, "收到 usb 数据: " + data_str);
-//                if (data_str.startsWith("a88b")) {
-//                    int index = data_str.lastIndexOf("a88a");
-//                    if (index > 0) {
-//                        String ecgData = data_str.substring(6, index);
-//                        String head = ecgData.substring(0, 2);
-//                        if (head.equals("a5")) {
-//                            String cmd1 = ecgData.substring(2, 4);
-//                            String cmd2 = ecgData.substring(4, 6);
-//                            if (((Integer.parseInt(cmd1, 16) == Integer.parseInt("03", 16)) && (255 - Integer.parseInt(cmd1, 16) == Integer.parseInt(cmd2, 16)))) {
-//                                String len1 = ecgData.substring(10, 12);
-//                                String len2 = ecgData.substring(12, 14);
-//                                int len = Integer.parseInt(len2 + len1, 16);
-//                                int length = ecgData.length();
-//                                if ((len * 2) + 16 <= length) {
-//                                    String dataStr = ecgData.substring(0, (len * 2) + 16);
-//                                    if (dataStr.length() / 2 >= len + 8) {
-//                                        String content = dataStr.substring(14, dataStr.length() - 2);
-//                                        String heartRate = String.valueOf(Integer.parseInt(content.substring(2, 4) + content.substring(0, 2), 16));
-////                                        Log.i(TAG, "收到 usb 数据: " + heartRate);
-//                                        usbSerialData.setHeartRate(heartRate);
-////                                    int batterLevel = Integer.parseInt(content.substring(6, 8), 16);
-////                                    int runStatus = Integer.parseInt(content.substring(16, 18), 16);
-//                                        long time = System.currentTimeMillis();
-//                                        if (!heartRate.isEmpty() && !heartRate.equals("0")) {
-//                                            mapHeartRate.put(time, heartRate);
-//                                        }
-//                                        String waveForm = content.substring(40);
-//                                        String waveData = waveForm.substring(4);
-//                                        List<Float> waveArr = new ArrayList<>();
-//                                        if (waveData.length() > 4) {
-//                                            for (int i = 0; i < waveData.length(); i += 4) {
-//                                                float wave = Integer.parseInt(waveData.substring(i + 2, i + 4) + waveData.substring(i, i + 2), 16);
-//                                                if (wave > 32767) {
-//                                                    wave = wave - 65536;
-//                                                } else if (wave == 32767) {
-//                                                    wave = 0;
-//                                                }
-//                                                wave = (float) (wave * (1.0035 * 1800) / (4096 * 178.74));
-////                                                wave = (float) (wave * 0.002467);
-//                                                waveArr.add(wave);
-//                                            }
-//                                            mapHeartEcg.clear();
-//                                            mapHeartEcg.addAll(waveArr);
-//                                            SixMinEcgBean bean = new SixMinEcgBean(heartRate, mapHeartEcg);
-//                                            heartEcgList.add(0,bean);
-//                                        } else {
-//                                            mapHeartEcg.clear();
-//                                        }
-//                                        LiveDataBus.get().with(Constants.sixMinLiveDataBusKey).postValue(new Gson().toJson(usbSerialData));
-//                                    }
-//                                }
-//                            } else {
-//                                Log.e(TAG, "数据类型不正确");
-//                            }
-//                        }
-//                    }
-//                }
-//                try {
-//                    Long time = System.currentTimeMillis();
-//                    if (map.containsKey(time)) {
-//                        time = time + 1;
-//                        if (!map.containsKey(time)) {
-//                            map.put(time, data);
-//                        }
-//                    } else {
-//                        map.put(time, data);
-//                    }
-//                    parseData(map);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
+                Log.i(TAG, "收到 usb 数据: " + data_str);
+                if (data_str.startsWith("a88b")) {
+                    int index = data_str.lastIndexOf("a88a");
+                    if (index > 0) {
+                        String ecgData = data_str.substring(6, index);
+                        String head = ecgData.substring(0, 2);
+                        if (head.equals("a5")) {
+                            String cmd1 = ecgData.substring(2, 4);
+                            String cmd2 = ecgData.substring(4, 6);
+                            if (((Integer.parseInt(cmd1, 16) == Integer.parseInt("03", 16)) && (255 - Integer.parseInt(cmd1, 16) == Integer.parseInt(cmd2, 16)))) {
+                                String len1 = ecgData.substring(10, 12);
+                                String len2 = ecgData.substring(12, 14);
+                                int len = Integer.parseInt(len2 + len1, 16);
+                                int length = ecgData.length();
+                                if ((len * 2) + 16 <= length) {
+                                    String dataStr = ecgData.substring(0, (len * 2) + 16);
+                                    if (dataStr.length() / 2 >= len + 8) {
+                                        String content = dataStr.substring(14, dataStr.length() - 2);
+                                        String heartRate = String.valueOf(Integer.parseInt(content.substring(2, 4) + content.substring(0, 2), 16));
+//                                        Log.i(TAG, "收到 usb 数据: " + heartRate);
+                                        usbSerialData.setHeartRate(heartRate);
+//                                    int batterLevel = Integer.parseInt(content.substring(6, 8), 16);
+//                                    int runStatus = Integer.parseInt(content.substring(16, 18), 16);
+                                        long time = System.currentTimeMillis();
+                                        if (!heartRate.isEmpty() && !heartRate.equals("0")) {
+                                            mapHeartRate.put(time, heartRate);
+                                            //静息心率集合
+                                            if (testType == 0) {
+                                                restHeartRate = restHeartRate + heartRate + ",";
+                                            }
+                                        }
+                                        String waveForm = content.substring(40);
+                                        String waveData = waveForm.substring(4);
+                                        List<Float> waveArr = new ArrayList<>();
+                                        if (waveData.length() > 4) {
+                                            for (int i = 0; i < waveData.length(); i += 4) {
+                                                float wave = Integer.parseInt(waveData.substring(i + 2, i + 4) + waveData.substring(i, i + 2), 16);
+                                                if (wave > 32767) {
+                                                    wave = wave - 65536;
+                                                } else if (wave == 32767) {
+                                                    wave = 0;
+                                                }
+                                                wave = (float) (wave * (1.0035 * 1800) / (4096 * 178.74));
+//                                                wave = (float) (wave * 0.002467);
+                                                waveArr.add(wave);
+                                            }
+                                            mapHeartEcg.clear();
+                                            mapHeartEcg.addAll(waveArr);
+                                            SixMinEcgBean bean = new SixMinEcgBean(heartRate, mapHeartEcg);
+                                            heartEcgList.add(0,bean);
+                                        } else {
+                                            mapHeartEcg.clear();
+                                        }
+                                        LiveDataBus.get().with(Constants.sixMinLiveDataBusKey).postValue(new Gson().toJson(usbSerialData));
+                                    }
+                                }
+                            } else {
+                                Log.e(TAG, "数据类型不正确");
+                            }
+                        }
+                    }
+                }
+                try {
+                    Long time = System.currentTimeMillis();
+                    if (map.containsKey(time)) {
+                        time = time + 1;
+                        if (!map.containsKey(time)) {
+                            map.put(time, data);
+                        }
+                    } else {
+                        map.put(time, data);
+                    }
+                    parseData(map);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -1244,6 +1245,22 @@ public class USBTransferUtil {
      * @return
      */
     public void dealHeartRate(SixMinReportHeartBeat reportHeart, String heartBeatLineDat) {
+        //处理静息血氧
+        if (!restHeartRate.isEmpty()) {
+            String[] strings = restHeartRate.split(",");
+            int heartRateTotInt = 0;
+            if (strings.length > 0) {
+                for (String string : strings) {
+                    if (!string.isEmpty()) {
+                        int bloodInt = Integer.parseInt(string);
+                        heartRateTotInt = heartRateTotInt + bloodInt;
+                    }
+                }
+                BigDecimal heartRateTotIntDec = new BigDecimal(heartRateTotInt).divide(new BigDecimal(strings.length), 0, RoundingMode.HALF_UP);
+                int heartRateTotIntStop = Integer.parseInt(heartRateTotIntDec.toString());
+                reportHeart.setHeartStop(String.valueOf(heartRateTotIntStop));
+            }
+        }
         Integer min = 0;
         Integer max = 0;
         if (heartRateAllListAvg.size() > 0) {
@@ -1297,10 +1314,10 @@ public class USBTransferUtil {
         reportHeart.setHeartSmall(String.valueOf(min));
         reportHeart.setHeartAverage(avg.toString());
         //计算运动心率恢复值，最大心率-1分钟恢复心率
-        if (reportHeart.getHeartRestore().isEmpty()) {
+        if (!TextUtils.isEmpty(reportHeart.getHeartRestore())) {
             reportHeart.setHeartRestore(String.valueOf(max - Integer.parseInt(reportHeart.getHeartRestore())));
         }
-        reportHeart.setHeartAllData(heartBeatLineDat);
+        reportHeart.setHeartAll(heartBeatLineDat);
     }
 
     /**
@@ -1342,6 +1359,22 @@ public class USBTransferUtil {
      * @return
      */
     public void dealBreath(SixMinReportBreathing breathing, String breathingLineData) {
+        //处理静息血氧
+        if (!restHeartRate.isEmpty()) {
+            String[] strings = restHeartRate.split(",");
+            int breathingTotInt = 0;
+            if (strings.length > 0) {
+                for (String string : strings) {
+                    if (!TextUtils.isEmpty(string)) {
+                        int bloodInt = Integer.parseInt(string);
+                        breathingTotInt = breathingTotInt + bloodInt;
+                    }
+                }
+                BigDecimal breathingTotIntDec = new BigDecimal(breathingTotInt).divide(new BigDecimal(strings.length), 0, RoundingMode.HALF_UP);
+                int breathingTotIntStop = Integer.parseInt(breathingTotIntDec.toString())/4;
+                breathing.setBreathingStop(String.valueOf(breathingTotIntStop));
+            }
+        }
         Integer min = 0;
         Integer max = 0;
         if (breathingAllListAvg.size() > 0) {
@@ -1349,25 +1382,25 @@ public class USBTransferUtil {
             max = Collections.max(breathingAllListAvg);
         }
 
-        if (breathing.getBreathingStop().isEmpty()) {
+        if (TextUtils.isEmpty(breathing.getBreathingStop())) {
             breathing.setBreathingStop("0");
         }
-        if (breathing.getBreathingOne().isEmpty()) {
+        if (TextUtils.isEmpty(breathing.getBreathingOne())) {
             breathing.setBreathingOne("0");
         }
-        if (breathing.getBreathingTwo().isEmpty()) {
+        if (TextUtils.isEmpty(breathing.getBreathingTwo())) {
             breathing.setBreathingTwo("0");
         }
-        if (breathing.getBreathingThree().isEmpty()) {
+        if (TextUtils.isEmpty(breathing.getBreathingThree())) {
             breathing.setBreathingThree("0");
         }
-        if (breathing.getBreathingFour().isEmpty()) {
+        if (TextUtils.isEmpty(breathing.getBreathingFour())) {
             breathing.setBreathingFour("0");
         }
-        if (breathing.getBreathingFive().isEmpty()) {
+        if (TextUtils.isEmpty(breathing.getBreathingFive())) {
             breathing.setBreathingFive("0");
         }
-        if (breathing.getBreathingSix().isEmpty()) {
+        if (TextUtils.isEmpty(breathing.getBreathingSix())) {
             breathing.setBreathingSix("0");
         }
         //平均值，只是以下七个数据

@@ -191,6 +191,8 @@
                                 android:id="@+id/sixmin_report_tv_patient_disease_history"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:singleLine="true"
                                 android:text="病史:"
                                 android:textSize="16sp" />
 
@@ -199,6 +201,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="临床诊断:"
+                                android:ellipsize="end"
+                                android:singleLine="true"
                                 android:textSize="16sp" />
 
                             <TextView
@@ -206,6 +210,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="目前用药:"
+                                android:ellipsize="end"
+                                android:singleLine="true"
                                 android:textSize="16sp" />
 
                         </LinearLayout>

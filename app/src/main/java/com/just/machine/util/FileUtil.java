@@ -156,7 +156,7 @@ public class FileUtil {
      */
     public List<File> getPathFiles(String pathStr) {
         List<File> listFile = new ArrayList<>();
-        File directory = new File(context.getExternalFilesDir("").getAbsolutePath(), pathStr);
+        File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), pathStr);
         if (directory.exists() && directory.isDirectory()) {
             // 获取目录下所有文件和目录
             File[] files = directory.listFiles();
