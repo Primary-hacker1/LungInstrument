@@ -4,27 +4,25 @@ import android.app.Dialog
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.common.base.BaseDialogFragment
 import com.common.base.setNoRepeatListener
+import com.common.base.toast
 import com.google.gson.Gson
 import com.just.machine.model.Constants
 import com.just.machine.model.sixmininfo.SixMinEcgBean
-import com.just.machine.util.CommonUtil
 import com.just.machine.util.ECGDataParse
 import com.just.news.R
 import com.just.news.databinding.FragmentDialogSixminCaptureEcgBinding
 import com.seeker.luckychart.model.ECGPointValue
-import com.seeker.luckychart.model.chartdata.ECGChartData
-import com.seeker.luckychart.model.container.ECGPointContainer
 import com.seeker.luckychart.soft.LuckySoftRenderer
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.internal.filterList
 import java.io.File
 
 /**
@@ -83,15 +81,23 @@ class SixMinCaptureEcgDialogFragment : BaseDialogFragment<FragmentDialogSixminCa
                 "SixMin/SixMinReportEcg" + File.separator + reportNo + File.separator + "ecgData.json"
             val file = File(Environment.getExternalStorageDirectory().absolutePath, path)
             if (file.exists()) {
-                val dataParse = ECGDataParse(requireContext(), file.absolutePath)
-                ecgMap = dataParse.values
-                ecgBeanList.clear()
-                dataParse.values.entries.forEach {
-                    ecgBeanList.add(it.value)
-                }
-                ecgInfoList.clear()
-                ecgBeanList.forEach {
-                    ecgInfoList.addAll(it.ecgList)
+                try {
+                    val dataParse = ECGDataParse(requireContext(), file.absolutePath)
+                    ecgMap = dataParse.values
+                    if (ecgMap.isNotEmpty()) {
+                        ecgBeanList.clear()
+                        ecgMap.entries.forEach {
+                            ecgBeanList.add(it.value)
+                        }
+                        ecgInfoList.clear()
+                        ecgBeanList.forEach {
+                            ecgInfoList.addAll(it.ecgList)
+                        }
+                    }
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        toast("解析心电数据失败!")
+                    }
                 }
             }
         }
@@ -143,123 +149,131 @@ class SixMinCaptureEcgDialogFragment : BaseDialogFragment<FragmentDialogSixminCa
 
             3 -> {
                 //当前截取的心率
-                if (ecgMap.isNotEmpty() && ecgBeanList.isNotEmpty()) {
-                    //截取心电图
-                    binding.tvCaptureTitle.text = "截取心电图预览"
-                    var sum = 0
-                    var captureIndex = 0
-                    for (index in ecgBeanList.indices) {
-                        if (sum < ecgVisibleLeft) {
-                            sum += ecgBeanList[index].ecgList.size
-                        } else {
-                            captureIndex = index
-                            break
+                try {
+                    if (ecgMap.isNotEmpty() && ecgBeanList.isNotEmpty()) {
+                        //截取心电图
+                        binding.tvCaptureTitle.text = "截取心电图预览"
+                        var sum = 0
+                        var captureIndex = 0
+                        for (index in ecgBeanList.indices) {
+                            if (sum < ecgVisibleLeft) {
+                                sum += ecgBeanList[index].ecgList.size
+                            } else {
+                                captureIndex = index
+                                break
+                            }
                         }
-                    }
-                    val sixMinEcgBean = ecgBeanList[captureIndex]
-                    captureHeartBeat = sixMinEcgBean.heartBeat
-                    captureTime = ecgMap.keys.elementAt(captureIndex)
+                        val sixMinEcgBean = ecgBeanList[captureIndex]
+                        captureHeartBeat = sixMinEcgBean.heartBeat
+                        captureTime = ecgMap.keys.elementAt(captureIndex)
 
-                    val values: Array<ECGPointValue?>
-                    val ecgDataList = mutableListOf<Float>()
-                    if (ecgInfoList.size > 1960) {
-                        values = arrayOfNulls(1960)
-                        var ecgPointValue: ECGPointValue
-                        ecgInfoList.forEachIndexed { index, it ->
-                            if (index >= ecgVisibleLeft && index < ecgVisibleLeft + 1960) {
+                        val values: Array<ECGPointValue?>
+                        val ecgDataList = mutableListOf<Float>()
+                        if (ecgInfoList.size > 1960) {
+                            values = arrayOfNulls(1960)
+                            var ecgPointValue: ECGPointValue
+                            ecgInfoList.forEachIndexed { index, it ->
+                                if (index >= ecgVisibleLeft && index < ecgVisibleLeft + 1960) {
+                                    ecgPointValue = ECGPointValue()
+                                    ecgPointValue.coorY = -it
+                                    ecgPointValue.coorX = 0.0f
+                                    values[index - ecgVisibleLeft] = ecgPointValue
+                                    ecgDataList.add(it)
+                                }
+                            }
+                        } else {
+                            values = arrayOfNulls(ecgInfoList.size)
+                            var ecgPointValue: ECGPointValue
+                            ecgInfoList.forEachIndexed { index, it ->
                                 ecgPointValue = ECGPointValue()
                                 ecgPointValue.coorY = -it
                                 ecgPointValue.coorX = 0.0f
-                                values[index - ecgVisibleLeft] = ecgPointValue
+                                values[index] = ecgPointValue
                                 ecgDataList.add(it)
                             }
                         }
-                    } else {
-                        values = arrayOfNulls(ecgInfoList.size)
-                        var ecgPointValue: ECGPointValue
-                        ecgInfoList.forEachIndexed { index, it ->
-                            ecgPointValue = ECGPointValue()
-                            ecgPointValue.coorY = -it
-                            ecgPointValue.coorX = 0.0f
-                            values[index] = ecgPointValue
-                            ecgDataList.add(it)
-                        }
+                        captureEcgData = Gson().toJson(ecgDataList)
+                        imagePreview = LuckySoftRenderer.instantiate(
+                            requireContext(), values
+                        ).startRender()
+                        binding.ivEcgPreview.setImageBitmap(imagePreview)
+                        binding.tvCaptureEcgHeart.text = "心率: ${captureHeartBeat}bmp"
                     }
-                    captureEcgData = Gson().toJson(ecgDataList)
-                    imagePreview = LuckySoftRenderer.instantiate(
-                        requireContext(), values
-                    ).startRender()
-                    binding.ivEcgPreview.setImageBitmap(imagePreview)
-                    binding.tvCaptureEcgHeart.text = "心率: ${captureHeartBeat}bmp"
+                } catch (e: Exception) {
+                    Log.e("handleCaptureEcgData", e.message.toString())
                 }
             }
         }
     }
 
     private fun handleCaptureEcgData(type: Int) {
-        if (ecgMap.isNotEmpty() && ecgBeanList.isNotEmpty()) {
-            if (type == 1) {
-                //最快心率
-                binding.tvCaptureTitle.text = "最快心电图预览"
-                captureHeartBeat = ecgBeanList.maxOf { it.heartBeat }
-            } else {
-                //最慢心率
-                binding.tvCaptureTitle.text = "最慢心电图预览"
-                captureHeartBeat = ecgBeanList.minOf { it.heartBeat }
-            }
-            val filterBean = ecgBeanList.find { it.heartBeat == captureHeartBeat }
-            captureTime = ecgMap.entries.firstOrNull {
-                it.value.heartBeat == filterBean?.heartBeat
-            }?.key!!
-            val filterIndex = ecgBeanList.indexOfFirst { it.heartBeat == captureHeartBeat }
-            val values: Array<ECGPointValue?>
-            var sum = 0
-            val filterList = mutableListOf<Float>()
-            if (ecgInfoList.size > 1960) {
-                values = arrayOfNulls(1960)
-                var ecgPointValue: ECGPointValue
-                ecgBeanList.forEachIndexed { index, it ->
-                    if (index >= filterIndex && sum <= 1960) {
-                        filterList.addAll(it.ecgList)
-                        sum += it.ecgList.size
-                    }
-                }
-                if (filterList.size > 1960) {
-                    val ecgDataList = mutableListOf<Float>()
-                    filterList.subList(0, 1960).forEachIndexed { index, it ->
-                        ecgDataList.add(it)
-                        ecgPointValue = ECGPointValue()
-                        ecgPointValue.coorY = -it
-                        ecgPointValue.coorX = 0.0f
-                        values[index] = ecgPointValue
-                    }
-                    captureEcgData = Gson().toJson(ecgDataList)
+        try {
+            if (ecgMap.isNotEmpty() && ecgBeanList.isNotEmpty()) {
+                if (type == 1) {
+                    //最快心率
+                    binding.tvCaptureTitle.text = "最快心电图预览"
+                    captureHeartBeat = ecgBeanList.maxOf { it.heartBeat }
                 } else {
-                    filterList.forEachIndexed { index, it ->
+                    //最慢心率
+                    binding.tvCaptureTitle.text = "最慢心电图预览"
+                    captureHeartBeat = ecgBeanList.minOf { it.heartBeat }
+                }
+                val filterBean = ecgBeanList.find { it.heartBeat == captureHeartBeat }
+                captureTime = ecgMap.entries.firstOrNull {
+                    it.value.heartBeat == filterBean?.heartBeat
+                }?.key!!
+                val filterIndex = ecgBeanList.indexOfFirst { it.heartBeat == captureHeartBeat }
+                val values: Array<ECGPointValue?>
+                var sum = 0
+                val filterList = mutableListOf<Float>()
+                if (ecgInfoList.size > 1960) {
+                    values = arrayOfNulls(1960)
+                    var ecgPointValue: ECGPointValue
+                    ecgBeanList.forEachIndexed { index, it ->
+                        if (index >= filterIndex && sum <= 1960) {
+                            filterList.addAll(it.ecgList)
+                            sum += it.ecgList.size
+                        }
+                    }
+                    if (filterList.size > 1960) {
+                        val ecgDataList = mutableListOf<Float>()
+                        filterList.subList(0, 1960).forEachIndexed { index, it ->
+                            ecgDataList.add(it)
+                            ecgPointValue = ECGPointValue()
+                            ecgPointValue.coorY = -it
+                            ecgPointValue.coorX = 0.0f
+                            values[index] = ecgPointValue
+                        }
+                        captureEcgData = Gson().toJson(ecgDataList)
+                    } else {
+                        filterList.forEachIndexed { index, it ->
+                            ecgPointValue = ECGPointValue()
+                            ecgPointValue.coorY = -it
+                            ecgPointValue.coorX = 0.0f
+                            values[index] = ecgPointValue
+                        }
+                        captureEcgData = Gson().toJson(filterList)
+                    }
+                } else {
+                    values = arrayOfNulls(ecgInfoList.size)
+                    var ecgPointValue: ECGPointValue
+                    ecgInfoList.forEachIndexed { index, it ->
                         ecgPointValue = ECGPointValue()
                         ecgPointValue.coorY = -it
                         ecgPointValue.coorX = 0.0f
                         values[index] = ecgPointValue
                     }
-                    captureEcgData = Gson().toJson(filterList)
+                    captureEcgData = Gson().toJson(ecgInfoList)
                 }
-            } else {
-                values = arrayOfNulls(ecgInfoList.size)
-                var ecgPointValue: ECGPointValue
-                ecgInfoList.forEachIndexed { index, it ->
-                    ecgPointValue = ECGPointValue()
-                    ecgPointValue.coorY = -it
-                    ecgPointValue.coorX = 0.0f
-                    values[index] = ecgPointValue
-                }
-                captureEcgData = Gson().toJson(ecgInfoList)
-            }
 
-            imagePreview = LuckySoftRenderer.instantiate(
-                requireContext(), values
-            ).startRender()
-            binding.ivEcgPreview.setImageBitmap(imagePreview)
-            binding.tvCaptureEcgHeart.text = "心率: ${captureHeartBeat}bmp"
+                imagePreview = LuckySoftRenderer.instantiate(
+                    requireContext(), values
+                ).startRender()
+                binding.ivEcgPreview.setImageBitmap(imagePreview)
+                binding.tvCaptureEcgHeart.text = "心率: ${captureHeartBeat}bmp"
+            }
+        } catch (e: Exception) {
+            Log.e("handleCaptureEcgData", e.message.toString())
         }
     }
 

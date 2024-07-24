@@ -2,6 +2,9 @@ package com.just.machine.util;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.text.TextUtils;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -12,7 +15,6 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -23,16 +25,24 @@ public class ECGDataParse {
 
     private TreeMap<Integer, SixMinEcgBean> values;
 
-    public ECGDataParse(Context context){
-        String json = parseJson(context,"ecgData2.json");
+    public ECGDataParse(Context context) {
+        String json = parseJson(context, "ecgData.json");
         Gson gson = new Gson();
-        values = gson.fromJson(json,new TypeToken<ECGPointValue[]>(){}.getType());
+        values = gson.fromJson(json, new TypeToken<ECGPointValue[]>() {
+        }.getType());
     }
 
-    public ECGDataParse(Context context,String filePath){
-        String json = parseLocalFile(context,filePath);
+    public ECGDataParse(Context context, String filePath) throws Exception {
+        String json = parseLocalFile(context, filePath);
         Gson gson = new Gson();
-        values = gson.fromJson(json,new TypeToken<TreeMap<Integer, SixMinEcgBean>>(){}.getType());
+        if (!TextUtils.isEmpty(json)) {
+            values = gson.fromJson(json, new TypeToken<TreeMap<Integer, SixMinEcgBean>>() {}.getType());
+            if(values == null){
+                throw new Exception("解析心电数据失败!");
+            }
+        } else {
+            throw new Exception("解析心电数据失败!");
+        }
     }
 
     private static String parseJson(Context context, String fileName) {

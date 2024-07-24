@@ -162,45 +162,45 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
 
         binding.btnYes.setNoRepeatListener {
 
-            if (Constants.isDebug) {
-
-                patient.name = "张三$index"
-
-                patient.age = (18 + index).toString()
-
-                patient.sex = "男"
-
-                patient.height = "18$index"
-
-                patient.weight = "130"
-
-                patient.addTime = "2024-3-6 13:00"
-
-                val testRecordsBeans: MutableList<CardiopulmonaryRecordsBean> = ArrayList()//心肺测试记录
-
-                val sixMinRecordsBeans: MutableList<SixMinRecordsBean> = ArrayList()//六分钟测试记录
-
-                val sixMinRecordsBean = SixMinRecordsBean()
-
-                val cardiopulmonaryRecordsBean = CardiopulmonaryRecordsBean(
-                    "测试1",
-                    "测试2", "测试3", "测试4", "测试5",
-                )
-
-                sixMinRecordsBeans.add(sixMinRecordsBean)
-
-                testRecordsBeans.add(cardiopulmonaryRecordsBean)
-
-                patient.testRecordsBean = testRecordsBeans
-
-                patient.sixMinRecordsBean = sixMinRecordsBeans
-
-                viewModel.setDates(patient)//新增患者
-
-                listener?.onClickConfirmBtn(patient.patientId.toString())
-
-                return@setNoRepeatListener
-            }
+//            if (Constants.isDebug) {
+//
+//                patient.name = "张三$index"
+//
+//                patient.age = (18 + index).toString()
+//
+//                patient.sex = "男"
+//
+//                patient.height = "18$index"
+//
+//                patient.weight = "130"
+//
+//                patient.addTime = "2024-3-6 13:00"
+//
+//                val testRecordsBeans: MutableList<CardiopulmonaryRecordsBean> = ArrayList()//心肺测试记录
+//
+//                val sixMinRecordsBeans: MutableList<SixMinRecordsBean> = ArrayList()//六分钟测试记录
+//
+//                val sixMinRecordsBean = SixMinRecordsBean()
+//
+//                val cardiopulmonaryRecordsBean = CardiopulmonaryRecordsBean(
+//                    "测试1",
+//                    "测试2", "测试3", "测试4", "测试5",
+//                )
+//
+//                sixMinRecordsBeans.add(sixMinRecordsBean)
+//
+//                testRecordsBeans.add(cardiopulmonaryRecordsBean)
+//
+//                patient.testRecordsBean = testRecordsBeans
+//
+//                patient.sixMinRecordsBean = sixMinRecordsBeans
+//
+//                viewModel.setDates(patient)//新增患者
+//
+//                listener?.onClickConfirmBtn(patient.patientId.toString())
+//
+//                return@setNoRepeatListener
+//            }
 
             if (binding.atvName.text?.isEmpty() == true) {
                 toast("姓名不能为空！")
@@ -208,6 +208,10 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
             }
             if (binding.atvPaientNumber.text?.isEmpty() == true) {
                 toast("病历号不能为空！")
+                return@setNoRepeatListener
+            }
+            if (binding.atvPaientNumber.text?.isEmpty() == false && binding.atvPaientNumber.text.toString().trim().length >= 16) {
+                toast("病历号超出长度！")
                 return@setNoRepeatListener
             }
             if (binding.atvHeight.text?.isEmpty() == true) {
@@ -222,8 +226,18 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
                 toast("生日不能为空！")
                 return@setNoRepeatListener
             }
-
-            patient.addTime = DateUtils.nowTimeString
+            if (binding.editCurrentMedications.text?.isEmpty() == false && binding.editCurrentMedications.text.toString().trim().length > 41) {
+                toast("目前用药超出长度！")
+                return@setNoRepeatListener
+            }
+            if (binding.editDiseaseHistory.text?.isEmpty() == false && binding.editDiseaseHistory.text.toString().trim().length > 41) {
+                toast("病史超出长度！")
+                return@setNoRepeatListener
+            }
+            if (binding.editClinicalDiagnosis.text?.isEmpty() == false && binding.editClinicalDiagnosis.text.toString().trim().length > 41) {
+                toast("临床诊断超出长度！")
+                return@setNoRepeatListener
+            }
 
             patient.name = binding.atvName.text.toString()
 
@@ -254,13 +268,12 @@ class PatientDialogFragment : BaseDialogFragment<FragmentDialogPatientBinding>()
             patient.remark = binding.editRemark.text.toString()
 
             if (isUpdate) {
-
+                patient.updatedTime = DateUtils.nowTimeString
                 viewModel.updatePatients(patient)//修改数据
 
             } else {
-
+                patient.addTime = DateUtils.nowTimeString
                 viewModel.setDates(patient)//新增患者
-
             }
 
             listener?.onClickConfirmBtn(patient.patientId.toString())

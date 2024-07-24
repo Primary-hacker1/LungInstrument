@@ -285,81 +285,81 @@ public class USBTransferUtil {
                 String data_str = CRC16Util.bytes2Hex(data);
 //                Log.i(TAG, "收到 usb 数据长度: " + data_str.length());
                 Log.i(TAG, "收到 usb 数据: " + data_str);
-                if (data_str.startsWith("a88b")) {
-                    int index = data_str.lastIndexOf("a88a");
-                    if (index > 0) {
-                        String ecgData = data_str.substring(6, index);
-                        String head = ecgData.substring(0, 2);
-                        if (head.equals("a5")) {
-                            String cmd1 = ecgData.substring(2, 4);
-                            String cmd2 = ecgData.substring(4, 6);
-                            if (((Integer.parseInt(cmd1, 16) == Integer.parseInt("03", 16)) && (255 - Integer.parseInt(cmd1, 16) == Integer.parseInt(cmd2, 16)))) {
-                                String len1 = ecgData.substring(10, 12);
-                                String len2 = ecgData.substring(12, 14);
-                                int len = Integer.parseInt(len2 + len1, 16);
-                                int length = ecgData.length();
-                                if ((len * 2) + 16 <= length) {
-                                    String dataStr = ecgData.substring(0, (len * 2) + 16);
-                                    if (dataStr.length() / 2 >= len + 8) {
-                                        String content = dataStr.substring(14, dataStr.length() - 2);
-                                        String heartRate = String.valueOf(Integer.parseInt(content.substring(2, 4) + content.substring(0, 2), 16));
-//                                        Log.i(TAG, "收到 usb 数据: " + heartRate);
-                                        usbSerialData.setHeartRate(heartRate);
-//                                    int batterLevel = Integer.parseInt(content.substring(6, 8), 16);
-//                                    int runStatus = Integer.parseInt(content.substring(16, 18), 16);
-                                        long time = System.currentTimeMillis();
-                                        if (!heartRate.isEmpty() && !heartRate.equals("0")) {
-                                            mapHeartRate.put(time, heartRate);
-                                            //静息心率集合
-                                            if (testType == 0) {
-                                                restHeartRate = restHeartRate + heartRate + ",";
-                                            }
-                                        }
-                                        String waveForm = content.substring(40);
-                                        String waveData = waveForm.substring(4);
-                                        List<Float> waveArr = new ArrayList<>();
-                                        if (waveData.length() > 4) {
-                                            for (int i = 0; i < waveData.length(); i += 4) {
-                                                float wave = Integer.parseInt(waveData.substring(i + 2, i + 4) + waveData.substring(i, i + 2), 16);
-                                                if (wave > 32767) {
-                                                    wave = wave - 65536;
-                                                } else if (wave == 32767) {
-                                                    wave = 0;
-                                                }
-                                                wave = (float) (wave * (1.0035 * 1800) / (4096 * 178.74));
-//                                                wave = (float) (wave * 0.002467);
-                                                waveArr.add(wave);
-                                            }
-                                            mapHeartEcg.clear();
-                                            mapHeartEcg.addAll(waveArr);
-                                            SixMinEcgBean bean = new SixMinEcgBean(heartRate, mapHeartEcg);
-                                            heartEcgList.add(0,bean);
-                                        } else {
-                                            mapHeartEcg.clear();
-                                        }
-                                        LiveDataBus.get().with(Constants.sixMinLiveDataBusKey).postValue(new Gson().toJson(usbSerialData));
-                                    }
-                                }
-                            } else {
-                                Log.e(TAG, "数据类型不正确");
-                            }
-                        }
-                    }
-                }
-                try {
-                    Long time = System.currentTimeMillis();
-                    if (map.containsKey(time)) {
-                        time = time + 1;
-                        if (!map.containsKey(time)) {
-                            map.put(time, data);
-                        }
-                    } else {
-                        map.put(time, data);
-                    }
-                    parseData(map);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+//                if (data_str.startsWith("a88b")) {
+//                    int index = data_str.lastIndexOf("a88a");
+//                    if (index > 0) {
+//                        String ecgData = data_str.substring(6, index);
+//                        String head = ecgData.substring(0, 2);
+//                        if (head.equals("a5")) {
+//                            String cmd1 = ecgData.substring(2, 4);
+//                            String cmd2 = ecgData.substring(4, 6);
+//                            if (((Integer.parseInt(cmd1, 16) == Integer.parseInt("03", 16)) && (255 - Integer.parseInt(cmd1, 16) == Integer.parseInt(cmd2, 16)))) {
+//                                String len1 = ecgData.substring(10, 12);
+//                                String len2 = ecgData.substring(12, 14);
+//                                int len = Integer.parseInt(len2 + len1, 16);
+//                                int length = ecgData.length();
+//                                if ((len * 2) + 16 <= length) {
+//                                    String dataStr = ecgData.substring(0, (len * 2) + 16);
+//                                    if (dataStr.length() / 2 >= len + 8) {
+//                                        String content = dataStr.substring(14, dataStr.length() - 2);
+//                                        String heartRate = String.valueOf(Integer.parseInt(content.substring(2, 4) + content.substring(0, 2), 16));
+////                                        Log.i(TAG, "收到 usb 数据: " + heartRate);
+//                                        usbSerialData.setHeartRate(heartRate);
+////                                    int batterLevel = Integer.parseInt(content.substring(6, 8), 16);
+////                                    int runStatus = Integer.parseInt(content.substring(16, 18), 16);
+//                                        long time = System.currentTimeMillis();
+//                                        if (!heartRate.isEmpty() && !heartRate.equals("0")) {
+//                                            mapHeartRate.put(time, heartRate);
+//                                            //静息心率集合
+//                                            if (testType == 0) {
+//                                                restHeartRate = restHeartRate + heartRate + ",";
+//                                            }
+//                                        }
+//                                        String waveForm = content.substring(40);
+//                                        String waveData = waveForm.substring(4);
+//                                        List<Float> waveArr = new ArrayList<>();
+//                                        if (waveData.length() > 4) {
+//                                            for (int i = 0; i < waveData.length(); i += 4) {
+//                                                float wave = Integer.parseInt(waveData.substring(i + 2, i + 4) + waveData.substring(i, i + 2), 16);
+//                                                if (wave > 32767) {
+//                                                    wave = wave - 65536;
+//                                                } else if (wave == 32767) {
+//                                                    wave = 0;
+//                                                }
+//                                                wave = (float) (wave * (1.0035 * 1800) / (4096 * 178.74));
+////                                                wave = (float) (wave * 0.002467);
+//                                                waveArr.add(wave);
+//                                            }
+//                                            mapHeartEcg.clear();
+//                                            mapHeartEcg.addAll(waveArr);
+//                                            SixMinEcgBean bean = new SixMinEcgBean(heartRate, mapHeartEcg);
+//                                            heartEcgList.add(0,bean);
+//                                        } else {
+//                                            mapHeartEcg.clear();
+//                                        }
+//                                        LiveDataBus.get().with(Constants.sixMinLiveDataBusKey).postValue(new Gson().toJson(usbSerialData));
+//                                    }
+//                                }
+//                            } else {
+//                                Log.e(TAG, "数据类型不正确");
+//                            }
+//                        }
+//                    }
+//                }
+//                try {
+//                    Long time = System.currentTimeMillis();
+//                    if (map.containsKey(time)) {
+//                        time = time + 1;
+//                        if (!map.containsKey(time)) {
+//                            map.put(time, data);
+//                        }
+//                    } else {
+//                        map.put(time, data);
+//                    }
+//                    parseData(map);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
             }
 
             @Override
