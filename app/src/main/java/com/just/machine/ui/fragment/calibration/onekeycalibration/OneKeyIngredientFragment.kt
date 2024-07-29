@@ -1,5 +1,6 @@
 package com.just.machine.ui.fragment.calibration.onekeycalibration
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.speech.tts.TextToSpeech
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.just.machine.dao.calibration.IngredientBean
 import com.just.machine.dao.calibration.IngredientCalibrationResultBean
+import com.just.machine.model.Constants
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.ui.adapter.calibration.IngredientAdapter
 import com.just.machine.ui.dialog.LungCommonDialogFragment
@@ -118,16 +120,17 @@ class OneKeyIngredientFragment : CommonBaseFragment<FragmentOnekeyIngredientBind
         binding.tvOnekeyStanderdTwoCalibrationCo2.text = standardTwoGasCO2Concentration.toString()
     }
 
+    @SuppressLint("SetTextI18n")
     override fun initListener() {
-        LiveDataBus.get().with("oneKeyCalibra").observe(this) {
+        LiveDataBus.get().with(Constants.oneKeyCalibraEvent).observe(this) {
             if (it is String) {
-                if (it == "ingredient") {
+                if (it == Constants.oneKeyCalibraEventIngredient) {
                     isIngredientStart = true
                 }
             }
         }
         //串口数据
-        LiveDataBus.get().with("二类传感器").observe(this) {
+        LiveDataBus.get().with(Constants.twoSensorSerialCallback).observe(this) {
             if (isIngredientStart) {
                 if (it is ByteArray) {
                     if (it[10].toInt() == 0x02 && it[11].toInt() == 0x02) {
@@ -341,16 +344,16 @@ class OneKeyIngredientFragment : CommonBaseFragment<FragmentOnekeyIngredientBind
     private fun calculateIngredient() {
         var o2offset = 0.0
         var co2offset = 0.0
-        var o2t90 = 0.0
-        var co2t90 = 0.0
+        var o2t90: Double
+        var co2t90: Double
         var o2mvalue1 = 0.0
         var co2mvalue1 = 0.0
         var o2mvalue2 = 0.0
         var co2mvalue2 = 0.0
-        var ko2 = 0.0
-        var bo2 = 0.0
-        var kco2 = 0.0
-        var bco2 = 0.0
+        var ko2: Double
+        var bo2: Double
+        var kco2: Double
+        var bco2: Double
         val listko2 = arrayListOf<Double>()
         val listbo2 = arrayListOf<Double>()
         val listkco2 = arrayListOf<Double>()
@@ -370,9 +373,9 @@ class OneKeyIngredientFragment : CommonBaseFragment<FragmentOnekeyIngredientBind
                 kco2 = (standardOneGasCO2Concentration - standardTwoGasCO2Concentration) / (c2 - c1)
                 bco2 = standardOneGasCO2Concentration - kco2 * c1
                 listko2.add(ko2)
-                listbo2.add(bo2);
-                listkco2.add(kco2);
-                listbco2.add(bco2);
+                listbo2.add(bo2)
+                listkco2.add(kco2)
+                listbco2.add(bco2)
             }
 
             if (listko2.size > 0) {
@@ -384,17 +387,17 @@ class OneKeyIngredientFragment : CommonBaseFragment<FragmentOnekeyIngredientBind
             var num = 0
             for (j in 0 until 5) {
                 if (o2SensorList[(i + 1) * 2].size == 0 || o2SensorList[(i + 1) * 2 + 1].size == 0 || co2SensorList[(i + 1) * 2].size == 0 || co2SensorList[(i + 1) * 2 + 1].size == 0)
-                    continue;
-                val listo2s = o2SensorList[(i + 1) * 2 + 1].toList();
-                val listco2s = co2SensorList[(i + 1) * 2 + 1].toList();
-                val o2ac1 = o2SensorList[(i + 1) * 2].drop(80).average();
-                val o2ac2 = o2SensorList[(i + 1) * 2 + 1].drop(80).average();
-                val co2ac1 = co2SensorList[(i + 1) * 2].drop(80).average();
-                val co2ac2 = co2SensorList[(i + 1) * 2 + 1].drop(80).average();
-                o2mvalue1 += ko2 * o2ac1 + bo2;
-                o2mvalue2 += ko2 * o2ac2 + bo2;
-                co2mvalue1 += kco2 * co2ac1 + bco2;
-                co2mvalue2 += kco2 * co2ac2 + bco2;
+                    continue
+                val listo2s = o2SensorList[(i + 1) * 2 + 1].toList()
+                val listco2s = co2SensorList[(i + 1) * 2 + 1].toList()
+                val o2ac1 = o2SensorList[(i + 1) * 2].drop(80).average()
+                val o2ac2 = o2SensorList[(i + 1) * 2 + 1].drop(80).average()
+                val co2ac1 = co2SensorList[(i + 1) * 2].drop(80).average()
+                val co2ac2 = co2SensorList[(i + 1) * 2 + 1].drop(80).average()
+                o2mvalue1 += ko2 * o2ac1 + bo2
+                o2mvalue2 += ko2 * o2ac2 + bo2
+                co2mvalue1 += kco2 * co2ac1 + bco2
+                co2mvalue2 += kco2 * co2ac2 + bco2
 
                 for (k in listo2s.indices) {
                     if (abs(listo2s[k] - o2ac1) > abs(o2ac1 - o2ac2) * 0.067) {
@@ -421,16 +424,16 @@ class OneKeyIngredientFragment : CommonBaseFragment<FragmentOnekeyIngredientBind
                 co2offset = String.format("%2.f", co2offset / num.toDouble()).toDouble()
             }
 
-            o2SensorList[6].addAll(o2SensorList[7]);
-            o2SensorList[6].addAll(o2SensorList[8]);
-            o2SensorList[6].addAll(o2SensorList[9]);
-            o2SensorList[6].addAll(o2SensorList[10]);
-            o2SensorList[6].addAll(o2SensorList[11]);
-            co2SensorList[6].addAll(co2SensorList[7]);
-            co2SensorList[6].addAll(co2SensorList[8]);
-            co2SensorList[6].addAll(co2SensorList[9]);
-            co2SensorList[6].addAll(co2SensorList[10]);
-            co2SensorList[6].addAll(co2SensorList[11]);
+            o2SensorList[6].addAll(o2SensorList[7])
+            o2SensorList[6].addAll(o2SensorList[8])
+            o2SensorList[6].addAll(o2SensorList[9])
+            o2SensorList[6].addAll(o2SensorList[10])
+            o2SensorList[6].addAll(o2SensorList[11])
+            co2SensorList[6].addAll(co2SensorList[7])
+            co2SensorList[6].addAll(co2SensorList[8])
+            co2SensorList[6].addAll(co2SensorList[9])
+            co2SensorList[6].addAll(co2SensorList[10])
+            co2SensorList[6].addAll(co2SensorList[11])
             o2t90 = CerlibraHelper.signalFilter(o2SensorList[6]).toDouble()
             co2t90 = CerlibraHelper.signalFilterCO2(co2SensorList[6]).toDouble()
 
@@ -573,11 +576,11 @@ class OneKeyIngredientFragment : CommonBaseFragment<FragmentOnekeyIngredientBind
             if (result) {
                 binding.tvIngredientOnekeyResult.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
                 binding.tvIngredientOnekeyResult.text = "定标未通过"
-                LiveDataBus.get().with("oneKeyCalibra").value = "ingredientFailed"
+                LiveDataBus.get().with(Constants.oneKeyCalibraEvent).value = Constants.oneKeyCalibraResultIngredientFailed
             } else {
                 binding.tvIngredientOnekeyResult.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
                 binding.tvIngredientOnekeyResult.text = "定标通过"
-                LiveDataBus.get().with("oneKeyCalibra").value = "ingredientSuccess"
+                LiveDataBus.get().with(Constants.oneKeyCalibraEvent).value = Constants.oneKeyCalibraResultIngredientSuccess
             }
         }
     }

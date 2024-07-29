@@ -29,7 +29,7 @@ class CalibrationFlowHandleResultFragment :
     override fun initView() {
         binding.rvResultFlowHandle.layoutManager = LinearLayoutManager(requireContext())
         binding.rvResultFlowHandle.adapter = adapterFlow
-//        viewModel.getFlowManualCaliResult()
+        viewModel.getFlowManualCaliResult()
     }
 
     override fun initListener() {

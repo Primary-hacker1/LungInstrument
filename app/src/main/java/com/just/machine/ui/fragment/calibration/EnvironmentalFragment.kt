@@ -95,37 +95,11 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
             val start = binding.tvCalibrationStart.text
             if (ModbusProtocol.isDeviceConnect) {
                 if (start == getString(R.string.begin)) {
-//                if (Constants.isDebug) {
-//                    val temperature: Short = 250 // 温度，单位为摄氏度
-//                    val humidity: Short = 60 // 湿度，单位为百分比
-//                    val pressure = 101325 // 气压，单位为帕斯卡
-//
-//                    val environmentData = MudbusProtocol.generateSerialCommand(
-//                        temperature,
-//                        humidity,
-//                        pressure
-//                    )
-//
-//                    LiveDataBus.get().with(Constants.serialCallback).value = environmentData
-//                }
-
-//                val startTime = System.currentTimeMillis()
-//                scope = lifecycleScope.launch(Dispatchers.IO) {
-//                    var nextPrintTime = startTime
-//                    var i = 0
-//                    while (isActive) {
-//                        if (System.currentTimeMillis() >= nextPrintTime) {
-//                            println("job: I'm sleeping ${i++} ...")
-//                            nextPrintTime += 1000L
-//                        }
-//                    }
-//                }
-//                binding.tvCalibrationStart.text = getString(R.string.cancel)
                     isBegin = true
                     usbTransferUtil.write(ModbusProtocol.allowOneSensor)//发送环境定标
                 }
             }else{
-                toast("设备未连接!")
+                toast(getString(R.string.device_without_connection_tips))
             }
         }
 
@@ -251,17 +225,6 @@ class EnvironmentalFragment : CommonBaseFragment<FragmentEnvironmentalBinding>()
                 R.color.colorWhite
             )
         )
-    }
-
-    /**
-     * 获取自动定标数据
-     */
-    private fun exitLowPower() {
-        try {
-            SerialPortManager.sendMessage(ModbusProtocol.EXIT_LOW_POWER_COMMAND)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
     }
 
     /**

@@ -39,5 +39,26 @@ interface Constants {
         const val envCaliSerialCallback = "环境定标"//串口返回消息
         const val getDevInfoSerialCallback = "获取设备信息"//串口返回消息
         const val LungData = "动态心肺测试"
+        const val twoSensorSerialCallback = "二类传感器"
+
+        /**
+         * 定标
+         */
+        const val clickStartFlowCalibra= "clickFlowStart"//点击开始流量定标
+        const val clickStopFlowCalibra= "clickFlowStop"//点击停止流量定标
+        const val flowHandleCalibra= "handleFlow"//流量手动定标
+        const val flowAutoCalibra= "autoFlow"//流量自动定标
+        const val startFlowHCalibra= "flowStart"//开始流量定标
+        const val stopFlowCalibra= "flowStop"//停止流量定标
+        const val oneKeyCalibraEvent = "oneKeyCalibra"//一键定标事件
+        const val oneKeyCalibraEventEnvironment = "environment"//一键定标事件-环境定标
+        const val oneKeyCalibraEventFlowAuto = "flowAuto"//一键定标事件-自动流量定标
+        const val oneKeyCalibraEventIngredient = "ingredient"//一键定标事件-成分定标
+        const val oneKeyCalibraResultEnvironmentSuccess = "environmentSuccess"//一键定标事件-环境定标成功
+        const val oneKeyCalibraResultEnvironmentFailed = "environmentFailed"//一键定标事件-环境定标失败
+        const val oneKeyCalibraResultFlowAutoSuccess = "flowAutoSuccess"//一键定标事件-自动流量定标成功
+        const val oneKeyCalibraResultFlowAutoFailed = "flowAutoFailed"//一键定标事件-自动流量定标失败
+        const val oneKeyCalibraResultIngredientSuccess = "ingredientSuccess"//一键定标事件-成分定标定标成功
+        const val oneKeyCalibraResultIngredientFailed = "ingredientFailed"//一键定标事件-成分定标定标失败
     }
 }

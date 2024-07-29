@@ -21,6 +21,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.dao.calibration.FlowCalibrationResultBean
 import com.just.machine.dao.calibration.FlowManualCalibrationResultBean
+import com.just.machine.model.Constants
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.model.calibrate.Definition
 import com.just.machine.ui.adapter.calibration.FlowAdapter
@@ -199,29 +200,29 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
         }
 
         //点击定标开始
-        LiveDataBus.get().with("clickFlowStart").observe(this) {
+        LiveDataBus.get().with(Constants.clickStartFlowCalibra).observe(this) {
             if (it is String) {
-                if (it == "handleFlow") {
+                if (it == Constants.flowHandleCalibra) {
                     //开始手动定标
                     if (ModbusProtocol.isDeviceConnect) {
                         prepareManualFlowCalibration()
                         sendCalibraCommand()
                         startLoadingDialogFragment = LoadingDialogFragment.startLoadingDialogFragment(activity!!.supportFragmentManager,"正在校零...")
                     } else {
-                        toast("设备未连接!!!")
+                        toast(getString(R.string.device_without_connection_tips))
                     }
                 }
             }
         }
         //点击定标结束
-        LiveDataBus.get().with("clickFlowStop").observe(this) {
+        LiveDataBus.get().with(Constants.clickStopFlowCalibra).observe(this) {
             if (it is String) {
                 stopPortSend()
             }
         }
 
         //串口数据
-        LiveDataBus.get().with("二类传感器").observe(this) {
+        LiveDataBus.get().with(Constants.twoSensorSerialCallback).observe(this) {
             if(isHandleFlowStart){
                 if (it is ByteArray) {
                     Autoindex++
@@ -1501,7 +1502,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
     private fun stopPortSend() {
         try {
             usbTransferUtil!!.write(ModbusProtocol.banTwoSensor)
-            LiveDataBus.get().with("flowStop").postValue("handleFlow")
+            LiveDataBus.get().with(Constants.stopFlowCalibra).postValue(Constants.flowHandleCalibra)
             isHandleFlowStart = false
         } catch (e: Exception) {
             e.printStackTrace()
@@ -1511,7 +1512,7 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
     private fun sendCalibraCommand() {
         try {
             usbTransferUtil?.write(ModbusProtocol.allowTwoSensor)
-            LiveDataBus.get().with("flowStart").postValue("handleFlow")
+            LiveDataBus.get().with(Constants.startFlowHCalibra).postValue(Constants.flowHandleCalibra)
             isHandleFlowStart = true
         } catch (e: Exception) {
             e.printStackTrace()

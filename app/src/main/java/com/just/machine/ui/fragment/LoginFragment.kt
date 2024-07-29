@@ -81,22 +81,7 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
             }.toTypedArray()
         )
 
-//        if (!SharedPreferencesUtils.instance.user.equals("")) {
-//            MainActivity.startMainActivity(context)
-//            activity?.finish()
-//        }
-
-//        if (SharedPreferencesUtils.instance.user.equals("")) {
-//            SharedPreferencesUtils.instance.user = "admin"
-//        }
-//
-//        if (SharedPreferencesUtils.instance.pass.equals("")) {
-//            SharedPreferencesUtils.instance.pass = "123456"
-//        }
-
-        if (!SharedPreferencesUtils.instance.user.equals("") && !SharedPreferencesUtils.instance.pass.equals(
-                ""
-            )
+        if (SharedPreferencesUtils.instance.user?.isNotEmpty() == true && SharedPreferencesUtils.instance.pass?.isNotEmpty() == true
         ) {
             binding.atvUser.setText(SharedPreferencesUtils.instance.user)
             binding.atvPass.setText(SharedPreferencesUtils.instance.pass)
@@ -108,12 +93,6 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
 
     override fun initListener() {
         binding.btnLogin.setNoRepeatListener {
-
-//            if (Constants.isDebug) {
-//                MainActivity.startMainActivity(context)
-//                activity?.finish()
-//                return@setNoRepeatListener
-//            }
 
             hideKeyboard(it.windowToken)
 

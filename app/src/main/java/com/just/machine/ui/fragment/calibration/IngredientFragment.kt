@@ -21,6 +21,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.just.machine.dao.calibration.IngredientBean
 import com.just.machine.dao.calibration.IngredientCalibrationResultBean
+import com.just.machine.model.Constants
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.ui.adapter.calibration.IngredientAdapter
 import com.just.machine.ui.dialog.LungCommonDialogFragment
@@ -228,18 +229,18 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
                 if (!isIngredientStart) {
                     prepareIngredientCalibration()
                     sendCalibraCommand()
-                    binding.tvIngredientCalibrateStart.text = "停止"
+                    binding.tvIngredientCalibrateStart.text = getString(R.string.stop)
                 } else {
                     stopPortSend()
-                    binding.tvIngredientCalibrateStart.text = "开始"
+                    binding.tvIngredientCalibrateStart.text = getString(R.string.begin)
                 }
             } else {
-                toast("设备未连接!!!")
+                toast(getString(R.string.device_without_connection_tips))
             }
         }
 
         //串口数据
-        LiveDataBus.get().with("二类传感器").observe(this) {
+        LiveDataBus.get().with(Constants.twoSensorSerialCallback).observe(this) {
             if (isIngredientStart) {
                 if (it is ByteArray) {
                     if (it[10].toInt() == 0x02 && it[11].toInt() == 0x02) {

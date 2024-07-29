@@ -73,7 +73,7 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/btn_forced"
-                    android:layout_width="100dp"
+                    android:layout_width="120dp"
                     android:layout_height="28dp"
                     android:layout_marginStart="@dimen/space_18"
                     android:gravity="center"
@@ -86,7 +86,7 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/btn_maxiVentilation"
-                    android:layout_width="100dp"
+                    android:layout_width="150dp"
                     android:layout_height="28dp"
                     android:layout_marginStart="@dimen/space_18"
                     android:gravity="center"

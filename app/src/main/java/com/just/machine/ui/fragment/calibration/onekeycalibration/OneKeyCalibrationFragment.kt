@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
+import com.common.base.toast
+import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.FragmentChildAdapter
 import com.just.machine.ui.dialog.LungCommonDialogFragment
 import com.just.machine.ui.fragment.serial.ModbusProtocol
@@ -53,123 +55,128 @@ class OneKeyCalibrationFragment : CommonBaseFragment<FragmentOnekeyCalibrationBi
 
     override fun initListener() {
         binding.llOnekeyStart.setNoRepeatListener {
-            prepareStart()
-            disEnableStartBtn()
-            timer = fixedRateTimer("", false, 0, 1000) {
-                Log.d("oneky", "正计时======")
-                if (countSec == 0) {
-                    iFlag = 1
-                    binding.vpOnekey.setCurrentItem(1, true)
-                }
-                if (countSec < 5 && iFlag == 1) {
-                    if (envSuccess) {
-                        binding.tvOnekeyCalibrationEnvironment.setTextColor(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                R.color.green
+            if (ModbusProtocol.isDeviceConnect) {
+                prepareStart()
+                disEnableStartBtn()
+                timer = fixedRateTimer("", false, 0, 1000) {
+                    Log.d("oneky", "正计时======")
+                    if (countSec == 0) {
+                        iFlag = 1
+                        binding.vpOnekey.setCurrentItem(1, true)
+                        LiveDataBus.get().with(Constants.oneKeyCalibraEvent).value = Constants.oneKeyCalibraEventEnvironment
+                    }
+                    if (countSec < 5 && iFlag == 1) {
+                        if (envSuccess) {
+                            binding.tvOnekeyCalibrationEnvironment.setTextColor(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    R.color.green
+                                )
                             )
-                        )
-                        binding.ivOnekeyCalibrationEnvironment.setImageResource(R.drawable.environment_highlight)
+                            binding.ivOnekeyCalibrationEnvironment.setImageResource(R.drawable.environment_highlight)
+                            iFlag = 2
+                        } else if (!envSuccess && countSec >= 4) {
+                            timer?.cancel()
+                            enableStartBtn()
+                            binding.vpOnekey.setCurrentItem(0, true)
+                            LungCommonDialogFragment.startCommonDialogFragment(
+                                requireActivity().supportFragmentManager, "一键定标失败!", "2"
+                            )
+                            return@fixedRateTimer
+                        }
+                    } else if (countSec == 5 && iFlag == 1) {
+                        binding.vpOnekey.setCurrentItem(2, true)
                         iFlag = 2
-                    }else if(!envSuccess && countSec >= 4){
+                    } else if (countSec in 6 until 55 && iFlag == 2) {
+                        //自动流量定标开始
+                        if (!isFlowSend) {
+                            isFlowSend = true
+                            LiveDataBus.get().with(Constants.oneKeyCalibraEvent).value = Constants.oneKeyCalibraEventFlowAuto
+                        }
+                        if (flowSuccess) {
+                            binding.tvOnekeyCalibrationLineTwo.setBackgroundColor(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    R.color.green
+                                )
+                            )
+                            binding.tvOnekeyCalibrationFlow.setTextColor(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    R.color.green
+                                )
+                            )
+                            binding.ivOnekeyCalibrationFlow.setImageResource(R.drawable.flow_highlight)
+                            iFlag = 3
+                        }
+                    } else if (countSec == 56 && iFlag == 3) {
+                        binding.vpOnekey.setCurrentItem(3, true)
+                    } else if (countSec > 56 && iFlag == 3) {
+                        //成分流量定标开始
+                        if (!isIngredientSend) {
+                            isIngredientSend = true
+                            LiveDataBus.get().with(Constants.oneKeyCalibraEvent).value = Constants.oneKeyCalibraEventIngredient
+                        }
+                        if (ingredientSuccess) {
+                            binding.tvOnekeyCalibrationLineTwo.setBackgroundColor(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    R.color.green
+                                )
+                            )
+                            binding.tvOnekeyCalibrationFlow.setTextColor(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    R.color.green
+                                )
+                            )
+                            binding.ivOnekeyCalibrationFlow.setImageResource(R.drawable.flow_highlight)
+                        }
+                    } else if (countSec == 110) {
+                        binding.vpOnekey.setCurrentItem(0, true)
+                        if (envSuccess && flowSuccess && ingredientSuccess) {
+                            LungCommonDialogFragment.startCommonDialogFragment(
+                                requireActivity().supportFragmentManager, "一键定标成功!", "1"
+                            )
+                        } else {
+                            LungCommonDialogFragment.startCommonDialogFragment(
+                                requireActivity().supportFragmentManager, "一键定标失败!", "2"
+                            )
+                        }
                         timer?.cancel()
                         enableStartBtn()
-                        binding.vpOnekey.setCurrentItem(0, true)
-                        LungCommonDialogFragment.startCommonDialogFragment(
-                            requireActivity().supportFragmentManager, "一键定标失败!", "2"
-                        )
-                        return@fixedRateTimer
                     }
-                } else if (countSec == 5 && iFlag == 1) {
-                    binding.vpOnekey.setCurrentItem(2, true)
-                    iFlag = 2
-                } else if (countSec in 6 until 55 && iFlag == 2) {
-                    //自动流量定标开始
-                    if (!isFlowSend) {
-                        isFlowSend = true
-                        LiveDataBus.get().with("oneKeyCalibra").value = "flowAuto"
-                    }
-                    if (flowSuccess) {
-                        binding.tvOnekeyCalibrationLineTwo.setBackgroundColor(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                R.color.green
-                            )
-                        )
-                        binding.tvOnekeyCalibrationFlow.setTextColor(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                R.color.green
-                            )
-                        )
-                        binding.ivOnekeyCalibrationFlow.setImageResource(R.drawable.flow_highlight)
-                        iFlag = 3
-                    }
-                } else if (countSec == 56 && iFlag == 3) {
-                    binding.vpOnekey.setCurrentItem(3, true)
-                } else if (countSec > 56 && iFlag == 3) {
-                    //成分流量定标开始
-                    if (!isIngredientSend) {
-                        isIngredientSend = true
-                        LiveDataBus.get().with("oneKeyCalibra").value = "ingredient"
-                    }
-                    if (ingredientSuccess) {
-                        binding.tvOnekeyCalibrationLineTwo.setBackgroundColor(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                R.color.green
-                            )
-                        )
-                        binding.tvOnekeyCalibrationFlow.setTextColor(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                R.color.green
-                            )
-                        )
-                        binding.ivOnekeyCalibrationFlow.setImageResource(R.drawable.flow_highlight)
-                    }
-                } else if (countSec == 110) {
-                    binding.vpOnekey.setCurrentItem(0, true)
-                    if (envSuccess && flowSuccess && ingredientSuccess) {
-                        LungCommonDialogFragment.startCommonDialogFragment(
-                            requireActivity().supportFragmentManager, "一键定标成功!", "1"
-                        )
-                    } else {
-                        LungCommonDialogFragment.startCommonDialogFragment(
-                            requireActivity().supportFragmentManager, "一键定标失败!", "2"
-                        )
-                    }
-                    timer?.cancel()
-                    enableStartBtn()
+                    countSec++
                 }
-                countSec++
+            } else {
+                toast(getString(R.string.device_without_connection_tips))
             }
         }
 
-        LiveDataBus.get().with("oneKeyCalibra").observe(this) {
+        LiveDataBus.get().with(Constants.oneKeyCalibraEvent).observe(this) {
             if (it is String) {
                 when (it) {
-                    "environmentFailed" -> {
+                    Constants.oneKeyCalibraResultEnvironmentFailed -> {
                         envSuccess = false
                     }
 
-                    "environmentSuccess" -> {
+                    Constants.oneKeyCalibraResultEnvironmentSuccess -> {
                         envSuccess = true
                     }
 
-                    "flowAutoFailed" -> {
+                    Constants.oneKeyCalibraResultFlowAutoFailed -> {
                         flowSuccess = false
                     }
 
-                    "flowAutoSuccess" -> {
+                    Constants.oneKeyCalibraResultFlowAutoSuccess -> {
                         flowSuccess = true
                     }
 
-                    "ingredientFailed" -> {
+                    Constants.oneKeyCalibraResultIngredientFailed -> {
                         ingredientSuccess = false
                     }
 
-                    "ingredientSuccess" -> {
+                    Constants.oneKeyCalibraResultIngredientSuccess -> {
                         ingredientSuccess = true
                     }
                 }

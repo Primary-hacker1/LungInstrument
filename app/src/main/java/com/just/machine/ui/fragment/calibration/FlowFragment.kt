@@ -7,12 +7,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import com.common.base.BaseUtil
 import com.common.base.CommonBaseFragment
 import com.common.base.setNoRepeatListener
-import com.common.network.LogUtils
+import com.just.machine.model.Constants
 import com.just.machine.ui.adapter.FragmentChildAdapter
-import com.just.machine.ui.fragment.serial.ModbusProtocol
 import com.just.machine.util.LiveDataBus
 import com.just.news.R
 import com.just.news.databinding.FragmentFlowBinding
@@ -29,7 +27,6 @@ import java.util.Locale
 class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
 
     private lateinit var tts: TextToSpeech
-    private var isTest = false
 
     override fun initView() {
 
@@ -62,32 +59,32 @@ class FlowFragment : CommonBaseFragment<FragmentFlowBinding>() {
                 tts.speak("开始流量定标", TextToSpeech.QUEUE_FLUSH, null, "")
                 //手动流量定标
                 if (binding.vpFlowTitle.currentItem == 0) {
-                    LiveDataBus.get().with("clickFlowStart").value = "handleFlow"
+                    LiveDataBus.get().with(Constants.clickStartFlowCalibra).value = Constants.flowHandleCalibra
                 } else {
-                    LiveDataBus.get().with("clickFlowStart").value = "autoFlow"
+                    LiveDataBus.get().with(Constants.clickStartFlowCalibra).value = Constants.flowAutoCalibra
                 }
             } else {
                 //手动流量定标
                 if (binding.vpFlowTitle.currentItem == 0) {
-                    LiveDataBus.get().with("clickFlowStop").value = "handleFlow"
+                    LiveDataBus.get().with(Constants.clickStopFlowCalibra).value = Constants.flowHandleCalibra
                 } else {
-                    LiveDataBus.get().with("clickFlowStop").value = "autoFlow"
+                    LiveDataBus.get().with(Constants.clickStopFlowCalibra).value = Constants.flowAutoCalibra
                 }
-                binding.tvFlowStart.text = "开始"
+                binding.tvFlowStart.text = getString(R.string.begin)
             }
         }
 
         //定标开始
-        LiveDataBus.get().with("flowStart").observe(this) {
+        LiveDataBus.get().with(Constants.startFlowHCalibra).observe(this) {
             if (it is String) {
-                binding.tvFlowStart.text = "停止"
+                binding.tvFlowStart.text = getString(R.string.stop)
             }
         }
 
         //定标结束
-        LiveDataBus.get().with("flowStop").observe(this) {
+        LiveDataBus.get().with(Constants.stopFlowCalibra).observe(this) {
             if (it is String) {
-                binding.tvFlowStart.text = "开始"
+                binding.tvFlowStart.text = getString(R.string.begin)
             }
         }
     }

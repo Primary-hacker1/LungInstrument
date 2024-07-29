@@ -18,6 +18,7 @@ import com.just.machine.dao.PatientBean
 import com.just.machine.dao.calibration.FlowAutoCalibrationResultBean
 import com.just.machine.dao.calibration.FlowBean
 import com.just.machine.dao.calibration.FlowManualCalibrationResultBean
+import com.just.machine.model.Constants
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.ui.adapter.calibration.FlowAdapter
 import com.just.machine.ui.dialog.LoadingDialogFragment
@@ -94,9 +95,9 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
         }
 
         //点击定标开始
-        LiveDataBus.get().with("clickFlowStart").observe(this) {
+        LiveDataBus.get().with(Constants.clickStartFlowCalibra).observe(this) {
             if (it is String) {
-                if (it == "autoFlow") {
+                if (it == Constants.flowAutoCalibra) {
                     if (ModbusProtocol.isDeviceConnect) {
                         prepareAutoFlow()
                         sendCalibraCommand()
@@ -106,20 +107,20 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
                                 "正在校零..."
                             )
                     } else {
-                        toast("设备未连接!!!")
+                        toast(getString(R.string.device_without_connection_tips))
                     }
                 }
             }
         }
         //点击定标结束
-        LiveDataBus.get().with("clickFlowStop").observe(this) {
+        LiveDataBus.get().with(Constants.clickStopFlowCalibra).observe(this) {
             if (it is String) {
                 stopPortSend()
             }
         }
 
         //串口数据
-        LiveDataBus.get().with("二类传感器").observe(this) {
+        LiveDataBus.get().with(Constants.twoSensorSerialCallback).observe(this) {
             if (isAutoFlowStart) {
                 if (it is ByteArray) {
                     if (ratedFlowZero.size <= 200) {
@@ -425,7 +426,7 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
         try {
             usbTransferUtil!!.write(ModbusProtocol.banTwoSensor)
             usbTransferUtil!!.write(ModbusProtocol.reset)
-            LiveDataBus.get().with("flowStop").postValue("autoFlow")
+            LiveDataBus.get().with(Constants.stopFlowCalibra).postValue(Constants.flowAutoCalibra)
             isAutoFlowStart = true
         } catch (e: Exception) {
             e.printStackTrace()
@@ -444,7 +445,7 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
         try {
             usbTransferUtil?.write(ModbusProtocol.allowTwoSensor)
             usbTransferUtil?.write(ModbusProtocol.setAutoFlowBlow)
-            LiveDataBus.get().with("flowStart").postValue("autoFlow")
+            LiveDataBus.get().with(Constants.startFlowHCalibra).postValue(Constants.flowAutoCalibra)
             isAutoFlowStart = true
         } catch (e: Exception) {
             e.printStackTrace()

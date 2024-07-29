@@ -33,6 +33,116 @@
     <string name="currentMedications">目前用药</string>
     <string name="remark">备注</string>
     <string name="clinicalDiagnosis">临床诊断</string>
+    <string name="man">男</string>
+    <string name="woman">女</string>
+    <string name="add">新增</string>
+    <string name="patient_list">患者列表</string>
+    <string name="create_time">创建时间</string>
+    <string name="operation">操作</string>
+    <string name="report_no">报告编号</string>
+    <string name="testTime">测试时间</string>
+    <string name="assess">评估</string>
+    <string name="exercise_lung_test">运动肺测试</string>
+    <string name="maximumVentilation">最大通气量</string>
+    <string name="forcedVitalCapacity">用力肺活量</string>
+    <string name="conventionalVentilation">常规肺活量</string>
+    <string name="cardiopulmonary_records">心肺测试记录</string>
+    <string name="six_records">六分钟步行测试记录</string>
+    <string name="system_setting">系统设置</string>
+    <string name="save">保存</string>
+    <string name="report_number">报告编号</string>
+    <string name="hospital_settings">医院设置</string>
+    <string name="hospital_name">医院名称</string>
+    <string name="dynamic_settings">动态肺设置</string>
+    <string name="static_setting">静态肺设置</string>
+    <string name="general_settings">通用设置</string>
+    <string name="hospital_name_mao">医院名称：</string>
+    <string name="login_pass_mao">登陆密码:</string>
+    <string name="_123456789">123456789</string>
+    <string name="update_pass">修改密码:</string>
+    <string name="confirm_password">确认密码:</string>
+    <string name="export_passwords">导出密码:</string>
+    <string name="test_parameters">测试参数</string>
+    <string name="data_backup">数据备份/还原</string>
+    <string name="data_backup_">数据备份</string>
+    <string name="data_restoration">数据还原</string>
+    <string name="device_management">设备管理</string>
+    <string name="ECG">心电仪：</string>
+    <string name="device_overhaul">设备检修</string>
+    <string name="ml">毫升(ML)</string>
+    <string name="assessment_process">评估流程</string>
+    <string name="report_shows">报告显示</string>
+    <string name="exercise_prescription">运动处方</string>
+    <string name="cpet">CPET设置</string>
+    <string name="unit">单位</string>
+    <string name="vital_capacity">呼气肺活量</string>
+    <string name="svc">svc</string>
+    <string name="chines_name">中文名</string>
+    <string name="metricValues">指标值</string>
+    <string name="di_displayed">是否显示</string>
+    <string name="svc_setting">SVC设置</string>
+    <string name="x_time">X轴时间量程：</string>
+    <string name="min_s">秒(s)</string>
+    <string name="y_time_up">Y轴时间上限：</string>
+    <string name="y_time_down">Y轴时间下限：</string>
+    <string name="vt_base_line">VT基线：</string>
+    <string name="display">显示</string>
+    <string name="display_no">不显示</string>
+    <string name="begin">开始</string>
+    <string name="stop">停止</string>
+    <string name="environmental_calibration">环境定标</string>
+    <string name="calibrationMethod">标定方式</string>
+    <string name="atmosphericPressure">气压(mmHg)</string>
+    <string name="ambientAirPressure">环境气压</string>
+    <string name="calibrationTime">定标时间</string>
+    <string name="temperature">温度(℃)</string>
+    <string name="humidity">湿度(%)</string>
+    <string name="flow">流量定标</string>
+    <string name="flow_handle">流量手动定标</string>
+    <string name="flow_auto">流量自动定标</string>
+    <string name="Inspiratory_calibration">吸气标定指标</string>
+    <string name="pull">拉</string>
+    <string name="ingredient_calibration">成分定标</string>
+    <string name="o_t90_ms">T90(ms)</string>
+    <string name="ingredientCalibration">成分定标</string>
+    <string name="dataTables">数据表格</string>
+    <string-array name="spinner_items">
+        <item>Item 1</item>
+        <item>Item 2</item>
+        <item>Item 3</item>
+        <!-- 添加更多项 -->
+    </string-array>
+
+    <string-array name="spScenarios_items">
+        <item>Zapletal</item>
+        <item>Eccs</item>
+        <item>Wasserman</item>
+        <item>Cherniak</item>
+        <item>Jaeger</item>
+        <item>Fixed</item>
+    </string-array>
+
+    <string-array name="spBreathing_items">
+        <item>硅胶面罩(特大)</item>
+        <item>硅胶面罩(小)</item>
+        <item>硅胶面罩(中)</item>
+        <item>硅胶面罩</item>
+    </string-array>
+    <string name="ambulatoryLungTest">动态肺测试</string>
+    <string name="routine">常规</string>
+    <string name="wasserman_9">Wasserman-9</string>
+    <string name="data">数据</string>
+    <string name="tranquility">静息</string>
+    <string name="warm_up">热身</string>
+    <string name="motion">运动</string>
+    <string name="recover">恢复</string>
+    <string name="motorAssessment">运动评估</string>
+    <string name="reset">重置</string>
+    <string name="data_tables">数据表格</string>
+    <string name="staticLungTest">静态肺测试</string>
+    <string name="maxiVentilation">分钟最大通气量</string>
+    <string name="onekey_calibration_guide_content"><![CDATA[<font color="#000000"><Big><b>开始前请确认设备已连接:</b></Big></font> <br><br>1.请确认流量传感器已正确连接到流量定标口。<br>2.请确认气瓶管路已正确连接到后方的输入口，并且气阀已打开。<br>3.请确认采样管已连接到成分定标接口。]]></string>
+    <string name="device_without_connection_tips">设备未连接!!!</string>
 
     <string name="sixmin_measure_blood">测量\n血压</string>
     <string name="sixmin_measuring_blood">测量\n中</string>
@@ -107,106 +217,6 @@
     <string name="sixmin_test_blood_pressure_after">运动后血压/mmHg</string>
     <string name="sixmin_test_blood_oxygen_title">血氧</string>
     <string name="sixmin_test_ecg_title">心率</string>
-    <string name="man">男</string>
-    <string name="woman">女</string>
-    <string name="add">新增</string>
-    <string name="patient_list">患者列表</string>
-    <string name="create_time">创建时间</string>
-    <string name="operation">操作</string>
-    <string name="report_no">报告编号</string>
-    <string name="testTime">测试时间</string>
-    <string name="assess">评估</string>
-    <string name="exercise_lung_test">运动肺测试</string>
-    <string name="maximumVentilation">最大通气量</string>
-    <string name="forcedVitalCapacity">用力肺活量</string>
-    <string name="conventionalVentilation">常规肺活量</string>
-    <string name="cardiopulmonary_records">心肺测试记录</string>
-    <string name="six_records">六分钟步行测试记录</string>
-    <string name="system_setting">系统设置</string>
-    <string name="save">保存</string>
-    <string name="report_number">报告编号</string>
-    <string name="hospital_settings">医院设置</string>
-    <string name="hospital_name">医院名称</string>
-    <string name="dynamic_settings">动态肺设置</string>
-    <string name="static_setting">静态肺设置</string>
-    <string name="general_settings">通用设置</string>
-    <string name="hospital_name_mao">医院名称：</string>
-    <string name="login_pass_mao">登陆密码:</string>
-    <string name="_123456789">123456789</string>
-    <string name="update_pass">修改密码:</string>
-    <string name="confirm_password">确认密码:</string>
-    <string name="export_passwords">导出密码:</string>
-    <string name="test_parameters">测试参数</string>
-    <string name="data_backup">数据备份/还原</string>
-    <string name="data_backup_">数据备份</string>
-    <string name="data_restoration">数据还原</string>
-    <string name="device_management">设备管理</string>
-    <string name="ECG">心电仪：</string>
-    <string name="device_overhaul">设备检修</string>
-    <string name="ml">毫升(ML)</string>
-    <string name="assessment_process">评估流程</string>
-    <string name="report_shows">报告显示</string>
-    <string name="exercise_prescription">运动处方</string>
-    <string name="cpet">CPET设置</string>
-    <string name="unit">单位</string>
-    <string name="vital_capacity">呼气肺活量</string>
-    <string name="svc">svc</string>
-    <string name="chines_name">中文名</string>
-    <string name="metricValues">指标值</string>
-    <string name="di_displayed">是否显示</string>
-    <string name="svc_setting">SVC设置</string>
-    <string name="x_time">X轴时间量程：</string>
-    <string name="min_s">秒(s)</string>
-    <string name="y_time_up">Y轴时间上限：</string>
-    <string name="y_time_down">Y轴时间下限：</string>
-    <string name="vt_base_line">VT基线：</string>
-    <string name="display">显示</string>
-    <string name="display_no">不显示</string>
-    <string name="begin">开始</string>
-    <string name="environmental_calibration">环境定标</string>
-    <string name="calibrationMethod">标定方式</string>
-    <string name="atmosphericPressure">气压(mmHg)</string>
-    <string name="ambientAirPressure">环境气压</string>
-    <string name="calibrationTime">定标时间</string>
-    <string name="temperature">温度(℃)</string>
-    <string name="humidity">湿度(%)</string>
-    <string name="flow">流量定标</string>
-    <string name="flow_handle">流量手动定标</string>
-    <string name="flow_auto">流量自动定标</string>
-    <string name="Inspiratory_calibration">吸气标定指标</string>
-    <string name="pull">拉</string>
-    <string name="ingredient_calibration">成分定标</string>
-    <string name="o_t90_ms">T90(ms)</string>
-    <string name="ingredientCalibration">成分定标</string>
-    <string name="dataTables">数据表格</string>
-    <string-array name="spinner_items">
-        <item>Item 1</item>
-        <item>Item 2</item>
-        <item>Item 3</item>
-        <!-- 添加更多项 -->
-    </string-array>
-
-    <string-array name="spScenarios_items">
-        <item>Zapletal</item>
-        <item>Eccs</item>
-        <item>Wasserman</item>
-        <item>Cherniak</item>
-        <item>Jaeger</item>
-        <item>Fixed</item>
-    </string-array>
-
-    <string-array name="spBreathing_items">
-        <item>硅胶面罩(特大)</item>
-        <item>硅胶面罩(小)</item>
-        <item>硅胶面罩(中)</item>
-        <item>硅胶面罩</item>
-    </string-array>
-
-    <string name="sixmin_test_guide_text">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;本次试验为六分钟步行试验，目标是在规定场地内来回步行，在6分钟之内步行尽可能远的距离。如果您在测试过程中停止行走或需要休息时，如果您愿意，可以靠在墙上或坐在椅子上休息，当您觉得体力恢复后，请继续行走，当提示时间到的时候，您不要突然停下来，而是放慢速度继续向前走。</string>
-    <string name="ambulatoryLungTest">动态肺测试</string>
-    <string name="routine">常规</string>
-    <string name="wasserman_9">Wasserman-9</string>
-    <string name="data">数据</string>
     <string name="sixmin_test_start_measure_blood_front">请您坐在椅子上，并保持平静，我们为您测量运动前血压。</string>
     <string name="sixmin_test_start_measure_blood_behind">我们为您测量运动后血压。</string>
     <string name="sixmin_test_start_test">现在开始六分钟步行试验，倒计时5秒</string>
@@ -223,17 +233,9 @@
     <string name="sixmin_test_start_count_down_two_tips">加油，您只剩两分钟了。</string>
     <string name="sixmin_test_start_count_down_one_tips">您做得很好，再走1分钟就结束了。</string>
     <string name="sixmin_test_start_count_down_zero_tips">试验即将结束，当提示时间到的时候，您不要突然停下来，而是放慢速度继续向前走。</string>
-    <string name="staticLungTest">静态肺测试</string>
-    <string name="maxiVentilation">分钟最大通气量</string>
     <string name="sixmin_test_measuring_blood">正在测量血压中…</string>
     <string name="sixmin_test_blood_pressure_without_connection">血压仪未连接，请检查设备!</string>
     <string name="sixmin_test_device_without_connection">请先接入设备</string>
-    <string name="tranquility">静息</string>
-    <string name="warm_up">热身</string>
-    <string name="motion">运动</string>
-    <string name="recover">恢复</string>
-    <string name="motorAssessment">运动评估</string>
-    <string name="reset">重置</string>
     <string-array name="spinner_sixmin_report_description">
         <item>出具</item>
         <item>不出具</item>
@@ -277,7 +279,6 @@
     <string name="sixmin_test_report_check_report_data_statistics_title">【六分钟步行试验检测情况】</string>
     <string name="sixmin_test_report_check_report_comprehensive_evaluation_title">【六分钟步行试验综合评估】</string>
     <string name="sixmin_test_report_check_report_sport_prescription_advice_title">【运动处方建议】</string>
-    <string name="data_tables">数据表格</string>
     <string name="sixmin_test_report_check_report_enter_test">进入试验</string>
     <string name="sixmin_test_enter_test_without_device_connection">设备未连接成功，是否继续试验？</string>
     <string-array name="spinner_sixmin_report_stide_formula">
@@ -289,5 +290,5 @@
         <item>6分钟平均步行速度×(70%~80%)×建议单次运动时长</item>
     </string-array>
     <string name="sixmin_test_report_heart_beart_capture_title"><![CDATA[%s心率心电图: 心率: %s bmp，速度: %s mm/s，增益: %s mm/mv]]></string>
-    <string name="onekey_calibration_guide_content"><![CDATA[<font color="#000000"><Big><b>开始前请确认设备已连接:</b></Big></font> <br><br>1.请确认流量传感器已正确连接到流量定标口。<br>2.请确认气瓶管路已正确连接到后方的输入口，并且气阀已打开。<br>3.请确认采样管已连接到桌面上方的成分定标接口。]]></string>
+    <string name="sixmin_test_guide_text">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;本次试验为六分钟步行试验，目标是在规定场地内来回步行，在6分钟之内步行尽可能远的距离。如果您在测试过程中停止行走或需要休息时，如果您愿意，可以靠在墙上或坐在椅子上休息，当您觉得体力恢复后，请继续行走，当提示时间到的时候，您不要突然停下来，而是放慢速度继续向前走。</string>
 </resources>

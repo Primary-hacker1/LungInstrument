@@ -42,9 +42,9 @@ class OneKeyEnvironmentFragment : CommonBaseFragment<FragmentOnekeyEnvironmentBi
     }
 
     override fun initListener() {
-        LiveDataBus.get().with("oneKeyCalibra").observe(this) {
+        LiveDataBus.get().with(Constants.oneKeyCalibraEvent).observe(this) {
             if (it is String) {
-                if (it == "environment") {
+                if (it == Constants.oneKeyCalibraEventEnvironment) {
                     isBegin = true
                     usbTransferUtil.write(ModbusProtocol.allowOneSensor)//发送环境定标
                 }
@@ -72,7 +72,7 @@ class OneKeyEnvironmentFragment : CommonBaseFragment<FragmentOnekeyEnvironmentBi
                             //定标失败
                             binding.tvOnekeyCalibrationResult.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
                             binding.tvOnekeyCalibrationResult.text = "定标未通过"
-                            LiveDataBus.get().with("oneKeyCalibra").value = "environmentFailed"
+                            LiveDataBus.get().with(Constants.oneKeyCalibraEvent).value = Constants.oneKeyCalibraResultEnvironmentFailed
                         } else {
                             binding.tvOnekeyCalibrationResult.text = "定标通过"
                             binding.tvOnekeyCalibrationResult.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
@@ -83,7 +83,7 @@ class OneKeyEnvironmentFragment : CommonBaseFragment<FragmentOnekeyEnvironmentBi
                                     humidity.toString(), pressure.toString(), "1"
                                 )
                             )//插入数据库并查询
-                            LiveDataBus.get().with("oneKeyCalibra").value = "environmentSuccess"
+                            LiveDataBus.get().with(Constants.oneKeyCalibraEvent).value = Constants.oneKeyCalibraResultEnvironmentSuccess
                         }
                     }
                     isBegin = false

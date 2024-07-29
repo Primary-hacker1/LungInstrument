@@ -3,14 +3,10 @@ package com.just.machine.util;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.text.TextUtils;
-import android.util.Log;
-import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.just.machine.model.sixmininfo.SixMinEcgBean;
 import com.seeker.luckychart.model.ECGPointValue;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;

@@ -15,6 +15,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.just.machine.dao.PatientBean
 import com.just.machine.dao.calibration.FlowAutoCalibrationResultBean
 import com.just.machine.dao.calibration.FlowBean
+import com.just.machine.model.Constants
 import com.just.machine.model.SharedPreferencesUtils
 import com.just.machine.ui.adapter.calibration.FlowAdapter
 import com.just.machine.ui.fragment.serial.ModbusProtocol
@@ -79,9 +80,9 @@ class OneKeyFlowFragment : CommonBaseFragment<FragmentOnekeyFlowBinding>() {
     }
 
     override fun initListener() {
-        LiveDataBus.get().with("oneKeyCalibra").observe(this) {
+        LiveDataBus.get().with(Constants.oneKeyCalibraEvent).observe(this) {
             if (it is String) {
-                if (it == "flowAuto") {
+                if (it == Constants.oneKeyCalibraEventFlowAuto) {
                     isAutoFlowStart = true
                     prepareAutoFlow()
                     sendCalibraCommand()
@@ -90,7 +91,7 @@ class OneKeyFlowFragment : CommonBaseFragment<FragmentOnekeyFlowBinding>() {
         }
 
         //串口数据
-        LiveDataBus.get().with("二类传感器").observe(this) {
+        LiveDataBus.get().with(Constants.twoSensorSerialCallback).observe(this) {
             if (isAutoFlowStart) {
                 if (it is ByteArray) {
                     if (ratedFlowZero.size <= 200) {
@@ -274,12 +275,12 @@ class OneKeyFlowFragment : CommonBaseFragment<FragmentOnekeyFlowBinding>() {
                             //定标未通过
                             binding.tvFlowOnekeyResult.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
                             binding.tvFlowOnekeyResult.text = "定标未通过"
-                            LiveDataBus.get().with("oneKeyCalibra").value = "flowAutoFailed"
+                            LiveDataBus.get().with(Constants.oneKeyCalibraEvent).value = Constants.oneKeyCalibraResultFlowAutoFailed
                         } else {
                             //定标通过
                             binding.tvFlowOnekeyResult.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
                             binding.tvFlowOnekeyResult.text = "定标通过"
-                            LiveDataBus.get().with("oneKeyCalibra").value = "flowAutoSuccess"
+                            LiveDataBus.get().with(Constants.oneKeyCalibraEvent).value = Constants.oneKeyCalibraResultFlowAutoSuccess
                         }
                     }
                 }
