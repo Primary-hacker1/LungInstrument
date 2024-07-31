@@ -6,6 +6,7 @@ import android.os.IBinder
 import com.just.machine.ui.dialog.LungCommonDialogFragment
 import com.just.machine.ui.fragment.serial.ModbusProtocol
 import com.just.machine.util.USBTransferUtil
+import com.just.news.R
 import java.util.Timer
 import kotlin.concurrent.fixedRateTimer
 
@@ -20,9 +21,10 @@ class GetDeviceInfoService: Service(){
         super.onCreate()
         usbTransferUtil.init(this)
         usbTransferUtil.connect()
-//        timer = fixedRateTimer("", false, 0, 1000) {
-//            usbTransferUtil.write(ModbusProtocol.readDevice)
-//        }
+        usbTransferUtil.write(ModbusProtocol.reset)
+        timer = fixedRateTimer("", false, 0, 1000) {
+            usbTransferUtil.write(ModbusProtocol.readDevice)
+        }
     }
 
     override fun onBind(intent: Intent?): IBinder? {

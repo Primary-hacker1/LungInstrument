@@ -87,7 +87,6 @@ class SixMinDetectActivity : CommonBaseActivity<ActivitySixMinDetectBinding>() {
         usbTransferUtil = USBTransferUtil.getInstance()
         usbTransferUtil.init(this)
         usbTransferUtil.connect()
-        usbTransferUtil.bloodOxyLineData.clear()
         usbTransferUtil.setOnUSBDateReceive {
             runOnUiThread {
                 if (it.equals("android.hardware.usb.action.USB_DEVICE_DETACHED")) {

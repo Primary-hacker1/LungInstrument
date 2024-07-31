@@ -52,6 +52,6 @@ class ResultAutoFlowAdapter(val context: Context) :
 
 
     override fun getLayoutRes(): Int {
-        return R.layout.item_result_flow
+        return R.layout.item_result_auto_flow
     }
 }

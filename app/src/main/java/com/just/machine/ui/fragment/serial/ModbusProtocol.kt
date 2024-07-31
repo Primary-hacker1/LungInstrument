@@ -12,6 +12,7 @@ import com.just.machine.model.lungdata.DyCalculeSerializeCore
 import com.just.machine.util.CRC16Util
 import com.just.machine.util.LiveDataBus
 import com.justsafe.libview.util.DateUtils
+import java.text.DecimalFormat
 import java.util.zip.CRC32
 import kotlin.experimental.and
 
@@ -287,7 +288,7 @@ object ModbusProtocol {
         val heatSecHex1 = bytes2Hex.substring(12, 14)
         val heatSecHex2 = bytes2Hex.substring(14, 16)
         val heatSexHex = heatSecHex2 +heatSecHex1
-        warmLeaveSec = heatSexHex.toInt(16) //热机时间
+        warmLeaveSec = heatSexHex.toInt(16)
         isDeviceConnect = true
 
 //        LogUtils.e(
@@ -423,8 +424,7 @@ object ModbusProtocol {
             humidity = 50f
         }
 
-        var atmosphericPressure =
-            ((response[8].toInt() and 0xFF) + (response[9].toInt() and 0xFF) * 256).toFloat() * 0.075f  // 大气压数据
+        var atmosphericPressure = DecimalFormat("#.#").format(((response[8].toInt() and 0xFF) + (response[9].toInt() and 0xFF) * 256).toFloat() * 0.075f).toFloat() // 大气压数据
         if (atmosphericPressure < 500f || atmosphericPressure > 1000f) {
             atmosphericPressure = 765f
         }
@@ -861,7 +861,7 @@ object ModbusProtocol {
             return
         }
 
-        LiveDataBus.get().with("二类传感器").postValue(response)
+        LiveDataBus.get().with(Constants.twoSensorSerialCallback).postValue(response)
 
         val lungTestData = LungTestData(
             // 返回解析后的数据

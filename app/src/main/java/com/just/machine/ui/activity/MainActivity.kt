@@ -6,6 +6,7 @@ import android.view.WindowManager
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import com.common.base.CommonBaseActivity
+import com.just.machine.ui.service.GetDeviceInfoService
 import com.just.machine.util.USBTransferUtil
 import com.just.news.R
 import com.just.news.databinding.ActivityMainBinding
@@ -73,6 +74,7 @@ class MainActivity : CommonBaseActivity<ActivityMainBinding>() {
     override fun onDestroy() {
         USBTransferUtil.getInstance().unRegisterUsbReceiver()
         USBTransferUtil.getInstance().disconnect()
+        stopService(Intent(this, GetDeviceInfoService::class.java))
         super.onDestroy()
     }
 }

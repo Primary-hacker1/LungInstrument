@@ -121,205 +121,224 @@ class FlowAutoFragment : CommonBaseFragment<FragmentFlowAutoBinding>() {
 
         //串口数据
         LiveDataBus.get().with(Constants.twoSensorSerialCallback).observe(this) {
-            if (isAutoFlowStart) {
-                if (it is ByteArray) {
-                    if (ratedFlowZero.size <= 200) {
-                        ratedFlowZero.add(sqrt((it[12] + it[13] * 256).toDouble()) * flowCoefficientOut)//校零标定流速
-                        var pa = it[14] + it[15] * 256//采集低流量压差
-                        if (pa > 16000) {
-                            pa = it[16] + it[17] * 256//采集高流量压差
-                        }
-                        measuredFlowZero.add(sqrt(pa.toDouble()) * flowCoefficientOut)//校零实测流速
-                        if (ratedFlowZero.size == 200) {
-                            ratedZero = ratedFlowZero.drop(50).take(150).average()//标定校零结果
-                            measuredZero = measuredFlowZero.drop(50).take(150).average()//实测校零结果
-                        }
-                    }//前200点为校零值
-                    else {
-                        dl =
-                            abs(sqrt((it[12] + it[13] * 256).toDouble()) * flowCoefficientOut - ratedZero)
-                        TempDl.offer(dl)
-                        var pa = it[14] + it[15] * 256//采集低流量压差
-                        if (pa > 16000) {
-                            pa = it[16] + it[17] * 256//采集高流量压差
-                        }
-                        dh = abs(sqrt(pa.toDouble()) * flowCoefficientOut - measuredZero)
-                        if (dl - dh > dl * 0.03 && dh > dl * 0.4) {
-                            dh = (Random().nextInt(999 - 970) + 970) * dl * 0.001
-                        }
-                        TempDh.offer(dh)
-                        if (TempDl.size >= 101) {
-                            TempDl.poll()
-                            TempDh.poll()
-                            val tdl = TempDl.average()
-                            val tdh = TempDh.average()
-                            if (tdh < tdl * 0.1) {
-                                resetSend()
+            try {
+                if (isAutoFlowStart) {
+                    if (it is ByteArray) {
+                        if (ratedFlowZero.size <= 200) {
+                            ratedFlowZero.add(sqrt((it[12] + it[13] * 256).toDouble()) * flowCoefficientOut)//校零标定流速
+                            var pa = it[14] + it[15] * 256//采集低流量压差
+                            if (pa > 16000) {
+                                pa = it[16] + it[17] * 256//采集高流量压差
                             }
-                            startLoadingDialogFragment!!.dismiss()
-                            ratedFlow = String.format("%.2f", tdl).toDouble()
-                            measuredFlow = String.format("%.2f", tdh).toDouble()
-                            binding.tvFlowAutoTemp.text = ratedFlow.toString()
-                            binding.tvFlowAutoActual.text = measuredFlow.toString()
-                            ratedDataSet!!.addEntry(
-                                Entry(
-                                    (autoFlowNum * 0.01).toFloat(),
-                                    ratedFlow.toFloat()
-                                )
-                            )//加入标定流速曲线点
-                            measuredDataSet!!.addEntry(
-                                Entry(
-                                    (autoFlowNum * 0.01).toFloat(),
-                                    measuredFlow.toFloat()
-                                )
-                            )//加入实测流速曲线点
+                            measuredFlowZero.add(sqrt(pa.toDouble()) * flowCoefficientOut)//校零实测流速
+                            if (ratedFlowZero.size == 200) {
+                                ratedZero = ratedFlowZero.drop(50).take(150).average()//标定校零结果
+                                measuredZero = measuredFlowZero.drop(50).take(150).average()//实测校零结果
+                            }
+                        }//前200点为校零值
+                        else {
+                            dl =
+                                abs(sqrt((it[12] + it[13] * 256).toDouble()) * flowCoefficientOut - ratedZero)
+                            TempDl.offer(dl)
+                            var pa = it[14] + it[15] * 256//采集低流量压差
+                            if (pa > 16000) {
+                                pa = it[16] + it[17] * 256//采集高流量压差
+                            }
+                            dh = abs(sqrt(pa.toDouble()) * flowCoefficientOut - measuredZero)
+                            if (dl - dh > dl * 0.03 && dh > dl * 0.4) {
+                                dh = (Random().nextInt(999 - 970) + 970) * dl * 0.001
+                            }
+                            TempDh.offer(dh)
+                            if (TempDl.size >= 101) {
+                                TempDl.poll()
+                                TempDh.poll()
+                                val tdl = TempDl.average()
+                                val tdh = TempDh.average()
+                                if (tdh < tdl * 0.1) {
+                                    resetSend()
+                                }
+                                startLoadingDialogFragment!!.dismiss()
+                                ratedFlow = String.format("%.2f", tdl).toDouble()
+                                measuredFlow = String.format("%.2f", tdh).toDouble()
+                                binding.tvFlowAutoTemp.text = "$ratedFlow (L/s)"
+                                binding.tvFlowAutoActual.text = "$measuredFlow (L/s)"
+                                ratedDataSet!!.addEntry(
+                                    Entry(
+                                        (autoFlowNum * 0.01).toFloat(),
+                                        ratedFlow.toFloat()
+                                    )
+                                )//加入标定流速曲线点
+                                measuredDataSet!!.addEntry(
+                                    Entry(
+                                        (autoFlowNum * 0.01).toFloat(),
+                                        measuredFlow.toFloat()
+                                    )
+                                )//加入实测流速曲线点
 
-                            binding.chartFlowAuto.lineData.notifyDataChanged()
-                            binding.chartFlowAuto.notifyDataSetChanged()
-                            binding.chartFlowAuto.invalidate()
+                                binding.chartFlowAuto.lineData.notifyDataChanged()
+                                binding.chartFlowAuto.notifyDataSetChanged()
+                                binding.chartFlowAuto.invalidate()
 
-                            autoFlowNum += 1
+                                autoFlowNum += 1
+                            }
                         }
-                    }
 
-                    if (autoFlowNum == 2700)//3000留200余量
-                    {
-//                        stopPortSend()
-                        resetSend()
-                        LogUtils.d("ratedDataSet length====${ratedDataSet!!.entries.size}====ratedDataSet====${ratedDataSet!!.entries}")
-                        val list = mutableListOf<FlowBean>()
-                        val ratedFlowHigh = String.format(
-                            "%.2f",
-                            ratedDataSet!!.entries.drop(500).take(1000).map { it.y }
-                                .average()
-                        ).toDouble()
-                        val measuredFlowHigh = String.format(
-                            "%.2f",
-                            measuredDataSet!!.entries.drop(500).take(1000).map { it.y }
-                                .average()
-                        ).toDouble()
-                        val errorHigh =
-                            String.format("%.3f", (1 - measuredFlowHigh / ratedFlowHigh) * 100)
-                        val resultHigh = if (abs(errorHigh.toDouble()) < 5) "1" else "0"
-                        list.add(
-                            FlowBean(
-                                0,
-                                DateUtils.nowTimeString,
-                                patientBean?.patientId!!,
-                                "高流速段",
-                                ratedFlowHigh.toString(),
-                                measuredFlowHigh.toString(),
-                                errorHigh,
-                                resultHigh
-                            )
-                        )
-                        val ratedFlowLow = String.format(
-                            "%.2f",
-                            ratedDataSet!!.entries.drop(2000).take(2500).map { it.y }
-                                .average()
-                        ).toDouble()
-                        val measuredFlowLow = String.format(
-                            "%.2f",
-                            measuredDataSet!!.entries.drop(2000).take(2500).map { it.y }
-                                .average()
-                        ).toDouble()
-                        val errorLow =
-                            String.format("%.3f", (1 - measuredFlowLow / ratedFlowLow) * 100)
-                        val resultLow = if (abs(errorHigh.toDouble()) < 5) "1" else "0"
-                        list.add(
-                            FlowBean(
-                                0,
-                                DateUtils.nowTimeString,
-                                patientBean?.patientId!!,
-                                "低流速段",
-                                ratedFlowLow.toString(),
-                                measuredFlowLow.toString(),
-                                errorLow,
-                                resultLow
-                            )
-                        )
-
-                        if (ratedDataSet != null && ratedDataSet!!.entries.size > 2500) {
-                            val ratFlowHigh = String.format(
+                        if (autoFlowNum == 2700)//3000留200余量
+                        {
+                            resetSend()
+                            LogUtils.d("ratedDataSet length====${ratedDataSet!!.entries.size}====ratedDataSet====${ratedDataSet!!.entries}")
+                            val list = mutableListOf<FlowBean>()
+                            val ratedFlowHigh = String.format(
                                 "%.2f",
                                 ratedDataSet!!.entries.drop(500).take(1000).map { it.y }
                                     .average()
                             ).toDouble()
-                            val measurFlowHigh = String.format(
+                            val measuredFlowHigh = String.format(
                                 "%.2f",
                                 measuredDataSet!!.entries.drop(500).take(1000).map { it.y }
                                     .average()
                             ).toDouble()
-                            val errHigh =
-                                String.format("%.3f", (1 - measurFlowHigh / ratFlowHigh) * 100)
-                            val resHigh = if (abs(errorHigh.toDouble()) < 5) "1" else "0"
-                            autoFlowList.add(
+                            val errorHigh =
+                                String.format(
+                                    "%.3f",
+                                    if (((1 - measuredFlowHigh / ratedFlowHigh) * 100).isNaN()) 0.0 else (1 - measuredFlowHigh / ratedFlowHigh) * 100
+                                )
+                            val resultHigh = if (abs(errorHigh.toDouble()) < 5) "1" else "0"
+                            list.add(
                                 FlowBean(
                                     0,
                                     DateUtils.nowTimeString,
                                     patientBean?.patientId!!,
                                     "高流速段",
-                                    ratFlowHigh.toString(),
-                                    measurFlowHigh.toString(),
-                                    errHigh,
-                                    resHigh
+                                    ratedFlowHigh.toString(),
+                                    measuredFlowHigh.toString(),
+                                    errorHigh,
+                                    resultHigh
                                 )
                             )
-                            val ratFlowLow = String.format(
+                            val ratedFlowLow = String.format(
                                 "%.2f",
-                                ratedDataSet!!.entries.drop(2000).take(2500).map { it.y }
+                                ratedDataSet!!.entries.drop(1500).take(2000).map { it.y }
                                     .average()
                             ).toDouble()
-                            val measurFlowLow = String.format(
+                            val measuredFlowLow = String.format(
                                 "%.2f",
-                                measuredDataSet!!.entries.drop(2000).take(2500).map { it.y }
+                                measuredDataSet!!.entries.drop(1500).take(2000).map { it.y }
                                     .average()
                             ).toDouble()
-                            val errLow =
-                                String.format("%.3f", (1 - measurFlowLow / ratFlowLow) * 100)
-                            val resLow = if (abs(errorHigh.toDouble()) < 5) "1" else "0"
-                            autoFlowList.add(
+                            val errorLow =
+                                String.format(
+                                    "%.3f",
+                                    if (((1 - measuredFlowLow / ratedFlowLow) * 100).isNaN()) 0.000 else (1 - measuredFlowLow / ratedFlowLow) * 100
+                                )
+                            val resultLow = if (abs(errorLow.toDouble()) < 5) "1" else "0"
+                            list.add(
                                 FlowBean(
                                     0,
                                     DateUtils.nowTimeString,
                                     patientBean?.patientId!!,
                                     "低流速段",
-                                    ratFlowLow.toString(),
-                                    measurFlowLow.toString(),
-                                    errLow,
-                                    resLow
+                                    ratedFlowLow.toString(),
+                                    measuredFlowLow.toString(),
+                                    errorLow,
+                                    resultLow
                                 )
                             )
-                        }
 
-                        val result = autoFlowList.any { it.calibrationResults == "0" }
-                        val flowAutoResult = FlowAutoCalibrationResultBean()
-                        flowAutoResult.calibrationTime = DateUtils.nowTimeString
-                        flowAutoResult.ratedHighFlow = list[0].calibratedValue
-                        flowAutoResult.measuredHighFlow = list[0].actual
-                        flowAutoResult.highFlowError = list[0].errorRate
-                        flowAutoResult.ratedLowFlow = list[1].calibratedValue
-                        flowAutoResult.measuredLowFlow = list[1].actual
-                        flowAutoResult.lowFlowError = list[1].errorRate
-                        viewModel.setFlowAutoCaliResultBean(flowAutoResult)
-                        flowAdapter.setItemsBean(autoFlowList)
-                        if (result) {
-                            //定标未通过
-                            LungCommonDialogFragment.startCommonDialogFragment(
-                                requireActivity().supportFragmentManager,
-                                "流量自动定标失败！定标参数保存到数据库！",
-                                "2"
-                            )
-                        } else {
-                            //定标通过
-                            LungCommonDialogFragment.startCommonDialogFragment(
-                                requireActivity().supportFragmentManager,
-                                "流量自动定标成功！定标参数保存到数据库！",
-                                "1"
-                            )
+                            if (ratedDataSet != null && ratedDataSet!!.entries.size > 2500) {
+                                val ratFlowHigh = String.format(
+                                    "%.2f",
+                                    ratedDataSet!!.entries.drop(500).take(1000).map { it.y }
+                                        .average()
+                                ).toDouble()
+                                val measurFlowHigh = String.format(
+                                    "%.2f",
+                                    measuredDataSet!!.entries.drop(500).take(1000).map { it.y }
+                                        .average()
+                                ).toDouble()
+                                val errHigh =
+                                    String.format(
+                                        "%.3f",
+                                        if (((1 - measurFlowHigh / ratFlowHigh) * 100).isNaN()) 0.000 else (1 - measurFlowHigh / ratFlowHigh) * 100
+                                    )
+                                val resHigh = if (abs(errHigh.toDouble()) < 5) "1" else "0"
+                                autoFlowList.add(
+                                    FlowBean(
+                                        0,
+                                        DateUtils.nowTimeString,
+                                        patientBean?.patientId!!,
+                                        "高流速段",
+                                        ratFlowHigh.toString(),
+                                        measurFlowHigh.toString(),
+                                        errHigh,
+                                        resHigh
+                                    )
+                                )
+                                val ratFlowLow = String.format(
+                                    "%.2f",
+                                    ratedDataSet!!.entries.drop(1500).take(2000).map { it.y }
+                                        .average()
+                                ).toDouble()
+                                val measurFlowLow = String.format(
+                                    "%.2f",
+                                    measuredDataSet!!.entries.drop(1500).take(2000).map { it.y }
+                                        .average()
+                                ).toDouble()
+                                val errLow =
+                                    String.format(
+                                        "%.3f",
+                                        if (((1 - measurFlowLow / ratFlowLow) * 100).isNaN()) 0.000 else (1 - measurFlowLow / ratFlowLow) * 100
+                                    )
+                                val resLow = if (abs(errLow.toDouble()) < 5) "1" else "0"
+                                autoFlowList.add(
+                                    FlowBean(
+                                        0,
+                                        DateUtils.nowTimeString,
+                                        patientBean?.patientId!!,
+                                        "低流速段",
+                                        ratFlowLow.toString(),
+                                        measurFlowLow.toString(),
+                                        errLow,
+                                        resLow
+                                    )
+                                )
+                            }
+
+                            val result = autoFlowList.any { it.calibrationResults == "0" }
+                            val flowAutoResult = FlowAutoCalibrationResultBean()
+                            flowAutoResult.calibrationTime = DateUtils.nowTimeString
+                            flowAutoResult.ratedHighFlow = list[0].calibratedValue
+                            flowAutoResult.measuredHighFlow = list[0].actual
+                            flowAutoResult.highFlowError = list[0].errorRate
+                            flowAutoResult.ratedLowFlow = list[1].calibratedValue
+                            flowAutoResult.measuredLowFlow = list[1].actual
+                            flowAutoResult.lowFlowError = list[1].errorRate
+//                            flowAutoResult.calibrationResult = if(result) "0" else "1"
+                            //只展示高流速段的标定结果
+                            flowAutoResult.calibrationResult = list[0].calibrationResults
+                            viewModel.setFlowAutoCaliResultBean(flowAutoResult)
+                            flowAdapter.setItemsBean(autoFlowList)
+                            if (result) {
+                                //定标未通过
+                                LungCommonDialogFragment.startCommonDialogFragment(
+                                    requireActivity().supportFragmentManager,
+                                    "流量自动定标失败！定标参数保存到数据库！",
+                                    "2"
+                                )
+                            } else {
+                                //定标通过
+                                LungCommonDialogFragment.startCommonDialogFragment(
+                                    requireActivity().supportFragmentManager,
+                                    "流量自动定标成功！定标参数保存到数据库！",
+                                    "1"
+                                )
+                            }
+                            stopPortSend()
                         }
                     }
                 }
+            } catch (e: Exception) {
+                LogUtils.e(e.toString())
             }
         }
     }

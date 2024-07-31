@@ -127,10 +127,15 @@ class LoginFragment : CommonBaseFragment<FragmentLoginBinding>() {
                 SharedPreferencesUtils.instance.pass = ""
             }
 
-            if (1200 - ModbusProtocol.warmLeaveSec > 0) {
-                popBackStack()
-                navigate(it, R.id.preHeatFragment)
-            } else {
+            if(ModbusProtocol.isDeviceConnect){
+                if (1200 - ModbusProtocol.warmLeaveSec > 0) {
+                    popBackStack()
+                    navigate(it, R.id.preHeatFragment)
+                } else {
+                    MainActivity.startMainActivity(context)
+                    activity?.finish()
+                }
+            }else{
                 MainActivity.startMainActivity(context)
                 activity?.finish()
             }

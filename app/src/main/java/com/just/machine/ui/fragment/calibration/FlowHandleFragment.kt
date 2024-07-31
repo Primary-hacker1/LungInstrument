@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.common.base.CommonBaseFragment
 import com.common.base.toast
+import com.common.network.LogUtils
 import com.common.viewmodel.LiveDataEvent
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -207,7 +208,11 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                     if (ModbusProtocol.isDeviceConnect) {
                         prepareManualFlowCalibration()
                         sendCalibraCommand()
-                        startLoadingDialogFragment = LoadingDialogFragment.startLoadingDialogFragment(activity!!.supportFragmentManager,"正在校零...")
+                        startLoadingDialogFragment =
+                            LoadingDialogFragment.startLoadingDialogFragment(
+                                activity!!.supportFragmentManager,
+                                "正在校零..."
+                            )
                     } else {
                         toast(getString(R.string.device_without_connection_tips))
                     }
@@ -223,24 +228,28 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
 
         //串口数据
         LiveDataBus.get().with(Constants.twoSensorSerialCallback).observe(this) {
-            if(isHandleFlowStart){
-                if (it is ByteArray) {
-                    Autoindex++
-                    if (Autoindex <= 200) {
-                        ftemplow += it[14] + it[15] * 256
-                        ftemphigh += it[16] + it[17] * 256
-                    }
-                    if (Autoindex == 200) {
-                        Definition.fzeroLow = ftemplow / Autoindex.toFloat()
-                        Definition.fzeroHigh = ftemphigh / Autoindex.toFloat()
-                    }
-                    if (Autoindex > 200) {
-                        calculateFlow(
-                            (it[14] + it[15] * 256).toFloat(),
-                            (it[16] + it[17] * 256).toFloat()
-                        )
+            try {
+                if (isHandleFlowStart) {
+                    if (it is ByteArray) {
+                        Autoindex++
+                        if (Autoindex <= 200) {
+                            ftemplow += it[14] + it[15] * 256
+                            ftemphigh += it[16] + it[17] * 256
+                        }
+                        if (Autoindex == 200) {
+                            Definition.fzeroLow = ftemplow / Autoindex.toFloat()
+                            Definition.fzeroHigh = ftemphigh / Autoindex.toFloat()
+                        }
+                        if (Autoindex > 200) {
+                            calculateFlow(
+                                (it[14] + it[15] * 256).toFloat(),
+                                (it[16] + it[17] * 256).toFloat()
+                            )
+                        }
                     }
                 }
+            } catch (e: Exception) {
+                LogUtils.e(e.toString())
             }
         }
     }
@@ -289,7 +298,10 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                             tempvol = abs((ftemp + ftempHigh))
                         }
 
-                        Log.i(TAG, "startsec====$startsec====ftemp + ftempHigh 数据: ${ftemp + ftempHigh}====flow===$flow")
+                        Log.i(
+                            TAG,
+                            "startsec====$startsec====ftemp + ftempHigh 数据: ${ftemp + ftempHigh}====flow===$flow"
+                        )
 
                         inVolSec1DataSet!!.addEntry(
                             Entry(
@@ -1117,7 +1129,8 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                 Definition.Cur_ADC_IN_HDIM = ADC_IN_HDIM
                 Definition.Cur_ADC_OUT_HDIM = ADC_OUT_HDIM
 
-                val result = inHaleFlowList.any { it.calibrationResults == "0" } || exHaleFlowList.any{it.calibrationResults == "0"}
+                val result =
+                    inHaleFlowList.any { it.calibrationResults == "0" } || exHaleFlowList.any { it.calibrationResults == "0" }
                 //定标结果写入数据库
                 val flowResult = FlowCalibrationResultBean()
                 flowResult.calibrationTime = DateUtils.nowTimeString
@@ -1126,23 +1139,27 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
                 flowResult.outCoefficient = ADC_OUT_LDES.toString()
                 flowResult.inHighCoefficient = ADC_IN_HDIM.toString()
                 flowResult.outHighCoefficient = ADC_OUT_HDIM.toString()
-                flowResult.calibrationResult = if(result) "0" else "1"
+                flowResult.calibrationResult = if (result) "0" else "1"
                 viewModel.setFlowCaliResultBean(flowResult)
                 val flowManualResult = FlowManualCalibrationResultBean()
                 flowManualResult.calibrationTime = DateUtils.nowTimeString
-                flowManualResult.inFluctuation = String.format("%.2f",m_AccuracyIn)
-                flowManualResult.inError = String.format("%.2f",m_PrecisionIn)
-                flowManualResult.outFluctuation = String.format("%.2f",m_AccuracyOut)
-                flowManualResult.outError = String.format("%.2f",m_PrecisionOut)
-                flowManualResult.calibrationResult = if(result) "0" else "1"
+                flowManualResult.inFluctuation = String.format("%.2f", m_AccuracyIn)
+                flowManualResult.inError = String.format("%.2f", m_PrecisionIn)
+                flowManualResult.outFluctuation = String.format("%.2f", m_AccuracyOut)
+                flowManualResult.outError = String.format("%.2f", m_PrecisionOut)
+                flowManualResult.calibrationResult = if (result) "0" else "1"
                 viewModel.setFlowManualCaliResultBean(flowManualResult)
-                if(result){
+                if (result) {
                     LungCommonDialogFragment.startCommonDialogFragment(
-                        requireActivity().supportFragmentManager, "流量手动定标失败！定标参数保存到数据库！", "2"
+                        requireActivity().supportFragmentManager,
+                        "流量手动定标失败！定标参数保存到数据库！",
+                        "2"
                     )
-                }else{
+                } else {
                     LungCommonDialogFragment.startCommonDialogFragment(
-                        requireActivity().supportFragmentManager, "流量手动定标成功！定标参数保存到数据库！", "1"
+                        requireActivity().supportFragmentManager,
+                        "流量手动定标成功！定标参数保存到数据库！",
+                        "1"
                     )
                 }
                 return
@@ -1512,7 +1529,8 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
     private fun sendCalibraCommand() {
         try {
             usbTransferUtil?.write(ModbusProtocol.allowTwoSensor)
-            LiveDataBus.get().with(Constants.startFlowHCalibra).postValue(Constants.flowHandleCalibra)
+            LiveDataBus.get().with(Constants.startFlowHCalibra)
+                .postValue(Constants.flowHandleCalibra)
             isHandleFlowStart = true
         } catch (e: Exception) {
             e.printStackTrace()
@@ -1749,12 +1767,12 @@ class FlowHandleFragment : CommonBaseFragment<FragmentFlowHandleBinding>() {
         }
     }
 
-    private fun setPullStyle(){
+    private fun setPullStyle() {
         binding.tvPullDirection.text = "拉"
         binding.tvPullDirection.setBackgroundResource(R.drawable.flow_pull)
     }
 
-    private fun setPushStyle(){
+    private fun setPushStyle() {
         binding.tvPullDirection.text = "推"
         binding.tvPullDirection.setBackgroundResource(R.drawable.flow_down)
     }

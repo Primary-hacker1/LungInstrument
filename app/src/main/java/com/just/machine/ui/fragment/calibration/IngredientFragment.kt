@@ -1,5 +1,6 @@
 package com.just.machine.ui.fragment.calibration
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.speech.tts.TextToSpeech
 import android.text.Editable
@@ -72,8 +73,8 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
     private var kO2 = 0.0017 //氧气kx+b的k
     private var bO2 = -1.0 //氧气kx+b的k
 
-    private val o2SensorList = ArrayList<ArrayList<Double>>() //氧气传感器值
-    private val co2SensorList = ArrayList<ArrayList<Double>>() //二氧化碳传感器值
+    private val o2SensorList = mutableListOf<MutableList<Double>>() //氧气传感器值
+    private val co2SensorList = mutableListOf<MutableList<Double>>() //二氧化碳传感器值
 
     private var listO2 = ArrayList<Double>()
     private var listCO2 = ArrayList<Double>()
@@ -210,6 +211,7 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
         binding.etTwoCo2.addTextChangedListener(textWatcher)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun initListener() {
         binding.swDepthToggle.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
@@ -225,7 +227,7 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
 
         binding.llStart.setNoRepeatListener {
             tts.speak("开始成分定标", TextToSpeech.QUEUE_FLUSH, null, "")
-            if (!ModbusProtocol.isDeviceConnect) {
+            if (ModbusProtocol.isDeviceConnect) {
                 if (!isIngredientStart) {
                     prepareIngredientCalibration()
                     sendCalibraCommand()
@@ -241,88 +243,102 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
 
         //串口数据
         LiveDataBus.get().with(Constants.twoSensorSerialCallback).observe(this) {
-            if (isIngredientStart) {
-                if (it is ByteArray) {
-                    if (it[10].toInt() == 0x02 && it[11].toInt() == 0x02) {
-                        return@observe
-                    }
-                    var sensorO2 = (it[20] + it[21] * 256).toDouble()//氧气传感器的值
-                    var sensorCO2 = (it[18] + it[19] * 256).toDouble()//二氧化碳传感器的值
+            try {
+                if (isIngredientStart) {
+                    if (it is ByteArray) {
+                        if (it[10].toInt() == 2 && it[11].toInt() == 2) {
+                            return@observe
+                        }
+                        var sensorO2 = (it[20] + it[21] * 256).toDouble()//氧气传感器的值
+                        var sensorCO2 = (it[18] + it[19] * 256).toDouble()//二氧化碳传感器的值
 
-                    if (it[10].toInt() == 0x01 && it[11].toInt() == 0x02 && ingredientState) {
-                        ingredientState = false
-                        ingredientStateList.add(ingredientState)
-                    }//电磁阀1打开，接入空气且状态为标气进行切换操作
-                    else if (it[10].toInt() == 0x02 && it[11].toInt() == 0x01 && ingredientState) {
-                        ingredientState = true
-                        ingredientStateList.add(ingredientState)
-                    }//电磁阀2打开，接入标气且状态为空气，进行切换操作
+                        LogUtils.d("sensorO2 ==== $sensorO2==== sensorCO2 ==== $sensorCO2")
+                        if (it[10].toInt() == 1 && it[11].toInt() == 2 && ingredientState) {
+                            ingredientState = false
+                            ingredientStateList.add(ingredientState)
+                        }//电磁阀1打开，接入空气且状态为标气进行切换操作
+                        else if (it[10].toInt() == 2 && it[11].toInt() == 1 && !ingredientState) {
+                            ingredientState = true
+                            ingredientStateList.add(ingredientState)
+                        }//电磁阀2打开，接入标气且状态为空气，进行切换操作
 
-                    if (ingredientStateList.size == 4 && o2SensorList[4].size == 0)//只计算一次
-                    {
-                        kO2 = CerlibraHelper.calculateKValue(
-                            standardOneGasO2Concentration,
-                            standardTwoGasO2Concentration,
-                            o2SensorList[2].drop(100).average(),
-                            o2SensorList[3].drop(100).average()
-                        )
-                        bO2 = CerlibraHelper.calculateBValue(
-                            standardOneGasO2Concentration, kO2, o2SensorList[3].drop(100).average()
-                        )
-                        kCO2 = CerlibraHelper.calculateKValue(
-                            standardOneGasCO2Concentration,
-                            standardTwoGasCO2Concentration,
-                            co2SensorList[3].drop(100).average(),
-                            co2SensorList[2].drop(100).average()
-                        )
-                        bCO2 = CerlibraHelper.calculateBValue(
-                            standardOneGasCO2Concentration,
-                            kCO2,
-                            co2SensorList[2].drop(100).average()
-                        )
-
-                    }//第一段计算
-
-                    o2SensorList[ingredientStateList.size].add(sensorO2)
-                    o2SensorList[ingredientStateList.size].add(sensorCO2)
-                    sensorO2 = kO2 * sensorO2 + bO2
-                    sensorCO2 = kCO2 * sensorCO2 + bCO2
-                    if (sensorO2 <= 0) sensorO2 = 0.00
-                    if (sensorCO2 <= 0) sensorCO2 = 0.00
-
-                    measuredO2Concentration =
-                        String.format("%.2f", CerlibraHelper.setO2Value(sensorO2)).toDouble()
-                    binding.tvActualO2.text = "$measuredO2Concentration%"
-                    measuredCO2Concentration =
-                        String.format("%.2f", CerlibraHelper.setCo2Value(sensorCO2)).toDouble()
-                    binding.tvActualCo2.text = "$measuredCO2Concentration%"
-
-                    listO2.add(measuredO2Concentration)
-                    listCO2.add(measuredCO2Concentration)
-
-                    val num = measuredO2DataSet!!.entries.size
-                    if (listO2.size - 10 > num) {
-                        for (i in 0 until 10) {
-                            measuredO2DataSet!!.addEntry(
-                                Entry(
-                                    ((num + i) * 0.01).toFloat(),
-                                    listO2[num + i].toFloat()
-                                )
+                        if (ingredientStateList.size == 4 && o2SensorList.isNotEmpty() && o2SensorList[4].size == 0)//只计算一次
+                        {
+                            kO2 = CerlibraHelper.calculateKValue(
+                                standardOneGasO2Concentration,
+                                standardTwoGasO2Concentration,
+                                o2SensorList[2].drop(100).average(),
+                                o2SensorList[3].drop(100).average()
                             )
-                            measuredCO2DataSet!!.addEntry(
-                                Entry(
-                                    ((num + i) * 0.01).toFloat(),
-                                    listCO2[num + i].toFloat()
-                                )
+                            bO2 = CerlibraHelper.calculateBValue(
+                                standardOneGasO2Concentration,
+                                kO2,
+                                o2SensorList[3].drop(100).average()
                             )
+                            kCO2 = CerlibraHelper.calculateKValue(
+                                standardOneGasCO2Concentration,
+                                standardTwoGasCO2Concentration,
+                                co2SensorList[3].drop(100).average(),
+                                co2SensorList[2].drop(100).average()
+                            )
+                            bCO2 = CerlibraHelper.calculateBValue(
+                                standardOneGasCO2Concentration,
+                                kCO2,
+                                co2SensorList[2].drop(100).average()
+                            )
+
+                        }//第一段计算
+
+                        if (o2SensorList.isNotEmpty() && ingredientStateList.isNotEmpty()) {
+                            o2SensorList[ingredientStateList.size].add(sensorO2)
+                            co2SensorList[ingredientStateList.size].add(sensorCO2)
+                        }
+                        sensorO2 = if ((kO2 * sensorO2 + bO2).isNaN()) 0.00 else kO2 * sensorO2 + bO2
+                        sensorCO2 =
+                            if ((kCO2 * sensorCO2 + bCO2).isNaN()) 0.00 else kCO2 * sensorCO2 + bCO2
+                        if (sensorO2 <= 0) sensorO2 = 0.00
+                        if (sensorCO2 <= 0) sensorCO2 = 0.00
+
+                        measuredO2Concentration =
+                            String.format("%.2f", CerlibraHelper.setO2Value(sensorO2)).toDouble()
+                        binding.tvActualO2.text = "$measuredO2Concentration%"
+                        measuredCO2Concentration =
+                            String.format("%.2f", CerlibraHelper.setCo2Value(sensorCO2)).toDouble()
+                        binding.tvActualCo2.text = "$measuredCO2Concentration%"
+
+                        listO2.add(measuredO2Concentration)
+                        listCO2.add(measuredCO2Concentration)
+
+                        val num = measuredO2DataSet!!.entries.size
+                        if (listO2.size - 10 > num) {
+                            for (i in 0 until 10) {
+                                measuredO2DataSet!!.addEntry(
+                                    Entry(
+                                        ((num + i) * 0.01).toFloat(),
+                                        listO2[num + i].toFloat()
+                                    )
+                                )
+                                measuredCO2DataSet!!.addEntry(
+                                    Entry(
+                                        ((num + i) * 0.01).toFloat(),
+                                        listCO2[num + i].toFloat()
+                                    )
+                                )
+                            }
+
+                            binding.chartIngredient.lineData.notifyDataChanged()
+                            binding.chartIngredient.notifyDataSetChanged()
+                            binding.chartIngredient.invalidate()
+                        }
+
+                        if (o2SensorList.isNotEmpty() && o2SensorList[11].isNotEmpty() && o2SensorList[11].size > 360) {
+                            LogUtils.d("-------------------成分定标--------------------" + it[20] + it[21])
+                            calculateIngredient()
                         }
                     }
-
-                    if (o2SensorList[11].size > 360) {
-                        LogUtils.d("-------------------成分定标--------------------" + it[20] + it[21])
-                        calculateIngredient()
-                    }
                 }
+            } catch (e: Exception) {
+                LogUtils.e(e.toString())
             }
         }
 
@@ -485,7 +501,8 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
 
             measuredO2DataSet = LineDataSet(null, "")
             measuredO2DataSet!!.lineWidth = 1.0f
-            measuredO2DataSet!!.color = ContextCompat.getColor(requireContext(), R.color.green)
+            measuredO2DataSet!!.color =
+                ContextCompat.getColor(requireContext(), R.color.colorTextOrange)
             measuredO2DataSet!!.setDrawValues(false)
             measuredO2DataSet!!.setDrawCircles(false)
             measuredO2DataSet!!.setDrawCircleHole(false)
@@ -495,7 +512,7 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
             measuredCO2DataSet = LineDataSet(null, "")
             measuredCO2DataSet!!.lineWidth = 1.0f
             measuredCO2DataSet!!.color =
-                ContextCompat.getColor(requireContext(), R.color.colorTextOrange)
+                ContextCompat.getColor(requireContext(), R.color.green)
             measuredCO2DataSet!!.setDrawValues(false)
             measuredCO2DataSet!!.setDrawCircles(false)
             measuredCO2DataSet!!.setDrawCircleHole(false)
@@ -520,6 +537,11 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
         ingredientStateList.clear()
         ingredientState = false
 
+        for (index in 0..11) {
+            o2SensorList.add(mutableListOf())
+            co2SensorList.add(mutableListOf())
+        }
+
         measuredCO2DataSet!!.clear()
         measuredO2DataSet!!.clear()
 
@@ -533,7 +555,8 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
 
     private fun stopPortSend() {
         try {
-            usbTransferUtil!!.write(ModbusProtocol.banTwoSensor)
+//            usbTransferUtil!!.write(ModbusProtocol.banTwoSensor)
+            usbTransferUtil!!.write(ModbusProtocol.reset)
             isIngredientStart = false
         } catch (e: Exception) {
             e.printStackTrace()
@@ -582,9 +605,9 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
                 kco2 = (standardOneGasCO2Concentration - standardTwoGasCO2Concentration) / (c2 - c1)
                 bco2 = standardOneGasCO2Concentration - kco2 * c1
                 listko2.add(ko2)
-                listbo2.add(bo2);
-                listkco2.add(kco2);
-                listbco2.add(bco2);
+                listbo2.add(bo2)
+                listkco2.add(kco2)
+                listbco2.add(bco2)
             }
 
             if (listko2.size > 0) {
@@ -596,17 +619,17 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
             var num = 0
             for (j in 0 until 5) {
                 if (o2SensorList[(i + 1) * 2].size == 0 || o2SensorList[(i + 1) * 2 + 1].size == 0 || co2SensorList[(i + 1) * 2].size == 0 || co2SensorList[(i + 1) * 2 + 1].size == 0)
-                    continue;
-                val listo2s = o2SensorList[(i + 1) * 2 + 1].toList();
-                val listco2s = co2SensorList[(i + 1) * 2 + 1].toList();
-                val o2ac1 = o2SensorList[(i + 1) * 2].drop(80).average();
-                val o2ac2 = o2SensorList[(i + 1) * 2 + 1].drop(80).average();
-                val co2ac1 = co2SensorList[(i + 1) * 2].drop(80).average();
-                val co2ac2 = co2SensorList[(i + 1) * 2 + 1].drop(80).average();
-                o2mvalue1 += ko2 * o2ac1 + bo2;
-                o2mvalue2 += ko2 * o2ac2 + bo2;
-                co2mvalue1 += kco2 * co2ac1 + bco2;
-                co2mvalue2 += kco2 * co2ac2 + bco2;
+                    continue
+                val listo2s = o2SensorList[(i + 1) * 2 + 1].toList()
+                val listco2s = co2SensorList[(i + 1) * 2 + 1].toList()
+                val o2ac1 = o2SensorList[(i + 1) * 2].drop(80).average()
+                val o2ac2 = o2SensorList[(i + 1) * 2 + 1].drop(80).average()
+                val co2ac1 = co2SensorList[(i + 1) * 2].drop(80).average()
+                val co2ac2 = co2SensorList[(i + 1) * 2 + 1].drop(80).average()
+                o2mvalue1 += ko2 * o2ac1 + bo2
+                o2mvalue2 += ko2 * o2ac2 + bo2
+                co2mvalue1 += kco2 * co2ac1 + bco2
+                co2mvalue2 += kco2 * co2ac2 + bco2
 
                 for (k in listo2s.indices) {
                     if (abs(listo2s[k] - o2ac1) > abs(o2ac1 - o2ac2) * 0.067) {
@@ -633,16 +656,16 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
                 co2offset = String.format("%2.f", co2offset / num.toDouble()).toDouble()
             }
 
-            o2SensorList[6].addAll(o2SensorList[7]);
-            o2SensorList[6].addAll(o2SensorList[8]);
-            o2SensorList[6].addAll(o2SensorList[9]);
-            o2SensorList[6].addAll(o2SensorList[10]);
-            o2SensorList[6].addAll(o2SensorList[11]);
-            co2SensorList[6].addAll(co2SensorList[7]);
-            co2SensorList[6].addAll(co2SensorList[8]);
-            co2SensorList[6].addAll(co2SensorList[9]);
-            co2SensorList[6].addAll(co2SensorList[10]);
-            co2SensorList[6].addAll(co2SensorList[11]);
+            o2SensorList[6].addAll(o2SensorList[7])
+            o2SensorList[6].addAll(o2SensorList[8])
+            o2SensorList[6].addAll(o2SensorList[9])
+            o2SensorList[6].addAll(o2SensorList[10])
+            o2SensorList[6].addAll(o2SensorList[11])
+            co2SensorList[6].addAll(co2SensorList[7])
+            co2SensorList[6].addAll(co2SensorList[8])
+            co2SensorList[6].addAll(co2SensorList[9])
+            co2SensorList[6].addAll(co2SensorList[10])
+            co2SensorList[6].addAll(co2SensorList[11])
             o2t90 = CerlibraHelper.signalFilter(o2SensorList[6]).toDouble()
             co2t90 = CerlibraHelper.signalFilterCO2(co2SensorList[6]).toDouble()
 
@@ -766,7 +789,7 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
             val result = listIng.any { it.calibrationResults == "0" }
             val patientBean = SharedPreferencesUtils.instance.patientBean
             val ingredientCalibrationResultEntity = IngredientCalibrationResultBean()
-            ingredientCalibrationResultEntity.calibrationResult = if(result) "1" else "0"
+            ingredientCalibrationResultEntity.calibrationResult = if (result) "1" else "0"
             ingredientCalibrationResultEntity.ingredientId = patientBean?.patientId!!
             ingredientCalibrationResultEntity.calibrationTime = DateUtils.nowTimeString
 

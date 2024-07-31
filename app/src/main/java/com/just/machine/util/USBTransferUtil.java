@@ -183,6 +183,11 @@ public class USBTransferUtil {
                     bloodOxygenConnection = false;
                     bloodPressureConnection = false;
                     inputOutputManager = null;
+                    ModbusProtocol.INSTANCE.setDeviceConnect(false);
+                    ModbusProtocol.INSTANCE.setBatteryLevel(0);
+                    ModbusProtocol.INSTANCE.setEnvironmentCalibra(false);
+                    ModbusProtocol.INSTANCE.setFlowCalibra(false);
+                    ModbusProtocol.INSTANCE.setIngredientCalibra(false);
                     if (onUSBDateReceive != null) {
                         onUSBDateReceive.onReceive(intent.getAction());
                     }
@@ -370,8 +375,12 @@ public class USBTransferUtil {
                 ecgConnection = false;
                 bloodOxygenConnection = false;
                 bloodPressureConnection = false;
+                ModbusProtocol.INSTANCE.setDeviceConnect(false);
+                ModbusProtocol.INSTANCE.setBatteryLevel(0);
+                ModbusProtocol.INSTANCE.setEnvironmentCalibra(false);
+                ModbusProtocol.INSTANCE.setFlowCalibra(false);
+                ModbusProtocol.INSTANCE.setIngredientCalibra(false);
                 e.printStackTrace();
-                my_context.stopService(new Intent(my_context, GetDeviceInfoService.class));
             }
         });
         inputOutputManager.setReadBufferSize(1024);
