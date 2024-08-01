@@ -392,7 +392,7 @@ public class USBTransferUtil {
     // 下发数据：建议使用线程池
     public void write(byte[] data_bytes) {
         if (usbSerialPort != null) {
-            String data_str = CRC16Util.bytes2Hex(data_bytes);
+//            String data_str = CRC16Util.bytes2Hex(data_bytes);
 //            Log.e(TAG, "当前usb状态: isOpen-" + usbSerialPort.isOpen());
 //            Log.e(TAG, "usb 写入数据: " + data_str);
             // 当串口打开时再下发

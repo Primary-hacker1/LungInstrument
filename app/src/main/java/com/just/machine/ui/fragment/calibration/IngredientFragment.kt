@@ -249,8 +249,12 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
                         if (it[10].toInt() == 2 && it[11].toInt() == 2) {
                             return@observe
                         }
-                        var sensorO2 = (it[20] + it[21] * 256).toDouble()//氧气传感器的值
-                        var sensorCO2 = (it[18] + it[19] * 256).toDouble()//二氧化碳传感器的值
+
+                        var sensorCO2 =
+                            ((it[18].toInt() and 0xFF) + (it[19].toInt() and 0xFF) * 256).toDouble()  //二氧化碳传感器的值
+
+                        var sensorO2 =
+                            ((it[20].toInt() and 0xFF) + (it[21].toInt() and 0xFF) * 256).toDouble() //氧气传感器的值
 
                         LogUtils.d("sensorO2 ==== $sensorO2==== sensorCO2 ==== $sensorCO2")
                         if (it[10].toInt() == 1 && it[11].toInt() == 2 && ingredientState) {
@@ -293,7 +297,8 @@ class IngredientFragment : CommonBaseFragment<FragmentIngredientBinding>() {
                             o2SensorList[ingredientStateList.size].add(sensorO2)
                             co2SensorList[ingredientStateList.size].add(sensorCO2)
                         }
-                        sensorO2 = if ((kO2 * sensorO2 + bO2).isNaN()) 0.00 else kO2 * sensorO2 + bO2
+                        sensorO2 =
+                            if ((kO2 * sensorO2 + bO2).isNaN()) 0.00 else kO2 * sensorO2 + bO2
                         sensorCO2 =
                             if ((kCO2 * sensorCO2 + bCO2).isNaN()) 0.00 else kCO2 * sensorCO2 + bCO2
                         if (sensorO2 <= 0) sensorO2 = 0.00

@@ -381,7 +381,7 @@ object ModbusProtocol {
 
 
     // 解析环境定标数据
-    data class EnvironmentData(val temperature: Float, val humidity: Float, val pressure: Float)
+    data class EnvironmentData(val temperature: Float, val humidity: Float, val pressure: Int)
 
     private fun parseEnvironmentData(response: ByteArray) {
 
@@ -424,9 +424,9 @@ object ModbusProtocol {
             humidity = 50f
         }
 
-        var atmosphericPressure = DecimalFormat("#.#").format(((response[8].toInt() and 0xFF) + (response[9].toInt() and 0xFF) * 256).toFloat() * 0.075f).toFloat() // 大气压数据
-        if (atmosphericPressure < 500f || atmosphericPressure > 1000f) {
-            atmosphericPressure = 765f
+        var atmosphericPressure = DecimalFormat("#.#").format(((response[8].toInt() and 0xFF) + (response[9].toInt() and 0xFF) * 256).toFloat() * 0.075f).toInt() // 大气压数据
+        if (atmosphericPressure < 500 || atmosphericPressure > 1000) {
+            atmosphericPressure = 765
         }
 
 //        LogUtils.e(
